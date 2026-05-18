@@ -424,6 +424,84 @@ body::after {
   to { stroke-dashoffset: 0; }
 }
 
+/* Once the brush finishes drawing, the ring eases into a long, near-static
+   life: a faint breath (scale + opacity) layered with a slow rotational
+   drift like a sumi painting hanging on the wall. The 1.4s delay matches
+   the draw-in duration so the breath starts only after the brush settles. */
+.brush-ring--animate {
+  transform-origin: center;
+  animation:
+    brush-ring-breath 5.4s ease-in-out 1.4s infinite,
+    brush-ring-drift 11s ease-in-out 1.4s infinite;
+}
+
+@keyframes brush-ring-breath {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.008);
+    opacity: 0.92;
+  }
+}
+
+@keyframes brush-ring-drift {
+  0%, 100% { rotate: -0.4deg; }
+  50%      { rotate:  0.4deg; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brush-ring--animate { animation: none; }
+}
+
+/* Menu-bar mockup — coordinated entry once the card scrolls into view.
+   The bristled track is already drawn; the gold charge arc sweeps in
+   (handled inline in MenuBarMockup.tsx), and the numeric readout fades
+   up after it so the eye lands on the ring → number → time-left in order. */
+.menu-bar-mockup__readout {
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 520ms cubic-bezier(0.2, 0.8, 0.2, 1) var(--readout-delay, 0ms),
+    transform 520ms cubic-bezier(0.2, 0.8, 0.2, 1) var(--readout-delay, 0ms);
+}
+.menu-bar-mockup[data-revealed='true'] .menu-bar-mockup__readout {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-bar-mockup__readout {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Ink-level rule rows — stagger each row's entry so the eye reads top→down
+   on first reveal. Triggered by the parent Reveal's `data-revealed`. */
+.ink-rule-row {
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 560ms cubic-bezier(0.2, 0.8, 0.2, 1) var(--rule-delay, 0ms),
+    transform 560ms cubic-bezier(0.2, 0.8, 0.2, 1) var(--rule-delay, 0ms);
+}
+[data-revealed='true'] .ink-rule-row,
+.ink-rule-row[data-revealed='true'] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ink-rule-row {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 /* ---- Ink Level Bar (InkLevelBar.tsx) — animated warning meter ---- */
 
 /* Charge fraction drives the wet-brush mask width and the flick pulses. */
@@ -498,20 +576,23 @@ body::after {
   animation: ink-flick-pulse 10s ease-in-out infinite;
 }
 
+/* Gentle flick pulse — soft rise, settled peak, long decay. Matches the
+   app's `ZenMotion.checkpointPulse` spring (response 0.26, damping 0.72):
+   a quiet "ping" rather than a snap. */
 @keyframes ink-flick-pulse {
-  0%, 2% {
+  0%, 1% {
     filter: drop-shadow(0 0 0 transparent);
     transform: scale(1);
   }
-  3% {
-    filter: drop-shadow(0 0 8px currentColor);
-    transform: scale(1.22);
+  6% {
+    filter: drop-shadow(0 0 3px currentColor);
+    transform: scale(1.07);
   }
-  10% {
-    filter: drop-shadow(0 0 2px currentColor);
-    transform: scale(1.05);
+  14% {
+    filter: drop-shadow(0 0 1px currentColor);
+    transform: scale(1.02);
   }
-  16% {
+  22% {
     filter: drop-shadow(0 0 0 transparent);
     transform: scale(1);
   }

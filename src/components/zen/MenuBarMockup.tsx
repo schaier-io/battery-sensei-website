@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Wifi, Bluetooth, Search } from 'lucide-react'
 import { BrushRing } from '#/components/zen/BrushRing'
 
@@ -17,15 +17,43 @@ const TIME_LEFT = '3h 47m'
  */
 export function MenuBarMockup({ className = '' }: { className?: string }) {
   const [now, setNow] = useState(() => new Date())
+  const [revealed, setRevealed] = useState(false)
+  const rootRef = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
     const id = setInterval(() => setNow(new Date()), 30_000)
     return () => clearInterval(id)
   }, [])
+
+  useEffect(() => {
+    const el = rootRef.current
+    if (!el) return
+    if (typeof IntersectionObserver === 'undefined') {
+      setRevealed(true)
+      return
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setRevealed(true)
+            io.unobserve(entry.target)
+          }
+        }
+      },
+      { threshold: 0.35 },
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+
   const time = formatTime(now)
 
   return (
     <div
-      className={`paper-card relative overflow-visible rounded-xl ${className}`}
+      ref={rootRef}
+      data-revealed={revealed ? 'true' : 'false'}
+      className={`menu-bar-mockup paper-card relative overflow-visible rounded-xl ${className}`}
       style={{ aspectRatio: '5 / 4' }}
     >
       {/* macOS menu bar strip — Battery Sensei icon highlighted on the right */}
@@ -75,8 +103,10 @@ export function MenuBarMockup({ className = '' }: { className?: string }) {
                 animate={false}
               />
               {/* Gold charge arc — overlays the bristled track up to the
-                  current fraction. Matches the app's foreground arcTint. */}
-              <ChargeArc fraction={CHARGE} className="absolute inset-0" />
+                  current fraction. Animates from 0 → fraction when the
+                  mockup scrolls into view (mirrors the app's `ZenMotion.gentle`
+                  spring on `clampedFraction`). */}
+              <ChargeArc fraction={CHARGE} revealed={revealed} className="absolute inset-0" />
               <img
                 src="/app-icon-256.png"
                 srcSet="/app-icon-256.png 1x, /app-icon.png 2x"
@@ -86,10 +116,16 @@ export function MenuBarMockup({ className = '' }: { className?: string }) {
               />
             </div>
 
-            <span className="display-title mt-2 text-2xl font-bold leading-none text-sumi tabular-nums">
+            <span
+              className="display-title mt-2 text-2xl font-bold leading-none text-sumi tabular-nums menu-bar-mockup__readout"
+              style={{ ['--readout-delay' as string]: '320ms' }}
+            >
               {Math.round(CHARGE * 100)}%
             </span>
-            <span className="mt-1 text-[10px] font-semibold tracking-wider text-sumi-soft">
+            <span
+              className="mt-1 text-[10px] font-semibold tracking-wider text-sumi-soft menu-bar-mockup__readout"
+              style={{ ['--readout-delay' as string]: '420ms' }}
+            >
               {TIME_LEFT} LEFT
             </span>
           </div>
@@ -143,9 +179,19 @@ export function MenuBarMockup({ className = '' }: { className?: string }) {
   )
 }
 
-function ChargeArc({ fraction, className }: { fraction: number; className?: string }) {
+function ChargeArc({
+  fraction,
+  revealed,
+  className,
+}: {
+  fraction: number
+  revealed: boolean
+  className?: string
+}) {
   // Mirrors the gold body+leading-cap arc the app draws over the bristled
-  // track (ContentView.swift `heroIconPanel`).
+  // track (ContentView.swift `heroIconPanel`). The dashoffset transitions
+  // from fully hidden (C) → showing `visible` length when `revealed` flips,
+  // so the gold arc sweeps in as the user scrolls the mockup into view.
   const VB = 220
   const cx = VB / 2
   const cy = VB / 2
@@ -154,6 +200,7 @@ function ChargeArc({ fraction, className }: { fraction: number; className?: stri
   const arcEnd = Math.min(trackEnd, Math.max(0, fraction * trackEnd))
   const C = 2 * Math.PI * r
   const visible = arcEnd * C
+  const dashOffset = revealed ? C - visible : C
   return (
     <svg viewBox={`0 0 ${VB} ${VB}`} width="100%" height="100%" className={className} aria-hidden>
       <circle
@@ -164,9 +211,16 @@ function ChargeArc({ fraction, className }: { fraction: number; className?: stri
         stroke="var(--kin)"
         strokeWidth={9}
         strokeLinecap="round"
-        strokeDasharray={`${visible.toFixed(2)} ${C.toFixed(2)}`}
+        strokeDasharray={`${C.toFixed(2)} ${C.toFixed(2)}`}
         transform={`rotate(-90 ${cx} ${cy})`}
         opacity="0.92"
+        // Setting strokeDashoffset via CSS (not the SVG attribute) so the
+        // value change actually fires a CSS transition. Setting it as an
+        // SVG attribute changes the value instantly with no animation.
+        style={{
+          strokeDashoffset: dashOffset,
+          transition: 'stroke-dashoffset 1.4s cubic-bezier(0.55, 0.08, 0.18, 1) 200ms',
+        }}
       />
     </svg>
   )

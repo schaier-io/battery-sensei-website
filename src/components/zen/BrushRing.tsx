@@ -62,11 +62,16 @@ export function BrushRing({
   for (let i = 0; i < bristleCount; i++) {
     const t = i / Math.max(bristleCount - 1, 1)
     const edgeBias = Math.abs(t - 0.5) * 2 // 0 mid, 1 outermost
+    // Steeper falloff toward the bundle's outer edges so the brush reads as
+    // dense at the core and wispy at the edges (matches the app's contrast).
     const radialOffset = (t - 0.5) * lineWidth * 1.05
     const r = baseR + radialOffset
 
-    const startInset = rand() * (0.005 + edgeBias * 0.05)
-    const endInset = rand() * (0.005 + edgeBias * 0.05)
+    // Outer bristles "fan out" — they start a touch later and end earlier
+    // than inner bristles, giving the visible-arc endpoints a soft taper
+    // without needing a separate angular gradient mask.
+    const startInset = rand() * (0.004 + edgeBias * 0.08)
+    const endInset = rand() * (0.004 + edgeBias * 0.085)
     const s = Math.min(tEnd, tStart + startInset)
     const e = Math.max(tStart, tEnd - endInset)
     if (e - s < 0.01) continue
@@ -74,9 +79,21 @@ export function BrushRing({
     const arcLen = (e - s) * 2 * Math.PI * r
     const segs: number[] = []
     let remaining = arcLen
-    while (remaining > 0.5 && segs.length < 40) {
-      const mark = (4 + rand() * 18) * (1 - edgeBias * 0.45)
-      const gap = (0.5 + rand() * 1.6) * (1 + edgeBias * 1.4)
+    let dashIdx = 0
+    while (remaining > 0.5 && segs.length < 44) {
+      // Dashes near the very start/end of the bristle get progressively
+      // shorter + sparser so each bristle naturally tapers at its tips, the
+      // same way a loaded brush thins as it lifts off the paper.
+      const progress = (arcLen - remaining) / arcLen // 0 at start, 1 at end
+      const tipFalloff = Math.max(
+        1 - progress / 0.12, // fade in over first 12%
+        1 - (1 - progress) / 0.18, // fade out over last 18%
+        0,
+      )
+      const tipMult = 1 - tipFalloff * 0.7
+
+      const mark = (4 + rand() * 18) * (1 - edgeBias * 0.5) * tipMult
+      const gap = (0.5 + rand() * 1.6) * (1 + edgeBias * 1.6) * (1 + tipFalloff * 0.8)
       const m = Math.min(mark, remaining)
       segs.push(m)
       remaining -= mark
@@ -84,6 +101,7 @@ export function BrushRing({
       const g = Math.min(gap, remaining)
       segs.push(g)
       remaining -= gap
+      dashIdx += 2
     }
 
     const a0 = s * Math.PI * 2
@@ -95,8 +113,11 @@ export function BrushRing({
     const largeArc = a1 - a0 > Math.PI ? 1 : 0
     const d = `M ${x0.toFixed(2)} ${y0.toFixed(2)} A ${r.toFixed(2)} ${r.toFixed(2)} 0 ${largeArc} 1 ${x1.toFixed(2)} ${y1.toFixed(2)}`
 
-    const opacity = (0.3 + 0.55 * (1 - edgeBias)) * inkOpacity
-    const width = 0.55 + (1 - edgeBias) * 0.85 + rand() * 0.25
+    // Steepened contrast: core bristles are notably darker than wispy outer
+    // ones. Power 1.4 on edgeBias falloff so the bundle feels "loaded" in the
+    // middle and "dry" at the edges.
+    const opacity = (0.22 + 0.7 * Math.pow(1 - edgeBias, 1.4)) * inkOpacity
+    const width = 0.5 + (1 - edgeBias) * 1.0 + rand() * 0.25
 
     bristles.push({ d, dashes: segs.map((n) => n.toFixed(2)).join(' '), opacity, width })
   }
@@ -113,7 +134,7 @@ export function BrushRing({
       viewBox={`0 0 ${VB} ${VB}`}
       width={size}
       height={size}
-      className={className}
+      className={`brush-ring ${animate ? 'brush-ring--animate' : ''} ${className ?? ''}`}
       aria-hidden
     >
       <defs>

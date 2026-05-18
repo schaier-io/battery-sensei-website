@@ -43,18 +43,22 @@ function RuleRow({
   title,
   detail,
   color,
+  delay = 0,
 }: {
   percent: number
   title: string
   detail: string
   color: string
+  /** Milliseconds to delay this row's entry — staggers a group of rows. */
+  delay?: number
 }) {
   return (
     <li
-      className="flex items-center gap-3 rounded-xl border px-3 py-2"
+      className="ink-rule-row flex items-center gap-3 rounded-xl border px-3 py-2 transition-transform duration-200 hover:-translate-y-px"
       style={{
         backgroundColor: `color-mix(in oklab, ${color} 10%, var(--card))`,
         borderColor: `color-mix(in oklab, ${color} 28%, transparent)`,
+        ['--rule-delay' as string]: `${delay}ms`,
       }}
     >
       <span
@@ -173,18 +177,21 @@ export function Features() {
                         title="Zen whisper"
                         detail="Auto-dismiss after 8s"
                         color="rgb(33, 125, 247)"
+                        delay={120}
                       />
                       <RuleRow
                         percent={15}
                         title="Alert overlay"
                         detail="Auto-dismiss after 12s"
                         color="rgb(250, 133, 10)"
+                        delay={240}
                       />
                       <RuleRow
                         percent={5}
                         title="Critical full-screen"
                         detail="Dismiss manually"
                         color="rgb(255, 56, 71)"
+                        delay={360}
                       />
                     </ul>
                   </div>
