@@ -1,0 +1,87 @@
+import { Suspense, lazy } from 'react'
+import { Hanko } from '#/components/zen/Hanko'
+import { Reveal } from '#/components/zen/Reveal'
+import { BrushTick } from '#/components/zen/BrushTick'
+import { BatteryJournal } from '#/components/zen/BatteryJournal'
+
+// Lazy: keeps three.js + R3F (~750 KB) out of the initial route bundle.
+const FrameBorder = lazy(() => import('#/components/reactbits/FrameBorder'))
+
+export function Saga() {
+  return (
+    <section id="saga" className="zen-section relative">
+      <div className="mx-auto grid max-w-6xl items-center gap-16 px-6 md:grid-cols-2">
+        <div>
+          <Hanko kanji="史" className="mb-5" />
+          <Reveal as="p" delay={100} className="kicker-row mb-4">
+            Personal history · 個人史
+          </Reveal>
+          <Reveal
+            as="h2"
+            delay={180}
+            className="display-title text-3xl font-semibold text-sumi md:text-5xl"
+          >
+            Your battery's life,
+            <span className="block italic text-sumi-soft font-normal">
+              quietly recorded.
+            </span>
+          </Reveal>
+          <Reveal
+            as="p"
+            delay={260}
+            className="mt-7 max-w-md text-base leading-relaxed text-sumi-soft"
+          >
+            Sensei keeps a personal history — every cycle, every rescue, every
+            milestone. A capacity timeline you can read. An honest account of
+            how your MacBook is aging, written in plain language.
+          </Reveal>
+          <Reveal as="ul" delay={340} className="mt-8 space-y-3 text-sm text-sumi-soft">
+            <li className="flex gap-3">
+              <BrushTick className="text-sumi-soft mt-2 shrink-0" />
+              Cycles, rescues, plateaus — all annotated.
+            </li>
+            <li className="flex gap-3">
+              <BrushTick className="text-sumi-soft mt-2 shrink-0" />
+              Capacity timeline updated as you live.
+            </li>
+            <li className="flex gap-3">
+              <BrushTick className="text-sumi-soft mt-2 shrink-0" />
+              Stays on your Mac. Yours alone, always.
+            </li>
+          </Reveal>
+        </div>
+
+        <Reveal delay={200} className="relative flex items-center justify-center">
+          <div className="relative aspect-[3/4] w-full max-w-xs">
+            <Suspense
+              fallback={
+                <div className="absolute inset-0 flex items-center justify-center p-4">
+                  <BatteryJournal className="w-full" />
+                </div>
+              }
+            >
+              <FrameBorder
+                className="relative rounded-sm"
+                color="#1c1a17"
+                backgroundColor="#f4ede0"
+                speed={1.36}
+                borderWidth={0.5}
+                falloff={1}
+                noiseScale={7.5}
+                noiseStrength={5}
+                noiseOctaves={5}
+                intensity={1}
+                gamma={2}
+                opacity={1}
+              >
+                <div className="absolute inset-0 flex items-center justify-center p-7 sm:p-8">
+                  <BatteryJournal className="w-full rotate-[-1.4deg] transition-transform duration-500 hover:rotate-0" />
+                </div>
+              </FrameBorder>
+            </Suspense>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  )
+}

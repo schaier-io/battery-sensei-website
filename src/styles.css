@@ -1,0 +1,677 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=Noto+Serif+JP:wght@400;500;700;900&display=swap');
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Sumi ink + washi paper palette */
+  --sumi: #1c1a17;          /* ink black */
+  --sumi-soft: #4a4540;     /* charcoal */
+  --nezumi: #8a847c;        /* mouse gray */
+  --washi: #f4ede0;         /* warm paper */
+  --washi-soft: #ece3d1;    /* shaded paper */
+  --washi-deep: #e2d6bd;    /* aged paper */
+  --hinomaru: #bc002d;      /* flag red */
+  --hinomaru-soft: #d63e35; /* ember red */
+  --kin: #c89b3c;           /* gold leaf */
+  --matcha: #6f7a3a;        /* tea green */
+  --aizome: #1a345a;        /* indigo */
+
+  --line: rgba(28, 26, 23, 0.14);
+  --line-strong: rgba(28, 26, 23, 0.24);
+  --paper-shadow: rgba(28, 26, 23, 0.06);
+
+  --background: oklch(0.94 0.02 80);
+  --foreground: oklch(0.18 0.01 50);
+  --card: oklch(0.97 0.015 80);
+  --card-foreground: oklch(0.18 0.01 50);
+  --popover: oklch(0.97 0.015 80);
+  --popover-foreground: oklch(0.18 0.01 50);
+  --primary: oklch(0.18 0.01 50);
+  --primary-foreground: oklch(0.97 0.015 80);
+  --secondary: oklch(0.88 0.02 80);
+  --secondary-foreground: oklch(0.18 0.01 50);
+  --muted: oklch(0.88 0.02 80);
+  --muted-foreground: oklch(0.45 0.01 50);
+  --accent: oklch(0.5 0.18 25);
+  --accent-foreground: oklch(0.97 0.015 80);
+  --destructive: oklch(0.5 0.18 25);
+  --destructive-foreground: oklch(0.97 0.015 80);
+  --border: oklch(0.82 0.02 80);
+  --input: oklch(0.82 0.02 80);
+  --ring: oklch(0.5 0.18 25);
+  --radius: 0.5rem;
+}
+
+.dark {
+  --sumi: #f4ede0;
+  --sumi-soft: #cdc6b8;
+  --nezumi: #908a82;
+  --washi: #15130f;
+  --washi-soft: #1d1b16;
+  --washi-deep: #26241e;
+  --hinomaru: #e04857;
+  --hinomaru-soft: #ef7064;
+  --kin: #d8b65a;
+  --matcha: #8a9a4a;
+  --aizome: #6e90c0;
+
+  --line: rgba(244, 237, 224, 0.14);
+  --line-strong: rgba(244, 237, 224, 0.26);
+  --paper-shadow: rgba(0, 0, 0, 0.4);
+
+  --background: oklch(0.16 0.01 50);
+  --foreground: oklch(0.94 0.02 80);
+  --card: oklch(0.2 0.01 50);
+  --card-foreground: oklch(0.94 0.02 80);
+  --popover: oklch(0.2 0.01 50);
+  --popover-foreground: oklch(0.94 0.02 80);
+  --primary: oklch(0.94 0.02 80);
+  --primary-foreground: oklch(0.18 0.01 50);
+  --secondary: oklch(0.28 0.01 50);
+  --secondary-foreground: oklch(0.94 0.02 80);
+  --muted: oklch(0.28 0.01 50);
+  --muted-foreground: oklch(0.7 0.01 50);
+  --accent: oklch(0.6 0.18 25);
+  --accent-foreground: oklch(0.97 0.015 80);
+  --destructive: oklch(0.6 0.18 25);
+  --destructive-foreground: oklch(0.97 0.015 80);
+  --border: oklch(0.32 0.01 50);
+  --input: oklch(0.32 0.01 50);
+  --ring: oklch(0.6 0.18 25);
+}
+
+@theme inline {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Fraunces', Georgia, ui-serif, serif;
+  --font-jp: 'Noto Serif JP', 'Yu Mincho', 'Hiragino Mincho ProN', serif;
+
+  --color-sumi: var(--sumi);
+  --color-sumi-soft: var(--sumi-soft);
+  --color-nezumi: var(--nezumi);
+  --color-washi: var(--washi);
+  --color-washi-soft: var(--washi-soft);
+  --color-washi-deep: var(--washi-deep);
+  --color-hinomaru: var(--hinomaru);
+  --color-hinomaru-soft: var(--hinomaru-soft);
+  --color-kin: var(--kin);
+  --color-matcha: var(--matcha);
+  --color-aizome: var(--aizome);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+html,
+body,
+#app {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  color: var(--sumi);
+  font-family: var(--font-sans);
+  background-color: var(--washi);
+  /* Washi paper: subtle warm gradient + fiber speckle */
+  background-image:
+    radial-gradient(ellipse at 18% 12%, rgba(255, 248, 232, 0.6), transparent 55%),
+    radial-gradient(ellipse at 82% 90%, rgba(226, 214, 189, 0.55), transparent 60%),
+    linear-gradient(180deg, var(--washi) 0%, var(--washi-soft) 100%);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Washi fiber texture overlay — paired with foxing spots and pulp speckles
+   to mirror the app's HistoricalPaperPatina (Surfaces/Zen/WashiBackground.swift). */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.55;
+  background-image:
+    /* foxing — small ochre age spots scattered like the app's foxingColor */
+    radial-gradient(circle at 12% 18%, rgba(143, 81, 30, 0.10) 0, transparent 4px),
+    radial-gradient(circle at 78% 8%, rgba(143, 81, 30, 0.09) 0, transparent 3px),
+    radial-gradient(circle at 22% 72%, rgba(143, 81, 30, 0.08) 0, transparent 5px),
+    radial-gradient(circle at 88% 64%, rgba(143, 81, 30, 0.11) 0, transparent 3px),
+    radial-gradient(circle at 44% 38%, rgba(143, 81, 30, 0.07) 0, transparent 2px),
+    radial-gradient(circle at 66% 88%, rgba(143, 81, 30, 0.09) 0, transparent 4px),
+    /* mottled age stains — broad warm ellipses */
+    radial-gradient(ellipse 200px 90px at 8% 86%, rgba(107, 62, 22, 0.04), transparent 70%),
+    radial-gradient(ellipse 280px 140px at 92% 12%, rgba(107, 62, 22, 0.035), transparent 70%),
+    /* fiber speckle base */
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.6' numOctaves='2' seed='5'/><feColorMatrix values='0 0 0 0 0.42  0 0 0 0 0.36  0 0 0 0 0.28  0 0 0 0.18 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  mix-blend-mode: multiply;
+}
+
+.dark body::before {
+  opacity: 0.35;
+  mix-blend-mode: screen;
+}
+
+/* Subtle horizontal grid like ruled mulberry paper, with deckled edge
+   shadows top/bottom — mirrors the app's drawDeckledEdges() inset glow. */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.7;
+  background-image:
+    linear-gradient(180deg, rgba(95, 56, 23, 0.10), transparent 56px),
+    linear-gradient(0deg,   rgba(95, 56, 23, 0.12), transparent 68px),
+    linear-gradient(0deg, transparent 31px, rgba(28, 26, 23, 0.035) 32px);
+  background-size: 100% 100%, 100% 100%, 100% 32px;
+  background-repeat: no-repeat, no-repeat, repeat;
+  mask-image: radial-gradient(ellipse at 50% 35%, black, rgba(0,0,0,0.4) 70%);
+}
+
+.dark body::after {
+  opacity: 0.6;
+  background-image:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.30), transparent 56px),
+    linear-gradient(0deg,   rgba(0, 0, 0, 0.34), transparent 68px),
+    linear-gradient(0deg, transparent 31px, rgba(244, 237, 224, 0.035) 32px);
+}
+
+#app, main, header, footer, section {
+  position: relative;
+  z-index: 1;
+}
+
+.display-title {
+  font-family: var(--font-display);
+  letter-spacing: -0.015em;
+  font-weight: 600;
+}
+
+.font-jp {
+  font-family: var(--font-jp);
+}
+
+/* Vertical Japanese (writing-mode tate) */
+.vertical-jp {
+  writing-mode: vertical-rl;
+  font-family: var(--font-jp);
+  letter-spacing: 0.4em;
+}
+
+/* Section kicker with kanji square seal */
+.kicker-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--sumi-soft);
+}
+
+.kicker-row::before {
+  content: '';
+  width: 28px;
+  height: 1px;
+  background: var(--sumi);
+  opacity: 0.4;
+}
+
+/* Hanko (red square seal) */
+.hanko {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  background: var(--hinomaru);
+  color: #fff8eb;
+  font-family: var(--font-jp);
+  font-weight: 900;
+  font-size: 1.3rem;
+  border-radius: 4px;
+  box-shadow:
+    inset 0 0 0 2px rgba(255, 248, 235, 0.18),
+    0 1px 0 rgba(0, 0, 0, 0.05);
+  letter-spacing: 0;
+  transform: rotate(-3deg);
+  position: relative;
+  transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.hanko:hover {
+  transform: rotate(-1deg) scale(1.05);
+}
+
+/* Inner thin white frame — matches app's Hanko stroke at radius 2 inset. */
+.hanko::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: 3px;
+  border: 1.5px solid rgba(255, 248, 235, 0.55);
+  pointer-events: none;
+}
+
+/* Radial paper grain — fades from soft white center, mirrors the app's
+   RadialGradient overlay (Surfaces/Zen/Hanko.swift). Layered over the
+   turbulence noise for an inked-but-uneven seal. */
+.hanko::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 4px;
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(255, 248, 235, 0.18), transparent 60%),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='2.4' numOctaves='2'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.4 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  mix-blend-mode: screen;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* Paper card — washi surface with hand-drawn InkStroke double border
+   (ported from Surfaces/Zen/InkStroke.swift: an offset 0.4px shadow line
+   beneath a 0.8px primary stroke gives the edge an uneven, brush-set feel).
+   The ::before holds a faint procedural fiber overlay so each card reads
+   as a separate sheet of paper, not a flat panel. */
+.paper-card {
+  position: relative;
+  background: linear-gradient(180deg, var(--card) 0%, color-mix(in oklab, var(--card) 96%, var(--washi-deep)) 100%);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  box-shadow:
+    /* InkStroke: offset secondary stroke */
+    0.4px 0.4px 0 0 var(--line),
+    0 1px 0 rgba(255, 255, 255, 0.5) inset,
+    0 1px 2px var(--paper-shadow),
+    0 8px 24px rgba(28, 26, 23, 0.05);
+  transition: transform 250ms cubic-bezier(0.2, 0.8, 0.2, 1),
+              border-color 250ms ease,
+              box-shadow 250ms ease;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.paper-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.35;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220'><filter id='c'><feTurbulence type='fractalNoise' baseFrequency='2.1' numOctaves='2' seed='8'/><feColorMatrix values='0 0 0 0 0.42  0 0 0 0 0.36  0 0 0 0 0.28  0 0 0 0.10 0'/></filter><rect width='100%25' height='100%25' filter='url(%23c)'/></svg>");
+  mix-blend-mode: multiply;
+  border-radius: inherit;
+}
+
+.dark .paper-card::before {
+  opacity: 0.22;
+  mix-blend-mode: screen;
+}
+
+.paper-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.paper-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--line-strong);
+  box-shadow:
+    0.4px 0.4px 0 0 var(--line-strong),
+    0 1px 0 rgba(255, 255, 255, 0.5) inset,
+    0 2px 4px var(--paper-shadow),
+    0 14px 32px rgba(28, 26, 23, 0.08);
+}
+
+/* Ink button (primary) */
+.btn-sumi {
+  background: var(--sumi);
+  color: var(--washi);
+  border: 1px solid var(--sumi);
+  transition: background 200ms ease, transform 150ms ease;
+}
+.btn-sumi:hover {
+  background: color-mix(in oklab, var(--sumi) 88%, var(--washi));
+}
+
+/* (Hinomaru dot replaced by <BrushTick /> SVG component — no CSS needed) */
+
+/* Enso (zen circle) — animated brush stroke
+   Speed profile of a real sumi brush: lift-off slow, accelerate through the
+   loaded body, decelerate as the ink runs out. Modeled with a custom cubic
+   bezier — soft start, fast middle, long decel tail. */
+.enso-spin {
+  stroke-dasharray: 600;
+  stroke-dashoffset: 600;
+}
+
+.enso-main {
+  animation: enso-draw 2400ms cubic-bezier(0.55, 0.08, 0.18, 1) forwards;
+}
+
+/* Trailing whisper — even slower decel, brush is starving for ink */
+.enso-whisper {
+  stroke-dasharray: 220;
+  stroke-dashoffset: 220;
+  animation: enso-draw-whisper 2800ms cubic-bezier(0.6, 0.05, 0.08, 1) forwards;
+}
+
+/* Tail bristle fan past the end point — fast strokes flicking out */
+.enso-tail {
+  stroke-dasharray: 90;
+  stroke-dashoffset: 90;
+  opacity: 0;
+  animation: enso-draw-tail 700ms cubic-bezier(0.2, 0.7, 0.1, 1) forwards;
+}
+
+/* Static decorations (start drop, spatter group) — fade in on cue */
+.enso-fade {
+  opacity: 0;
+  animation: enso-fade-in 500ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes enso-draw {
+  from { stroke-dashoffset: 600; }
+  to   { stroke-dashoffset: 0; }
+}
+@keyframes enso-draw-whisper {
+  from { stroke-dashoffset: 220; }
+  to   { stroke-dashoffset: 0; }
+}
+@keyframes enso-draw-tail {
+  from { stroke-dashoffset: 90; opacity: 0; }
+  30%  { opacity: 1; }
+  to   { stroke-dashoffset: 0; opacity: 1; }
+}
+@keyframes enso-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Bristled brush ring — animated reveal mask (BrushRing.tsx).
+   Mirrors the app's ZenMotion.ensoDraw curve. */
+@keyframes brush-ring-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+/* ---- Ink Level Bar (InkLevelBar.tsx) — animated warning meter ---- */
+
+/* Charge fraction drives the wet-brush mask width and the flick pulses. */
+@property --ink-charge {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 1;
+}
+
+/* 1 = head dissolves into the page (used while draining);
+   0 = head terminates cleanly (used while recharging). The keyframes flip
+   this at the drain↔recharge boundary so the brush's leading edge matches
+   the app's `isExtendingForward` mask switch. */
+@property --ink-head-fade {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 1;
+}
+
+.ink-level-bar {
+  --ink-charge: 1;
+  --ink-head-fade: 1;
+  display: block;
+  overflow: visible;
+}
+
+/* Both mask rects share the same animated clip so the brush head ends at
+   `charge * width`. Their opacities cross-fade via --ink-head-fade. */
+.ink-level-bar__mask {
+  clip-path: inset(0 calc((1 - var(--ink-charge)) * 100%) 0 0);
+  transition: clip-path 60ms linear;
+}
+.ink-level-bar__mask--fade  { opacity: var(--ink-head-fade); }
+.ink-level-bar__mask--sharp { opacity: calc(1 - var(--ink-head-fade)); }
+
+.ink-level-bar--animate {
+  animation: ink-level-cycle 10s cubic-bezier(0.28, 0.08, 0.24, 1) infinite;
+}
+
+/* Stepwise descent that mirrors the app's `startPreviewAnimation`
+   (Surfaces/SetupWizard.swift): starts at 0.65, drops to each threshold in
+   turn, holds briefly so the checkpoint flick can pulse, then recharges to
+   1.0 with the app's `previewTravelAnimation` curve. Cycle: 10s.
+   `--ink-head-fade` flips from 1 (dispersing) to 0 (clean) at the recharge
+   start so the head matches the app's `isExtendingForward` mask switch. */
+@keyframes ink-level-cycle {
+  0%   { --ink-charge: 0.65; --ink-head-fade: 1; } /* initial pause */
+  4%   { --ink-charge: 0.65; --ink-head-fade: 1; }
+  11%  { --ink-charge: 0.35; --ink-head-fade: 1; } /* drop 1 */
+  18%  { --ink-charge: 0.35; --ink-head-fade: 1; }
+  28%  { --ink-charge: 0.15; --ink-head-fade: 1; } /* drop 2 */
+  35%  { --ink-charge: 0.15; --ink-head-fade: 1; }
+  45%  { --ink-charge: 0.05; --ink-head-fade: 1; } /* drop 3 */
+  51%  { --ink-charge: 0.05; --ink-head-fade: 1; }
+  /* Hard cut to sharp head as recharge begins (no transition mid-cycle). */
+  52%  { --ink-charge: 0.05; --ink-head-fade: 0; }
+  82%  { --ink-charge: 1.00; --ink-head-fade: 0; } /* recharge done */
+  /* Pause at full, then flip fade back on while still at full so the next
+     cycle's drain starts with a dispersing head (and the flip is invisible
+     because there's no head cutoff at charge=1). */
+  94%  { --ink-charge: 1.00; --ink-head-fade: 0; }
+  95%  { --ink-charge: 1.00; --ink-head-fade: 1; }
+  100% { --ink-charge: 1.00; --ink-head-fade: 1; }
+}
+
+.ink-level-bar__flick {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+  /* Each flick pulses (scale + glow) when the wet brush head settles on it.
+     The per-flick `animation-delay` is set inline so the pulse fires when
+     the keyframes above pin --ink-charge at this threshold. */
+  animation: ink-flick-pulse 10s ease-in-out infinite;
+}
+
+@keyframes ink-flick-pulse {
+  0%, 2% {
+    filter: drop-shadow(0 0 0 transparent);
+    transform: scale(1);
+  }
+  3% {
+    filter: drop-shadow(0 0 8px currentColor);
+    transform: scale(1.22);
+  }
+  10% {
+    filter: drop-shadow(0 0 2px currentColor);
+    transform: scale(1.05);
+  }
+  16% {
+    filter: drop-shadow(0 0 0 transparent);
+    transform: scale(1);
+  }
+  100% {
+    filter: drop-shadow(0 0 0 transparent);
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ink-level-bar--animate { animation: none; --ink-charge: 0.62; }
+  .ink-level-bar__flick { animation: none; }
+}
+
+/* Brush divider — sumi stroke */
+.brush-divider {
+  display: block;
+  width: 100%;
+  height: 24px;
+  color: var(--sumi);
+  opacity: 0.16;
+}
+
+/* Section spacing — generous "ma" 間 */
+.zen-section {
+  padding-block: clamp(5rem, 10vw, 9rem);
+}
+
+/* Nav link */
+.nav-link {
+  position: relative;
+  font-size: 0.875rem;
+  color: var(--sumi-soft);
+  letter-spacing: 0.02em;
+  transition: color 180ms ease;
+}
+.nav-link:hover {
+  color: var(--sumi);
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 1px;
+  background: var(--sumi);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 220ms ease;
+}
+.nav-link:hover::after {
+  transform: scaleX(1);
+}
+
+/* ────────── micro animations ────────── */
+
+/* Reveal on scroll: rise + fade. Triggered by [data-revealed="true"]. */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 700ms cubic-bezier(0.2, 0.8, 0.2, 1),
+              transform 700ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+[data-reveal][data-revealed='true'] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stamp animation for hanko on first reveal */
+[data-stamp][data-revealed='true'] {
+  animation: hanko-stamp 460ms cubic-bezier(0.4, 1.6, 0.4, 1) both;
+}
+
+@keyframes hanko-stamp {
+  0% {
+    transform: rotate(-15deg) scale(1.6);
+    opacity: 0;
+  }
+  60% {
+    transform: rotate(-1deg) scale(0.94);
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(-3deg) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Brush divider stroke length is driven by scroll progress (see BrushDivider.tsx) */
+
+/* Card kanji accent: nudges on card hover */
+.paper-card .kanji-accent {
+  transition: transform 320ms cubic-bezier(0.2, 0.8, 0.2, 1),
+              color 320ms ease;
+}
+
+.paper-card:hover .kanji-accent {
+  transform: translateY(-2px) scale(1.08);
+  color: var(--hinomaru);
+}
+
+/* Ninja float */
+.ninja-float {
+  animation: ninja-float 3.6s ease-in-out infinite;
+}
+@keyframes ninja-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* Vertical kanji rails: gentle drift */
+.vertical-jp.drift {
+  animation: vertical-drift 9s ease-in-out infinite;
+}
+@keyframes vertical-drift {
+  0%, 100% { transform: translateY(-50%); }
+  50% { transform: translateY(calc(-50% - 8px)); }
+}
+
+/* Honor reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .enso-spin,
+  .ninja-float,
+  .vertical-jp.drift,
+  .enso-main,
+  .enso-whisper,
+  .enso-tail,
+  .enso-fade,
+  [data-stamp][data-revealed='true'] {
+    animation: none !important;
+  }
+  .enso-spin,
+  .enso-main,
+  .enso-whisper,
+  .enso-tail {
+    stroke-dashoffset: 0 !important;
+  }
+  .enso-fade,
+  .enso-tail {
+    opacity: 1 !important;
+  }
+  .brush-divider path {
+    stroke-dashoffset: 0 !important;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    color: var(--sumi);
+  }
+}
