@@ -11,7 +11,7 @@ export function BrushDivider({ className = '' }: { className?: string }) {
   const dashOffset = useTransform(smooth, [0, 1], [1400, 0])
 
   return (
-    <div ref={ref} className={`mx-auto max-w-6xl px-6 ${className}`}>
+    <div ref={ref} className={`relative mx-auto max-w-6xl px-6 ${className}`}>
       <svg
         viewBox="0 0 1200 24"
         className="brush-divider"

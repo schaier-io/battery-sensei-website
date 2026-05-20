@@ -21,41 +21,43 @@ const cells: Cell[] = [
   {
     kanji: '時',
     icon: Activity,
-    title: 'Capacity over time',
-    body: 'See how your battery is aging — in plain English, not vendor jargon. A quiet line that tells the truth.',
+    title: 'How it ages, plotted',
+    body: 'A quiet line you can read in a second. Plain English, no vendor jargon, no scary red dashboards.',
     span: 'lg:col-span-2 lg:row-span-2',
     feature: true,
   },
   {
     kanji: '輪',
     icon: Repeat,
-    title: 'Cycle count',
-    body: '"217 cycles. Normal for 14 months." No more cryptic numbers.',
+    title: 'Cycle count, in context',
+    body: '"217 cycles. Normal for 14 months." Numbers a human would say.',
   },
   {
     kanji: '熱',
     icon: Thermometer,
-    title: 'Thermal awareness',
-    body: 'Sensei tells you when charging is throttled by heat — and what to do.',
+    title: 'Heat throttling, named',
+    body: 'When macOS pauses charging to cool off, Sensei tells you why and what to do.',
   },
   {
     kanji: '電',
     icon: Zap,
-    title: 'Live charging power',
-    body: 'Watts in, watts out. Spot a flaky cable instantly.',
+    title: 'Live watts in, watts out',
+    body: 'Spot a flaky cable in seconds. Catch a thirsty app before it eats your day.',
     span: 'lg:col-span-2',
   },
   {
     kanji: '守',
     icon: ShieldCheck,
-    title: 'Privacy by default',
-    body: 'Everything stays on your Mac. No cloud. No accounts.',
+    title: 'Stays on your Mac',
+    body: 'No cloud. No account. No telemetry. Your battery story is yours alone.',
+    span: 'lg:col-span-2',
   },
   {
     kanji: '言',
     icon: Languages,
-    title: 'Five languages',
+    title: 'Speaks five languages',
     body: 'EN · DE · ES · FR · 日本語',
+    span: 'lg:col-span-2',
   },
 ]
 
@@ -72,7 +74,7 @@ export function Health() {
           delay={200}
           className="display-title text-3xl font-semibold text-sumi md:text-5xl max-w-2xl"
         >
-          Every battery metric,
+          Every metric that matters,
           <span className="block italic text-sumi-soft font-normal">
             in a sentence you'd actually say.
           </span>

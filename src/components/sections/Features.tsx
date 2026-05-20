@@ -1,4 +1,4 @@
-import { Eye, Bell, BatteryCharging, Plane } from 'lucide-react'
+import { Eye, Bell, BatteryCharging, Plane, Wifi, Search, Zap } from 'lucide-react'
 import { Hanko } from '#/components/zen/Hanko'
 import { Reveal } from '#/components/zen/Reveal'
 import { TiltCard } from '#/components/zen/TiltCard'
@@ -7,31 +7,165 @@ import { InkLevelBar } from '#/components/zen/InkLevelBar'
 const featured = {
   seal: '警',
   icon: Bell,
-  title: 'Smart warnings.',
-  italic: 'The heart of Sensei.',
+  title: 'Three levels. You pick.',
+  italic: 'Sensei whispers, insists, or stays.',
   jp: '静かな警告',
-  body: "Sensei watches your battery so you never miss a critical low. Three calm levels — Zen whispers, Alert insists, Critical overlays the screen. You set the thresholds; Sensei respects them.",
-  pills: ['Zen mode', 'Alert mode', 'Critical overlay', 'Custom thresholds'],
+  body: "macOS shows you a percent. Sensei shows you the right nudge at the right moment. Pick a preset, or set your own thresholds. Fewer surprise shutdowns. Quieter days.",
 }
 
 const supporting = [
   {
     seal: '保',
     icon: BatteryCharging,
-    title: 'Charge limits',
-    titleSub: '+ Travel Mode',
+    title: 'Charge limit',
+    titleSub: 'with Travel Mode',
     jp: '長く保つ・旅',
-    body: 'Cap charging at 80% to extend cycle life. One click switches to Travel Mode and tops up to 100% before a trip.',
-    chip: { icon: Plane, label: 'Travel Mode · charges to 100%' },
+    body: 'Apple recommends keeping charge below 100% to slow chemical aging. Sensei holds your cap. Heading on a flight? One click for a full charge, then it returns when you are home.',
+    chip: { icon: Plane, label: 'Travel Mode · full charge on demand' },
+    mockup: null as null | (() => JSX.Element),
   },
   {
     seal: '見',
     icon: Eye,
-    title: 'Menu-bar glance',
+    title: 'One glance, the whole story',
     jp: '一目で',
-    body: 'Live charge, status, and power source — always one look away. No dock clutter, no notifications spam.',
+    body: 'Charge, source, watts in or out, time left. All from your menu bar. No dock icon. No notification noise.',
+    chip: null as null | { icon: typeof Plane; label: string },
+    mockup: MenuBarGlanceMockup as () => JSX.Element,
   },
 ]
+
+/**
+ * Compact macOS dropdown mockup — mirrors how Battery Sensei reads when
+ * its menu-bar status item is clicked open. A thin translucent menu bar
+ * with the BatterySensei badge highlighted, then a small context-menu
+ * card below with the live numbers (port of the menuStatusItem + items
+ * built in BatteryStatusItemController.swift).
+ */
+function MenuBarGlanceMockup() {
+  return (
+    <div className="relative mt-5 mx-auto w-fit max-w-full">
+      {/* Menu bar — only the right-edge cluster (system icons + Sensei badge),
+          rendered above the dropdown so it reads as "this is the icon you'd
+          click". Width is narrow on purpose; this is a context, not a chrome. */}
+      <div className="flex h-6 items-center justify-end gap-2.5 rounded-t-md bg-[color-mix(in_oklab,var(--sumi)_74%,transparent)] px-2.5 text-white/85">
+        <Wifi className="h-2.5 w-2.5" strokeWidth={1.8} aria-hidden />
+        <Search className="h-2.5 w-2.5" strokeWidth={1.8} aria-hidden />
+        <span className="tabular-nums font-medium text-[10px]">13:42</span>
+        <MenuBarBatteryBadge percent={84} charging />
+      </div>
+
+      {/* Dropdown — context menu under the badge, right-aligned. */}
+      <div className="ml-auto mt-1 w-[244px] overflow-hidden rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,#fff)] shadow-[0_1px_0_rgba(255,255,255,0.5)_inset,0_14px_30px_-14px_rgba(28,26,23,0.30),0_4px_10px_-6px_rgba(28,26,23,0.18)]">
+        {/* Hero row: app icon + big % + time-left */}
+        <div className="flex items-center gap-3 px-3 pt-3 pb-2.5">
+          <img
+            src="/app-icon.png"
+            srcSet="/app-icon-256.png 1x, /app-icon.png 2x"
+            alt=""
+            aria-hidden
+            className="h-8 w-8 drop-shadow-[0_2px_4px_rgba(28,26,23,0.15)]"
+          />
+          <div className="min-w-0 leading-tight">
+            <p className="display-title text-[18px] font-bold tabular-nums text-sumi leading-none">
+              84%
+            </p>
+            <p className="mt-1 text-[10px] uppercase tracking-[0.16em] text-sumi-soft">
+              1h 52m left
+            </p>
+          </div>
+        </div>
+
+        <MenuSep />
+
+        {/* Live status rows — like NSMenuItems built in BatteryStatusItemController */}
+        <MenuRow
+          icon={<Zap className="h-3 w-3 text-hinomaru" strokeWidth={2} />}
+          label="Charging to 85%"
+          value="29.7 W"
+        />
+        <MenuRow label="Source" value="Power adapter" />
+        <MenuRow label="Cycles" value="217" />
+
+        <MenuSep />
+
+        {/* Toggle-row: Charge Limit */}
+        <div className="flex items-center justify-between gap-2 px-3 py-1.5 text-[11px] text-sumi">
+          <span className="flex items-center gap-1.5">
+            <span className="inline-block h-1.5 w-1.5 rounded-full bg-hinomaru" />
+            Charge limit · 85%
+          </span>
+          <span className="rounded-sm bg-sumi px-1.5 py-0.5 text-[9px] font-semibold tracking-wider text-washi">
+            ON
+          </span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function MenuRow({
+  icon,
+  label,
+  value,
+}: {
+  icon?: React.ReactNode
+  label: string
+  value: string
+}) {
+  return (
+    <div className="flex items-center justify-between gap-2 px-3 py-1.5 text-[11px] text-sumi">
+      <span className="flex items-center gap-1.5 min-w-0">
+        {icon}
+        <span className="truncate">{label}</span>
+      </span>
+      <span className="tabular-nums text-sumi-soft">{value}</span>
+    </div>
+  )
+}
+
+function MenuSep() {
+  return <span aria-hidden className="block h-px w-full bg-[var(--line)]" />
+}
+
+function MenuBarBatteryBadge({
+  percent,
+  charging = false,
+}: {
+  percent: number
+  charging?: boolean
+}) {
+  return (
+    <span
+      className="relative inline-flex items-center gap-0.5 rounded-sm px-1 py-0.5 bg-white/10 ring-1 ring-white/25"
+      aria-hidden
+    >
+      {charging && <Zap className="h-2.5 w-2.5 text-hinomaru" strokeWidth={2.2} />}
+      <svg viewBox="0 0 24 12" width="20" height="10">
+        <rect
+          x="0.5"
+          y="1"
+          width="20"
+          height="10"
+          rx="2"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1"
+        />
+        <rect x="21.5" y="4" width="2" height="4" rx="0.5" fill="currentColor" />
+        <rect
+          x="2"
+          y="2.5"
+          width={Math.max(1, (percent / 100) * 17)}
+          height="7"
+          rx="1"
+          fill="var(--hinomaru)"
+        />
+      </svg>
+      <span className="tabular-nums text-[9px] font-semibold text-white">{percent}%</span>
+    </span>
+  )
+}
 
 /**
  * Per-rule description row — matches the app's `SetupWizardRuleDescriptionRow`
@@ -112,7 +246,7 @@ export function Features() {
       <div className="mb-16 flex flex-col items-center text-center">
         <Hanko kanji="基" className="mb-5" />
         <Reveal as="p" delay={120} className="kicker-row mb-4">
-          The basics, refined
+          What it does
         </Reveal>
         <Reveal
           as="h2"
@@ -156,55 +290,50 @@ export function Features() {
                   </p>
 
                   {/* Live ink meter — wet sumi stroke drains stepwise through
-                      thresholds, pausing as each checkpoint flick pulses, then
-                      sharply recharges. Mirrors `SetupWizardWarningPreview`
-                      from the app — bar, flicks, and per-rule description rows. */}
+                      the three thresholds, pausing as each checkpoint flick
+                      pulses, then sharply recharges. Mirrors the app's
+                      Regular Mode preview in SetupWizardWarningPreview. */}
                   <div className="mt-7 max-w-xl">
                     <div className="mb-3 flex items-baseline justify-between text-[10px] uppercase tracking-[0.28em] text-nezumi">
                       <span>Battery</span>
-                      <span className="font-jp normal-case tracking-[0.3em] text-hinomaru/80">警 告</span>
+                      <span className="font-jp normal-case tracking-[0.3em] text-hinomaru/80">
+                        警 告
+                      </span>
                     </div>
                     <InkLevelBar
                       thresholds={[
-                        { fraction: 0.35, level: 'info', label: 'Zen' },
-                        { fraction: 0.15, level: 'warn', label: 'Alert' },
-                        { fraction: 0.05, level: 'critical', label: 'Critical' },
+                        // displayFraction is what we render on the bar — picked
+                        // to match the drain keyframes in styles.css so the
+                        // wet brush head lands exactly on each flick.
+                        // The real fractions stay 15/5/2 (shown in the rule rows).
+                        { fraction: 0.15, displayFraction: 0.32, level: 'info', label: 'Info' },
+                        { fraction: 0.05, displayFraction: 0.16, level: 'warn', label: 'Warning' },
+                        { fraction: 0.02, displayFraction: 0.07, level: 'critical', label: 'Alert' },
                       ]}
                     />
                     <ul className="mt-4 space-y-2">
                       <RuleRow
-                        percent={35}
-                        title="Zen whisper"
-                        detail="Auto-dismiss after 8s"
+                        percent={15}
+                        title="Info"
+                        detail="Quiet nudge. Closes itself in 5 s."
                         color="rgb(33, 125, 247)"
                         delay={120}
                       />
                       <RuleRow
-                        percent={15}
-                        title="Alert overlay"
-                        detail="Auto-dismiss after 12s"
+                        percent={5}
+                        title="Warning"
+                        detail="Card on screen for 10 s."
                         color="rgb(250, 133, 10)"
                         delay={240}
                       />
                       <RuleRow
-                        percent={5}
-                        title="Critical full-screen"
-                        detail="Dismiss manually"
+                        percent={2}
+                        title="Alert"
+                        detail="Stays until you dismiss it."
                         color="rgb(255, 56, 71)"
                         delay={360}
                       />
                     </ul>
-                  </div>
-
-                  <div className="mt-5 flex flex-wrap gap-2">
-                    {featured.pills.map((p) => (
-                      <span
-                        key={p}
-                        className="rounded-full border border-[var(--line-strong)] bg-[var(--washi-soft)] px-3 py-1 text-xs text-sumi-soft"
-                      >
-                        {p}
-                      </span>
-                    ))}
                   </div>
                 </div>
               </div>
@@ -213,7 +342,7 @@ export function Features() {
         </Reveal>
 
         {/* Supporting cards */}
-        {supporting.map(({ seal, icon: Icon, title, titleSub, jp, body, chip }, i) => (
+        {supporting.map(({ seal, icon: Icon, title, titleSub, jp, body, chip, mockup: Mockup }, i) => (
           <Reveal key={title} delay={140 + i * 100}>
             <TiltCard rotateAmplitude={6} scaleOnHover={1.015}>
               <article className="paper-card p-7 h-full flex flex-col">
@@ -231,7 +360,9 @@ export function Features() {
                     </span>
                   )}
                 </h3>
-                <p className="mt-1 font-jp text-xs text-nezumi tracking-wider">{jp}</p>
+                <p className="mt-1 font-jp text-xs text-nezumi tracking-wider">
+                  {jp}
+                </p>
                 <p className="mt-4 text-sm leading-relaxed text-sumi-soft">{body}</p>
                 {chip && (
                   <div className="mt-5 inline-flex w-fit items-center gap-2 rounded-md bg-[var(--washi-deep)] px-3 py-1.5 text-xs text-sumi">
@@ -239,6 +370,7 @@ export function Features() {
                     {chip.label}
                   </div>
                 )}
+                {Mockup && <Mockup />}
               </article>
             </TiltCard>
           </Reveal>

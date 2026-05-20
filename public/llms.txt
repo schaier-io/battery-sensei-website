@@ -1,0 +1,41 @@
+# Battery Sensei
+
+> A calm, free, native macOS menu-bar app that watches your MacBook battery.
+> Smart low-battery alerts, charge limit with Travel Mode, cycle and capacity
+> tracking, and a plain-English battery history. Runs entirely on your Mac.
+
+Battery Sensei (電池先生) is a single-purpose macOS utility for MacBook owners
+who want to slow battery wear, avoid surprise shutdowns, and understand how
+their battery is aging. It is free, notarized by Apple, native AppKit and
+SwiftUI, and supports macOS 13 Ventura or later on Apple Silicon and Intel.
+
+Privacy: nothing leaves the device. No telemetry, no account, no cloud.
+
+## Quick facts
+
+- Price: free
+- Platform: macOS 13+ (Apple Silicon and Intel)
+- Distribution: notarized .dmg, direct download
+- Languages: English, German, Spanish, French, Japanese
+- Open source: https://github.com/sandro/battery-sensei
+
+## Key features
+
+- Three-level low-battery alerts (Zen / Regular / Senpai presets, or custom)
+- Charge limit (cap at any percent, default 85%) with one-click Travel Mode
+- Live charge, source, watts in/out, and time-left readout in the menu bar
+- Cycle count and capacity tracking with plain-English context
+- Heat-throttling awareness with explanation of macOS pause behaviour
+- Personal battery history (timeline of cycles, rescues, plateaus)
+- AlDente alternative for users who want a free, simple, native option
+
+## Docs
+
+- [Pricing](https://battery-sensei.app/pricing.md): free, no tiers
+- [Site](https://battery-sensei.app/): full marketing site with FAQs
+- [Source](https://github.com/sandro/battery-sensei): GitHub repository
+
+## Optional
+
+- [FAQ](https://battery-sensei.app/#faq): answers to common buyer questions
+- [Sitemap](https://battery-sensei.app/sitemap.xml)

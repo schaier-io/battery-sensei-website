@@ -7,32 +7,46 @@ import {
 import { Hanko } from '#/components/zen/Hanko'
 import { Reveal } from '#/components/zen/Reveal'
 
-const items = [
+/**
+ * Shared FAQ data — also consumed by the FAQPage JSON-LD schema in
+ * src/routes/__root.tsx so the answers can earn rich results.
+ */
+export const FAQ_ITEMS: ReadonlyArray<{ q: string; a: string }> = [
   {
     q: 'Which Macs and macOS versions does Battery Sensei support?',
-    a: 'macOS 13 Ventura, Sonoma, Sequoia, and later — on both Apple Silicon (M1/M2/M3/M4) and Intel MacBooks.',
+    a: 'macOS 13 Ventura, Sonoma, Sequoia, and later, on both Apple Silicon (M1/M2/M3/M4) and Intel MacBooks.',
   },
   {
     q: 'Is Battery Sensei free?',
-    a: 'Yes — free and notarized by Apple. Download the .dmg directly from this site. No accounts, no subscription.',
+    a: 'Yes. Battery Sensei is free and notarized by Apple. Download the .dmg directly from this site. No accounts, no subscription, no in-app purchases.',
   },
   {
     q: 'How does the charge limit and Travel Mode work?',
-    a: 'Sensei caps your MacBook at a charge level you choose (default 80%) to extend battery life. One click switches to Travel Mode — Sensei tops the battery up to 100% before a trip, then returns to your normal limit afterward.',
+    a: 'Sensei caps your MacBook at a charge level you choose (default 85 percent) to extend battery life. One click switches to Travel Mode and Sensei tops the battery up to 100 percent before a trip, then returns to your normal limit when you are home.',
   },
   {
     q: 'Does Battery Sensei send my data anywhere?',
-    a: 'No. Battery Sensei is privacy-first — it runs entirely on your Mac. No telemetry, no analytics, no cloud account. Your personal battery history stays local; nothing leaves your machine unless you explicitly share it.',
+    a: 'No. Battery Sensei is privacy-first. It runs entirely on your Mac. No telemetry, no analytics, no cloud account. Your personal battery history stays local; nothing leaves your machine unless you explicitly share it.',
   },
   {
-    q: "How is this different from macOS's built-in battery menu?",
-    a: "macOS shows you a percentage. Battery Sensei tells you a story — cycles, capacity, thermal state, charging power, and what it all means. Plus customizable low-battery warnings, charge limits, Travel Mode, and a personal battery history.",
+    q: 'How is Battery Sensei different from the built-in macOS battery menu?',
+    a: 'macOS shows you a percentage. Battery Sensei adds smart low-battery alerts at thresholds you choose, a charge limit with Travel Mode, live charging watts, cycle and capacity tracking, and a plain-English history of how your battery is aging.',
+  },
+  {
+    q: 'How much battery does Battery Sensei itself use?',
+    a: 'Less than one percent. Sensei is a native AppKit and SwiftUI menu-bar app with no background polling. It samples the system battery only when macOS reports a change.',
+  },
+  {
+    q: 'Is Battery Sensei an AlDente alternative?',
+    a: 'Yes. Sensei covers AlDente’s core charge-limit feature for free, adds smart warnings and a personal battery history, and ships as a single notarized .dmg with no account.',
   },
   {
     q: 'How do I update Battery Sensei?',
-    a: 'Sensei checks for updates on launch and notifies you when a new version is available. You stay in control — updates only install when you say so.',
+    a: 'Sensei checks for updates on launch and notifies you when a new version is available. You stay in control: updates only install when you say so.',
   },
 ]
+
+const items = FAQ_ITEMS
 
 export function FAQ() {
   return (

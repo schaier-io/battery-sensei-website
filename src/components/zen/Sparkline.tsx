@@ -12,7 +12,10 @@ type SparklineProps = {
 }
 
 /**
- * Tiny brush-stroke line graph. Defaults look like a battery capacity decline.
+ * Smooth charge/capacity line chart. Mirrors the macOS app's
+ * `BatteryChargeHistoryPanel` styling (Surfaces/SagaSurface.swift):
+ * hinomaru stroke, gradient red area, latest-point bullseye.
+ * Used in compact spots (Health bento, BatteryJournal).
  */
 export function Sparkline({
   values,
@@ -37,10 +40,7 @@ export function Sparkline({
     return [x, y] as const
   })
 
-  const linePath = points
-    .map(([x, y], i) => (i === 0 ? `M ${x} ${y}` : `L ${x} ${y}`))
-    .join(' ')
-
+  const linePath = catmullRomPath(points)
   const areaPath = `${linePath} L ${points.at(-1)?.[0]} ${h - padY} L ${points[0][0]} ${h - padY} Z`
 
   const last = points.at(-1)
@@ -54,13 +54,9 @@ export function Sparkline({
       aria-hidden
     >
       <defs>
-        <filter id={`sl-rough-${id}`} x="-2%" y="-20%" width="104%" height="140%">
-          <feTurbulence type="fractalNoise" baseFrequency="0.4" numOctaves="2" seed="11" />
-          <feDisplacementMap in="SourceGraphic" scale="0.8" />
-        </filter>
         <linearGradient id={`sl-grad-${id}`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="currentColor" stopOpacity="0.18" />
-          <stop offset="100%" stopColor="currentColor" stopOpacity="0" />
+          <stop offset="0%" stopColor="var(--hinomaru)" stopOpacity="0.32" />
+          <stop offset="100%" stopColor="var(--hinomaru)" stopOpacity="0.02" />
         </linearGradient>
       </defs>
 
@@ -70,9 +66,9 @@ export function Sparkline({
         y1={h - padY}
         x2={w - padX}
         y2={h - padY}
-        stroke="currentColor"
-        strokeOpacity="0.12"
-        strokeDasharray="2 4"
+        stroke="var(--line)"
+        strokeWidth="0.8"
+        strokeDasharray="3 4"
       />
 
       {fill && <path d={areaPath} fill={`url(#sl-grad-${id})`} />}
@@ -80,11 +76,10 @@ export function Sparkline({
       <path
         d={linePath}
         fill="none"
-        stroke="currentColor"
-        strokeWidth="1.6"
+        stroke="var(--hinomaru)"
+        strokeWidth="1.8"
         strokeLinecap="round"
         strokeLinejoin="round"
-        filter={`url(#sl-rough-${id})`}
       />
 
       {markLatest && last && (
@@ -92,13 +87,33 @@ export function Sparkline({
           <circle
             cx={last[0]}
             cy={last[1]}
-            r="3.6"
+            r="3.8"
             fill="var(--hinomaru)"
             opacity="0.18"
           />
-          <circle cx={last[0]} cy={last[1]} r="1.8" fill="var(--hinomaru)" />
+          <circle cx={last[0]} cy={last[1]} r="1.8" fill="var(--sumi)" />
         </>
       )}
     </svg>
   )
+}
+
+/** Centripetal Catmull-Rom-ish smoothing — matches ChargeChart. */
+function catmullRomPath(pts: ReadonlyArray<readonly [number, number]>): string {
+  if (pts.length === 0) return ''
+  if (pts.length === 1) return `M ${pts[0][0]} ${pts[0][1]}`
+  const tension = 0.22
+  const segs: string[] = [`M ${pts[0][0]} ${pts[0][1]}`]
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[i - 1] ?? pts[i]
+    const p1 = pts[i]
+    const p2 = pts[i + 1]
+    const p3 = pts[i + 2] ?? pts[i + 1]
+    const c1x = p1[0] + (p2[0] - p0[0]) * tension
+    const c1y = p1[1] + (p2[1] - p0[1]) * tension
+    const c2x = p2[0] - (p3[0] - p1[0]) * tension
+    const c2y = p2[1] - (p3[1] - p1[1]) * tension
+    segs.push(`C ${c1x} ${c1y}, ${c2x} ${c2y}, ${p2[0]} ${p2[1]}`)
+  }
+  return segs.join(' ')
 }

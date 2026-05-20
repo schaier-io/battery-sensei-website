@@ -1,44 +1,106 @@
 import { Download as DownloadIcon, Github } from 'lucide-react'
+import { Reveal } from '#/components/zen/Reveal'
+import { ChargeRing } from '#/components/zen/ChargeRing'
 
 export function Download() {
   return (
-    <section id="download" className="zen-section px-6">
+    <section id="download" className="zen-section px-5 sm:px-6">
       <div className="relative mx-auto max-w-3xl text-center">
-        <img
-          src="/app-icon.png"
-          srcSet="/app-icon-256.png 1x, /app-icon.png 2x"
-          alt="Battery Sensei logo"
-          className="mx-auto mb-8 h-24 w-24 sm:h-32 sm:w-32 drop-shadow-[0_8px_18px_rgba(28,26,23,0.18)]"
-        />
-        <p className="font-jp text-base text-hinomaru/80 mb-3 tracking-widest">
+        {/* Bristled brush ring + gold charge arc + shimmer + app icon —
+            mirrors the macOS app's heroIconPanel, at the "almost full"
+            80% point with a sweeping highlight along the gold. */}
+        <Reveal delay={60} className="relative mx-auto mb-8 w-fit">
+          <ChargeRing fraction={0.8} size={240} />
+        </Reveal>
+
+        <Reveal as="p" delay={140} className="font-jp text-base text-hinomaru/80 mb-3 tracking-[0.4em]">
           ようこそ
-        </p>
-        <h2 className="display-title text-3xl font-semibold text-sumi md:text-5xl">
-          Bring Sensei home.
-        </h2>
-        <p className="mx-auto mt-5 max-w-xl text-base text-sumi-soft">
-          12 MB · single-purpose · respects your time and your battery.
-        </p>
-        <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+        </Reveal>
+        <Reveal
+          as="h2"
+          delay={200}
+          className="display-title text-3xl font-semibold text-sumi md:text-5xl tracking-[-0.015em]"
+        >
+          Install once.
+          <span className="block italic text-sumi-soft font-normal">
+            Let your battery breathe.
+          </span>
+        </Reveal>
+        <Reveal
+          as="p"
+          delay={280}
+          className="mx-auto mt-5 max-w-xl text-base text-sumi-soft md:text-[1.0625rem]"
+        >
+          Free, notarized by Apple, native macOS. Sensei sits in your menu bar
+          and quietly looks after your battery from the very first day.
+        </Reveal>
+        <Reveal
+          delay={360}
+          className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row"
+        >
           <a
             href="#"
             data-todo="dmg-url"
-            className="btn-sumi inline-flex h-11 items-center gap-2.5 rounded-md px-6 text-sm font-medium"
+            className="btn-sumi group inline-flex h-11 items-center gap-2.5 rounded-md px-6 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
           >
-            <DownloadIcon className="h-4 w-4" strokeWidth={1.8} />
+            <DownloadIcon
+              className="h-4 w-4 transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5"
+              strokeWidth={1.8}
+            />
             Download .dmg
           </a>
           <a
             href="https://github.com/sandro/battery-sensei"
             target="_blank"
             rel="noreferrer"
-            className="inline-flex h-11 items-center gap-2 rounded-md px-4 text-sm font-medium text-sumi-soft hover:text-sumi transition-colors"
+            className="inline-flex h-11 items-center gap-2 rounded-md px-4 text-sm font-medium text-sumi-soft transition-colors duration-[280ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:text-sumi focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
           >
             <Github className="h-4 w-4" strokeWidth={1.5} />
             Source
           </a>
-        </div>
+        </Reveal>
+        <Reveal
+          delay={440}
+          className="mt-9 grid gap-3 sm:grid-cols-3 max-w-2xl mx-auto"
+        >
+          <TrustPill kanji="速" title="Native macOS" body="AppKit and SwiftUI. Feels like a system tool, because it is one." />
+          <TrustPill kanji="軽" title="Light on your battery" body="No background polling. Sensei wakes only when macOS reports a change." />
+          <TrustPill kanji="無" title="Nothing leaves your Mac" body="No telemetry. No account. No cloud, ever." />
+        </Reveal>
+
+        <Reveal
+          as="p"
+          delay={520}
+          className="mt-7 text-[11px] uppercase tracking-[0.22em] text-nezumi"
+        >
+          macOS 13+ · Apple Silicon &amp; Intel · Free · Notarized
+        </Reveal>
       </div>
     </section>
+  )
+}
+
+function TrustPill({
+  kanji,
+  title,
+  body,
+}: {
+  kanji: string
+  title: string
+  body: string
+}) {
+  return (
+    <div className="relative rounded-xl border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] px-4 py-4 text-left transition-transform duration-[280ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-0.5">
+      <span
+        aria-hidden
+        className="absolute top-3 right-3 font-jp text-base text-hinomaru/70 leading-none"
+      >
+        {kanji}
+      </span>
+      <p className="display-title text-[13px] font-semibold text-sumi tracking-tight pr-7">
+        {title}
+      </p>
+      <p className="mt-1 text-[12px] leading-snug text-sumi-soft">{body}</p>
+    </div>
   )
 }

@@ -21,9 +21,9 @@ export function Saga() {
             delay={180}
             className="display-title text-3xl font-semibold text-sumi md:text-5xl"
           >
-            Your battery's life,
+            A diary your battery
             <span className="block italic text-sumi-soft font-normal">
-              quietly recorded.
+              would actually keep.
             </span>
           </Reveal>
           <Reveal
@@ -31,22 +31,22 @@ export function Saga() {
             delay={260}
             className="mt-7 max-w-md text-base leading-relaxed text-sumi-soft"
           >
-            Sensei keeps a personal history — every cycle, every rescue, every
-            milestone. A capacity timeline you can read. An honest account of
-            how your MacBook is aging, written in plain language.
+            Every cycle. Every rescue. Every plateau. Sensei keeps a plain-English
+            record so when the day comes to retire your MacBook, you'll know how
+            it lived, and what carried it that far.
           </Reveal>
           <Reveal as="ul" delay={340} className="mt-8 space-y-3 text-sm text-sumi-soft">
             <li className="flex gap-3">
               <BrushTick className="text-sumi-soft mt-2 shrink-0" />
-              Cycles, rescues, plateaus — all annotated.
+              247 days, 217 cycles, 92%. Yours, annotated.
             </li>
             <li className="flex gap-3">
               <BrushTick className="text-sumi-soft mt-2 shrink-0" />
-              Capacity timeline updated as you live.
+              Updated quietly as you live, no setup.
             </li>
             <li className="flex gap-3">
               <BrushTick className="text-sumi-soft mt-2 shrink-0" />
-              Stays on your Mac. Yours alone, always.
+              Lives on your Mac. No cloud. No account.
             </li>
           </Reveal>
         </div>

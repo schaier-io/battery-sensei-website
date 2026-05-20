@@ -1,3 +1,48 @@
-# https://www.robotstxt.org/robotstxt.html
+# Battery Sensei — https://battery-sensei.app
+# robotstxt.org
+
+# Default: allow all standard search and AI crawlers.
 User-agent: *
-Disallow:
+Allow: /
+
+# Explicit allows for AI search bots (so each platform can cite us in
+# AI answers / Overviews). Listed for clarity even though * already
+# allows them.
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Block scrapers that only feed training datasets, not search citation.
+User-agent: CCBot
+Disallow: /
+
+Sitemap: https://battery-sensei.app/sitemap.xml

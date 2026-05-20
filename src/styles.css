@@ -226,16 +226,23 @@ body::after {
   letter-spacing: 0.4em;
 }
 
-/* Section kicker with kanji square seal */
+/* Section kicker with rule-line */
 .kicker-row {
   display: inline-flex;
   align-items: center;
   gap: 0.85rem;
   font-size: 0.72rem;
-  letter-spacing: 0.32em;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
   font-weight: 600;
   color: var(--sumi-soft);
+  max-width: 100%;
+}
+
+.kicker-row > span {
+  min-width: 0;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
 }
 
 .kicker-row::before {
@@ -244,6 +251,7 @@ body::after {
   height: 1px;
   background: var(--sumi);
   opacity: 0.4;
+  flex-shrink: 0;
 }
 
 /* Hanko (red square seal) */
@@ -344,13 +352,17 @@ body::after {
 }
 
 .paper-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
   border-color: var(--line-strong);
   box-shadow:
     0.4px 0.4px 0 0 var(--line-strong),
     0 1px 0 rgba(255, 255, 255, 0.5) inset,
     0 2px 4px var(--paper-shadow),
-    0 14px 32px rgba(28, 26, 23, 0.08);
+    0 18px 40px rgba(28, 26, 23, 0.10);
+}
+
+.paper-card:focus-within {
+  border-color: var(--line-strong);
 }
 
 /* Ink button (primary) */
@@ -358,10 +370,25 @@ body::after {
   background: var(--sumi);
   color: var(--washi);
   border: 1px solid var(--sumi);
-  transition: background 200ms ease, transform 150ms ease;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.12) inset,
+    0 1px 2px rgba(28, 26, 23, 0.18),
+    0 6px 18px -8px rgba(28, 26, 23, 0.35);
+  transition:
+    background-color 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 .btn-sumi:hover {
-  background: color-mix(in oklab, var(--sumi) 88%, var(--washi));
+  background: color-mix(in oklab, var(--sumi) 86%, var(--washi));
+  transform: translateY(-1px);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.12) inset,
+    0 2px 4px rgba(28, 26, 23, 0.20),
+    0 10px 26px -10px rgba(28, 26, 23, 0.45);
+}
+.btn-sumi:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.10) inset,
+    0 1px 2px rgba(28, 26, 23, 0.18);
 }
 
 /* (Hinomaru dot replaced by <BrushTick /> SVG component — no CSS needed) */
@@ -422,6 +449,28 @@ body::after {
    Mirrors the app's ZenMotion.ensoDraw curve. */
 @keyframes brush-ring-draw {
   to { stroke-dashoffset: 0; }
+}
+
+/* One wet-ink shimmer along the gold ChargeArc. It is a short arc <path>
+   whose stroke is a gradient (transparent → bright → transparent), so
+   the dash has soft caps painted into its colour. CSS rotates it around
+   the ring centre; opacity envelopes the sweep so the dash fades in,
+   travels, fades out, then the cycle rests at opacity 0 before looping. */
+.charge-ring-shimmer {
+  animation: charge-ring-shimmer 6.8s cubic-bezier(0.4, 0, 0.6, 1) 1.8s infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes charge-ring-shimmer {
+  0%   { transform: rotate(0deg);                opacity: 0;    }
+  12%  {                                          opacity: 0.9;  }
+  50%  {                                          opacity: 0.9;  }
+  62%  { transform: rotate(var(--shimmer-end));  opacity: 0;    }
+  100% { transform: rotate(var(--shimmer-end));  opacity: 0;    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .charge-ring-shimmer { animation: none; opacity: 0; }
 }
 
 /* Once the brush finishes drawing, the ring eases into a long, near-static
@@ -542,22 +591,24 @@ body::after {
 }
 
 /* Stepwise descent that mirrors the app's `startPreviewAnimation`
-   (Surfaces/SetupWizard.swift): starts at 0.65, drops to each threshold in
-   turn, holds briefly so the checkpoint flick can pulse, then recharges to
-   1.0 with the app's `previewTravelAnimation` curve. Cycle: 10s.
+   (Surfaces/SetupWizard.swift): starts above the first flick, drops to
+   each visual position in turn, holds briefly so the checkpoint flick can
+   pulse, then recharges to 1.0 with the app's `previewTravelAnimation`
+   curve. Cycle: 10s. Values match `displayFraction` in Features.tsx so
+   the wet brush head settles exactly on each visual flick.
    `--ink-head-fade` flips from 1 (dispersing) to 0 (clean) at the recharge
    start so the head matches the app's `isExtendingForward` mask switch. */
 @keyframes ink-level-cycle {
-  0%   { --ink-charge: 0.65; --ink-head-fade: 1; } /* initial pause */
-  4%   { --ink-charge: 0.65; --ink-head-fade: 1; }
-  11%  { --ink-charge: 0.35; --ink-head-fade: 1; } /* drop 1 */
-  18%  { --ink-charge: 0.35; --ink-head-fade: 1; }
-  28%  { --ink-charge: 0.15; --ink-head-fade: 1; } /* drop 2 */
-  35%  { --ink-charge: 0.15; --ink-head-fade: 1; }
-  45%  { --ink-charge: 0.05; --ink-head-fade: 1; } /* drop 3 */
-  51%  { --ink-charge: 0.05; --ink-head-fade: 1; }
+  0%   { --ink-charge: 0.55; --ink-head-fade: 1; } /* initial pause */
+  4%   { --ink-charge: 0.55; --ink-head-fade: 1; }
+  11%  { --ink-charge: 0.32; --ink-head-fade: 1; } /* settle on Info flick */
+  18%  { --ink-charge: 0.32; --ink-head-fade: 1; }
+  28%  { --ink-charge: 0.16; --ink-head-fade: 1; } /* settle on Warning flick */
+  35%  { --ink-charge: 0.16; --ink-head-fade: 1; }
+  45%  { --ink-charge: 0.07; --ink-head-fade: 1; } /* settle on Alert flick */
+  51%  { --ink-charge: 0.07; --ink-head-fade: 1; }
   /* Hard cut to sharp head as recharge begins (no transition mid-cycle). */
-  52%  { --ink-charge: 0.05; --ink-head-fade: 0; }
+  52%  { --ink-charge: 0.07; --ink-head-fade: 0; }
   82%  { --ink-charge: 1.00; --ink-head-fade: 0; } /* recharge done */
   /* Pause at full, then flip fade back on while still at full so the next
      cycle's drain starts with a dispersing head (and the flip is invisible
@@ -611,14 +662,19 @@ body::after {
 .brush-divider {
   display: block;
   width: 100%;
-  height: 24px;
+  height: 28px;
   color: var(--sumi);
-  opacity: 0.16;
+  opacity: 0.24;
 }
 
 /* Section spacing — generous "ma" 間 */
 .zen-section {
-  padding-block: clamp(5rem, 10vw, 9rem);
+  padding-block: clamp(4.5rem, 9vw, 8rem);
+}
+
+/* Section anchors offset so the sticky nav doesn't cover headings on jump */
+section[id] {
+  scroll-margin-top: 5rem;
 }
 
 /* Nav link */
@@ -627,9 +683,10 @@ body::after {
   font-size: 0.875rem;
   color: var(--sumi-soft);
   letter-spacing: 0.02em;
-  transition: color 180ms ease;
+  transition: color 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
-.nav-link:hover {
+.nav-link:hover,
+.nav-link[data-active='true'] {
   color: var(--sumi);
 }
 .nav-link::after {
@@ -637,14 +694,25 @@ body::after {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: -6px;
+  bottom: -8px;
   height: 1px;
   background: var(--sumi);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform 220ms ease;
+  transition: transform 320ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
-.nav-link:hover::after {
+.nav-link:hover::after,
+.nav-link[data-active='true']::after {
+  transform: scaleX(1);
+}
+.nav-link[data-active='true']::after {
+  background: var(--hinomaru);
+}
+.nav-link:focus-visible {
+  outline: none;
+  color: var(--sumi);
+}
+.nav-link:focus-visible::after {
   transform: scaleX(1);
 }
 

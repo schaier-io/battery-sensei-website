@@ -13,8 +13,14 @@ function rng(seed: number) {
 }
 
 export type InkLevelThreshold = {
-  /** Where the flick sits along the bar, 0...1 left→right. */
+  /** Semantic battery fraction this threshold fires at (drives the pulse delay). */
   fraction: number
+  /**
+   * Optional visual position 0…1 used for the flick along the bar.
+   * Defaults to `fraction`. Useful when several thresholds bunch at the
+   * low end of a linear bar; passing spread-out values keeps them legible.
+   */
+  displayFraction?: number
   /** Visual tint — maps to css variables. */
   level: 'info' | 'warn' | 'critical'
   /** Optional label rendered beside the flick. */
@@ -149,7 +155,7 @@ export function InkLevelBar({
       {thresholds.map((t, i) => (
         <Flick
           key={`${t.fraction}-${i}`}
-          x={t.fraction * W}
+          x={(t.displayFraction ?? t.fraction) * W}
           y={Y}
           color={COLOR_BY_LEVEL[t.level]}
           seed={seed + 11 * (i + 1) + Math.round(t.fraction * 100)}
@@ -364,13 +370,18 @@ function Flick({
   // The cycle is a stepwise descent through the thresholds — the wet brush
   // pauses at each fraction (where a checkpoint pulse should fire) before
   // dropping to the next. Times below match the @keyframes in styles.css.
-  // Cycle is 10s; thresholds 0.35 / 0.15 / 0.05 arrive at ~11%, ~28%, ~45%
-  // of cycle respectively, with the pulse landing just as the brush head
-  // settles on the flick.
+  // Cycle is 10 s; the visual settling points are 0.32 / 0.16 / 0.07 (set in
+  // Features.tsx via displayFraction). The pulse fires just as the brush
+  // head lands on each flick (≈11 %, ≈28 %, ≈45 % of the cycle).
   const CHECKPOINT_TIMES: Record<string, number> = {
+    // Semantic battery percent → seconds into the 10 s cycle when the wet
+    // brush head settles on this threshold's flick (visual settling points
+    // are 0.32 / 0.16 / 0.07 — see styles.css ink-level-cycle).
+    '0.15': 1.1, // Info  — head arrives at flick position 0.32
+    '0.05': 2.8, // Warn  — head arrives at flick position 0.16
+    '0.02': 4.5, // Alert — head arrives at flick position 0.07
+    // Legacy values from the previous threshold scheme.
     '0.35': 1.1,
-    '0.15': 2.8,
-    '0.05': 4.5,
   }
   const key = fraction.toFixed(2)
   const delaySec = CHECKPOINT_TIMES[key] ?? (1 - fraction) * 5
