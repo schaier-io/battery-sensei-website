@@ -38,7 +38,7 @@ export const FAQ_ITEMS: ReadonlyArray<{ q: string; a: string }> = [
   },
   {
     q: 'Is Battery Sensei an AlDente alternative?',
-    a: 'Yes. Sensei covers AlDente’s core charge-limit feature for free, adds smart warnings and a personal battery history, and ships as a single notarized .dmg with no account.',
+    a: 'Yes. Sensei covers AlDente\'s core charge-limit feature for free, adds smart warnings and a personal battery history, and ships as a single notarized .dmg with no account. A detailed side-by-side comparison lives at battery-sensei.app/vs-aldente.',
   },
   {
     q: 'How do I update Battery Sensei?',

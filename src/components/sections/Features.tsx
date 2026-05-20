@@ -1,4 +1,4 @@
-import { Eye, Bell, BatteryCharging, Plane, Wifi, Search, Zap } from 'lucide-react'
+import { Eye, Bell, BatteryCharging, Plane, Wifi, Search, Zap, CalendarClock, Lock } from 'lucide-react'
 import { Hanko } from '#/components/zen/Hanko'
 import { Reveal } from '#/components/zen/Reveal'
 import { TiltCard } from '#/components/zen/TiltCard'
@@ -10,7 +10,7 @@ const featured = {
   title: 'Three levels. You pick.',
   italic: 'Sensei whispers, insists, or stays.',
   jp: '静かな警告',
-  body: "macOS shows you a percent. Sensei shows you the right nudge at the right moment. Pick a preset, or set your own thresholds. Fewer surprise shutdowns. Quieter days.",
+  body: "macOS shows you a percent. Sensei picks the right nudge for the moment, so you never lose work to a surprise shutdown again. Three preset moods, or set your own thresholds and dismiss times.",
 }
 
 const supporting = [
@@ -20,8 +20,8 @@ const supporting = [
     title: 'Charge limit',
     titleSub: 'with Travel Mode',
     jp: '長く保つ・旅',
-    body: 'Apple recommends keeping charge below 100% to slow chemical aging. Sensei holds your cap. Heading on a flight? One click for a full charge, then it returns when you are home.',
-    chip: { icon: Plane, label: 'Travel Mode · full charge on demand' },
+    body: 'Apple says lithium-ion ages faster the longer it sits at 100%. Pick a cap (we suggest 80%). Sensei holds it in the background. Flying tomorrow? One click for a full charge, then your cap returns when you are home.',
+    chip: { icon: Plane, label: 'Travel Mode · full charge before a trip' },
     mockup: null as null | (() => JSX.Element),
   },
   {
@@ -29,9 +29,19 @@ const supporting = [
     icon: Eye,
     title: 'One glance, the whole story',
     jp: '一目で',
-    body: 'Charge, source, watts in or out, time left. All from your menu bar. No dock icon. No notification noise.',
+    body: 'Charge, source, watts in or out, time left. The whole picture, one look. No dock icon. No notification noise. Nothing to click unless you want to.',
     chip: null as null | { icon: typeof Plane; label: string },
     mockup: MenuBarGlanceMockup as () => JSX.Element,
+  },
+  {
+    seal: '会',
+    icon: CalendarClock,
+    title: 'Meetings, met.',
+    titleSub: 'Sensei reads ahead, so your battery does too.',
+    jp: '会議の前に',
+    body: "Opt-in. Sensei peeks at your next few meetings and warns you when the battery won't survive the one that matters. Loss-aversion-forward copy — \"your laptop dies 17 minutes into standup\" — and a clear fix. Event titles never leave your Mac.",
+    chip: { icon: Lock, label: 'Read-only · titles never leave your Mac' },
+    mockup: MeetingGuardMockup as () => JSX.Element,
   },
 ]
 
@@ -99,6 +109,60 @@ function MenuBarGlanceMockup() {
             ON
           </span>
         </div>
+      </div>
+    </div>
+  )
+}
+
+/**
+ * Compact mockup for the Meeting Battery Guard feature card. Mirrors the
+ * loss-aversion-forward warning the macOS app surfaces 30/15/5 min before
+ * a critical meeting: a small calendar entry strip + the warning copy
+ * Sensei would actually show. Kept deliberately quiet — the privacy chip
+ * does the heavy lifting, the mockup just shows the shape of the alert.
+ */
+function MeetingGuardMockup() {
+  return (
+    <div className="mt-5 mx-auto w-full max-w-[320px]">
+      {/* Upcoming meeting strip — washi paper card with a tabular time + title */}
+      <div className="rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,#fff)] px-3 py-2.5 shadow-[0_1px_0_rgba(255,255,255,0.5)_inset,0_8px_18px_-12px_rgba(28,26,23,0.22)]">
+        <div className="flex items-center gap-2.5">
+          <CalendarClock className="h-3.5 w-3.5 text-sumi-soft" strokeWidth={1.8} aria-hidden />
+          <span className="text-[10px] uppercase tracking-[0.18em] text-sumi-soft">
+            Next on calendar
+          </span>
+          <span className="ml-auto rounded-sm bg-sumi/8 px-1.5 py-0.5 text-[9px] font-semibold tracking-wider text-sumi-soft">
+            3:00 PM · 60 min
+          </span>
+        </div>
+        <p className="display-title mt-1.5 text-[15px] font-semibold text-sumi leading-tight">
+          Weekly standup
+        </p>
+      </div>
+
+      {/* Warning card — red hinomaru accent, loss-framing first, fix second */}
+      <div className="mt-2 rounded-md border border-hinomaru/30 bg-[color-mix(in_oklab,var(--hinomaru)_6%,var(--washi))] px-3 py-2.5 shadow-[0_1px_0_rgba(255,255,255,0.5)_inset]">
+        <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.18em] text-hinomaru">
+          <span className="inline-block h-1.5 w-1.5 rounded-full bg-hinomaru" />
+          Battery won't last your meeting
+        </div>
+        <p className="mt-1.5 text-[13px] font-medium leading-snug text-sumi">
+          Your laptop dies <span className="font-semibold text-hinomaru">17 min</span> into standup. Plug in now.
+        </p>
+        <p className="mt-1 text-[11px] text-sumi-soft leading-snug">
+          22 min on the charger and you're clear through.
+        </p>
+      </div>
+
+      {/* Tiny meta-row — under the warning, signalling privacy + control */}
+      <div className="mt-2 flex items-center justify-between text-[9px] text-sumi-soft">
+        <span className="inline-flex items-center gap-1">
+          <Lock className="h-2.5 w-2.5" strokeWidth={2} aria-hidden />
+          On-device only
+        </span>
+        <span className="font-jp tracking-[0.3em] text-hinomaru/70">
+          会 議
+        </span>
       </div>
     </div>
   )

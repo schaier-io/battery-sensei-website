@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Download } from 'lucide-react'
+import { Download, Github } from 'lucide-react'
 import { Reveal } from '#/components/zen/Reveal'
 import { MenuBarMockup } from '#/components/zen/MenuBarMockup'
 
@@ -118,9 +118,10 @@ export function Hero() {
           静かに、電池に寄り添う。
         </Reveal>
         <Reveal as="p" delay={400} className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-sumi-soft md:text-[1.0625rem]">
-          Your MacBook's battery is the one part that quietly wears down.
-          Sensei watches it for you, gently. Warns before a surprise shutdown,
-          holds your charge limit, and keeps an honest record of how it ages.
+          Your MacBook's battery quietly wears down with every charge. Sensei
+          watches it for you: warns before a surprise shutdown, holds your
+          charge limit so the cells last longer, and keeps a plain-English
+          record of how the years are going.
         </Reveal>
 
         <Reveal delay={480} className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -137,12 +138,13 @@ export function Hero() {
             rel="noreferrer"
             className="inline-flex h-11 items-center gap-2 rounded-md px-4 text-sm text-sumi-soft hover:text-sumi transition-colors duration-[280ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
           >
-            View source
+            <Github className="h-4 w-4" strokeWidth={1.6} />
+            Read the source
           </a>
         </Reveal>
 
         <Reveal as="p" delay={560} className="mt-7 text-[11px] uppercase tracking-[0.22em] text-nezumi">
-          Native macOS · barely sips power · stays in your menu bar · privacy-first
+          Free &amp; open source · native macOS · privacy-first · barely sips power
         </Reveal>
 
         <Reveal
@@ -151,7 +153,7 @@ export function Hero() {
         >
           <MenuBarMockup className="rotate-[-1.2deg] transition-transform duration-[520ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:rotate-0 hover:-translate-y-1" />
           <p className="mt-4 text-center text-[11px] tracking-[0.18em] text-nezumi uppercase">
-            Lives in your menu bar. Speaks only when needed.
+            Lives in your menu bar. Speaks only when it matters.
           </p>
         </Reveal>
       </div>

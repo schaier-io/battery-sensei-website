@@ -31,9 +31,10 @@ export function Saga() {
             delay={260}
             className="mt-7 max-w-md text-base leading-relaxed text-sumi-soft"
           >
-            Every cycle. Every rescue. Every plateau. Sensei keeps a plain-English
-            record so when the day comes to retire your MacBook, you'll know how
-            it lived, and what carried it that far.
+            Every cycle. Every rescue. Every plateau. Sensei keeps a
+            plain-English journal of your battery's life so when the day comes
+            to retire your MacBook, you know how it lived, what carried it that
+            far, and exactly what to ask the next one to do better.
           </Reveal>
           <Reveal as="ul" delay={340} className="mt-8 space-y-3 text-sm text-sumi-soft">
             <li className="flex gap-3">

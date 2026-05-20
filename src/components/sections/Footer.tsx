@@ -27,7 +27,7 @@ export function Footer() {
         <Hanko kanji="禅" />
 
         <p className="max-w-md text-xs tracking-[0.12em] text-nezumi uppercase">
-          Crafted with care for MacBooks worldwide
+          Made by a MacBook owner, for MacBook owners
         </p>
         <p className="text-[11px] tracking-wider text-nezumi">
           © {new Date().getFullYear()} · Battery Sensei

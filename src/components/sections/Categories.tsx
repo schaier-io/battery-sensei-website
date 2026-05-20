@@ -3,13 +3,13 @@
  * doubles as inline navigation + keyword-rich anchor links for crawlers.
  */
 const items: { href: string; label: string }[] = [
-  { href: '#features', label: 'Smart warnings' },
-  { href: '#features', label: 'Charge limits' },
+  { href: '#features', label: 'Smart low-battery alerts' },
+  { href: '#features', label: 'Charge limit · 80%' },
   { href: '#features', label: 'Travel Mode' },
-  { href: '#health', label: 'Battery health' },
-  { href: '#health', label: 'Cycle count' },
-  { href: '#saga', label: 'Personal history' },
-  { href: '#features', label: 'Menu-bar app' },
+  { href: '#health', label: 'Cycle & capacity' },
+  { href: '#health', label: 'Live watts' },
+  { href: '#saga', label: 'Battery history' },
+  { href: '/vs-aldente', label: 'AlDente alternative' },
 ]
 
 export function Categories() {

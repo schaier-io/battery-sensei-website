@@ -31,8 +31,8 @@ export function Download() {
           delay={280}
           className="mx-auto mt-5 max-w-xl text-base text-sumi-soft md:text-[1.0625rem]"
         >
-          Free, notarized by Apple, native macOS. Sensei sits in your menu bar
-          and quietly looks after your battery from the very first day.
+          Free. Open source. Notarized by Apple. Sensei sits in your menu bar
+          from day one and looks after your battery without asking again.
         </Reveal>
         <Reveal
           delay={360}
