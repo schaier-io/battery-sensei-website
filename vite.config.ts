@@ -17,6 +17,13 @@ const config = defineConfig({
         autoSubfolderIndex: true,
         autoStaticPathsDiscovery: true,
         crawlLinks: true,
+        // Skip paths the crawler discovers in rendered HTML that are not
+        // actual application routes: `/download/*` is a Vercel redirect to
+        // the GitHub Releases zip, and `/pricing.md` is a static file in
+        // `public/`. Both 404 at prerender time even though they work in
+        // production.
+        filter: (page) =>
+          !page.path.startsWith('/download/') && page.path !== '/pricing.md',
       },
     }),
     viteReact(),

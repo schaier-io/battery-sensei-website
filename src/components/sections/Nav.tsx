@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Download } from 'lucide-react'
 
-const SECTIONS = ['features', 'saga', 'health', 'pricing', 'faq'] as const
+const SECTIONS = ['features', 'saga', 'health', 'pricing', 'faq', 'contact'] as const
 type SectionId = (typeof SECTIONS)[number]
 
 export function Nav() {

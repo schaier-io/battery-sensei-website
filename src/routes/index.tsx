@@ -9,6 +9,7 @@ import { Pricing } from '#/components/sections/Pricing'
 import { Download } from '#/components/sections/Download'
 import { Footer } from '#/components/sections/Footer'
 import { Categories } from '#/components/sections/Categories'
+import { Contact } from '#/components/sections/Contact'
 import { BrushDivider } from '#/components/zen/BrushDivider'
 
 export const Route = createFileRoute('/')({ component: Home })
@@ -29,6 +30,8 @@ function Home() {
         <Pricing />
         <BrushDivider />
         <FAQ />
+        <BrushDivider />
+        <Contact />
         <BrushDivider />
         <Download />
       </main>

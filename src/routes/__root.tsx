@@ -1,6 +1,8 @@
 import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
+import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from '@vercel/speed-insights/react'
 
 import appCss from '../styles.css?url'
 import { FAQ_ITEMS } from '#/components/sections/FAQ'
@@ -291,6 +293,14 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         {children}
+        {/* Vercel Web Analytics — cookieless, no PII, aggregate counts only.
+            Mounts a tiny script (~1KB) that fires page-view beacons. No-ops
+            outside Vercel (dev console logs a notice and does nothing). */}
+        <Analytics />
+        {/* Vercel Speed Insights — collects Core Web Vitals (LCP, INP, CLS)
+            from real visits and reports them in the Vercel dashboard.
+            Cookieless, sampled, no PII. Also a no-op outside production. */}
+        <SpeedInsights />
         {import.meta.env.DEV && (
           <TanStackDevtools
             config={{ position: 'bottom-right' }}

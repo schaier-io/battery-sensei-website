@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Download, Github } from 'lucide-react'
+import { Download } from 'lucide-react'
+import { GithubMark } from '#/components/icons/GithubMark'
 import { Reveal } from '#/components/zen/Reveal'
 import { MenuBarMockup } from '#/components/zen/MenuBarMockup'
 import { TRIAL_DAYS } from '#/lib/lemon'
@@ -141,7 +142,7 @@ export function Hero() {
             rel="noreferrer"
             className="inline-flex h-11 items-center gap-2 rounded-md px-4 text-sm text-sumi-soft hover:text-sumi transition-colors duration-[280ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
           >
-            <Github className="h-4 w-4" strokeWidth={1.6} />
+            <GithubMark className="h-4 w-4" strokeWidth={1.6} />
             Read the source
           </a>
         </Reveal>

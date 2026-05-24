@@ -52,6 +52,10 @@ export const FAQ_ITEMS: ReadonlyArray<{ q: string; a: string }> = [
     q: 'How do I update Battery Sensei?',
     a: 'Sensei checks for updates on launch and notifies you when a new version is available. You stay in control: updates only install when you say so.',
   },
+  {
+    q: 'How does the Meeting Battery Guard timeout work?',
+    a: 'Opt-in. Sensei looks at the next few events on your calendar and predicts whether your current battery will survive each meeting given typical drain. When a meeting is at risk, it fires up to four notifications: 30, 15, and 5 minutes before the meeting starts, and one final nudge at start time. Each notification includes the exact minute the laptop is predicted to die ("dies 17 min into standup") and a plug-in remedy ("22 min on the charger and you\'re clear through"). Event titles never leave your Mac — Sensei reads the calendar locally via EventKit. If a meeting is no longer at risk (you plugged in, or the meeting ended), pending reminders are cancelled silently.',
+  },
 ]
 
 const items = FAQ_ITEMS

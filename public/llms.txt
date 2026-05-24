@@ -33,7 +33,9 @@ Privacy: nothing leaves the device. No telemetry, no account, no cloud.
 - Cycle count and capacity tracking with plain-English context
 - Heat-throttling awareness with explanation of macOS pause behaviour
 - Personal battery history (timeline of cycles, rescues, plateaus)
-- Meeting Battery Guard (Premium): warns before meetings the battery won't survive
+- Meeting Battery Guard (Premium): reads upcoming calendar events on-device and
+  fires up to four warnings (30 / 15 / 5 / 0 minutes before) when the battery
+  won't survive a meeting, with a concrete plug-in remedy
 - AlDente alternative for users who want a one-time-purchase, native option
   instead of an annual subscription
 

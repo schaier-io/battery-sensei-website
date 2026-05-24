@@ -39,7 +39,7 @@ const supporting = [
     title: 'Meetings, met.',
     titleSub: 'Sensei reads ahead, so your battery does too.',
     jp: '会議の前に',
-    body: "Opt-in. Sensei peeks at your next few meetings and warns you when the battery won't survive the one that matters. Loss-aversion-forward copy — \"your laptop dies 17 minutes into standup\" — and a clear fix. Event titles never leave your Mac.",
+    body: "Opt-in. Sensei peeks at your next few meetings and, when the battery won't survive the one that matters, warns you at 30, 15, 5, and 0 minutes before — with a clear fix (\"22 min on the charger and you're clear through\"). Event titles never leave your Mac.",
     chip: { icon: Lock, label: 'Read-only · titles never leave your Mac' },
     mockup: MeetingGuardMockup as () => JSX.Element,
   },
@@ -152,6 +152,50 @@ function MeetingGuardMockup() {
         <p className="mt-1 text-[11px] text-sumi-soft leading-snug">
           22 min on the charger and you're clear through.
         </p>
+      </div>
+
+      {/* Warning-ladder strip — visualises the 30/15/5/0 timeout sequence the
+          app actually uses (CalendarBatteryNotifier.severityBucket). Specific
+          numbers do the marketing work that vague "warns ahead" can't:
+          they're more believable, more concrete, and the "0" step says
+          "we'll still nudge you when the meeting starts". */}
+      <div className="mt-2.5 rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,#fff)] px-3 py-2">
+        <div className="flex items-center justify-between text-[9px] uppercase tracking-[0.18em] text-sumi-soft">
+          <span className="font-jp normal-case tracking-[0.3em] text-sumi-soft/80">
+            予 告
+          </span>
+          <span>Reminds you at</span>
+        </div>
+        <ol
+          aria-label="Meeting warning timing ladder"
+          className="mt-1.5 grid grid-cols-4 items-end gap-1 text-center"
+        >
+          {[
+            { t: '30', tone: 'sumi-soft' },
+            { t: '15', tone: 'sumi-soft' },
+            { t: '5', tone: 'hinomaru' },
+            { t: '0', tone: 'hinomaru' },
+          ].map(({ t, tone }, i) => (
+            <li key={t} className="flex flex-col items-center gap-1">
+              <span
+                aria-hidden
+                className={`h-1 w-full rounded-full ${
+                  tone === 'hinomaru'
+                    ? 'bg-hinomaru/70'
+                    : 'bg-sumi-soft/35'
+                }`}
+                style={{ opacity: 0.55 + i * 0.12 }}
+              />
+              <span
+                className={`tabular-nums text-[10px] font-semibold ${
+                  tone === 'hinomaru' ? 'text-hinomaru' : 'text-sumi'
+                }`}
+              >
+                {t === '0' ? 'now' : `−${t} min`}
+              </span>
+            </li>
+          ))}
+        </ol>
       </div>
 
       {/* Tiny meta-row — under the warning, signalling privacy + control */}

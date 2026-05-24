@@ -26,7 +26,7 @@
 
 ### Premium additions
 
-- Meeting Battery Guard: warns before meetings the battery won't survive
+- Meeting Battery Guard: reads upcoming calendar events on-device and fires up to four warnings (30 / 15 / 5 / 0 minutes before) when the battery won't survive a meeting, with a concrete plug-in remedy ("22 min on the charger and you're clear through")
 - Unlimited Saga history (vs. 30 days on free)
 - Custom warning presets (vs. three preset moods)
 - Lifetime updates + priority email support

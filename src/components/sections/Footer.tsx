@@ -29,6 +29,38 @@ export function Footer() {
         <p className="font-display italic text-[0.95rem] text-nezumi max-w-md leading-snug">
           Made by a MacBook owner, for MacBook owners.
         </p>
+
+        <nav
+          aria-label="Footer"
+          className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[0.8125rem] text-sumi-soft"
+        >
+          <a href="#contact" className="hover:text-sumi transition-colors">
+            Contact
+          </a>
+          <span aria-hidden className="text-nezumi/50">·</span>
+          <a
+            href="https://github.com/schaier-io/battery-sensei-releases/issues/new/choose"
+            target="_blank"
+            rel="noreferrer"
+            className="hover:text-sumi transition-colors"
+          >
+            Report an issue
+          </a>
+          <span aria-hidden className="text-nezumi/50">·</span>
+          <a
+            href="https://github.com/schaier-io/battery-sensei-releases"
+            target="_blank"
+            rel="noreferrer"
+            className="hover:text-sumi transition-colors"
+          >
+            Releases
+          </a>
+          <span aria-hidden className="text-nezumi/50">·</span>
+          <a href="/pricing.md" className="hover:text-sumi transition-colors">
+            Pricing
+          </a>
+        </nav>
+
         <p className="text-[0.75rem] tracking-[0.05em] text-nezumi tabular-nums">
           © {new Date().getFullYear()} · Battery Sensei
           <span className="mx-2 text-nezumi/60" aria-hidden>·</span>

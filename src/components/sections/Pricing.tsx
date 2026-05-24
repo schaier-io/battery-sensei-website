@@ -19,7 +19,7 @@ const premiumFeatures: Array<{ icon: typeof Sparkles; title: string; body: strin
   {
     icon: Sparkles,
     title: 'Meeting Battery Guard',
-    body: 'Sensei reads your next meetings (titles stay on-device) and warns when the battery won\'t survive the one that matters.',
+    body: 'Sensei reads your next meetings (titles stay on-device) and, when the battery won\'t survive the one that matters, warns you at 30, 15, 5, and 0 minutes before — with a clear fix.',
   },
   {
     icon: InfinityIcon,
