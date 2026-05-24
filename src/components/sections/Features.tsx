@@ -432,19 +432,23 @@ export function Features() {
                   {jp}
                 </p>
                 <p className="mt-4 text-[0.9375rem] leading-[1.6] text-sumi-soft">{body}</p>
-                {chip && (
-                  <div className="mt-5 inline-flex w-fit items-center gap-2 rounded-md bg-[var(--washi-deep)] px-3 py-1.5 text-[0.7rem] text-sumi">
-                    <chip.icon className="h-3.5 w-3.5 shrink-0" strokeWidth={1.6} />
-                    <span className="truncate">{chip.label}</span>
-                  </div>
-                )}
-                {/* Mockup slot — pushed to the card bottom and clipped so
-                    a tall illustration can't push the card past its siblings. */}
-                {Mockup && (
-                  <div className="mt-auto pt-6 overflow-hidden">
-                    <Mockup />
-                  </div>
-                )}
+                {/* Footer slot — anchors chip + mockup to the card bottom so
+                    cards with different illustration weight align cleanly.
+                    Mockup is clipped so a tall illustration can't push the
+                    card past its siblings. */}
+                <div className="mt-auto pt-5 flex flex-col gap-4">
+                  {chip && (
+                    <div className="inline-flex w-fit items-center gap-2 rounded-md bg-[var(--washi-deep)] px-3 py-1.5 text-[0.7rem] text-sumi">
+                      <chip.icon className="h-3.5 w-3.5 shrink-0" strokeWidth={1.6} />
+                      <span className="truncate">{chip.label}</span>
+                    </div>
+                  )}
+                  {Mockup && (
+                    <div className="overflow-hidden">
+                      <Mockup />
+                    </div>
+                  )}
+                </div>
               </article>
             </TiltCard>
           </Reveal>

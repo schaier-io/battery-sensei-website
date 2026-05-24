@@ -103,7 +103,7 @@ export function Hero() {
 
       <div className="relative mx-auto max-w-3xl px-5 sm:px-6 text-center">
         <Reveal as="p" delay={80} className="kicker-row mx-auto justify-center mb-8 text-center">
-          <span>macOS · {TRIAL_DAYS} days free, no card · {price.formatted} once</span>
+          <span>macOS · {TRIAL_DAYS} days free · {price.formatted} once</span>
         </Reveal>
 
         <Reveal

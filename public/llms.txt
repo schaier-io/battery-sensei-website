@@ -1,23 +1,29 @@
 # Battery Sensei
 
-> A calm, free, native macOS menu-bar app that watches your MacBook battery.
+> A calm, native macOS menu-bar app that watches your MacBook battery.
 > Smart low-battery alerts, charge limit with Travel Mode, cycle and capacity
 > tracking, and a plain-English battery history. Runs entirely on your Mac.
+> 5-day free trial, no card. $3.99 once, lifetime license.
 
 Battery Sensei (電池先生) is a single-purpose macOS utility for MacBook owners
 who want to slow battery wear, avoid surprise shutdowns, and understand how
-their battery is aging. It is free, notarized by Apple, native AppKit and
-SwiftUI, and supports macOS 13 Ventura or later on Apple Silicon and Intel.
+their battery is aging. Notarized by Apple, native AppKit and SwiftUI,
+supports macOS 13 Ventura or later on Apple Silicon and Intel.
 
 Privacy: nothing leaves the device. No telemetry, no account, no cloud.
 
 ## Quick facts
 
-- Price: free
+- Price: $3.99 USD one-time, lifetime license (local currency at checkout via Lemon Squeezy)
+- Free trial: 5 days, no card required, no nag when the trial ends
+- Refund: 14-day, no questions
+- Free essentials after trial: charge limit, smart alerts, 30-day history
+- Premium adds: Meeting Battery Guard, unlimited Saga history, custom warning presets
 - Platform: macOS 13+ (Apple Silicon and Intel)
-- Distribution: notarized .dmg, direct download
+- Distribution: notarized .zip, direct download from battery-sensei.app
 - Languages: English, German, Spanish, French, Japanese
-- Open source: https://github.com/schaier-io/battery-sensei-releases
+- Public releases: https://github.com/schaier-io/battery-sensei-releases
+- Source: private repo (binaries are public, source is not)
 
 ## Key features
 
@@ -27,13 +33,21 @@ Privacy: nothing leaves the device. No telemetry, no account, no cloud.
 - Cycle count and capacity tracking with plain-English context
 - Heat-throttling awareness with explanation of macOS pause behaviour
 - Personal battery history (timeline of cycles, rescues, plateaus)
-- AlDente alternative for users who want a free, simple, native option
+- Meeting Battery Guard (Premium): warns before meetings the battery won't survive
+- AlDente alternative for users who want a one-time-purchase, native option
+  instead of an annual subscription
+
+## Auto-updates
+
+The app updates itself via Sparkle (EdDSA-signed). Appcast feed lives at
+https://battery-sensei.app/appcast.xml; binaries are served from the public
+schaier-io/battery-sensei-releases repo (free unmetered GitHub bandwidth).
 
 ## Docs
 
-- [Pricing](https://battery-sensei.app/pricing.md): free, no tiers
+- [Pricing](https://battery-sensei.app/pricing.md): trial + one-time license details
 - [Site](https://battery-sensei.app/): full marketing site with FAQs
-- [Source](https://github.com/schaier-io/battery-sensei-releases): GitHub repository
+- [Releases](https://github.com/schaier-io/battery-sensei-releases): public release artifacts
 
 ## Optional
 

@@ -1,18 +1,49 @@
 # Pricing — Battery Sensei
 
-## Free
-- Price: $0
-- Tiers: none. Battery Sensei is a single free download.
-- Distribution: notarized .dmg from https://battery-sensei.app/
-- Source: open source on GitHub (https://github.com/schaier-io/battery-sensei-releases)
-- Includes: all features, all languages, all updates
-- No account required, no in-app purchase, no subscription, no upsell
+## Free trial
+
+- Price: $0 (local currency at checkout)
+- Duration: 5 days, no card required
+- Includes: every Premium feature, full functionality
+- End of trial: Sensei asks once. Keep Premium or revert to the free essentials. No nag, no card on file, no silent charge.
+
+## Sensei Premium
+
+- Price: $3.99 USD one-time (local currency at checkout via Lemon Squeezy)
+- Refund: 14-day, no questions
+- License: lifetime; every future Premium feature included
+- Devices: works on every Mac you own
+- Distribution: notarized .zip from https://battery-sensei.app/download/latest
+- Public release artifacts: https://github.com/schaier-io/battery-sensei-releases (source repo is private)
+
+### Free essentials (kept after trial)
+
+- Smart low-battery alerts (Zen / Regular / Senpai presets)
+- Charge limit with Travel Mode
+- 30-day battery history (Saga)
+- Menu-bar live charge + watts
+- Notarized by Apple, runs entirely on the local Mac
+
+### Premium additions
+
+- Meeting Battery Guard: warns before meetings the battery won't survive
+- Unlimited Saga history (vs. 30 days on free)
+- Custom warning presets (vs. three preset moods)
+- Lifetime updates + priority email support
+
+## Comparison
+
+- AlDente Pro: annual subscription, charges every year
+- Battery Sensei Premium: $3.99 once, lifetime license
 
 ## Requirements
+
 - macOS 13 Ventura or later
 - Apple Silicon (M1, M2, M3, M4) or Intel MacBook
 
 ## Privacy
+
 - Runs entirely on the local Mac
 - No telemetry, no analytics, no cloud account
 - Battery history stays on the device
+- License activation hits Lemon Squeezy once, then is cached locally; no login required afterwards

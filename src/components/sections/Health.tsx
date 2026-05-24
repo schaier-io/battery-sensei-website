@@ -91,7 +91,7 @@ export function Health() {
             <TiltCard rotateAmplitude={feature ? 4 : 6} scaleOnHover={feature ? 1.01 : 1.02}>
               <div
                 className={`paper-card h-full p-6 flex flex-col ${
-                  feature ? 'gap-5' : 'gap-3'
+                  feature ? 'gap-5' : 'gap-4'
                 }`}
               >
                 <div className="flex items-start justify-between">
@@ -116,7 +116,11 @@ export function Health() {
                     </div>
                   </div>
                 )}
-                <div className="mt-auto">
+                {/* Feature card pins the title block at the bottom (sparkline
+                    fills the middle). Non-feature cards let it flow right
+                    after the icon row so short copy doesn't leave a giant
+                    top gap. */}
+                <div className={feature ? 'mt-auto' : ''}>
                   <h3
                     className={`display-title font-medium text-sumi ${
                       feature ? 'text-[1.625rem]' : 'text-[1.0625rem]'
