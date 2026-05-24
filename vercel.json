@@ -1,4 +1,31 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "outputDirectory": "dist/client"
+  "outputDirectory": "dist/client",
+  "redirects": [
+    {
+      "source": "/download/latest",
+      "destination": "https://github.com/schaier-io/battery-sensei-releases/releases/latest/download/Battery-Sensei.zip",
+      "permanent": false
+    },
+    {
+      "source": "/download/(:version)",
+      "destination": "https://github.com/schaier-io/battery-sensei-releases/releases/download/v:version/Battery-Sensei.zip",
+      "permanent": false
+    }
+  ],
+  "headers": [
+    {
+      "source": "/appcast.xml",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=900, s-maxage=900" },
+        { "key": "Content-Type", "value": "application/rss+xml; charset=utf-8" }
+      ]
+    },
+    {
+      "source": "/version.json",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=300, s-maxage=300" }
+      ]
+    }
+  ]
 }

@@ -17,8 +17,16 @@ export const FAQ_ITEMS: ReadonlyArray<{ q: string; a: string }> = [
     a: 'macOS 13 Ventura, Sonoma, Sequoia, and later, on both Apple Silicon (M1/M2/M3/M4) and Intel MacBooks.',
   },
   {
-    q: 'Is Battery Sensei free?',
-    a: 'Yes. Battery Sensei is free and notarized by Apple. Download the .dmg directly from this site. No accounts, no subscription, no in-app purchases.',
+    q: 'How much does Battery Sensei cost?',
+    a: 'Sensei Premium is $3.99 once. One payment, lifetime license, every future Premium feature, every Mac you own. Try it free for 5 days first — no card needed to start, no nag when the trial ends. After the trial the core essentials (charge limit, smart alerts, 30-day history) stay free forever; Premium unlocks Meeting Battery Guard, unlimited Saga history, and custom warning presets. For context: AlDente Pro is about $24 every year. Sensei is $3.99 once, ever. Checkout shows the equivalent in your local currency.',
+  },
+  {
+    q: 'How does the license key work?',
+    a: 'After checkout via Lemon Squeezy you get a license key by email. Open Sensei → Settings → Premium and paste the key. Sensei activates it against the Lemon Squeezy API and stores the result locally; no account, no login. The key works on every Mac you own.',
+  },
+  {
+    q: 'Can I get a refund?',
+    a: 'Yes. Email within 14 days of purchase and we refund, no questions asked. Lemon Squeezy handles the payment so the refund hits the original card.',
   },
   {
     q: 'How does the charge limit and Travel Mode work?',
@@ -38,7 +46,7 @@ export const FAQ_ITEMS: ReadonlyArray<{ q: string; a: string }> = [
   },
   {
     q: 'Is Battery Sensei an AlDente alternative?',
-    a: 'Yes. Sensei covers AlDente\'s core charge-limit feature for free, adds smart warnings and a personal battery history, and ships as a single notarized .dmg with no account. A detailed side-by-side comparison lives at battery-sensei.app/vs-aldente.',
+    a: 'Yes. Sensei covers AlDente\'s core charge-limit feature in every tier, adds smart warnings and a personal battery history, and ships as a single notarized .dmg. Premium adds Meeting Battery Guard and unlimited Saga history for a $3.99 one-time payment vs. AlDente Pro\'s subscription. A detailed side-by-side comparison lives at battery-sensei.app/vs-aldente.',
   },
   {
     q: 'How do I update Battery Sensei?',
@@ -57,7 +65,7 @@ export function FAQ() {
         <Reveal
           as="h2"
           delay={200}
-          className="display-title text-3xl font-semibold text-sumi md:text-4xl"
+          className="section-heading text-sumi"
         >
           Answered calmly.
         </Reveal>
@@ -66,10 +74,10 @@ export function FAQ() {
       <Accordion type="single" collapsible className="paper-card divide-y divide-[var(--line)]">
         {items.map(({ q, a }, i) => (
           <AccordionItem key={i} value={`item-${i}`} className="border-0 px-6">
-            <AccordionTrigger className="text-left text-sumi font-medium hover:no-underline py-5">
+            <AccordionTrigger className="display-title text-left text-sumi text-[1.0625rem] font-medium hover:no-underline py-5">
               {q}
             </AccordionTrigger>
-            <AccordionContent className="text-sumi-soft leading-relaxed pb-5">
+            <AccordionContent className="text-sumi-soft leading-[1.65] pb-5 text-[0.9375rem]">
               {a}
             </AccordionContent>
           </AccordionItem>

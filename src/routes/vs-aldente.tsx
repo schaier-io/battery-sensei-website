@@ -247,7 +247,7 @@ function VsAldentePage() {
               Try Battery Sensei free
             </Link>
             <a
-              href="https://github.com/sandro/battery-sensei"
+              href="https://github.com/schaier-io/battery-sensei-releases"
               target="_blank"
               rel="noreferrer"
               className="text-sm text-sumi-soft transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:text-sumi"

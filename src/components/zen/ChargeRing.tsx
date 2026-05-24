@@ -258,8 +258,8 @@ function ChargeArc({
     return null
   }
 
-  // Shimmer's angular length on the ring. Small + soft.
-  const shimmerDeg = 26
+  // Shimmer's angular length on the ring. Long + soft.
+  const shimmerDeg = 58
   // The path is defined at the top of the circle. CSS rotation moves it
   // around. We sweep it from 0° (top) to (fraction * 360 - shimmerDeg)°
   // so the trailing edge never overshoots the end of the gold.
@@ -273,7 +273,7 @@ function ChargeArc({
   const y1 = cy + r * Math.sin(toRad(a1))
   const d = `M ${x0.toFixed(2)} ${y0.toFixed(2)} A ${r} ${r} 0 0 1 ${x1.toFixed(2)} ${y1.toFixed(2)}`
 
-  const strokeW = 10
+  const strokeW = 16
 
   return (
     <svg viewBox={`0 0 ${VB} ${VB}`} width="100%" height="100%" className={className} aria-hidden>
@@ -289,9 +289,11 @@ function ChargeArc({
           y2="0.5"
         >
           <stop offset="0%" stopColor="#fff8d6" stopOpacity="0" />
-          <stop offset="25%" stopColor="#fff8d6" stopOpacity="0.95" />
-          <stop offset="50%" stopColor="#ffffff" stopOpacity="1" />
-          <stop offset="75%" stopColor="#fff8d6" stopOpacity="0.95" />
+          <stop offset="15%" stopColor="#fff8d6" stopOpacity="0.18" />
+          <stop offset="35%" stopColor="#fff8d6" stopOpacity="0.45" />
+          <stop offset="50%" stopColor="#ffffff" stopOpacity="0.6" />
+          <stop offset="65%" stopColor="#fff8d6" stopOpacity="0.45" />
+          <stop offset="85%" stopColor="#fff8d6" stopOpacity="0.18" />
           <stop offset="100%" stopColor="#fff8d6" stopOpacity="0" />
         </linearGradient>
       </defs>

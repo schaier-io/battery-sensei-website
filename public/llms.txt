@@ -17,7 +17,7 @@ Privacy: nothing leaves the device. No telemetry, no account, no cloud.
 - Platform: macOS 13+ (Apple Silicon and Intel)
 - Distribution: notarized .dmg, direct download
 - Languages: English, German, Spanish, French, Japanese
-- Open source: https://github.com/sandro/battery-sensei
+- Open source: https://github.com/schaier-io/battery-sensei-releases
 
 ## Key features
 
@@ -33,7 +33,7 @@ Privacy: nothing leaves the device. No telemetry, no account, no cloud.
 
 - [Pricing](https://battery-sensei.app/pricing.md): free, no tiers
 - [Site](https://battery-sensei.app/): full marketing site with FAQs
-- [Source](https://github.com/sandro/battery-sensei): GitHub repository
+- [Source](https://github.com/schaier-io/battery-sensei-releases): GitHub repository
 
 ## Optional
 

@@ -26,10 +26,10 @@ export function Footer() {
 
         <Hanko kanji="禅" />
 
-        <p className="max-w-md text-xs tracking-[0.12em] text-nezumi uppercase">
-          Made by a MacBook owner, for MacBook owners
+        <p className="font-display italic text-[0.95rem] text-nezumi max-w-md leading-snug">
+          Made by a MacBook owner, for MacBook owners.
         </p>
-        <p className="text-[11px] tracking-wider text-nezumi">
+        <p className="text-[0.75rem] tracking-[0.05em] text-nezumi tabular-nums">
           © {new Date().getFullYear()} · Battery Sensei
           <span className="mx-2 text-nezumi/60" aria-hidden>·</span>
           <time dateTime="2026-05-20">Last updated 20 May 2026</time>

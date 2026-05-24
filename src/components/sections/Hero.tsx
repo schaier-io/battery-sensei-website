@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { Download, Github } from 'lucide-react'
 import { Reveal } from '#/components/zen/Reveal'
 import { MenuBarMockup } from '#/components/zen/MenuBarMockup'
+import { TRIAL_DAYS } from '#/lib/lemon'
+import { usePremiumPrice } from '#/lib/use-price'
 
 function useScrollProgress(maxAtProgress = 0.45): number {
   const [progress, setProgress] = useState(0)
@@ -74,6 +76,7 @@ function KanjiRail({
 
 export function Hero() {
   const progress = useScrollProgress(0.12)
+  const price = usePremiumPrice()
 
   return (
     <section
@@ -100,13 +103,13 @@ export function Hero() {
 
       <div className="relative mx-auto max-w-3xl px-5 sm:px-6 text-center">
         <Reveal as="p" delay={80} className="kicker-row mx-auto justify-center mb-8 text-center">
-          <span>Free for macOS · battery health</span>
+          <span>macOS · {TRIAL_DAYS} days free, no card · {price.formatted} once</span>
         </Reveal>
 
         <Reveal
           as="h1"
           delay={160}
-          className="display-title text-[2.5rem] xs:text-5xl sm:text-6xl md:text-[5.25rem] font-semibold leading-[1.04] tracking-[-0.02em] text-sumi"
+          className="hero-display text-sumi"
         >
           Quiet power
           <span className="block mt-1 sm:mt-2 text-sumi-soft italic font-normal">
@@ -117,7 +120,7 @@ export function Hero() {
         <Reveal as="p" delay={320} className="mx-auto mt-8 font-jp text-base text-hinomaru/75 md:text-lg tracking-[0.08em]">
           静かに、電池に寄り添う。
         </Reveal>
-        <Reveal as="p" delay={400} className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-sumi-soft md:text-[1.0625rem]">
+        <Reveal as="p" delay={400} className="prose-readable mx-auto mt-5 text-[1.0625rem] text-sumi-soft md:text-[1.125rem]">
           Your MacBook's battery quietly wears down with every charge. Sensei
           watches it for you: warns before a surprise shutdown, holds your
           charge limit so the cells last longer, and keeps a plain-English
@@ -126,14 +129,14 @@ export function Hero() {
 
         <Reveal delay={480} className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <a
-            href="#download"
+            href="/download/latest"
             className="btn-sumi group inline-flex h-11 items-center gap-2.5 rounded-md px-6 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
           >
             <Download className="h-4 w-4 transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5" strokeWidth={1.8} />
             Download for macOS
           </a>
           <a
-            href="https://github.com/sandro/battery-sensei"
+            href="https://github.com/schaier-io/battery-sensei-releases"
             target="_blank"
             rel="noreferrer"
             className="inline-flex h-11 items-center gap-2 rounded-md px-4 text-sm text-sumi-soft hover:text-sumi transition-colors duration-[280ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
@@ -143,8 +146,8 @@ export function Hero() {
           </a>
         </Reveal>
 
-        <Reveal as="p" delay={560} className="mt-7 text-[11px] uppercase tracking-[0.22em] text-nezumi">
-          Free &amp; open source · native macOS · privacy-first · barely sips power
+        <Reveal as="p" delay={560} className="spec-strip mt-7">
+          {TRIAL_DAYS} days free. No card, no account. Then {price.formatted} once, never again.
         </Reveal>
 
         <Reveal
@@ -152,7 +155,7 @@ export function Hero() {
           className="relative mx-auto mt-14 w-full max-w-[480px]"
         >
           <MenuBarMockup className="rotate-[-1.2deg] transition-transform duration-[520ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:rotate-0 hover:-translate-y-1" />
-          <p className="mt-4 text-center text-[11px] tracking-[0.18em] text-nezumi uppercase">
+          <p className="spec-strip mt-4 text-center">
             Lives in your menu bar. Speaks only when it matters.
           </p>
         </Reveal>

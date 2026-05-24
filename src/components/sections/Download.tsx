@@ -1,8 +1,11 @@
 import { Download as DownloadIcon, Github } from 'lucide-react'
 import { Reveal } from '#/components/zen/Reveal'
 import { ChargeRing } from '#/components/zen/ChargeRing'
+import { TRIAL_DAYS } from '#/lib/lemon'
+import { usePremiumPrice } from '#/lib/use-price'
 
 export function Download() {
+  const price = usePremiumPrice()
   return (
     <section id="download" className="zen-section px-5 sm:px-6">
       <div className="relative mx-auto max-w-3xl text-center">
@@ -19,7 +22,7 @@ export function Download() {
         <Reveal
           as="h2"
           delay={200}
-          className="display-title text-3xl font-semibold text-sumi md:text-5xl tracking-[-0.015em]"
+          className="section-heading text-sumi"
         >
           Install once.
           <span className="block italic text-sumi-soft font-normal">
@@ -29,28 +32,29 @@ export function Download() {
         <Reveal
           as="p"
           delay={280}
-          className="mx-auto mt-5 max-w-xl text-base text-sumi-soft md:text-[1.0625rem]"
+          className="prose-readable mx-auto mt-6 text-[1.0625rem] text-sumi-soft md:text-[1.125rem]"
         >
-          Free. Open source. Notarized by Apple. Sensei sits in your menu bar
-          from day one and looks after your battery without asking again.
+          {TRIAL_DAYS} days to live with it. Then {price.formatted} once, never
+          again — about a sixth of an AlDente Pro year. Notarized by Apple. Sits
+          in your menu bar from day one and looks after your battery without
+          asking again.
         </Reveal>
         <Reveal
           delay={360}
           className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row"
         >
           <a
-            href="#"
-            data-todo="dmg-url"
+            href="/download/latest"
             className="btn-sumi group inline-flex h-11 items-center gap-2.5 rounded-md px-6 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
           >
             <DownloadIcon
               className="h-4 w-4 transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5"
               strokeWidth={1.8}
             />
-            Download .dmg
+            Download for macOS
           </a>
           <a
-            href="https://github.com/sandro/battery-sensei"
+            href="https://github.com/schaier-io/battery-sensei-releases"
             target="_blank"
             rel="noreferrer"
             className="inline-flex h-11 items-center gap-2 rounded-md px-4 text-sm font-medium text-sumi-soft transition-colors duration-[280ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:text-sumi focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
@@ -71,9 +75,9 @@ export function Download() {
         <Reveal
           as="p"
           delay={520}
-          className="mt-7 text-[11px] uppercase tracking-[0.22em] text-nezumi"
+          className="spec-strip mt-8"
         >
-          macOS 13+ · Apple Silicon &amp; Intel · Free · Notarized
+          macOS 13+. Apple Silicon &amp; Intel. {TRIAL_DAYS} days free, no card. {price.formatted} once. 14-day refund.
         </Reveal>
       </div>
     </section>
@@ -97,10 +101,10 @@ function TrustPill({
       >
         {kanji}
       </span>
-      <p className="display-title text-[13px] font-semibold text-sumi tracking-tight pr-7">
+      <p className="display-title text-[0.9375rem] font-medium text-sumi tracking-tight pr-7">
         {title}
       </p>
-      <p className="mt-1 text-[12px] leading-snug text-sumi-soft">{body}</p>
+      <p className="mt-1.5 text-[0.8125rem] leading-[1.55] text-sumi-soft">{body}</p>
     </div>
   )
 }

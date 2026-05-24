@@ -19,7 +19,7 @@ export function Saga() {
           <Reveal
             as="h2"
             delay={180}
-            className="display-title text-3xl font-semibold text-sumi md:text-5xl"
+            className="section-heading text-sumi"
           >
             A diary your battery
             <span className="block italic text-sumi-soft font-normal">
@@ -29,14 +29,14 @@ export function Saga() {
           <Reveal
             as="p"
             delay={260}
-            className="mt-7 max-w-md text-base leading-relaxed text-sumi-soft"
+            className="prose-readable mt-7 text-[1.0625rem] text-sumi-soft"
           >
             Every cycle. Every rescue. Every plateau. Sensei keeps a
             plain-English journal of your battery's life so when the day comes
             to retire your MacBook, you know how it lived, what carried it that
             far, and exactly what to ask the next one to do better.
           </Reveal>
-          <Reveal as="ul" delay={340} className="mt-8 space-y-3 text-sm text-sumi-soft">
+          <Reveal as="ul" delay={340} className="mt-8 space-y-3 text-[0.9375rem] text-sumi-soft">
             <li className="flex gap-3">
               <BrushTick className="text-sumi-soft mt-2 shrink-0" />
               247 days, 217 cycles, 92%. Yours, annotated.

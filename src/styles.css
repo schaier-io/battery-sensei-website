@@ -1,4 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=Noto+Serif+JP:wght@400;500;700;900&display=swap');
+/* Type pairing:
+   - Spectral: bookish display serif with sumi-brush calligraphic terminals.
+     Italic carries the brand's whispered second-line voice. Replaces Fraunces,
+     which read as editorial-template.
+   - Source Sans 3: humanist body sans with warmer reading colour than Inter.
+     Italic available where the JP/EN voice mixes (rare). Replaces Inter.
+   - Noto Serif JP: kept; it harmonises with Spectral and remains the
+     authoritative Japanese cut for headings and accents. */
+@import url('https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Noto+Serif+JP:wght@400;500;700;900&display=swap');
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
@@ -85,9 +93,33 @@
 }
 
 @theme inline {
-  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
-  --font-display: 'Fraunces', Georgia, ui-serif, serif;
+  --font-sans: 'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Spectral', 'Source Serif 4', Georgia, ui-serif, serif;
   --font-jp: 'Noto Serif JP', 'Yu Mincho', 'Hiragino Mincho ProN', serif;
+
+  /* Modular type scale — 1.25 ratio with a fluid clamp on display sizes.
+     Marketing register: clamp on h1/h2, fixed rem on body so reading rhythm
+     stays predictable. Tokens are semantic (role-named) so future surfaces
+     don't reach for arbitrary text-[XYZ] values. */
+  --text-display: clamp(2.75rem, 1.45rem + 5.6vw, 5.75rem);
+  --text-h1:      clamp(2.15rem, 1.4rem + 3vw, 3.5rem);
+  --text-h2:      clamp(1.75rem, 1.25rem + 2vw, 2.5rem);
+  --text-h3:      clamp(1.25rem, 1.05rem + 0.85vw, 1.625rem);
+  --text-h4:      1.125rem;
+  --text-body:    1.0625rem; /* 17px reading-comfortable */
+  --text-body-sm: 0.9375rem; /* 15px */
+  --text-caption: 0.8125rem; /* 13px */
+  --text-meta:    0.6875rem; /* 11px — kickers, ALL-CAPS spec strips */
+
+  --leading-display: 1.04;
+  --leading-heading: 1.12;
+  --leading-body:    1.65;
+  --leading-snug:    1.45;
+
+  --tracking-display: -0.024em;
+  --tracking-heading: -0.012em;
+  --tracking-body:    0em;
+  --tracking-meta:    0.22em;
 
   --color-sumi: var(--sumi);
   --color-sumi-soft: var(--sumi-soft);
@@ -136,6 +168,8 @@ body {
   margin: 0;
   color: var(--sumi);
   font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
   background-color: var(--washi);
   /* Washi paper: subtle warm gradient + fiber speckle */
   background-image:
@@ -145,7 +179,18 @@ body {
   background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* OpenType: kerning + standard ligatures + contextual alternates.
+     Source Sans 3 has stylistic alternates (ss01 single-storey a, ss02
+     single-storey g) — both lighten the colour at body size. */
+  font-feature-settings: 'kern', 'liga', 'calt', 'ss01';
+  text-rendering: optimizeLegibility;
   overflow-x: hidden;
+}
+
+/* Reading column — paragraphs cap at ~65ch so the eye returns cleanly. */
+.prose-readable {
+  max-width: 65ch;
+  line-height: var(--leading-body);
 }
 
 /* Washi fiber texture overlay — paired with foxing spots and pulp speckles
@@ -211,8 +256,44 @@ body::after {
 
 .display-title {
   font-family: var(--font-display);
-  letter-spacing: -0.015em;
-  font-weight: 600;
+  font-weight: 500;
+  letter-spacing: var(--tracking-heading);
+  line-height: var(--leading-heading);
+  /* Spectral's lining figures + discretionary ligatures lift the headlines. */
+  font-feature-settings: 'kern', 'liga', 'dlig', 'lnum';
+  font-optical-sizing: auto;
+  text-wrap: balance;
+}
+
+.display-title em,
+.display-title i,
+.display-title .italic {
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* Hero-scale display — fluid clamp, tighter tracking, balanced wrap. */
+.hero-display {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--text-display);
+  letter-spacing: var(--tracking-display);
+  line-height: var(--leading-display);
+  font-feature-settings: 'kern', 'liga', 'dlig', 'lnum';
+  font-optical-sizing: auto;
+  text-wrap: balance;
+}
+
+/* Section headings — replaces the repeated text-3xl md:text-5xl pattern. */
+.section-heading {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--text-h2);
+  letter-spacing: var(--tracking-heading);
+  line-height: var(--leading-heading);
+  font-feature-settings: 'kern', 'liga', 'dlig', 'lnum';
+  font-optical-sizing: auto;
+  text-wrap: balance;
 }
 
 .font-jp {
@@ -226,17 +307,19 @@ body::after {
   letter-spacing: 0.4em;
 }
 
-/* Section kicker with rule-line */
+/* Section kicker with rule-line — tightened: medium weight (was 600), slightly
+   shorter tracking (was 0.28em), longer rule. Reads as a label, not a shout. */
 .kicker-row {
   display: inline-flex;
   align-items: center;
-  gap: 0.85rem;
-  font-size: 0.72rem;
-  letter-spacing: 0.28em;
+  gap: 0.95rem;
+  font-size: var(--text-meta);
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--sumi-soft);
   max-width: 100%;
+  font-feature-settings: 'kern', 'liga', 'tnum';
 }
 
 .kicker-row > span {
@@ -247,11 +330,23 @@ body::after {
 
 .kicker-row::before {
   content: '';
-  width: 28px;
+  width: 36px;
   height: 1px;
   background: var(--sumi);
-  opacity: 0.4;
+  opacity: 0.35;
   flex-shrink: 0;
+}
+
+/* Tiny spec-strip caption — for the meta line under hero CTAs. Reads as
+   subtitled metadata rather than a third tracked kicker. */
+.spec-strip {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 0.95rem;
+  letter-spacing: 0;
+  color: var(--nezumi);
+  line-height: 1.5;
 }
 
 /* Hanko (red square seal) */
@@ -457,15 +552,15 @@ body::after {
    the ring centre; opacity envelopes the sweep so the dash fades in,
    travels, fades out, then the cycle rests at opacity 0 before looping. */
 .charge-ring-shimmer {
-  animation: charge-ring-shimmer 6.8s cubic-bezier(0.4, 0, 0.6, 1) 1.8s infinite;
+  animation: charge-ring-shimmer 6.8s cubic-bezier(0.55, 0, 0.55, 0.85) 1.8s infinite;
   will-change: transform, opacity;
 }
 
 @keyframes charge-ring-shimmer {
   0%   { transform: rotate(0deg);                opacity: 0;    }
-  12%  {                                          opacity: 0.9;  }
-  50%  {                                          opacity: 0.9;  }
-  62%  { transform: rotate(var(--shimmer-end));  opacity: 0;    }
+  18%  {                                          opacity: 0.69; }
+  56%  {                                          opacity: 0.69; }
+  68%  { transform: rotate(var(--shimmer-end));  opacity: 0;    }
   100% { transform: rotate(var(--shimmer-end));  opacity: 0;    }
 }
 

@@ -315,7 +315,7 @@ export function Features() {
         <Reveal
           as="h2"
           delay={200}
-          className="display-title text-3xl font-semibold text-sumi md:text-5xl max-w-2xl"
+          className="section-heading text-sumi max-w-2xl"
         >
           Everything your battery needs.
           <span className="block mt-2 italic text-sumi-soft font-normal">
@@ -324,90 +324,94 @@ export function Features() {
         </Reveal>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
-        {/* Featured: Smart Warnings — spans both columns */}
-        <Reveal delay={0} className="md:col-span-2">
-          <TiltCard rotateAmplitude={3} scaleOnHover={1.005}>
-            <article className="paper-card p-8 md:p-10">
-              <div className="flex flex-col gap-6 md:flex-row md:items-start md:gap-10">
-                <div className="flex items-center gap-5 md:flex-col md:items-start md:gap-3">
-                  <featured.icon
-                    className="h-9 w-9 text-sumi"
-                    strokeWidth={1.5}
-                  />
-                  <span className="kanji-accent font-jp text-5xl leading-none text-hinomaru/90">
-                    {featured.seal}
+      {/* Featured card — full width, kept apart from supporting grid so its
+          weight doesn't get diluted by being just "one of four". */}
+      <Reveal delay={0}>
+        <TiltCard rotateAmplitude={3} scaleOnHover={1.005}>
+          <article className="paper-card p-8 md:p-10">
+            <div className="flex flex-col gap-6 md:flex-row md:items-start md:gap-10">
+              <div className="flex items-center gap-5 md:flex-col md:items-start md:gap-3">
+                <featured.icon
+                  className="h-9 w-9 text-sumi"
+                  strokeWidth={1.5}
+                />
+                <span className="kanji-accent font-jp text-5xl leading-none text-hinomaru/90">
+                  {featured.seal}
+                </span>
+              </div>
+              <div className="flex-1">
+                <p className="font-jp text-xs text-nezumi tracking-widest mb-2">
+                  {featured.jp}
+                </p>
+                <h3 className="display-title text-[1.625rem] md:text-[1.875rem] font-medium text-sumi">
+                  {featured.title}
+                  <span className="block italic text-sumi-soft font-normal">
+                    {featured.italic}
                   </span>
-                </div>
-                <div className="flex-1">
-                  <p className="font-jp text-xs text-nezumi tracking-widest mb-2">
-                    {featured.jp}
-                  </p>
-                  <h3 className="display-title text-2xl md:text-3xl font-semibold text-sumi">
-                    {featured.title}
-                    <span className="block italic text-sumi-soft font-normal">
-                      {featured.italic}
-                    </span>
-                  </h3>
-                  <p className="mt-4 max-w-xl text-base leading-relaxed text-sumi-soft">
-                    {featured.body}
-                  </p>
+                </h3>
+                <p className="prose-readable mt-4 text-[1rem] text-sumi-soft">
+                  {featured.body}
+                </p>
 
-                  {/* Live ink meter — wet sumi stroke drains stepwise through
-                      the three thresholds, pausing as each checkpoint flick
-                      pulses, then sharply recharges. Mirrors the app's
-                      Regular Mode preview in SetupWizardWarningPreview. */}
-                  <div className="mt-7 max-w-xl">
-                    <div className="mb-3 flex items-baseline justify-between text-[10px] uppercase tracking-[0.28em] text-nezumi">
-                      <span>Battery</span>
-                      <span className="font-jp normal-case tracking-[0.3em] text-hinomaru/80">
-                        警 告
-                      </span>
-                    </div>
-                    <InkLevelBar
-                      thresholds={[
-                        // displayFraction is what we render on the bar — picked
-                        // to match the drain keyframes in styles.css so the
-                        // wet brush head lands exactly on each flick.
-                        // The real fractions stay 15/5/2 (shown in the rule rows).
-                        { fraction: 0.15, displayFraction: 0.32, level: 'info', label: 'Info' },
-                        { fraction: 0.05, displayFraction: 0.16, level: 'warn', label: 'Warning' },
-                        { fraction: 0.02, displayFraction: 0.07, level: 'critical', label: 'Alert' },
-                      ]}
-                    />
-                    <ul className="mt-4 space-y-2">
-                      <RuleRow
-                        percent={15}
-                        title="Info"
-                        detail="Quiet nudge. Closes itself in 5 s."
-                        color="rgb(33, 125, 247)"
-                        delay={120}
-                      />
-                      <RuleRow
-                        percent={5}
-                        title="Warning"
-                        detail="Card on screen for 10 s."
-                        color="rgb(250, 133, 10)"
-                        delay={240}
-                      />
-                      <RuleRow
-                        percent={2}
-                        title="Alert"
-                        detail="Stays until you dismiss it."
-                        color="rgb(255, 56, 71)"
-                        delay={360}
-                      />
-                    </ul>
+                {/* Live ink meter — wet sumi stroke drains stepwise through
+                    the three thresholds, pausing as each checkpoint flick
+                    pulses, then sharply recharges. Mirrors the app's
+                    Regular Mode preview in SetupWizardWarningPreview. */}
+                <div className="mt-7 max-w-xl">
+                  <div className="mb-3 flex items-baseline justify-between text-[10px] uppercase tracking-[0.28em] text-nezumi">
+                    <span>Battery</span>
+                    <span className="font-jp normal-case tracking-[0.3em] text-hinomaru/80">
+                      警 告
+                    </span>
                   </div>
+                  <InkLevelBar
+                    thresholds={[
+                      // displayFraction is what we render on the bar — picked
+                      // to match the drain keyframes in styles.css so the
+                      // wet brush head lands exactly on each flick.
+                      // The real fractions stay 15/5/2 (shown in the rule rows).
+                      { fraction: 0.15, displayFraction: 0.32, level: 'info', label: 'Info' },
+                      { fraction: 0.05, displayFraction: 0.16, level: 'warn', label: 'Warning' },
+                      { fraction: 0.02, displayFraction: 0.07, level: 'critical', label: 'Alert' },
+                    ]}
+                  />
+                  <ul className="mt-4 space-y-2">
+                    <RuleRow
+                      percent={15}
+                      title="Info"
+                      detail="Quiet nudge. Closes itself in 5 s."
+                      color="rgb(33, 125, 247)"
+                      delay={120}
+                    />
+                    <RuleRow
+                      percent={5}
+                      title="Warning"
+                      detail="Card on screen for 10 s."
+                      color="rgb(250, 133, 10)"
+                      delay={240}
+                    />
+                    <RuleRow
+                      percent={2}
+                      title="Alert"
+                      detail="Stays until you dismiss it."
+                      color="rgb(255, 56, 71)"
+                      delay={360}
+                    />
+                  </ul>
                 </div>
               </div>
-            </article>
-          </TiltCard>
-        </Reveal>
+            </div>
+          </article>
+        </TiltCard>
+      </Reveal>
 
-        {/* Supporting cards */}
+      {/* Supporting cards — 3-up on lg so the 3 cards fill the row cleanly
+          (the old 2-col layout left an orphan cell). Mockups now sit in a
+          fixed-height slot so cards align even when one has a richer
+          illustration than the others. */}
+      <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {supporting.map(({ seal, icon: Icon, title, titleSub, jp, body, chip, mockup: Mockup }, i) => (
-          <Reveal key={title} delay={140 + i * 100}>
+          <Reveal key={title} delay={140 + i * 100} className="h-full">
             <TiltCard rotateAmplitude={6} scaleOnHover={1.015}>
               <article className="paper-card p-7 h-full flex flex-col">
                 <div className="flex items-start justify-between">
@@ -416,25 +420,31 @@ export function Features() {
                     {seal}
                   </span>
                 </div>
-                <h3 className="display-title mt-6 text-xl font-semibold text-sumi">
+                <h3 className="display-title mt-6 text-[1.3125rem] font-medium text-sumi">
                   {title}
                   {titleSub && (
-                    <span className="block italic text-sumi-soft font-normal text-base">
+                    <span className="block italic text-sumi-soft font-normal text-[0.95rem] mt-0.5 leading-snug">
                       {titleSub}
                     </span>
                   )}
                 </h3>
-                <p className="mt-1 font-jp text-xs text-nezumi tracking-wider">
+                <p className="mt-1.5 font-jp text-xs text-nezumi tracking-wider">
                   {jp}
                 </p>
-                <p className="mt-4 text-sm leading-relaxed text-sumi-soft">{body}</p>
+                <p className="mt-4 text-[0.9375rem] leading-[1.6] text-sumi-soft">{body}</p>
                 {chip && (
-                  <div className="mt-5 inline-flex w-fit items-center gap-2 rounded-md bg-[var(--washi-deep)] px-3 py-1.5 text-xs text-sumi">
-                    <chip.icon className="h-3.5 w-3.5" strokeWidth={1.6} />
-                    {chip.label}
+                  <div className="mt-5 inline-flex w-fit items-center gap-2 rounded-md bg-[var(--washi-deep)] px-3 py-1.5 text-[0.7rem] text-sumi">
+                    <chip.icon className="h-3.5 w-3.5 shrink-0" strokeWidth={1.6} />
+                    <span className="truncate">{chip.label}</span>
                   </div>
                 )}
-                {Mockup && <Mockup />}
+                {/* Mockup slot — pushed to the card bottom and clipped so
+                    a tall illustration can't push the card past its siblings. */}
+                {Mockup && (
+                  <div className="mt-auto pt-6 overflow-hidden">
+                    <Mockup />
+                  </div>
+                )}
               </article>
             </TiltCard>
           </Reveal>

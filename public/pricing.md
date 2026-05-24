@@ -4,7 +4,7 @@
 - Price: $0
 - Tiers: none. Battery Sensei is a single free download.
 - Distribution: notarized .dmg from https://battery-sensei.app/
-- Source: open source on GitHub (https://github.com/sandro/battery-sensei)
+- Source: open source on GitHub (https://github.com/schaier-io/battery-sensei-releases)
 - Includes: all features, all languages, all updates
 - No account required, no in-app purchase, no subscription, no upsell
 

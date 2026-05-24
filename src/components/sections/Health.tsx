@@ -72,7 +72,7 @@ export function Health() {
         <Reveal
           as="h2"
           delay={200}
-          className="display-title text-3xl font-semibold text-sumi md:text-5xl max-w-2xl"
+          className="section-heading text-sumi max-w-2xl"
         >
           Every metric that matters,
           <span className="block italic text-sumi-soft font-normal">
@@ -118,15 +118,15 @@ export function Health() {
                 )}
                 <div className="mt-auto">
                   <h3
-                    className={`display-title font-semibold text-sumi ${
-                      feature ? 'text-2xl' : 'text-base'
+                    className={`display-title font-medium text-sumi ${
+                      feature ? 'text-[1.625rem]' : 'text-[1.0625rem]'
                     }`}
                   >
                     {title}
                   </h3>
                   <p
-                    className={`mt-2 leading-relaxed text-sumi-soft ${
-                      feature ? 'text-base' : 'text-sm'
+                    className={`mt-2 leading-[1.6] text-sumi-soft ${
+                      feature ? 'text-[1rem]' : 'text-[0.9375rem]'
                     }`}
                   >
                     {body}

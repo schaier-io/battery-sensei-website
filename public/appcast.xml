@@ -1,0 +1,18 @@
+<?xml version="1.0" standalone="yes"?>
+<rss version="2.0"
+     xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle"
+     xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Battery Sensei</title>
+    <link>https://battery-sensei.app/appcast.xml</link>
+    <description>Updates for Battery Sensei — a quiet macOS menu-bar battery utility.</description>
+    <language>en</language>
+    <!--
+      Items are prepended by the publish script in the Mac repo:
+        battery-sensei/scripts/publish-release.sh X.Y.Z "release notes"
+      Newest release first. Sparkle picks the topmost <item> as the latest.
+      Binaries are hosted on the public schaier-io/battery-sensei-releases repo
+      (free unmetered bandwidth, anonymous downloads, no Vercel egress).
+    -->
+  </channel>
+</rss>

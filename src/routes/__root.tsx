@@ -13,10 +13,10 @@ const SITE_URL = 'https://battery-sensei.app'
 const TITLE =
   'MacBook Battery Health, Limits & Alerts · Battery Sensei'
 
-// Description: 154 chars. Hook + the three concrete benefits + zero-price
+// Description: 156 chars. Hook + the three concrete benefits + trial/price
 // + privacy/performance trust signal. Reads as a single sentence in SERPs.
 const DESCRIPTION =
-  'Free macOS menu-bar app for MacBook battery health. Smart low-battery alerts, charge limit with Travel Mode, cycle tracking. Native, under 1% impact.'
+  'macOS menu-bar app for MacBook battery health. Smart alerts, charge limit, Travel Mode, cycle tracking. 5-day free trial (no card), $3.99 once. Native, <1% impact.'
 
 // Kept for legacy crawlers — Google ignores `keywords`, Bing weighs it lightly.
 const KEYWORDS =
@@ -32,16 +32,29 @@ const softwareApplicationLd = {
   operatingSystem: 'macOS 13.0',
   description: DESCRIPTION,
   url: SITE_URL,
-  downloadUrl: SITE_URL,
-  installUrl: SITE_URL,
+  downloadUrl: `${SITE_URL}/download/latest`,
+  installUrl: `${SITE_URL}/download/latest`,
   fileSize: '12 MB',
   softwareRequirements: 'macOS 13 Ventura or later. Apple Silicon or Intel.',
-  offers: {
-    '@type': 'Offer',
-    price: '0',
-    priceCurrency: 'USD',
-    availability: 'https://schema.org/InStock',
-  },
+  offers: [
+    {
+      '@type': 'Offer',
+      name: 'Free trial',
+      price: '0',
+      priceCurrency: 'USD',
+      availability: 'https://schema.org/InStock',
+      description: '5-day free trial of Battery Sensei Premium. No card required.',
+    },
+    {
+      '@type': 'Offer',
+      name: 'Sensei Premium',
+      price: '3.99',
+      priceCurrency: 'USD',
+      availability: 'https://schema.org/InStock',
+      description: 'One-time purchase. Lifetime license, all future Premium features.',
+      url: `${SITE_URL}#pricing`,
+    },
+  ],
   featureList: [
     'Smart low-battery alerts (Zen, Regular, Senpai presets)',
     'Charge limit with one-click Travel Mode',
@@ -75,7 +88,7 @@ const organizationLd = {
   name: 'Battery Sensei',
   url: SITE_URL,
   logo: `${SITE_URL}/logo.svg`,
-  sameAs: ['https://github.com/sandro/battery-sensei'],
+  sameAs: ['https://github.com/schaier-io/battery-sensei-releases'],
 }
 
 const webSiteLd = {
@@ -225,9 +238,22 @@ export const Route = createRootRoute({
       // ~100ms on first paint on cold connections.
       { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
       { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' },
+      { rel: 'preconnect', href: 'https://app.lemonsqueezy.com' },
       { rel: 'stylesheet', href: appCss },
     ],
     scripts: [
+      // Lemon.js — powers the overlay checkout for the Premium tier.
+      // Defers so it never blocks first paint; the inline initializer below
+      // calls `createLemonSqueezy()` once the global is ready, which then
+      // intercepts clicks on anchors with class="lemonsqueezy-button".
+      {
+        src: 'https://app.lemonsqueezy.com/js/lemon.js',
+        defer: true,
+      },
+      {
+        children:
+          '(function(){function r(){if(window.createLemonSqueezy){window.createLemonSqueezy()}else{setTimeout(r,80)}}if(document.readyState!=="loading"){r()}else{document.addEventListener("DOMContentLoaded",r)}})();',
+      },
       {
         type: 'application/ld+json',
         children: JSON.stringify(softwareApplicationLd),
