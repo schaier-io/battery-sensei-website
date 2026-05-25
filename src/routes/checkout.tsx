@@ -298,8 +298,26 @@ function CheckoutPage() {
           </p>
         </Reveal>
 
-        <Reveal delay={360}>
+        {/* Activation pane — moved here from the Pricing card.
+            Buyers see it after they've decided to purchase, not while
+            still browsing. Keeps the pricing cards short. */}
+        <Reveal delay={340}>
           <aside className="mt-8 rounded-md border border-dashed border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-5 py-4">
+            <p className="flex items-center gap-2 text-[0.7rem] uppercase tracking-[0.22em] font-medium text-sumi-soft">
+              <span className="font-jp normal-case tracking-normal text-hinomaru/80">鍵</span>
+              {t('pricing.lifetime.activationLabel')}
+            </p>
+            <p className="mt-2 text-[0.875rem] leading-snug text-sumi-soft">
+              <Trans
+                i18nKey="pricing.lifetime.activationBody"
+                components={[<span className="font-medium text-sumi" />]}
+              />
+            </p>
+          </aside>
+        </Reveal>
+
+        <Reveal delay={400}>
+          <aside className="mt-4 rounded-md border border-dashed border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-5 py-4">
             <p className="flex items-center gap-2 text-[0.7rem] uppercase tracking-[0.22em] font-medium text-sumi-soft">
               <span className="font-jp normal-case tracking-normal text-hinomaru/80">鍵</span>
               {t('checkout.alreadyOwnTitle')}

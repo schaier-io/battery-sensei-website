@@ -264,35 +264,36 @@
       "tier": "基本 · Free",
       "period": "forever",
       "blurb": "Yours forever. No card, no account.",
-      "blurbBonus": "Plus: every Premium feature unlocked for your first {{trial}} days.",
-      "ctaSub": "No card, no account. Direct .zip from battery-sensei.app.",
+      "blurbBonus": "Plus every Premium feature, free for your first {{trial}} days.",
+      "ctaSub": "Direct download — no card, no account.",
+      "email": {
+        "label": "Email — heads-up on new versions",
+        "placeholder": "you@example.com",
+        "cta": "Get download",
+        "skip": "or download without email",
+        "footnote": "One email when a new version ships. Unsubscribe in one click.",
+        "errorInvalid": "That doesn't look like an email.",
+        "sending": "Sending…"
+      },
       "whatYouKeep": "What you keep · 基本",
-      "trialEnd": "On day {{day}}, Sensei asks once:",
-      "trialChoice": "<0>Keep Premium ({{price}})</0> · or · <1>revert to free essentials</1>. No nag, no card on file, no silent charge.",
+      "trialEnd": "Day {{day}}, Sensei asks once:",
+      "trialChoice": "<0>Keep Premium ({{price}})</0> or <1>switch to free</1>. No nag, no card.",
       "items": [
         {
-          "title": "Smart low-battery alert presets",
-          "body": "Three escalating moods — Zen, Regular, Senpai — pick the one that fits the day."
+          "title": "Smart low-battery alerts",
+          "body": "Three escalating moods — Zen, Regular, Senpai."
         },
         {
-          "title": "Charge limit with Travel Mode",
-          "body": "Cap your charge level. One tap before a trip charges to 100%, then auto-resets the next morning at 9 AM."
+          "title": "Charge limit + Travel Mode",
+          "body": "Cap your charge. One tap to 100% before a trip, auto-resets at 9 AM."
         },
         {
           "title": "30-day Sensei Saga",
-          "body": "Charge history, battery health tiles, and Rescue Receipts — the last 30 days, kept locally on your Mac."
+          "body": "Charge history, health tiles, Rescue Receipts — kept locally."
         },
         {
-          "title": "Menu-bar charge + watts",
-          "body": "Live percentage in the menu bar, charging watts in the dropdown when plugged in."
-        },
-        {
-          "title": "Apple-notarized + signed auto-updates",
-          "body": "Sparkle delivers EdDSA-signed releases. Sensei checks on launch and installs only when you say so."
-        },
-        {
-          "title": "Runs entirely on your Mac",
-          "body": "Native AppKit + SwiftUI. No Electron, no cloud, no account, no telemetry."
+          "title": "Notarized native macOS app",
+          "body": "AppKit + SwiftUI. No Electron, no cloud, no account."
         }
       ]
     },
@@ -301,7 +302,7 @@
       "period": "once, forever",
       "blurb": "Skip the trial. Unlock everything immediately and own it forever — every Mac, every future Premium feature.",
       "originalLabel": "was",
-      "discountNote": "Limited offer · ZENMODE applied automatically",
+      "discountNote": "Limited-time offer · code ZENMODE",
       "redeem": {
         "label": "<0>{{remaining}}</0> of <1>{{max}}</1> ZENMODE codes remaining",
         "almostGone": "Almost gone — only {{remaining}} left",
@@ -313,7 +314,8 @@
         "notarized": "Notarized by Apple · safe auto-updates",
         "refund": "14-day refund, no questions",
         "noSub": "Lifetime · up to 3 Macs",
-        "subscription": "Yearly · up to 5 Macs · cancel anytime"
+        "subscription": "Yearly · up to 5 Macs · cancel anytime",
+        "combined": "Notarized by Apple · up to 3 Macs"
       },
       "premiumAdds": "Lifetime includes · 先生",
       "activationLabel": "How activation works",

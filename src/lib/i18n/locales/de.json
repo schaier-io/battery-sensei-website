@@ -263,36 +263,37 @@
     "free": {
       "tier": "基本 · Free",
       "period": "für immer",
-      "blurb": "Ihres für immer. Keine Karte, kein Konto.",
-      "blurbBonus": "Dazu: alle Premium-Funktionen für Ihre ersten {{trial}} Tage freigeschaltet.",
-      "ctaSub": "Keine Karte, kein Konto. Direkter .zip-Download von battery-sensei.app.",
+      "blurb": "Deins für immer. Keine Karte, kein Konto.",
+      "blurbBonus": "Plus jede Premium-Funktion, {{trial}} Tage gratis.",
+      "ctaSub": "Direkter Download — keine Karte, kein Konto.",
+      "email": {
+        "label": "E-Mail — Bescheid bei neuen Versionen",
+        "placeholder": "du@beispiel.de",
+        "cta": "Download holen",
+        "skip": "oder ohne E-Mail herunterladen",
+        "footnote": "Eine E-Mail bei einer neuen Version. Abmeldung mit einem Klick.",
+        "errorInvalid": "Das sieht nicht nach einer E-Mail aus.",
+        "sending": "Senden…"
+      },
       "whatYouKeep": "Was Sie behalten · 基本",
-      "trialEnd": "An Tag {{day}} fragt Sensei einmal:",
-      "trialChoice": "<0>Premium behalten ({{price}})</0> · oder · <1>auf die kostenlosen Grundfunktionen zurückkehren</1>. Kein Nachhaken, keine gespeicherte Karte, keine stille Abbuchung.",
+      "trialEnd": "Tag {{day}}, Sensei fragt einmal:",
+      "trialChoice": "<0>Premium behalten ({{price}})</0> oder <1>auf Free wechseln</1>. Kein Nachhaken, keine Karte.",
       "items": [
         {
           "title": "Intelligente Akkuwarnungen",
-          "body": "Drei eskalierende Stimmungen — Zen, Regular, Senpai — wähle, was zum Tag passt."
+          "body": "Drei eskalierende Stimmungen — Zen, Regular, Senpai."
         },
         {
-          "title": "Ladelimit mit Travel Mode",
-          "body": "Limitiere den Ladestand. Ein Tipp vor der Reise lädt auf 100 % und setzt sich am nächsten Morgen um 9 Uhr automatisch zurück."
+          "title": "Ladelimit + Travel Mode",
+          "body": "Limitiere den Ladestand. Ein Tipp auf 100 % vor der Reise, zurück um 9 Uhr."
         },
         {
           "title": "30 Tage Sensei Saga",
-          "body": "Ladeverlauf, Akkugesundheits-Kacheln und Rescue Receipts — die letzten 30 Tage, lokal auf deinem Mac."
+          "body": "Ladeverlauf, Gesundheits-Kacheln, Rescue Receipts — lokal gespeichert."
         },
         {
-          "title": "Akkustand + Watt in der Menüleiste",
-          "body": "Live-Prozent in der Menüleiste, Ladewatt im Dropdown beim Anschließen."
-        },
-        {
-          "title": "Apple-notarisiert + signierte Auto-Updates",
-          "body": "Sparkle liefert EdDSA-signierte Releases. Sensei prüft beim Start und installiert nur, wenn du es erlaubst."
-        },
-        {
-          "title": "Läuft vollständig auf deinem Mac",
-          "body": "Natives AppKit + SwiftUI. Kein Electron, keine Cloud, kein Konto, keine Telemetrie."
+          "title": "Notarisierte native macOS-App",
+          "body": "AppKit + SwiftUI. Kein Electron, keine Cloud, kein Konto."
         }
       ]
     },
@@ -301,7 +302,7 @@
       "period": "einmal, für immer",
       "blurb": "Überspringen Sie die Testphase. Alles sofort freigeschaltet, für immer Ihres — jeder Mac, jede künftige Premium-Funktion.",
       "originalLabel": "vorher",
-      "discountNote": "Limitiertes Angebot · ZENMODE wird automatisch angewendet",
+      "discountNote": "Zeitlich begrenztes Angebot · Code ZENMODE",
       "redeem": {
         "label": "<0>{{remaining}}</0> von <1>{{max}}</1> ZENMODE-Codes verbleibend",
         "almostGone": "Fast weg — nur noch {{remaining}}",
@@ -313,7 +314,8 @@
         "notarized": "Von Apple notarisiert · sichere Auto-Updates",
         "refund": "14 Tage Rückgaberecht, ohne Fragen",
         "noSub": "Lifetime · bis zu 3 Macs",
-        "subscription": "Jährlich · bis zu 5 Macs · jederzeit kündbar"
+        "subscription": "Jährlich · bis zu 5 Macs · jederzeit kündbar",
+        "combined": "Von Apple notarisiert · bis zu 3 Macs"
       },
       "premiumAdds": "Lifetime enthält · 先生",
       "activationLabel": "So funktioniert die Aktivierung",

@@ -264,35 +264,36 @@
       "tier": "基本 · Free",
       "period": "para siempre",
       "blurb": "Tuyo para siempre. Sin tarjeta, sin cuenta.",
-      "blurbBonus": "Además: todas las funciones Premium desbloqueadas durante tus primeros {{trial}} días.",
-      "ctaSub": "Sin tarjeta, sin cuenta. .zip directo desde battery-sensei.app.",
+      "blurbBonus": "Más cada función Premium, gratis durante {{trial}} días.",
+      "ctaSub": "Descarga directa — sin tarjeta, sin cuenta.",
+      "email": {
+        "label": "Email — aviso de nuevas versiones",
+        "placeholder": "tu@ejemplo.com",
+        "cta": "Obtener descarga",
+        "skip": "o descarga sin correo",
+        "footnote": "Un correo cuando salga una nueva versión. Cancela en un clic.",
+        "errorInvalid": "Eso no parece un correo.",
+        "sending": "Enviando…"
+      },
       "whatYouKeep": "Lo que te quedas · 基本",
-      "trialEnd": "El día {{day}}, Sensei pregunta una vez:",
-      "trialChoice": "<0>Quédate con Premium ({{price}})</0> · o · <1>vuelve a lo esencial gratuito</1>. Sin insistir, sin tarjeta guardada, sin cargos silenciosos.",
+      "trialEnd": "Día {{day}}, Sensei pregunta una vez:",
+      "trialChoice": "<0>Quédate con Premium ({{price}})</0> o <1>cambia a gratis</1>. Sin insistir, sin tarjeta.",
       "items": [
         {
           "title": "Avisos inteligentes de batería baja",
-          "body": "Tres modos escalonados — Zen, Regular, Senpai — elige el que encaja con tu día."
+          "body": "Tres modos escalonados — Zen, Regular, Senpai."
         },
         {
-          "title": "Límite de carga con Travel Mode",
-          "body": "Limita la carga. Un toque antes de viajar carga al 100 % y se reinicia solo a la mañana siguiente a las 9."
+          "title": "Límite de carga + Travel Mode",
+          "body": "Limita la carga. Un toque al 100 % antes de viajar, vuelve a las 9."
         },
         {
           "title": "30 días de Sensei Saga",
-          "body": "Historial de carga, panel de salud y Recibos de Rescate — los últimos 30 días, guardados en tu Mac."
+          "body": "Historial de carga, panel de salud, Recibos de Rescate — guardado en tu Mac."
         },
         {
-          "title": "Carga + vatios en la barra de menús",
-          "body": "Porcentaje en vivo en la barra de menús, vatios de carga en el desplegable cuando enchufas."
-        },
-        {
-          "title": "Notarizada por Apple + auto-updates firmadas",
-          "body": "Sparkle entrega releases firmadas con EdDSA. Sensei comprueba al iniciar e instala solo cuando lo dices tú."
-        },
-        {
-          "title": "Funciona enteramente en tu Mac",
-          "body": "AppKit + SwiftUI nativos. Sin Electron, sin nube, sin cuenta, sin telemetría."
+          "title": "App nativa de macOS notarizada",
+          "body": "AppKit + SwiftUI. Sin Electron, sin nube, sin cuenta."
         }
       ]
     },
@@ -301,7 +302,7 @@
       "period": "una vez, para siempre",
       "blurb": "Sáltate la prueba. Desbloquéalo todo al instante y consérvalo para siempre — cada Mac, cada futura función Premium.",
       "originalLabel": "antes",
-      "discountNote": "Oferta limitada · ZENMODE aplicado automáticamente",
+      "discountNote": "Oferta por tiempo limitado · código ZENMODE",
       "redeem": {
         "label": "Quedan <0>{{remaining}}</0> de <1>{{max}}</1> códigos ZENMODE",
         "almostGone": "Casi se acaba — quedan {{remaining}}",
@@ -313,7 +314,8 @@
         "notarized": "Notarizada por Apple · actualizaciones automáticas seguras",
         "refund": "Devolución en 14 días, sin preguntas",
         "noSub": "Vitalicia · hasta 3 Macs",
-        "subscription": "Anual · hasta 5 Macs · cancela cuando quieras"
+        "subscription": "Anual · hasta 5 Macs · cancela cuando quieras",
+        "combined": "Notarizada por Apple · hasta 3 Macs"
       },
       "premiumAdds": "Lifetime incluye · 先生",
       "activationLabel": "Cómo funciona la activación",

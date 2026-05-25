@@ -263,36 +263,37 @@
     "free": {
       "tier": "基本 · Free",
       "period": "pour toujours",
-      "blurb": "À vous pour toujours. Sans carte, sans compte.",
-      "blurbBonus": "En plus : toutes les fonctionnalités Premium débloquées pendant vos {{trial}} premiers jours.",
-      "ctaSub": "Sans carte, sans compte. .zip direct depuis battery-sensei.app.",
-      "whatYouKeep": "Ce que vous gardez · 基本",
-      "trialEnd": "Au jour {{day}}, Sensei demande une seule fois :",
-      "trialChoice": "<0>Gardez Premium ({{price}})</0> · ou · <1>revenez aux essentiels gratuits</1>. Pas de relance insistante, pas de carte enregistrée, pas de prélèvement silencieux.",
+      "blurb": "À toi pour toujours. Pas de carte, pas de compte.",
+      "blurbBonus": "Plus chaque fonctionnalité Premium, gratuite pendant {{trial}} jours.",
+      "ctaSub": "Téléchargement direct — pas de carte, pas de compte.",
+      "email": {
+        "label": "E-mail — préviens-moi des nouvelles versions",
+        "placeholder": "toi@exemple.fr",
+        "cta": "Obtenir le téléchargement",
+        "skip": "ou télécharge sans e-mail",
+        "footnote": "Un e-mail à la sortie d'une nouvelle version. Désabonnement en un clic.",
+        "errorInvalid": "Ça ne ressemble pas à un e-mail.",
+        "sending": "Envoi…"
+      },
+      "whatYouKeep": "Ce que tu gardes · 基本",
+      "trialEnd": "Jour {{day}}, Sensei demande une fois :",
+      "trialChoice": "<0>Garde Premium ({{price}})</0> ou <1>passe en gratuit</1>. Pas de relance, pas de carte.",
       "items": [
         {
-          "title": "Préréglages d'alertes batterie faible",
-          "body": "Trois humeurs escaladées — Zen, Regular, Senpai — choisis celle qui colle à ta journée."
+          "title": "Alertes intelligentes de batterie faible",
+          "body": "Trois humeurs escaladées — Zen, Regular, Senpai."
         },
         {
-          "title": "Limite de charge avec Travel Mode",
-          "body": "Plafonne ta charge. Un tap avant un voyage charge à 100 % et se réinitialise le lendemain à 9 h."
+          "title": "Limite de charge + Travel Mode",
+          "body": "Plafonne ta charge. Un tap à 100 % avant un voyage, retour à 9 h."
         },
         {
           "title": "30 jours de Sensei Saga",
-          "body": "Historique de charge, panneau santé et Reçus de sauvetage — les 30 derniers jours, gardés sur ton Mac."
+          "body": "Historique de charge, panneau santé, Reçus de sauvetage — gardés sur ton Mac."
         },
         {
-          "title": "Charge + watts dans la barre des menus",
-          "body": "Pourcentage en direct dans la barre, watts de charge dans le menu déroulant quand tu branches."
-        },
-        {
-          "title": "Notarisé par Apple + mises à jour signées",
-          "body": "Sparkle livre des releases signées EdDSA. Sensei vérifie au démarrage et n'installe que quand tu dis oui."
-        },
-        {
-          "title": "S'exécute entièrement sur ton Mac",
-          "body": "AppKit + SwiftUI natifs. Pas d'Electron, pas de cloud, pas de compte, pas de télémétrie."
+          "title": "App native macOS notarisée",
+          "body": "AppKit + SwiftUI. Pas d'Electron, pas de cloud, pas de compte."
         }
       ]
     },
@@ -301,7 +302,7 @@
       "period": "une fois, pour toujours",
       "blurb": "Sautez l'essai. Débloquez tout immédiatement, à vous pour toujours — chaque Mac, chaque future fonctionnalité Premium.",
       "originalLabel": "avant",
-      "discountNote": "Offre limitée · ZENMODE appliqué automatiquement",
+      "discountNote": "Offre limitée dans le temps · code ZENMODE",
       "redeem": {
         "label": "<0>{{remaining}}</0> sur <1>{{max}}</1> codes ZENMODE restants",
         "almostGone": "Bientôt fini — il en reste {{remaining}}",
@@ -313,7 +314,8 @@
         "notarized": "Notarisé par Apple · mises à jour automatiques sûres",
         "refund": "Remboursement sous 14 jours, sans question",
         "noSub": "À vie · jusqu'à 3 Macs",
-        "subscription": "Annuel · jusqu'à 5 Macs · annule quand tu veux"
+        "subscription": "Annuel · jusqu'à 5 Macs · annule quand tu veux",
+        "combined": "Notarisé par Apple · jusqu'à 3 Macs"
       },
       "premiumAdds": "Lifetime comprend · 先生",
       "activationLabel": "Comment fonctionne l'activation",

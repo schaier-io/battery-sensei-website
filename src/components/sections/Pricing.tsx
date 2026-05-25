@@ -5,8 +5,6 @@ import {
   Headphones,
   Download,
   ShieldCheck,
-  KeyRound,
-  RotateCcw,
   Heart,
   TrendingUp,
   Inbox,
@@ -19,7 +17,9 @@ import {
   Laptop,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
+import { useState, type FormEvent } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
+import i18n from 'i18next'
 import { Hanko } from '#/components/zen/Hanko'
 import { Reveal } from '#/components/zen/Reveal'
 import { TRIAL_DAYS, lifetimeCheckoutUrl, supportCheckoutUrl } from '#/lib/polar'
@@ -109,20 +109,6 @@ export function Pricing() {
               </span>
             </p>
 
-            <a
-              href="/download/latest"
-              className="btn-sumi group mt-6 inline-flex h-11 items-center justify-center gap-2 rounded-md px-6 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
-            >
-              <Download
-                className="h-4 w-4 transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5"
-                strokeWidth={1.8}
-              />
-              {t('common.downloadFree')}
-            </a>
-            <p className="mt-2 text-[0.7rem] text-nezumi text-center">
-              {t('pricing.free.ctaSub')}
-            </p>
-
             <div aria-hidden className="mt-7 h-px w-full bg-[var(--line)]" />
 
             <p className="mt-6 font-jp text-[11px] tracking-[0.32em] text-nezumi uppercase">
@@ -149,6 +135,10 @@ export function Pricing() {
               })}
             </ul>
 
+            {/* Trial-end pitch + email form + CTA all live INSIDE the
+                mt-auto wrapper so the whole conversion block pins to the
+                bottom of the card. Avoids the floating-whitespace look
+                between feature list and CTA. */}
             <div className="mt-auto pt-8">
               <div className="rounded-md border border-dashed border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-4 py-3.5">
                 <p className="flex items-center gap-2 text-[0.7rem] uppercase tracking-[0.22em] font-medium text-sumi-soft">
@@ -166,6 +156,7 @@ export function Pricing() {
                   />
                 </p>
               </div>
+              <FreeDownloadForm />
             </div>
           </article>
         </Reveal>
@@ -214,28 +205,6 @@ export function Pricing() {
               {t('pricing.lifetime.blurb')}
             </p>
 
-            <a
-              href={lifetimeCheckoutUrl()}
-              className="btn-sumi group mt-6 inline-flex h-11 items-center justify-center gap-2 rounded-md px-6 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
-            >
-              <Sparkles className="h-4 w-4" strokeWidth={1.8} />
-              {t('pricing.lifetime.ctaLabel')}
-            </a>
-            <ul className="mt-3 flex flex-col gap-1.5 text-[0.7rem] text-nezumi">
-              <li className="inline-flex items-center gap-1.5">
-                <ShieldCheck className="h-3 w-3 shrink-0" strokeWidth={1.8} aria-hidden />
-                {t('pricing.lifetime.trust.notarized')}
-              </li>
-              <li className="inline-flex items-center gap-1.5">
-                <RotateCcw className="h-3 w-3 shrink-0" strokeWidth={1.8} aria-hidden />
-                {t('pricing.lifetime.trust.refund')}
-              </li>
-              <li className="inline-flex items-center gap-1.5">
-                <KeyRound className="h-3 w-3 shrink-0" strokeWidth={1.8} aria-hidden />
-                {t('pricing.lifetime.trust.noSub')}
-              </li>
-            </ul>
-
             <div aria-hidden className="mt-7 h-px w-full bg-[var(--line)]" />
 
             <p className="mt-6 font-jp text-[11px] tracking-[0.32em] text-hinomaru/80 uppercase">
@@ -262,19 +231,21 @@ export function Pricing() {
               })}
             </ul>
 
+            {/* Trust line + CTA bundled in mt-auto so they sit glued
+                together at the bottom — peak-end rule: trust is the
+                last thing the visitor reads before clicking. */}
             <div className="mt-auto pt-8">
-              <div className="rounded-md border border-dashed border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-4 py-3.5">
-                <p className="flex items-center gap-2 text-[0.7rem] uppercase tracking-[0.22em] font-medium text-sumi-soft">
-                  <span className="font-jp normal-case tracking-normal text-hinomaru/80">鍵</span>
-                  {t('pricing.lifetime.activationLabel')}
-                </p>
-                <p className="mt-2 text-[0.8125rem] leading-snug text-sumi-soft">
-                  <Trans
-                    i18nKey="pricing.lifetime.activationBody"
-                    components={[<span className="font-medium text-sumi" />]}
-                  />
-                </p>
-              </div>
+              <p className="inline-flex items-center gap-1.5 text-[0.7rem] text-nezumi">
+                <ShieldCheck className="h-3 w-3 shrink-0" strokeWidth={1.8} aria-hidden />
+                {t('pricing.lifetime.trust.combined')}
+              </p>
+              <a
+                href={lifetimeCheckoutUrl()}
+                className="btn-sumi group mt-3 inline-flex h-11 w-full items-center justify-center gap-2 rounded-md px-6 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
+              >
+                <Sparkles className="h-4 w-4" strokeWidth={1.8} />
+                {t('pricing.lifetime.ctaLabel')}
+              </a>
             </div>
           </article>
         </Reveal>
@@ -302,18 +273,6 @@ export function Pricing() {
               {t('pricing.support.blurb')}
             </p>
 
-            <a
-              href={supportCheckoutUrl()}
-              className="btn-sumi-soft group mt-6 inline-flex h-11 items-center justify-center gap-2 rounded-md border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-6 text-sm font-medium text-sumi transition-colors duration-200 hover:bg-[color-mix(in_oklab,var(--washi)_40%,#fff)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
-            >
-              <Heart className="h-4 w-4 text-hinomaru" strokeWidth={1.8} />
-              {t('pricing.support.ctaLabel')}
-            </a>
-            <p className="mt-3 inline-flex items-center gap-1.5 text-[0.7rem] text-nezumi">
-              <RefreshCw className="h-3 w-3 shrink-0" strokeWidth={1.8} aria-hidden />
-              {t('pricing.lifetime.trust.subscription')}
-            </p>
-
             <div aria-hidden className="mt-7 h-px w-full bg-[var(--line)]" />
 
             <p className="mt-6 font-jp text-[11px] tracking-[0.32em] text-sumi-soft uppercase">
@@ -334,6 +293,23 @@ export function Pricing() {
                 )
               })}
             </ul>
+
+            {/* Same pattern as Lifetime: trust + CTA bundled at the
+                bottom so the white space lives ABOVE the conversion
+                block, not between trust and button. */}
+            <div className="mt-auto pt-8">
+              <p className="inline-flex items-center gap-1.5 text-[0.7rem] text-nezumi">
+                <RefreshCw className="h-3 w-3 shrink-0" strokeWidth={1.8} aria-hidden />
+                {t('pricing.lifetime.trust.subscription')}
+              </p>
+              <a
+                href={supportCheckoutUrl()}
+                className="btn-sumi-soft group mt-3 inline-flex h-11 w-full items-center justify-center gap-2 rounded-md border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-6 text-sm font-medium text-sumi transition-colors duration-200 hover:bg-[color-mix(in_oklab,var(--washi)_40%,#fff)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
+              >
+                <Heart className="h-4 w-4 text-hinomaru" strokeWidth={1.8} />
+                {t('pricing.support.ctaLabel')}
+              </a>
+            </div>
           </article>
         </Reveal>
       </div>
@@ -416,5 +392,114 @@ function LimitedRedeemBar({ fullPriceFormatted }: { fullPriceFormatted: string }
         </p>
       )}
     </div>
+  )
+}
+
+/**
+ * Email-gated download for the Free card.
+ *
+ * Marketing-psychology design:
+ *   - Default path is the email opt-in (Default Effect). The form is
+ *     the visible action; the no-email link sits below as a quiet
+ *     escape hatch.
+ *   - Reciprocity: you give us an email, we hand you the download
+ *     plus one quiet email per release. Honest trade, no clutter.
+ *   - Self-determination: skip link preserves autonomy — no dark
+ *     pattern, no gate, the download is still one click away.
+ *   - Reduced friction (BJ Fogg): single email field, no name, no
+ *     extra confirmation; submit fires the download immediately so
+ *     the visitor never waits for an email-link round-trip.
+ *
+ * The API call is fire-and-forget — a network failure never blocks
+ * the download. The visitor is always served the .dmg.
+ */
+function FreeDownloadForm() {
+  const { t } = useTranslation()
+  const [email, setEmail] = useState('')
+  const [status, setStatus] = useState<'idle' | 'sending' | 'error'>('idle')
+
+  const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    if (!isValid || status === 'sending') {
+      if (!isValid) setStatus('error')
+      return
+    }
+    setStatus('sending')
+    // Best-effort signup. Failures are silent — the visitor still
+    // gets the download. Logging happens server-side.
+    try {
+      await fetch('/api/free-signup', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          email: email.trim(),
+          locale: i18n.language,
+          source: 'pricing-free',
+        }),
+        keepalive: true,
+      })
+    } catch {
+      // intentional: don't block download on network/api failure
+    }
+    window.location.assign('/download/latest')
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="mt-5" noValidate>
+      <label
+        htmlFor="free-download-email"
+        className="block text-center text-[0.7rem] uppercase tracking-[0.16em] text-sumi-soft"
+      >
+        {t('pricing.free.email.label')}
+      </label>
+      <div className="mt-2 flex flex-col gap-2 sm:flex-row">
+        <input
+          id="free-download-email"
+          type="email"
+          required
+          autoComplete="email"
+          inputMode="email"
+          value={email}
+          onChange={(e) => {
+            setEmail(e.target.value)
+            if (status === 'error') setStatus('idle')
+          }}
+          placeholder={t('pricing.free.email.placeholder')}
+          className="h-11 flex-1 min-w-0 rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_55%,#fff)] px-3 text-[0.875rem] text-sumi placeholder:text-nezumi/70 focus:outline-none focus:ring-2 focus:ring-sumi/30"
+        />
+        <button
+          type="submit"
+          disabled={status === 'sending'}
+          className="btn-sumi group inline-flex h-11 items-center justify-center gap-2 rounded-md px-5 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)] disabled:opacity-70"
+        >
+          <Download
+            className="h-4 w-4 transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5"
+            strokeWidth={1.8}
+            aria-hidden
+          />
+          {status === 'sending'
+            ? t('pricing.free.email.sending')
+            : t('pricing.free.email.cta')}
+        </button>
+      </div>
+      {status === 'error' && (
+        <p className="mt-1.5 text-center text-[11px] text-hinomaru">
+          {t('pricing.free.email.errorInvalid')}
+        </p>
+      )}
+      <p className="mt-2 text-center text-[0.7rem] leading-[1.45] text-nezumi">
+        {t('pricing.free.email.footnote')}
+      </p>
+      <p className="mt-1.5 text-center">
+        <a
+          href="/download/latest"
+          className="text-[0.7rem] text-nezumi underline-offset-[6px] hover:text-sumi-soft hover:underline"
+        >
+          {t('pricing.free.email.skip')}
+        </a>
+      </p>
+    </form>
   )
 }
