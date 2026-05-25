@@ -1,0 +1,590 @@
+{
+  "common": {
+    "language": "言語",
+    "languageName": {
+      "en": "English",
+      "de": "Deutsch",
+      "es": "Español",
+      "fr": "Français",
+      "ja": "日本語"
+    },
+    "download": "ダウンロード",
+    "downloadFree": "無料でダウンロード",
+    "downloadMac": "macOS版をダウンロード",
+    "buyNow": "今すぐ購入 — {{price}}",
+    "purchaseNow": "今すぐ購入",
+    "onceForever": "一度きり、永続",
+    "recommended": "おすすめ",
+    "learnMore": "詳しく見る"
+  },
+  "nav": {
+    "ariaPrimary": "メインナビゲーション",
+    "ariaHome": "Battery Sensei — ホーム",
+    "openMenu": "メニューを開く",
+    "closeMenu": "メニューを閉じる",
+    "support": "お問い合わせ",
+    "supportAria": "サポートに連絡 — 一日以内に返信",
+    "sections": {
+      "features": "機能",
+      "saga": "歴史",
+      "health": "健康",
+      "pricing": "値段",
+      "faq": "問答",
+      "contact": "連絡"
+    }
+  },
+  "hero": {
+    "kicker": "macOS · {{trial}}日間無料 · {{price}}一度きり",
+    "title": "静かな力を、",
+    "titleItalic": "あなたのMacBookに。",
+    "jp": "静かに、電池に寄り添う。",
+    "body": "MacBookの電池は、充電のたびに静かに消耗していきます。先生はその様子をそっと見守り、突然のシャットダウンを未然に防ぎ、充電上限を保って電池を長持ちさせ、年月の歩みをやさしい言葉で記録します。",
+    "readMore": "もっと読む",
+    "specStrip": "{{trial}}日間無料。カード不要、アカウント不要。その後は{{price}}を一度だけ、それきりです。",
+    "menuCaption": "メニューバーに住み、必要なときだけ声をかけます。"
+  },
+  "categories": {
+    "ariaLabel": "Battery Senseiの機能",
+    "items": {
+      "alerts": "スマートな低電池警告",
+      "chargeLimit": "充電上限 · 80%",
+      "travelMode": "旅モード",
+      "cycle": "サイクルと容量",
+      "watts": "ライブワット",
+      "history": "電池履歴",
+      "aldenteAlt": "AlDenteの代替"
+    }
+  },
+  "features": {
+    "kicker": "できること",
+    "heading": "電池に必要なすべてを。",
+    "headingItalic": "それ以外は何も。",
+    "featured": {
+      "title": "三段階。お好みで。",
+      "italic": "先生はささやき、念を押し、あるいは静かに留まります。",
+      "jp": "静かな警告",
+      "body": "macOSはパーセントを表示するだけ。先生はその瞬間にふさわしい合図を選び、突然のシャットダウンで作業を失うことはもうありません。三つのプリセット、または自分の閾値と消去時間を設定できます。",
+      "battery": "電池",
+      "rules": {
+        "info": "情報",
+        "infoDetail": "静かな合図。5秒で自動的に閉じます。",
+        "warning": "警告",
+        "warningDetail": "10秒間カードを表示します。",
+        "alert": "アラート",
+        "alertDetail": "消去するまで画面に残ります。"
+      }
+    },
+    "chargeLimit": {
+      "title": "充電上限",
+      "titleSub": "旅モード付き",
+      "jp": "長く保つ・旅",
+      "body": "Appleによれば、リチウムイオン電池は100%のままでいる時間が長いほど早く劣化します。上限を選んでください(80%をおすすめします)。先生はそれを背後で保ちます。明日は飛行機ですか?ワンクリックで満充電、家に戻ればまた上限へ戻ります。",
+      "chip": "旅モード · 出発前に満充電"
+    },
+    "glance": {
+      "title": "一目で、すべてが伝わる",
+      "jp": "一目で",
+      "body": "充電量、電源、入出力ワット、残り時間。全体像が、ひと目で。Dockアイコンなし。通知の騒がしさなし。クリックしたいときだけ、クリックしてください。",
+      "timeLeft": "残り1時間52分",
+      "chargingTo": "80%まで充電中",
+      "source": "電源",
+      "powerAdapter": "電源アダプタ",
+      "cycles": "サイクル数",
+      "chargeLimitOn": "充電上限 · 80%",
+      "on": "オン"
+    },
+    "meetings": {
+      "title": "会議に、間に合う。",
+      "titleSub": "先生が先を読み、電池もそれに備えます。",
+      "jp": "会議の前に",
+      "body": "オプトイン式です。先生は次の数件の予定をそっと覗き、肝心な会議を電池が持ちこたえられないとわかれば、30分前、15分前、5分前、開始時刻に明確な対処法と共にお知らせします(「22分充電すれば最後まで持ちます」)。予定のタイトルがMacの外に出ることはありません。",
+      "chip": "読み取り専用 · タイトルはMacから出ません",
+      "nextOnCalendar": "次の予定",
+      "duration": "午後3:00 · 60分",
+      "meetingTitle": "週次ミーティング",
+      "warnHeading": "会議の途中で電池が切れます",
+      "warnBody": "スタンドアップ開始から<0>17分</0>でラップトップが落ちます。今すぐ充電を。",
+      "warnFix": "22分充電すれば最後まで持ちます。",
+      "remindsYou": "お知らせするタイミング",
+      "now": "今",
+      "minBefore": "−{{min}}分",
+      "onDevice": "端末内のみ"
+    }
+  },
+  "saga": {
+    "kicker": "個人史 · Personal history",
+    "heading": "電池が本当に",
+    "headingItalic": "つけたくなる日記。",
+    "body": "一つひとつのサイクル。一度ごとの救出。すべての踊り場。先生は電池の一生をやさしい言葉で日記に残します。MacBookを引退させる日が来たとき、その電池がどう生きたか、何がそこまで支えたか、次の一台にどう頼むべきかが、はっきりとわかります。",
+    "bullets": [
+      "247日、217サイクル、92%。あなたの記録、注釈付きで。",
+      "バックグラウンドで静かに更新。設定不要。",
+      "あなたのMacの中に。クラウドなし、アカウントなし。"
+    ]
+  },
+  "health": {
+    "kicker": "MacBookの電池の健康 · Battery health",
+    "heading": "大切な指標すべてを、",
+    "headingItalic": "あなたが本当に口にする言葉で。",
+    "cells": {
+      "aging": {
+        "title": "加齢の様子を、グラフで",
+        "body": "一秒で読み取れる、静かな一本の線。やさしい言葉で、専門用語なし、赤く脅かすダッシュボードもなし。",
+        "monthsAgo": "14か月前",
+        "today": "本日92%"
+      },
+      "cycles": {
+        "title": "サイクル数を、文脈とともに",
+        "body": "「217サイクル。14か月にしては普通です。」人が口にする数字を。"
+      },
+      "heat": {
+        "title": "発熱による充電制限を、わかる言葉で",
+        "body": "macOSが冷却のために充電を止めたとき、先生が理由と対処法を伝えます。"
+      },
+      "watts": {
+        "title": "ライブの入出力ワット",
+        "body": "怪しいケーブルを数秒で発見。電池泥棒なアプリを、一日が終わる前に捕まえます。"
+      },
+      "privacy": {
+        "title": "Macの中に留まります",
+        "body": "クラウドなし。アカウントなし。テレメトリなし。あなたの電池の物語は、あなただけのものです。"
+      },
+      "languages": {
+        "title": "五か国語を話します",
+        "body": "EN · DE · ES · FR · 日本語"
+      }
+    }
+  },
+  "compare": {
+    "kicker": "Sensei vs その他 · Compared",
+    "heading": "美しく設計されています。",
+    "headingItalic": "正直に、機能ごとに。",
+    "intro": "Battery Senseiは、愛されてきたMac向け電池ツール — AlDente、BatFi、coconutBattery、iStat Menus、さらにmacOSの新しい充電上限機能 — の隣に立ちます。並べて、ありのままに。",
+    "videoCta": "60秒のウォークスルーを見る",
+    "labels": { "partial": "一部", "moreInfo": "詳細", "openFeature": "機能を開く" },
+    "headers": {
+      "feature": "機能",
+      "sensei": "Battery Sensei",
+      "aldente": "AlDente",
+      "batfi": "BatFi",
+      "coconut": "coconutBattery",
+      "istat": "iStat Menus",
+      "macos": "macOS"
+    },
+    "rows": [
+      { "label": "端末内のみ",              "desc": "すべてMacの中で動作。クラウドなし、アカウントなし、テレメトリなし。",                              "sensei": "yes", "aldente": "yes",     "batfi": "yes",     "coconut": "yes", "istat": "yes",     "macos": "yes" },
+      { "label": "ネイティブmacOSアプリ",    "desc": "ネイティブのAppKit + SwiftUIで開発。Electronなし、Webラッパーなし — 即起動、軽メモリ、システムの手触り。",                "sensei": "yes", "aldente": "yes",     "batfi": "yes",     "coconut": "yes", "istat": "yes",     "macos": "yes" },
+      { "label": "ライト&ダークテーマ",      "desc": "macOSの外観に追従。お好みで「Daylight Sensei」「Night Ninja」に手動で切り替えも可能。",                              "sensei": "yes", "aldente": "yes",     "batfi": "yes",     "coconut": "yes", "istat": "yes",     "macos": "yes" },
+      { "label": "サイクルと容量",          "desc": "サイクル数と容量を、時間軸で記録。",                                                                "sensei": "yes", "aldente": "yes",     "batfi": "no",      "coconut": "yes", "istat": "yes",     "macos": "partial" },
+      { "label": "省電力動作",             "desc": "イベント駆動のサンプリング、約30秒で更新 — 通常は1日のうち1%未満。",                                "sensei": "yes", "aldente": "yes",     "batfi": "yes",     "coconut": "yes", "istat": "partial", "macos": "yes" },
+      { "label": "メニューバーのワット表示", "desc": "充電中の電力を、メニューバーのドロップダウンにライブ表示。",                                       "sensei": "yes", "aldente": "yes",     "batfi": "yes",     "coconut": "no",  "istat": "yes",     "macos": "no" },
+      { "label": "充電上限",                "desc": "充電量に上限を設けて、電池を涼しく長持ちさせます。",                                                "sensei": "yes", "aldente": "yes",     "batfi": "yes",     "coconut": "no",  "istat": "no",      "macos": "yes" },
+      { "label": "電力を食うアプリ上位",    "desc": "Sagaページでの上位電力消費アプリ — 1時間 / 24時間 / 7日間、アクティビティモニタ式スコア、5分ごとに更新。", "key": "energy-usage",         "sensei": "yes", "aldente": "no",      "batfi": "no",      "coconut": "no",  "istat": "no",      "macos": "partial" },
+      { "label": "旅支度モード",            "desc": "出発前にワンクリック — 100%まで充電し、より強い警告に切り替え、翌朝9時に自動でリセット。", "key": "travel-mode",      "sensei": "yes", "aldente": "partial", "batfi": "partial", "coconut": "no",  "istat": "no",      "macos": "no" },
+      { "label": "カスタム閾値",            "desc": "自分専用の低電池閾値と、レベルごとの消去時間を設定できます。", "key": "custom-thresholds",                "sensei": "yes", "aldente": "no",      "batfi": "no",      "coconut": "no",  "istat": "no",      "macos": "no" },
+      { "label": "警告プリセット",          "desc": "Zen Mode、Regular Mode、Teach Me Senpai — 3段階のムード、その日にひとつ。", "key": "alert-presets",                       "sensei": "yes", "aldente": "no",      "batfi": "no",      "coconut": "no",  "istat": "no",      "macos": "no" },
+      { "label": "Sensei Saga",            "desc": "充電履歴(24h / 3日 / 7日)、健康パネル、Weekly + Monthly Wrapped、間に合って救出したときのRescue Receipt。", "key": "battery-journal",                          "sensei": "yes", "aldente": "no",      "batfi": "no",      "coconut": "no",  "istat": "no",      "macos": "no" },
+      { "label": "会議の電池ガード",        "desc": "次の4時間の予定を端末内で読み取り。クリティカル:30/15/5/0分前に通知。カタストロフィック:即時通知。", "key": "meeting-battery-guard", "sensei": "yes", "aldente": "no",      "batfi": "no",      "coconut": "no",  "istat": "no",      "macos": "no" }
+    ],
+    "footnote": "2026年5月時点の各ツール公式サイトに基づきます。各アプリにはそれぞれの得意分野があります — 詳しい機能一覧は各公式サイトをご覧ください。"
+  },
+  "walkthrough": {
+    "kicker": "ウォークスルー · 動画",
+    "heading": "60秒で先生を。",
+    "headingItalic": "他のアプリと並べて。",
+    "body": "Battery Senseiが動いている様子を短くご紹介します — AlDente、BatFi、coconutBattery、iStat Menus、そしてmacOSの充電上限機能との並べた比較も。映像は制作中、完成し次第ここで公開します。",
+    "videoBadge": "近日公開",
+    "videoCaption": "推定再生時間 · 60秒 · 1080p",
+    "notifyHeading": "公開時にお知らせをご希望ですか?",
+    "notifyBody": "メールは1通だけ — ウォークスルーが公開された日にお送りします。",
+    "notifyCta": "知らせてもらう",
+    "backToCompare": "比較に戻る"
+  },
+  "featurePages": {
+    "backLink": "Battery Sensei",
+    "backToHome": "ホームに戻る",
+    "tryFree": "Battery Senseiを無料で試す",
+    "howItHeading": "仕組み",
+    "whyItHeading": "なぜ大切か",
+    "travel-mode": {
+      "kicker": "機能 · 旅",
+      "heading": "旅支度モード。",
+      "headingItalic": "出発前にワンクリック。あとは先生におまかせ。",
+      "body": "普段、先生はあなたが選んだ上限(80%推奨)で充電を止め、電池の劣化を遅らせます。フライト前夜に「旅支度」を押せば、上限を解除して100%まで充電し、より強い低電池警告(30% / 15% / 5%)に切り替え、Appleの最適化バッテリー充電も一時停止します。翌朝9時に、いつもの上限が自動的に戻ります。元に戻すリマインドも、何週間も100%のまま温まる電池もありません。",
+      "mockupCaption": "上限を100%へ解除。明朝9時に自動で復帰。",
+      "why": "リチウムイオン電池は100%のまま置かれると早く劣化します。「旅行前に充電して放置」では何週間も満充電のままになり、セルに目に見える形で負担がかかります。9時の自動リセットは安全網 — 忘れても上限が戻ってきます。"
+    },
+    "custom-thresholds": {
+      "kicker": "Premium · 設定",
+      "heading": "カスタム閾値。",
+      "headingItalic": "あなたの数字、あなたの消去時間。",
+      "body": "3つのプリセットでほとんどの日は事足ります。でも「警告は22%で14秒、アラートは6%で承認するまで」という流儀なら、自分で組み立てましょう。先生はエスカレーションの各段階ごとに、正確なパーセンテージと表示時間を設定できます。1つの全体値ではなく、段階ごとに。",
+      "mockupCaption": "Info · 警告 · アラート — それぞれにパーセントと消去時間を。",
+      "why": "ひとつの全体しきい値では、長距離フライトと連続会議の両方には対応できません。段階ごとの閾値が、その日の動きに合った通知を可能にします。"
+    },
+    "alert-presets": {
+      "kicker": "機能 · 警告",
+      "heading": "警告プリセット。",
+      "headingItalic": "Zen Mode。Regular Mode。Teach Me Senpai。",
+      "body": "Zen Modeは15%でそっとささやき(5秒で消える)、もう一度5%で(10秒)— 静かに、続きをやらせてくれます。Regular Modeはそれに加え、5%で赤いオーバーレイ、2%で消えないアラート。Teach Me Senpaiはシンプルだけれど厳しく — 15%で赤いオーバーレイ、5%で全画面フラッシュ、どちらも自分で閉じるまで残ります。働き方に合うムードを選ぶか、カスタム閾値で自分のものを組み立ててください。",
+      "mockupCaption": "3つのプリセット。いつでもワンタップで切替。",
+      "why": "macOSの電池通知は10%でたった一度。送る直前のスライドには、たいてい遅すぎます。3つのプリセットなら、その瞬間の重要度に通知を合わせられます。"
+    },
+    "battery-journal": {
+      "kicker": "機能 · 個人史",
+      "heading": "Sensei Saga。",
+      "headingItalic": "サイクル、充電、救出 — すべての歴史。",
+      "body": "Sagaは、あなたの電池の長い目線。24時間 / 3日 / 7日で切り替えられる充電履歴のグラフ、バッテリー健康パネル(容量、サイクル、温度、状態)、直近1時間 / 1日 / 1週間の電力を食ったアプリ、そしてSpotify-Wrapped風のWeekly + Monthlyの振り返り。間に合って電池を救出したとき — クリティカル警告から30分以内に充電を始めたとき — 先生はRescue Receiptを綴じます:小さな、共有できるカードでその瞬間を残せます。",
+      "mockupCaption": "生涯の統計、充電履歴、Wrapped。すべてSagaページに。",
+      "why": "文脈のない電池の数字は、ただの数字です。「容量92%」は何も語りません。Sagaは同じ数字に物語を与えます — 一週間前はどうだったか、どのアプリに一番奪われたか、どの日にあと一歩で失うところだったか。"
+    },
+    "meeting-battery-guard": {
+      "kicker": "Premium · 会議",
+      "heading": "会議の電池ガード。",
+      "headingItalic": "大事な会議を、絶対に逃さない。",
+      "body": "オプトイン式。先生は次の4時間のカレンダー予定を端末内で読み取ります(EventKit、デフォルトの先読み時間)。現在の電池に対して各会議をスコアリング — Comfortable、Tight、Critical、Catastrophic — し、必要なときだけ知らせます。Critical:30 / 15 / 5 / 0分前、それぞれにラップトップが落ちる正確な時刻と対処法(「22分充電すれば最後まで持ちます」)を添えて。Catastrophic:即時警告。Tight:30分前に一度だけ。Comfortable:静か。早めに充電を始めれば、未送信のお知らせは取り消されます。通知のタイトルは初期状態では読める形ですが、ひとつのスイッチで伏せられます。",
+      "mockupCaption": "4時間の先読み。鳴らすべきときだけ鳴らします。",
+      "why": "会議の最中の10%警告は役に立ちません — 充電器を探しに出られないからです。カレンダーを読むことで、まだ間に合ううちに先生が知らせ、それ以外のときは黙っています。"
+    },
+    "energy-usage": {
+      "kicker": "機能 · 電力",
+      "heading": "電力を食うアプリ上位。",
+      "headingItalic": "電池を食べているのは誰か — 名前で。",
+      "body": "Sagaページで、先生は電力を最も使っているアプリを並べます — 直近1時間、24時間、7日間を切り替え可能。各アプリにはアクティビティモニタ式のエネルギーインパクトスコア(CPU時間とアイドル時のwakeupsを混ぜたもの)、インパクトラベル(低 / 中 / 高 / 非常に高い)、そして検索フィルター — 「chrome」と打てば、すべてのChromeヘルパーが整列します。プロセスごとのリソース使用量を5分ごとにサンプリング — システム拡張なし、カーネルフックなし。",
+      "mockupCaption": "上位アプリ · 1h / 24h / 7d · 検索フィルター付き。5分ごとに更新。",
+      "why": "電池の減りは、ほとんど電池のせいではありません。固まったヘルパー、眠らないタブ、GPUを離さないビデオ会議が原因です。どのアプリが一番のコストかを知ることが、4時間の一日と7時間の一日の差を生みます。"
+    }
+  },
+  "pricing": {
+    "kicker": "値段 · Pricing",
+    "heading": "先生を使う、3つの道。",
+    "headingItalic": "Lifetimeを一度きり、または毎年の応援。",
+    "intro": "まずは無料で{{trial}}日間のPremiumお試し。その後はLifetimeを一度きりお買い上げ({{lifetime}}、先着500名のみ)— または{{support}}/年で開発を支えてください。",
+    "free": {
+      "tier": "基本 · Free",
+      "period": "ずっと",
+      "blurb": "ずっとあなたのもの。カード不要、アカウント不要。",
+      "blurbBonus": "さらに最初の{{trial}}日間、すべてのPremium機能が解放されます。",
+      "ctaSub": "カード不要、アカウント不要。battery-sensei.appから直接.zipで。",
+      "whatYouKeep": "ずっと使えるもの · 基本",
+      "trialEnd": "{{day}}日目、先生は一度だけ尋ねます:",
+      "trialChoice": "<0>Premiumを続ける({{price}})</0> · または · <1>基本機能に戻る</1>。しつこい催促なし、カード情報の保存なし、こっそり請求もありません。",
+      "items": [
+        {
+          "title": "スマートな低電池警告プリセット",
+          "body": "3段階のムード — Zen、Regular、Senpai — その日に合うものを選んでください。"
+        },
+        {
+          "title": "旅モード付きの充電上限",
+          "body": "充電量に上限を設定。出発前にワンタップで100%まで充電し、翌朝9時に自動で元に戻ります。"
+        },
+        {
+          "title": "30日間のSensei Saga",
+          "body": "充電履歴、健康パネル、Rescue Receipt — 直近30日分をMacの中に保存。"
+        },
+        {
+          "title": "メニューバーの充電量とワット",
+          "body": "メニューバーにライブの%、充電中はドロップダウンにワット表示。"
+        },
+        {
+          "title": "Apple公証 + 署名付き自動アップデート",
+          "body": "SparkleがEdDSA署名のリリースを配信。起動時に確認し、あなたが許可したときだけインストール。"
+        },
+        {
+          "title": "完全にMacの中で動作",
+          "body": "ネイティブのAppKit + SwiftUI。Electronなし、クラウドなし、アカウントなし、テレメトリなし。"
+        }
+      ]
+    },
+    "lifetime": {
+      "tier": "永遠 · Lifetime",
+      "period": "一度きり、ずっと",
+      "blurb": "試用期間をスキップ。今すぐすべてを解放し、ずっとあなたのものに — すべてのMacで、未来のすべてのPremium機能まで。",
+      "originalLabel": "元の価格",
+      "discountNote": "数量限定 · ZENMODEは決済時に自動適用",
+      "redeem": {
+        "label": "ZENMODEコード残り <0>{{remaining}}</0> / <1>{{max}}</1>",
+        "almostGone": "もうすぐ売り切れ — 残り {{remaining}}",
+        "soldOut": "ZENMODE完売",
+        "soldOutHint": "価格は{{full}}に戻ります"
+      },
+      "ctaLabel": "Lifetimeを入手",
+      "trust": {
+        "notarized": "Apple公証済み · 安全な自動アップデート",
+        "refund": "14日間返金、理由不要",
+        "noSub": "ライフタイム · 最大3台のMac",
+        "subscription": "年額 · 最大5台のMac · いつでも解約"
+      },
+      "premiumAdds": "Lifetimeに含まれるもの · 先生",
+      "activationLabel": "アクティベーションの流れ",
+      "activationBody": "Polarからメールでライセンスキーをお届け。<0>Sensei → 設定 → Premium</0>に一度貼り付けるだけ。ライフタイムは全Premium機能を永久に解放(最大3台のMac)。年額オプションは同じ内容で5台までに拡大、1年間のアップデートとメールサポート付き — Polarからいつでも管理・解約可能。アプリにログインもアカウントも不要。",
+      "items": [
+        {
+          "title": "会議の電池ガード",
+          "body": "先生が次の予定を読み(タイトルは端末から出ません)、肝心な会議を電池が持ちこたえられないとわかれば、30分前、15分前、5分前、開始時刻に明確な対処法と共にお知らせします。"
+        },
+        {
+          "title": "Saga履歴を無制限に",
+          "body": "30日分だけでなく、すべてのサイクル、踊り場、容量の記録を永久に保存します。"
+        },
+        {
+          "title": "カスタム警告プリセット",
+          "body": "三つのプリセットの先で、自分の閾値と消去時間を自由に設定できます。"
+        },
+        {
+          "title": "未来のすべてのPremium機能",
+          "body": "一度の支払いで。お持ちのすべてのMacで。先生が今後リリースするすべてのアップデートを。"
+        }
+      ]
+    },
+    "support": {
+      "tier": "応援 · 開発を応援する",
+      "period": "年あたり",
+      "badge": "いつでも解約可能",
+      "blurb": "ご購読中はPremium機能をご利用いただけ、先生の継続開発を支えていただけます。初期費用を抑え、毎年お続けいただくプランです。",
+      "ctaLabel": "毎年応援する",
+      "perksTitle": "1年で支えるもの · 応援",
+      "items": [
+        "ご購読中はすべての現行Premium機能",
+        "次の1年の先生の開発資金になります",
+        "Polarアカウントからいつでも解約可能",
+        "アイデアや機能要望の直通窓口"
+      ]
+    },
+    "alreadyBought": "もう購入済みですか?Sensei → 設定 → Premiumでライセンスキーを貼り付けてください。"
+  },
+  "faq": {
+    "kicker": "問答 · Questions",
+    "heading": "静かにお答えします。",
+    "items": [
+      {
+        "q": "Battery SenseiはどのMacとmacOSに対応していますか?",
+        "a": "macOS 13 Ventura、Sonoma、Sequoia、それ以降に対応。Apple Silicon(M1/M2/M3/M4)とIntel搭載のMacBook、どちらでも動きます。"
+      },
+      {
+        "q": "Battery Senseiの価格は?",
+        "a": "Sensei Premiumは{{price}}の一度きり、一回の支払いで、永久ライセンス — 未来のすべてのPremium機能、お持ちのすべてのMacに対応します。まずは{{trial}}日間無料でお試しを — 開始時にカード不要、試用期間終了時のしつこい催促もなし。試用後も、コアの基本機能(充電上限、スマート警告、30日間履歴)は永久に無料。Premiumでは会議の電池ガード、無制限のSaga履歴、カスタム警告プリセットが解放されます。決済画面では現地通貨での金額をご確認いただけます。"
+      },
+      {
+        "q": "ライセンスキーはどのように使いますか?",
+        "a": "Polarでの決済後、ライセンスキーをメールでお届けします。Sensei → 設定 → Premiumを開いてキーを貼り付けてください。先生がPolar APIで認証し、結果はローカルに保存します。アカウントもログインも不要。お持ちのすべてのMacで使えます。"
+      },
+      {
+        "q": "返金できますか?",
+        "a": "はい。ご購入から14日以内にメールでご連絡いただければ、理由を問わず返金いたします。決済はPolarが扱うため、返金は元のカードへ戻ります。"
+      },
+      {
+        "q": "充電上限と旅モードはどう動きますか?",
+        "a": "先生はMacBookの充電を選んだ水準(初期値80%)で止めて、電池の寿命を延ばします。ワンクリックで旅モードに切り替えれば、出発前に100%まで満たし、家に戻れば元の上限に戻ります。"
+      },
+      {
+        "q": "Battery Senseiはデータをどこかに送りますか?",
+        "a": "いいえ。Battery Senseiはプライバシーを第一に考えています。完全にあなたのMac内で動きます。テレメトリなし、解析なし、クラウドアカウントなし。あなたの個人的な電池履歴はローカルに留まり、あなたが明示的に共有しない限り、Macから出ることはありません。"
+      },
+      {
+        "q": "Battery SenseiはmacOS内蔵の電池メニューとどう違いますか?",
+        "a": "macOSはパーセントを表示するだけ。Battery Senseiはお選びの閾値でのスマートな低電池警告、旅モード付きの充電上限、ライブの充電ワット、サイクル数と容量の追跡、電池の加齢をやさしい言葉で綴る履歴を加えます。"
+      },
+      {
+        "q": "Battery Sensei自体はどれくらい電池を使いますか?",
+        "a": "1%未満です。先生はAppKitとSwiftUIで作られたネイティブのメニューバーアプリで、バックグラウンドでのポーリングは行いません。macOSが変化を報告したときだけ、システムの電池を読み取ります。"
+      },
+      {
+        "q": "Battery SenseiはAlDenteの代替になりますか?",
+        "a": "はい。先生はAlDenteの核である充電上限機能をすべてのプランで備え、スマート警告と個人的な電池履歴を加え、一つの公証済み.dmgで配布されます。Premiumでは会議の電池ガードと無制限のSaga履歴を、一度きりのお支払いでご利用いただけます。詳しい比較はbattery-sensei.app/vs-aldenteにあります。"
+      },
+      {
+        "q": "Battery Senseiはどう更新しますか?",
+        "a": "先生は起動時にアップデートを確認し、新しいバージョンがあればお知らせします。主導権はあなたに:あなたが許可したときだけ、アップデートはインストールされます。"
+      },
+      {
+        "q": "会議の電池ガードのタイマーはどう動きますか?",
+        "a": "オプトイン式です。先生はカレンダーの次の数件の予定を見て、現在の電池が通常の消費でそれぞれの会議を持ちこたえられるかを予測します。会議が危ういとき、最大四回の通知を行います:会議開始の30分前、15分前、5分前、そして開始時刻の最後のひと押し。各通知には、ラップトップが落ちる予測時刻(「スタンドアップ開始から17分で落ちます」)と、充電による対処法(「22分充電すれば最後まで持ちます」)が含まれます。予定のタイトルがMacの外に出ることはありません — 先生はEventKitを通じてローカルでカレンダーを読み取ります。会議が危険でなくなった(充電を始めた、会議が終わった)場合、未送信のお知らせは静かに取り消されます。"
+      }
+    ]
+  },
+  "contact": {
+    "kicker": "連絡 · Get in touch",
+    "heading": "すべてのメッセージに、",
+    "headingItalic": "本物の人間が目を通します。",
+    "intro": "バグや機能のご要望はGitHubで公開し、皆さんが回答の恩恵を受けられるようにしています。ご購入やライセンスに関わるご質問はフォームからお願いします。平日は約48時間以内に初回のお返事をお送りします。たいていは、もっと早く。",
+    "privateMessage": "プライベートメッセージ",
+    "notStored": "保存せず、転送するのみ",
+    "topicLegend": "どのようなお問い合わせですか?",
+    "topics": {
+      "billing": { "label": "支払いまたはライセンス", "hint": "返金、ライセンスキー、請求書。" },
+      "feature": { "label": "機能のアイデア", "hint": "先生がもっとお役に立てる方法。" },
+      "bug": { "label": "バグ", "hint": "何かが壊れている、おかしい。" },
+      "other": { "label": "その他", "hint": "ご挨拶、取材、提携など。" }
+    },
+    "fields": {
+      "name": "お名前",
+      "email": "メールアドレス",
+      "subject": "件名",
+      "subjectHint": "任意ですが、振り分けに役立ちます。",
+      "subjectPlaceholderBilling": "注文LMS-…の返金について",
+      "subjectPlaceholder": "一行で。",
+      "message": "メッセージ",
+      "messageHint": "一文か二文で十分です。支払いに関するご質問の場合は、ライセンス用のメールアドレスもご記入ください。",
+      "company": "会社"
+    },
+    "formHelp": "フォームはあなたのメッセージをBattery Senseiのサポート受信箱に送ります。送信内容を保存したり、第三者と共有することはありません。",
+    "status": {
+      "sent": "送信完了 · Sent. 平日は48時間以内にメールでお返事いたします。",
+      "sending": "送信中…",
+      "idle": "すべてのメールにお返事いたします。お約束します。",
+      "errorDefault": "何か問題が起きたようです。直接メールでご連絡ください。",
+      "errorNetwork": "ネットワークの不調です。もう一度お試しいただくか、直接メールでご連絡ください。"
+    },
+    "buttons": {
+      "send": "メッセージを送信",
+      "sending": "送信中…",
+      "sent": "送信完了"
+    },
+    "github": {
+      "label": "公開ロードマップ · GitHub",
+      "title": "Senseiをもっと良くするには、何があれば?",
+      "body": "バグ、アイデア、「こうだったらいいのに」 — どれも歓迎です。テンプレートは出荷に必要なことだけを尋ねます。既存のアイデアには👍で投票して順位を上げてください。",
+      "cta": "あなたのスレッドを見つける",
+      "paths": {
+        "label": "あなたの道を選ぶ",
+        "idea": "アイデアがある",
+        "bug": "うまくいかない",
+        "curious": "ちょっと気になる"
+      }
+    },
+    "email": {
+      "label": "直接メール",
+      "title": "あるいは先生へ直接お書きください。",
+      "body": "ご自分のメールクライアントがお好みですか?同じ受信箱、同じ人、同じく約48時間でお返事します。セキュリティに関するご報告にもこちらをご利用ください。"
+    },
+    "before": {
+      "title": "書く前に",
+      "body": "ほとんどのご質問は<0>FAQ</0>でお答えしています。返金の場合は、注文ID(Polarからの購入確認メールに記載)を添えていただくと、やりとりなしで返金できます。"
+    }
+  },
+  "download": {
+    "welcome": "ようこそ",
+    "heading": "一度入れたら、",
+    "headingItalic": "電池に息をさせてあげてください。",
+    "body": "{{trial}}日間、一緒に暮らしてみてください。その後は{{price}}を一度きり、それきりです。Apple公証済み。初日からメニューバーに座り、二度と尋ねることなく電池を見守ります。電気はMacに、元気はあなたに。",
+    "source": "ソース",
+    "trust": {
+      "native": { "title": "ネイティブmacOS", "body": "AppKitとSwiftUIで。システム標準のツールのような手触り — 実際そうですから。" },
+      "light": { "title": "電池にやさしい", "body": "バックグラウンドでのポーリングなし。macOSが変化を報告したときだけ、先生は目を覚まします。" },
+      "private": { "title": "何もMacから出ません", "body": "テレメトリなし。アカウントなし。クラウドなし、これからもずっと。" }
+    },
+    "specStrip": "macOS 13+。Apple SiliconとIntel。{{trial}}日間無料、カード不要。{{price}}一度きり。14日間返金。"
+  },
+  "footer": {
+    "tagline": "MacBookオーナーが、MacBookオーナーのために作りました。",
+    "ariaGetApp": "アプリを入手",
+    "ariaFooter": "フッター",
+    "purchaseSub": "· {{price}}一度きり",
+    "contact": "連絡",
+    "reportIssue": "問題を報告",
+    "releases": "リリース",
+    "pricing": "値段",
+    "copyright": "© {{year}} · Battery Sensei",
+    "lastUpdated": "最終更新 2026年5月24日"
+  },
+  "checkout": {
+    "kicker": "会計 · Checkout",
+    "tierToggleLabel": "プラン",
+    "tierLifetime": "Lifetime · 一度",
+    "tierSupport": "応援 · 毎年",
+    "heading": {
+      "lifetime": "買い切り。",
+      "support": "毎年のご支援。"
+    },
+    "headingItalic": {
+      "lifetime": "Premiumはずっと。",
+      "support": "いつでも解約可能。"
+    },
+    "intro": {
+      "lifetime": "安全なお支払いはPolarが担当します。1分以内にライセンスキーをメールでお届けし、アプリの 設定 → Premium から有効化できます。",
+      "support": "安全なお支払いはPolarが担当します。1分以内にライセンスキーをメールでお届け — ご購読が続く限り有効です。"
+    },
+    "lifetimeAutoNote": "ZENMODEは自動適用 — 先着500名のみ。",
+    "supportSwapNote": "一度きりで自分のものに?<0>Lifetimeに切り替える</0>。",
+    "lifetimeSwapNote": "毎年のお支払いをご希望?<0>開発の応援プランに切り替える</0>。",
+    "summaryTitle": "含まれるもの",
+    "summaryLines": {
+      "lifetime": [
+        "会議の電池ガード — 肝心な会議の前にお知らせ",
+        "無制限のSaga履歴 — すべてのサイクルを永久に",
+        "カスタム警告プリセット — 自分の閾値と消去時間",
+        "永久アップデート、サブスクリプションなし"
+      ],
+      "support": [
+        "ご購読中はすべての現行Premium機能",
+        "次の1年の先生の開発資金になります",
+        "Polarアカウントからいつでも解約可能",
+        "アイデアや機能要望の直通窓口"
+      ]
+    },
+    "priceLabel": {
+      "lifetime": "合計",
+      "support": "年あたり"
+    },
+    "originalLabel": "元の価格",
+    "discountLabel": "プロモコード",
+    "discountPlaceholder": "例: OVER9000",
+    "continueAction": "安全な決済へ進む",
+    "continueAria": "Polarの決済へ進む",
+    "refundNote": "14日間の返金保証",
+    "alreadyOwnTitle": "すでに購入済みですか?",
+    "alreadyOwnBody": "Battery Senseiを開き、設定 → Premiumを選択。キーと購入時のメールアドレスを入力し、「Premiumを有効化」を押してください。",
+    "backToHome": "ホームに戻る"
+  },
+  "vsAldente": {
+    "backLink": "Battery Sensei",
+    "kicker": "正直な比較 · Honest comparison",
+    "heading": "Battery Sensei 対 AlDente。",
+    "headingItalic": "同じところ、違うところ。",
+    "intro": "AlDenteは、多くのMacBookオーナーが最初に手に取るツールです。良くできたソフトウェア。Battery Senseiはより穏やかな代替品で、電池の日記が標準装備 — 基本機能は永遠に無料、加えて任意のPremium解放もご用意。両方を使ってきた者による、横並びの比較を以下にまとめます。",
+    "tableHeaders": {
+      "feature": "機能",
+      "sensei": "Battery Sensei",
+      "aldente": "AlDente"
+    },
+    "labels": {
+      "partial": "一部"
+    },
+    "lastUpdatedNote": "最終更新 2026年5月24日。AlDenteの機能は執筆時点の公式サイトに基づきます — 最新の情報はあちらでご確認ください。",
+    "rows": [
+      { "label": "オープンソース", "sensei": "はい", "aldente": "いいえ" },
+      { "label": "ネイティブmacOS(AppKit + SwiftUI)", "sensei": "はい", "aldente": "はい" },
+      { "label": "充電上限", "sensei": "はい", "aldente": "はい" },
+      { "label": "旅モード(出発前に満充電)", "sensei": "はい", "aldente": "はい" },
+      { "label": "スマートな低電池警告(プリセット3つ+カスタム)", "sensei": "はい", "aldente": "一部" },
+      { "label": "サイクル数と容量の追跡", "sensei": "はい", "aldente": "はい" },
+      { "label": "やさしい言葉の電池履歴", "sensei": "はい", "aldente": "いいえ" },
+      { "label": "メニューバーでのライブ入出力ワット", "sensei": "はい", "aldente": "一部" },
+      { "label": "放電/セーリング/キャリブレーションモード", "sensei": "いいえ", "aldente": "はい(Pro)" },
+      { "label": "発熱を考慮した充電のヒント", "sensei": "はい", "aldente": "一部" },
+      { "label": "アカウント/クラウド必須", "sensei": "いいえ", "aldente": "いいえ" },
+      { "label": "対応言語", "sensei": "EN · DE · ES · FR · 日本語", "aldente": "複数" },
+      { "label": "macOS対応", "sensei": "13 Ventura以降", "aldente": "11 Big Sur以降" }
+    ],
+    "differentHeading": "先生の違うところ",
+    "different": [
+      { "title": "基本は無料、Premiumは任意の買い切り。", "body": "サブスクリプションなし。コア機能は誰でもずっと無料。Premiumは深い機能のための一度きりの解放です。GitHubでオープンソース — コードを読めて、プロジェクトが止まっても先生を使い続けられます。" },
+      { "title": "スマートな低電池警告を、中心の機能として。", "body": "三つのプリセット(Zen、Regular、Senpai)、または自分の閾値と自動消去時間、そして合図、警告、全画面警告の穏やかな階層。" },
+      { "title": "やさしい言葉の電池日記。", "body": "サイクル、救出、踊り場、時間ごとの容量を、専門用語ではなく文章で。Macの中に留まります。" },
+      { "title": "穏やかな佇まい。", "body": "目的を絞ったメニューバーツール、墨+和紙のタイポグラフィ、ネイティブのAppKit + SwiftUI。Dockアイコンなし、通知の騒がしさなし。" }
+    ],
+    "wins": "AlDenteが今も勝るところ",
+    "winsBody": "AlDenteはmacOSで最も知られた充電上限アプリで、より高度な電源機能を備えています:放電モード、セーリング、発熱を考慮したモード、そして長い歴史。最大限細やかなコントロールが欲しいなら、AlDenteの方が充実したツールです。",
+    "questions": "よくあるご質問",
+    "faq": [
+      { "q": "Battery Senseiは無料ですか?", "a": "基本機能は永遠に無料 — 充電上限、スマート警告、30日間履歴。Premiumは会議の電池ガード、無制限のSaga履歴、カスタムプリセットのための一度きりの解放です。サブスクリプションなし、アカウントなし。先生はGitHubでオープンソース。" },
+      { "q": "Battery SenseiはAlDenteと同じことができますか?", "a": "ほとんどの方がAlDenteで使うことは、はい:充電上限、出発前の旅モード、ネイティブのメニューバー表示。先生はそこにお選びの閾値でのスマートな低電池警告と、やさしい言葉の電池履歴を加えます。AlDenteには放電モード、セーリング/キャリブレーションといった追加の電源機能があり、先生は同等のものを持ちません。" },
+      { "q": "どのようなときにAlDenteを選ぶべきですか?", "a": "今日のmacOSで最も細やかな電池コントロール(発熱モード、セーリング、放電)が欲しいなら、AlDenteの方が充実したツールです。先生は網羅的な機能リストよりも、穏やかな初期設定と、メニューバーに静かに寄り添う姿勢を選びました。" },
+      { "q": "AlDenteからBattery Senseiに乗り換えたら、データを失いますか?", "a": "macOS自体には何も失われません。先生は導入した日から新しい電池日記を始めます。切り替えの間、両方のアプリを少しの間動かしておいて、不要な方をアンインストールしても構いません。" },
+      { "q": "充電上限は安全ですか?Appleは認めていますか?", "a": "AppleはすでにmacOSに最適化されたバッテリー充電を実装しており、利用習慣に基づいて約80%で保つようにしています。Battery SenseiやAlDenteのような手動の充電上限ツールは、その上に乗って、上限を明示的に設定できるようにします。Apple自身の指針も、リチウムイオンは100%にとどまる時間が長いほど早く劣化する、というものです。" }
+    ],
+    "tryFree": "Battery Senseiを無料で試す",
+    "readSource": "GitHubでソースを読む →"
+  }
+}

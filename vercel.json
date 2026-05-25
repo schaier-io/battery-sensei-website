@@ -8,12 +8,57 @@
       "permanent": false
     },
     {
-      "source": "/download/(:version)",
+      "source": "/download/:version",
       "destination": "https://github.com/schaier-io/battery-sensei-releases/releases/download/v:version/Battery-Sensei.zip",
       "permanent": false
     }
   ],
   "headers": [
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/(.*)\\.(webp|avif|png|jpg|jpeg|svg|ico)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400, s-maxage=604800, stale-while-revalidate=2592000" }
+      ]
+    },
+    {
+      "source": "/(.*)\\.(woff|woff2)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/manifest.json",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400, s-maxage=604800" }
+      ]
+    },
+    {
+      "source": "/sitemap.xml",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=3600, s-maxage=86400" },
+        { "key": "Content-Type", "value": "application/xml; charset=utf-8" }
+      ]
+    },
+    {
+      "source": "/robots.txt",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=3600, s-maxage=86400" },
+        { "key": "Content-Type", "value": "text/plain; charset=utf-8" }
+      ]
+    },
+    {
+      "source": "/llms.txt",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=3600, s-maxage=86400" },
+        { "key": "Content-Type", "value": "text/plain; charset=utf-8" }
+      ]
+    },
     {
       "source": "/appcast.xml",
       "headers": [

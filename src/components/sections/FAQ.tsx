@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import {
   Accordion,
   AccordionContent,
@@ -18,15 +19,19 @@ export const FAQ_ITEMS: ReadonlyArray<{ q: string; a: string }> = [
   },
   {
     q: 'How much does Battery Sensei cost?',
-    a: 'Sensei Premium is $3.99 once. One payment, lifetime license, every future Premium feature, every Mac you own. Try it free for 5 days first — no card needed to start, no nag when the trial ends. After the trial the core essentials (charge limit, smart alerts, 30-day history) stay free forever; Premium unlocks Meeting Battery Guard, unlimited Saga history, and custom warning presets. For context: AlDente Pro is about $24 every year. Sensei is $3.99 once, ever. Checkout shows the equivalent in your local currency.',
+    a: 'Three tiers. Free forever (essentials, plus 5 days of Premium to try). Lifetime is a one-time $4.99 for the first 500 buyers (originally $11.97) — all current and future Premium features, every Mac you own. Ongoing Developer Support is $3.99/year: the same Premium features while subscribed, and it funds the next year of Sensei development — cancel anytime. Checkout shows the equivalent in your local currency.',
+  },
+  {
+    q: 'What is the ZENMODE discount?',
+    a: 'ZENMODE is the launch discount on the Lifetime tier — $4.99 instead of $11.97, capped at the first 500 buyers. It is applied automatically on the Lifetime checkout page; you do not need to type it. Once the cap is reached, Polar silently ignores the code and the price returns to $11.97.',
   },
   {
     q: 'How does the license key work?',
-    a: 'After checkout via Lemon Squeezy you get a license key by email. Open Sensei → Settings → Premium and paste the key. Sensei activates it against the Lemon Squeezy API and stores the result locally; no account, no login. The key works on every Mac you own.',
+    a: 'After checkout via Polar you get a license key by email. Open Sensei → Settings → Premium and paste the key. Sensei activates it against the Polar API and stores the result locally; no account, no login. Lifetime keys work on every Mac you own. Yearly support keys stay active for as long as the subscription is active.',
   },
   {
     q: 'Can I get a refund?',
-    a: 'Yes. Email within 14 days of purchase and we refund, no questions asked. Lemon Squeezy handles the payment so the refund hits the original card.',
+    a: 'Yes. Email within 14 days of purchase and we refund Lifetime, no questions asked. For yearly support, cancel anytime from your Polar account — the current period stays active until it ends. Polar handles the payment so refunds hit the original card.',
   },
   {
     q: 'How does the charge limit and Travel Mode work?',
@@ -58,20 +63,20 @@ export const FAQ_ITEMS: ReadonlyArray<{ q: string; a: string }> = [
   },
 ]
 
-const items = FAQ_ITEMS
-
 export function FAQ() {
+  const { t } = useTranslation()
+  const items = t('faq.items', { returnObjects: true }) as Array<{ q: string; a: string }>
   return (
     <section id="faq" className="zen-section mx-auto max-w-3xl px-6">
       <div className="mb-12 flex flex-col items-center text-center">
         <Hanko kanji="問" className="mb-5" />
-        <Reveal as="p" delay={120} className="kicker-row mb-4">Questions · 問答</Reveal>
+        <Reveal as="p" delay={120} className="kicker-row mb-4">{t('faq.kicker')}</Reveal>
         <Reveal
           as="h2"
           delay={200}
           className="section-heading text-sumi"
         >
-          Answered calmly.
+          {t('faq.heading')}
         </Reveal>
       </div>
       <Reveal delay={260}>

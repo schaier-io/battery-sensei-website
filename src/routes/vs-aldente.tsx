@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { Check, Minus, Download as DownloadIcon, ArrowLeft } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { Hanko } from '#/components/zen/Hanko'
 import { Reveal } from '#/components/zen/Reveal'
 import { Nav } from '#/components/sections/Nav'
@@ -91,24 +92,11 @@ type Row = {
   aldente: 'yes' | 'partial' | 'no' | string
 }
 
-const ROWS: Row[] = [
-  { label: 'Price', sensei: 'Free', aldente: 'Free + paid Pro' },
-  { label: 'Open source', sensei: 'yes', aldente: 'no' },
-  { label: 'Native macOS (AppKit + SwiftUI)', sensei: 'yes', aldente: 'yes' },
-  { label: 'Charge limit', sensei: 'yes', aldente: 'yes' },
-  { label: 'Travel Mode (top up before a trip)', sensei: 'yes', aldente: 'yes' },
-  { label: 'Smart low-battery alerts (3 presets + custom)', sensei: 'yes', aldente: 'partial' },
-  { label: 'Cycle & capacity tracking', sensei: 'yes', aldente: 'yes' },
-  { label: 'Plain-English battery history', sensei: 'yes', aldente: 'no' },
-  { label: 'Live watts in / out in the menu bar', sensei: 'yes', aldente: 'partial' },
-  { label: 'Discharge / sailing / calibration modes', sensei: 'no', aldente: 'yes (Pro)' },
-  { label: 'Heat-aware charging hints', sensei: 'yes', aldente: 'partial' },
-  { label: 'Account / cloud required', sensei: 'no', aldente: 'no' },
-  { label: 'Languages', sensei: 'EN · DE · ES · FR · 日本語', aldente: 'Multiple' },
-  { label: 'macOS support', sensei: '13 Ventura +', aldente: '11 Big Sur +' },
-]
-
 function VsAldentePage() {
+  const { t } = useTranslation()
+  const ROWS = t('vsAldente.rows', { returnObjects: true }) as Row[]
+  const differentList = t('vsAldente.different', { returnObjects: true }) as Array<{ title: string; body: string }>
+  const faqList = t('vsAldente.faq', { returnObjects: true }) as Array<{ q: string; a: string }>
   return (
     <>
       <Nav />
@@ -120,23 +108,23 @@ function VsAldentePage() {
               className="inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.22em] text-sumi-soft transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:text-sumi"
             >
               <ArrowLeft className="h-3.5 w-3.5" strokeWidth={1.6} />
-              Battery Sensei
+              {t('vsAldente.backLink')}
             </Link>
           </Reveal>
 
           <div className="flex flex-col items-start">
             <Hanko kanji="比" className="mb-6" />
             <Reveal as="p" delay={140} className="kicker-row mb-4">
-              Honest comparison · 比較
+              {t('vsAldente.kicker')}
             </Reveal>
             <Reveal
               as="h1"
               delay={220}
               className="display-title text-4xl font-semibold leading-[1.04] tracking-[-0.018em] text-sumi md:text-[3.25rem]"
             >
-              Battery Sensei vs AlDente.
+              {t('vsAldente.heading')}
               <span className="block italic text-sumi-soft font-normal">
-                What's the same, what isn't.
+                {t('vsAldente.headingItalic')}
               </span>
             </Reveal>
             <Reveal
@@ -144,10 +132,7 @@ function VsAldentePage() {
               delay={320}
               className="mt-6 max-w-2xl text-base leading-relaxed text-sumi-soft md:text-[1.0625rem]"
             >
-              AlDente is the tool a lot of MacBook owners reach for first. It's
-              good, paid software. Battery Sensei is a free, open-source
-              alternative with a calmer default and a built-in battery journal.
-              Here is the side-by-side, written by someone who has used both.
+              {t('vsAldente.intro')}
             </Reveal>
           </div>
         </section>
@@ -158,19 +143,19 @@ function VsAldentePage() {
               <table className="w-full text-left text-sm">
                 <thead>
                   <tr className="border-b border-[var(--line)] text-[11px] uppercase tracking-[0.18em] text-sumi-soft">
-                    <th className="w-[44%] px-5 py-4 font-semibold">Feature</th>
+                    <th className="w-[44%] px-5 py-4 font-semibold">{t('vsAldente.tableHeaders.feature')}</th>
                     <th className="w-[28%] px-5 py-4 font-semibold text-hinomaru">
-                      Battery Sensei
+                      {t('vsAldente.tableHeaders.sensei')}
                     </th>
-                    <th className="w-[28%] px-5 py-4 font-semibold">AlDente</th>
+                    <th className="w-[28%] px-5 py-4 font-semibold">{t('vsAldente.tableHeaders.aldente')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[var(--line)]">
                   {ROWS.map((r) => (
                     <tr key={r.label} className="align-top">
                       <td className="px-5 py-3.5 text-sumi">{r.label}</td>
-                      <Cell value={r.sensei} accent />
-                      <Cell value={r.aldente} />
+                      <Cell value={r.sensei} accent partialLabel={t('vsAldente.labels.partial')} />
+                      <Cell value={r.aldente} partialLabel={t('vsAldente.labels.partial')} />
                     </tr>
                   ))}
                 </tbody>
@@ -179,57 +164,35 @@ function VsAldentePage() {
           </Reveal>
 
           <Reveal as="p" delay={520} className="mt-6 text-[12px] tracking-[0.1em] text-nezumi">
-            Last updated 20 May 2026. Pricing and features for AlDente reflect
-            their public site at the time of writing — check theirs for the
-            latest.
+            {t('vsAldente.lastUpdatedNote')}
           </Reveal>
         </section>
 
         <section className="zen-section mx-auto max-w-3xl px-5 sm:px-6">
           <Reveal as="h2" delay={120} className="display-title text-2xl font-semibold text-sumi md:text-3xl">
-            Where Sensei is different
+            {t('vsAldente.differentHeading')}
           </Reveal>
           <Reveal as="ul" delay={200} className="mt-6 space-y-4 text-sumi-soft">
-            <li>
-              <span className="text-sumi font-semibold">Free, forever, open source.</span>{' '}
-              No tiers, no licence, no upsell. You can read the code on GitHub
-              and you keep using Sensei even if the project pauses.
-            </li>
-            <li>
-              <span className="text-sumi font-semibold">Smart low-battery alerts as a first-class feature.</span>{' '}
-              Three presets (Zen, Regular, Senpai) or your own thresholds,
-              auto-dismiss times, and a calm hierarchy of nudges, warnings,
-              and full-screen alerts.
-            </li>
-            <li>
-              <span className="text-sumi font-semibold">A plain-English battery journal.</span>{' '}
-              Cycles, rescues, plateaus, capacity over time, written in
-              sentences instead of vendor jargon. Stays on your Mac.
-            </li>
-            <li>
-              <span className="text-sumi font-semibold">Calm aesthetic.</span>{' '}
-              Single-purpose menu-bar tool, sumi + washi typography, native
-              AppKit + SwiftUI. No dock icon, no notification noise.
-            </li>
+            {differentList.map(({ title, body }) => (
+              <li key={title}>
+                <span className="text-sumi font-semibold">{title}</span>{' '}{body}
+              </li>
+            ))}
           </Reveal>
 
           <Reveal as="h2" delay={280} className="display-title mt-12 text-2xl font-semibold text-sumi md:text-3xl">
-            Where AlDente still wins
+            {t('vsAldente.wins')}
           </Reveal>
           <Reveal as="p" delay={340} className="mt-4 text-sumi-soft leading-relaxed">
-            AlDente Pro has more advanced power features: discharge mode,
-            sailing, heat-aware modes, and a longer history as the
-            best-known charge-limit app on macOS. If you want maximum
-            granular control and you do not mind a one-time licence, AlDente
-            is the deeper tool.
+            {t('vsAldente.winsBody')}
           </Reveal>
 
           <Reveal as="h2" delay={420} className="display-title mt-12 text-2xl font-semibold text-sumi md:text-3xl">
-            Common questions
+            {t('vsAldente.questions')}
           </Reveal>
           <Reveal delay={500} className="mt-6">
             <dl className="divide-y divide-[var(--line)] rounded-xl border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,#fff)]">
-              {FAQ_ITEMS.map(({ q, a }) => (
+              {faqList.map(({ q, a }) => (
                 <div key={q} className="px-5 py-4">
                   <dt className="text-sumi font-semibold">{q}</dt>
                   <dd className="mt-2 text-sumi-soft leading-relaxed">{a}</dd>
@@ -240,11 +203,12 @@ function VsAldentePage() {
 
           <Reveal delay={600} className="mt-12 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
             <Link
-              to="/#download"
+              to="/"
+              hash="download"
               className="btn-sumi inline-flex h-11 items-center gap-2.5 rounded-md px-6 text-sm font-medium"
             >
               <DownloadIcon className="h-4 w-4" strokeWidth={1.8} />
-              Try Battery Sensei free
+              {t('vsAldente.tryFree')}
             </Link>
             <a
               href="https://github.com/schaier-io/battery-sensei-releases"
@@ -252,7 +216,7 @@ function VsAldentePage() {
               rel="noreferrer"
               className="text-sm text-sumi-soft transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:text-sumi"
             >
-              Read the source on GitHub →
+              {t('vsAldente.readSource')}
             </a>
           </Reveal>
         </section>
@@ -262,7 +226,15 @@ function VsAldentePage() {
   )
 }
 
-function Cell({ value, accent = false }: { value: string; accent?: boolean }) {
+function Cell({
+  value,
+  accent = false,
+  partialLabel,
+}: {
+  value: string
+  accent?: boolean
+  partialLabel: string
+}) {
   if (value === 'yes') {
     return (
       <td className="px-5 py-3.5">
@@ -283,7 +255,7 @@ function Cell({ value, accent = false }: { value: string; accent?: boolean }) {
   if (value === 'partial') {
     return (
       <td className="px-5 py-3.5 text-[12px] uppercase tracking-[0.16em] text-sumi-soft">
-        Partial
+        {partialLabel}
       </td>
     )
   }

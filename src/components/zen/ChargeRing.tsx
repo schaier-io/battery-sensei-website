@@ -58,11 +58,7 @@ export function ChargeRing({
 
       {/* Single solid gold stroke. One continuous arc in kin from the top
           clockwise to fraction. */}
-      <GoldUnderstroke
-        fraction={fraction}
-        revealed={revealed}
-        size={size}
-      />
+      <GoldUnderstroke fraction={fraction} revealed={revealed} />
 
       {/* One roving wet-ink shimmer with its own gradient (transparent →
           bright → transparent along the dash). */}
@@ -109,7 +105,7 @@ export function ChargeRing({
           }}
         >
           {percentLabel && (
-            <p className="display-title text-[2.25rem] font-bold leading-none tabular-nums tracking-[-0.02em] text-sumi">
+            <p className="display-title text-[2.25rem] font-semibold leading-none tabular-nums tracking-[-0.02em] text-sumi">
               {percentLabel}
             </p>
           )}
@@ -139,11 +135,9 @@ export function ChargeRing({
 function GoldUnderstroke({
   fraction,
   revealed,
-  size,
 }: {
   fraction: number
   revealed: boolean
-  size: number
 }) {
   const arcEnd = Math.max(0, Math.min(1, fraction))
   const totalDeg = arcEnd * 360
@@ -180,11 +174,9 @@ function GoldUnderstroke({
     ].join(', ')
   })()
 
-  // Annular mask: keep only the band between strokeInner and strokeOuter
-  // radii so the conic-gradient fill reads as a stroke, not a pie slice.
-  const strokeW = Math.max(7, (size / 220) * 13)
-  const innerR = 80 // px in the 220 viewBox
-  const outerR = innerR + strokeW
+  // Annular mask is driven by the percent stops on the radial mask below
+  // (71% → 86%), which tracks the sumi BrushRing's bristle band regardless
+  // of `size`. No pixel-radius computation needed.
 
   return (
     <div

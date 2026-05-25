@@ -1,0 +1,590 @@
+{
+  "common": {
+    "language": "Language",
+    "languageName": {
+      "en": "English",
+      "de": "Deutsch",
+      "es": "Español",
+      "fr": "Français",
+      "ja": "日本語"
+    },
+    "download": "Download",
+    "downloadFree": "Download free",
+    "downloadMac": "Download for macOS",
+    "buyNow": "Buy now — {{price}}",
+    "purchaseNow": "Purchase now",
+    "onceForever": "once, forever",
+    "recommended": "Recommended",
+    "learnMore": "Learn more"
+  },
+  "nav": {
+    "ariaPrimary": "Primary",
+    "ariaHome": "Battery Sensei — home",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "support": "Get in touch",
+    "supportAria": "Contact support — we reply within a day",
+    "sections": {
+      "features": "Features",
+      "saga": "History",
+      "health": "Health",
+      "pricing": "Pricing",
+      "faq": "FAQ",
+      "contact": "Contact"
+    }
+  },
+  "hero": {
+    "kicker": "macOS · {{trial}} days free · {{price}} once",
+    "title": "Quiet power",
+    "titleItalic": "for your MacBook.",
+    "jp": "静かに、電池に寄り添う。",
+    "body": "Your MacBook's battery quietly wears down with every charge. Sensei watches it for you: warns before a surprise shutdown, holds your charge limit so the battery lasts longer, and keeps a plain-English record of how the years are going.",
+    "readMore": "Read more",
+    "specStrip": "{{trial}} days free. No card, no account. Then {{price}} once, never again.",
+    "menuCaption": "Lives in your menu bar. Speaks only when it matters."
+  },
+  "categories": {
+    "ariaLabel": "Battery Sensei capabilities",
+    "items": {
+      "alerts": "Smart low-battery alerts",
+      "chargeLimit": "Charge limit · 80%",
+      "travelMode": "Travel Mode",
+      "cycle": "Cycle & capacity",
+      "watts": "Live watts",
+      "history": "Battery history",
+      "aldenteAlt": "AlDente alternative"
+    }
+  },
+  "features": {
+    "kicker": "What it does",
+    "heading": "Everything your battery needs.",
+    "headingItalic": "Nothing it doesn't.",
+    "featured": {
+      "title": "Three levels. You pick.",
+      "italic": "Sensei whispers, insists, or stays.",
+      "jp": "静かな警告",
+      "body": "macOS shows you a percent. Sensei picks the right nudge for the moment, so you never lose work to a surprise shutdown again. Three preset moods, or set your own thresholds and dismiss times.",
+      "battery": "Battery",
+      "rules": {
+        "info": "Info",
+        "infoDetail": "Quiet nudge. Closes itself in 5 s.",
+        "warning": "Warning",
+        "warningDetail": "Card on screen for 10 s.",
+        "alert": "Alert",
+        "alertDetail": "Stays until you dismiss it."
+      }
+    },
+    "chargeLimit": {
+      "title": "Charge limit",
+      "titleSub": "with Travel Mode",
+      "jp": "長く保つ・旅",
+      "body": "Apple says lithium-ion ages faster the longer it sits at 100%. Pick a cap (we suggest 80%). Sensei holds it in the background. Flying tomorrow? One click for a full charge, then your cap returns when you are home.",
+      "chip": "Travel Mode · full charge before a trip"
+    },
+    "glance": {
+      "title": "One glance, the whole story",
+      "jp": "一目で",
+      "body": "Charge, source, watts in or out, time left. The whole picture, one look. No dock icon. No notification noise. Nothing to click unless you want to. Stay current — in every sense.",
+      "timeLeft": "1h 52m left",
+      "chargingTo": "Charging to 80%",
+      "source": "Source",
+      "powerAdapter": "Power adapter",
+      "cycles": "Cycles",
+      "chargeLimitOn": "Charge limit · 80%",
+      "on": "ON"
+    },
+    "meetings": {
+      "title": "Meetings, met.",
+      "titleSub": "Sensei reads ahead, so your battery does too.",
+      "jp": "会議の前に",
+      "body": "Opt-in. Sensei peeks at your next few meetings and, when the battery won't survive the one that matters, warns you at 30, 15, 5, and 0 minutes before — with a clear fix (\"22 min on the charger and you're clear through\"). Event titles never leave your Mac.",
+      "chip": "Read-only · titles never leave your Mac",
+      "nextOnCalendar": "Next on calendar",
+      "duration": "3:00 PM · 60 min",
+      "meetingTitle": "Weekly standup",
+      "warnHeading": "Battery won't last your meeting",
+      "warnBody": "Your laptop dies <0>17 min</0> into standup. Plug in now.",
+      "warnFix": "22 min on the charger and you're clear through.",
+      "remindsYou": "Reminds you at",
+      "now": "now",
+      "minBefore": "−{{min}} min",
+      "onDevice": "On-device only"
+    }
+  },
+  "saga": {
+    "kicker": "Personal history · 個人史",
+    "heading": "A diary your battery",
+    "headingItalic": "would actually keep.",
+    "body": "Every cycle. Every rescue. Every plateau. Sensei keeps a plain-English journal of your battery's life so when the day comes to retire your MacBook, you know how it lived, what carried it that far, and exactly what to ask the next one to do better.",
+    "bullets": [
+      "247 days, 217 cycles, 92%. Yours, annotated.",
+      "Updates in the background. No setup.",
+      "Lives on your Mac. No cloud. No account."
+    ]
+  },
+  "health": {
+    "kicker": "MacBook battery health · 健康",
+    "heading": "Every metric that matters,",
+    "headingItalic": "in a sentence you'd actually say.",
+    "cells": {
+      "aging": {
+        "title": "How it ages, plotted",
+        "body": "A quiet line you can read in a second. Plain English, no vendor jargon, no scary red dashboards.",
+        "monthsAgo": "14 months ago",
+        "today": "92% today"
+      },
+      "cycles": {
+        "title": "Cycle count, in context",
+        "body": "\"217 cycles. Normal for 14 months.\" Numbers a human would say."
+      },
+      "heat": {
+        "title": "Heat throttling, named",
+        "body": "When macOS pauses charging to cool off, Sensei tells you why and what to do."
+      },
+      "watts": {
+        "title": "Live watts in, watts out",
+        "body": "Spot a flaky cable in seconds. Catch a thirsty app before it eats your day."
+      },
+      "privacy": {
+        "title": "Stays on your Mac",
+        "body": "No cloud. No account. No telemetry. Your battery story is yours alone."
+      },
+      "languages": {
+        "title": "Speaks five languages",
+        "body": "EN · DE · ES · FR · 日本語"
+      }
+    }
+  },
+  "compare": {
+    "kicker": "Sensei vs the rest · 比較",
+    "heading": "Beautifully designed.",
+    "headingItalic": "Honest, feature by feature.",
+    "intro": "Battery Sensei sits alongside well-loved Mac battery tools — AlDente, BatFi, coconutBattery, iStat Menus, even the new macOS Charge Limit. Side by side, plainly.",
+    "videoCta": "Watch the 60-second walkthrough",
+    "labels": { "partial": "Partial", "moreInfo": "More info", "openFeature": "Open feature" },
+    "headers": {
+      "feature": "Feature",
+      "sensei": "Battery Sensei",
+      "aldente": "AlDente",
+      "batfi": "BatFi",
+      "coconut": "coconutBattery",
+      "istat": "iStat Menus",
+      "macos": "macOS"
+    },
+    "rows": [
+      { "label": "On-device only",          "desc": "Everything runs on your Mac. No cloud, no account, no telemetry.",                                               "sensei": "yes", "aldente": "yes",     "batfi": "yes",     "coconut": "yes", "istat": "yes",     "macos": "yes" },
+      { "label": "Native macOS app",        "desc": "Built with native AppKit + SwiftUI. No Electron, no web wrappers — instant launch, low memory, system-feel.",     "sensei": "yes", "aldente": "yes",     "batfi": "yes",     "coconut": "yes", "istat": "yes",     "macos": "yes" },
+      { "label": "Light & dark themes",     "desc": "Follows your macOS appearance, with manual Daylight Sensei / Night Ninja overrides if you prefer.",                "sensei": "yes", "aldente": "yes",     "batfi": "yes",     "coconut": "yes", "istat": "yes",     "macos": "yes" },
+      { "label": "Cycle & capacity",        "desc": "Cycle count and capacity, tracked over time.",                                                                   "sensei": "yes", "aldente": "yes",     "batfi": "no",      "coconut": "yes", "istat": "yes",     "macos": "partial" },
+      { "label": "Light battery use",       "desc": "Event-driven sampling, ~30 s refresh — typically under 1% of your day.",                                            "sensei": "yes", "aldente": "yes",     "batfi": "yes",     "coconut": "yes", "istat": "partial", "macos": "yes" },
+      { "label": "Live menu-bar watts",     "desc": "Charging watts in the menu-bar dropdown, refreshed live.",                                                          "sensei": "yes", "aldente": "yes",     "batfi": "yes",     "coconut": "no",  "istat": "yes",     "macos": "no" },
+      { "label": "Charge limit",            "desc": "Cap your charge level so the battery sits cooler and lasts longer.",                                          "sensei": "yes", "aldente": "yes",     "batfi": "yes",     "coconut": "no",  "istat": "no",      "macos": "yes" },
+      { "label": "Energy use per app",      "desc": "Top power-hungry apps on the Saga page — 1h / 24h / 7d windows, Activity-Monitor-style energy score, refreshed every 5 min.", "key": "energy-usage",                "sensei": "yes", "aldente": "no",      "batfi": "no",      "coconut": "no",  "istat": "no",      "macos": "partial" },
+      { "label": "Travel prep mode",        "desc": "One click before a trip — charges to 100%, switches to stricter warnings, auto-resets the next morning at 9 AM.", "key": "travel-mode",  "sensei": "yes", "aldente": "partial", "batfi": "partial", "coconut": "no",  "istat": "no",      "macos": "no" },
+      { "label": "Custom thresholds",       "desc": "Set your own low-battery thresholds and per-tier auto-dismiss times.", "key": "custom-thresholds",                "sensei": "yes", "aldente": "no",      "batfi": "no",      "coconut": "no",  "istat": "no",      "macos": "no" },
+      { "label": "Alert presets",           "desc": "Zen Mode, Regular Mode, Teach Me Senpai — three escalating moods, one fits every day.", "key": "alert-presets",                    "sensei": "yes", "aldente": "no",      "batfi": "no",      "coconut": "no",  "istat": "no",      "macos": "no" },
+      { "label": "Sensei Saga",             "desc": "Charge history (24h / 3d / 7d), battery health tiles, Weekly + Monthly Wrapped, and Rescue Receipts when you save a battery in time.", "key": "battery-journal",                       "sensei": "yes", "aldente": "no",      "batfi": "no",      "coconut": "no",  "istat": "no",      "macos": "no" },
+      { "label": "Meeting Battery Guard",   "desc": "Reads the next 4 hours of meetings on-device. Critical risk: warned at 30/15/5/0 min. Catastrophic: warned immediately.", "key": "meeting-battery-guard", "sensei": "yes", "aldente": "no",      "batfi": "no",      "coconut": "no",  "istat": "no",      "macos": "no" }
+    ],
+    "footnote": "Based on each tool's public site as of May 2026. Each app is great at its own thing — see their sites for the full picture."
+  },
+  "walkthrough": {
+    "kicker": "Walkthrough · 動画",
+    "heading": "60 seconds with Sensei.",
+    "headingItalic": "Side by side with the rest.",
+    "body": "A short walkthrough of Battery Sensei in motion — and how it stacks up against AlDente, BatFi, coconutBattery, iStat Menus, and macOS's built-in. The film is in production; this page will hold the video the moment it's ready.",
+    "videoBadge": "Video coming soon",
+    "videoCaption": "Estimated runtime · 60 sec · 1080p",
+    "notifyHeading": "Want a heads-up when it's live?",
+    "notifyBody": "We'll only send one email — the day the walkthrough goes up.",
+    "notifyCta": "Notify me",
+    "backToCompare": "Back to comparison"
+  },
+  "featurePages": {
+    "backLink": "Battery Sensei",
+    "backToHome": "Back to homepage",
+    "tryFree": "Try Battery Sensei free",
+    "howItHeading": "How it works",
+    "whyItHeading": "Why it matters",
+    "travel-mode": {
+      "kicker": "Feature · 旅",
+      "heading": "Travel prep mode.",
+      "headingItalic": "One click before a trip. Sensei does the rest.",
+      "body": "Sensei normally holds your charge at the cap you set (80% suggested) so the battery ages slower. The night before a flight, tap Travel prep mode — Sensei lifts the cap, charges to 100%, switches to stricter low-battery warnings (30% / 15% / 5%), and pauses Apple's Optimized Battery Charging. The next morning at 9 AM your normal limit comes back, automatically. No reminder to undo it. No battery left baking at 100% for weeks.",
+      "mockupCaption": "Limit lifted to 100%. Auto-resets tomorrow at 9 AM.",
+      "why": "Lithium-ion batteries age faster when held at 100%. A typical \"top up before a trip and forget\" leaves a MacBook at full charge for weeks — measurably aging the cells. The 9 AM auto-reset is the safety net: even if you forget, the cap returns."
+    },
+    "custom-thresholds": {
+      "kicker": "Premium · 設定",
+      "heading": "Custom thresholds.",
+      "headingItalic": "Your numbers, your dismiss times.",
+      "body": "The three included presets cover most days, but if you live by 22% Warning at 14s and 6% Alert until acknowledged, build it. Sensei lets you set the exact percent for each escalation level and how long each card stays on screen. Per-tier, not one global number.",
+      "mockupCaption": "Info · Warning · Alert — each with its own percent and dismiss time.",
+      "why": "One global warning threshold can't serve someone on a long-haul flight and someone in back-to-back meetings the same way. Per-tier thresholds let the nudges fit the day."
+    },
+    "alert-presets": {
+      "kicker": "Feature · 警告",
+      "heading": "Alert presets.",
+      "headingItalic": "Zen Mode. Regular Mode. Teach Me Senpai.",
+      "body": "Zen Mode whispers at 15% (closes in 5 s) and once more at 5% (10 s) — quiet, lets you finish. Regular Mode adds a red overlay at 5% and a persistent alert at 2%. Teach Me Senpai keeps it simple but stern: a red overlay at 15% and a full-screen flasher at 5%, both staying until you dismiss. Pick the mood that fits — or compose your own with Custom thresholds.",
+      "mockupCaption": "Three preset moods. One tap to switch — any time.",
+      "why": "macOS gives you exactly one battery notification: at 10%. By then it's often too late for the slide you were about to ship. Three presets let the warning match the stakes."
+    },
+    "battery-journal": {
+      "kicker": "Feature · 個人史",
+      "heading": "Sensei Saga.",
+      "headingItalic": "Cycles, charges, rescues — the full history.",
+      "body": "Saga is the long view of your battery's life. A charge history chart you can flip between 24 h / 3 d / 7 d, a Battery Health panel (capacity, cycles, temperature, condition), the top power-hungry apps over the last hour / day / week, and Spotify-Wrapped-style Weekly + Monthly recaps. When you rescue a battery in time — plug in within 30 minutes of a critical warning — Sensei stitches a Rescue Receipt: a small, shareable card to mark the save.",
+      "mockupCaption": "Lifetime stats, charge history, Wrapped recaps. All on the Saga page.",
+      "why": "Battery numbers without context are just numbers. \"92% capacity\" tells you nothing. Saga gives the same number a story — what it looked like a week ago, which apps cost it the most, which day you nearly lost it."
+    },
+    "meeting-battery-guard": {
+      "kicker": "Premium · 会議",
+      "heading": "Meeting Battery Guard.",
+      "headingItalic": "Never miss the meeting that matters.",
+      "body": "Opt-in. Sensei reads the next 4 hours of calendar events on-device (EventKit, default lookahead). It scores each meeting against your current battery — Comfortable, Tight, Critical, or Catastrophic — and only nudges when it should. Critical: 30 / 15 / 5 / 0 min before, with the exact minute the laptop would die and the fix (\"22 min on the charger and you're clear through\"). Catastrophic: warned immediately. Tight: a single 30-min nudge. Comfortable: silent. Plug in early enough and pending warnings cancel themselves. Titles stay readable in notifications by default; one toggle redacts them.",
+      "mockupCaption": "4-hour lookahead. Only nudges when it should.",
+      "why": "A 10% warning mid-meeting is useless: you can't leave to find a charger. Reading your calendar lets Sensei warn you when there's still time to fix it — and stay silent the rest of the time."
+    },
+    "energy-usage": {
+      "kicker": "Feature · 電力",
+      "heading": "Top power-hungry apps.",
+      "headingItalic": "See what's eating your battery, by name.",
+      "body": "On the Saga page, Sensei ranks the top power users — flip between the last 1 hour, 24 hours, or 7 days. Each app gets an Activity-Monitor-style energy impact score (CPU time blended with idle wake-ups), an impact label (Low / Moderate / High / Very high), and a search filter so you can type \"chrome\" and watch every Chrome helper line up. Sampled every 5 minutes via per-process resource usage — no system extension, no kernel hooks.",
+      "mockupCaption": "Top apps · 1h / 24h / 7d · with search filter. Refreshed every 5 min.",
+      "why": "Battery loss is almost never the battery's fault. It's a hung helper, a sleepless tab, a video call that won't release the GPU. Knowing which app costs you the most is the difference between a 4-hour day and a 7-hour day."
+    }
+  },
+  "pricing": {
+    "kicker": "Pricing · 値段",
+    "heading": "Three ways to use Sensei.",
+    "headingItalic": "Lifetime once, or yearly support.",
+    "intro": "Start free with a {{trial}}-day Premium trial. Then own it forever ({{lifetime}}, first 500 only) — or back ongoing development at {{support}}/year.",
+    "free": {
+      "tier": "基本 · Free",
+      "period": "forever",
+      "blurb": "Yours forever. No card, no account.",
+      "blurbBonus": "Plus: every Premium feature unlocked for your first {{trial}} days.",
+      "ctaSub": "No card, no account. Direct .zip from battery-sensei.app.",
+      "whatYouKeep": "What you keep · 基本",
+      "trialEnd": "On day {{day}}, Sensei asks once:",
+      "trialChoice": "<0>Keep Premium ({{price}})</0> · or · <1>revert to free essentials</1>. No nag, no card on file, no silent charge.",
+      "items": [
+        {
+          "title": "Smart low-battery alert presets",
+          "body": "Three escalating moods — Zen, Regular, Senpai — pick the one that fits the day."
+        },
+        {
+          "title": "Charge limit with Travel Mode",
+          "body": "Cap your charge level. One tap before a trip charges to 100%, then auto-resets the next morning at 9 AM."
+        },
+        {
+          "title": "30-day Sensei Saga",
+          "body": "Charge history, battery health tiles, and Rescue Receipts — the last 30 days, kept locally on your Mac."
+        },
+        {
+          "title": "Menu-bar charge + watts",
+          "body": "Live percentage in the menu bar, charging watts in the dropdown when plugged in."
+        },
+        {
+          "title": "Apple-notarized + signed auto-updates",
+          "body": "Sparkle delivers EdDSA-signed releases. Sensei checks on launch and installs only when you say so."
+        },
+        {
+          "title": "Runs entirely on your Mac",
+          "body": "Native AppKit + SwiftUI. No Electron, no cloud, no account, no telemetry."
+        }
+      ]
+    },
+    "lifetime": {
+      "tier": "永遠 · Lifetime",
+      "period": "once, forever",
+      "blurb": "Skip the trial. Unlock everything immediately and own it forever — every Mac, every future Premium feature.",
+      "originalLabel": "was",
+      "discountNote": "Limited offer · ZENMODE applied automatically",
+      "redeem": {
+        "label": "<0>{{remaining}}</0> of <1>{{max}}</1> ZENMODE codes remaining",
+        "almostGone": "Almost gone — only {{remaining}} left",
+        "soldOut": "ZENMODE fully redeemed",
+        "soldOutHint": "Price returns to {{full}}"
+      },
+      "ctaLabel": "Get Lifetime",
+      "trust": {
+        "notarized": "Notarized by Apple · safe auto-updates",
+        "refund": "14-day refund, no questions",
+        "noSub": "Lifetime · up to 3 Macs",
+        "subscription": "Yearly · up to 5 Macs · cancel anytime"
+      },
+      "premiumAdds": "Lifetime includes · 先生",
+      "activationLabel": "How activation works",
+      "activationBody": "License key by email from Polar. Paste once in <0>Sensei → Settings → Premium</0>. Lifetime unlocks every Premium feature forever (up to 3 Macs). The Yearly option is the same, capped at 5 Macs, and includes one year of updates and email support — manage or cancel from Polar any time. No login, no account in the app.",
+      "items": [
+        {
+          "title": "Meeting Battery Guard",
+          "body": "Sensei reads your next meetings (titles stay on-device) and, when the battery won't survive the one that matters, warns you at 30, 15, 5, and 0 minutes before — with a clear fix."
+        },
+        {
+          "title": "Unlimited Saga history",
+          "body": "Keep every cycle, plateau, and capacity reading forever — not just the last 30 days."
+        },
+        {
+          "title": "Custom warning presets",
+          "body": "Build your own thresholds and dismiss times beyond the three included moods."
+        },
+        {
+          "title": "Every future Premium feature",
+          "body": "One payment. Every Mac you own. Every update Sensei ever ships."
+        }
+      ]
+    },
+    "support": {
+      "tier": "応援 · Ongoing Developer Support",
+      "period": "per year",
+      "badge": "Cancel anytime",
+      "blurb": "Premium features while subscribed, plus you keep Sensei in active development. Lower upfront — yearly commitment.",
+      "ctaLabel": "Support yearly",
+      "perksTitle": "What your year buys · 応援",
+      "items": [
+        "Every current Premium feature while subscribed",
+        "Funds the next year of Sensei development",
+        "Cancel anytime from your Polar account",
+        "Direct line for ideas + feature requests"
+      ]
+    },
+    "alreadyBought": "Already bought? Enter your license key in Sensei → Settings → Premium."
+  },
+  "faq": {
+    "kicker": "Questions · 問答",
+    "heading": "Answered calmly.",
+    "items": [
+      {
+        "q": "Which Macs and macOS versions does Battery Sensei support?",
+        "a": "macOS 13 Ventura, Sonoma, Sequoia, and later, on both Apple Silicon (M1/M2/M3/M4) and Intel MacBooks."
+      },
+      {
+        "q": "How much does Battery Sensei cost?",
+        "a": "Sensei Premium is {{price}}, one payment, lifetime license — every future Premium feature, every Mac you own. Try it free for {{trial}} days first — no card needed to start, no nag when the trial ends. After the trial the core essentials (charge limit, smart alerts, 30-day history) stay free forever; Premium unlocks Meeting Battery Guard, unlimited Saga history, and custom warning presets. Checkout shows the price in your local currency."
+      },
+      {
+        "q": "How does the license key work?",
+        "a": "After checkout via Polar you get a license key by email. Open Sensei → Settings → Premium and paste the key. Sensei activates it against the Polar API and stores the result locally; no account, no login. The key works on every Mac you own."
+      },
+      {
+        "q": "Can I get a refund?",
+        "a": "Yes. Email within 14 days of purchase and we refund, no questions asked. Polar handles the payment so the refund hits the original card."
+      },
+      {
+        "q": "How does the charge limit and Travel Mode work?",
+        "a": "Sensei caps your MacBook at a charge level you choose (default 80 percent) to extend battery life. One click switches to Travel Mode and Sensei tops the battery up to 100 percent before a trip, then returns to your normal limit when you are home."
+      },
+      {
+        "q": "Does Battery Sensei send my data anywhere?",
+        "a": "No. Battery Sensei is privacy-first. It runs entirely on your Mac. No telemetry, no analytics, no cloud account. Your personal battery history stays local; nothing leaves your machine unless you explicitly share it."
+      },
+      {
+        "q": "How is Battery Sensei different from the built-in macOS battery menu?",
+        "a": "macOS shows you a percentage. Battery Sensei adds smart low-battery alerts at thresholds you choose, a charge limit with Travel Mode, live charging watts, cycle and capacity tracking, and a plain-English history of how your battery is aging."
+      },
+      {
+        "q": "How much battery does Battery Sensei itself use?",
+        "a": "Less than one percent. Sensei is a native AppKit and SwiftUI menu-bar app with no background polling. It samples the system battery only when macOS reports a change."
+      },
+      {
+        "q": "Is Battery Sensei an AlDente alternative?",
+        "a": "Yes. Sensei covers AlDente's core charge-limit feature in every tier, adds smart warnings and a plain-English battery history, and ships as a single notarized .dmg. Premium adds Meeting Battery Guard and unlimited Saga history for one payment. A detailed side-by-side comparison lives at battery-sensei.app/vs-aldente."
+      },
+      {
+        "q": "How do I update Battery Sensei?",
+        "a": "Sensei checks for updates on launch and notifies you when a new version is available. You stay in control: updates only install when you say so."
+      },
+      {
+        "q": "How does the Meeting Battery Guard timeout work?",
+        "a": "Opt-in. Sensei looks at the next few events on your calendar and predicts whether your current battery will survive each meeting given typical drain. When a meeting is at risk, it fires up to four notifications: 30, 15, and 5 minutes before the meeting starts, and one final nudge at start time. Each notification includes the exact minute the laptop is predicted to die (\"dies 17 min into standup\") and a plug-in remedy (\"22 min on the charger and you're clear through\"). Event titles never leave your Mac — Sensei reads the calendar locally via EventKit. If a meeting is no longer at risk (you plugged in, or the meeting ended), pending reminders are cancelled silently."
+      }
+    ]
+  },
+  "contact": {
+    "kicker": "Get in touch · 連絡",
+    "heading": "A real person",
+    "headingItalic": "reads every message.",
+    "intro": "Bugs and feature requests live in the open on GitHub so everyone benefits from the answer. Anything tied to your purchase or license goes through the form. First reply within ~48 hours on weekdays, often sooner.",
+    "privateMessage": "Private message",
+    "notStored": "Not stored, just forwarded",
+    "topicLegend": "What is this about?",
+    "topics": {
+      "billing": { "label": "Billing or license", "hint": "Refund, license key, invoice." },
+      "feature": { "label": "Feature idea", "hint": "A way Sensei could help more." },
+      "bug": { "label": "Bug", "hint": "Something is broken or wrong." },
+      "other": { "label": "Something else", "hint": "Hello, press, partnership, etc." }
+    },
+    "fields": {
+      "name": "Your name",
+      "email": "Email",
+      "subject": "Subject",
+      "subjectHint": "Optional, but helps us triage.",
+      "subjectPlaceholderBilling": "Refund for order LMS-…",
+      "subjectPlaceholder": "In one line.",
+      "message": "Message",
+      "messageHint": "A sentence or two is plenty. Include your license email if it's a billing question.",
+      "company": "Company"
+    },
+    "formHelp": "The form sends your message to Battery Sensei's support inbox. We do not store submissions or share them with third parties.",
+    "status": {
+      "sent": "送信完了 · Sent. We will reply to your email within 48h on weekdays.",
+      "sending": "Sending…",
+      "idle": "We reply to every email. Promise.",
+      "errorDefault": "Something went wrong. Please email us directly.",
+      "errorNetwork": "Network hiccup. Please try again, or email us directly."
+    },
+    "buttons": {
+      "send": "Send message",
+      "sending": "Sending…",
+      "sent": "Sent"
+    },
+    "github": {
+      "label": "Open roadmap · GitHub",
+      "title": "What would make Sensei better for you?",
+      "body": "Bugs, feature ideas, or a quiet \"wish it did X\" — all welcome. Templates ask only what we need to ship. 👍 existing ideas to bump them up.",
+      "cta": "Find your thread",
+      "paths": {
+        "label": "Pick your path",
+        "idea": "Have an idea",
+        "bug": "Hit a wall",
+        "curious": "Just curious"
+      }
+    },
+    "email": {
+      "label": "Direct email",
+      "title": "Or email the Sensei directly.",
+      "body": "Prefer your own mail client? Same inbox, same person, same ~48h reply. Use this for security disclosures."
+    },
+    "before": {
+      "title": "Before you write",
+      "body": "Most questions are already answered in the <0>FAQ</0>. If it's a refund, mention your order ID (Polar emails it on purchase) so we can refund without going back and forth."
+    }
+  },
+  "download": {
+    "welcome": "ようこそ",
+    "heading": "Install once.",
+    "headingItalic": "Let your battery breathe.",
+    "body": "{{trial}} days to live with it. Then {{price}} once, never again. Notarized by Apple. Sits in your menu bar from day one and looks after your battery without asking again. Charged once. Yours for life.",
+    "source": "Source",
+    "trust": {
+      "native": { "title": "Native macOS", "body": "AppKit and SwiftUI. Feels like a system tool, because it is one." },
+      "light": { "title": "Light on your battery", "body": "No background polling. Sensei wakes only when macOS reports a change." },
+      "private": { "title": "Nothing leaves your Mac", "body": "No telemetry. No account. No cloud, ever." }
+    },
+    "specStrip": "macOS 13+. Apple Silicon & Intel. {{trial}} days free, no card. {{price}} once. 14-day refund."
+  },
+  "footer": {
+    "tagline": "Made by a MacBook owner, for MacBook owners.",
+    "ariaGetApp": "Get the app",
+    "ariaFooter": "Footer",
+    "purchaseSub": "· {{price}} once",
+    "contact": "Contact",
+    "reportIssue": "Report an issue",
+    "releases": "Releases",
+    "pricing": "Pricing",
+    "copyright": "© {{year}} · Battery Sensei",
+    "lastUpdated": "Last updated 24 May 2026"
+  },
+  "checkout": {
+    "kicker": "Checkout · 会計",
+    "tierToggleLabel": "Plan",
+    "tierLifetime": "Lifetime · once",
+    "tierSupport": "Support · yearly",
+    "heading": {
+      "lifetime": "One-time purchase.",
+      "support": "Yearly support."
+    },
+    "headingItalic": {
+      "lifetime": "Premium forever.",
+      "support": "Cancel anytime."
+    },
+    "intro": {
+      "lifetime": "Polar handles the secure checkout. You'll receive your license key by email within a minute, then activate it from Settings → Premium inside the app.",
+      "support": "Polar handles the secure checkout. You'll receive your license key by email within a minute — it stays active for as long as your yearly support is active."
+    },
+    "lifetimeAutoNote": "ZENMODE applied automatically — first 500 buyers only.",
+    "supportSwapNote": "Prefer to pay once and own it? <0>Switch to Lifetime</0>.",
+    "lifetimeSwapNote": "Prefer a yearly commitment? <0>Switch to Ongoing Developer Support</0>.",
+    "summaryTitle": "What you're getting",
+    "summaryLines": {
+      "lifetime": [
+        "Meeting Battery Guard — alerts before the meeting that matters",
+        "Unlimited Saga history — every cycle, forever",
+        "Custom warning presets — your own thresholds and dismiss times",
+        "Lifetime updates, no subscription"
+      ],
+      "support": [
+        "Every current Premium feature, while subscribed",
+        "Funds the next year of Sensei development",
+        "Cancel anytime from your Polar account",
+        "Direct line for ideas + feature requests"
+      ]
+    },
+    "priceLabel": {
+      "lifetime": "Total",
+      "support": "Per year"
+    },
+    "originalLabel": "was",
+    "discountLabel": "Promo code",
+    "discountPlaceholder": "e.g. OVER9000",
+    "continueAction": "Continue to secure checkout",
+    "continueAria": "Continue to the Polar checkout",
+    "refundNote": "14-day refund guarantee",
+    "alreadyOwnTitle": "Already bought?",
+    "alreadyOwnBody": "Open Battery Sensei → Settings → Premium. Paste your key and the email you used at purchase, then click Activate Premium.",
+    "backToHome": "Back to homepage"
+  },
+  "vsAldente": {
+    "backLink": "Battery Sensei",
+    "kicker": "Honest comparison · 比較",
+    "heading": "Battery Sensei vs AlDente.",
+    "headingItalic": "What's the same, what isn't.",
+    "intro": "AlDente is the tool a lot of MacBook owners reach for first. It's good software. Battery Sensei is a calmer alternative with a built-in battery journal — free essentials forever, plus an optional Premium unlock. Here is the side-by-side, written by someone who has used both.",
+    "tableHeaders": {
+      "feature": "Feature",
+      "sensei": "Battery Sensei",
+      "aldente": "AlDente"
+    },
+    "labels": {
+      "partial": "Partial"
+    },
+    "lastUpdatedNote": "Last updated 24 May 2026. Features for AlDente reflect their public site at the time of writing — check theirs for the latest.",
+    "rows": [
+      { "label": "Open source", "sensei": "yes", "aldente": "no" },
+      { "label": "Native macOS (AppKit + SwiftUI)", "sensei": "yes", "aldente": "yes" },
+      { "label": "Charge limit", "sensei": "yes", "aldente": "yes" },
+      { "label": "Travel Mode (top up before a trip)", "sensei": "yes", "aldente": "yes" },
+      { "label": "Smart low-battery alerts (3 presets + custom)", "sensei": "yes", "aldente": "partial" },
+      { "label": "Cycle & capacity tracking", "sensei": "yes", "aldente": "yes" },
+      { "label": "Plain-English battery history", "sensei": "yes", "aldente": "no" },
+      { "label": "Live watts in / out in the menu bar", "sensei": "yes", "aldente": "partial" },
+      { "label": "Discharge / sailing / calibration modes", "sensei": "no", "aldente": "yes (Pro)" },
+      { "label": "Heat-aware charging hints", "sensei": "yes", "aldente": "partial" },
+      { "label": "Account / cloud required", "sensei": "no", "aldente": "no" },
+      { "label": "Languages", "sensei": "EN · DE · ES · FR · 日本語", "aldente": "Multiple" },
+      { "label": "macOS support", "sensei": "13 Ventura +", "aldente": "11 Big Sur +" }
+    ],
+    "differentHeading": "Where Sensei is different",
+    "different": [
+      { "title": "Free essentials, optional Premium once.", "body": "No subscription. The core stays free for everyone; Premium is a single one-time unlock for the deeper features. Open source on GitHub — you can read the code and keep using Sensei even if the project pauses." },
+      { "title": "Smart low-battery alerts as a first-class feature.", "body": "Three presets (Zen, Regular, Senpai) or your own thresholds, auto-dismiss times, and a calm hierarchy of nudges, warnings, and full-screen alerts." },
+      { "title": "A plain-English battery journal.", "body": "Cycles, rescues, plateaus, capacity over time, written in sentences instead of vendor jargon. Stays on your Mac." },
+      { "title": "Calm aesthetic.", "body": "Single-purpose menu-bar tool, sumi + washi typography, native AppKit + SwiftUI. No dock icon, no notification noise." }
+    ],
+    "wins": "Where AlDente still wins",
+    "winsBody": "AlDente has more advanced power features: discharge mode, sailing, heat-aware modes, and a longer history as the best-known charge-limit app on macOS. If you want maximum granular control, AlDente is the deeper tool.",
+    "questions": "Common questions",
+    "faq": [
+      { "q": "Is Battery Sensei free?", "a": "The essentials are free forever — charge limit, smart alerts, 30-day history. Premium is a one-time unlock for Meeting Battery Guard, unlimited Saga history, and custom presets. No subscription, no account. Sensei is open source on GitHub." },
+      { "q": "Does Battery Sensei do everything AlDente does?", "a": "Most of what most people use AlDente for, yes: charge limit, Travel Mode for trips, native menu-bar status. Sensei adds smart low-battery alerts at thresholds you choose and a plain-English battery history. AlDente has additional power features like discharge mode and sailing/calibration that Sensei does not match." },
+      { "q": "When should I pick AlDente instead?", "a": "If you want the most fine-grained battery control on macOS today (heat-mode, sailing, discharge), AlDente is the deeper tool. Sensei prioritises calm defaults and a quiet menu-bar story over an exhaustive feature list." },
+      { "q": "Will switching from AlDente to Battery Sensei lose my data?", "a": "Nothing in macOS itself is lost. Sensei starts a fresh battery journal from install day. You can run both apps briefly during the switchover, then uninstall the one you do not want." },
+      { "q": "Are charge limits safe? Does Apple support them?", "a": "Apple already implements Optimized Battery Charging in macOS to hold around 80% based on your habits. Manual charge-limit tools like Battery Sensei or AlDente sit on top of that, letting you set the cap explicitly. Apple's own guidance is that lithium-ion ages faster the longer it sits at 100%." }
+    ],
+    "tryFree": "Try Battery Sensei free",
+    "readSource": "Read the source on GitHub →"
+  }
+}

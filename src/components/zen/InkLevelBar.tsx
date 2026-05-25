@@ -77,7 +77,6 @@ export function InkLevelBar({
   const H = 30
   const Y = H / 2
   const THICKNESS = 6.5
-  const id_dry = `ink-dry-${id}`
   const id_wet = `ink-wet-${id}`
   const id_fade = `ink-fade-${id}`
 

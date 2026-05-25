@@ -1,30 +1,55 @@
 import { useEffect, useState } from 'react'
-import { Download } from 'lucide-react'
-import { GithubMark } from '#/components/icons/GithubMark'
+import { Download, ChevronDown } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { Reveal } from '#/components/zen/Reveal'
 import { MenuBarMockup } from '#/components/zen/MenuBarMockup'
-import { TRIAL_DAYS } from '#/lib/lemon'
-import { usePremiumPrice } from '#/lib/use-price'
+import { TRIAL_DAYS } from '#/lib/polar'
+import { useLifetimePrice } from '#/lib/use-price'
+
+function ScrollCue() {
+  const [hidden, setHidden] = useState(false)
+  useEffect(() => {
+    const onScroll = () => {
+      if (window.scrollY > 24) setHidden(true)
+    }
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+  return (
+    <a
+      href="#features"
+      aria-label="Scroll down"
+      className={`fixed bottom-5 left-1/2 z-30 -translate-x-1/2 transition-[opacity,transform] duration-700 ease-out ${
+        hidden
+          ? 'pointer-events-none translate-y-2 opacity-0'
+          : 'pointer-events-auto opacity-60 hover:opacity-100'
+      }`}
+    >
+      <span className="flex h-9 w-9 items-center justify-center rounded-full border border-sumi/10 bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] shadow-[0_6px_20px_-10px_rgba(28,26,23,0.25)] backdrop-blur-sm">
+        <ChevronDown
+          className="h-4 w-4 animate-gentle-bob text-sumi-soft"
+          strokeWidth={1.8}
+          aria-hidden
+        />
+      </span>
+    </a>
+  )
+}
 
 function useScrollProgress(maxAtProgress = 0.45): number {
   const [progress, setProgress] = useState(0)
   useEffect(() => {
-    let frame = 0
-    let lastY = -1
-    const tick = () => {
+    const onScroll = () => {
       const y = window.scrollY
-      if (y !== lastY) {
-        lastY = y
-        const max = document.documentElement.scrollHeight - window.innerHeight
-        if (max > 0) {
-          const p = Math.min(1, Math.max(0, y / max / maxAtProgress))
-          setProgress(p)
-        }
+      const max = document.documentElement.scrollHeight - window.innerHeight
+      if (max > 0) {
+        setProgress(Math.min(1, Math.max(0, y / max / maxAtProgress)))
       }
-      frame = requestAnimationFrame(tick)
     }
-    frame = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(frame)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
   }, [maxAtProgress])
   return progress
 }
@@ -77,7 +102,9 @@ function KanjiRail({
 
 export function Hero() {
   const progress = useScrollProgress(0.12)
-  const price = usePremiumPrice()
+  const lifetime = useLifetimePrice()
+  const price = lifetime.discounted
+  const { t } = useTranslation()
 
   return (
     <section
@@ -102,9 +129,10 @@ export function Hero() {
         className="vertical-jp drift pointer-events-none absolute right-[max(1.25rem,calc(50%-32rem))] top-1/2 -translate-y-1/2 text-[0.95rem] lg:text-[1.05rem] leading-loose hidden md:block"
       />
 
+      <ScrollCue />
       <div className="relative mx-auto max-w-3xl px-5 sm:px-6 text-center">
         <Reveal as="p" delay={80} className="kicker-row mx-auto justify-center mb-8 text-center">
-          <span>macOS · {TRIAL_DAYS} days free · {price.formatted} once</span>
+          <span>{t('hero.kicker', { trial: TRIAL_DAYS, price: price.formatted })}</span>
         </Reveal>
 
         <Reveal
@@ -112,20 +140,17 @@ export function Hero() {
           delay={160}
           className="hero-display text-sumi"
         >
-          Quiet power
+          {t('hero.title')}
           <span className="block mt-1 sm:mt-2 text-sumi-soft italic font-normal">
-            for your MacBook.
+            {t('hero.titleItalic')}
           </span>
         </Reveal>
 
         <Reveal as="p" delay={320} className="mx-auto mt-8 font-jp text-base text-hinomaru/75 md:text-lg tracking-[0.08em]">
-          静かに、電池に寄り添う。
+          {t('hero.jp')}
         </Reveal>
         <Reveal as="p" delay={400} className="prose-readable mx-auto mt-5 text-[1.0625rem] text-sumi-soft md:text-[1.125rem]">
-          Your MacBook's battery quietly wears down with every charge. Sensei
-          watches it for you: warns before a surprise shutdown, holds your
-          charge limit so the cells last longer, and keeps a plain-English
-          record of how the years are going.
+          {t('hero.body')}
         </Reveal>
 
         <Reveal delay={480} className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -134,21 +159,27 @@ export function Hero() {
             className="btn-sumi group inline-flex h-11 items-center gap-2.5 rounded-md px-6 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
           >
             <Download className="h-4 w-4 transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5" strokeWidth={1.8} />
-            Download for macOS
+            {t('common.downloadMac')}
           </a>
           <a
-            href="https://github.com/schaier-io/battery-sensei-releases"
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex h-11 items-center gap-2 rounded-md px-4 text-sm text-sumi-soft hover:text-sumi transition-colors duration-[280ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
+            href="#features"
+            className="group inline-flex h-11 items-center gap-2.5 rounded-md pl-4 pr-2 text-sm text-sumi-soft hover:text-sumi transition-colors duration-[280ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
           >
-            <GithubMark className="h-4 w-4" strokeWidth={1.6} />
-            Read the source
+            {t('hero.readMore')}
+            <span
+              className="relative inline-flex h-7 w-7 items-center justify-center rounded-full border border-sumi/15 bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] transition-all duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:border-sumi/35 group-hover:bg-[color-mix(in_oklab,var(--washi)_45%,#fff)] group-hover:shadow-[0_4px_12px_-6px_rgba(28,26,23,0.25)]"
+              aria-hidden
+            >
+              <ChevronDown
+                className="h-3.5 w-3.5 animate-gentle-bob transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:translate-y-0.5 group-hover:[animation-play-state:paused]"
+                strokeWidth={2}
+              />
+            </span>
           </a>
         </Reveal>
 
         <Reveal as="p" delay={560} className="spec-strip mt-7">
-          {TRIAL_DAYS} days free. No card, no account. Then {price.formatted} once, never again.
+          {t('hero.specStrip', { trial: TRIAL_DAYS, price: price.formatted })}
         </Reveal>
 
         <Reveal
@@ -157,7 +188,7 @@ export function Hero() {
         >
           <MenuBarMockup className="rotate-[-1.2deg] transition-transform duration-[520ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:rotate-0 hover:-translate-y-1" />
           <p className="spec-strip mt-4 text-center">
-            Lives in your menu bar. Speaks only when it matters.
+            {t('hero.menuCaption')}
           </p>
         </Reveal>
       </div>

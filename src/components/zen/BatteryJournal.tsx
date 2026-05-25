@@ -100,7 +100,7 @@ function Stat({ label, value }: { label: string; value: string }) {
             "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'><filter id='c'><feTurbulence type='fractalNoise' baseFrequency='2.4' numOctaves='2' seed='9'/><feColorMatrix values='0 0 0 0 0.42  0 0 0 0 0.36  0 0 0 0 0.28  0 0 0 0.12 0'/></filter><rect width='100%25' height='100%25' filter='url(%23c)'/></svg>\")",
         }}
       />
-      <span className="display-title relative text-xl font-bold leading-none text-sumi tabular-nums tracking-tight">
+      <span className="display-title relative text-xl font-semibold leading-none text-sumi tabular-nums tracking-tight">
         {value}
       </span>
       <span className="relative text-[9px] font-semibold uppercase tracking-[0.18em] text-sumi-soft">

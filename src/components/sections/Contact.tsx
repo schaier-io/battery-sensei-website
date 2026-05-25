@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react'
-import { Bug, Mail, Send, ShieldCheck } from 'lucide-react'
+import { Bug, Mail, Send, ShieldCheck, Lightbulb, Sparkles } from 'lucide-react'
+import { Trans, useTranslation } from 'react-i18next'
 import { GithubMark } from '#/components/icons/GithubMark'
 import { Hanko } from '#/components/zen/Hanko'
 import { Reveal } from '#/components/zen/Reveal'
@@ -7,18 +8,14 @@ import { Reveal } from '#/components/zen/Reveal'
 type Topic = 'bug' | 'feature' | 'billing' | 'other'
 type Status = 'idle' | 'sending' | 'sent' | 'error'
 
-const TOPICS: ReadonlyArray<{ value: Topic; label: string; hint: string }> = [
-  { value: 'billing', label: 'Billing or license', hint: 'Refund, license key, invoice.' },
-  { value: 'feature', label: 'Feature idea', hint: 'A way Sensei could help more.' },
-  { value: 'bug',     label: 'Bug',            hint: 'Something is broken or wrong.' },
-  { value: 'other',   label: 'Something else', hint: 'Hello, press, partnership, etc.' },
-]
+const TOPIC_ORDER: ReadonlyArray<Topic> = ['feature', 'bug', 'billing', 'other']
 
 const ISSUES_URL = 'https://github.com/schaier-io/battery-sensei-releases/issues/new/choose'
 const EMAIL = 'sandro@schaier.io'
 
 export function Contact() {
-  const [topic, setTopic] = useState<Topic>('billing')
+  const { t } = useTranslation()
+  const [topic, setTopic] = useState<Topic>('feature')
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [subject, setSubject] = useState('')
@@ -45,7 +42,7 @@ export function Contact() {
       const data = (await response.json().catch(() => ({}))) as { ok?: boolean; error?: string }
 
       if (!response.ok || !data.ok) {
-        setErrorMsg(data.error ?? 'Something went wrong. Please email us directly.')
+        setErrorMsg(data.error ?? t('contact.status.errorDefault'))
         setStatus('error')
         return
       }
@@ -55,7 +52,7 @@ export function Contact() {
       setSubject('')
       setMessage('')
     } catch {
-      setErrorMsg('Network hiccup. Please try again, or email us directly.')
+      setErrorMsg(t('contact.status.errorNetwork'))
       setStatus('error')
     }
   }
@@ -66,20 +63,17 @@ export function Contact() {
         <div className="mb-12 flex flex-col items-center text-center">
           <Hanko kanji="文" className="mb-5" />
           <Reveal as="p" delay={120} className="kicker-row mb-4">
-            Get in touch · 連絡
+            {t('contact.kicker')}
           </Reveal>
           <Reveal as="h2" delay={200} className="section-heading text-sumi">
-            A real person <span className="italic text-sumi-soft font-normal">reads every message.</span>
+            {t('contact.heading')} <span className="italic text-sumi-soft font-normal">{t('contact.headingItalic')}</span>
           </Reveal>
           <Reveal
             as="p"
             delay={280}
             className="prose-readable mx-auto mt-5 text-[1.0625rem] text-sumi-soft"
           >
-            Bugs and feature requests live in the open on GitHub so everyone
-            benefits from the answer. Anything tied to your account, license,
-            or payment goes through the form. First reply within ~48 hours on
-            weekdays, often sooner.
+            {t('contact.intro')}
           </Reveal>
         </div>
 
@@ -93,28 +87,28 @@ export function Contact() {
             >
               <header className="flex items-center justify-between gap-4">
                 <span className="display-title text-[12px] font-semibold uppercase tracking-[0.22em] text-sumi-soft">
-                  Private message
+                  {t('contact.privateMessage')}
                 </span>
                 <span className="inline-flex items-center gap-1.5 text-[11px] tracking-[0.04em] text-nezumi">
                   <ShieldCheck className="h-3.5 w-3.5" strokeWidth={1.6} aria-hidden />
-                  Not stored, just forwarded
+                  {t('contact.notStored')}
                 </span>
               </header>
 
               <fieldset className="flex flex-col gap-2">
                 <legend className="text-[0.8125rem] font-medium text-sumi mb-1">
-                  What is this about?
+                  {t('contact.topicLegend')}
                 </legend>
                 <div
                   role="radiogroup"
-                  aria-label="Topic"
+                  aria-label={t('contact.topicLegend')}
                   className="grid grid-cols-2 gap-2"
                 >
-                  {TOPICS.map((t) => {
-                    const active = topic === t.value
+                  {TOPIC_ORDER.map((value) => {
+                    const active = topic === value
                     return (
                       <label
-                        key={t.value}
+                        key={value}
                         className={[
                           'group relative cursor-pointer rounded-md border px-3 py-2.5 text-left transition-colors duration-200',
                           active
@@ -125,16 +119,16 @@ export function Contact() {
                         <input
                           type="radio"
                           name="topic"
-                          value={t.value}
+                          value={value}
                           checked={active}
-                          onChange={() => setTopic(t.value)}
+                          onChange={() => setTopic(value)}
                           className="sr-only"
                         />
                         <span className="display-title block text-[0.9375rem] font-medium text-sumi leading-snug">
-                          {t.label}
+                          {t(`contact.topics.${value}.label`)}
                         </span>
                         <span className="mt-0.5 block text-[0.75rem] leading-snug text-nezumi">
-                          {t.hint}
+                          {t(`contact.topics.${value}.hint`)}
                         </span>
                         <span
                           aria-hidden
@@ -150,7 +144,7 @@ export function Contact() {
               </fieldset>
 
               <div className="grid gap-4 sm:grid-cols-2">
-                <Field label="Your name" htmlFor="contact-name">
+                <Field label={t('contact.fields.name')} htmlFor="contact-name">
                   <input
                     id="contact-name"
                     name="name"
@@ -163,7 +157,7 @@ export function Contact() {
                     className={inputClass}
                   />
                 </Field>
-                <Field label="Email" htmlFor="contact-email">
+                <Field label={t('contact.fields.email')} htmlFor="contact-email">
                   <input
                     id="contact-email"
                     name="email"
@@ -179,9 +173,9 @@ export function Contact() {
               </div>
 
               <Field
-                label="Subject"
+                label={t('contact.fields.subject')}
                 htmlFor="contact-subject"
-                hint="Optional, but helps us triage."
+                hint={t('contact.fields.subjectHint')}
               >
                 <input
                   id="contact-subject"
@@ -191,14 +185,18 @@ export function Contact() {
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
                   className={inputClass}
-                  placeholder={topic === 'billing' ? 'Refund for order LMS-…' : 'In one line.'}
+                  placeholder={
+                    topic === 'billing'
+                      ? t('contact.fields.subjectPlaceholderBilling')
+                      : t('contact.fields.subjectPlaceholder')
+                  }
                 />
               </Field>
 
               <Field
-                label="Message"
+                label={t('contact.fields.message')}
                 htmlFor="contact-message"
-                hint="A sentence or two is plenty. Include your license email if it's a billing question."
+                hint={t('contact.fields.messageHint')}
               >
                 <textarea
                   id="contact-message"
@@ -213,9 +211,8 @@ export function Contact() {
                 />
               </Field>
 
-              {/* Honeypot — invisible to humans, irresistible to bots. */}
               <label className="sr-only" aria-hidden="true">
-                Company
+                {t('contact.fields.company')}
                 <input
                   type="text"
                   name="company"
@@ -225,8 +222,7 @@ export function Contact() {
               </label>
 
               <p id="contact-form-help" className="sr-only">
-                The form sends your message to Battery Sensei's support inbox.
-                We do not store submissions or share them with third parties.
+                {t('contact.formHelp')}
               </p>
 
               <div className="mt-1 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -240,10 +236,10 @@ export function Contact() {
                     'text-nezumi',
                   ].join(' ')}
                 >
-                  {status === 'sent'   ? '送信完了 · Sent. We will reply to your email within 48h on weekdays.' :
+                  {status === 'sent'   ? t('contact.status.sent') :
                    status === 'error'  ? errorMsg :
-                   status === 'sending'? 'Sending…' :
-                   'We reply to every email. Promise.'}
+                   status === 'sending'? t('contact.status.sending') :
+                   t('contact.status.idle')}
                 </p>
 
                 <button
@@ -255,7 +251,11 @@ export function Contact() {
                     className="h-4 w-4 transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                     strokeWidth={1.7}
                   />
-                  {status === 'sent' ? 'Sent' : status === 'sending' ? 'Sending…' : 'Send message'}
+                  {status === 'sent'
+                    ? t('contact.buttons.sent')
+                    : status === 'sending'
+                      ? t('contact.buttons.sending')
+                      : t('contact.buttons.send')}
                 </button>
               </div>
             </form>
@@ -267,25 +267,32 @@ export function Contact() {
                 href={ISSUES_URL}
                 target="_blank"
                 rel="noreferrer"
-                className="paper-card group flex flex-col gap-3 p-6 transition-transform duration-300"
+                className="paper-card group relative flex flex-col gap-4 overflow-hidden p-6 transition-transform duration-300"
               >
-                <header className="flex items-center justify-between gap-3">
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute -right-8 -top-10 h-32 w-32 rounded-full bg-hinomaru/[0.06] blur-2xl"
+                />
+                <header className="relative flex items-center justify-between gap-3">
                   <span className="inline-flex items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.22em] text-sumi-soft display-title">
-                    <Bug className="h-3.5 w-3.5 text-hinomaru" strokeWidth={1.7} aria-hidden />
-                    Public · GitHub
+                    <Sparkles className="h-3.5 w-3.5 text-hinomaru" strokeWidth={1.7} aria-hidden />
+                    {t('contact.github.label')}
                   </span>
                   <GithubMark className="h-4 w-4 text-nezumi transition-colors group-hover:text-sumi" strokeWidth={1.6} />
                 </header>
-                <p className="display-title text-[1.125rem] font-medium text-sumi leading-snug">
-                  Report a bug or request a feature.
+                <p className="display-title relative text-[1.125rem] font-medium leading-snug text-sumi">
+                  {t('contact.github.title')}
                 </p>
-                <p className="text-[0.875rem] leading-[1.55] text-sumi-soft">
-                  The roadmap is open. Templates ask only for what we genuinely
-                  need to ship a fix. Vote on existing ideas with a 👍 to bump
-                  them up.
+                <div className="relative -mx-1 flex flex-wrap gap-1.5">
+                  <PathChip icon={Lightbulb} label={t('contact.github.paths.idea')} accent="hinomaru" />
+                  <PathChip icon={Bug} label={t('contact.github.paths.bug')} accent="kin" />
+                  <PathChip icon={Mail} label={t('contact.github.paths.curious')} accent="nezumi" />
+                </div>
+                <p className="relative text-[0.875rem] leading-[1.55] text-sumi-soft">
+                  {t('contact.github.body')}
                 </p>
-                <span className="mt-1 inline-flex items-center gap-1.5 text-[0.8125rem] font-medium text-sumi group-hover:text-hinomaru transition-colors">
-                  Open an issue
+                <span className="relative mt-1 inline-flex items-center gap-1.5 text-[0.8125rem] font-medium text-sumi transition-colors group-hover:text-hinomaru">
+                  {t('contact.github.cta')}
                   <span aria-hidden className="transition-transform duration-300 group-hover:translate-x-0.5">→</span>
                 </span>
               </a>
@@ -299,15 +306,14 @@ export function Contact() {
                 <header className="flex items-center gap-2">
                   <span className="inline-flex items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.22em] text-sumi-soft display-title">
                     <Mail className="h-3.5 w-3.5 text-kin" strokeWidth={1.7} aria-hidden />
-                    Direct email
+                    {t('contact.email.label')}
                   </span>
                 </header>
                 <p className="display-title text-[1.125rem] font-medium text-sumi leading-snug">
-                  Or write to <span className="font-jp">先生</span> directly.
+                  {t('contact.email.title')}
                 </p>
                 <p className="text-[0.875rem] leading-[1.55] text-sumi-soft">
-                  Prefer your own mail client? Same inbox, same person, same
-                  ~48h reply. Use this for security disclosures.
+                  {t('contact.email.body')}
                 </p>
                 <span className="mt-1 inline-flex items-center gap-1.5 text-[0.8125rem] font-medium text-sumi group-hover:text-kin transition-colors break-all">
                   {EMAIL}
@@ -319,16 +325,15 @@ export function Contact() {
             <Reveal delay={360}>
               <div className="rounded-md border border-dashed border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_82%,transparent)] p-5">
                 <p className="display-title text-[0.8125rem] font-semibold uppercase tracking-[0.18em] text-sumi-soft mb-2">
-                  Before you write
+                  {t('contact.before.title')}
                 </p>
                 <p className="text-[0.875rem] leading-[1.6] text-sumi-soft">
-                  Most questions are already answered in the{' '}
-                  <a href="#faq" className="underline decoration-hinomaru/40 decoration-2 underline-offset-4 hover:text-sumi hover:decoration-hinomaru transition-colors">
-                    FAQ
-                  </a>
-                  . If it's a refund, mention your order ID (Lemon Squeezy
-                  emails it on purchase) so we can refund without going back
-                  and forth.
+                  <Trans
+                    i18nKey="contact.before.body"
+                    components={[
+                      <a href="#faq" className="underline decoration-hinomaru/40 decoration-2 underline-offset-4 hover:text-sumi hover:decoration-hinomaru transition-colors" />,
+                    ]}
+                  />
                 </p>
               </div>
             </Reveal>
@@ -366,5 +371,28 @@ function Field({
       </label>
       {children}
     </div>
+  )
+}
+
+function PathChip({
+  icon: Icon,
+  label,
+  accent,
+}: {
+  icon: typeof Bug
+  label: string
+  accent: 'hinomaru' | 'kin' | 'nezumi'
+}) {
+  const iconColor =
+    accent === 'hinomaru'
+      ? 'text-hinomaru'
+      : accent === 'kin'
+        ? 'text-kin'
+        : 'text-nezumi'
+  return (
+    <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] px-2.5 py-1 text-[11px] font-medium text-sumi-soft transition-colors duration-[220ms] group-hover:border-[var(--line-strong)] group-hover:text-sumi">
+      <Icon className={`h-3 w-3 ${iconColor}`} strokeWidth={1.8} aria-hidden />
+      {label}
+    </span>
   )
 }

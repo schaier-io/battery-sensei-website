@@ -52,7 +52,13 @@ export function TiltCard({
   return (
     <div
       ref={ref}
-      className={`[transform-style:preserve-3d] ${className}`}
+      // `h-full` on the outer wrapper is load-bearing: when a TiltCard sits
+      // inside a CSS Grid cell, the grid uses `align-items: stretch` to make
+      // siblings equal-height, but only if every intermediate wrapper
+      // forwards that height. Without `h-full` here, the inner `motion.div`
+      // and the child `paper-card` collapse to their intrinsic content size
+      // and the cards end up uneven.
+      className={`h-full [transform-style:preserve-3d] ${className}`}
       style={{ perspective: `${perspective}px` }}
       onMouseMove={handleMove}
       onMouseEnter={handleEnter}

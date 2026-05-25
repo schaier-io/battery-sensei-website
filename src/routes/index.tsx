@@ -6,6 +6,7 @@ import { Saga } from '#/components/sections/Saga'
 import { Health } from '#/components/sections/Health'
 import { FAQ } from '#/components/sections/FAQ'
 import { Pricing } from '#/components/sections/Pricing'
+import { Compare } from '#/components/sections/Compare'
 import { Download } from '#/components/sections/Download'
 import { Footer } from '#/components/sections/Footer'
 import { Categories } from '#/components/sections/Categories'
@@ -26,6 +27,8 @@ function Home() {
         <Saga />
         <BrushDivider />
         <Health />
+        <BrushDivider />
+        <Compare />
         <BrushDivider />
         <Pricing />
         <BrushDivider />

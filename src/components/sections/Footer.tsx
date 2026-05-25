@@ -1,41 +1,78 @@
-import { Hanko } from '#/components/zen/Hanko'
+import { Download, ShoppingBag } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
+import { lifetimeCheckoutUrl } from '#/lib/polar'
+import { useLifetimePrice } from '#/lib/use-price'
 
 export function Footer() {
+  const lifetime = useLifetimePrice()
+  const price = lifetime.discounted
+  const { t } = useTranslation()
   return (
     <footer className="relative border-t border-[var(--line)] py-16">
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 px-6 text-center">
         <div className="flex items-center gap-3">
           <img
-            src="/app-icon.png"
-            srcSet="/app-icon-256.png 1x, /app-icon.png 2x"
+            src="/logo-256.webp"
+            srcSet="/logo-256.webp 1x, /logo-512.webp 2x"
+            width="48"
+            height="48"
             alt=""
             aria-hidden
+            decoding="async"
+            loading="lazy"
             className="h-12 w-12"
           />
-          <span className="flex flex-col items-start gap-[3px] leading-none">
+          <span className="flex items-baseline gap-2.5 leading-none">
             <span className="display-title text-[12px] font-semibold uppercase tracking-[0.22em] text-sumi">
               Battery Sensei
             </span>
-            <span className="font-jp text-[10px] tracking-[0.36em] text-hinomaru/70">
+            <span aria-hidden className="text-hinomaru/60 text-[10px]">·</span>
+            {/* Full hinomaru red — replaces the previously stacked Hanko seal
+                as the page's red beat. Keeps the brand mark compact while
+                preserving the ink-on-washi accent the footer needs. */}
+            <span className="font-jp text-[10px] tracking-[0.36em] text-hinomaru">
               電池先生
             </span>
           </span>
         </div>
 
-        <span aria-hidden className="block h-px w-12 bg-[var(--line-strong)]" />
-
-        <Hanko kanji="禅" />
-
         <p className="font-display italic text-[0.95rem] text-nezumi max-w-md leading-snug">
-          Made by a MacBook owner, for MacBook owners.
+          {t('footer.tagline')}
         </p>
 
+        <div
+          aria-label={t('footer.ariaGetApp')}
+          className="flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center"
+        >
+          <a
+            href="/download/latest"
+            className="group inline-flex h-10 items-center justify-center gap-2 rounded-md border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] px-5 text-[0.875rem] font-medium text-sumi transition-colors duration-200 hover:bg-[color-mix(in_oklab,var(--washi)_45%,#fff)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
+          >
+            <Download
+              className="h-4 w-4 transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5"
+              strokeWidth={1.7}
+            />
+            {t('common.downloadFree')}
+          </a>
+          <a
+            href={lifetimeCheckoutUrl()}
+            className="group inline-flex h-10 items-center justify-center gap-2 rounded-md border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] px-5 text-[0.875rem] font-medium text-sumi transition-colors duration-200 hover:bg-[color-mix(in_oklab,var(--washi)_45%,#fff)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
+          >
+            <ShoppingBag
+              className="h-4 w-4 text-hinomaru transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5"
+              strokeWidth={1.7}
+            />
+            {t('common.purchaseNow')}
+            <span className="text-nezumi font-normal">{t('footer.purchaseSub', { price: price.formatted })}</span>
+          </a>
+        </div>
+
         <nav
-          aria-label="Footer"
+          aria-label={t('footer.ariaFooter')}
           className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[0.8125rem] text-sumi-soft"
         >
           <a href="#contact" className="hover:text-sumi transition-colors">
-            Contact
+            {t('footer.contact')}
           </a>
           <span aria-hidden className="text-nezumi/50">·</span>
           <a
@@ -44,7 +81,7 @@ export function Footer() {
             rel="noreferrer"
             className="hover:text-sumi transition-colors"
           >
-            Report an issue
+            {t('footer.reportIssue')}
           </a>
           <span aria-hidden className="text-nezumi/50">·</span>
           <a
@@ -53,18 +90,18 @@ export function Footer() {
             rel="noreferrer"
             className="hover:text-sumi transition-colors"
           >
-            Releases
+            {t('footer.releases')}
           </a>
           <span aria-hidden className="text-nezumi/50">·</span>
-          <a href="/pricing.md" className="hover:text-sumi transition-colors">
-            Pricing
+          <a href="#pricing" className="hover:text-sumi transition-colors">
+            {t('footer.pricing')}
           </a>
         </nav>
 
         <p className="text-[0.75rem] tracking-[0.05em] text-nezumi tabular-nums">
-          © {new Date().getFullYear()} · Battery Sensei
+          {t('footer.copyright', { year: new Date().getFullYear() })}
           <span className="mx-2 text-nezumi/60" aria-hidden>·</span>
-          <time dateTime="2026-05-20">Last updated 20 May 2026</time>
+          <time dateTime="2026-05-20">{t('footer.lastUpdated')}</time>
         </p>
       </div>
     </footer>

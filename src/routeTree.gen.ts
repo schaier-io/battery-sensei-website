@@ -9,12 +9,30 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WalkthroughRouteImport } from './routes/walkthrough'
 import { Route as VsAldenteRouteImport } from './routes/vs-aldente'
+import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as FeaturesTravelModeRouteImport } from './routes/features.travel-mode'
+import { Route as FeaturesMeetingBatteryGuardRouteImport } from './routes/features.meeting-battery-guard'
+import { Route as FeaturesEnergyUsageRouteImport } from './routes/features.energy-usage'
+import { Route as FeaturesCustomThresholdsRouteImport } from './routes/features.custom-thresholds'
+import { Route as FeaturesBatteryJournalRouteImport } from './routes/features.battery-journal'
+import { Route as FeaturesAlertPresetsRouteImport } from './routes/features.alert-presets'
 
+const WalkthroughRoute = WalkthroughRouteImport.update({
+  id: '/walkthrough',
+  path: '/walkthrough',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const VsAldenteRoute = VsAldenteRouteImport.update({
   id: '/vs-aldente',
   path: '/vs-aldente',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -22,40 +40,149 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FeaturesTravelModeRoute = FeaturesTravelModeRouteImport.update({
+  id: '/features/travel-mode',
+  path: '/features/travel-mode',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeaturesMeetingBatteryGuardRoute =
+  FeaturesMeetingBatteryGuardRouteImport.update({
+    id: '/features/meeting-battery-guard',
+    path: '/features/meeting-battery-guard',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const FeaturesEnergyUsageRoute = FeaturesEnergyUsageRouteImport.update({
+  id: '/features/energy-usage',
+  path: '/features/energy-usage',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeaturesCustomThresholdsRoute =
+  FeaturesCustomThresholdsRouteImport.update({
+    id: '/features/custom-thresholds',
+    path: '/features/custom-thresholds',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const FeaturesBatteryJournalRoute = FeaturesBatteryJournalRouteImport.update({
+  id: '/features/battery-journal',
+  path: '/features/battery-journal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeaturesAlertPresetsRoute = FeaturesAlertPresetsRouteImport.update({
+  id: '/features/alert-presets',
+  path: '/features/alert-presets',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/checkout': typeof CheckoutRoute
   '/vs-aldente': typeof VsAldenteRoute
+  '/walkthrough': typeof WalkthroughRoute
+  '/features/alert-presets': typeof FeaturesAlertPresetsRoute
+  '/features/battery-journal': typeof FeaturesBatteryJournalRoute
+  '/features/custom-thresholds': typeof FeaturesCustomThresholdsRoute
+  '/features/energy-usage': typeof FeaturesEnergyUsageRoute
+  '/features/meeting-battery-guard': typeof FeaturesMeetingBatteryGuardRoute
+  '/features/travel-mode': typeof FeaturesTravelModeRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/checkout': typeof CheckoutRoute
   '/vs-aldente': typeof VsAldenteRoute
+  '/walkthrough': typeof WalkthroughRoute
+  '/features/alert-presets': typeof FeaturesAlertPresetsRoute
+  '/features/battery-journal': typeof FeaturesBatteryJournalRoute
+  '/features/custom-thresholds': typeof FeaturesCustomThresholdsRoute
+  '/features/energy-usage': typeof FeaturesEnergyUsageRoute
+  '/features/meeting-battery-guard': typeof FeaturesMeetingBatteryGuardRoute
+  '/features/travel-mode': typeof FeaturesTravelModeRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/checkout': typeof CheckoutRoute
   '/vs-aldente': typeof VsAldenteRoute
+  '/walkthrough': typeof WalkthroughRoute
+  '/features/alert-presets': typeof FeaturesAlertPresetsRoute
+  '/features/battery-journal': typeof FeaturesBatteryJournalRoute
+  '/features/custom-thresholds': typeof FeaturesCustomThresholdsRoute
+  '/features/energy-usage': typeof FeaturesEnergyUsageRoute
+  '/features/meeting-battery-guard': typeof FeaturesMeetingBatteryGuardRoute
+  '/features/travel-mode': typeof FeaturesTravelModeRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/vs-aldente'
+  fullPaths:
+    | '/'
+    | '/checkout'
+    | '/vs-aldente'
+    | '/walkthrough'
+    | '/features/alert-presets'
+    | '/features/battery-journal'
+    | '/features/custom-thresholds'
+    | '/features/energy-usage'
+    | '/features/meeting-battery-guard'
+    | '/features/travel-mode'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/vs-aldente'
-  id: '__root__' | '/' | '/vs-aldente'
+  to:
+    | '/'
+    | '/checkout'
+    | '/vs-aldente'
+    | '/walkthrough'
+    | '/features/alert-presets'
+    | '/features/battery-journal'
+    | '/features/custom-thresholds'
+    | '/features/energy-usage'
+    | '/features/meeting-battery-guard'
+    | '/features/travel-mode'
+  id:
+    | '__root__'
+    | '/'
+    | '/checkout'
+    | '/vs-aldente'
+    | '/walkthrough'
+    | '/features/alert-presets'
+    | '/features/battery-journal'
+    | '/features/custom-thresholds'
+    | '/features/energy-usage'
+    | '/features/meeting-battery-guard'
+    | '/features/travel-mode'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CheckoutRoute: typeof CheckoutRoute
   VsAldenteRoute: typeof VsAldenteRoute
+  WalkthroughRoute: typeof WalkthroughRoute
+  FeaturesAlertPresetsRoute: typeof FeaturesAlertPresetsRoute
+  FeaturesBatteryJournalRoute: typeof FeaturesBatteryJournalRoute
+  FeaturesCustomThresholdsRoute: typeof FeaturesCustomThresholdsRoute
+  FeaturesEnergyUsageRoute: typeof FeaturesEnergyUsageRoute
+  FeaturesMeetingBatteryGuardRoute: typeof FeaturesMeetingBatteryGuardRoute
+  FeaturesTravelModeRoute: typeof FeaturesTravelModeRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/walkthrough': {
+      id: '/walkthrough'
+      path: '/walkthrough'
+      fullPath: '/walkthrough'
+      preLoaderRoute: typeof WalkthroughRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/vs-aldente': {
       id: '/vs-aldente'
       path: '/vs-aldente'
       fullPath: '/vs-aldente'
       preLoaderRoute: typeof VsAldenteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -65,12 +192,62 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/features/travel-mode': {
+      id: '/features/travel-mode'
+      path: '/features/travel-mode'
+      fullPath: '/features/travel-mode'
+      preLoaderRoute: typeof FeaturesTravelModeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/features/meeting-battery-guard': {
+      id: '/features/meeting-battery-guard'
+      path: '/features/meeting-battery-guard'
+      fullPath: '/features/meeting-battery-guard'
+      preLoaderRoute: typeof FeaturesMeetingBatteryGuardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/features/energy-usage': {
+      id: '/features/energy-usage'
+      path: '/features/energy-usage'
+      fullPath: '/features/energy-usage'
+      preLoaderRoute: typeof FeaturesEnergyUsageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/features/custom-thresholds': {
+      id: '/features/custom-thresholds'
+      path: '/features/custom-thresholds'
+      fullPath: '/features/custom-thresholds'
+      preLoaderRoute: typeof FeaturesCustomThresholdsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/features/battery-journal': {
+      id: '/features/battery-journal'
+      path: '/features/battery-journal'
+      fullPath: '/features/battery-journal'
+      preLoaderRoute: typeof FeaturesBatteryJournalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/features/alert-presets': {
+      id: '/features/alert-presets'
+      path: '/features/alert-presets'
+      fullPath: '/features/alert-presets'
+      preLoaderRoute: typeof FeaturesAlertPresetsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CheckoutRoute: CheckoutRoute,
   VsAldenteRoute: VsAldenteRoute,
+  WalkthroughRoute: WalkthroughRoute,
+  FeaturesAlertPresetsRoute: FeaturesAlertPresetsRoute,
+  FeaturesBatteryJournalRoute: FeaturesBatteryJournalRoute,
+  FeaturesCustomThresholdsRoute: FeaturesCustomThresholdsRoute,
+  FeaturesEnergyUsageRoute: FeaturesEnergyUsageRoute,
+  FeaturesMeetingBatteryGuardRoute: FeaturesMeetingBatteryGuardRoute,
+  FeaturesTravelModeRoute: FeaturesTravelModeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

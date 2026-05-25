@@ -6,6 +6,7 @@ import { SpeedInsights } from '@vercel/speed-insights/react'
 
 import appCss from '../styles.css?url'
 import { FAQ_ITEMS } from '#/components/sections/FAQ'
+import { I18nProvider } from '#/lib/i18n/I18nProvider'
 
 const SITE_URL = 'https://battery-sensei.app'
 
@@ -115,9 +116,16 @@ const faqPageLd = {
   })),
 }
 
-// ISO date of the last meaningful page edit. Bumped manually when content
-// (not just code) changes so AI systems can see freshness.
-const LAST_UPDATED = '2026-05-20'
+// ISO date of the last meaningful page edit. Injected at build time by
+// vite.config.ts (`__LAST_UPDATED__`), which reads the most recent commit
+// date that touched routes/components/i18n/public docs. Falls back to today
+// if git is unavailable (e.g. sandbox builds), so the schema always carries
+// a valid YYYY-MM-DD without manual maintenance.
+declare const __LAST_UPDATED__: string
+const LAST_UPDATED: string =
+  typeof __LAST_UPDATED__ !== 'undefined'
+    ? __LAST_UPDATED__
+    : new Date().toISOString().slice(0, 10)
 
 // HowTo schema — eligible for Google's "HowTo" rich result + frequently
 // reused by AI Overviews for procedural queries like "How to limit charge
@@ -211,16 +219,21 @@ export const Route = createRootRoute({
       { property: 'og:site_name', content: 'Battery Sensei' },
       { property: 'og:title', content: TITLE },
       { property: 'og:description', content: DESCRIPTION },
+      // PNG only: tried a WebP-first multi-image set but TanStack Start's meta
+      // manager collapses duplicate `property` entries, keeping only the last.
+      // PNG is universally supported by every OG card consumer (iMessage, Slack,
+      // Discord, Twitter, Facebook, LinkedIn); the ~80 KB WebP saving isn't
+      // worth the risk of one client rendering a broken card. Revisit if/when
+      // TanStack Start supports preserving duplicate-property meta tags.
       { property: 'og:image', content: `${SITE_URL}/share-card.png` },
       { property: 'og:image:type', content: 'image/png' },
       { property: 'og:image:width', content: '1200' },
       { property: 'og:image:height', content: '630' },
       { property: 'og:image:alt', content: 'Battery Sensei — quiet power for your MacBook' },
       { property: 'og:locale', content: 'en_US' },
-      { property: 'og:locale:alternate', content: 'de_DE' },
-      { property: 'og:locale:alternate', content: 'es_ES' },
-      { property: 'og:locale:alternate', content: 'fr_FR' },
-      { property: 'og:locale:alternate', content: 'ja_JP' },
+      // No og:locale:alternate declared: site translations share one URL with
+      // `lang="en"` SSR. Advertising alternates that resolve to the same page
+      // is a misleading signal. Revisit when /de/, /fr/, etc. exist as crawlable URLs.
       // Twitter
       { name: 'twitter:card', content: 'summary_large_image' },
       { name: 'twitter:title', content: TITLE },
@@ -236,26 +249,38 @@ export const Route = createRootRoute({
       { rel: 'shortcut icon', href: '/favicon.ico' },
       { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' },
       { rel: 'manifest', href: '/manifest.json' },
-      // Connection setup for the Google Fonts the styles import — saves
-      // ~100ms on first paint on cold connections.
+      // Preload the Nav logo — it's the first above-fold <img> and a likely
+      // LCP candidate. Paired with `fetchpriority="high"` + `loading="eager"`
+      // on the <img> itself; the preload kicks the request off before React
+      // has hydrated the tree. `imagesrcset` matches the Nav's srcSet so the
+      // browser picks the right DPI.
+      // Note: passing `imageSrcSet` / `fetchPriority` (React 19 camelCase) here
+      // tripped a "did you mean imageSrcSet?" warning under TanStack Start's
+      // link spreader. Sticking to `href` + `type` keeps the preload effective
+      // (browser fetches the WebP at 1x DPR) without the false-positive devtool
+      // noise; HiDPI DPR will request via the Nav's srcSet on hydration.
+      { rel: 'preload', as: 'image', href: '/logo-256.webp', type: 'image/webp' },
+      // Fonts: preconnect first, then the stylesheet itself — loading it from
+      // <head> (instead of a CSS @import inside styles.css) lets the browser
+      // fetch fonts in parallel with the app CSS instead of chaining the two.
+      // Weights trimmed to what the design uses: Spectral 400/500/600 + 400i,
+      // Source Sans 3 400/500/600/700, Noto Serif JP 400/700/900.
       { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
       { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' },
-      { rel: 'preconnect', href: 'https://app.lemonsqueezy.com' },
+      // /api/price calls api.polar.sh server-side; the click-through buy
+      // button on Polar's hosted checkout lives on buy.polar.sh — preconnect
+      // warms the TLS session before the navigation and is cheap.
+      { rel: 'preconnect', href: 'https://buy.polar.sh' },
+      {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Source+Sans+3:wght@400;500;600;700&family=Noto+Serif+JP:wght@400;700;900&display=swap',
+      },
       { rel: 'stylesheet', href: appCss },
     ],
     scripts: [
-      // Lemon.js — powers the overlay checkout for the Premium tier.
-      // Defers so it never blocks first paint; the inline initializer below
-      // calls `createLemonSqueezy()` once the global is ready, which then
-      // intercepts clicks on anchors with class="lemonsqueezy-button".
-      {
-        src: 'https://app.lemonsqueezy.com/js/lemon.js',
-        defer: true,
-      },
-      {
-        children:
-          '(function(){function r(){if(window.createLemonSqueezy){window.createLemonSqueezy()}else{setTimeout(r,80)}}if(document.readyState!=="loading"){r()}else{document.addEventListener("DOMContentLoaded",r)}})();',
-      },
+      // Polar's checkout is a plain hosted page (buy.polar.sh/...) — no
+      // overlay JS to load. The click is a normal navigation, which is why
+      // we only preconnect to buy.polar.sh above and ship no extra script.
       {
         type: 'application/ld+json',
         children: JSON.stringify(softwareApplicationLd),
@@ -292,26 +317,27 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        {children}
+        <I18nProvider>{children}</I18nProvider>
         {/* Vercel Web Analytics — cookieless, no PII, aggregate counts only.
-            Mounts a tiny script (~1KB) that fires page-view beacons. No-ops
-            outside Vercel (dev console logs a notice and does nothing). */}
+            No-op outside Vercel (dev console logs a notice and does nothing). */}
         <Analytics />
-        {/* Vercel Speed Insights — collects Core Web Vitals (LCP, INP, CLS)
-            from real visits and reports them in the Vercel dashboard.
-            Cookieless, sampled, no PII. Also a no-op outside production. */}
+        {/* Vercel Speed Insights — Core Web Vitals from real visits.
+            Cookieless, sampled, no PII. No-op outside production. */}
         <SpeedInsights />
-        {import.meta.env.DEV && (
-          <TanStackDevtools
-            config={{ position: 'bottom-right' }}
-            plugins={[
-              {
-                name: 'Tanstack Router',
-                render: <TanStackRouterDevtoolsPanel />,
-              },
-            ]}
-          />
-        )}
+        {/* No DEV guard — `@tanstack/devtools-vite` strips this entire
+            element (and its imports) from production builds automatically.
+            Wrapping it in `import.meta.env.DEV && (...)` breaks the plugin's
+            transform on devtools-vite >= 0.7 because the strip leaves
+            `&& ()` behind. */}
+        <TanStackDevtools
+          config={{ position: 'bottom-right' }}
+          plugins={[
+            {
+              name: 'Tanstack Router',
+              render: <TanStackRouterDevtoolsPanel />,
+            },
+          ]}
+        />
         <Scripts />
       </body>
     </html>

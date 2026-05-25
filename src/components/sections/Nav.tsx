@@ -1,13 +1,34 @@
 import { useEffect, useState } from 'react'
-import { Download } from 'lucide-react'
+import { Download, MessageCircle, X } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
+import { LanguageSwitcher } from '#/components/LanguageSwitcher'
 
 const SECTIONS = ['features', 'saga', 'health', 'pricing', 'faq', 'contact'] as const
 type SectionId = (typeof SECTIONS)[number]
 
+// Desktop bar shows only the conversion-critical trio. History, Health, and
+// Contact remain reachable via the full mobile drawer and in-page scroll, so
+// the desktop header can breathe.
+const DESKTOP_SECTIONS: ReadonlyArray<SectionId> = ['features', 'pricing', 'faq']
+
+// Maps each section to a single-character kanji used as a quiet seal next to
+// the link in the mobile drawer. Keeps the menu visually anchored to the
+// brand's ink-on-washi aesthetic rather than a generic bullet list.
+const SECTION_KANJI: Record<SectionId, string> = {
+  features: '基',
+  saga: '史',
+  health: '健',
+  pricing: '価',
+  faq: '問',
+  contact: '文',
+}
+
 export function Nav() {
+  const { t } = useTranslation()
   const [scrolled, setScrolled] = useState(false)
   const [active, setActive] = useState<SectionId | null>(null)
   const [progress, setProgress] = useState(0)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
     const onScroll = () => {
@@ -32,7 +53,6 @@ export function Nav() {
         for (const e of entries) {
           visibility.set(e.target.id as SectionId, e.isIntersecting)
         }
-        // Pick the first section (by source order) currently in view.
         const first = SECTIONS.find((id) => visibility.get(id))
         setActive(first ?? null)
       },
@@ -42,25 +62,48 @@ export function Nav() {
     return () => io.disconnect()
   }, [])
 
+  // Body scroll lock + escape-to-close while the drawer is open.
+  useEffect(() => {
+    if (!menuOpen) return
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMenuOpen(false)
+    }
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.body.style.overflow = prev
+      document.removeEventListener('keydown', onKey)
+    }
+  }, [menuOpen])
+
   return (
     <header
       data-scrolled={scrolled ? 'true' : 'false'}
       className="sticky top-0 z-40 w-full border-b border-transparent bg-[color-mix(in_oklab,var(--washi)_78%,transparent)] backdrop-blur-md transition-[background-color,border-color,box-shadow,height] duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] data-[scrolled=true]:border-[var(--line-strong)] data-[scrolled=true]:shadow-[0_1px_0_rgba(28,26,23,0.04),0_8px_24px_-12px_rgba(28,26,23,0.18)]"
     >
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-6 px-5 sm:h-20 sm:px-8 lg:px-10">
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-5 sm:h-20 sm:px-8 md:gap-5 lg:gap-6 lg:px-10">
         <a
           href="#"
           className="group flex items-center gap-3 leading-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 rounded-md"
-          aria-label="Battery Sensei — home"
+          aria-label={t('nav.ariaHome')}
         >
           <img
-            src="/app-icon.png"
-            srcSet="/app-icon-256.png 1x, /app-icon.png 2x"
+            src="/logo-256.webp"
+            srcSet="/logo-256.webp 1x, /logo-512.webp 2x"
+            width="44"
+            height="44"
             alt=""
             aria-hidden
+            // First above-fold image → LCP candidate. Eager + high priority
+            // + the matching <link rel="preload"> in __root.tsx kick the
+            // request off before hydration discovers this img.
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
             className="h-10 w-10 shrink-0 transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-rotate-3 sm:h-11 sm:w-11"
           />
-          <span className="hidden sm:flex flex-col items-start gap-[2px] min-w-0">
+          <span className="hidden lg:flex flex-col items-start gap-[2px] min-w-0">
             <span className="display-title text-[12px] font-semibold uppercase tracking-[0.22em] text-sumi whitespace-nowrap leading-none">
               Battery Sensei
             </span>
@@ -70,26 +113,54 @@ export function Nav() {
           </span>
         </a>
 
-        <nav className="hidden items-center gap-7 md:flex" aria-label="Primary">
-          {SECTIONS.map((id) => (
+        <nav className="hidden items-center gap-6 md:flex lg:gap-8" aria-label={t('nav.ariaPrimary')}>
+          {DESKTOP_SECTIONS.map((id) => (
             <a
               key={id}
               href={`#${id}`}
               data-active={active === id ? 'true' : 'false'}
-              className="nav-link capitalize"
+              className="nav-link"
             >
-              {id}
+              {t(`nav.sections.${id}`)}
             </a>
           ))}
         </nav>
 
-        <a
-          href="#download"
-          className="btn-sumi inline-flex h-9 items-center gap-2 rounded-md px-4 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
-        >
-          <Download className="h-3.5 w-3.5" strokeWidth={1.8} />
-          <span className="hidden xs:inline sm:inline">Download</span>
-        </a>
+        <div className="flex items-center gap-2">
+          {/* Quiet support affordance — signals "humans answer here" without
+              competing with the primary nav. Icon-only on md to save room;
+              label appears at lg where the wordmark also shows. */}
+          <a
+            href="#contact"
+            aria-label={t('nav.supportAria')}
+            className="nav-support hidden md:inline-flex items-center gap-2 h-9 px-2.5 lg:px-3 rounded-md text-sm text-sumi-soft hover:text-hinomaru transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40"
+          >
+            <MessageCircle className="h-4 w-4" strokeWidth={1.7} aria-hidden />
+            <span className="hidden lg:inline">{t('nav.support')}</span>
+          </a>
+          {/* Language switcher: visible on md+; mobile gets it inside the drawer. */}
+          <LanguageSwitcher className="hidden md:block" />
+          <a
+            href="#download"
+            className="btn-sumi hidden md:inline-flex h-9 items-center gap-2 rounded-md px-4 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
+          >
+            <Download className="h-3.5 w-3.5" strokeWidth={1.8} />
+            <span>{t('common.download')}</span>
+          </a>
+
+          {/* Brush-stroke hamburger — three sumi lines that tilt + spread on
+              hover. Visible only below md where the desktop nav is hidden. */}
+          <button
+            type="button"
+            onClick={() => setMenuOpen(true)}
+            aria-label={t('nav.openMenu')}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-drawer"
+            className="md:hidden group inline-flex h-10 w-10 items-center justify-center rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] text-sumi-soft transition-colors duration-200 hover:border-[var(--line-strong)] hover:text-sumi focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40"
+          >
+            <BrushBurger />
+          </button>
+        </div>
       </div>
 
       <span
@@ -97,6 +168,171 @@ export function Nav() {
         className="pointer-events-none absolute inset-x-0 bottom-0 h-px origin-left bg-gradient-to-r from-hinomaru/0 via-hinomaru/50 to-hinomaru/0 transition-transform duration-150 ease-out"
         style={{ transform: `scaleX(${progress})` }}
       />
+
+      <MobileDrawer
+        open={menuOpen}
+        active={active}
+        onClose={() => setMenuOpen(false)}
+      />
     </header>
+  )
+}
+
+function BrushBurger() {
+  return (
+    <svg
+      viewBox="0 0 22 14"
+      width="22"
+      height="14"
+      aria-hidden
+      className="text-current"
+    >
+      <g fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="1.6">
+        {/* Slight length variation + endpoint stagger so the bars read as
+            three brush strokes rather than a clinical hamburger. */}
+        <line x1="2" y1="2"  x2="20" y2="2" />
+        <line x1="3" y1="7"  x2="17" y2="7" />
+        <line x1="2" y1="12" x2="19" y2="12" />
+      </g>
+    </svg>
+  )
+}
+
+function MobileDrawer({
+  open,
+  active,
+  onClose,
+}: {
+  open: boolean
+  active: SectionId | null
+  onClose: () => void
+}) {
+  const { t } = useTranslation()
+
+  return (
+    <div
+      id="mobile-drawer"
+      data-open={open ? 'true' : 'false'}
+      className="md:hidden fixed inset-0 z-50 pointer-events-none data-[open=true]:pointer-events-auto"
+      aria-hidden={!open}
+    >
+      {/* Washi-wash backdrop — soft warm scrim that doesn't go full black. */}
+      <button
+        type="button"
+        tabIndex={open ? 0 : -1}
+        aria-label={t('nav.closeMenu')}
+        onClick={onClose}
+        className="absolute inset-0 bg-[color-mix(in_oklab,var(--sumi)_55%,transparent)] backdrop-blur-[2px] opacity-0 transition-opacity duration-[320ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] data-[open=true]:opacity-100"
+        data-open={open ? 'true' : 'false'}
+      />
+
+      {/* Sheet panel — washi-textured paper that slides down from the top. */}
+      <aside
+        role="dialog"
+        aria-modal="true"
+        aria-label={t('nav.ariaPrimary')}
+        className="absolute inset-x-0 top-0 max-h-[100dvh] overflow-y-auto bg-[color-mix(in_oklab,var(--washi)_94%,#fff)] shadow-[0_18px_40px_-22px_rgba(28,26,23,0.45)] -translate-y-full transition-transform duration-[360ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] data-[open=true]:translate-y-0"
+        data-open={open ? 'true' : 'false'}
+      >
+        {/* Header bar inside the sheet — mirrors the page header so the
+            transition feels like a panel unfolding from it. */}
+        <div className="flex items-center justify-between gap-3 px-5 h-16 border-b border-[var(--line)]">
+          <span className="flex items-center gap-2.5 leading-none">
+            <img
+              src="/logo-256.webp"
+              srcSet="/logo-256.webp 1x, /logo-512.webp 2x"
+              width="36"
+              height="36"
+              alt=""
+              aria-hidden
+              decoding="async"
+              className="h-9 w-9"
+            />
+            <span className="flex flex-col items-start gap-[2px]">
+              <span className="display-title text-[11px] font-semibold uppercase tracking-[0.22em] text-sumi leading-none">
+                Battery Sensei
+              </span>
+              <span className="font-jp text-[10px] tracking-[0.36em] text-hinomaru/80 leading-none">
+                電池先生
+              </span>
+            </span>
+          </span>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label={t('nav.closeMenu')}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-md text-sumi-soft transition-colors duration-200 hover:text-sumi hover:bg-[color-mix(in_oklab,var(--washi-deep)_55%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40"
+          >
+            <X className="h-5 w-5" strokeWidth={1.6} aria-hidden />
+          </button>
+        </div>
+
+        {/* Section list — each row gets a kanji seal + section name. Generous
+            tap targets, sumi divider rules. */}
+        <nav className="px-5 pt-5 pb-2" aria-label={t('nav.ariaPrimary')}>
+          <ul className="flex flex-col">
+            {SECTIONS.map((id, i) => {
+              const isActive = active === id
+              return (
+                <li key={id}>
+                  <a
+                    href={`#${id}`}
+                    onClick={onClose}
+                    data-active={isActive ? 'true' : 'false'}
+                    className="group flex items-center justify-between gap-4 py-4 border-b border-[var(--line)] last:border-b-0"
+                  >
+                    <span className="flex items-baseline gap-4 min-w-0">
+                      <span
+                        aria-hidden
+                        className="font-jp text-2xl leading-none text-hinomaru/70 group-hover:text-hinomaru transition-colors w-8 text-center tabular-nums"
+                      >
+                        {SECTION_KANJI[id]}
+                      </span>
+                      <span className="display-title text-[1.25rem] font-medium text-sumi group-data-[active=true]:text-hinomaru transition-colors">
+                        {t(`nav.sections.${id}`)}
+                      </span>
+                    </span>
+                    <span
+                      aria-hidden
+                      className="text-nezumi tabular-nums text-[10px] uppercase tracking-[0.18em]"
+                    >
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                  </a>
+                </li>
+              )
+            })}
+          </ul>
+        </nav>
+
+        {/* Brush divider between sections + utilities. */}
+        <div className="px-5 mt-4">
+          <span
+            aria-hidden
+            className="block h-px w-full bg-gradient-to-r from-transparent via-[var(--line-strong)] to-transparent"
+          />
+        </div>
+
+        {/* Language switcher — inline variant so it reads as part of the menu. */}
+        <div className="px-5 pt-6">
+          <LanguageSwitcher variant="inline" />
+        </div>
+
+        {/* Primary CTA + closing hanko-style mark. */}
+        <div className="px-5 pt-7 pb-8 flex flex-col gap-4">
+          <a
+            href="#download"
+            onClick={onClose}
+            className="btn-sumi inline-flex h-12 items-center justify-center gap-2.5 rounded-md px-6 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40"
+          >
+            <Download className="h-4 w-4" strokeWidth={1.8} aria-hidden />
+            {t('common.downloadMac')}
+          </a>
+          <p className="text-center font-jp text-[11px] tracking-[0.36em] text-nezumi">
+            静 か な 力
+          </p>
+        </div>
+      </aside>
+    </div>
   )
 }

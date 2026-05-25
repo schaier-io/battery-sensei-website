@@ -14,7 +14,7 @@ type RevealProps = {
 
 export function Reveal({
   children,
-  as: Tag = 'div',
+  as = 'div',
   delay = 0,
   className = '',
   stamp = false,
@@ -23,6 +23,10 @@ export function Reveal({
   style,
   id,
 }: RevealProps) {
+  // React 19 + TS 6 collapse polymorphic ElementType props to `never` at
+  // the call site. The plain `any` cast is the standard escape hatch.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const Tag: any = as
   const ref = useRef<HTMLElement>(null)
 
   useEffect(() => {

@@ -188,7 +188,7 @@ function AlertCard({ percent, revealed }: { percent: number; revealed: boolean }
         />
       </div>
 
-      <p className="display-title mt-3 text-[2.25rem] font-bold leading-none tabular-nums tracking-[-0.02em] text-sumi">
+      <p className="display-title mt-3 text-[2.25rem] font-semibold leading-none tabular-nums tracking-[-0.02em] text-sumi">
         {percent}%
       </p>
 

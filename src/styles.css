@@ -1,12 +1,11 @@
 /* Type pairing:
-   - Spectral: bookish display serif with sumi-brush calligraphic terminals.
-     Italic carries the brand's whispered second-line voice. Replaces Fraunces,
-     which read as editorial-template.
-   - Source Sans 3: humanist body sans with warmer reading colour than Inter.
-     Italic available where the JP/EN voice mixes (rare). Replaces Inter.
-   - Noto Serif JP: kept; it harmonises with Spectral and remains the
-     authoritative Japanese cut for headings and accents. */
-@import url('https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Noto+Serif+JP:wght@400;500;700;900&display=swap');
+   - Spectral: bookish display serif. Loaded via `<link>` in __root.tsx so the
+     stylesheet fetches in parallel with this file instead of chaining behind
+     it. Italic 400 carries the whispered second-line voice; other italics
+     and the 700 weight aren't used here.
+   - Source Sans 3: humanist body sans. Weights 400/500/600/700, no italic
+     (italic in the design is always on the display serif).
+   - Noto Serif JP: kept for the seal/kanji accents at 400/700/900. */
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
@@ -164,6 +163,18 @@ body,
   min-height: 100%;
 }
 
+/* Smooth in-page anchor jumps — affects nav and the hero's "Read more"
+   chevron. Honored only when the user hasn't requested reduced motion. */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 body {
   margin: 0;
   color: var(--sumi);
@@ -254,46 +265,53 @@ body::after {
   z-index: 1;
 }
 
-.display-title {
-  font-family: var(--font-display);
-  font-weight: 500;
-  letter-spacing: var(--tracking-heading);
-  line-height: var(--leading-heading);
-  /* Spectral's lining figures + discretionary ligatures lift the headlines. */
-  font-feature-settings: 'kern', 'liga', 'dlig', 'lnum';
-  font-optical-sizing: auto;
-  text-wrap: balance;
-}
+/* Display typography lives in @layer components so Tailwind utility classes
+   (font-medium / font-semibold / italic, in @layer utilities) cascade above
+   it. Without the layer, .display-title — being defined later in this file
+   than the imported Tailwind utilities — silently overrode every weight
+   override on the markup, collapsing the whole site to font-weight 500. */
+@layer components {
+  .display-title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: var(--tracking-heading);
+    line-height: var(--leading-heading);
+    /* Spectral's lining figures + discretionary ligatures lift the headlines. */
+    font-feature-settings: 'kern', 'liga', 'dlig', 'lnum';
+    font-optical-sizing: auto;
+    text-wrap: balance;
+  }
 
-.display-title em,
-.display-title i,
-.display-title .italic {
-  font-style: italic;
-  font-weight: 400;
-}
+  .display-title em,
+  .display-title i,
+  .display-title .italic {
+    font-style: italic;
+    font-weight: 400;
+  }
 
-/* Hero-scale display — fluid clamp, tighter tracking, balanced wrap. */
-.hero-display {
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: var(--text-display);
-  letter-spacing: var(--tracking-display);
-  line-height: var(--leading-display);
-  font-feature-settings: 'kern', 'liga', 'dlig', 'lnum';
-  font-optical-sizing: auto;
-  text-wrap: balance;
-}
+  /* Hero-scale display — fluid clamp, tighter tracking, balanced wrap. */
+  .hero-display {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: var(--text-display);
+    letter-spacing: var(--tracking-display);
+    line-height: var(--leading-display);
+    font-feature-settings: 'kern', 'liga', 'dlig', 'lnum';
+    font-optical-sizing: auto;
+    text-wrap: balance;
+  }
 
-/* Section headings — replaces the repeated text-3xl md:text-5xl pattern. */
-.section-heading {
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: var(--text-h2);
-  letter-spacing: var(--tracking-heading);
-  line-height: var(--leading-heading);
-  font-feature-settings: 'kern', 'liga', 'dlig', 'lnum';
-  font-optical-sizing: auto;
-  text-wrap: balance;
+  /* Section headings — replaces the repeated text-3xl md:text-5xl pattern. */
+  .section-heading {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: var(--text-h2);
+    letter-spacing: var(--tracking-heading);
+    line-height: var(--leading-heading);
+    font-feature-settings: 'kern', 'liga', 'dlig', 'lnum';
+    font-optical-sizing: auto;
+    text-wrap: balance;
+  }
 }
 
 .font-jp {
@@ -538,6 +556,95 @@ body::after {
 @keyframes enso-fade-in {
   from { opacity: 0; }
   to   { opacity: 1; }
+}
+
+/* Text-selection contrast — washi (cream) backgrounds clash with the
+   browser default light-blue selection on most platforms, washing out
+   the selected text. Override with a hinomaru wash that still passes
+   AA contrast against sumi text. */
+::selection {
+  background-color: color-mix(in oklab, var(--hinomaru) 26%, transparent);
+  color: var(--sumi);
+  text-shadow: none;
+}
+::-moz-selection {
+  background-color: color-mix(in oklab, var(--hinomaru) 26%, transparent);
+  color: var(--sumi);
+  text-shadow: none;
+}
+
+/* Gentle scroll-down bob — used on hero scroll cue + Read more arrow. */
+@keyframes gentle-bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(5px); }
+}
+.animate-gentle-bob { animation: gentle-bob 1.9s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .animate-gentle-bob { animation: none; }
+}
+
+/* Language dropdown — open/close + per-item stagger.
+   Origin-aware: scales from the trigger corner so the panel feels
+   anchored. Right-anchored vs left-anchored variants set --origin-x. */
+@keyframes lang-pop-in {
+  0%   { opacity: 0; transform: translateY(-6px) scale(0.96); }
+  60%  { opacity: 1; }
+  100% { opacity: 1; transform: translateY(0)    scale(1); }
+}
+@keyframes lang-pop-out {
+  0%   { opacity: 1; transform: translateY(0)    scale(1); }
+  100% { opacity: 0; transform: translateY(-4px) scale(0.97); }
+}
+.lang-pop {
+  transform-origin: var(--origin-x, 100%) top;
+  will-change: opacity, transform;
+}
+.lang-pop[data-state="open"]    { animation: lang-pop-in  220ms cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.lang-pop[data-state="closing"] { animation: lang-pop-out 180ms cubic-bezier(0.4, 0.0, 1.0, 1) both; }
+
+@keyframes lang-item-in {
+  from { opacity: 0; transform: translateX(-6px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.lang-pop[data-state="open"] .lang-item {
+  animation: lang-item-in 320ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation-delay: calc(80ms + (var(--i, 0) * 38ms));
+}
+.lang-pop[data-state="open"] .lang-pop-header {
+  animation: lang-item-in 280ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation-delay: 40ms;
+}
+
+/* Hover ink rule — a brushy line sweeps in from the left under each item. */
+.lang-item-rule {
+  position: absolute;
+  left: 12px; right: 12px; bottom: 4px; height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--hinomaru) 28%, transparent) 40%, transparent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 320ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  pointer-events: none;
+}
+.lang-item:hover .lang-item-rule,
+.lang-item:focus-visible .lang-item-rule { transform: scaleX(1); }
+
+/* Trigger chevron rotates open. */
+.lang-chevron { transition: transform 240ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+.lang-trigger[aria-expanded="true"] .lang-chevron { transform: rotate(180deg); }
+
+/* Language glyph micro-lift on hover/open. */
+.lang-glyph-anim { transition: transform 320ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+.lang-trigger:hover .lang-glyph-anim,
+.lang-trigger[aria-expanded="true"] .lang-glyph-anim {
+  transform: translateY(-1px) rotate(-3deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lang-pop[data-state="open"],
+  .lang-pop[data-state="closing"],
+  .lang-pop[data-state="open"] .lang-item,
+  .lang-pop[data-state="open"] .lang-pop-header { animation: none; }
+  .lang-chevron, .lang-glyph-anim, .lang-item-rule { transition: none; }
 }
 
 /* Bristled brush ring — animated reveal mask (BrushRing.tsx).

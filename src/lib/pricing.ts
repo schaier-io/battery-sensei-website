@@ -1,14 +1,13 @@
-// Localized price table for Sensei Premium.
+// Localized price table for Sensei Premium — used as the **fallback** when the
+// live `/api/price` endpoint (which talks to Polar's Checkout API for the true
+// per-country preview including FX + VAT) is unreachable or unconfigured. See
+// `api/price.ts` and `use-price.ts` for the live path.
 //
-// USD is the canonical price (used in schema.org offers + the LemonSqueezy
-// charge). Display prices in each region are hand-picked for psychological
-// price comfort — charm pricing (.99 / .49) in Western markets, whole numbers
-// in CHF/JPY/NOK/SEK/INR where charm-pricing reads as cheap-and-spammy.
-// They're rough approximations of USD 3.99, not live FX rates.
-//
-// LemonSqueezy will charge the user's actual local currency at checkout
-// (computed from billing country), which is what gets reconciled. The
-// website's price is a marketing surface, not the source of truth.
+// USD is the canonical price (used in schema.org offers + the Polar charge).
+// Display prices in each region are hand-picked for psychological price
+// comfort — charm pricing (.99 / .49) in Western markets, whole numbers in
+// CHF/JPY/NOK/SEK/INR where charm-pricing reads as cheap-and-spammy. They're
+// rough approximations of USD 3.99, not live FX rates.
 
 export type PriceEntry = {
   amount: number
@@ -57,12 +56,17 @@ export function priceForLocale(locale: string | undefined): PriceEntry {
   if (!locale) return US
   try {
     const region = new Intl.Locale(locale).region
-    if (!region) return US
-    if (EUROZONE.has(region)) return EU
-    return REGION_TO_PRICE[region] ?? US
+    return priceForCountry(region)
   } catch {
     return US
   }
+}
+
+export function priceForCountry(country: string | null | undefined): PriceEntry {
+  if (!country) return US
+  const code = country.toUpperCase()
+  if (EUROZONE.has(code)) return EU
+  return REGION_TO_PRICE[code] ?? US
 }
 
 // Format the entry's amount as a currency string in its native locale.
@@ -85,6 +89,22 @@ export function formatZero(entry: PriceEntry): string {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   }).format(0)
+}
+
+/**
+ * Format an arbitrary amount in the entry's currency + locale, used by the
+ * derived Lifetime prices (yearly + 1, yearly × 3). Whole-number currencies
+ * (JPY/NOK/etc.) round to the nearest integer so we don't print "¥593.00".
+ */
+export function formatPriceAmount(entry: PriceEntry, amount: number): string {
+  const wholeOnly = Number.isInteger(entry.amount)
+  const rounded = wholeOnly ? Math.round(amount) : amount
+  return new Intl.NumberFormat(entry.locale, {
+    style: 'currency',
+    currency: entry.currency,
+    minimumFractionDigits: wholeOnly ? 0 : 2,
+    maximumFractionDigits: wholeOnly ? 0 : 2,
+  }).format(rounded)
 }
 
 export const CANONICAL_PRICE = US

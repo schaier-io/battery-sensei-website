@@ -94,7 +94,7 @@ export function WarningOverlay({
         />
       </div>
 
-      <p className="display-title mt-5 text-[3.25rem] font-bold leading-none tabular-nums tracking-[-0.02em] text-sumi">
+      <p className="display-title mt-5 text-[3.25rem] font-semibold leading-none tabular-nums tracking-[-0.02em] text-sumi">
         {percent}%
       </p>
 

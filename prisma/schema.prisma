@@ -1,0 +1,70 @@
+// Battery Sensei — contact form persistence.
+//
+// One table stores every contact-form submission that passes input
+// validation. Both the raw (as-received) payload and the cleaned/validated
+// fields are persisted, so we can audit exactly what was sent and how it
+// was normalised. Rate limiting is a count aggregate over this same table.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum SupportRequestStatus {
+  pending
+  sent
+  failed
+  rate_limited_email
+  rate_limited_ip
+  honeypot
+}
+
+model SupportRequest {
+  id       String @id @default(cuid())
+  // Short shared identifier shown to the visitor and in the inbox.
+  ticketId String @unique
+
+  // Raw, unmodified input as received from the client (post JSON.parse).
+  // Individual raw fields are kept for quick lookups; rawPayload is the
+  // full object for audit completeness.
+  rawName    String?
+  rawEmail   String?
+  rawTopic   String?
+  rawSubject String?
+  rawMessage String?
+  rawPayload Json
+
+  // Cleaned/validated values from the zod schema. These are what gets
+  // rendered into the support email (after HTML escaping).
+  name    String
+  email   String
+  topic   String
+  subject String
+  message String
+
+  // Request metadata for abuse investigation.
+  ipAddress String?
+  userAgent String?
+  origin    String?
+
+  // Resend message ids — useful for tracing delivery failures.
+  supportEmailId      String?
+  confirmationEmailId String?
+
+  status SupportRequestStatus @default(pending)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Email rate limit lookup: count rows where email = ? and createdAt > ?.
+  @@index([email, createdAt])
+  // IP rate limit lookup: count rows where ipAddress = ? and createdAt > ?.
+  @@index([ipAddress, createdAt])
+  // Operational dashboards: filter by status + recency.
+  @@index([status, createdAt])
+  @@index([createdAt])
+}
