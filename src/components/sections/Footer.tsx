@@ -75,10 +75,14 @@ export function Footer() {
             keeps it invisible on desktop where the header already shows
             both, so the affordance only appears where it's needed. */}
         <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 lg:hidden">
+          {/* Chat chip voice mirrors the LanguageSwitcher next to it
+              (h-9, tracked 12 px, lowercase-case sibling) so the two
+              chips read as a single utility row rather than mismatched
+              affordances thrown together at the breakpoint. */}
           <a
             href="#contact"
             aria-label={t('nav.supportAria')}
-            className="inline-flex h-9 items-center gap-2 rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] px-3 text-[0.8125rem] text-sumi-soft transition-colors duration-200 hover:text-hinomaru hover:border-[var(--line-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40"
+            className="inline-flex h-9 items-center gap-2 rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-2.5 text-[12px] font-medium uppercase tracking-[0.18em] text-sumi-soft transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:text-hinomaru hover:border-[var(--line-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40"
           >
             <MessageCircle className="h-3.5 w-3.5" strokeWidth={1.7} aria-hidden />
             <span>{t('nav.support')}</span>

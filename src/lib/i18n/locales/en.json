@@ -192,19 +192,26 @@
     "kicker": "Thank you · ありがとう",
     "videoCaption": "Sensei bows.",
     "openApp": "Open Sensei",
+    "downloadApp": "Download Sensei",
     "backToHome": "Back to homepage",
     "checkoutHint": "Order #{{id}}",
+    "delivery": {
+      "label": "License key · by email",
+      "from": "From <0>Polar</0> (our payment provider), usually within a minute.",
+      "spam": "Not in your inbox? Check spam. Still nothing after five minutes? Write to <0>sandro@schaier.io</0> and we'll resend it the same day.",
+      "supportEmail": "sandro@schaier.io"
+    },
     "lifetime": {
       "heading": "Welcome to Lifetime.",
       "headingItalic": "Every Premium feature, forever.",
       "body": "Your key is on its way by email. Open Sensei, then <0>Settings → Premium</0>, and paste it in. That's the last ask — <1>three Macs of your own</1>, every Premium feature Sensei ever ships, forever. No login. No account.",
-      "next": "If the email doesn't arrive within five minutes, check spam. Still nothing? Write to us — we'll resend it the same day."
+      "next": "Haven't downloaded Sensei yet? Grab it below, then drop the key into Settings → Premium."
     },
     "support": {
       "heading": "Thank you for the year ahead.",
       "headingItalic": "Premium unlocked, on up to five Macs.",
       "body": "Your key is on its way by email. Open Sensei, then <0>Settings → Premium</0>, and paste it in. <1>Up to five Macs</1>, a full year of new builds and quiet email support. Manage or cancel any time from your Polar dashboard.",
-      "next": "We'll email you once when the year is nearly up — never a silent re-charge."
+      "next": "We'll email you once when the year is nearly up — never a silent re-charge. Haven't downloaded Sensei yet? Grab it below."
     }
   },
   "walkthrough": {

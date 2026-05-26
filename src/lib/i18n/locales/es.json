@@ -192,19 +192,26 @@
     "kicker": "Gracias · ありがとう",
     "videoCaption": "Sensei se inclina.",
     "openApp": "Abrir Sensei",
+    "downloadApp": "Descargar Sensei",
     "backToHome": "Volver a la página principal",
     "checkoutHint": "Pedido #{{id}}",
+    "delivery": {
+      "label": "Clave de licencia · por correo",
+      "from": "De <0>Polar</0> (nuestra plataforma de pago), normalmente en menos de un minuto.",
+      "spam": "¿No está en tu bandeja? Mira el spam. ¿Aún nada después de cinco minutos? Escribe a <0>sandro@schaier.io</0> y la reenviamos el mismo día.",
+      "supportEmail": "sandro@schaier.io"
+    },
     "lifetime": {
       "heading": "Bienvenida a Lifetime.",
       "headingItalic": "Cada función Premium, para siempre.",
       "body": "Tu clave va de camino por correo. Abre Sensei, luego <0>Ajustes → Premium</0>, y pégala. Eso es todo — <1>tres Macs tuyos</1>, cada función Premium que Sensei publique, para siempre. Sin login. Sin cuenta.",
-      "next": "Si el correo no llega en cinco minutos, mira el spam. ¿Aún nada? Escríbenos — lo reenviamos el mismo día."
+      "next": "¿Aún no has descargado Sensei? Hazlo abajo y pega la clave en Ajustes → Premium."
     },
     "support": {
       "heading": "Gracias por el año que viene.",
       "headingItalic": "Premium desbloqueado, hasta en 5 Macs.",
       "body": "Tu clave va de camino por correo. Abre Sensei, luego <0>Ajustes → Premium</0>, y pégala. <1>Hasta cinco Macs</1>, un año entero de nuevas versiones y soporte por correo, sin ruido. Gestiona o cancela cuando quieras desde tu panel de Polar.",
-      "next": "Te escribiremos una sola vez cuando el año esté por terminar — nunca un cargo silencioso."
+      "next": "Te escribiremos una sola vez cuando el año esté por terminar — nunca un cargo silencioso. ¿Aún no has descargado Sensei? Hazlo abajo."
     }
   },
   "walkthrough": {

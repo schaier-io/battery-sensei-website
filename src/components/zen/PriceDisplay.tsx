@@ -61,6 +61,11 @@ export function PriceDisplay({ entry, className, symbolClassName }: Props): Reac
 
   const symbolEl = (
     <span
+      // Inline `vertical-align` lifts the symbol ~0.08em above the digit
+      // baseline so it cap-aligns visually with the digits instead of
+      // sitting low like a subscript. Without this the symbol reads as a
+      // typographic afterthought; with it the price feels intentional.
+      style={{ verticalAlign: '0.08em' }}
       className={
         symbolClassName ??
         // 0.6em keeps the symbol comfortably inside the cap-height of

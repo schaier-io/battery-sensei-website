@@ -192,19 +192,26 @@
     "kicker": "Danke · ありがとう",
     "videoCaption": "Sensei verbeugt sich.",
     "openApp": "Sensei öffnen",
+    "downloadApp": "Sensei laden",
     "backToHome": "Zurück zur Startseite",
     "checkoutHint": "Bestellung #{{id}}",
+    "delivery": {
+      "label": "Lizenzschlüssel · per E-Mail",
+      "from": "Von <0>Polar</0> (unser Zahlungsanbieter), meist innerhalb einer Minute.",
+      "spam": "Nicht im Posteingang? Schau in den Spam-Ordner. Nach fünf Minuten immer noch nichts? Schreib an <0>sandro@schaier.io</0>, wir schicken ihn noch am selben Tag erneut.",
+      "supportEmail": "sandro@schaier.io"
+    },
     "lifetime": {
       "heading": "Willkommen bei Lifetime.",
       "headingItalic": "Jede Premium-Funktion, für immer.",
       "body": "Dein Schlüssel ist per E-Mail unterwegs. Öffne Sensei, dann <0>Einstellungen → Premium</0>, und füge ihn ein. Mehr ist nicht zu tun — <1>drei eigene Macs</1>, jede Premium-Funktion, die Sensei je ausliefert, für immer. Kein Login. Kein Konto.",
-      "next": "Sollte die E-Mail nicht innerhalb von fünf Minuten ankommen, schau in den Spam-Ordner. Immer noch nichts? Schreib uns — wir senden sie noch am selben Tag erneut."
+      "next": "Sensei noch nicht geladen? Hol's dir unten und füge den Schlüssel in Einstellungen → Premium ein."
     },
     "support": {
       "heading": "Danke für das kommende Jahr.",
       "headingItalic": "Premium freigeschaltet, auf bis zu 5 Macs.",
       "body": "Dein Schlüssel ist per E-Mail unterwegs. Öffne Sensei, dann <0>Einstellungen → Premium</0>, und füge ihn ein. <1>Bis zu fünf Macs</1>, ein ganzes Jahr neue Builds und ruhiger E-Mail-Support. Jederzeit über dein Polar-Dashboard verwalten oder kündigen.",
-      "next": "Wir melden uns einmal per Mail, kurz bevor das Jahr vorbei ist — nie eine stille erneute Abbuchung."
+      "next": "Wir melden uns einmal per Mail, kurz bevor das Jahr vorbei ist — nie eine stille erneute Abbuchung. Sensei noch nicht geladen? Hol's dir unten."
     }
   },
   "walkthrough": {

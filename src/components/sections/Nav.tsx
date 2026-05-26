@@ -83,8 +83,11 @@ export function Nav() {
       className="sticky top-0 z-40 w-full border-b border-transparent bg-[color-mix(in_oklab,var(--washi)_78%,transparent)] backdrop-blur-md transition-[background-color,border-color,box-shadow,height] duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] data-[scrolled=true]:border-[var(--line-strong)] data-[scrolled=true]:shadow-[0_1px_0_rgba(28,26,23,0.04),0_8px_24px_-12px_rgba(28,26,23,0.18)]"
     >
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-5 sm:h-20 sm:px-8 md:gap-5 lg:gap-6 lg:px-10">
+        {/* Anchor href "/" (not "#") so the browser back button + history
+            entries behave correctly. Clicking the wordmark on a deep
+            page returns to home; on home itself it's a no-op scroll. */}
         <a
-          href="#"
+          href="/"
           className="group flex items-center gap-3 leading-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 rounded-md"
           aria-label={t('nav.ariaHome')}
         >
@@ -320,17 +323,27 @@ function MobileDrawer({
           />
         </div>
 
-        {/* Chat + language switcher — both header utilities mirrored here
-            so mobile visitors get every affordance the desktop bar has
-            without scrolling to the footer. */}
+        {/* Chat row — voice tuned to match the inline LanguageSwitcher
+            header (kanji glyph + tracked label + brush rule) below it,
+            so the two utilities feel like one panel of options instead
+            of two unrelated links stacked vertically. */}
         <div className="px-5 pt-6">
           <a
             href="#contact"
             onClick={onClose}
-            className="inline-flex h-10 items-center gap-2 rounded-md px-3 text-sm text-sumi-soft transition-colors duration-200 hover:text-hinomaru focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40"
+            className="group flex items-center gap-3 rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_72%,#fff)] px-3.5 py-2.5 transition-colors duration-200 hover:border-[var(--line-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40"
           >
-            <MessageCircle className="h-4 w-4" strokeWidth={1.7} aria-hidden />
-            <span>{t('nav.support')}</span>
+            <span aria-hidden className="font-jp text-base leading-none text-hinomaru/80 w-5 text-center">
+              文
+            </span>
+            <span className="display-title text-[0.9375rem] font-medium text-sumi truncate">
+              {t('nav.support')}
+            </span>
+            <MessageCircle
+              aria-hidden
+              className="ml-auto h-4 w-4 text-nezumi transition-colors group-hover:text-sumi"
+              strokeWidth={1.7}
+            />
           </a>
         </div>
         <div className="px-5 pt-3">

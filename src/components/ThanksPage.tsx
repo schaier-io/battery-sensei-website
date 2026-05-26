@@ -1,5 +1,5 @@
 import { Link, useSearch } from '@tanstack/react-router'
-import { ArrowLeft, Download as DownloadIcon } from 'lucide-react'
+import { ArrowLeft, Download as DownloadIcon, Mail, Sparkles } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { Hanko } from '#/components/zen/Hanko'
@@ -98,23 +98,51 @@ export function ThanksPage({ tier, kanji }: { tier: Tier; kanji: string }) {
         </section>
 
         <section className="zen-section mx-auto max-w-3xl px-5 pt-2 sm:px-6">
-          <Reveal as="p" delay={500} className="text-center text-[0.9375rem] leading-[1.65] text-sumi-soft">
-            {t(`${key}.next`)}
+          {/* Delivery card — explicit sender + spam guidance so visitors
+              know exactly which message to look for and where to write
+              if it never lands. The kanji 鍵 (kagi / key) anchors the
+              card as a "key arrives here" piece of brand language; the
+              ruled brush-divider mirrors the LanguageSwitcher header so
+              the card feels native to the site's washi-and-ink system. */}
+          <Reveal delay={480}>
+            <DeliveryCard />
           </Reveal>
 
           <Reveal
-            delay={580}
-            className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row"
+            as="p"
+            delay={540}
+            className="mt-6 text-center text-[0.9375rem] leading-[1.65] text-sumi-soft"
+          >
+            {t(`${key}.next`)}
+          </Reveal>
+
+          {/* CTA row — three actions ordered by buyer intent.
+                Primary  · Open Sensei  (most buyers already installed during the 5-day trial)
+                Secondary · Download    (newcomers who paid before downloading)
+                Tertiary · Back to home (escape hatch, plain link) */}
+          <Reveal
+            delay={620}
+            className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap"
           >
             <a
               href="batterysensei://open"
               className="btn-sumi group inline-flex h-11 items-center gap-2.5 rounded-md px-6 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
             >
-              <DownloadIcon
+              <Sparkles
                 className="h-4 w-4 transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5"
                 strokeWidth={1.8}
               />
               {t('thanks.openApp')}
+            </a>
+            <a
+              href="/download/latest"
+              className="group inline-flex h-11 items-center gap-2.5 rounded-md border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] px-6 text-sm font-medium text-sumi transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:bg-[color-mix(in_oklab,var(--washi)_45%,#fff)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
+            >
+              <DownloadIcon
+                className="h-4 w-4 transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5"
+                strokeWidth={1.8}
+              />
+              {t('thanks.downloadApp')}
             </a>
             <Link
               to="/"
@@ -132,18 +160,89 @@ export function ThanksPage({ tier, kanji }: { tier: Tier; kanji: string }) {
 }
 
 /**
+ * Delivery card — surfaces the email sender + spam-folder reassurance
+ * so a buyer knows exactly which message to look for. Brand parity:
+ * 鍵 (kagi / key) kanji + tracked label + brush rule mirrors the
+ * LanguageSwitcher dropdown header so the card feels native to the
+ * site's ink-on-washi system rather than bolted on.
+ *
+ * The two paragraphs use rich-text components so the locale string can
+ * bold the sender ("Polar") and the support address without forcing
+ * the translator to assemble HTML themselves.
+ */
+function DeliveryCard() {
+  const { t } = useTranslation()
+  return (
+    <div
+      role="note"
+      aria-label={t('thanks.delivery.label')}
+      className="mx-auto max-w-xl rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] px-5 py-5 sm:px-6"
+    >
+      <div className="flex items-center gap-3">
+        {/* 鍵 = "key". Matches the kanji-seal vocabulary the rest of the
+            site uses (基 features, 価 pricing, etc.). */}
+        <span
+          aria-hidden
+          className="font-jp text-base leading-none text-hinomaru/85 w-5 text-center"
+        >
+          鍵
+        </span>
+        <span className="display-title text-[11px] font-semibold uppercase tracking-[0.22em] text-sumi-soft">
+          {t('thanks.delivery.label')}
+        </span>
+        <span
+          aria-hidden
+          className="h-px flex-1 bg-gradient-to-r from-[var(--line-strong)] via-[var(--line)] to-transparent"
+        />
+        <Mail aria-hidden className="h-3.5 w-3.5 text-nezumi" strokeWidth={1.7} />
+      </div>
+      <p className="mt-3 text-[0.875rem] leading-[1.6] text-sumi-soft">
+        <Trans
+          i18nKey="thanks.delivery.from"
+          components={[<span className="font-semibold text-sumi" />]}
+        />
+      </p>
+      <p className="mt-1.5 text-[0.875rem] leading-[1.6] text-sumi-soft">
+        <Trans
+          i18nKey="thanks.delivery.spam"
+          components={[
+            <a
+              href={`mailto:${t('thanks.delivery.supportEmail')}?subject=License%20key%20resend`}
+              className="font-semibold text-sumi underline decoration-[var(--line-strong)] underline-offset-[3px] hover:decoration-sumi transition-colors"
+            />,
+          ]}
+        />
+      </p>
+    </div>
+  )
+}
+
+/**
  * Self-contained bow video that holds invisible for VIDEO_DELAY_MS so
- * the hero text + CTA fan out first, then fades in, plays once, and
- * fades out as the clip ends. No controls, no caption, no looping.
+ * the hero text + CTA fan out first, then fades in *as the bow actually
+ * starts moving*, plays once, and dissolves as the clip ends. No
+ * controls, no caption, no looping.
  *
  * Three phases tracked in `phase`:
  *   - 'hidden'  → opacity 0, video paused at frame 0 (initial)
- *   - 'in'      → opacity 1, video playing (after delay timer fires)
- *   - 'out'     → opacity 0, video paused at last frame (after onEnded)
+ *   - 'in'      → opacity 1, video playing (after `playing` event fires)
+ *   - 'out'     → opacity 0, video paused at last frame (after `ended`)
  *
- * `prefers-reduced-motion` skips the play() call entirely — the still
- * first frame fades in once and stays put, which is the gentler thing
- * to show someone who has asked the browser to settle down.
+ * Timing is two-stage:
+ *   1. At VIDEO_DELAY_MS we kick off `play()`. We do NOT fade in yet.
+ *   2. The browser fires `onPlaying` once a real frame has decoded; at
+ *      that moment we flip phase → 'in'. This avoids the small window
+ *      where a slow decode would otherwise fade in a blank/black frame.
+ *      A 350 ms safety timeout falls back to fading in regardless, in
+ *      case `playing` never fires (autoplay rejection, codec hiccup).
+ *
+ * `prefers-reduced-motion` skips play() entirely — the still first
+ * frame fades in once and stays put, which is the gentler thing to
+ * show someone who has asked the browser to settle down.
+ *
+ * `preload="auto"` lets the browser fetch the frames during the 3 s
+ * idle wait so play() doesn't have to wait on the network when it
+ * eventually fires.
  */
 function DelayedBowVideo() {
   const videoRef = useRef<HTMLVideoElement | null>(null)
@@ -154,19 +253,31 @@ function DelayedBowVideo() {
       '(prefers-reduced-motion: reduce)',
     ).matches
 
-    // Fade-in timer. Even with reduced motion we still bring the still
-    // into view — just without ever calling play().
-    const fadeInTimer = window.setTimeout(() => {
-      setPhase('in')
+    const timers: number[] = []
+    const startTimer = window.setTimeout(() => {
       const el = videoRef.current
-      if (!el || prefersReducedMotion) return
-      // play() returns a promise that can reject on some browsers if the
-      // tab is backgrounded or if autoplay policy bites. Swallow rejection
-      // silently — the still frame is a perfectly fine fallback.
+      if (!el) return
+      if (prefersReducedMotion) {
+        // Reduced-motion path: skip play, just bring the poster in.
+        setPhase('in')
+        return
+      }
+      // Kick off playback. The matching onPlaying handler flips phase
+      // → 'in' as soon as a real frame decodes. play() can reject on
+      // backgrounded tabs or hostile autoplay policies — swallow it
+      // silently and let the fallback timer reveal the still frame.
       el.play().catch(() => {})
+      // Safety net: if `playing` never fires within 350 ms, fade in
+      // anyway so the visitor isn't staring at empty space.
+      timers.push(
+        window.setTimeout(() => setPhase((p) => (p === 'hidden' ? 'in' : p)), 350),
+      )
     }, VIDEO_DELAY_MS)
+    timers.push(startTimer)
 
-    return () => window.clearTimeout(fadeInTimer)
+    return () => {
+      for (const id of timers) window.clearTimeout(id)
+    }
   }, [])
 
   return (
@@ -175,11 +286,12 @@ function DelayedBowVideo() {
       src="/ninja-thanks.mp4"
       muted
       playsInline
-      preload="metadata"
+      preload="auto"
       aria-hidden
       tabIndex={-1}
       disablePictureInPicture
       controlsList="nodownload noplaybackrate nofullscreen"
+      onPlaying={() => setPhase((p) => (p === 'hidden' ? 'in' : p))}
       onEnded={() => setPhase('out')}
       // Two transition durations — slower on the way out so the bow
       // settles into the page rather than blinking off. CSS transition

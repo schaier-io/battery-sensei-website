@@ -192,19 +192,26 @@
     "kicker": "Merci · ありがとう",
     "videoCaption": "Sensei s'incline.",
     "openApp": "Ouvrir Sensei",
+    "downloadApp": "Télécharger Sensei",
     "backToHome": "Retour à l'accueil",
     "checkoutHint": "Commande #{{id}}",
+    "delivery": {
+      "label": "Clé de licence · par e-mail",
+      "from": "De <0>Polar</0> (notre prestataire de paiement), généralement en moins d'une minute.",
+      "spam": "Pas dans ta boîte de réception ? Vérifie les spams. Toujours rien après cinq minutes ? Écris à <0>sandro@schaier.io</0> et nous la renvoyons le jour même.",
+      "supportEmail": "sandro@schaier.io"
+    },
     "lifetime": {
       "heading": "Bienvenue dans À vie.",
       "headingItalic": "Toutes les fonctionnalités Premium, pour toujours.",
       "body": "Ta clé arrive par e-mail. Ouvre Sensei, puis <0>Réglages → Premium</0>, et colle-la. C'est la dernière étape — <1>trois Macs à toi</1>, toutes les fonctionnalités Premium que Sensei livrera, pour toujours. Pas de connexion. Pas de compte.",
-      "next": "Si l'e-mail n'arrive pas dans les cinq minutes, vérifie les spams. Toujours rien ? Écris-nous — on le renvoie le jour même."
+      "next": "Pas encore téléchargé Sensei ? Récupère-le ci-dessous, puis colle la clé dans Réglages → Premium."
     },
     "support": {
       "heading": "Merci pour l'année à venir.",
       "headingItalic": "Premium déverrouillé, sur jusqu'à 5 Macs.",
       "body": "Ta clé arrive par e-mail. Ouvre Sensei, puis <0>Réglages → Premium</0>, et colle-la. <1>Jusqu'à cinq Macs</1>, une année entière de nouvelles versions et un support e-mail discret. Gère ou annule à tout moment depuis ton tableau de bord Polar.",
-      "next": "On t'écrira une seule fois, peu avant la fin de l'année — jamais de prélèvement silencieux."
+      "next": "On t'écrira une seule fois, peu avant la fin de l'année — jamais de prélèvement silencieux. Pas encore téléchargé Sensei ? Récupère-le ci-dessous."
     }
   },
   "walkthrough": {
