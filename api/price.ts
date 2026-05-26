@@ -34,12 +34,69 @@
  * VITE_POLAR_CHECKOUT_URL; the API token + product id are server-only.
  */
 
-import {
-  LIFETIME_DISCOUNT_CODE,
-  POLAR_API_BASE,
-  POLAR_TIMEOUT_MS,
-  resolveDiscountId,
-} from '../lib/polar-server'
+// ────────────────────────────────────────────────────────────────────
+//  Inlined Polar helpers — duplicated, NOT imported
+// ────────────────────────────────────────────────────────────────────
+//
+// Vercel's serverless bundler does NOT reliably traverse imports out
+// of `api/` into sibling directories (`/lib`, `/src/lib`) under this
+// project's TanStack Start + Vite build. Prod fails with
+// `ERR_MODULE_NOT_FOUND` even when the file is committed and the
+// import path resolves locally. `api/discount-availability.ts` and
+// `api/checkout-session.ts` document the same limitation.
+//
+// Search the codebase for `ZENMODE` / `resolveDiscountId` to find all
+// copies that need to stay in lockstep.
+
+const POLAR_API_BASE = 'https://api.polar.sh/v1'
+/** Launch discount auto-applied to every Lifetime preview. */
+const LIFETIME_DISCOUNT_CODE = 'ZENMODE'
+const POLAR_TIMEOUT_MS = 4_000
+
+type DiscountIdEntry = { id: string | null; expiresAt: number }
+const DISCOUNT_ID_TTL_MS = 10 * 60 * 1000
+const globalForDiscountCache = globalThis as unknown as {
+  __polarDiscountIdCache?: Map<string, DiscountIdEntry>
+}
+const discountIdCache: Map<string, DiscountIdEntry> =
+  globalForDiscountCache.__polarDiscountIdCache ??
+  (globalForDiscountCache.__polarDiscountIdCache = new Map())
+
+async function resolveDiscountId(code: string, token: string): Promise<string | null> {
+  const key = code.toUpperCase()
+  const now = Date.now()
+  const cached = discountIdCache.get(key)
+  if (cached && cached.expiresAt > now) return cached.id
+
+  const url = new URL(`${POLAR_API_BASE}/discounts`)
+  url.searchParams.set('query', code)
+  url.searchParams.set('limit', '20')
+
+  let id: string | null = null
+  try {
+    const r = await fetch(url, {
+      headers: { Authorization: `Bearer ${token}`, accept: 'application/json' },
+      signal: AbortSignal.timeout(POLAR_TIMEOUT_MS),
+    })
+    if (r.ok) {
+      const body = (await r.json()) as { items?: Array<{ id?: string; code?: string }> }
+      const items = Array.isArray(body.items) ? body.items : []
+      const match = items.find(
+        (d) => typeof d.code === 'string' && d.code.toUpperCase() === key,
+      )
+      id = typeof match?.id === 'string' ? match.id : null
+    } else {
+      console.warn('[price] discount list non-2xx', { status: r.status })
+    }
+  } catch (err) {
+    console.warn('[price] discount list threw', {
+      err: err instanceof Error ? err.message : String(err),
+    })
+  }
+
+  discountIdCache.set(key, { id, expiresAt: now + DISCOUNT_ID_TTL_MS })
+  return id
+}
 
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000
 

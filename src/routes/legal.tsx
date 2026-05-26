@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, Mail } from 'lucide-react'
 import { Trans, useTranslation } from 'react-i18next'
 import { Hanko } from '#/components/zen/Hanko'
 import { Reveal } from '#/components/zen/Reveal'
@@ -193,6 +193,24 @@ function LegalPage() {
                     i18nKey="legal.body.withdrawal.p3"
                     components={[<a className="legal-link" href="mailto:info@battery-sensei.app" />]}
                   />
+                </p>
+                {/* One-click refund-request mailto. Pre-fills subject +
+                    body so support can match the purchase by Polar order
+                    id in a few seconds; the hint underneath nudges the
+                    buyer to send from the address used at checkout so
+                    we don't have to verify identity over a second
+                    round-trip. */}
+                <p className="mt-2 flex flex-wrap items-center gap-3">
+                  <a
+                    href="mailto:info@battery-sensei.app?subject=Refund%20request%20%E2%80%94%20Battery%20Sensei&body=Hi%2C%0A%0AI%27d%20like%20to%20request%20a%20refund%20for%20my%20Battery%20Sensei%20purchase.%0A%0APolar%20order%20id%20%28if%20handy%29%3A%20%0AReason%20%28optional%29%3A%20%0A%0APlease%20note%3A%20I%20am%20sending%20this%20from%20the%20email%20I%20used%20at%20checkout.%0A%0AThanks%2C"
+                    className="btn-sumi inline-flex h-10 items-center gap-2 rounded-md px-4 text-[0.8125rem] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
+                  >
+                    <Mail className="h-3.5 w-3.5" strokeWidth={1.8} aria-hidden />
+                    {t('legal.body.withdrawal.refundCta')}
+                  </a>
+                  <span className="text-[0.8125rem] text-sumi-soft">
+                    {t('legal.body.withdrawal.refundCtaHint')}
+                  </span>
                 </p>
               </Block>
 

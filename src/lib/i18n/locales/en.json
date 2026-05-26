@@ -865,7 +865,9 @@
         "heading": "Your 14-day cooling-off right",
         "p1": "As a consumer resident in the European Union, you generally have <0>14 days</0> to withdraw from a distance contract under §1829 of the Czech Civil Code (Act No. 89/2012 Coll.).",
         "p2": "Because Battery Sensei is delivered as digital content immediately on payment, by completing checkout you expressly agree that performance begins immediately and acknowledge that, under <0>§1837(l) of the Czech Civil Code</0>, you lose the right of withdrawal once the licence key has been issued.",
-        "p3": "If your key has not yet been issued, or you have not yet activated it, you can still withdraw within 14 days — write to <0>info@battery-sensei.app</0> and we will coordinate with Polar to refund. Polar's own refund flow (available from your purchase email or the Polar dashboard) is usually the fastest path."
+        "p3": "If your key has not yet been issued, or you have not yet activated it, you can still withdraw within 14 days — write to <0>info@battery-sensei.app</0> and we will coordinate with Polar to refund. Polar's own refund flow (available from your purchase email or the Polar dashboard) is usually the fastest path.",
+        "refundCta": "Request a refund",
+        "refundCtaHint": "Please email from the address you used at checkout — that helps us match your purchase in seconds."
       },
       "contentLiability": {
         "kicker": "四 · Content",
