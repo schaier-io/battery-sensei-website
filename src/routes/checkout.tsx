@@ -10,21 +10,16 @@ import {
   XCircle,
   Mail,
 } from 'lucide-react'
-import { useMemo, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { z } from 'zod'
 import { Hanko } from '#/components/zen/Hanko'
+import { PolarInlineCheckout } from '#/components/PolarInlineCheckout'
 import { PriceDisplay } from '#/components/zen/PriceDisplay'
 import { Reveal } from '#/components/zen/Reveal'
 import { Nav } from '#/components/sections/Nav'
 import { Footer } from '#/components/sections/Footer'
-import {
-  LIFETIME_DISCOUNT_CODE,
-  lifetimeCheckoutUrl,
-  supportCheckoutUrl,
-} from '#/lib/polar'
+import { useDiscountAvailability } from '#/lib/use-discount-availability'
 import { usePremiumPrice, useLifetimePrice } from '#/lib/use-price'
-import { usePolarCheckout } from '#/lib/use-polar-embed'
 
 const SITE_URL = 'https://battery-sensei.app'
 const PATH = '/checkout'
@@ -60,27 +55,26 @@ function CheckoutPage() {
   const { t } = useTranslation()
   const { tier } = Route.useSearch()
   const navigate = Route.useNavigate()
-  const openPolarCheckout = usePolarCheckout()
   const yearly = usePremiumPrice()
   const lifetime = useLifetimePrice()
-  const [discountCode, setDiscountCode] = useState('')
+  // ZENMODE availability gates every "launch discount" surface on the
+  // page: the strikethrough above the headline price, the
+  // "ZENMODE applied" pill, and the inline hint chip above the embed.
+  // Once `remaining` hits 0 we revert to the full lifetime price and
+  // hide all of them — no stale urgency.
+  const { remaining: zenmodeRemaining, max: zenmodeMax } = useDiscountAvailability()
+  const launchOpen = zenmodeRemaining > 0
 
   const isLifetime = tier === 'lifetime'
 
-  // Lifetime card shows the discounted ZENMODE price (first 500 buyers);
-  // Support tier is the plain yearly recurring price. Both update live as
-  // /api/price returns the visitor's currency.
-  const price = isLifetime ? lifetime.discounted : yearly
-
-  // Recompute the Polar URL whenever the user types so the link always
-  // carries the latest discount code at click time. Both tier helpers
-  // accept a discountCode override — lifetimeCheckoutUrl falls back to
-  // ZENMODE when nothing is typed.
-  const checkoutHref = useMemo(() => {
-    return isLifetime
-      ? lifetimeCheckoutUrl({ discountCode })
-      : supportCheckoutUrl({ discountCode })
-  }, [isLifetime, discountCode])
+  // Lifetime headline price is the ZENMODE-discounted figure while the
+  // launch is open; falls back to the original full price once the cap
+  // is reached. Support tier is the plain yearly recurring price.
+  const price = isLifetime
+    ? launchOpen
+      ? lifetime.discounted
+      : lifetime.original
+    : yearly
 
   const summaryLines = (t('checkout.summaryLines', { returnObjects: true }) as {
     lifetime: string[]
@@ -167,7 +161,11 @@ function CheckoutPage() {
                   entry={price}
                   className="display-title inline-flex items-baseline text-[2rem] md:text-[2.5rem] font-medium text-sumi leading-none"
                 />
-                {isLifetime ? (
+                {/* Strikethrough only when the launch discount is live.
+                    Once ZENMODE is exhausted the headline IS the
+                    original price; a "was X" line over the same number
+                    would be a lie. */}
+                {isLifetime && launchOpen ? (
                   <span className="mt-1 block text-[0.6875rem] text-nezumi">
                     {t('checkout.originalLabel')}{' '}
                     <span className="line-through decoration-hinomaru/50">
@@ -187,7 +185,9 @@ function CheckoutPage() {
               </div>
             </header>
 
-            {isLifetime ? (
+            {/* "ZENMODE applied automatically" pill — only meaningful
+                while the launch is open. Hidden once exhausted. */}
+            {isLifetime && launchOpen ? (
               <p className="mt-4 inline-flex items-center gap-2 rounded-full bg-hinomaru/10 px-3 py-1 text-[0.75rem] font-medium text-hinomaru">
                 <Sparkles className="h-3 w-3" strokeWidth={2} aria-hidden />
                 {t('checkout.lifetimeAutoNote')}
@@ -215,59 +215,31 @@ function CheckoutPage() {
 
             <div aria-hidden className="my-7 h-px w-full bg-[var(--line)]" />
 
-            {/* Promo code field — local-only validation; Polar verifies the
-                code server-side when checkout loads. We pre-fill via the URL
-                so a wrong code surfaces inside the Polar form, not as a
-                guessing game on our side. */}
-            <label
-              htmlFor="checkout-promo"
-              className="flex flex-col gap-2"
-            >
-              <span className="flex items-center gap-2 text-[0.8125rem] font-medium uppercase tracking-[0.2em] text-sumi">
-                <Tag className="h-3.5 w-3.5" strokeWidth={1.8} aria-hidden />
-                {t('checkout.discountLabel')}
-              </span>
-              <input
-                id="checkout-promo"
-                name="discount_code"
-                type="text"
-                inputMode="text"
-                autoComplete="off"
-                spellCheck={false}
-                value={discountCode}
-                onChange={(e) => setDiscountCode(e.target.value)}
-                maxLength={64}
-                placeholder={
-                  isLifetime ? LIFETIME_DISCOUNT_CODE : t('checkout.discountPlaceholder')
-                }
-                className="h-11 rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-3 text-[0.9375rem] text-sumi placeholder:text-nezumi/70 focus:outline-none focus:ring-2 focus:ring-sumi/30"
-              />
-            </label>
+            {/* Launch-discount hint chip — visible only while ZENMODE
+                has redemptions left. The pill above (`lifetimeAutoNote`)
+                already confirms the discount is on; this row adds the
+                live count so the urgency reads from a real number, not
+                a slogan. Once the cap is hit the entire chip
+                disappears — page reverts to a plain full-price view. */}
+            {isLifetime && launchOpen && (
+              <div className="flex items-start gap-3 rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_72%,#fff)] px-4 py-3">
+                <Tag className="mt-0.5 h-4 w-4 shrink-0 text-hinomaru" strokeWidth={1.7} aria-hidden />
+                <p className="text-[0.8125rem] leading-[1.55] text-sumi-soft tabular-nums">
+                  <Trans
+                    i18nKey="checkout.inline.hint"
+                    values={{ remaining: zenmodeRemaining, max: zenmodeMax }}
+                    components={[
+                      <span className="font-semibold tracking-[0.04em] text-sumi" />,
+                      <span className="font-semibold tracking-[0.04em] text-sumi" />,
+                    ]}
+                  />
+                </p>
+              </div>
+            )}
 
-            <a
-              href={checkoutHref}
-              onClick={(e) => {
-                e.preventDefault()
-                // `discountCode` carries whatever the visitor typed into
-                // the promo field. If the embed-session API fails the
-                // hook now shows an inline error overlay (no off-domain
-                // redirect) — the anchor's `href` still works as a
-                // no-JS escape hatch.
-                void openPolarCheckout({
-                  tier: isLifetime ? 'lifetime' : 'support',
-                  discountCode: discountCode || undefined,
-                })
-              }}
-              className="btn-sumi group mt-7 inline-flex h-12 w-full items-center justify-center gap-2 rounded-md text-[0.9375rem] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
-              aria-label={t('checkout.continueAria')}
-            >
-              {isLifetime ? (
-                <Sparkles className="h-4 w-4" strokeWidth={1.8} />
-              ) : (
-                <Heart className="h-4 w-4" strokeWidth={1.8} />
-              )}
-              {t('checkout.continueAction')}
-            </a>
+            <div className="mt-5">
+              <PolarInlineCheckout tier={tier} />
+            </div>
 
             <ul className="mt-4 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[0.75rem] text-nezumi">
               {isLifetime ? (

@@ -48,6 +48,20 @@ import { z } from 'zod'
 type Tier = 'lifetime' | 'support'
 
 /**
+ * Code we silently auto-apply to every Lifetime session when the
+ * visitor didn't type one themselves. Mirrors `LIFETIME_DISCOUNT_CODE`
+ * in `src/lib/polar.ts` (deliberately duplicated — Vercel's serverless
+ * bundler can't follow cross-package imports from `api/` into `src/`
+ * reliably under Vite-built deployments, see the discount-availability
+ * regression we hit earlier).
+ *
+ * Polar caps redemptions at 500 server-side and 422s once exhausted;
+ * the handler below catches that and retries without the code so the
+ * session still creates.
+ */
+const AUTO_DISCOUNT_CODE = 'ZENMODE'
+
+/**
  * Request body validator. Caller only needs `tier`; `discountCode` is
  * optional and capped at 64 chars to keep a malformed promo field from
  * being smuggled into Polar's API. `.catch` collapses any invalid input
@@ -199,35 +213,63 @@ export async function POST(request: Request): Promise<Response> {
   // substituted server-side at redirect time.
   const successUrl = `${embedOrigin}/thanks/${tier}?checkout_id={CHECKOUT_ID}`
 
-  const payload: Record<string, unknown> = {
+  // Resolve the discount code to attach (if any):
+  //   - Caller-typed code wins (visitor's promo input on /checkout)
+  //   - Otherwise Lifetime gets ZENMODE auto-applied. Polar caps it at
+  //     500 redemptions and 422s once exhausted; we catch that below
+  //     and retry without the code so the session still creates. The
+  //     /checkout UI hides every "launch discount" surface once the
+  //     cap is reached, so the visitor sees the plain full price.
+  //   - Support tier never gets an auto-apply.
+  const autoDiscount =
+    body.discountCode ?? (tier === 'lifetime' ? AUTO_DISCOUNT_CODE : undefined)
+
+  const basePayload: Record<string, unknown> = {
     products: [productId],
     embed_origin: embedOrigin,
     success_url: successUrl,
-    // Lifetime ZENMODE is auto-applied client-side via `polar.ts`; the
-    // discountCode here is only set when the visitor typed something
-    // different into the checkout-page promo field. zod's .trim()
-    // already normalised the value.
-    ...(body.discountCode ? { discount_code: body.discountCode } : {}),
   }
 
-  try {
-    const res = await fetch('https://api.polar.sh/v1/checkouts/', {
+  // Wrapped so we can fire the request twice (once with the discount,
+  // once without on 422) without duplicating the fetch boilerplate.
+  async function createSession(extra: Record<string, unknown> = {}) {
+    return fetch('https://api.polar.sh/v1/checkouts/', {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
         accept: 'application/json',
         authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify({ ...basePayload, ...extra }),
       // Polar typically responds in <500ms; if it stalls we'd rather
-      // hand back the fallback Link than keep the visitor staring at a
+      // surface an inline error than keep the visitor staring at a
       // spinner.
       signal: AbortSignal.timeout(6000),
     })
+  }
+
+  try {
+    let res = await createSession(
+      autoDiscount ? { discount_code: autoDiscount } : {},
+    )
+
+    // 422 with a discount usually means Polar rejected the code (cap
+    // exhausted, expired, wrong product). Retry once without it so the
+    // visitor still gets a session at the regular price — the UI on
+    // /checkout will already be showing the full price by then since
+    // the discount-availability hook reports `remaining === 0`.
+    if (!res.ok && res.status === 422 && autoDiscount) {
+      console.warn('[checkout-session] discount rejected — retrying without', {
+        tier,
+        code: autoDiscount,
+      })
+      res = await createSession()
+    }
+
     if (!res.ok) {
       // Read Polar's error body so the function log explains *why*
       // the call was rejected (invalid product id, wrong token scope,
-      // discount-code expired, embed_origin not allowlisted, etc.).
+      // embed_origin not allowlisted, etc.).
       const bodyText = await res.text().catch(() => '')
       console.warn('[checkout-session] polar non-2xx', {
         status: res.status,

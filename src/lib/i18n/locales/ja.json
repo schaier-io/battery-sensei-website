@@ -161,7 +161,11 @@
     "headingItalic": "正直に、機能ごとに。",
     "intro": "Battery Senseiは、愛されてきたMac向け電池ツール — AlDente、BatFi、coconutBattery、iStat Menus、さらにmacOSの新しい充電上限機能 — の隣に立ちます。並べて、ありのままに。",
     "videoCta": "60秒のウォークスルーを見る",
-    "labels": { "partial": "一部", "moreInfo": "詳細", "openFeature": "機能を開く" },
+    "labels": {
+      "partial": "一部",
+      "moreInfo": "詳細",
+      "openFeature": "機能を開く"
+    },
     "headers": {
       "feature": "機能",
       "sensei": "Battery Sensei",
@@ -172,19 +176,142 @@
       "macos": "macOS"
     },
     "rows": [
-      { "label": "端末内のみ",              "desc": "すべてMacの中で動作。クラウドなし、アカウントなし、テレメトリなし。",                              "sensei": "yes", "aldente": "yes",     "batfi": "yes",     "coconut": "yes", "istat": "yes",     "macos": "yes" },
-      { "label": "ネイティブmacOSアプリ",    "desc": "ネイティブのAppKit + SwiftUIで開発。Electronなし、Webラッパーなし — 即起動、軽メモリ、システムの手触り。",                "sensei": "yes", "aldente": "yes",     "batfi": "yes",     "coconut": "yes", "istat": "yes",     "macos": "yes" },
-      { "label": "ライト&ダークテーマ",      "desc": "macOSの外観に追従。お好みで「Daylight Sensei」「Night Ninja」に手動で切り替えも可能。",                              "sensei": "yes", "aldente": "yes",     "batfi": "yes",     "coconut": "yes", "istat": "yes",     "macos": "yes" },
-      { "label": "サイクルと容量",          "desc": "サイクル数と容量を、時間軸で記録。",                                                                "sensei": "yes", "aldente": "yes",     "batfi": "no",      "coconut": "yes", "istat": "yes",     "macos": "partial" },
-      { "label": "省電力動作",             "desc": "イベント駆動のサンプリング、約30秒で更新 — 通常は1日のうち1%未満。",                                "sensei": "yes", "aldente": "yes",     "batfi": "yes",     "coconut": "yes", "istat": "partial", "macos": "yes" },
-      { "label": "メニューバーのワット表示", "desc": "充電中の電力を、メニューバーのドロップダウンにライブ表示。",                                       "sensei": "yes", "aldente": "yes",     "batfi": "yes",     "coconut": "no",  "istat": "yes",     "macos": "no" },
-      { "label": "充電上限",                "desc": "充電量に上限を設けて、電池を涼しく長持ちさせます。",                                                "sensei": "yes", "aldente": "yes",     "batfi": "yes",     "coconut": "no",  "istat": "no",      "macos": "yes" },
-      { "label": "電力を食うアプリ上位",    "desc": "Sagaページでの上位電力消費アプリ — 1時間 / 24時間 / 7日間、アクティビティモニタ式スコア、5分ごとに更新。", "key": "energy-usage",         "sensei": "yes", "aldente": "no",      "batfi": "no",      "coconut": "no",  "istat": "no",      "macos": "partial" },
-      { "label": "旅支度モード",            "desc": "出発前にワンクリック — 100%まで充電し、より強い警告に切り替え、翌朝9時に自動でリセット。", "key": "travel-mode",      "sensei": "yes", "aldente": "partial", "batfi": "partial", "coconut": "no",  "istat": "no",      "macos": "no" },
-      { "label": "カスタム閾値",            "desc": "自分専用の低電池閾値と、レベルごとの消去時間を設定できます。", "key": "custom-thresholds",                "sensei": "yes", "aldente": "no",      "batfi": "no",      "coconut": "no",  "istat": "no",      "macos": "no" },
-      { "label": "警告プリセット",          "desc": "Zen Mode、Regular Mode、Teach Me Senpai — 3段階のムード、その日にひとつ。", "key": "alert-presets",                       "sensei": "yes", "aldente": "no",      "batfi": "no",      "coconut": "no",  "istat": "no",      "macos": "no" },
-      { "label": "Sensei Saga",            "desc": "充電履歴(24h / 3日 / 7日)、健康パネル、Weekly + Monthly Wrapped、間に合って救出したときのRescue Receipt。", "key": "battery-journal",                          "sensei": "yes", "aldente": "no",      "batfi": "no",      "coconut": "no",  "istat": "no",      "macos": "no" },
-      { "label": "会議の電池ガード",        "desc": "次の4時間の予定を端末内で読み取り。クリティカル:30/15/5/0分前に通知。カタストロフィック:即時通知。", "key": "meeting-battery-guard", "sensei": "yes", "aldente": "no",      "batfi": "no",      "coconut": "no",  "istat": "no",      "macos": "no" }
+      {
+        "label": "端末内のみ",
+        "desc": "すべてMacの中で動作。クラウドなし、アカウントなし、テレメトリなし。",
+        "sensei": "yes",
+        "aldente": "yes",
+        "batfi": "yes",
+        "coconut": "yes",
+        "istat": "yes",
+        "macos": "yes"
+      },
+      {
+        "label": "ネイティブmacOSアプリ",
+        "desc": "ネイティブのAppKit + SwiftUIで開発。Electronなし、Webラッパーなし — 即起動、軽メモリ、システムの手触り。",
+        "sensei": "yes",
+        "aldente": "yes",
+        "batfi": "yes",
+        "coconut": "yes",
+        "istat": "yes",
+        "macos": "yes"
+      },
+      {
+        "label": "ライト&ダークテーマ",
+        "desc": "macOSの外観に追従。お好みで「Daylight Sensei」「Night Ninja」に手動で切り替えも可能。",
+        "sensei": "yes",
+        "aldente": "yes",
+        "batfi": "yes",
+        "coconut": "yes",
+        "istat": "yes",
+        "macos": "yes"
+      },
+      {
+        "label": "サイクルと容量",
+        "desc": "サイクル数と容量を、時間軸で記録。",
+        "sensei": "yes",
+        "aldente": "yes",
+        "batfi": "no",
+        "coconut": "yes",
+        "istat": "yes",
+        "macos": "partial"
+      },
+      {
+        "label": "省電力動作",
+        "desc": "イベント駆動のサンプリング、約30秒で更新 — 通常は1日のうち1%未満。",
+        "sensei": "yes",
+        "aldente": "yes",
+        "batfi": "yes",
+        "coconut": "yes",
+        "istat": "partial",
+        "macos": "yes"
+      },
+      {
+        "label": "メニューバーのワット表示",
+        "desc": "充電中の電力を、メニューバーのドロップダウンにライブ表示。",
+        "sensei": "yes",
+        "aldente": "yes",
+        "batfi": "yes",
+        "coconut": "no",
+        "istat": "yes",
+        "macos": "no"
+      },
+      {
+        "label": "充電上限",
+        "desc": "充電量に上限を設けて、電池を涼しく長持ちさせます。",
+        "sensei": "yes",
+        "aldente": "yes",
+        "batfi": "yes",
+        "coconut": "no",
+        "istat": "no",
+        "macos": "yes"
+      },
+      {
+        "label": "電力を食うアプリ上位",
+        "desc": "Sagaページでの上位電力消費アプリ — 1時間 / 24時間 / 7日間、アクティビティモニタ式スコア、5分ごとに更新。",
+        "key": "energy-usage",
+        "sensei": "yes",
+        "aldente": "no",
+        "batfi": "no",
+        "coconut": "no",
+        "istat": "no",
+        "macos": "partial"
+      },
+      {
+        "label": "旅支度モード",
+        "desc": "出発前にワンクリック — 100%まで充電し、より強い警告に切り替え、翌朝9時に自動でリセット。",
+        "key": "travel-mode",
+        "sensei": "yes",
+        "aldente": "partial",
+        "batfi": "partial",
+        "coconut": "no",
+        "istat": "no",
+        "macos": "no"
+      },
+      {
+        "label": "カスタム閾値",
+        "desc": "自分専用の低電池閾値と、レベルごとの消去時間を設定できます。",
+        "key": "custom-thresholds",
+        "sensei": "yes",
+        "aldente": "no",
+        "batfi": "no",
+        "coconut": "no",
+        "istat": "no",
+        "macos": "no"
+      },
+      {
+        "label": "警告プリセット",
+        "desc": "Zen Mode、Regular Mode、Teach Me Senpai — 3段階のムード、その日にひとつ。",
+        "key": "alert-presets",
+        "sensei": "yes",
+        "aldente": "no",
+        "batfi": "no",
+        "coconut": "no",
+        "istat": "no",
+        "macos": "no"
+      },
+      {
+        "label": "Sensei Saga",
+        "desc": "充電履歴(24h / 3日 / 7日)、健康パネル、Weekly + Monthly Wrapped、間に合って救出したときのRescue Receipt。",
+        "key": "battery-journal",
+        "sensei": "yes",
+        "aldente": "no",
+        "batfi": "no",
+        "coconut": "no",
+        "istat": "no",
+        "macos": "no"
+      },
+      {
+        "label": "会議の電池ガード",
+        "desc": "次の4時間の予定を端末内で読み取り。クリティカル:30/15/5/0分前に通知。カタストロフィック:即時通知。",
+        "key": "meeting-battery-guard",
+        "sensei": "yes",
+        "aldente": "no",
+        "batfi": "no",
+        "coconut": "no",
+        "istat": "no",
+        "macos": "no"
+      }
     ],
     "footnote": "2026年5月時点の各ツール公式サイトに基づきます。各アプリにはそれぞれの得意分野があります — 詳しい機能一覧は各公式サイトをご覧ください。"
   },
@@ -440,10 +567,22 @@
     "notStored": "保存せず、転送するのみ",
     "topicLegend": "どのようなお問い合わせですか?",
     "topics": {
-      "billing": { "label": "支払いまたはライセンス", "hint": "返金、ライセンスキー、請求書。" },
-      "feature": { "label": "機能のアイデア", "hint": "先生がもっとお役に立てる方法。" },
-      "bug": { "label": "バグ", "hint": "何かが壊れている、おかしい。" },
-      "other": { "label": "その他", "hint": "ご挨拶、取材、提携など。" }
+      "billing": {
+        "label": "支払いまたはライセンス",
+        "hint": "返金、ライセンスキー、請求書。"
+      },
+      "feature": {
+        "label": "機能のアイデア",
+        "hint": "先生がもっとお役に立てる方法。"
+      },
+      "bug": {
+        "label": "バグ",
+        "hint": "何かが壊れている、おかしい。"
+      },
+      "other": {
+        "label": "その他",
+        "hint": "ご挨拶、取材、提携など。"
+      }
     },
     "fields": {
       "name": "お名前",
@@ -498,9 +637,18 @@
     "body": "{{trial}}日間、一緒に暮らしてみてください。その後は{{price}}を一度きり、それきりです。Apple公証済み。初日からメニューバーに座り、二度と尋ねることなく電池を見守ります。電気はMacに、元気はあなたに。",
     "source": "ソース",
     "trust": {
-      "native": { "title": "ネイティブmacOS", "body": "AppKitとSwiftUIで。システム標準のツールのような手触り — 実際そうですから。" },
-      "light": { "title": "電池にやさしい", "body": "バックグラウンドでのポーリングなし。macOSが変化を報告したときだけ、先生は目を覚まします。" },
-      "private": { "title": "何もMacから出ません", "body": "テレメトリなし。アカウントなし。クラウドなし、これからもずっと。" }
+      "native": {
+        "title": "ネイティブmacOS",
+        "body": "AppKitとSwiftUIで。システム標準のツールのような手触り — 実際そうですから。"
+      },
+      "light": {
+        "title": "電池にやさしい",
+        "body": "バックグラウンドでのポーリングなし。macOSが変化を報告したときだけ、先生は目を覚まします。"
+      },
+      "private": {
+        "title": "何もMacから出ません",
+        "body": "テレメトリなし。アカウントなし。クラウドなし、これからもずっと。"
+      }
     },
     "specStrip": "macOS 13+。Apple SiliconとIntel。{{trial}}日間無料、カード不要。{{price}}一度きり。14日間返金。"
   },
@@ -556,10 +704,20 @@
       "support": "年あたり"
     },
     "originalLabel": "元の価格",
-    "discountLabel": "プロモコード",
-    "discountPlaceholder": "例: OVER9000",
-    "continueAction": "安全な決済へ進む",
-    "continueAria": "Polarの決済へ進む",
+    "inline": {
+      "title": "Battery Sensei 安全な決済",
+      "hint": "ローンチ割引を自動で適用しました — この価格で残り <0>{{remaining}}</0> / <1>{{max}}</1> 件です。",
+      "loading": "決済を開いています",
+      "preparing": "決済を準備しています",
+      "confirming": "決済を確認しています",
+      "noscript": "埋め込み決済の読み込みにはJavaScriptが必要です。有効にしていただくか、info@battery-sensei.app までご連絡いただければ直接の決済リンクをお送りします。"
+    },
+    "error": {
+      "title": "決済をご利用いただけません",
+      "body": "Polarがリクエストを受け付けませんでした。少し時間をおいてもう一度お試しください。ご連絡いただければ直接の決済リンクをお送りします。",
+      "retry": "もう一度試す",
+      "email": "メールで連絡"
+    },
     "refundNote": "14日間の返金保証",
     "alreadyOwnTitle": "すでに購入済みですか?",
     "alreadyOwnBody": "Battery Senseiを開き、設定 → Premiumを選択。キーと購入時のメールアドレスを入力し、「Premiumを有効化」を押してください。",
@@ -581,36 +739,115 @@
     },
     "lastUpdatedNote": "最終更新 2026年5月24日。AlDenteの機能は執筆時点の公式サイトに基づきます — 最新の情報はあちらでご確認ください。",
     "rows": [
-      { "label": "オープンソース", "sensei": "はい", "aldente": "いいえ" },
-      { "label": "ネイティブmacOS(AppKit + SwiftUI)", "sensei": "はい", "aldente": "はい" },
-      { "label": "充電上限", "sensei": "はい", "aldente": "はい" },
-      { "label": "旅モード(出発前に満充電)", "sensei": "はい", "aldente": "はい" },
-      { "label": "スマートな低電池警告(プリセット3つ+カスタム)", "sensei": "はい", "aldente": "一部" },
-      { "label": "サイクル数と容量の追跡", "sensei": "はい", "aldente": "はい" },
-      { "label": "やさしい言葉の電池履歴", "sensei": "はい", "aldente": "いいえ" },
-      { "label": "メニューバーでのライブ入出力ワット", "sensei": "はい", "aldente": "一部" },
-      { "label": "放電/セーリング/キャリブレーションモード", "sensei": "いいえ", "aldente": "はい(Pro)" },
-      { "label": "発熱を考慮した充電のヒント", "sensei": "はい", "aldente": "一部" },
-      { "label": "アカウント/クラウド必須", "sensei": "いいえ", "aldente": "いいえ" },
-      { "label": "対応言語", "sensei": "EN · DE · ES · FR · 日本語", "aldente": "複数" },
-      { "label": "macOS対応", "sensei": "13 Ventura以降", "aldente": "11 Big Sur以降" }
+      {
+        "label": "オープンソース",
+        "sensei": "はい",
+        "aldente": "いいえ"
+      },
+      {
+        "label": "ネイティブmacOS(AppKit + SwiftUI)",
+        "sensei": "はい",
+        "aldente": "はい"
+      },
+      {
+        "label": "充電上限",
+        "sensei": "はい",
+        "aldente": "はい"
+      },
+      {
+        "label": "旅モード(出発前に満充電)",
+        "sensei": "はい",
+        "aldente": "はい"
+      },
+      {
+        "label": "スマートな低電池警告(プリセット3つ+カスタム)",
+        "sensei": "はい",
+        "aldente": "一部"
+      },
+      {
+        "label": "サイクル数と容量の追跡",
+        "sensei": "はい",
+        "aldente": "はい"
+      },
+      {
+        "label": "やさしい言葉の電池履歴",
+        "sensei": "はい",
+        "aldente": "いいえ"
+      },
+      {
+        "label": "メニューバーでのライブ入出力ワット",
+        "sensei": "はい",
+        "aldente": "一部"
+      },
+      {
+        "label": "放電/セーリング/キャリブレーションモード",
+        "sensei": "いいえ",
+        "aldente": "はい(Pro)"
+      },
+      {
+        "label": "発熱を考慮した充電のヒント",
+        "sensei": "はい",
+        "aldente": "一部"
+      },
+      {
+        "label": "アカウント/クラウド必須",
+        "sensei": "いいえ",
+        "aldente": "いいえ"
+      },
+      {
+        "label": "対応言語",
+        "sensei": "EN · DE · ES · FR · 日本語",
+        "aldente": "複数"
+      },
+      {
+        "label": "macOS対応",
+        "sensei": "13 Ventura以降",
+        "aldente": "11 Big Sur以降"
+      }
     ],
     "differentHeading": "先生の違うところ",
     "different": [
-      { "title": "基本は無料、Premiumは任意の買い切り。", "body": "サブスクリプションなし。コア機能は誰でもずっと無料。Premiumは深い機能のための一度きりの解放です。GitHubでオープンソース — コードを読めて、プロジェクトが止まっても先生を使い続けられます。" },
-      { "title": "スマートな低電池警告を、中心の機能として。", "body": "三つのプリセット(Zen、Regular、Senpai)、または自分の閾値と自動消去時間、そして合図、警告、全画面警告の穏やかな階層。" },
-      { "title": "やさしい言葉の電池日記。", "body": "サイクル、救出、踊り場、時間ごとの容量を、専門用語ではなく文章で。Macの中に留まります。" },
-      { "title": "穏やかな佇まい。", "body": "目的を絞ったメニューバーツール、墨+和紙のタイポグラフィ、ネイティブのAppKit + SwiftUI。Dockアイコンなし、通知の騒がしさなし。" }
+      {
+        "title": "基本は無料、Premiumは任意の買い切り。",
+        "body": "サブスクリプションなし。コア機能は誰でもずっと無料。Premiumは深い機能のための一度きりの解放です。GitHubでオープンソース — コードを読めて、プロジェクトが止まっても先生を使い続けられます。"
+      },
+      {
+        "title": "スマートな低電池警告を、中心の機能として。",
+        "body": "三つのプリセット(Zen、Regular、Senpai)、または自分の閾値と自動消去時間、そして合図、警告、全画面警告の穏やかな階層。"
+      },
+      {
+        "title": "やさしい言葉の電池日記。",
+        "body": "サイクル、救出、踊り場、時間ごとの容量を、専門用語ではなく文章で。Macの中に留まります。"
+      },
+      {
+        "title": "穏やかな佇まい。",
+        "body": "目的を絞ったメニューバーツール、墨+和紙のタイポグラフィ、ネイティブのAppKit + SwiftUI。Dockアイコンなし、通知の騒がしさなし。"
+      }
     ],
     "wins": "AlDenteが今も勝るところ",
     "winsBody": "AlDenteはmacOSで最も知られた充電上限アプリで、より高度な電源機能を備えています:放電モード、セーリング、発熱を考慮したモード、そして長い歴史。最大限細やかなコントロールが欲しいなら、AlDenteの方が充実したツールです。",
     "questions": "よくあるご質問",
     "faq": [
-      { "q": "Battery Senseiは無料ですか?", "a": "基本機能は永遠に無料 — 充電上限、スマート警告、30日間履歴。Premiumは会議の電池ガード、無制限のSaga履歴、カスタムプリセットのための一度きりの解放です。サブスクリプションなし、アカウントなし。先生はGitHubでオープンソース。" },
-      { "q": "Battery SenseiはAlDenteと同じことができますか?", "a": "ほとんどの方がAlDenteで使うことは、はい:充電上限、出発前の旅モード、ネイティブのメニューバー表示。先生はそこにお選びの閾値でのスマートな低電池警告と、やさしい言葉の電池履歴を加えます。AlDenteには放電モード、セーリング/キャリブレーションといった追加の電源機能があり、先生は同等のものを持ちません。" },
-      { "q": "どのようなときにAlDenteを選ぶべきですか?", "a": "今日のmacOSで最も細やかな電池コントロール(発熱モード、セーリング、放電)が欲しいなら、AlDenteの方が充実したツールです。先生は網羅的な機能リストよりも、穏やかな初期設定と、メニューバーに静かに寄り添う姿勢を選びました。" },
-      { "q": "AlDenteからBattery Senseiに乗り換えたら、データを失いますか?", "a": "macOS自体には何も失われません。先生は導入した日から新しい電池日記を始めます。切り替えの間、両方のアプリを少しの間動かしておいて、不要な方をアンインストールしても構いません。" },
-      { "q": "充電上限は安全ですか?Appleは認めていますか?", "a": "AppleはすでにmacOSに最適化されたバッテリー充電を実装しており、利用習慣に基づいて約80%で保つようにしています。Battery SenseiやAlDenteのような手動の充電上限ツールは、その上に乗って、上限を明示的に設定できるようにします。Apple自身の指針も、リチウムイオンは100%にとどまる時間が長いほど早く劣化する、というものです。" }
+      {
+        "q": "Battery Senseiは無料ですか?",
+        "a": "基本機能は永遠に無料 — 充電上限、スマート警告、30日間履歴。Premiumは会議の電池ガード、無制限のSaga履歴、カスタムプリセットのための一度きりの解放です。サブスクリプションなし、アカウントなし。先生はGitHubでオープンソース。"
+      },
+      {
+        "q": "Battery SenseiはAlDenteと同じことができますか?",
+        "a": "ほとんどの方がAlDenteで使うことは、はい:充電上限、出発前の旅モード、ネイティブのメニューバー表示。先生はそこにお選びの閾値でのスマートな低電池警告と、やさしい言葉の電池履歴を加えます。AlDenteには放電モード、セーリング/キャリブレーションといった追加の電源機能があり、先生は同等のものを持ちません。"
+      },
+      {
+        "q": "どのようなときにAlDenteを選ぶべきですか?",
+        "a": "今日のmacOSで最も細やかな電池コントロール(発熱モード、セーリング、放電)が欲しいなら、AlDenteの方が充実したツールです。先生は網羅的な機能リストよりも、穏やかな初期設定と、メニューバーに静かに寄り添う姿勢を選びました。"
+      },
+      {
+        "q": "AlDenteからBattery Senseiに乗り換えたら、データを失いますか?",
+        "a": "macOS自体には何も失われません。先生は導入した日から新しい電池日記を始めます。切り替えの間、両方のアプリを少しの間動かしておいて、不要な方をアンインストールしても構いません。"
+      },
+      {
+        "q": "充電上限は安全ですか?Appleは認めていますか?",
+        "a": "AppleはすでにmacOSに最適化されたバッテリー充電を実装しており、利用習慣に基づいて約80%で保つようにしています。Battery SenseiやAlDenteのような手動の充電上限ツールは、その上に乗って、上限を明示的に設定できるようにします。Apple自身の指針も、リチウムイオンは100%にとどまる時間が長いほど早く劣化する、というものです。"
+      }
     ],
     "tryFree": "Battery Senseiを無料で試す",
     "readSource": "GitHubでソースを読む →"

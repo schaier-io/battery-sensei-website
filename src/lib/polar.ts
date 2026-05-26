@@ -25,9 +25,18 @@ const SUPPORT_CHECKOUT_URL =
   import.meta.env.VITE_POLAR_CHECKOUT_URL_SUPPORT ??
   'https://buy.polar.sh/YOUR_SUPPORT_CHECKOUT_LINK'
 
-/** Discount code auto-applied to Lifetime checkouts. Polar enforces the
- *  500-redemption cap server-side; once exhausted Polar silently ignores
- *  the param and charges the full $11.97. */
+/**
+ * Launch discount for the Lifetime tier.
+ *
+ * **ZENMODE** is the silent, auto-applied launch code: the server
+ * attaches it to every embed session by default, Polar caps it at
+ * 500 redemptions and 422s once exhausted. Visitors never have to
+ * type it. Once exhausted, every "launch discount" surface on the
+ * site (scarcity bar, discount-note chip, strikethrough, the
+ * /checkout hint chip) hides itself, and the headline price becomes
+ * the original full price.
+ *
+ */
 export const LIFETIME_DISCOUNT_CODE = 'ZENMODE'
 export const LIFETIME_DISCOUNT_MAX_REDEMPTIONS = 500
 

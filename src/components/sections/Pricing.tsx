@@ -47,6 +47,17 @@ export function Pricing() {
   const lifetime = useLifetimePrice()
   const { t } = useTranslation()
   const openPolarCheckout = usePolarCheckout()
+  // ZENMODE redemption count drives every "launch discount" surface on
+  // this section. Once `remaining` hits 0 we hide the scarcity bar, the
+  // discount-note chip, AND the strikethrough — the page then reads as
+  // a plain full-price product, not a stale "was X / now Y" anchor that
+  // would lie about the active offer.
+  const { remaining: zenmodeRemaining } = useDiscountAvailability()
+  const launchOpen = zenmodeRemaining > 0
+  // While the launch discount is active we show the discounted price as
+  // the headline; once exhausted, the original full price becomes the
+  // headline and the strikethrough is gone too.
+  const lifetimePrice = launchOpen ? lifetime.discounted : lifetime.original
   const freeFeatures = t('pricing.free.items', {
     returnObjects: true,
   }) as Array<{ title: string; body: string }>
@@ -192,27 +203,31 @@ export function Pricing() {
                 {t('common.recommended')}
               </span>
             </div>
-            {/* Strikethrough is now stacked ABOVE the current price and
-                visually focused — anchoring effect: the eye sees the higher
-                number first, then the discounted price lands as relief. */}
-            <div className="mt-2.5 inline-flex items-baseline gap-2 text-sumi-soft">
-              <span className="uppercase tracking-[0.2em] text-[0.6875rem] text-nezumi">
-                {t('pricing.lifetime.originalLabel')}
-              </span>
-              {/* Strikethrough original price — same symbol-split treatment
-                  as the headline so the slash + diagonal line still cross
-                  cleanly even with two glyph families in the run. */}
-              <span className="relative inline-block leading-none">
-                <PriceDisplay
-                  entry={lifetime.original}
-                  className="display-title inline-flex items-baseline text-[1.25rem] md:text-[1.375rem] font-medium text-sumi/85 leading-none"
-                />
-                <span
-                  aria-hidden
-                  className="pointer-events-none absolute left-[-2px] right-[-2px] top-1/2 h-[2px] -translate-y-1/2 rotate-[-6deg] bg-hinomaru"
-                />
-              </span>
-            </div>
+            {/* Strikethrough only renders while ZENMODE has redemptions
+                left. Once exhausted, the original price IS the headline
+                price below — keeping a struck-through "was" line on
+                top of that would be a lie. */}
+            {launchOpen && (
+              <div className="mt-2.5 inline-flex items-baseline gap-2 text-sumi-soft">
+                <span className="uppercase tracking-[0.2em] text-[0.6875rem] text-nezumi">
+                  {t('pricing.lifetime.originalLabel')}
+                </span>
+                {/* Strikethrough original price — same symbol-split
+                    treatment as the headline so the slash + diagonal
+                    line still cross cleanly even with two glyph
+                    families in the run. */}
+                <span className="relative inline-block leading-none">
+                  <PriceDisplay
+                    entry={lifetime.original}
+                    className="display-title inline-flex items-baseline text-[1.25rem] md:text-[1.375rem] font-medium text-sumi/85 leading-none"
+                  />
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute left-[-2px] right-[-2px] top-1/2 h-[2px] -translate-y-1/2 rotate-[-6deg] bg-hinomaru"
+                  />
+                </span>
+              </div>
+            )}
             {/* `aria-live="polite" aria-atomic="true"` announces the
                 full headline (price + period) as one unit when the
                 live `/api/price` round-trip swaps in the visitor's
@@ -225,17 +240,25 @@ export function Pricing() {
               className="mt-1.5 flex flex-wrap items-baseline gap-x-3 gap-y-1"
             >
               <PriceDisplay
-                entry={lifetime.discounted}
+                entry={lifetimePrice}
                 className="display-title inline-flex items-baseline text-[2.25rem] md:text-[2.625rem] font-medium text-sumi leading-none"
               />
               <span className="text-[1rem] text-sumi-soft tracking-normal">
                 {t('pricing.lifetime.period')}
               </span>
             </div>
-            <p className="mt-2 text-[0.75rem] uppercase tracking-[0.16em] font-medium text-hinomaru/90">
-              {t('pricing.lifetime.discountNote')}
-            </p>
-            <LimitedRedeemBar fullPriceFormatted={lifetime.original.formatted} />
+            {/* Launch-discount marketing chrome (note + scarcity bar)
+                appears ONLY while ZENMODE still has redemptions. Past
+                that, the card reads as a plain lifetime product at
+                full price, no stale urgency cues. */}
+            {launchOpen && (
+              <>
+                <p className="mt-2 text-[0.75rem] uppercase tracking-[0.16em] font-medium text-hinomaru/90">
+                  {t('pricing.lifetime.discountNote')}
+                </p>
+                <LimitedRedeemBar fullPriceFormatted={lifetime.original.formatted} />
+              </>
+            )}
             <p className="mt-3 text-[0.9375rem] leading-snug text-sumi-soft max-w-md">
               {t('pricing.lifetime.blurb')}
             </p>
