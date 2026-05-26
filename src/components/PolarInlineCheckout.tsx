@@ -198,12 +198,21 @@ export function PolarInlineCheckout({ tier, discountCode, theme = 'light' }: Pro
     )
   }
 
+  // `min-h-[760px]` on the wrapper reserves the iframe's eventual
+  // height EVEN BEFORE the session URL resolves. Without it the
+  // wrapper collapses to zero height in the `creating` phase (the
+  // iframe is the only child with intrinsic height + it's
+  // conditionally rendered), so the absolutely-positioned loader
+  // had nothing to fill — it floated up and overlapped the trust
+  // badges + footer below. Reserving the height up front pins the
+  // page layout in place so nothing below jumps when the iframe
+  // finally mounts.
   return (
-    <div className="relative">
+    <div className="relative min-h-[760px] rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,#fff)]">
       {phase !== 'loaded' && phase !== 'success' && (
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center rounded-md bg-[color-mix(in_oklab,var(--washi)_94%,#fff)]"
+          className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center rounded-md"
         >
           <div className="flex flex-col items-center gap-3 text-sumi-soft">
             <Loader2 className="h-5 w-5 animate-spin" strokeWidth={1.6} />
@@ -225,7 +234,10 @@ export function PolarInlineCheckout({ tier, discountCode, theme = 'light' }: Pro
           title={t('checkout.inline.title')}
           allow="payment *; publickey-credentials-get *"
           loading="eager"
-          className="block w-full min-h-[760px] rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,#fff)]"
+          // Border + bg moved up to the wrapper so the loader sits
+          // on the same surface regardless of iframe state. The
+          // iframe itself stays transparent until it paints.
+          className="block w-full min-h-[760px] rounded-md"
         />
       )}
 
