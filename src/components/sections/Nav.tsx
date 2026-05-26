@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Download, MessageCircle, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { LanguageSwitcher } from '#/components/LanguageSwitcher'
@@ -29,6 +29,10 @@ export function Nav() {
   const [active, setActive] = useState<SectionId | null>(null)
   const [progress, setProgress] = useState(0)
   const [menuOpen, setMenuOpen] = useState(false)
+  // Remember which element opened the drawer so we can restore focus to
+  // it on close. Defaults to the hamburger button but works the same if
+  // some future surface programmatically opens the menu.
+  const hamburgerRef = useRef<HTMLButtonElement | null>(null)
 
   useEffect(() => {
     const onScroll = () => {
@@ -62,7 +66,10 @@ export function Nav() {
     return () => io.disconnect()
   }, [])
 
-  // Body scroll lock + escape-to-close while the drawer is open.
+  // Body scroll lock + escape-to-close + focus restoration while the
+  // drawer is open. Restoring focus to the hamburger on close keeps
+  // keyboard navigation continuous — the user's previous "place" in the
+  // tab order survives the modal interaction.
   useEffect(() => {
     if (!menuOpen) return
     const prev = document.body.style.overflow
@@ -74,6 +81,18 @@ export function Nav() {
     return () => {
       document.body.style.overflow = prev
       document.removeEventListener('keydown', onKey)
+      // Pull focus back to the hamburger ONLY if focus fell to nothing
+      // (e.g. user clicked outside the drawer). When they tap a section
+      // link inside the drawer, the browser is already smooth-scrolling
+      // and refocusing the off-screen hamburger would cancel that scroll
+      // on mobile Safari. Wrapped in rAF so the drawer is fully unmounted
+      // before we check `activeElement`.
+      window.requestAnimationFrame(() => {
+        const focused = document.activeElement
+        if (!focused || focused === document.body) {
+          hamburgerRef.current?.focus()
+        }
+      })
     }
   }, [menuOpen])
 
@@ -161,6 +180,7 @@ export function Nav() {
           {/* Brush-stroke hamburger — three sumi lines that tilt + spread on
               hover. Visible only below md where the desktop nav is hidden. */}
           <button
+            ref={hamburgerRef}
             type="button"
             onClick={() => setMenuOpen(true)}
             aria-label={t('nav.openMenu')}
@@ -218,6 +238,19 @@ function MobileDrawer({
   onClose: () => void
 }) {
   const { t } = useTranslation()
+  const closeBtnRef = useRef<HTMLButtonElement | null>(null)
+
+  // Move keyboard focus into the drawer on open so a screen-reader user
+  // immediately hears the dialog label + first interactive element. Pair
+  // with the parent Nav effect that restores focus to the hamburger on
+  // close. We don't trap Tab inside the drawer (would require more
+  // plumbing) — Escape + click-outside cover the common exit paths and
+  // the visually-hidden body content is scroll-locked underneath.
+  useEffect(() => {
+    if (!open) return
+    const timer = window.setTimeout(() => closeBtnRef.current?.focus(), 60)
+    return () => window.clearTimeout(timer)
+  }, [open])
 
   return (
     <div
@@ -268,6 +301,7 @@ function MobileDrawer({
             </span>
           </span>
           <button
+            ref={closeBtnRef}
             type="button"
             onClick={onClose}
             aria-label={t('nav.closeMenu')}

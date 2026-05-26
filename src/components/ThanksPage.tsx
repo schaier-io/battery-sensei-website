@@ -1,4 +1,5 @@
 import { Link, useSearch } from '@tanstack/react-router'
+import { track } from '@vercel/analytics'
 import { ArrowLeft, Download as DownloadIcon, Mail, Sparkles } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
@@ -37,6 +38,26 @@ export function ThanksPage({ tier, kanji }: { tier: Tier; kanji: string }) {
   const search = useSearch({ strict: false }) as { checkout_id?: string }
   const checkoutId = search.checkout_id
   const key = `thanks.${tier}`
+
+  // Track the purchase exactly once per mount. This is the *reliable*
+  // conversion event — visitors only land here after Polar (or the dev
+  // fake-checkout) confirms a successful charge. Vercel Analytics
+  // dedupes by event id, but we also gate on a session-storage flag so
+  // a soft refresh or back-then-forward doesn't double-count.
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const flag = `bs_purchase_tracked:${tier}:${checkoutId ?? 'unknown'}`
+    if (window.sessionStorage.getItem(flag)) return
+    try {
+      track('purchase_complete', {
+        tier,
+        ...(checkoutId ? { checkoutId } : {}),
+      })
+      window.sessionStorage.setItem(flag, '1')
+    } catch {
+      // Analytics never blocks the page.
+    }
+  }, [tier, checkoutId])
 
   return (
     <>

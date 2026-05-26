@@ -4,12 +4,12 @@
   "redirects": [
     {
       "source": "/download/latest",
-      "destination": "https://github.com/schaier-io/battery-sensei-releases/releases/latest/download/Battery-Sensei.zip",
+      "destination": "https://github.com/schaier-io/battery-sensei-releases/releases/latest/download/Battery-Sensei.pkg",
       "permanent": false
     },
     {
       "source": "/download/:version",
-      "destination": "https://github.com/schaier-io/battery-sensei-releases/releases/download/v:version/Battery-Sensei.zip",
+      "destination": "https://github.com/schaier-io/battery-sensei-releases/releases/download/v:version/Battery-Sensei.pkg",
       "permanent": false
     }
   ],

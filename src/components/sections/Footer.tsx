@@ -124,7 +124,7 @@ export function Footer() {
         <p className="text-[0.75rem] tracking-[0.05em] text-nezumi tabular-nums">
           {t('footer.copyright', { year: new Date().getFullYear() })}
           <span className="mx-2 text-nezumi/60" aria-hidden>·</span>
-          <time dateTime="2026-05-20">{t('footer.lastUpdated')}</time>
+          <time dateTime="2026-05-24">{t('footer.lastUpdated')}</time>
         </p>
       </div>
     </footer>

@@ -79,6 +79,12 @@ export function PriceDisplay({ entry, className, symbolClassName }: Props): Reac
     </span>
   )
 
+  // NOTE: live-region announcement is owned by the *parent* row
+  // (`aria-live="polite" aria-atomic="true"` on the price-line wrapper
+  // in Pricing.tsx / checkout.tsx). Putting it here turned every
+  // <PriceDisplay> into its own region, so the moment /api/price
+  // resolved screen readers fired 4–6 announcements back-to-back. The
+  // wrapper-level region announces the full headline once instead.
   return (
     <span className={className}>
       {symbolBefore ? (

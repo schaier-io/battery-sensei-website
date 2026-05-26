@@ -4,7 +4,7 @@
      xmlns:dc="http://purl.org/dc/elements/1.1/">
   <channel>
     <title>Battery Sensei</title>
-    <link>https://battery-sensei.app/appcast.xml</link>
+    <link>https://www.battery-sensei.app/appcast.xml</link>
     <description>Updates for Battery Sensei — a quiet macOS menu-bar battery utility.</description>
     <language>en</language>
     <!--

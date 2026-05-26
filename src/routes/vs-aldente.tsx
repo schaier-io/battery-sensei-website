@@ -13,22 +13,33 @@ const PAGE_TITLE =
 const PAGE_DESC =
   'A fair side-by-side: Battery Sensei (free, open source) vs AlDente (paid). Charge limits, Travel Mode, low-battery alerts, cycle history. Both native macOS.'
 
+/**
+ * Static EN copy mirrored from `vsAldente.faq` in en.json. The user-
+ * facing FAQ on this route reads from `t('vsAldente.faq', …)` so all
+ * five locales get the localized version; this static copy exists only
+ * so the SSR FAQPage JSON-LD below can resolve without going through
+ * the i18n runtime (which isn't ready at route-head time).
+ *
+ * Keep this in lockstep with en.json. House rules: no "AlDente Pro"
+ * (the brand uses plain "AlDente" in its own current marketing), no
+ * hardcoded prices.
+ */
 const FAQ_ITEMS: ReadonlyArray<{ q: string; a: string }> = [
   {
-    q: 'Is Battery Sensei really free, or is there a paid tier later?',
-    a: 'Free for everyone, no tiers, no in-app purchases, no upsell. Sensei is open source on GitHub. AlDente Pro is paid (one-time licence, plus a family option) and closed source.',
+    q: 'Is Battery Sensei free?',
+    a: 'The essentials are free forever — charge limit, smart alerts, 30-day history. Premium is a one-time unlock for Meeting Battery Guard, unlimited Saga history, and custom presets. No subscription, no account. Sensei is open source on GitHub.',
   },
   {
     q: 'Does Battery Sensei do everything AlDente does?',
-    a: 'Most of what most people use AlDente for, yes: charge limit, Travel Mode for trips, native menu-bar status. Sensei adds smart low-battery alerts at thresholds you choose and a plain-English battery history. AlDente Pro has additional power features like discharge mode and sailing/calibration that Sensei does not match.',
+    a: 'Most of what most people use AlDente for, yes: charge limit, Travel Mode for trips, native menu-bar status. Sensei adds smart low-battery alerts at thresholds you choose and a plain-English battery history. AlDente has additional power features like discharge mode and sailing/calibration that Sensei does not match.',
   },
   {
     q: 'When should I pick AlDente instead?',
-    a: 'If you want the most fine-grained battery control on macOS today (heat-mode, sailing, discharge), AlDente Pro is the deeper tool. Sensei prioritises calm defaults and a quiet menu-bar story over an exhaustive feature list.',
+    a: 'If you want the most fine-grained battery control on macOS today (heat-mode, sailing, discharge), AlDente is the deeper tool. Sensei prioritises calm defaults and a quiet menu-bar story over an exhaustive feature list.',
   },
   {
     q: 'Will switching from AlDente to Battery Sensei lose my data?',
-    a: 'No history is lost in macOS itself. Sensei starts a fresh battery journal the day you install it. You can run both apps briefly during a switchover, then uninstall the one you do not want.',
+    a: 'Nothing in macOS itself is lost. Sensei starts a fresh battery journal from install day. You can run both apps briefly during the switchover, then uninstall the one you do not want.',
   },
   {
     q: 'Are charge limits safe? Does Apple support them?',

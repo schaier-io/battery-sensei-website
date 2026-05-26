@@ -197,7 +197,17 @@ export function Pricing() {
                 />
               </span>
             </div>
-            <div className="mt-1.5 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+            {/* `aria-live="polite" aria-atomic="true"` announces the
+                full headline (price + period) as one unit when the
+                live `/api/price` round-trip swaps in the visitor's
+                real currency. Wrapping the row instead of each
+                <PriceDisplay> prevents the symbol + amount from being
+                announced as separate live regions. */}
+            <div
+              aria-live="polite"
+              aria-atomic="true"
+              className="mt-1.5 flex flex-wrap items-baseline gap-x-3 gap-y-1"
+            >
               <PriceDisplay
                 entry={lifetime.discounted}
                 className="display-title inline-flex items-baseline text-[2.25rem] md:text-[2.625rem] font-medium text-sumi leading-none"
@@ -278,7 +288,13 @@ export function Pricing() {
                 {t('pricing.support.badge')}
               </span>
             </div>
-            <div className="mt-2 flex items-baseline gap-2">
+            {/* Live region wraps the full price line — see the parallel
+                comment on the Lifetime card above. */}
+            <div
+              aria-live="polite"
+              aria-atomic="true"
+              className="mt-2 flex items-baseline gap-2"
+            >
               <PriceDisplay
                 entry={yearly}
                 className="display-title inline-flex items-baseline text-[2.25rem] md:text-[2.625rem] font-medium text-sumi leading-none"
@@ -437,7 +453,7 @@ function LimitedRedeemBar({ fullPriceFormatted }: { fullPriceFormatted: string }
  *     the visitor never waits for an email-link round-trip.
  *
  * The API call is fire-and-forget — a network failure never blocks
- * the download. The visitor is always served the .dmg.
+ * the download. The visitor is always served the .pkg installer.
  */
 function FreeDownloadForm() {
   const { t } = useTranslation()
@@ -480,38 +496,47 @@ function FreeDownloadForm() {
       >
         {t('pricing.free.email.label')}
       </label>
-      <div className="mt-2 flex flex-col gap-2 sm:flex-row">
-        <input
-          id="free-download-email"
-          type="email"
-          required
-          autoComplete="email"
-          inputMode="email"
-          value={email}
-          onChange={(e) => {
-            setEmail(e.target.value)
-            if (status === 'error') setStatus('idle')
-          }}
-          placeholder={t('pricing.free.email.placeholder')}
-          className="h-11 flex-1 min-w-0 rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_55%,#fff)] px-3 text-[0.875rem] text-sumi placeholder:text-nezumi/70 focus:outline-none focus:ring-2 focus:ring-sumi/30"
+
+      {/* Input + CTA are always stacked. On the previous side-by-side
+          layout the placeholder `you@example.com` got chopped on small
+          phones once the h-11 button squeezed alongside it; stacking
+          also makes the submit button a full-width affordance that
+          visually parallels the Lifetime / Support CTAs in the
+          neighbouring cards, so all three columns end on the same
+          shape. */}
+      <input
+        id="free-download-email"
+        type="email"
+        required
+        autoComplete="email"
+        inputMode="email"
+        value={email}
+        onChange={(e) => {
+          setEmail(e.target.value)
+          if (status === 'error') setStatus('idle')
+        }}
+        placeholder={t('pricing.free.email.placeholder')}
+        className="mt-2 block h-11 w-full min-w-0 rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_55%,#fff)] px-3 text-[0.875rem] text-sumi placeholder:text-nezumi/70 focus:outline-none focus:ring-2 focus:ring-sumi/30"
+      />
+      <button
+        type="submit"
+        disabled={status === 'sending'}
+        className="btn-sumi group mt-2 inline-flex h-11 w-full items-center justify-center gap-2 rounded-md px-5 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)] disabled:opacity-70"
+      >
+        <Download
+          className="h-4 w-4 transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5"
+          strokeWidth={1.8}
+          aria-hidden
         />
-        <button
-          type="submit"
-          disabled={status === 'sending'}
-          className="btn-sumi group inline-flex h-11 items-center justify-center gap-2 rounded-md px-5 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)] disabled:opacity-70"
-        >
-          <Download
-            className="h-4 w-4 transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5"
-            strokeWidth={1.8}
-            aria-hidden
-          />
-          {status === 'sending'
-            ? t('pricing.free.email.sending')
-            : t('pricing.free.email.cta')}
-        </button>
-      </div>
+        {status === 'sending'
+          ? t('pricing.free.email.sending')
+          : t('pricing.free.email.cta')}
+      </button>
+      {/* `role="alert"` so screen readers announce validation failures
+          the moment they appear; the visual hinomaru text already
+          carries the visual signal. */}
       {status === 'error' && (
-        <p className="mt-1.5 text-center text-[11px] text-hinomaru">
+        <p role="alert" className="mt-1.5 text-center text-[11px] text-hinomaru">
           {t('pricing.free.email.errorInvalid')}
         </p>
       )}

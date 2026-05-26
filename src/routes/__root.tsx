@@ -141,20 +141,20 @@ const howToLd = {
   supply: [
     { '@type': 'HowToSupply', name: 'MacBook running macOS 13 or later' },
   ],
-  tool: [{ '@type': 'HowToTool', name: 'Battery Sensei (free .dmg)' }],
+  tool: [{ '@type': 'HowToTool', name: 'Battery Sensei (free .pkg installer)' }],
   step: [
     {
       '@type': 'HowToStep',
       position: 1,
       name: 'Download Battery Sensei',
-      text: 'Download the notarized .dmg from battery-sensei.app and drag the app into Applications. No account needed.',
+      text: 'Download the notarized .pkg installer from battery-sensei.app and run it. macOS installs the app to Applications. No account needed.',
       url: `${SITE_URL}#download`,
     },
     {
       '@type': 'HowToStep',
       position: 2,
       name: 'Set a charge limit',
-      text: 'Open Battery Sensei from the menu bar and pick a cap (the default 85% slows chemical aging per Apple guidance). Sensei holds the limit in the background.',
+      text: 'Open Battery Sensei from the menu bar and pick a cap (the default 80% slows chemical aging per Apple guidance). Sensei holds the limit in the background.',
     },
     {
       '@type': 'HowToStep',
