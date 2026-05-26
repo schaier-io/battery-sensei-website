@@ -7,10 +7,13 @@
  * ----
  *  1. Country is read from `x-vercel-ip-country` (Vercel injects this header
  *     based on the requesting IP). `?country=XX` overrides for testing/dev.
- *  2. The server POSTs to Polar's checkouts endpoint with the product id
- *     and a `customer_billing_address.country`. Polar returns a checkout
- *     object with `total_amount`, `subtotal_amount`, `tax_amount`, and
- *     `currency` — those are the values the buyer will see.
+ *  2. The server POSTs to Polar's checkouts endpoint with the yearly
+ *     product id AND (when configured) the lifetime product id in parallel.
+ *     Polar returns checkout objects with `total_amount`, `subtotal_amount`,
+ *     `tax_amount`, and `currency` — those are the values the buyer will see.
+ *     For the lifetime product we additionally resolve `ZENMODE` → discount
+ *     UUID and pass `discount_id` so the returned total reflects the actual
+ *     post-discount price (e.g. 56 CZK vs the 165 CZK subtotal).
  *  3. Result is cached per-country in-process for 24h. Vercel Fluid Compute
  *     reuses instances, so a warm container serves repeat countries from
  *     memory; cold starts re-fetch on first miss.
@@ -19,17 +22,39 @@
  *     table without surfacing an error to the user.
  *
  * Required env (server-only, never exposed to the bundle):
- *   POLAR_ACCESS_TOKEN   Organization access token from Polar dashboard
- *                        → Settings → Developers
- *   POLAR_PRODUCT_ID     UUID of the $3.99 Premium product
+ *   POLAR_ACCESS_TOKEN          Organization access token from Polar
+ *                               dashboard → Settings → Developers
+ *   POLAR_PRODUCT_ID            UUID of the yearly support product
+ *                               (fallback: POLAR_PRODUCT_ID_SUPPORT)
+ *   POLAR_PRODUCT_ID_LIFETIME   UUID of the Lifetime one-time product.
+ *                               When set, payload includes a `lifetime`
+ *                               block with the live post-ZENMODE total.
  *
  * The Checkout Link URL used by the client buy button stays in
  * VITE_POLAR_CHECKOUT_URL; the API token + product id are server-only.
  */
 
+import {
+  LIFETIME_DISCOUNT_CODE,
+  POLAR_API_BASE,
+  POLAR_TIMEOUT_MS,
+  resolveDiscountId,
+} from './_polar'
+
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000
-const POLAR_TIMEOUT_MS = 4_000
-const POLAR_API_BASE = 'https://api.polar.sh/v1'
+
+type LifetimeBlock = {
+  /** Post-discount total in minor units (e.g. 5600 = 56.00 CZK). */
+  discounted_amount: number
+  discounted_formatted: string
+  /** Pre-discount subtotal in minor units (e.g. 16500 = 165.00 CZK). */
+  original_amount: number
+  original_formatted: string
+  /** True when Polar accepted the ZENMODE discount on this preview. */
+  has_discount: boolean
+  /** VAT portion of the discounted total, formatted. Empty when zero. */
+  tax_formatted: string
+}
 
 type PricePayload = {
   ok: true
@@ -41,6 +66,10 @@ type PricePayload = {
   tax_formatted: string
   tax_cents: number
   has_tax: boolean
+  /** Lifetime live pricing when POLAR_PRODUCT_ID_LIFETIME is set and the
+   *  preview call succeeded. Absent otherwise — client falls back to the
+   *  derived `yearly + 1` / `yearly × 3` constants. */
+  lifetime?: LifetimeBlock
   source: 'polar'
 }
 
@@ -108,25 +137,22 @@ type PolarCheckout = {
   total_amount?: number
 }
 
-async function fetchPolarPreview(country: string): Promise<PricePayload | PriceFallback> {
-  const token = process.env.POLAR_ACCESS_TOKEN
-  const productId = process.env.POLAR_PRODUCT_ID
-
-  if (!token || !productId) {
-    return { ok: false, country, reason: 'unconfigured', source: 'fallback' }
-  }
-
-  const body = {
+async function fetchCheckoutPreview(
+  productId: string,
+  country: string,
+  token: string,
+  discountId?: string | null,
+): Promise<PolarCheckout | null> {
+  const body: Record<string, unknown> = {
     product_id: productId,
     customer_billing_address: { country },
   }
+  if (discountId) body.discount_id = discountId
 
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), POLAR_TIMEOUT_MS)
-
-  let response: Response
   try {
-    response = await fetch(`${POLAR_API_BASE}/checkouts/`, {
+    const response = await fetch(`${POLAR_API_BASE}/checkouts/`, {
       method: 'POST',
       headers: {
         accept: 'application/json',
@@ -136,52 +162,118 @@ async function fetchPolarPreview(country: string): Promise<PricePayload | PriceF
       body: JSON.stringify(body),
       signal: controller.signal,
     })
-  } catch (err) {
-    return {
-      ok: false,
-      country,
-      reason: err instanceof Error && err.name === 'AbortError' ? 'timeout' : 'network',
-      source: 'fallback',
+
+    if (!response.ok) {
+      // 422 on the discounted lifetime preview means Polar rejected the
+      // discount (cap exhausted, expired, etc.) — caller retries without
+      // it to still get the subtotal.
+      console.warn('[price] polar non-2xx', {
+        status: response.status,
+        productId,
+        hasDiscount: Boolean(discountId),
+      })
+      return null
     }
+
+    return (await response.json()) as PolarCheckout
+  } catch (err) {
+    console.warn('[price] polar fetch threw', {
+      err: err instanceof Error ? err.message : String(err),
+      productId,
+    })
+    return null
   } finally {
     clearTimeout(timer)
   }
+}
 
-  if (!response.ok) {
-    return { ok: false, country, reason: `polar_${response.status}`, source: 'fallback' }
+function isValidCheckout(c: PolarCheckout | null): c is PolarCheckout & {
+  total_amount: number
+  subtotal_amount: number
+  currency: string
+} {
+  return (
+    !!c &&
+    typeof c.total_amount === 'number' &&
+    typeof c.subtotal_amount === 'number' &&
+    typeof c.currency === 'string'
+  )
+}
+
+async function fetchPolarPreview(country: string): Promise<PricePayload | PriceFallback> {
+  const token = process.env.POLAR_ACCESS_TOKEN
+  // Accept both `POLAR_PRODUCT_ID` (legacy) and `POLAR_PRODUCT_ID_SUPPORT`
+  // (newer convention used by checkout-session.ts). Whichever is set wins.
+  const yearlyProductId =
+    process.env.POLAR_PRODUCT_ID ?? process.env.POLAR_PRODUCT_ID_SUPPORT
+  const lifetimeProductId = process.env.POLAR_PRODUCT_ID_LIFETIME
+
+  if (!token || !yearlyProductId) {
+    return { ok: false, country, reason: 'unconfigured', source: 'fallback' }
   }
 
-  let parsed: unknown
-  try {
-    parsed = await response.json()
-  } catch {
-    return { ok: false, country, reason: 'bad_json', source: 'fallback' }
-  }
+  // Resolve ZENMODE → UUID once up front so the lifetime preview can
+  // attach `discount_id` (the only field Polar honours; see api/_polar.ts).
+  // Cached module-scope so repeat country lookups skip this round-trip.
+  const discountId = lifetimeProductId
+    ? await resolveDiscountId(LIFETIME_DISCOUNT_CODE, token)
+    : null
 
-  const checkout = parsed as PolarCheckout
-  if (
-    typeof checkout.total_amount !== 'number' ||
-    typeof checkout.subtotal_amount !== 'number' ||
-    typeof checkout.currency !== 'string'
-  ) {
+  // Fire yearly + lifetime previews in parallel. Lifetime is optional —
+  // if its env var isn't set, we skip the second call and the payload
+  // simply lacks a `lifetime` block (client derives like before).
+  const [yearlyCheckout, lifetimeCheckoutWithDiscount] = await Promise.all([
+    fetchCheckoutPreview(yearlyProductId, country, token),
+    lifetimeProductId
+      ? fetchCheckoutPreview(lifetimeProductId, country, token, discountId)
+      : Promise.resolve(null),
+  ])
+
+  if (!isValidCheckout(yearlyCheckout)) {
     return { ok: false, country, reason: 'no_totals', source: 'fallback' }
   }
 
-  const currency = checkout.currency.toUpperCase()
-  const tax = typeof checkout.tax_amount === 'number' ? checkout.tax_amount : 0
+  const currency = yearlyCheckout.currency.toUpperCase()
+  const tax = typeof yearlyCheckout.tax_amount === 'number' ? yearlyCheckout.tax_amount : 0
 
-  return {
+  const payload: PricePayload = {
     ok: true,
     country,
     currency,
-    amount: checkout.total_amount / 100,
-    formatted: formatAmount(checkout.total_amount, currency),
-    subtotal_formatted: formatAmount(checkout.subtotal_amount, currency),
+    amount: yearlyCheckout.total_amount / 100,
+    formatted: formatAmount(yearlyCheckout.total_amount, currency),
+    subtotal_formatted: formatAmount(yearlyCheckout.subtotal_amount, currency),
     tax_formatted: tax > 0 ? formatAmount(tax, currency) : '',
     tax_cents: tax,
     has_tax: tax > 0,
     source: 'polar',
   }
+
+  // Attach the live lifetime block when we got a valid preview back.
+  // `has_discount` reflects whether Polar's response shows the discount
+  // landed (total < subtotal) — once Polar caps ZENMODE the discounted
+  // preview comes back at full price and we flip the flag so the client
+  // knows to hide the strikethrough.
+  if (isValidCheckout(lifetimeCheckoutWithDiscount)) {
+    const lifeTotal = lifetimeCheckoutWithDiscount.total_amount
+    const lifeSubtotal = lifetimeCheckoutWithDiscount.subtotal_amount
+    const lifeTax =
+      typeof lifetimeCheckoutWithDiscount.tax_amount === 'number'
+        ? lifetimeCheckoutWithDiscount.tax_amount
+        : 0
+    const hasDiscount = lifeTotal < lifeSubtotal
+
+    payload.lifetime = {
+      discounted_amount: lifeTotal,
+      discounted_formatted: formatAmount(lifeTotal, currency),
+      original_amount: lifeSubtotal,
+      original_formatted: formatAmount(lifeSubtotal, currency),
+      has_discount: hasDiscount,
+      tax_formatted: lifeTax > 0 ? formatAmount(lifeTax, currency) : '',
+    }
+  }
+
+  return payload
 }
 
 /**

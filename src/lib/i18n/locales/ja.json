@@ -457,7 +457,7 @@
       "originalLabel": "元の価格",
       "discountNote": "期間限定オファー · コード ZENMODE",
       "redeem": {
-        "label": "ZENMODEコード残り <0>{{remaining}}</0> / <1>{{max}}</1>",
+        "label": "ZENMODEコード残り <0>{{remaining}}</0>",
         "almostGone": "もうすぐ売り切れ — 残り {{remaining}}",
         "soldOut": "ZENMODE完売",
         "soldOutHint": "価格は{{full}}に戻ります"
@@ -705,7 +705,7 @@
     "originalLabel": "元の価格",
     "inline": {
       "title": "Battery Sensei 安全な決済",
-      "hint": "ローンチ割引を自動で適用しました — この価格で残り <0>{{remaining}}</0> / <1>{{max}}</1> 件です。",
+      "hint": "ローンチ割引を自動で適用しました — この価格で残り <0>{{remaining}}</0> 件です。",
       "loading": "決済を開いています",
       "preparing": "決済を準備しています",
       "confirming": "決済を確認しています",
