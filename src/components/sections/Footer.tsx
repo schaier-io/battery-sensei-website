@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router'
 import { Download, MessageCircle, ShoppingBag } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { LanguageSwitcher } from '#/components/LanguageSwitcher'
@@ -119,6 +120,14 @@ export function Footer() {
           <a href="#pricing" className="hover:text-sumi transition-colors">
             {t('footer.pricing')}
           </a>
+          <span aria-hidden className="text-nezumi/50">·</span>
+          <Link to="/privacy" className="hover:text-sumi transition-colors">
+            {t('privacy.footerLink')}
+          </Link>
+          <span aria-hidden className="text-nezumi/50">·</span>
+          <Link to="/legal" className="hover:text-sumi transition-colors">
+            {t('legal.footerLink')}
+          </Link>
         </nav>
 
         <p className="text-[0.75rem] tracking-[0.05em] text-nezumi tabular-nums">

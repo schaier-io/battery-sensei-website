@@ -678,8 +678,8 @@
       "support": "Annulable à tout moment."
     },
     "intro": {
-      "lifetime": "Le paiement sécurisé est géré par Polar. Vous recevrez votre clé de licence par e-mail en moins d'une minute, puis l'activerez dans l'app via Réglages → Premium.",
-      "support": "Le paiement sécurisé est géré par Polar. Vous recevrez votre clé de licence par e-mail en moins d'une minute — elle reste active tant que votre soutien annuel l'est."
+      "lifetime": "Polar Software, Inc. est le vendeur officiel — ils gèrent le paiement, la TVA et votre reçu. Vous recevrez votre clé de licence par e-mail en moins d'une minute, puis l'activerez dans l'app via Réglages → Premium.",
+      "support": "Polar Software, Inc. est le vendeur officiel — ils gèrent le paiement, la TVA et votre reçu. Vous recevrez votre clé de licence par e-mail en moins d'une minute — elle reste active tant que votre soutien annuel l'est."
     },
     "lifetimeAutoNote": "ZENMODE appliqué automatiquement — 500 premiers acheteurs uniquement.",
     "supportSwapNote": "Vous préférez payer une fois et posséder ? <0>Passer à Lifetime</0>.",
@@ -722,6 +722,185 @@
     "alreadyOwnTitle": "Déjà acheté ?",
     "alreadyOwnBody": "Ouvrez Battery Sensei → Réglages → Premium. Collez votre clé, saisissez l'e-mail utilisé lors de l'achat, puis cliquez sur Activer Premium.",
     "backToHome": "Retour à l'accueil"
+  },
+  "privacy": {
+    "kicker": "Confidentialité · 個人情報",
+    "title": "Ce que nous collectons.",
+    "titleItalic": "Et ce que nous ne collectons pas.",
+    "lastUpdated": "Dernière mise à jour {{date}}",
+    "intro": "Battery Sensei est une petite app indé pour macOS. Nous collectons le strict minimum pour faire tourner le site, encaisser les paiements et te prévenir des nouvelles versions — et on t'explique en clair ci-dessous ce que ça veut dire.",
+    "backHome": "Retour à l'accueil",
+    "footerLink": "Confidentialité",
+    "translationNote": "Le texte juridique ci-dessous fait foi en anglais. Un résumé dans ta langue est dispo sur demande — écris-nous à <0>info@battery-sensei.app</0>.",
+    "body": {
+      "controller": {
+        "kicker": "一 · Responsable du traitement",
+        "heading": "Qui est responsable de tes données",
+        "p1": "Battery Sensei est exploité par <0>Sandro Thabiso Schaier</0>, travailleur indépendant (živnostník), avec siège d'activité au Korunní 2569/108, 101 00 Prague 10, République tchèque. Les mentions « nous » sur cette page désignent cet exploitant.",
+        "p2": "Contact pour toute question, demande ou réclamation liée à la vie privée : <0>info@battery-sensei.app</0>. Nous tâchons de répondre sous un jour ouvré."
+      },
+      "what": {
+        "kicker": "二 · Ce que nous collectons",
+        "heading": "La liste complète, par périmètre",
+        "intro": "L'application macOS Battery Sensei est conçue dans une logique de privacy-first : elle tourne intégralement sur ton Mac, sans télémétrie, sans analytics, sans compte cloud et sans connexion réseau sortante autre que la vérification des mises à jour. La liste ci-dessous concerne uniquement le site marketing battery-sensei.app et le tunnel de commande qui s'y trouve — lequel utilise bien des analytics sans cookies, décrits en détail plus bas.",
+        "items": {
+          "localeName": "Cookie de préférence de langue",
+          "localeBody": "Un cookie propriétaire nommé <0>bs_locale</0>, écrit uniquement quand tu changes de langue via le sélecteur du site. Stocke ton code de langue à deux lettres (par ex. <0>de</0>), expire au bout d'un an, jamais partagé.",
+          "purchaseName": "Indicateur de confirmation d'achat",
+          "purchaseBody": "Une entrée sessionStorage de portée session nommée <0>bs_purchase_tracked</0> qui empêche le déclenchement d'événements de conversion en double si tu recharges la page de remerciement. Effacée dès que tu fermes l'onglet.",
+          "analyticsName": "Analytics sans cookies",
+          "analyticsBody": "Compteurs de pages vues anonymisés et Core Web Vitals via Vercel Analytics et Vercel Speed Insights. Pas de cookies, pas d'identifiants inter-sites ; les adresses IP des visiteurs sont hachées une fois au niveau edge avant tout stockage.",
+          "signupName": "Données d'inscription par e-mail",
+          "signupBody": "Uniquement si tu envoies le formulaire « obtiens le téléchargement » : l'adresse e-mail saisie, la langue de la page, ton IP et ton user-agent (pour le tri des abus), plus un horodatage.",
+          "contactName": "Données du formulaire de contact",
+          "contactBody": "Uniquement si tu nous écris via le formulaire de contact : nom, e-mail, objet et corps du message, plus IP / user-agent / origine du référent pour la protection antispam.",
+          "checkoutName": "Données du checkout",
+          "checkoutBody": "Uniquement si tu cliques sur Acheter : l'iframe de checkout Polar collecte tes informations de paiement directement. Nous ne voyons jamais le numéro de carte ; nous ne voyons que ce que Polar nous remonte (e-mail utilisé, pays, identifiant de reçu, statut d'exécution).",
+          "logsName": "Logs serveur",
+          "logsBody": "Logs de requêtes de courte durée chez Vercel, contenant le chemin, le statut, le user-agent et une IP tronquée. Servent au débogage et au tri des abus. Vercel les fait tourner sur une fenêtre glissante de 30 jours."
+        }
+      },
+      "why": {
+        "kicker": "三 · Pourquoi nous les collectons",
+        "heading": "Finalité et base légale",
+        "items": {
+          "functionalName": "Fonctionnement du site",
+          "functionalBody": "Cookie de langue, indicateur de confirmation d'achat. Base légale : <0>intérêt légitime</0> (art. 6, §1, point f RGPD) et considérant 30 de la directive ePrivacy (stockage strictement fonctionnel).",
+          "orderName": "Exécution du tunnel de commande",
+          "orderBody": "Données du checkout, livraison de la clé de licence, gestion des remboursements. Base légale : <0>exécution du contrat</0> (art. 6, §1, point b RGPD).",
+          "newsletterName": "Annonces de versions et e-mails de nouvelles apps",
+          "newsletterBody": "Uniquement les adresses e-mail que tu transmets explicitement via le formulaire d'inscription. Base légale : <0>consentement</0> (art. 6, §1, point a RGPD), retirable à tout moment via le lien de désinscription présent dans chaque e-mail, ou en écrivant à <1>info@battery-sensei.app</1>.",
+          "analyticsName": "Analytics sans cookies + logs serveur",
+          "analyticsBody": "Un signal minimal du type « le site est en ligne et des gens le lisent ». Base légale : <0>intérêt légitime</0> (art. 6, §1, point f RGPD) à exploiter et améliorer le service. Pas de profilage, pas de reciblage publicitaire.",
+          "abuseName": "Signaux d'abus et de fraude",
+          "abuseBody": "IP et user-agent sur les formulaires de contact et d'inscription. Base légale : <0>intérêt légitime</0> (art. 6, §1, point f RGPD) à protéger le service contre le spam, le scraping et les tentatives d'achat frauduleuses."
+        },
+        "noAutomated": "Nous ne mettons en œuvre aucune décision automatisée ni profilage produisant des effets juridiques ou t'affectant de manière significative de façon similaire (art. 22 du RGPD)."
+      },
+      "processors": {
+        "kicker": "四 · Sous-traitants",
+        "heading": "Qui stocke réellement tes données",
+        "intro": "Nous utilisons un petit nombre de sous-traitants. Chacun a sa propre politique de confidentialité, liée ci-dessous. Aucune des données que nous détenons n'est vendue ni partagée avec des réseaux publicitaires.",
+        "items": {
+          "vercelName": "Vercel Inc.",
+          "vercelBody": "Hébergeur basé aux États-Unis ; sert le site, exécute les fonctions serveur, hache les IP au niveau edge. Vercel est certifié au titre de l'EU-US Data Privacy Framework. Politique : <0>vercel.com/legal/privacy-policy</0>.",
+          "polarName": "Polar Software, Inc.",
+          "polarBody": "Vendeur officiel pour tous les achats. Gère le traitement des paiements, la TVA, les remboursements, l'émission de licences. Les données de carte sont collectées directement par Polar ; nous ne les voyons jamais. Les transferts vers Polar (États-Unis) reposent sur les Clauses Contractuelles Types. Politique : <0>polar.sh/legal/privacy</0>.",
+          "resendName": "Resend, Inc.",
+          "resendBody": "Envoie les annonces de versions et les e-mails transactionnels (reçu d'achat, renvoi de clé, confirmation de formulaire de contact). Les adresses e-mail que tu transmets via nos formulaires sont répliquées dans des audiences Resend. Les transferts vers Resend (États-Unis) reposent sur les Clauses Contractuelles Types ; Resend est en outre auto-certifiée au titre de l'EU-US Data Privacy Framework. Politique : <0>resend.com/legal/privacy-policy</0>.",
+          "postgresName": "Base de données PostgreSQL (via la marketplace Vercel)",
+          "postgresBody": "Contient la table des inscriptions e-mail, la table du formulaire de contact et les enregistrements de licences émises par Polar. Provisionnée dans une région de l'UE (Francfort) lorsque le fournisseur de la marketplace le permet. Hébergée par un fournisseur partenaire de Vercel ; nous indiquerons son identité ici une fois la base de données de production en place."
+        }
+      },
+      "retention": {
+        "kicker": "五 · Conservation",
+        "heading": "Combien de temps nous conservons quoi",
+        "items": {
+          "signupName": "Inscriptions e-mail",
+          "signupBody": "Conservées tant que tu restes abonné. Après ta désinscription, nous conservons un marqueur haché pendant environ 30 jours afin d'éviter de te réinscrire silencieusement si tu renvoies le formulaire.",
+          "contactName": "Messages du formulaire de contact",
+          "contactBody": "Conservés jusqu'à 24 mois après la dernière réponse au fil, puis purgés.",
+          "purchaseName": "Données d'achat et d'exécution",
+          "purchaseBody": "Polar, en qualité de vendeur officiel, conserve la facture fiscale sous-jacente pendant la durée légalement requise (typiquement 10 ans en vertu de la loi tchèque n° 563/1991 Rec.). Nous ne conservons que les métadonnées d'émission de licence nécessaires pour réémettre ta clé ou la prendre en charge, en général jusqu'à 5 ans à compter de l'achat, après quoi elles sont anonymisées.",
+          "logsName": "Logs serveur",
+          "logsBody": "Renouvelés par Vercel dans les 30 jours suivant la requête."
+        }
+      },
+      "rights": {
+        "kicker": "六 · Tes droits",
+        "heading": "Ce que tu peux nous demander de faire",
+        "intro": "En vertu du RGPD (et de la loi tchèque n° 110/2019 Sb.), tu as le droit de :",
+        "items": {
+          "access": "Demander l'<0>accès</0> aux données personnelles que nous détenons à ton sujet (art. 15 RGPD).",
+          "correct": "Nous demander de <0>rectifier</0> des données inexactes ou incomplètes (art. 16).",
+          "delete": "Nous demander d'<0>effacer</0> tes données lorsqu'elles ne sont plus nécessaires (art. 17). Pour les données d'achat, nous devons conserver les pièces comptables conformément à la législation fiscale tchèque.",
+          "restrict": "Nous demander de <0>limiter</0> le traitement le temps de l'examen d'une rectification (art. 18).",
+          "portable": "Recevoir une <0>copie portable</0> de tes données dans un format lisible par machine (art. 20).",
+          "object": "T'<0>opposer</0> au traitement fondé sur l'intérêt légitime (art. 21).",
+          "withdraw": "<0>Retirer ton consentement</0> à tout moment — le lien de désinscription se trouve au bas de chaque e-mail de la newsletter."
+        },
+        "closing": "Pour exercer l'un de ces droits, écris-nous à <0>info@battery-sensei.app</0>. Nous te répondrons dans un délai d'un mois à compter de la réception et pouvons prolonger ce délai de deux mois supplémentaires en cas de demandes complexes ; dans ce cas, nous t'informerons dans le premier mois et t'expliquerons les motifs. Tu as également le droit d'introduire une réclamation auprès de l'Autorité tchèque de protection des données personnelles (Úřad pro ochranu osobních údajů, <1>uoou.gov.cz</1>) ou auprès de l'autorité de protection des données de ton pays de résidence."
+      },
+      "changes": {
+        "kicker": "七 · Modifications",
+        "heading": "Quand cette page est mise à jour",
+        "p1": "Lorsque nous modifions une pratique substantielle (nouveau sous-traitant, durée de conservation différente, nouveau type de données collecté), nous mettons à jour la date « dernière mise à jour » en haut de cette page. Si un changement affecte ton consentement (par exemple, un nouveau type de newsletter), nous t'en informerons séparément par e-mail et te demanderons ton accord avant toute inscription."
+      }
+    }
+  },
+  "legal": {
+    "kicker": "Mentions légales · 法",
+    "title": "Mentions légales &",
+    "titleItalic": "avis juridique.",
+    "lastUpdated": "Dernière mise à jour {{date}}",
+    "intro": "Qui se cache derrière battery-sensei.app, comment nous joindre, et les conditions légales qui régissent ton utilisation du site.",
+    "backHome": "Retour à l'accueil",
+    "footerLink": "Mentions légales",
+    "translationNote": "Le texte juridique ci-dessous fait foi en anglais. Un résumé dans ta langue est dispo sur demande — écris-nous à <0>info@battery-sensei.app</0>.",
+    "body": {
+      "operator": {
+        "kicker": "一 · Exploitant",
+        "heading": "Qui fait tourner ce site",
+        "name": "Sandro Thabiso Schaier",
+        "status": "Travailleur indépendant (živnostník) — pas une société immatriculée. Exerce sous couvert d'une licence d'activité tchèque (živnostenské oprávnění) délivrée par l'Úřad městské části Praha 7, en vigueur depuis le 6 mai 2026 pour une durée indéterminée.",
+        "seatLabel": "Siège d'activité :",
+        "seatLine1": "Korunní 2569/108",
+        "seatLine2": "101 00 Prague 10 — Vinohrady",
+        "seatLine3": "République tchèque",
+        "ico": "<0>IČO :</0> 29541263",
+        "dic": "<0>DIČ :</0> Non assujetti à la TVA (neplátce DPH). La TVA sur ton achat est collectée et reversée par Polar Software, Inc. en qualité de vendeur officiel.",
+        "emailLine": "E-mail : <0>info@battery-sensei.app</0>",
+        "activity": "<0>Étendue de l'activité</0> — activité libre relevant de l'Annexe 4 de la loi tchèque sur les licences d'activité, à savoir : fourniture de logiciels, conseil informatique, traitement de données, hébergement et activités connexes, portails web ; préparation de projets techniques, travaux graphiques et de dessin ; recherche et développement en sciences naturelles, techniques et sociales ; publicité, marketing et représentation médiatique.",
+        "authority": "<0>Autorité de surveillance des activités commerciales</0> — Úřad městské části Praha 10 (mairie du 10ᵉ arrondissement de Prague), désignée en vertu du §71(2) de la loi tchèque sur les licences d'activité."
+      },
+      "merchantOfRecord": {
+        "kicker": "二 · Vendeur officiel",
+        "heading": "À qui tu paies réellement",
+        "p1": "Tous les achats sur battery-sensei.app sont traités par <0>Polar Software, Inc.</0>, notre revendeur et vendeur officiel. Polar gère le paiement, la collecte et le reversement de la TVA, les remboursements, la facturation et les chargebacks. Ton contrat d'achat de la licence est conclu avec Polar ; ton contrat d'utilisation du logiciel est conclu avec l'exploitant désigné ci-dessus. Polar émet la facture fiscale en son propre nom — tu peux la retélécharger via le lien présent dans ton e-mail d'achat ou en demander une copie au support de Polar à tout moment.",
+        "p2": "Les conditions et la politique de confidentialité de Polar s'appliquent au checkout proprement dit et sont disponibles à <0>polar.sh/legal</0>."
+      },
+      "withdrawal": {
+        "kicker": "三 · Rétractation",
+        "heading": "Ton droit de rétractation de 14 jours",
+        "p1": "En tant que consommateur résidant dans l'Union européenne, tu disposes en principe de <0>14 jours</0> pour te rétracter d'un contrat à distance en vertu du §1829 du Code civil tchèque (loi n° 89/2012 Rec.).",
+        "p2": "Battery Sensei étant livré sous forme de contenu numérique immédiatement après le paiement, en finalisant la commande tu acceptes expressément que l'exécution commence sans délai et reconnais que, en vertu du <0>§1837(l) du Code civil tchèque</0>, tu perds le droit de rétractation dès que la clé de licence a été émise.",
+        "p3": "Si ta clé n'a pas encore été émise, ou si tu ne l'as pas encore activée, tu peux toujours te rétracter dans le délai de 14 jours — écris à <0>info@battery-sensei.app</0> et nous coordonnerons le remboursement avec Polar. Le flux de remboursement propre à Polar (accessible depuis ton e-mail d'achat ou le tableau de bord Polar) est généralement la voie la plus rapide."
+      },
+      "contentLiability": {
+        "kicker": "四 · Contenu",
+        "heading": "Responsabilité quant au contenu",
+        "p1": "Le contenu de battery-sensei.app est fourni de bonne foi et maintenu aussi à jour qu'il est raisonnablement possible. Nous ne garantissons pas que chaque détail soit exact, complet ou à jour à un instant donné — les logiciels, les prix, les politiques des tiers et les références juridiques évoluent.",
+        "p2": "Dans la mesure permise par la loi applicable, nous excluons toute responsabilité pour les dommages indirects, accessoires, spéciaux ou consécutifs résultant de l'utilisation (ou de l'impossibilité d'utiliser) le site ou le logiciel. Cela ne limite pas tes droits légaux en tant que consommateur, qui s'appliquent toujours pleinement."
+      },
+      "externalLinks": {
+        "kicker": "五 · Liens externes",
+        "heading": "Liens vers d'autres sites",
+        "p1": "Ce site renvoie vers des pages tierces que nous estimons utiles — sites concurrents, documentation, pages de prestataires de paiement, autorités de sécurité sociale et de protection des données. Nous n'avons aucun contrôle sur le contenu de ces pages externes et n'en assumons aucune responsabilité. Les exploitants de ces pages sont seuls responsables de leur propre contenu."
+      },
+      "copyright": {
+        "kicker": "六 · Droit d'auteur",
+        "heading": "Qui détient ce qui figure ici",
+        "p1": "L'ensemble des textes, du code, des images, des illustrations et des marques sur battery-sensei.app appartient à l'exploitant, sauf attribution expresse contraire. Ils sont protégés au titre de la loi tchèque n° 121/2000 Sb. (loi sur le droit d'auteur) ainsi que des lois équivalentes dans les autres juridictions. Toute réutilisation, reproduction ou modification au-delà de ce que permettent les exceptions au droit d'auteur applicables requiert notre consentement préalable écrit.",
+        "p2": "Les marques de tiers (AlDente, BatFi, coconutBattery, iStat Menus, macOS, Apple) sont mentionnées au titre du fair use nominatif à des fins de comparaison et appartiennent à leurs détenteurs respectifs."
+      },
+      "governingLaw": {
+        "kicker": "七 · Droit applicable",
+        "heading": "Quelle loi s'applique",
+        "p1": "L'utilisation de ce site est régie par les lois de la République tchèque ; les tribunaux compétents sont ceux de la République tchèque. Si tu es consommateur résidant dans l'Union européenne, la protection consommateur impérative de ton pays de résidence continue de s'appliquer pleinement et n'est pas écartée par cette clause."
+      },
+      "disputeResolution": {
+        "kicker": "八 · Règlement des litiges",
+        "heading": "Si quelque chose tourne mal",
+        "p1": "Nous essayons de régler toute difficulté en direct dans un premier temps — écris à <0>info@battery-sensei.app</0>, nous répondons sous un jour ouvré.",
+        "p2": "Les consommateurs en République tchèque peuvent aussi déposer une plainte extrajudiciaire auprès de l'Inspection commerciale tchèque (Česká obchodní inspekce, <0>coi.cz</0>), désignée comme organe de règlement extrajudiciaire des litiges au titre de la loi tchèque n° 634/1992 Sb.",
+        "p3": "Les consommateurs de l'UE peuvent également utiliser la plateforme de règlement en ligne des litiges de la Commission européenne à l'adresse <0>ec.europa.eu/consumers/odr</0>."
+      },
+      "privacyPointer": {
+        "kicker": "九 · Données personnelles",
+        "heading": "L'avis de confidentialité est ailleurs",
+        "p1": "La manière dont nous collectons, utilisons et protégeons les données personnelles est documentée séparément et fait foi sur ce sujet. Voir l'<0>avis de confidentialité</0>."
+      }
+    }
   },
   "vsAldente": {
     "backLink": "Battery Sensei",

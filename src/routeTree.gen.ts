@@ -11,6 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WalkthroughRouteImport } from './routes/walkthrough'
 import { Route as VsAldenteRouteImport } from './routes/vs-aldente'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as LegalRouteImport } from './routes/legal'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ThanksSupportRouteImport } from './routes/thanks.support'
@@ -30,6 +32,16 @@ const WalkthroughRoute = WalkthroughRouteImport.update({
 const VsAldenteRoute = VsAldenteRouteImport.update({
   id: '/vs-aldente',
   path: '/vs-aldente',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LegalRoute = LegalRouteImport.update({
+  id: '/legal',
+  path: '/legal',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CheckoutRoute = CheckoutRouteImport.update({
@@ -88,6 +100,8 @@ const FeaturesAlertPresetsRoute = FeaturesAlertPresetsRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/checkout': typeof CheckoutRoute
+  '/legal': typeof LegalRoute
+  '/privacy': typeof PrivacyRoute
   '/vs-aldente': typeof VsAldenteRoute
   '/walkthrough': typeof WalkthroughRoute
   '/features/alert-presets': typeof FeaturesAlertPresetsRoute
@@ -102,6 +116,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/checkout': typeof CheckoutRoute
+  '/legal': typeof LegalRoute
+  '/privacy': typeof PrivacyRoute
   '/vs-aldente': typeof VsAldenteRoute
   '/walkthrough': typeof WalkthroughRoute
   '/features/alert-presets': typeof FeaturesAlertPresetsRoute
@@ -117,6 +133,8 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/checkout': typeof CheckoutRoute
+  '/legal': typeof LegalRoute
+  '/privacy': typeof PrivacyRoute
   '/vs-aldente': typeof VsAldenteRoute
   '/walkthrough': typeof WalkthroughRoute
   '/features/alert-presets': typeof FeaturesAlertPresetsRoute
@@ -133,6 +151,8 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/checkout'
+    | '/legal'
+    | '/privacy'
     | '/vs-aldente'
     | '/walkthrough'
     | '/features/alert-presets'
@@ -147,6 +167,8 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/checkout'
+    | '/legal'
+    | '/privacy'
     | '/vs-aldente'
     | '/walkthrough'
     | '/features/alert-presets'
@@ -161,6 +183,8 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/checkout'
+    | '/legal'
+    | '/privacy'
     | '/vs-aldente'
     | '/walkthrough'
     | '/features/alert-presets'
@@ -176,6 +200,8 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CheckoutRoute: typeof CheckoutRoute
+  LegalRoute: typeof LegalRoute
+  PrivacyRoute: typeof PrivacyRoute
   VsAldenteRoute: typeof VsAldenteRoute
   WalkthroughRoute: typeof WalkthroughRoute
   FeaturesAlertPresetsRoute: typeof FeaturesAlertPresetsRoute
@@ -202,6 +228,20 @@ declare module '@tanstack/react-router' {
       path: '/vs-aldente'
       fullPath: '/vs-aldente'
       preLoaderRoute: typeof VsAldenteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal': {
+      id: '/legal'
+      path: '/legal'
+      fullPath: '/legal'
+      preLoaderRoute: typeof LegalRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/checkout': {
@@ -280,6 +320,8 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CheckoutRoute: CheckoutRoute,
+  LegalRoute: LegalRoute,
+  PrivacyRoute: PrivacyRoute,
   VsAldenteRoute: VsAldenteRoute,
   WalkthroughRoute: WalkthroughRoute,
   FeaturesAlertPresetsRoute: FeaturesAlertPresetsRoute,

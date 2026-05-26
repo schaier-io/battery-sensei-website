@@ -204,6 +204,46 @@ body {
   line-height: var(--leading-body);
 }
 
+/* Legal-page prose. Used by /privacy and /legal. Wraps the article body
+   with a comfortable reading column, underline-on-rest anchor style so
+   inline references stand out without shouting, and tight list spacing
+   that matches the kicker rhythm in the surrounding sections. */
+.legal-prose {
+  max-width: 65ch;
+}
+.legal-prose p {
+  margin: 0;
+}
+.legal-prose code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.875em;
+  padding: 0.05em 0.35em;
+  border-radius: 4px;
+  background: color-mix(in oklab, var(--washi-deep) 70%, transparent);
+  color: var(--sumi);
+}
+.legal-link {
+  color: var(--sumi);
+  text-decoration: underline;
+  text-decoration-color: var(--line-strong);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.legal-link:hover {
+  text-decoration-color: var(--hinomaru);
+}
+.legal-list {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  list-style: disc;
+}
+.legal-list li::marker {
+  color: color-mix(in oklab, var(--hinomaru) 60%, transparent);
+}
+
 /* Washi fiber texture overlay — paired with foxing spots and pulp speckles
    to mirror the app's HistoricalPaperPatina (Surfaces/Zen/WashiBackground.swift). */
 body::before {

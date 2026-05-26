@@ -17,16 +17,16 @@ import {
   Laptop,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
+import { Link } from '@tanstack/react-router'
 import { useState, type FormEvent } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import i18n from 'i18next'
 import { Hanko } from '#/components/zen/Hanko'
 import { PriceDisplay } from '#/components/zen/PriceDisplay'
 import { Reveal } from '#/components/zen/Reveal'
-import { TRIAL_DAYS, lifetimeCheckoutUrl, supportCheckoutUrl } from '#/lib/polar'
+import { TRIAL_DAYS } from '#/lib/polar'
 import { usePremiumPrice, useLifetimePrice } from '#/lib/use-price'
 import { useDiscountAvailability } from '#/lib/use-discount-availability'
-import { usePolarCheckout } from '#/lib/use-polar-embed'
 
 const lifetimeIcons: readonly LucideIcon[] = [Sparkles, InfinityIcon, Clock, Headphones]
 const supportIcons: readonly LucideIcon[] = [Sparkles, TrendingUp, XCircle, Inbox]
@@ -46,7 +46,6 @@ export function Pricing() {
   const yearly = usePremiumPrice()
   const lifetime = useLifetimePrice()
   const { t } = useTranslation()
-  const openPolarCheckout = usePolarCheckout()
   // ZENMODE redemption count drives every "launch discount" surface on
   // this section. Once `remaining` hits 0 we hide the scarcity bar, the
   // discount-note chip, AND the strikethrough — the page then reads as
@@ -291,33 +290,25 @@ export function Pricing() {
 
             {/* Trust line + CTA bundled in mt-auto so they sit glued
                 together at the bottom — peak-end rule: trust is the
-                last thing the visitor reads before clicking. */}
+                last thing the visitor reads before clicking. The
+                trust line uses `min-h-[2.5rem]` so its row always
+                reserves the same vertical space across all three
+                cards (Free / Lifetime / Support), keeping the CTA
+                buttons aligned even when one locale's trust copy
+                wraps to two lines. */}
             <div className="mt-auto pt-8">
-              <p className="inline-flex items-center gap-1.5 text-[0.7rem] text-nezumi">
+              <p className="inline-flex min-h-[2.5rem] items-center gap-1.5 text-[0.7rem] text-nezumi">
                 <ShieldCheck className="h-3 w-3 shrink-0" strokeWidth={1.8} aria-hidden />
                 {t('pricing.lifetime.trust.combined')}
               </p>
-              <a
-                href={lifetimeCheckoutUrl()}
-                onClick={(e) => {
-                  // Intercept and open the Polar embed in a modal instead
-                  // of navigating away. Plain anchor href remains as the
-                  // no-JS / right-click fallback. `tier` is used only by
-                  // fake-checkout mode to pick the right thank-you page.
-                  e.preventDefault()
-                  // `tier` resolves the product server-side. If the
-                  // session-create API fails, the hook shows an inline
-                  // error overlay — we no longer redirect the visitor
-                  // to buy.polar.sh as a fallback (keeps the brand
-                  // experience on-domain). The plain `href` on this
-                  // anchor still gives a no-JS path.
-                  void openPolarCheckout({ tier: 'lifetime' })
-                }}
+              <Link
+                to="/checkout"
+                search={{ tier: 'lifetime' }}
                 className="btn-sumi group mt-3 inline-flex h-11 w-full items-center justify-center gap-2 rounded-md px-6 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
               >
                 <Sparkles className="h-4 w-4" strokeWidth={1.8} />
                 {t('pricing.lifetime.ctaLabel')}
-              </a>
+              </Link>
             </div>
           </article>
         </Reveal>
@@ -381,23 +372,22 @@ export function Pricing() {
 
             {/* Same pattern as Lifetime: trust + CTA bundled at the
                 bottom so the white space lives ABOVE the conversion
-                block, not between trust and button. */}
+                block. Trust line uses `min-h-[2.5rem]` so all three
+                cards reserve the same vertical area and the buttons
+                end on the same baseline. */}
             <div className="mt-auto pt-8">
-              <p className="inline-flex items-center gap-1.5 text-[0.7rem] text-nezumi">
+              <p className="inline-flex min-h-[2.5rem] items-center gap-1.5 text-[0.7rem] text-nezumi">
                 <RefreshCw className="h-3 w-3 shrink-0" strokeWidth={1.8} aria-hidden />
                 {t('pricing.lifetime.trust.subscription')}
               </p>
-              <a
-                href={supportCheckoutUrl()}
-                onClick={(e) => {
-                  e.preventDefault()
-                  void openPolarCheckout({ tier: 'support' })
-                }}
+              <Link
+                to="/checkout"
+                search={{ tier: 'support' }}
                 className="btn-sumi-soft group mt-3 inline-flex h-11 w-full items-center justify-center gap-2 rounded-md border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-6 text-sm font-medium text-sumi transition-colors duration-200 hover:bg-[color-mix(in_oklab,var(--washi)_40%,#fff)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
               >
                 <Heart className="h-4 w-4 text-hinomaru" strokeWidth={1.8} />
                 {t('pricing.support.ctaLabel')}
-              </a>
+              </Link>
             </div>
           </article>
         </Reveal>
