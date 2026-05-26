@@ -354,11 +354,18 @@ function TierTab({
       role="tab"
       aria-selected={active}
       onClick={onClick}
-      className={`flex-1 rounded-[5px] px-4 py-2 text-[0.8125rem] font-medium transition-colors duration-200 ${
+      // Inactive tabs get a soft washi-tint hover background + sumi
+      // text shift so the toggle feels alive on pointer move; the
+      // active tab keeps its sumi pill and only deepens slightly on
+      // hover so the click target stays self-evident.
+      className={[
+        'flex-1 rounded-[5px] px-4 py-2 text-[0.8125rem] font-medium',
+        'transition-colors duration-200 cursor-pointer',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--washi)]',
         active
-          ? 'bg-sumi text-[var(--washi)] shadow-sm'
-          : 'text-sumi-soft hover:text-sumi'
-      }`}
+          ? 'bg-sumi text-[var(--washi)] shadow-sm hover:bg-[color-mix(in_oklab,var(--sumi)_92%,#000)]'
+          : 'text-sumi-soft hover:text-sumi hover:bg-[color-mix(in_oklab,var(--washi)_40%,#fff)]',
+      ].join(' ')}
     >
       {label}
     </button>

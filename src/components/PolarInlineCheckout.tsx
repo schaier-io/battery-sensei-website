@@ -118,6 +118,20 @@ export function PolarInlineCheckout({ tier, discountCode, theme = 'light' }: Pro
           if (!url.searchParams.has('theme')) {
             url.searchParams.set('theme', theme)
           }
+          // Auto-apply discount via URL query param — Polar's iframe reads
+          // `?discount_code=XYZ` and pre-applies it. The session-create
+          // request body's `discount_code` field is IGNORED by Polar's API
+          // (the schema only accepts `discount_id` UUIDs server-side); the
+          // URL param is the actual consumer-facing entry point. For
+          // Lifetime sessions we pass ZENMODE here unless the visitor
+          // typed something different on /checkout's (removed) promo
+          // field. Once the cap is exhausted Polar's UI ignores the
+          // param silently and the buyer sees full price.
+          if (tier === 'lifetime' && !url.searchParams.has('discount_code')) {
+            url.searchParams.set('discount_code', discountCode ?? 'ZENMODE')
+          } else if (discountCode && !url.searchParams.has('discount_code')) {
+            url.searchParams.set('discount_code', discountCode)
+          }
           setSessionUrl(url.toString())
           setPhase('mounted')
         } else {

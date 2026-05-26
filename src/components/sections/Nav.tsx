@@ -323,22 +323,28 @@ function MobileDrawer({
                     href={`#${id}`}
                     onClick={onClose}
                     data-active={isActive ? 'true' : 'false'}
-                    className="group flex items-center justify-between gap-4 py-4 border-b border-[var(--line)] last:border-b-0"
+                    // Row-level hover treatment: the inner kanji + label
+                    // group slides ~6 px to the right + the kanji deepens
+                    // to hinomaru. Subtle but enough to make the row feel
+                    // tappable on touch + responsive on pointer. The
+                    // padding-x doesn't change, so the border-bottom
+                    // alignment stays steady through the animation.
+                    className="group flex items-center justify-between gap-4 py-4 border-b border-[var(--line)] last:border-b-0 transition-colors duration-[260ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:border-[var(--line-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/30 focus-visible:rounded-md"
                   >
-                    <span className="flex items-baseline gap-4 min-w-0">
+                    <span className="flex items-baseline gap-4 min-w-0 transition-transform duration-[300ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:translate-x-1.5">
                       <span
                         aria-hidden
-                        className="font-jp text-2xl leading-none text-hinomaru/70 group-hover:text-hinomaru transition-colors w-8 text-center tabular-nums"
+                        className="font-jp text-2xl leading-none text-hinomaru/70 transition-colors duration-[220ms] group-hover:text-hinomaru w-8 text-center tabular-nums"
                       >
                         {SECTION_KANJI[id]}
                       </span>
-                      <span className="display-title text-[1.25rem] font-medium text-sumi group-data-[active=true]:text-hinomaru transition-colors">
+                      <span className="display-title text-[1.25rem] font-medium text-sumi transition-colors duration-[220ms] group-hover:text-hinomaru group-data-[active=true]:text-hinomaru">
                         {t(`nav.sections.${id}`)}
                       </span>
                     </span>
                     <span
                       aria-hidden
-                      className="text-nezumi tabular-nums text-[10px] uppercase tracking-[0.18em]"
+                      className="text-nezumi tabular-nums text-[10px] uppercase tracking-[0.18em] transition-colors duration-[220ms] group-hover:text-sumi-soft"
                     >
                       {String(i + 1).padStart(2, '0')}
                     </span>
