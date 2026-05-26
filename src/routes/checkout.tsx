@@ -35,7 +35,7 @@ type Tier = z.infer<typeof tierSchema>
 // through to `undefined`, which is the cue for the price hooks to
 // auto-detect the visitor's currency (USD outside the euro zone, EUR
 // inside) instead of forcing one.
-const currencySchema = z.enum(['USD', 'EUR']).optional().catch(undefined)
+const currencySchema = z.enum(['USD', 'EUR', 'CZK']).optional().catch(undefined)
 type Currency = z.infer<typeof currencySchema>
 
 export const Route = createFileRoute('/checkout')({
@@ -124,9 +124,14 @@ function CheckoutPage() {
 
   // What currency is the page CURRENTLY showing? Prefer the explicit
   // override; otherwise read the live (or fallback) price's currency
-  // so the segmented control highlights the auto-chosen side.
-  const activeCurrency: 'USD' | 'EUR' =
-    cur ?? (yearly.currency === 'EUR' ? 'EUR' : 'USD')
+  // so the inline picker highlights the auto-chosen option.
+  const activeCurrency: 'USD' | 'EUR' | 'CZK' = cur ?? (
+    yearly.currency === 'EUR'
+      ? 'EUR'
+      : yearly.currency === 'CZK'
+        ? 'CZK'
+        : 'USD'
+  )
 
   return (
     <>
@@ -256,39 +261,13 @@ function CheckoutPage() {
 
             <div aria-hidden className="my-7 h-px w-full bg-[var(--line)]" />
 
-            {/* Currency switcher — visitors default to USD or EUR
-                based on geo, but can flip explicitly. Sits above the
-                iframe so the choice is obvious BEFORE Polar paints
-                the card form (changing currency remounts the iframe
-                with a fresh session). Polar's hosted/embedded UI does
-                not expose a built-in currency control, so this is the
-                only path to switch. */}
-            <div className="mt-5 mb-4 flex flex-wrap items-center justify-between gap-3">
-              <div className="flex items-center gap-3">
-                <span className="text-[0.6875rem] uppercase tracking-[0.22em] text-sumi-soft">
-                  {t('checkout.currency.label')}
-                </span>
-                <div
-                  role="group"
-                  aria-label={t('checkout.currency.label')}
-                  className="inline-flex rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] p-0.5"
-                >
-                  <CurrencyTab
-                    active={activeCurrency === 'USD'}
-                    onClick={() => switchCurrency('USD')}
-                    label={t('checkout.currency.usd')}
-                  />
-                  <CurrencyTab
-                    active={activeCurrency === 'EUR'}
-                    onClick={() => switchCurrency('EUR')}
-                    label={t('checkout.currency.eur')}
-                  />
-                </div>
-              </div>
-              <span className="text-[0.6875rem] text-nezumi">
-                {t('checkout.currency.hint')}
-              </span>
-            </div>
+            {/* Currency switcher used to sit here as a bold
+                segmented control — too much weight for what is in
+                practice a "set-and-forget" preference. It now lives
+                as a quiet inline row BELOW the trust badges (see
+                below the iframe block), auto-picks CZK / EUR / USD
+                from the visitor's geo, and only renders the three
+                options as small text-links you can tap to override. */}
 
             {/* Activation pane — sits DIRECTLY above the iframe so
                 the buyer reads exactly how delivery + activation
@@ -360,6 +339,53 @@ function CheckoutPage() {
                 </>
               )}
             </ul>
+
+            {/* Quiet currency picker. The auto-detected currency
+                (CZ → CZK, eurozone → EUR, else USD) is already
+                selected — this row only exists so a visitor in CZ
+                who'd rather pay in EUR (or anywhere else who'd
+                rather pay in CZK) can override. Rendered as small
+                text-links with a "Pay in:" prefix so the row reads
+                as informational, not as a primary control. The
+                active currency renders bold + sumi; the other two
+                use `.zen-link` so the ink-press hover signals they
+                are clickable. */}
+            <div className="mt-3 flex justify-center">
+              <p
+                role="group"
+                aria-label={t('checkout.currency.label')}
+                className="inline-flex flex-wrap items-center justify-center gap-x-2 text-[0.6875rem] text-nezumi"
+              >
+                <span className="uppercase tracking-[0.18em] text-sumi-soft">
+                  {t('checkout.currency.payIn')}
+                </span>
+                {(['USD', 'EUR', 'CZK'] as const).map((c, i) => {
+                  const active = activeCurrency === c
+                  const label = t(`checkout.currency.${c.toLowerCase()}`)
+                  return (
+                    <span key={c} className="inline-flex items-center gap-2">
+                      {i > 0 && <span aria-hidden className="text-nezumi/50">·</span>}
+                      {active ? (
+                        <span
+                          aria-current="true"
+                          className="font-medium text-sumi tabular-nums"
+                        >
+                          {label}
+                        </span>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => switchCurrency(c)}
+                          className="zen-link tabular-nums"
+                        >
+                          {label}
+                        </button>
+                      )}
+                    </span>
+                  )
+                })}
+              </p>
+            </div>
           </article>
         </Reveal>
 
@@ -370,27 +396,53 @@ function CheckoutPage() {
             iframe where it answers the "what happens after I pay"
             question at the moment of payment. */}
 
+        {/* "Already bought?" panel — intentionally a DIFFERENT shape
+            from the dashed-border activation aside that sits above
+            the iframe so the two don't read as a pair of identical
+            "鍵 …" callouts. This one is a solid-border card with a
+            hinomaru ink-stripe on the left edge, a sealed key icon,
+            and a sumi-weight title. Visually it sits closer to a
+            stamped receipt / claim slip — the right metaphor for
+            "you already paid, here's how to take possession". */}
         <Reveal delay={400}>
-          <aside className="mt-4 rounded-md border border-dashed border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-5 py-4">
-            <p className="flex items-center gap-2 text-[0.7rem] uppercase tracking-[0.22em] font-medium text-sumi-soft">
-              <span className="font-jp normal-case tracking-normal text-hinomaru/80">鍵</span>
-              {t('checkout.alreadyOwnTitle')}
-            </p>
-            <p className="mt-2 text-[0.875rem] leading-snug text-sumi-soft">
-              {t('checkout.alreadyOwnBody')}
-            </p>
-            {/* Newcomers occasionally land here without Sensei installed
-                — usually visitors clicking through from a referral with
-                a key in hand. Surface the download as an outlined
-                secondary CTA so it's reachable without burying the
-                primary "paste your key" instructions above. */}
-            <a
-              href="/download/latest"
-              className="mt-3 inline-flex h-9 items-center gap-2 rounded-md border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_55%,#fff)] px-3.5 text-[0.8125rem] font-medium text-sumi transition-colors duration-200 hover:bg-[color-mix(in_oklab,var(--washi)_35%,#fff)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
-            >
-              <Download className="h-3.5 w-3.5" strokeWidth={1.7} aria-hidden />
-              {t('checkout.alreadyOwnDownload')}
-            </a>
+          <aside className="paper-card relative mt-4 overflow-hidden">
+            <span
+              aria-hidden
+              className="absolute inset-y-0 left-0 w-[3px] bg-gradient-to-b from-hinomaru/75 via-hinomaru/40 to-hinomaru/0"
+            />
+            <div className="flex flex-col gap-5 px-6 py-5 sm:flex-row sm:items-start">
+              {/* Stamped-key seal. Round border + hinomaru-tinted
+                  fill gives it the "hanko on a receipt" feel without
+                  pulling out a full Hanko component (those carry
+                  brush animation; overkill for a static aside). */}
+              <div
+                aria-hidden
+                className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-hinomaru/30 bg-[color-mix(in_oklab,var(--hinomaru)_7%,var(--washi))] shadow-[0_1px_0_rgba(255,255,255,0.5)_inset,0_1px_2px_rgba(28,26,23,0.12)]"
+              >
+                <KeyRound className="h-5 w-5 text-hinomaru" strokeWidth={1.5} />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="display-title text-[1rem] font-medium leading-tight text-sumi">
+                  {t('checkout.alreadyOwnTitle')}
+                </p>
+                <p className="mt-1.5 text-[0.875rem] leading-[1.55] text-sumi-soft">
+                  {t('checkout.alreadyOwnBody')}
+                </p>
+                {/* Newcomers occasionally land here without Sensei
+                    installed — usually visitors clicking through from
+                    a referral with a key in hand. Surface the
+                    download as an outlined secondary CTA so it's
+                    reachable without burying the "paste your key"
+                    instruction above. */}
+                <a
+                  href="/download/latest"
+                  className="mt-3.5 inline-flex h-9 items-center gap-2 rounded-md border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_55%,#fff)] px-3.5 text-[0.8125rem] font-medium text-sumi transition-[background-color,transform,box-shadow] duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-px hover:bg-[color-mix(in_oklab,var(--washi)_30%,#fff)] hover:shadow-[0_4px_12px_-6px_rgba(28,26,23,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
+                >
+                  <Download className="h-3.5 w-3.5" strokeWidth={1.7} aria-hidden />
+                  {t('checkout.alreadyOwnDownload')}
+                </a>
+              </div>
+            </div>
           </aside>
         </Reveal>
 
@@ -406,41 +458,6 @@ function CheckoutPage() {
       </main>
       <Footer />
     </>
-  )
-}
-
-/**
- * Smaller sibling of `TierTab` for the currency switcher (USD/EUR).
- * Visual language matches the tier toggle so the two segmented
- * controls read as a family, but the currency one is denser since it
- * lives inline above the iframe rather than above the headline.
- */
-function CurrencyTab({
-  active,
-  onClick,
-  label,
-}: {
-  active: boolean
-  onClick: () => void
-  label: string
-}) {
-  return (
-    <button
-      type="button"
-      role="tab"
-      aria-selected={active}
-      onClick={onClick}
-      className={[
-        'rounded-[5px] px-3 py-1 text-[0.75rem] font-medium tabular-nums',
-        'transition-colors duration-200 cursor-pointer',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40',
-        active
-          ? 'bg-sumi text-[var(--washi)] shadow-sm'
-          : 'text-sumi-soft hover:text-sumi',
-      ].join(' ')}
-    >
-      {label}
-    </button>
   )
 }
 

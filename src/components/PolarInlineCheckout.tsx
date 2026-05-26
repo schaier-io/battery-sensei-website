@@ -53,7 +53,7 @@ interface Props {
   /** Currency override from the /checkout switcher. When set, the
    *  session is created with Polar's `currency` field so the iframe
    *  quotes totals in this code regardless of the visitor's geo. */
-  currency?: 'USD' | 'EUR'
+  currency?: 'USD' | 'EUR' | 'CZK'
 }
 
 const POLAR_MESSAGE_ORIGINS = new Set([

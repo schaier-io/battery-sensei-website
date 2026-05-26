@@ -85,14 +85,14 @@ type ApiResponse =
 // is faster on warm navigations.
 //
 // The cache key is the chosen currency (`auto` for "no override"). The
-// /checkout switcher remounts the hook with `currency='USD' | 'EUR'`
+// /checkout switcher remounts the hook with `currency='USD' | 'EUR' | 'CZK'`
 // and we keep one entry per key — flipping the switch never serves a
 // stale preview from the other currency.
 const SHARED_TTL_MS = 60 * 1000
 const inFlightByKey: Map<string, Promise<ApiResponse | null>> = new Map()
 const cachedByKey: Map<string, { at: number; data: ApiResponse }> = new Map()
 
-function fetchPrice(currency?: 'USD' | 'EUR'): Promise<ApiResponse | null> {
+function fetchPrice(currency?: 'USD' | 'EUR' | 'CZK'): Promise<ApiResponse | null> {
   const key = currency ?? 'auto'
   const now = Date.now()
   const c = cachedByKey.get(key)
@@ -124,7 +124,7 @@ function fetchPrice(currency?: 'USD' | 'EUR'): Promise<ApiResponse | null> {
 // `currency` is an OPTIONAL explicit override coming from the /checkout
 // switcher. When unset, the server picks USD or EUR based on the
 // visitor's detected country (CZK / GBP / etc. are never auto-chosen).
-export function usePremiumPrice(currency?: 'USD' | 'EUR'): DisplayPrice {
+export function usePremiumPrice(currency?: 'USD' | 'EUR' | 'CZK'): DisplayPrice {
   const [price, setPrice] = useState<DisplayPrice>(FALLBACK)
 
   useEffect(() => {
@@ -217,7 +217,7 @@ export type LifetimePrice = {
  * sensible placeholder while the operator wires up the lifetime
  * product. For real prices the operator must set the env var.
  */
-export function useLifetimePrice(currency?: 'USD' | 'EUR'): LifetimePrice {
+export function useLifetimePrice(currency?: 'USD' | 'EUR' | 'CZK'): LifetimePrice {
   const yearly = usePremiumPrice(currency)
   const [live, setLive] = useState<LifetimeBlock | null>(null)
   const [hasDiscount, setHasDiscount] = useState<boolean>(true)

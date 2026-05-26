@@ -709,8 +709,10 @@
     "originalLabel": "was",
     "currency": {
       "label": "Currency",
+      "payIn": "Pay in:",
       "usd": "USD",
       "eur": "EUR",
+      "czk": "CZK",
       "hint": "Polar charges in your chosen currency at today's mid-market rate."
     },
     "inline": {

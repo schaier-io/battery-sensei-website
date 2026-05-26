@@ -709,8 +709,10 @@
     "originalLabel": "avant",
     "currency": {
       "label": "Devise",
+      "payIn": "Payer en :",
       "usd": "USD",
       "eur": "EUR",
+      "czk": "CZK",
       "hint": "Polar facture dans la devise choisie au taux moyen du jour."
     },
     "inline": {

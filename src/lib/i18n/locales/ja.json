@@ -709,8 +709,10 @@
     "originalLabel": "元の価格",
     "currency": {
       "label": "通貨",
+      "payIn": "支払い通貨:",
       "usd": "USD",
       "eur": "EUR",
+      "czk": "CZK",
       "hint": "Polarは選択された通貨で、本日の仲値レートにて請求します。"
     },
     "inline": {

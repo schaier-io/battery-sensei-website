@@ -138,8 +138,8 @@ const RequestSchema = z.object({
    * choices in the UI (see src/lib/pricing.ts SUPPORTED_CURRENCIES).
    */
   currency: z
-    .enum(['USD', 'EUR'])
-    .transform((c) => c.toLowerCase() as 'usd' | 'eur')
+    .enum(['USD', 'EUR', 'CZK'])
+    .transform((c) => c.toLowerCase() as 'usd' | 'eur' | 'czk')
     .optional(),
 })
 type RequestBody = z.infer<typeof RequestSchema>

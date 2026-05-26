@@ -32,6 +32,10 @@ export type PriceEntry = {
 
 const US: PriceEntry = { amount: 3.99, currency: 'USD', locale: 'en-US' }
 const EU: PriceEntry = { amount: 3.99, currency: 'EUR', locale: 'de-DE' }
+// CZK fallback is a clean whole number — decimals on a koruna read
+// as spammy. Polar's live preview replaces it whenever the API call
+// succeeds.
+const CZ: PriceEntry = { amount: 89, currency: 'CZK', locale: 'cs-CZ' }
 
 /**
  * Countries that use the euro as their everyday currency.
@@ -84,7 +88,9 @@ export function priceForLocale(locale: string | undefined): PriceEntry {
  */
 export function priceForCountry(country: string | null | undefined): PriceEntry {
   if (!country) return US
-  if (isEuroCountry(country)) return EU
+  const code = country.toUpperCase()
+  if (code === 'CZ') return CZ
+  if (isEuroCountry(code)) return EU
   return US
 }
 
@@ -99,6 +105,7 @@ export function priceForCurrency(currency: string | null | undefined): PriceEntr
   if (!currency) return US
   const code = currency.toUpperCase()
   if (code === 'EUR') return EU
+  if (code === 'CZK') return CZ
   return US
 }
 
@@ -148,7 +155,7 @@ export const CANONICAL_PRICE = US
  * UI we only surface these two: a stable, comprehensible pair that
  * covers the canonical brand price and the EU's home currency.
  */
-export const SUPPORTED_CURRENCIES = ['USD', 'EUR'] as const
+export const SUPPORTED_CURRENCIES = ['USD', 'EUR', 'CZK'] as const
 export type SupportedCurrency = (typeof SUPPORTED_CURRENCIES)[number]
 
 /** Type-guard: narrow an arbitrary string to a supported currency. */

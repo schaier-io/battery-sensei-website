@@ -73,11 +73,14 @@ const EURO_COUNTRIES = new Set([
 ])
 
 /** Currencies the public client API is allowed to request. */
-const SUPPORTED_CURRENCIES = new Set(['USD', 'EUR'])
+const SUPPORTED_CURRENCIES = new Set(['USD', 'EUR', 'CZK'])
 
 /** Default ISO 4217 (lowercase, Polar's wire format) for a country. */
-function defaultCurrencyForCountry(country: string): 'usd' | 'eur' {
-  return EURO_COUNTRIES.has(country.toUpperCase()) ? 'eur' : 'usd'
+function defaultCurrencyForCountry(country: string): 'usd' | 'eur' | 'czk' {
+  const code = country.toUpperCase()
+  if (code === 'CZ') return 'czk'
+  if (EURO_COUNTRIES.has(code)) return 'eur'
+  return 'usd'
 }
 
 /**
@@ -94,8 +97,10 @@ function defaultCurrencyForCountry(country: string): 'usd' | 'eur' {
  * checkout time inside the iframe, so the final receipt + tax remain
  * correct; this only affects the headline preview math.
  */
-function previewCountryFor(currency: 'usd' | 'eur'): string {
-  return currency === 'eur' ? 'DE' : 'US'
+function previewCountryFor(currency: 'usd' | 'eur' | 'czk'): string {
+  if (currency === 'eur') return 'DE'
+  if (currency === 'czk') return 'CZ'
+  return 'US'
 }
 
 type DiscountIdEntry = { id: string | null; expiresAt: number }
@@ -228,14 +233,16 @@ function pickCountry(request: Request): string {
  * values silently fall back to country-default so a bad querystring
  * never breaks the page.
  */
-function pickCurrencyOverride(request: Request): 'usd' | 'eur' | null {
+function pickCurrencyOverride(request: Request): 'usd' | 'eur' | 'czk' | null {
   const url = new URL(request.url)
   const raw = url.searchParams.get('currency')
   if (!raw) return null
   const code = raw.trim().toUpperCase()
   if (!SUPPORTED_CURRENCIES.has(code)) return null
-  return code.toLowerCase() as 'usd' | 'eur'
+  return code.toLowerCase() as 'usd' | 'eur' | 'czk'
 }
+// (defaultCurrencyForCountry handles CZ → czk above; pickCurrencyOverride
+//  just accepts whatever the client sends from the supported allowlist.)
 
 function formatAmount(cents: number, currency: string): string {
   try {
@@ -260,7 +267,7 @@ async function fetchCheckoutPreview(
   country: string,
   token: string,
   discountId?: string | null,
-  currency?: 'usd' | 'eur' | null,
+  currency?: 'usd' | 'eur' | 'czk' | null,
 ): Promise<PolarCheckout | null> {
   const body: Record<string, unknown> = {
     product_id: productId,
@@ -327,7 +334,7 @@ function isValidCheckout(c: PolarCheckout | null): c is PolarCheckout & {
 
 async function fetchPolarPreview(
   country: string,
-  currency: 'usd' | 'eur',
+  currency: 'usd' | 'eur' | 'czk',
 ): Promise<PricePayload | PriceFallback> {
   const token = process.env.POLAR_ACCESS_TOKEN
   // Accept both `POLAR_PRODUCT_ID` (legacy) and `POLAR_PRODUCT_ID_SUPPORT`

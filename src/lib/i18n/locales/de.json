@@ -709,8 +709,10 @@
     "originalLabel": "vorher",
     "currency": {
       "label": "Währung",
+      "payIn": "Bezahlen in:",
       "usd": "USD",
       "eur": "EUR",
+      "czk": "CZK",
       "hint": "Polar berechnet in Ihrer gewählten Währung zum aktuellen Mittelkurs."
     },
     "inline": {

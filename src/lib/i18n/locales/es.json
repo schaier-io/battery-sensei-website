@@ -709,8 +709,10 @@
     "originalLabel": "antes",
     "currency": {
       "label": "Moneda",
+      "payIn": "Pagar en:",
       "usd": "USD",
       "eur": "EUR",
+      "czk": "CZK",
       "hint": "Polar cobra en la moneda elegida al tipo medio del mercado actual."
     },
     "inline": {
