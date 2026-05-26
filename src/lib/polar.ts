@@ -26,6 +26,19 @@ const SUPPORT_CHECKOUT_URL =
   'https://buy.polar.sh/YOUR_SUPPORT_CHECKOUT_LINK'
 
 /**
+ * Polar customer portal. Buyers sign in with the email they used at
+ * checkout and can: see receipts, download invoices, update billing
+ * info, manage active subscriptions (support tier), and resend their
+ * license key. The portal URL is org-scoped on Polar — set
+ * `VITE_POLAR_CUSTOMER_PORTAL_URL` to the operator's org portal (e.g.
+ * `https://polar.sh/<org-slug>/portal`). Default falls back to Polar's
+ * general sign-in page so the link never 404s if the env var is unset.
+ */
+export const CUSTOMER_PORTAL_URL =
+  import.meta.env.VITE_POLAR_CUSTOMER_PORTAL_URL ??
+  'https://polar.sh/login'
+
+/**
  * Launch discount for the Lifetime tier.
  *
  * **ZENMODE** is the silent, auto-applied launch code: the server

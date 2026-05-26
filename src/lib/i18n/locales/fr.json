@@ -321,12 +321,14 @@
     "openApp": "Ouvrir Sensei",
     "downloadApp": "Télécharger Sensei",
     "backToHome": "Retour à l'accueil",
+    "managePurchase": "Gérer l'achat",
     "checkoutHint": "Commande #{{id}}",
     "delivery": {
       "label": "Clé de licence · par e-mail",
       "from": "De <0>Polar</0> (notre prestataire de paiement), généralement en moins d'une minute.",
       "spam": "Pas dans ta boîte de réception ? Vérifie les spams. Toujours rien après cinq minutes ? Écris à <0>info@battery-sensei.app</0> et nous la renvoyons le jour même.",
-      "supportEmail": "info@battery-sensei.app"
+      "supportEmail": "info@battery-sensei.app",
+      "downloadCta": "Télécharger Sensei"
     },
     "lifetime": {
       "heading": "Bienvenue dans À vie.",
@@ -661,6 +663,7 @@
     "reportIssue": "Signaler un problème",
     "releases": "Versions",
     "pricing": "Tarifs",
+    "managePurchase": "Gérer l'achat",
     "copyright": "© {{year}} · Battery Sensei",
     "lastUpdated": "Dernière mise à jour le 24 mai 2026"
   },

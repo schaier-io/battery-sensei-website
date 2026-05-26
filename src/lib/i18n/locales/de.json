@@ -321,12 +321,14 @@
     "openApp": "Sensei öffnen",
     "downloadApp": "Sensei laden",
     "backToHome": "Zurück zur Startseite",
+    "managePurchase": "Kauf verwalten",
     "checkoutHint": "Bestellung #{{id}}",
     "delivery": {
       "label": "Lizenzschlüssel · per E-Mail",
       "from": "Von <0>Polar</0> (unser Zahlungsanbieter), meist innerhalb einer Minute.",
       "spam": "Nicht im Posteingang? Schau in den Spam-Ordner. Nach fünf Minuten immer noch nichts? Schreib an <0>info@battery-sensei.app</0>, wir schicken ihn noch am selben Tag erneut.",
-      "supportEmail": "info@battery-sensei.app"
+      "supportEmail": "info@battery-sensei.app",
+      "downloadCta": "Sensei laden"
     },
     "lifetime": {
       "heading": "Willkommen bei Lifetime.",
@@ -661,6 +663,7 @@
     "reportIssue": "Problem melden",
     "releases": "Versionen",
     "pricing": "Preise",
+    "managePurchase": "Kauf verwalten",
     "copyright": "© {{year}} · Battery Sensei",
     "lastUpdated": "Zuletzt aktualisiert am 24. Mai 2026"
   },
