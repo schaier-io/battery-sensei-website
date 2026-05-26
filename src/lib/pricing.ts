@@ -3,11 +3,19 @@
 // per-country preview including FX + VAT) is unreachable or unconfigured. See
 // `api/price.ts` and `use-price.ts` for the live path.
 //
-// USD is the canonical price (used in schema.org offers + the Polar charge).
-// Display prices in each region are hand-picked for psychological price
-// comfort — charm pricing (.99 / .49) in Western markets, whole numbers in
-// CHF/JPY/NOK/SEK/INR where charm-pricing reads as cheap-and-spammy. They're
-// rough approximations of USD 3.99, not live FX rates.
+// Polar only settles in three currencies today: USD, EUR, CZK. Showing
+// any other currency in the fallback would mean the visitor sees one
+// price on the page and a *different* one at checkout. So this table is
+// deliberately tiny:
+//   - EU (eurozone members) → EUR
+//   - CZ                    → CZK
+//   - everything else       → USD (the canonical charge)
+//
+// Display amounts are hand-picked for psychological price comfort
+// (charm pricing in USD/EUR, a clean whole number in CZK where decimals
+// read as cheap-and-spammy). They're rough approximations of USD 3.99,
+// not live FX — Polar's live preview replaces them whenever the API
+// round-trip succeeds.
 
 export type PriceEntry = {
   amount: number
@@ -15,41 +23,20 @@ export type PriceEntry = {
   locale: string
 }
 
-const US: PriceEntry  = { amount: 3.99,  currency: 'USD', locale: 'en-US' }
-const EU: PriceEntry  = { amount: 3.99,  currency: 'EUR', locale: 'de-DE' }
-const GB: PriceEntry  = { amount: 3.49,  currency: 'GBP', locale: 'en-GB' }
-const CH: PriceEntry  = { amount: 3.90,  currency: 'CHF', locale: 'de-CH' }
-const CA: PriceEntry  = { amount: 5.49,  currency: 'CAD', locale: 'en-CA' }
-const AU: PriceEntry  = { amount: 5.99,  currency: 'AUD', locale: 'en-AU' }
-const NZ: PriceEntry  = { amount: 6.49,  currency: 'NZD', locale: 'en-NZ' }
-const JP: PriceEntry  = { amount: 590,   currency: 'JPY', locale: 'ja-JP' }
-const KR: PriceEntry  = { amount: 5500,  currency: 'KRW', locale: 'ko-KR' }
-const SG: PriceEntry  = { amount: 5.49,  currency: 'SGD', locale: 'en-SG' }
-const HK: PriceEntry  = { amount: 31,    currency: 'HKD', locale: 'en-HK' }
-const IN: PriceEntry  = { amount: 349,   currency: 'INR', locale: 'en-IN' }
-const BR: PriceEntry  = { amount: 19.90, currency: 'BRL', locale: 'pt-BR' }
-const MX: PriceEntry  = { amount: 79,    currency: 'MXN', locale: 'es-MX' }
-const NO: PriceEntry  = { amount: 39,    currency: 'NOK', locale: 'nb-NO' }
-const SE: PriceEntry  = { amount: 39,    currency: 'SEK', locale: 'sv-SE' }
-const DK: PriceEntry  = { amount: 27,    currency: 'DKK', locale: 'da-DK' }
-const PL: PriceEntry  = { amount: 16,    currency: 'PLN', locale: 'pl-PL' }
-const CZ: PriceEntry  = { amount: 89,    currency: 'CZK', locale: 'cs-CZ' }
-const HU: PriceEntry  = { amount: 1490,  currency: 'HUF', locale: 'hu-HU' }
-const TR: PriceEntry  = { amount: 139,   currency: 'TRY', locale: 'tr-TR' }
-const ZA: PriceEntry  = { amount: 75,    currency: 'ZAR', locale: 'en-ZA' }
-const AE: PriceEntry  = { amount: 14.99, currency: 'AED', locale: 'en-AE' }
-const IL: PriceEntry  = { amount: 14.90, currency: 'ILS', locale: 'he-IL' }
+const US: PriceEntry = { amount: 3.99, currency: 'USD', locale: 'en-US' }
+const EU: PriceEntry = { amount: 3.99, currency: 'EUR', locale: 'de-DE' }
+const CZ: PriceEntry = { amount: 89,   currency: 'CZK', locale: 'cs-CZ' }
 
 const EUROZONE = new Set([
   'AT','BE','CY','DE','EE','ES','FI','FR','GR','IE',
   'IT','LT','LU','LV','MT','NL','PT','SI','SK','HR',
 ])
 
+// Only currencies Polar actually charges in. Anything not here resolves
+// to the USD canonical price via `priceForCountry`'s fallback below.
 const REGION_TO_PRICE: Record<string, PriceEntry> = {
-  US: US, CA: CA, MX: MX, BR: BR,
-  GB: GB, CH: CH, NO: NO, SE: SE, DK: DK, PL: PL, CZ: CZ, HU: HU, TR: TR,
-  AU: AU, NZ: NZ, JP: JP, KR: KR, SG: SG, HK: HK, IN: IN,
-  ZA: ZA, AE: AE, IL: IL,
+  US,
+  CZ,
 }
 
 export function priceForLocale(locale: string | undefined): PriceEntry {

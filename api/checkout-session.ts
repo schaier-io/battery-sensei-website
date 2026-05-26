@@ -88,11 +88,44 @@ function json(payload: OkResponse | ErrResponse, status = 200): Response {
   })
 }
 
-function defaultEmbedOrigin(): string {
-  // SITE_URL is the canonical brand origin; fall back to it when the
-  // explicit env var is unset so the endpoint still works on a fresh
-  // deploy without manual config.
-  return (process.env.POLAR_EMBED_ORIGIN ?? 'https://battery-sensei.app').replace(/\/+$/, '')
+/**
+ * Allowlist of public origins this endpoint accepts AND that we'll
+ * forward to Polar as `embed_origin`. Most sites have both a www and
+ * an apex hostname; rather than force the operator to pick one, we
+ * accept any value matching the comma-separated `POLAR_EMBED_ORIGINS`
+ * env (or the legacy single-value `POLAR_EMBED_ORIGIN`). When neither
+ * is set we ship a sensible default covering both common variants of
+ * the brand domain so the prod URL works out of the box.
+ *
+ * Trailing slashes are stripped so `https://x.com/` and `https://x.com`
+ * compare equal.
+ */
+function allowedOrigins(): string[] {
+  const raw =
+    process.env.POLAR_EMBED_ORIGINS ??
+    process.env.POLAR_EMBED_ORIGIN ??
+    'https://battery-sensei.app,https://www.battery-sensei.app'
+  return raw
+    .split(',')
+    .map((o) => o.trim().replace(/\/+$/, ''))
+    .filter(Boolean)
+}
+
+/**
+ * Pick the embed_origin to forward to Polar. We use the request's own
+ * Origin header when it's in the allowlist — that way Polar's
+ * `frame-ancestors` header matches the EXACT page hosting the iframe,
+ * which is what stops the "polar.sh will not allow this page to be
+ * displayed" error from coming back when visitors land on the www
+ * variant of the domain. Falls back to the first allowlisted origin
+ * for non-browser callers (curl, health checks).
+ */
+function pickEmbedOrigin(
+  requestOrigin: string | null,
+  allowed: string[],
+): string {
+  if (requestOrigin && allowed.includes(requestOrigin)) return requestOrigin
+  return allowed[0] ?? 'https://battery-sensei.app'
 }
 
 /**
@@ -106,14 +139,19 @@ function defaultEmbedOrigin(): string {
  * Reference: https://vercel.com/docs/functions/runtimes/node-js#web-standard-api
  */
 export async function POST(request: Request): Promise<Response> {
-  // Cheap CSRF defense: only accept requests from our own origin (or
-  // same-origin no-Origin POSTs, which can't really happen from a
-  // browser). The endpoint mints sessions against our paid Polar org
-  // so a third party calling us to harvest sessions has zero value but
-  // they'd still consume the Polar API rate budget.
-  const origin = request.headers.get('origin')
-  if (origin && origin !== defaultEmbedOrigin()) {
-    console.warn('[checkout-session] cross-origin rejected', { origin })
+  // Cheap CSRF defense: only accept requests whose Origin is in our
+  // allowlist. Both www and apex variants of the brand domain are
+  // allowed by default — operators with a custom domain set
+  // `POLAR_EMBED_ORIGINS` (comma-separated) to override. Missing Origin
+  // headers (curl, server-to-server) are allowed through; same-origin
+  // browser POSTs always carry an Origin so this can't be spoofed away.
+  const requestOrigin = request.headers.get('origin')
+  const allowed = allowedOrigins()
+  if (requestOrigin && !allowed.includes(requestOrigin)) {
+    console.warn('[checkout-session] cross-origin rejected', {
+      origin: requestOrigin,
+      allowed,
+    })
     return json({ ok: false, reason: 'forbidden' }, 403)
   }
 
@@ -150,7 +188,12 @@ export async function POST(request: Request): Promise<Response> {
     return json({ ok: false, reason: 'missing-config' }, 503)
   }
 
-  const embedOrigin = defaultEmbedOrigin()
+  // Use the visitor's actual Origin (within the allowlist) as
+  // embed_origin so Polar serves `frame-ancestors: <that-origin>` and
+  // the iframe loads cleanly whether the visitor came in via www or
+  // apex. Non-browser callers without an Origin land on the first
+  // allowlisted origin.
+  const embedOrigin = pickEmbedOrigin(requestOrigin, allowed)
   // Build success URL using the same origin so the redirect stays
   // first-party. `{CHECKOUT_ID}` is a Polar placeholder that gets
   // substituted server-side at redirect time.

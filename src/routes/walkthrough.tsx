@@ -11,7 +11,7 @@ const PATH = '/walkthrough'
 const PAGE_TITLE = 'Walkthrough — Battery Sensei'
 const PAGE_DESC =
   '60-second walkthrough of Battery Sensei in motion, side by side with AlDente, BatFi, coconutBattery, iStat Menus, and the built-in macOS Charge Limit. Video coming soon.'
-const EMAIL = 'sandro@schaier.io'
+const EMAIL = 'info@battery-sensei.app'
 
 export const Route = createFileRoute('/walkthrough')({
   head: () => ({

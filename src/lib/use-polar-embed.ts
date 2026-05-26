@@ -250,14 +250,14 @@ function openCheckoutErrorOverlay(opts: {
     </div>
     ${reasonChip}
     <p style="font-size:13px;color:#6f6a64;margin:0 0 18px 0;line-height:1.5">
-      Something on our side blinked. Please try the ${opts.tier === 'lifetime' ? 'Lifetime' : 'Support'} button again in a moment. If it keeps failing, drop us a line at sandro@schaier.io and we'll send you a payment link directly.
+      Something on our side blinked. Please try the ${opts.tier === 'lifetime' ? 'Lifetime' : 'Support'} button again in a moment. If it keeps failing, drop us a line at info@battery-sensei.app and we'll send you a payment link directly.
     </p>
     <div style="display:flex;gap:8px;justify-content:flex-end">
       <button type="button" data-action="close"
         style="height:38px;padding:0 14px;border:1px solid rgba(28,26,23,0.18);background:transparent;border-radius:8px;font-size:13px;color:#3f3a35;cursor:pointer">
         Close
       </button>
-      <a href="mailto:sandro@schaier.io?subject=Checkout%20issue%20(${encodeURIComponent(opts.reason ?? 'unknown')})&body=Hi%2C%20I%20tried%20to%20buy%20the%20${opts.tier}%20tier%20and%20got%20an%20error.%20Could%20you%20send%20me%20a%20direct%20payment%20link%3F"
+      <a href="mailto:info@battery-sensei.app?subject=Checkout%20issue%20(${encodeURIComponent(opts.reason ?? 'unknown')})&body=Hi%2C%20I%20tried%20to%20buy%20the%20${opts.tier}%20tier%20and%20got%20an%20error.%20Could%20you%20send%20me%20a%20direct%20payment%20link%3F"
         style="height:38px;padding:0 16px;display:inline-flex;align-items:center;border:0;background:#1c1a17;color:#fbf7ef;border-radius:8px;font-size:13px;font-weight:500;text-decoration:none">
         Email us
       </a>

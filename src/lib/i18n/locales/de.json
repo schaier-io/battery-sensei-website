@@ -198,8 +198,8 @@
     "delivery": {
       "label": "Lizenzschlüssel · per E-Mail",
       "from": "Von <0>Polar</0> (unser Zahlungsanbieter), meist innerhalb einer Minute.",
-      "spam": "Nicht im Posteingang? Schau in den Spam-Ordner. Nach fünf Minuten immer noch nichts? Schreib an <0>sandro@schaier.io</0>, wir schicken ihn noch am selben Tag erneut.",
-      "supportEmail": "sandro@schaier.io"
+      "spam": "Nicht im Posteingang? Schau in den Spam-Ordner. Nach fünf Minuten immer noch nichts? Schreib an <0>info@battery-sensei.app</0>, wir schicken ihn noch am selben Tag erneut.",
+      "supportEmail": "info@battery-sensei.app"
     },
     "lifetime": {
       "heading": "Willkommen bei Lifetime.",

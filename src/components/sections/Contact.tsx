@@ -11,7 +11,7 @@ type Status = 'idle' | 'sending' | 'sent' | 'error'
 const TOPIC_ORDER: ReadonlyArray<Topic> = ['feature', 'bug', 'billing', 'other']
 
 const ISSUES_URL = 'https://github.com/schaier-io/battery-sensei-releases/issues/new/choose'
-const EMAIL = 'sandro@schaier.io'
+const EMAIL = 'info@battery-sensei.app'
 
 export function Contact() {
   const { t } = useTranslation()

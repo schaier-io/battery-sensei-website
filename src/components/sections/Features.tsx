@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import { Link } from '@tanstack/react-router'
 import { Hanko } from '#/components/zen/Hanko'
 import { Reveal } from '#/components/zen/Reveal'
-import { TiltCard } from '#/components/zen/TiltCard'
 import { InkLevelBar } from '#/components/zen/InkLevelBar'
 
 const featuredMeta = { seal: '警', icon: Bell }
@@ -364,9 +363,16 @@ export function Features() {
         </Reveal>
       </div>
 
+      {/* TiltCard removed from this row in 2026-05: the 3D rotation +
+          `transform-style: preserve-3d` was creating a stacking context
+          that made the inline `Link` to /features/alert-presets feel
+          unclickable (cursor lost the hit target as the spring tilt
+          repositioned it) and caused the embedded RuleRow / InkLevelBar
+          to flicker in Safari during the rotation. Plain article + the
+          paper-card hover styles read just as deliberate without
+          fighting interactive children. */}
       <Reveal delay={0}>
-        <TiltCard rotateAmplitude={3} scaleOnHover={1.005}>
-          <article className="paper-card p-8 md:p-10">
+        <article className="paper-card p-8 md:p-10">
             <div className="flex flex-col gap-6 md:flex-row md:items-start md:gap-10">
               <div className="flex items-center gap-5 md:flex-col md:items-start md:gap-3">
                 <featuredMeta.icon
@@ -442,8 +448,7 @@ export function Features() {
                 </div>
               </div>
             </div>
-          </article>
-        </TiltCard>
+        </article>
       </Reveal>
 
       <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -461,8 +466,12 @@ export function Features() {
               delay={140 + i * 100}
               className={isOrphan ? 'h-full sm:col-span-2 lg:col-span-1' : 'h-full'}
             >
-              <TiltCard rotateAmplitude={6} scaleOnHover={1.015}>
-                <article className="paper-card p-7 h-full flex flex-col">
+              {/* No TiltCard — same reasoning as the featured card above.
+                  The 3D rotation was clipping the Mockup behind a fresh
+                  stacking context and intercepting the Learn-more click
+                  on the Meetings card. Subtle hover still comes from
+                  the paper-card class. */}
+              <article className="paper-card p-7 h-full flex flex-col">
                   <div className="flex items-start justify-between">
                     <Icon className="h-6 w-6 text-sumi" strokeWidth={1.5} />
                     <span className="kanji-accent font-jp text-2xl text-hinomaru/80 leading-none">
@@ -509,8 +518,7 @@ export function Features() {
                       </Link>
                     )}
                   </div>
-                </article>
-              </TiltCard>
+              </article>
             </Reveal>
           )
         })}

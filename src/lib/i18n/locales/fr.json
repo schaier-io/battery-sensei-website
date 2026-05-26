@@ -198,8 +198,8 @@
     "delivery": {
       "label": "Clé de licence · par e-mail",
       "from": "De <0>Polar</0> (notre prestataire de paiement), généralement en moins d'une minute.",
-      "spam": "Pas dans ta boîte de réception ? Vérifie les spams. Toujours rien après cinq minutes ? Écris à <0>sandro@schaier.io</0> et nous la renvoyons le jour même.",
-      "supportEmail": "sandro@schaier.io"
+      "spam": "Pas dans ta boîte de réception ? Vérifie les spams. Toujours rien après cinq minutes ? Écris à <0>info@battery-sensei.app</0> et nous la renvoyons le jour même.",
+      "supportEmail": "info@battery-sensei.app"
     },
     "lifetime": {
       "heading": "Bienvenue dans À vie.",

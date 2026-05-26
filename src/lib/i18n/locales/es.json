@@ -198,8 +198,8 @@
     "delivery": {
       "label": "Clave de licencia · por correo",
       "from": "De <0>Polar</0> (nuestra plataforma de pago), normalmente en menos de un minuto.",
-      "spam": "¿No está en tu bandeja? Mira el spam. ¿Aún nada después de cinco minutos? Escribe a <0>sandro@schaier.io</0> y la reenviamos el mismo día.",
-      "supportEmail": "sandro@schaier.io"
+      "spam": "¿No está en tu bandeja? Mira el spam. ¿Aún nada después de cinco minutos? Escribe a <0>info@battery-sensei.app</0> y la reenviamos el mismo día.",
+      "supportEmail": "info@battery-sensei.app"
     },
     "lifetime": {
       "heading": "Bienvenida a Lifetime.",
