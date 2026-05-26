@@ -91,11 +91,21 @@ export function Pricing() {
       <div className="grid gap-6 lg:grid-cols-3 lg:items-stretch">
         {/* ---------- Free card (left) ---------- */}
         <Reveal delay={120} className="h-full">
-          <article className="paper-card flex h-full flex-col p-7 md:p-8">
+          <article
+            aria-labelledby="pricing-tier-free"
+            className="paper-card flex h-full flex-col p-7 md:p-8"
+          >
             <div className="flex items-center gap-3">
-              <span className="font-jp text-xs tracking-widest text-sumi-soft">
+              {/* `id` on the tier label gives the surrounding <article> an
+                  accessible name via aria-labelledby. The element stays a
+                  span so the kanji tracking + font-jp styling are
+                  preserved; no visual change. */}
+              <h3
+                id="pricing-tier-free"
+                className="font-jp text-xs tracking-widest text-sumi-soft m-0 font-normal"
+              >
                 {t('pricing.free.tier')}
-              </span>
+              </h3>
             </div>
             <div className="mt-2 flex items-baseline gap-2">
               <PriceDisplay
@@ -167,11 +177,17 @@ export function Pricing() {
 
         {/* ---------- Lifetime card (middle, RECOMMENDED) ---------- */}
         <Reveal delay={220} className="h-full">
-          <article className="paper-card flex h-full flex-col p-7 md:p-8 ring-1 ring-hinomaru/20">
+          <article
+            aria-labelledby="pricing-tier-lifetime"
+            className="paper-card flex h-full flex-col p-7 md:p-8 ring-1 ring-hinomaru/20"
+          >
             <div className="flex items-center gap-3">
-              <span className="font-jp text-xs tracking-widest text-hinomaru/80">
+              <h3
+                id="pricing-tier-lifetime"
+                className="font-jp text-xs tracking-widest text-hinomaru/80 m-0 font-normal"
+              >
                 {t('pricing.lifetime.tier')}
-              </span>
+              </h3>
               <span className="inline-flex items-center gap-1 rounded-full bg-hinomaru/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-hinomaru">
                 {t('common.recommended')}
               </span>
@@ -266,13 +282,13 @@ export function Pricing() {
                   // no-JS / right-click fallback. `tier` is used only by
                   // fake-checkout mode to pick the right thank-you page.
                   e.preventDefault()
-                  // `tier` resolves the product server-side; `fallbackUrl`
-                  // is the pre-created Checkout Link we redirect to if
-                  // the session-create API is unreachable.
-                  void openPolarCheckout({
-                    tier: 'lifetime',
-                    fallbackUrl: lifetimeCheckoutUrl(),
-                  })
+                  // `tier` resolves the product server-side. If the
+                  // session-create API fails, the hook shows an inline
+                  // error overlay — we no longer redirect the visitor
+                  // to buy.polar.sh as a fallback (keeps the brand
+                  // experience on-domain). The plain `href` on this
+                  // anchor still gives a no-JS path.
+                  void openPolarCheckout({ tier: 'lifetime' })
                 }}
                 className="btn-sumi group mt-3 inline-flex h-11 w-full items-center justify-center gap-2 rounded-md px-6 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
               >
@@ -285,11 +301,17 @@ export function Pricing() {
 
         {/* ---------- Ongoing Developer Support card (right) ---------- */}
         <Reveal delay={320} className="h-full">
-          <article className="paper-card flex h-full flex-col p-7 md:p-8">
+          <article
+            aria-labelledby="pricing-tier-support"
+            className="paper-card flex h-full flex-col p-7 md:p-8"
+          >
             <div className="flex flex-wrap items-center gap-2">
-              <span className="font-jp text-xs tracking-widest text-sumi-soft">
+              <h3
+                id="pricing-tier-support"
+                className="font-jp text-xs tracking-widest text-sumi-soft m-0 font-normal"
+              >
                 {t('pricing.support.tier')}
-              </span>
+              </h3>
               <span className="inline-flex items-center gap-1 rounded-full bg-sumi/5 px-2 py-0.5 text-[10px] font-medium uppercase tracking-[0.18em] text-sumi-soft">
                 {t('pricing.support.badge')}
               </span>
@@ -346,10 +368,7 @@ export function Pricing() {
                 href={supportCheckoutUrl()}
                 onClick={(e) => {
                   e.preventDefault()
-                  void openPolarCheckout({
-                    tier: 'support',
-                    fallbackUrl: supportCheckoutUrl(),
-                  })
+                  void openPolarCheckout({ tier: 'support' })
                 }}
                 className="btn-sumi-soft group mt-3 inline-flex h-11 w-full items-center justify-center gap-2 rounded-md border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-6 text-sm font-medium text-sumi transition-colors duration-200 hover:bg-[color-mix(in_oklab,var(--washi)_40%,#fff)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
               >

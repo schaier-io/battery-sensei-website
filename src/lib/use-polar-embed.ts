@@ -27,9 +27,10 @@ import { useCallback } from 'react'
  *   3. Pass that URL to `PolarEmbedCheckout.create(url, {theme})`
  *
  * If the session create fails (token missing, network blip, Polar
- * outage) the API responds with `{ok: false, fallbackUrl}` — we then
- * full-page redirect to the pre-created Checkout Link. The visitor
- * still completes the purchase, just outside an iframe.
+ * outage) the hook opens a tiny inline error overlay asking the
+ * visitor to try again or email us. We deliberately do NOT fall back
+ * to a buy.polar.sh redirect — the brand promise is "checkout stays
+ * on battery-sensei.app".
  *
  * The embed SDK is dynamically imported on first invocation — the
  * ~30 KB runtime is fetched only when a visitor actually clicks Buy.
@@ -55,10 +56,6 @@ export type PolarCheckoutOptions = {
   tier: 'lifetime' | 'support'
   /** Optional promo / discount code to pre-apply (ZENMODE on Lifetime). */
   discountCode?: string
-  /** Fallback Checkout Link URL used when the session-create API is
-   *  unreachable. Full-page redirect — visitor still buys, just outside
-   *  the iframe. Same URL the no-JS anchor `href` already uses. */
-  fallbackUrl?: string
   /** Embed theme. Defaults to `light` to match the washi page tone. */
   theme?: Theme
   /** Called when the checkout reports a successful purchase. If
@@ -75,7 +72,7 @@ export type PolarCheckoutOptions = {
 
 type SessionResponse =
   | { ok: true; url: string; tier: 'lifetime' | 'support' }
-  | { ok: false; reason: string; fallbackUrl?: string }
+  | { ok: false; reason: string }
 
 /**
  * Ask the server to mint a fresh embed-eligible Checkout Session.
@@ -127,15 +124,16 @@ export function usePolarCheckout() {
     const sessionUrl = await fetchSessionUrl(opts.tier, opts.discountCode)
 
     if (!sessionUrl) {
-      // Fail closed but useful: degrade to full-page redirect against
-      // the pre-created Checkout Link if the caller supplied one.
-      if (opts.fallbackUrl) {
-        window.location.assign(opts.fallbackUrl)
-        return null
-      }
-      // No fallback — surface the failure rather than silently doing
-      // nothing on click.
-      throw new Error('Polar checkout session could not be created')
+      // Stay on page. We deliberately do NOT redirect to a Polar-
+      // hosted Checkout Link as a fallback — the whole point of the
+      // embed is to keep the visitor inside our washi/sumi context.
+      // Surface an inline overlay so they know to try again instead
+      // of silently doing nothing on click.
+      openCheckoutErrorOverlay({
+        tier: opts.tier,
+        onClose: opts.onClose,
+      })
+      return null
     }
 
     // Lazy load: the embed bundle is only fetched when a visitor
@@ -159,6 +157,95 @@ export function usePolarCheckout() {
     }
     return embed
   }, [])
+}
+
+/**
+ * Inline error overlay shown when the session-create API can't mint a
+ * Checkout Session (token missing on the server, Polar 5xx, etc.). We
+ * deliberately don't redirect to a Polar-hosted Checkout Link here —
+ * the brand promise is "checkout on battery-sensei.app, not on
+ * buy.polar.sh" — so failure surfaces inline instead.
+ *
+ * Vanilla DOM (not React) so it can be opened from a hook callback
+ * without re-architecting the calling component. Mirrors the
+ * `openFakeCheckout` overlay's washi styling so the two failure paths
+ * (dev fake-checkout, prod backend down) feel like the same family.
+ */
+function openCheckoutErrorOverlay(opts: {
+  tier: 'lifetime' | 'support'
+  onClose?: () => void
+}): { close: () => void } {
+  const wrap = document.createElement('div')
+  wrap.setAttribute('role', 'dialog')
+  wrap.setAttribute('aria-modal', 'true')
+  wrap.setAttribute('aria-label', 'Checkout unavailable')
+  wrap.style.cssText = [
+    'position:fixed', 'inset:0', 'z-index:9999',
+    'display:flex', 'align-items:center', 'justify-content:center',
+    'background:rgba(28,26,23,0.55)', 'backdrop-filter:blur(4px)',
+    'animation:fake-fade-in 220ms cubic-bezier(0.2,0.8,0.2,1) both',
+    'font-family:inherit',
+  ].join(';')
+
+  const card = document.createElement('div')
+  card.style.cssText = [
+    'width:min(420px,92vw)', 'background:#fbf7ef', 'color:#1c1a17',
+    'border:1px solid rgba(28,26,23,0.12)', 'border-radius:14px',
+    'padding:24px 22px', 'box-shadow:0 22px 48px -22px rgba(28,26,23,0.45)',
+    'transform-origin:center', 'animation:fake-pop-in 240ms cubic-bezier(0.2,0.8,0.2,1) both',
+  ].join(';')
+  // Plain English copy. Not localized — this is a rare failure path and
+  // keeping i18n out of vanilla DOM avoids carting around an i18n bundle
+  // into a hook callback. If checkout outages become common enough that
+  // the copy needs translating, lift this to a real React component.
+  card.innerHTML = `
+    <div style="font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#8a847c;margin-bottom:8px">
+      Checkout · unavailable
+    </div>
+    <div style="font-family:'Spectral',serif;font-size:22px;font-weight:600;line-height:1.2;margin-bottom:6px">
+      Couldn't reach the checkout.
+    </div>
+    <p style="font-size:13px;color:#6f6a64;margin:0 0 18px 0;line-height:1.5">
+      Something on our side blinked. Please try the ${opts.tier === 'lifetime' ? 'Lifetime' : 'Support'} button again in a moment. If it keeps failing, drop us a line at sandro@schaier.io and we'll send you a payment link directly.
+    </p>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button type="button" data-action="close"
+        style="height:38px;padding:0 14px;border:1px solid rgba(28,26,23,0.18);background:transparent;border-radius:8px;font-size:13px;color:#3f3a35;cursor:pointer">
+        Close
+      </button>
+      <a href="mailto:sandro@schaier.io?subject=Checkout%20issue&body=Hi%2C%20I%20tried%20to%20buy%20the%20${opts.tier}%20tier%20and%20got%20an%20error.%20Could%20you%20send%20me%20a%20direct%20payment%20link%3F"
+        style="height:38px;padding:0 16px;display:inline-flex;align-items:center;border:0;background:#1c1a17;color:#fbf7ef;border-radius:8px;font-size:13px;font-weight:500;text-decoration:none">
+        Email us
+      </a>
+    </div>
+  `
+  wrap.appendChild(card)
+
+  if (!document.getElementById('fake-checkout-keyframes')) {
+    const style = document.createElement('style')
+    style.id = 'fake-checkout-keyframes'
+    style.textContent = `
+      @keyframes fake-fade-in { from { opacity: 0 } to { opacity: 1 } }
+      @keyframes fake-pop-in {
+        from { opacity: 0; transform: translateY(8px) scale(0.97) }
+        to   { opacity: 1; transform: translateY(0) scale(1) }
+      }
+    `
+    document.head.appendChild(style)
+  }
+
+  function close() {
+    wrap.remove()
+    opts.onClose?.()
+  }
+
+  wrap.addEventListener('click', (e) => {
+    if (e.target === wrap) close()
+  })
+  card.querySelector('[data-action="close"]')?.addEventListener('click', close)
+  document.body.appendChild(wrap)
+
+  return { close }
 }
 
 /**

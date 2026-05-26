@@ -1,5 +1,14 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { z } from 'zod'
 import { ThanksPage } from '#/components/ThanksPage'
+
+// Polar substitutes `{CHECKOUT_ID}` into the success URL — a UUID-ish
+// string ≤80 chars. Anything else (array, missing, oversized) collapses
+// to undefined so the component never renders garbage like
+// `[object Object]` inside the kicker line.
+const thanksSearchSchema = z.object({
+  checkout_id: z.string().min(1).max(80).optional(),
+}).catch({})
 
 const SITE_URL = 'https://battery-sensei.app'
 const PATH = '/thanks/lifetime'
@@ -8,6 +17,7 @@ const PAGE_DESC =
   'Payment confirmed. Your Battery Sensei lifetime license is on its way — open Sensei to enter your key and pick up where you left off.'
 
 export const Route = createFileRoute('/thanks/lifetime')({
+  validateSearch: thanksSearchSchema,
   // Post-purchase landing page reached via Polar's success URL. Keep it out
   // of search (no organic value, query param is per-checkout) but follow
   // links so the footer + nav still pass link equity.

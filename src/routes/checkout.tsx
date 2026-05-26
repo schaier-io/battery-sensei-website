@@ -249,12 +249,13 @@ function CheckoutPage() {
               onClick={(e) => {
                 e.preventDefault()
                 // `discountCode` carries whatever the visitor typed into
-                // the promo field; `fallbackUrl` is the pre-baked Checkout
-                // Link we'll redirect to if the embed-session API is down.
+                // the promo field. If the embed-session API fails the
+                // hook now shows an inline error overlay (no off-domain
+                // redirect) — the anchor's `href` still works as a
+                // no-JS escape hatch.
                 void openPolarCheckout({
                   tier: isLifetime ? 'lifetime' : 'support',
                   discountCode: discountCode || undefined,
-                  fallbackUrl: checkoutHref,
                 })
               }}
               className="btn-sumi group mt-7 inline-flex h-12 w-full items-center justify-center gap-2 rounded-md text-[0.9375rem] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"

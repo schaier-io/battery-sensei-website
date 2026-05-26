@@ -25,9 +25,10 @@
  *  3. Polar returns the session URL, which we hand back to the client to
  *     pass into `PolarEmbedCheckout.create(url, {theme})`.
  *  4. On any failure (token missing, network blip, Polar 4xx/5xx) we
- *     respond `{ok: false, fallbackUrl}` so the client can degrade to a
- *     full-page redirect against the pre-created Checkout Link — the
- *     visitor still completes the purchase, just outside an iframe.
+ *     respond `{ok: false, reason}`. The client shows an inline error
+ *     overlay — we deliberately do NOT fall back to a full-page redirect
+ *     to buy.polar.sh, because the brand promise is "checkout stays on
+ *     battery-sensei.app".
  *
  * The endpoint is intentionally stateless: every click creates a new
  * session. Polar sessions expire after ~24h, but we don't reuse them
@@ -66,9 +67,7 @@ type ErrResponse = {
     | 'invalid-tier'
     | 'missing-config'
     | 'polar-error'
-  /** Best-effort fallback (the pre-created Checkout Link). Client should
-   *  open this in a new tab / full-page redirect when present. */
-  fallbackUrl?: string
+    | 'forbidden'
 }
 
 function json(payload: OkResponse | ErrResponse, status = 200): Response {
@@ -92,18 +91,21 @@ function isTier(value: unknown): value is Tier {
   return value === 'lifetime' || value === 'support'
 }
 
-function fallbackLinkFor(tier: Tier): string | undefined {
-  // Read the same VITE_-prefixed env the client bundle uses for the
-  // pre-created Checkout Links. On Vercel, server functions can see
-  // every env var (the VITE_ prefix only gates *client* exposure), so
-  // these resolve fine here.
-  if (tier === 'lifetime') return process.env.VITE_POLAR_CHECKOUT_URL_LIFETIME
-  return process.env.VITE_POLAR_CHECKOUT_URL_SUPPORT
-}
-
 export default async function handler(request: Request): Promise<Response> {
   if (request.method !== 'POST') {
     return json({ ok: false, reason: 'method' }, 405)
+  }
+
+  // Cheap CSRF defense: only accept requests from our own origin (or
+  // same-origin no-Origin GETs, which can't reach POST anyway). The
+  // endpoint mints sessions against our paid Polar org so a third
+  // party calling us to harvest sessions has zero value but they'd
+  // still consume the Polar API rate budget. Allow no-Origin (curl,
+  // health checks) so server-to-server tooling keeps working.
+  const origin = request.headers.get('origin')
+  if (origin && origin !== defaultEmbedOrigin()) {
+    console.warn('[checkout-session] cross-origin rejected', { origin })
+    return json({ ok: false, reason: 'forbidden' }, 403)
   }
 
   let body: RequestBody
@@ -125,13 +127,9 @@ export default async function handler(request: Request): Promise<Response> {
       : process.env.POLAR_PRODUCT_ID_SUPPORT
 
   if (!token || !productId) {
-    // Hard fall-through: redirect to the pre-created Checkout Link if
-    // present, otherwise tell the client we have nothing to offer.
-    return json({
-      ok: false,
-      reason: 'missing-config',
-      fallbackUrl: fallbackLinkFor(tier),
-    }, 503)
+    // No off-domain fallback by design — client surfaces an inline
+    // error overlay rather than redirect away from the brand site.
+    return json({ ok: false, reason: 'missing-config' }, 503)
   }
 
   const embedOrigin = defaultEmbedOrigin()
@@ -171,30 +169,22 @@ export default async function handler(request: Request): Promise<Response> {
         status: res.status,
         tier,
       })
-      return json({
-        ok: false,
-        reason: 'polar-error',
-        fallbackUrl: fallbackLinkFor(tier),
-      }, 502)
+      return json({ ok: false, reason: 'polar-error' }, 502)
     }
     const data = (await res.json()) as { url?: string }
     if (!data?.url) {
-      return json({
-        ok: false,
-        reason: 'polar-error',
-        fallbackUrl: fallbackLinkFor(tier),
-      }, 502)
+      return json({ ok: false, reason: 'polar-error' }, 502)
     }
     return json({ ok: true, url: data.url, tier })
   } catch (err) {
-    console.warn('[checkout-session] polar error', {
+    // Branch on AbortError so ops can distinguish a slow-Polar timeout
+    // from genuine network / parse failures. Both surface as a generic
+    // overlay client-side; only the server log differs.
+    const isTimeout = err instanceof Error && err.name === 'AbortError'
+    console.warn(isTimeout ? '[checkout-session] polar timeout' : '[checkout-session] polar error', {
       err: err instanceof Error ? err.message : String(err),
       tier,
     })
-    return json({
-      ok: false,
-      reason: 'polar-error',
-      fallbackUrl: fallbackLinkFor(tier),
-    }, 502)
+    return json({ ok: false, reason: 'polar-error' }, 502)
   }
 }

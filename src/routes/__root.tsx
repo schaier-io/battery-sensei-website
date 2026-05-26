@@ -69,7 +69,11 @@ const softwareApplicationLd = {
   ],
   inLanguage: ['en', 'de', 'es', 'fr', 'ja'],
   image: [
-    `${SITE_URL}/app-icon.png`,
+    // Schema.org consumers (Google, Bing) only need a representative
+    // square mark; the 264 KB `app-icon.png` was overkill. The
+    // 256-square WebP-converted PNG is ~38 KB and still well above the
+    // 112×112 Google Rich Results minimum.
+    `${SITE_URL}/app-icon-256.png`,
     `${SITE_URL}/share-card.png`,
   ],
   screenshot: `${SITE_URL}/share-card.png`,
@@ -267,9 +271,17 @@ export const Route = createRootRoute({
       // Source Sans 3 400/500/600/700, Noto Serif JP 400/700/900.
       { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
       { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' },
-      // /api/price calls api.polar.sh server-side; the click-through buy
-      // button on Polar's hosted checkout lives on buy.polar.sh — preconnect
-      // warms the TLS session before the navigation and is cheap.
+      // Polar preconnect trio:
+      //   - api.polar.sh: client POSTs to /api/checkout-session which
+      //     proxies to api.polar.sh, AND the embed iframe loads pages
+      //     that postMessage from polar.sh after the session URL renders
+      //   - polar.sh: postMessage origin for the embed's success/close
+      //     events; also the cookie domain Polar uses
+      //   - buy.polar.sh: the fallback Checkout Link domain we
+      //     full-page-redirect to if the session-create API is down
+      // All three are TLS-warmed up-front so the Buy click feels instant.
+      { rel: 'preconnect', href: 'https://api.polar.sh' },
+      { rel: 'preconnect', href: 'https://polar.sh' },
       { rel: 'preconnect', href: 'https://buy.polar.sh' },
       {
         rel: 'stylesheet',
