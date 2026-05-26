@@ -1,9 +1,14 @@
 /**
- * Shared Polar helpers for API routes.
+ * Shared Polar helpers for API routes — server-side.
  *
- * Files in `api/` that begin with `_` are NOT deployed as Vercel
- * Functions (per Vercel's "paths and filenames" convention) — they're
- * just plain modules that other routes import.
+ * Lives in `/lib` (not `/api`) so Vercel's serverless bundler treats
+ * it as a regular module that other functions import. An earlier
+ * iteration sat at `api/_polar.ts` using the leading-underscore
+ * "private file" convention, but Vercel's bundler crashed at runtime
+ * with `ERR_MODULE_NOT_FOUND` on imports from neighbouring routes —
+ * moving here side-steps the convention entirely. The sibling
+ * `lib/db.ts` (which `api/contact.ts` already imports as
+ * `'../lib/db'`) is the working precedent.
  *
  * Why this exists
  * ---------------

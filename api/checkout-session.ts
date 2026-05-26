@@ -45,14 +45,14 @@
 
 import { z } from 'zod'
 
-import { LIFETIME_DISCOUNT_CODE, resolveDiscountId } from './_polar'
+import { LIFETIME_DISCOUNT_CODE, resolveDiscountId } from '../lib/polar-server'
 
 type Tier = 'lifetime' | 'support'
 
 /**
  * Code we silently auto-apply to every Lifetime session when the
  * visitor didn't type one themselves. Mirrors `LIFETIME_DISCOUNT_CODE`
- * in `src/lib/polar.ts` (kept in sync via the shared `_polar` helper).
+ * in `src/lib/polar.ts` (kept in sync via the shared `polar-server` helper).
  *
  * Polar caps redemptions at 500 server-side and 422s once exhausted;
  * the handler below catches that and retries without the code so the

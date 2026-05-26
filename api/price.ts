@@ -39,7 +39,7 @@ import {
   POLAR_API_BASE,
   POLAR_TIMEOUT_MS,
   resolveDiscountId,
-} from './_polar'
+} from '../lib/polar-server'
 
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000
 
@@ -213,7 +213,7 @@ async function fetchPolarPreview(country: string): Promise<PricePayload | PriceF
   }
 
   // Resolve ZENMODE → UUID once up front so the lifetime preview can
-  // attach `discount_id` (the only field Polar honours; see api/_polar.ts).
+  // attach `discount_id` (the only field Polar honours; see lib/polar-server.ts).
   // Cached module-scope so repeat country lookups skip this round-trip.
   const discountId = lifetimeProductId
     ? await resolveDiscountId(LIFETIME_DISCOUNT_CODE, token)
