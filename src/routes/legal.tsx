@@ -212,6 +212,15 @@ function LegalPage() {
                     {t('legal.body.withdrawal.refundCtaHint')}
                   </span>
                 </p>
+                {/* FAQ deep-link — same anchor the checkout trust badge
+                    points to, so the visitor lands on the auto-expanded
+                    refund row. Keeps both pages telling the same story
+                    without prose duplication. */}
+                <p className="mt-2 text-[0.8125rem]">
+                  <Link className="legal-link" to="/" hash="faq-refund">
+                    {t('legal.body.withdrawal.faqLink')}
+                  </Link>
+                </p>
               </Block>
 
               <Block

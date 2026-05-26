@@ -50,6 +50,10 @@ interface Props {
   /** Light or dark theme handoff to Polar. Matches washi page tone by
    *  default. */
   theme?: 'light' | 'dark'
+  /** Currency override from the /checkout switcher. When set, the
+   *  session is created with Polar's `currency` field so the iframe
+   *  quotes totals in this code regardless of the visitor's geo. */
+  currency?: 'USD' | 'EUR'
 }
 
 const POLAR_MESSAGE_ORIGINS = new Set([
@@ -83,7 +87,7 @@ function isPolarMessage(value: unknown): value is PolarMessage {
   )
 }
 
-export function PolarInlineCheckout({ tier, discountCode, theme = 'light' }: Props) {
+export function PolarInlineCheckout({ tier, discountCode, theme = 'light', currency }: Props) {
   const { t, i18n } = useTranslation()
   const [phase, setPhase] = useState<Phase>('creating')
   const [sessionUrl, setSessionUrl] = useState<string | null>(null)
@@ -102,6 +106,7 @@ export function PolarInlineCheckout({ tier, discountCode, theme = 'light' }: Pro
       body: JSON.stringify({
         tier,
         ...(discountCode ? { discountCode } : {}),
+        ...(currency ? { currency } : {}),
       }),
     })
       .then(async (res) => {
@@ -141,7 +146,7 @@ export function PolarInlineCheckout({ tier, discountCode, theme = 'light' }: Pro
     return () => {
       cancelled = true
     }
-  }, [tier, discountCode, theme, i18n.language])
+  }, [tier, discountCode, theme, currency, i18n.language])
 
   useEffect(() => {
     function onMessage(event: MessageEvent) {

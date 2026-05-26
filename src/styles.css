@@ -226,11 +226,88 @@ body {
   color: var(--sumi);
   text-decoration: underline;
   text-decoration-color: var(--line-strong);
+  text-decoration-thickness: 1px;
   text-underline-offset: 3px;
-  transition: text-decoration-color 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition:
+    color 200ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    text-decoration-color 200ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    text-decoration-thickness 200ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    text-underline-offset 200ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
-.legal-link:hover {
+.legal-link:hover,
+.legal-link:focus-visible {
+  /* Strong hinomaru underline with a slight thickening + offset drop;
+     reads as a clean ink-press without yelling. The thickness +
+     offset combo is what gives it the small "bloom" feel users
+     register as a hover acknowledgement on top of the colour shift. */
+  color: var(--hinomaru);
   text-decoration-color: var(--hinomaru);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+/* ────────────────────────────────────────────────────────────────
+   Inline anchor — used for hover-sensitive inline links across the
+   site (refund deep-links, FAQ anchors, footer nav, back-to-home).
+   Mirrors `.legal-link`'s ink-press feel but is lighter at rest so
+   it doesn't compete with surrounding prose. Pair with utility
+   colour classes when a different rest colour is needed.
+   ──────────────────────────────────────────────────────────────── */
+.zen-link {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition:
+    color 200ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    text-decoration-color 200ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    text-decoration-thickness 200ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    text-underline-offset 200ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform;
+}
+.zen-link:hover,
+.zen-link:focus-visible {
+  color: var(--sumi);
+  text-decoration-color: var(--hinomaru);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+/* Subtle nudge variant — same colour story as `.zen-link` but lifts
+   the whole element 1px on hover. Use for free-floating anchors
+   that don't sit inside a paragraph (back-to-home arrow, refund
+   button anchors). Skip on prose anchors — translating a span
+   inside a flowing paragraph shifts the line above/below. */
+.zen-link-lift {
+  transition:
+    color 200ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    text-decoration-color 200ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform;
+}
+.zen-link-lift:hover,
+.zen-link-lift:focus-visible {
+  color: var(--sumi);
+  transform: translateY(-1px);
+}
+
+/* Honour reduced-motion: drop transforms but keep colour transitions
+   so the hover affordance still registers without movement. */
+@media (prefers-reduced-motion: reduce) {
+  .zen-link,
+  .zen-link-lift {
+    transition:
+      color 200ms ease-out,
+      text-decoration-color 200ms ease-out,
+      text-decoration-thickness 200ms ease-out,
+      text-underline-offset 200ms ease-out;
+  }
+  .zen-link-lift:hover,
+  .zen-link-lift:focus-visible {
+    transform: none;
+  }
 }
 .legal-list {
   margin: 0;

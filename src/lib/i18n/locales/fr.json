@@ -527,6 +527,7 @@
         "a": "Après le paiement via Polar, vous recevez une clé de licence par e-mail. Ouvrez Sensei → Réglages → Premium et collez la clé. Sensei l'active via l'API Polar et conserve le résultat en local ; pas de compte, pas de connexion. La clé fonctionne sur chaque Mac que vous possédez."
       },
       {
+        "id": "refund",
         "q": "Puis-je obtenir un remboursement ?",
         "a": "Oui. Écrivez-nous dans les 14 jours suivant l'achat et nous remboursons, sans question. Polar gère le paiement, donc le remboursement revient sur la carte d'origine."
       },
@@ -706,6 +707,12 @@
       "support": "Par an"
     },
     "originalLabel": "avant",
+    "currency": {
+      "label": "Devise",
+      "usd": "USD",
+      "eur": "EUR",
+      "hint": "Polar facture dans la devise choisie au taux moyen du jour."
+    },
     "inline": {
       "title": "Paiement sécurisé Battery Sensei",
       "hint": "Remise de lancement appliquée automatiquement — <0>{{remaining}}</0> codes restants à ce prix.",
@@ -865,7 +872,10 @@
         "heading": "Ton droit de rétractation de 14 jours",
         "p1": "En tant que consommateur résidant dans l'Union européenne, tu disposes en principe de <0>14 jours</0> pour te rétracter d'un contrat à distance en vertu du §1829 du Code civil tchèque (loi n° 89/2012 Rec.).",
         "p2": "Battery Sensei étant livré sous forme de contenu numérique immédiatement après le paiement, en finalisant la commande tu acceptes expressément que l'exécution commence sans délai et reconnais que, en vertu du <0>§1837(l) du Code civil tchèque</0>, tu perds le droit de rétractation dès que la clé de licence a été émise.",
-        "p3": "Si ta clé n'a pas encore été émise, ou si tu ne l'as pas encore activée, tu peux toujours te rétracter dans le délai de 14 jours — écris à <0>info@battery-sensei.app</0> et nous coordonnerons le remboursement avec Polar. Le flux de remboursement propre à Polar (accessible depuis ton e-mail d'achat ou le tableau de bord Polar) est généralement la voie la plus rapide."
+        "p3": "Si ta clé n'a pas encore été émise, ou si tu ne l'as pas encore activée, tu peux toujours te rétracter dans le délai de 14 jours — écris à <0>info@battery-sensei.app</0> et nous coordonnerons le remboursement avec Polar. Le flux de remboursement propre à Polar (accessible depuis ton e-mail d'achat ou le tableau de bord Polar) est généralement la voie la plus rapide.",
+        "refundCta": "Demander un remboursement",
+        "refundCtaHint": "Écris-nous depuis l'adresse utilisée à la commande — ça nous permet de retrouver ton achat en quelques secondes.",
+        "faqLink": "Plus sur les remboursements dans la FAQ →"
       },
       "contentLiability": {
         "kicker": "四 · Contenu",

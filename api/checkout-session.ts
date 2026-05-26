@@ -131,6 +131,16 @@ async function resolveDiscountId(code: string, token: string): Promise<string | 
 const RequestSchema = z.object({
   tier: z.enum(['lifetime', 'support']),
   discountCode: z.string().trim().max(64).optional(),
+  /**
+   * Optional currency override coming from the /checkout currency
+   * switcher. Allowlist-validated to USD/EUR — Polar's full
+   * `PresentmentCurrency` enum is much larger but we only surface two
+   * choices in the UI (see src/lib/pricing.ts SUPPORTED_CURRENCIES).
+   */
+  currency: z
+    .enum(['USD', 'EUR'])
+    .transform((c) => c.toLowerCase() as 'usd' | 'eur')
+    .optional(),
 })
 type RequestBody = z.infer<typeof RequestSchema>
 
@@ -308,6 +318,15 @@ export async function POST(request: Request): Promise<Response> {
     products: [productId],
     embed_origin: embedOrigin,
     success_url: successUrl,
+  }
+  // Currency override forwarded from the /checkout switcher. Polar's
+  // CheckoutCreate accepts `currency` independently of any billing
+  // country, so the buyer sees totals in their chosen currency even
+  // before they fill in the billing address. Omit the field entirely
+  // when no override is given — Polar then auto-derives from the
+  // visitor's geo/billing as before.
+  if (body.currency) {
+    basePayload.currency = body.currency
   }
 
   // Wrapped so we can fire the request twice (once with the discount,

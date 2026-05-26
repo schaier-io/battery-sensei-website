@@ -527,6 +527,7 @@
         "a": "Nach dem Kauf über Polar erhalten Sie einen Lizenzschlüssel per E-Mail. Öffnen Sie Sensei → Einstellungen → Premium und fügen Sie den Schlüssel ein. Sensei aktiviert ihn über die Polar-API und speichert das Ergebnis lokal; kein Konto, kein Login. Der Schlüssel funktioniert auf jedem Mac, den Sie besitzen."
       },
       {
+        "id": "refund",
         "q": "Kann ich eine Rückerstattung erhalten?",
         "a": "Ja. Schreiben Sie innerhalb von 14 Tagen nach dem Kauf eine E-Mail und wir erstatten ohne Fragen. Polar wickelt die Zahlung ab, sodass die Rückerstattung auf die ursprüngliche Karte zurückgeht."
       },
@@ -706,6 +707,12 @@
       "support": "Pro Jahr"
     },
     "originalLabel": "vorher",
+    "currency": {
+      "label": "Währung",
+      "usd": "USD",
+      "eur": "EUR",
+      "hint": "Polar berechnet in Ihrer gewählten Währung zum aktuellen Mittelkurs."
+    },
     "inline": {
       "title": "Battery Sensei sichere Bezahlung",
       "hint": "Launch-Rabatt automatisch angewendet — <0>{{remaining}}</0> Codes übrig zu diesem Preis.",
@@ -865,7 +872,10 @@
         "heading": "Dein 14-tägiges Widerrufsrecht",
         "p1": "Als in der Europäischen Union ansässige Verbraucherin oder ansässiger Verbraucher hast du grundsätzlich <0>14 Tage</0> Zeit, einen Fernabsatzvertrag nach § 1829 des tschechischen Bürgerlichen Gesetzbuchs (Gesetz Nr. 89/2012 Slg.) zu widerrufen.",
         "p2": "Da Battery Sensei unmittelbar nach Zahlung als digitaler Inhalt geliefert wird, stimmst du mit Abschluss des Kaufs ausdrücklich zu, dass die Leistung sofort beginnt, und nimmst zur Kenntnis, dass du nach <0>§ 1837 Buchst. l des tschechischen Bürgerlichen Gesetzbuchs</0> das Widerrufsrecht verlierst, sobald der Lizenzschlüssel ausgegeben wurde.",
-        "p3": "Sollte dein Schlüssel noch nicht ausgegeben oder noch nicht aktiviert worden sein, kannst du dennoch innerhalb von 14 Tagen widerrufen — schreib an <0>info@battery-sensei.app</0> und wir stimmen die Rückerstattung mit Polar ab. Polars eigener Rückerstattungs-Workflow (erreichbar über deine Kauf-E-Mail oder das Polar-Dashboard) ist meist der schnellste Weg."
+        "p3": "Sollte dein Schlüssel noch nicht ausgegeben oder noch nicht aktiviert worden sein, kannst du dennoch innerhalb von 14 Tagen widerrufen — schreib an <0>info@battery-sensei.app</0> und wir stimmen die Rückerstattung mit Polar ab. Polars eigener Rückerstattungs-Workflow (erreichbar über deine Kauf-E-Mail oder das Polar-Dashboard) ist meist der schnellste Weg.",
+        "refundCta": "Rückerstattung anfordern",
+        "refundCtaHint": "Bitte schreib uns von der Adresse, mit der du im Checkout gekauft hast — so können wir deinen Kauf in Sekunden zuordnen.",
+        "faqLink": "Mehr zu Rückerstattungen in den FAQ →"
       },
       "contentLiability": {
         "kicker": "四 · Inhalte",

@@ -53,6 +53,51 @@ const POLAR_API_BASE = 'https://api.polar.sh/v1'
 const LIFETIME_DISCOUNT_CODE = 'ZENMODE'
 const POLAR_TIMEOUT_MS = 4_000
 
+// ────────────────────────────────────────────────────────────────────
+//  Currency policy (mirror of src/lib/pricing.ts)
+// ────────────────────────────────────────────────────────────────────
+//
+// We default visitors to exactly TWO currencies — USD or EUR — based
+// on their detected country. Anyone in a euro-using country gets EUR,
+// everyone else gets USD. The /checkout switcher then lets visitors
+// flip between USD and EUR explicitly. We do NOT auto-default to other
+// local currencies (CZK, GBP, JPY…) even when Polar would happily
+// settle in them; see the docblock in src/lib/pricing.ts for rationale.
+//
+// Keep this list in sync with EUROZONE in src/lib/pricing.ts.
+const EURO_COUNTRIES = new Set([
+  'AT','BE','CY','DE','EE','ES','FI','FR','GR','IE',
+  'IT','LT','LU','LV','MT','NL','PT','SI','SK','HR',
+  'AD','MC','SM','VA','ME','XK',
+  'GP','MQ','GF','RE','YT','BL','MF','PM',
+])
+
+/** Currencies the public client API is allowed to request. */
+const SUPPORTED_CURRENCIES = new Set(['USD', 'EUR'])
+
+/** Default ISO 4217 (lowercase, Polar's wire format) for a country. */
+function defaultCurrencyForCountry(country: string): 'usd' | 'eur' {
+  return EURO_COUNTRIES.has(country.toUpperCase()) ? 'eur' : 'usd'
+}
+
+/**
+ * Map a chosen currency to a representative billing country for the
+ * Polar preview call.
+ *
+ * Why: Polar's `currency` field is supposed to be independent, but in
+ * live testing the preview is occasionally still quoted in the
+ * `customer_billing_address.country`'s native currency (e.g. CZ → CZK)
+ * — that's what produced the "was CZK 86.36" strikethrough leak on
+ * the lifetime card. Forcing the preview's billing country to match
+ * the requested currency makes the quote deterministic: USD ↔ US, EUR
+ * ↔ DE. The buyer's REAL billing country is still collected at
+ * checkout time inside the iframe, so the final receipt + tax remain
+ * correct; this only affects the headline preview math.
+ */
+function previewCountryFor(currency: 'usd' | 'eur'): string {
+  return currency === 'eur' ? 'DE' : 'US'
+}
+
 type DiscountIdEntry = { id: string | null; expiresAt: number }
 const DISCOUNT_ID_TTL_MS = 10 * 60 * 1000
 const globalForDiscountCache = globalThis as unknown as {
@@ -176,6 +221,22 @@ function pickCountry(request: Request): string {
   return normaliseCountry(request.headers.get('x-vercel-ip-country'))
 }
 
+/**
+ * Pull a normalised currency override off the request, if any. The
+ * client may pass `?currency=usd` / `?currency=eur` from the /checkout
+ * switcher to force the preview into a specific currency. Unsupported
+ * values silently fall back to country-default so a bad querystring
+ * never breaks the page.
+ */
+function pickCurrencyOverride(request: Request): 'usd' | 'eur' | null {
+  const url = new URL(request.url)
+  const raw = url.searchParams.get('currency')
+  if (!raw) return null
+  const code = raw.trim().toUpperCase()
+  if (!SUPPORTED_CURRENCIES.has(code)) return null
+  return code.toLowerCase() as 'usd' | 'eur'
+}
+
 function formatAmount(cents: number, currency: string): string {
   try {
     return new Intl.NumberFormat('en-US', {
@@ -199,12 +260,19 @@ async function fetchCheckoutPreview(
   country: string,
   token: string,
   discountId?: string | null,
+  currency?: 'usd' | 'eur' | null,
 ): Promise<PolarCheckout | null> {
   const body: Record<string, unknown> = {
     product_id: productId,
     customer_billing_address: { country },
   }
   if (discountId) body.discount_id = discountId
+  // Polar accepts `currency` independently of the billing country
+  // (verified against the openapi PresentmentCurrency enum). Passing
+  // it forces the quoted total into the requested currency without
+  // changing the billing jurisdiction (so VAT stays correct for the
+  // detected country).
+  if (currency) body.currency = currency
 
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), POLAR_TIMEOUT_MS)
@@ -257,7 +325,10 @@ function isValidCheckout(c: PolarCheckout | null): c is PolarCheckout & {
   )
 }
 
-async function fetchPolarPreview(country: string): Promise<PricePayload | PriceFallback> {
+async function fetchPolarPreview(
+  country: string,
+  currency: 'usd' | 'eur',
+): Promise<PricePayload | PriceFallback> {
   const token = process.env.POLAR_ACCESS_TOKEN
   // Accept both `POLAR_PRODUCT_ID` (legacy) and `POLAR_PRODUCT_ID_SUPPORT`
   // (newer convention used by checkout-session.ts). Whichever is set wins.
@@ -276,13 +347,21 @@ async function fetchPolarPreview(country: string): Promise<PricePayload | PriceF
     ? await resolveDiscountId(LIFETIME_DISCOUNT_CODE, token)
     : null
 
+  // Use a currency-matched country for the preview call so Polar's
+  // quoted total is unambiguously in the requested currency (see
+  // `previewCountryFor` rationale). The visitor's actual `country`
+  // value is still echoed in the response payload for caching /
+  // observability; only Polar's `customer_billing_address.country`
+  // gets the mapped value.
+  const previewCountry = previewCountryFor(currency)
+
   // Fire yearly + lifetime previews in parallel. Lifetime is optional —
   // if its env var isn't set, we skip the second call and the payload
   // simply lacks a `lifetime` block (client derives like before).
   const [yearlyCheckout, lifetimeCheckoutWithDiscount] = await Promise.all([
-    fetchCheckoutPreview(yearlyProductId, country, token),
+    fetchCheckoutPreview(yearlyProductId, previewCountry, token, null, currency),
     lifetimeProductId
-      ? fetchCheckoutPreview(lifetimeProductId, country, token, discountId)
+      ? fetchCheckoutPreview(lifetimeProductId, previewCountry, token, discountId, currency)
       : Promise.resolve(null),
   ])
 
@@ -290,17 +369,19 @@ async function fetchPolarPreview(country: string): Promise<PricePayload | PriceF
     return { ok: false, country, reason: 'no_totals', source: 'fallback' }
   }
 
-  const currency = yearlyCheckout.currency.toUpperCase()
+  // The response's `currency` is what Polar actually quoted in — should
+  // match what we asked for, but trust the server-of-record either way.
+  const quotedCurrency = yearlyCheckout.currency.toUpperCase()
   const tax = typeof yearlyCheckout.tax_amount === 'number' ? yearlyCheckout.tax_amount : 0
 
   const payload: PricePayload = {
     ok: true,
     country,
-    currency,
+    currency: quotedCurrency,
     amount: yearlyCheckout.total_amount / 100,
-    formatted: formatAmount(yearlyCheckout.total_amount, currency),
-    subtotal_formatted: formatAmount(yearlyCheckout.subtotal_amount, currency),
-    tax_formatted: tax > 0 ? formatAmount(tax, currency) : '',
+    formatted: formatAmount(yearlyCheckout.total_amount, quotedCurrency),
+    subtotal_formatted: formatAmount(yearlyCheckout.subtotal_amount, quotedCurrency),
+    tax_formatted: tax > 0 ? formatAmount(tax, quotedCurrency) : '',
     tax_cents: tax,
     has_tax: tax > 0,
     source: 'polar',
@@ -322,11 +403,11 @@ async function fetchPolarPreview(country: string): Promise<PricePayload | PriceF
 
     payload.lifetime = {
       discounted_amount: lifeTotal,
-      discounted_formatted: formatAmount(lifeTotal, currency),
+      discounted_formatted: formatAmount(lifeTotal, quotedCurrency),
       original_amount: lifeSubtotal,
-      original_formatted: formatAmount(lifeSubtotal, currency),
+      original_formatted: formatAmount(lifeSubtotal, quotedCurrency),
       has_discount: hasDiscount,
-      tax_formatted: lifeTax > 0 ? formatAmount(lifeTax, currency) : '',
+      tax_formatted: lifeTax > 0 ? formatAmount(lifeTax, quotedCurrency) : '',
     }
   }
 
@@ -344,17 +425,27 @@ async function fetchPolarPreview(country: string): Promise<PricePayload | PriceF
  */
 export async function GET(request: Request): Promise<Response> {
   const country = pickCountry(request)
+  // Explicit `?currency=` override wins; otherwise pick USD or EUR
+  // based on the visitor's detected country. CZK / GBP / JPY / etc.
+  // are NEVER chosen as defaults — see currency-policy comment above.
+  const currency =
+    pickCurrencyOverride(request) ?? defaultCurrencyForCountry(country)
+
+  // Cache by (country, currency) — same country in EUR vs USD are two
+  // independent previews. Polar quotes them at different totals after
+  // FX, so they must not share a cache slot.
+  const cacheKey = `${country}:${currency}`
 
   const now = Date.now()
-  const cached = cache.get(country)
+  const cached = cache.get(cacheKey)
   if (cached && cached.expiresAt > now) {
     return json(cached.payload, 200, { 'x-price-cache': 'hit' })
   }
 
-  const result = await fetchPolarPreview(country)
+  const result = await fetchPolarPreview(country, currency)
 
   if (result.ok) {
-    cache.set(country, { expiresAt: now + CACHE_TTL_MS, payload: result })
+    cache.set(cacheKey, { expiresAt: now + CACHE_TTL_MS, payload: result })
     return json(result, 200, { 'x-price-cache': 'miss' })
   }
 

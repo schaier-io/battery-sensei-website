@@ -95,7 +95,7 @@ export function Footer() {
           aria-label={t('footer.ariaFooter')}
           className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[0.8125rem] text-sumi-soft"
         >
-          <a href="#contact" className="hover:text-sumi transition-colors">
+          <a href="#contact" className="zen-link-lift">
             {t('footer.contact')}
           </a>
           <span aria-hidden className="text-nezumi/50">·</span>
@@ -103,7 +103,7 @@ export function Footer() {
             href="https://github.com/schaier-io/battery-sensei-releases/issues/new/choose"
             target="_blank"
             rel="noreferrer"
-            className="hover:text-sumi transition-colors"
+            className="zen-link-lift"
           >
             {t('footer.reportIssue')}
           </a>
@@ -112,12 +112,12 @@ export function Footer() {
             href="https://github.com/schaier-io/battery-sensei-releases"
             target="_blank"
             rel="noreferrer"
-            className="hover:text-sumi transition-colors"
+            className="zen-link-lift"
           >
             {t('footer.releases')}
           </a>
           <span aria-hidden className="text-nezumi/50">·</span>
-          <a href="#pricing" className="hover:text-sumi transition-colors">
+          <a href="#pricing" className="zen-link-lift">
             {t('footer.pricing')}
           </a>
           <span aria-hidden className="text-nezumi/50">·</span>
@@ -129,16 +129,16 @@ export function Footer() {
             href={CUSTOMER_PORTAL_URL}
             target="_blank"
             rel="noreferrer"
-            className="hover:text-sumi transition-colors"
+            className="zen-link-lift"
           >
             {t('footer.managePurchase')}
           </a>
           <span aria-hidden className="text-nezumi/50">·</span>
-          <Link to="/privacy" className="hover:text-sumi transition-colors">
+          <Link to="/privacy" className="zen-link-lift">
             {t('privacy.footerLink')}
           </Link>
           <span aria-hidden className="text-nezumi/50">·</span>
-          <Link to="/legal" className="hover:text-sumi transition-colors">
+          <Link to="/legal" className="zen-link-lift">
             {t('legal.footerLink')}
           </Link>
         </nav>

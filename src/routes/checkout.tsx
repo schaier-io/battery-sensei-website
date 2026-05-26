@@ -30,10 +30,25 @@ const PAGE_DESC =
 const tierSchema = z.enum(['lifetime', 'support']).catch('lifetime')
 type Tier = z.infer<typeof tierSchema>
 
+// Currency switcher state lives in the URL (`?cur=usd|eur`) so it
+// survives refresh + can be linked. Unknown / missing values fall
+// through to `undefined`, which is the cue for the price hooks to
+// auto-detect the visitor's currency (USD outside the euro zone, EUR
+// inside) instead of forcing one.
+const currencySchema = z.enum(['USD', 'EUR']).optional().catch(undefined)
+type Currency = z.infer<typeof currencySchema>
+
 export const Route = createFileRoute('/checkout')({
-  validateSearch: (search) => ({
-    tier: tierSchema.parse((search as { tier?: unknown }).tier),
-  }),
+  validateSearch: (search) => {
+    const s = search as { tier?: unknown; cur?: unknown }
+    return {
+      tier: tierSchema.parse(s.tier),
+      // Accept lowercase too so hand-typed URLs are forgiving.
+      cur: currencySchema.parse(
+        typeof s.cur === 'string' ? s.cur.toUpperCase() : s.cur,
+      ),
+    }
+  },
   head: () => ({
     meta: [
       { title: PAGE_TITLE },
@@ -53,10 +68,14 @@ export const Route = createFileRoute('/checkout')({
 
 function CheckoutPage() {
   const { t } = useTranslation()
-  const { tier } = Route.useSearch()
+  const { tier, cur } = Route.useSearch()
   const navigate = Route.useNavigate()
-  const yearly = usePremiumPrice()
-  const lifetime = useLifetimePrice()
+  // `cur` is the explicit user override (USD/EUR from the switcher).
+  // When undefined the price hooks fall back to country-based auto:
+  // EUR for euro-using countries, USD everywhere else. The displayed
+  // price's `currency` field is what we sync the segmented control to.
+  const yearly = usePremiumPrice(cur)
+  const lifetime = useLifetimePrice(cur)
   // ZENMODE availability gates every "launch discount" surface on the
   // page: the strikethrough above the headline price, the
   // "ZENMODE applied" pill, and the inline hint chip above the embed.
@@ -91,8 +110,23 @@ function CheckoutPage() {
 
   function switchTier(next: Tier) {
     if (next === tier) return
-    void navigate({ search: { tier: next }, replace: true })
+    void navigate({ search: { tier: next, cur }, replace: true })
   }
+
+  // Currency switcher: writes the choice into `?cur=` so the page
+  // reload-survives + each toggle remounts PolarInlineCheckout (the
+  // `currency` prop is in its effect deps, so Polar mints a fresh
+  // session in the new currency).
+  function switchCurrency(next: Currency) {
+    if (next === cur) return
+    void navigate({ search: { tier, cur: next }, replace: true })
+  }
+
+  // What currency is the page CURRENTLY showing? Prefer the explicit
+  // override; otherwise read the live (or fallback) price's currency
+  // so the segmented control highlights the auto-chosen side.
+  const activeCurrency: 'USD' | 'EUR' =
+    cur ?? (yearly.currency === 'EUR' ? 'EUR' : 'USD')
 
   return (
     <>
@@ -222,12 +256,66 @@ function CheckoutPage() {
 
             <div aria-hidden className="my-7 h-px w-full bg-[var(--line)]" />
 
+            {/* Currency switcher — visitors default to USD or EUR
+                based on geo, but can flip explicitly. Sits above the
+                iframe so the choice is obvious BEFORE Polar paints
+                the card form (changing currency remounts the iframe
+                with a fresh session). Polar's hosted/embedded UI does
+                not expose a built-in currency control, so this is the
+                only path to switch. */}
+            <div className="mt-5 mb-4 flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <span className="text-[0.6875rem] uppercase tracking-[0.22em] text-sumi-soft">
+                  {t('checkout.currency.label')}
+                </span>
+                <div
+                  role="group"
+                  aria-label={t('checkout.currency.label')}
+                  className="inline-flex rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] p-0.5"
+                >
+                  <CurrencyTab
+                    active={activeCurrency === 'USD'}
+                    onClick={() => switchCurrency('USD')}
+                    label={t('checkout.currency.usd')}
+                  />
+                  <CurrencyTab
+                    active={activeCurrency === 'EUR'}
+                    onClick={() => switchCurrency('EUR')}
+                    label={t('checkout.currency.eur')}
+                  />
+                </div>
+              </div>
+              <span className="text-[0.6875rem] text-nezumi">
+                {t('checkout.currency.hint')}
+              </span>
+            </div>
+
+            {/* Activation pane — sits DIRECTLY above the iframe so
+                the buyer reads exactly how delivery + activation
+                works at the moment of paying. The dashed-border
+                "鍵 How activation works" copy was previously down at
+                the bottom of the page; up here it answers the
+                "what happens after I pay" question right at the card
+                form, which is where the doubt actually surfaces. */}
+            <aside className="mt-5 rounded-md border border-dashed border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-5 py-4">
+              <p className="flex items-center gap-2 text-[0.7rem] uppercase tracking-[0.22em] font-medium text-sumi-soft">
+                <span className="font-jp normal-case tracking-normal text-hinomaru/80">鍵</span>
+                {t('pricing.lifetime.activationLabel')}
+              </p>
+              <p className="mt-2 text-[0.875rem] leading-snug text-sumi-soft">
+                <Trans
+                  i18nKey="pricing.lifetime.activationBody"
+                  components={[<span className="font-medium text-sumi" />]}
+                />
+              </p>
+            </aside>
+
             {/* Live-count chip moved up next to the price (above the
                 fold). Polar iframe drops straight under the divider
                 here — no extra chrome between the visitor's eyes and
                 the card form. */}
             <div className="mt-5">
-              <PolarInlineCheckout tier={tier} />
+              <PolarInlineCheckout tier={tier} currency={cur} />
             </div>
 
             <ul className="mt-4 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[0.75rem] text-nezumi">
@@ -239,7 +327,18 @@ function CheckoutPage() {
                   </li>
                   <li className="inline-flex items-center gap-1.5">
                     <RotateCcw className="h-3 w-3 shrink-0" strokeWidth={1.8} aria-hidden />
-                    {t('checkout.refundNote')}
+                    {/* "14-day refund" badge links to the FAQ entry —
+                        deep-link auto-expands the refund row, where the
+                        one-click "Request a refund" mailto sits. Same
+                        underline cue we use across legal-link anchors so
+                        it reads as a click target, not just decoration. */}
+                    <Link
+                      to="/"
+                      hash="faq-refund"
+                      className="zen-link"
+                    >
+                      {t('checkout.refundNote')}
+                    </Link>
                   </li>
                   <li className="inline-flex items-center gap-1.5">
                     <KeyRound className="h-3 w-3 shrink-0" strokeWidth={1.8} aria-hidden />
@@ -264,38 +363,12 @@ function CheckoutPage() {
           </article>
         </Reveal>
 
-        <Reveal delay={300}>
-          <p className="mt-6 text-center text-[0.875rem] text-sumi-soft">
-            <Trans
-              i18nKey={isLifetime ? 'checkout.lifetimeSwapNote' : 'checkout.supportSwapNote'}
-              components={[
-                <button
-                  type="button"
-                  onClick={() => switchTier(isLifetime ? 'support' : 'lifetime')}
-                  className="underline decoration-dotted underline-offset-4 hover:text-sumi"
-                />,
-              ]}
-            />
-          </p>
-        </Reveal>
-
-        {/* Activation pane — moved here from the Pricing card.
-            Buyers see it after they've decided to purchase, not while
-            still browsing. Keeps the pricing cards short. */}
-        <Reveal delay={340}>
-          <aside className="mt-8 rounded-md border border-dashed border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-5 py-4">
-            <p className="flex items-center gap-2 text-[0.7rem] uppercase tracking-[0.22em] font-medium text-sumi-soft">
-              <span className="font-jp normal-case tracking-normal text-hinomaru/80">鍵</span>
-              {t('pricing.lifetime.activationLabel')}
-            </p>
-            <p className="mt-2 text-[0.875rem] leading-snug text-sumi-soft">
-              <Trans
-                i18nKey="pricing.lifetime.activationBody"
-                components={[<span className="font-medium text-sumi" />]}
-              />
-            </p>
-          </aside>
-        </Reveal>
+        {/* Tier-swap line + duplicated activation aside used to live
+            here. Both removed: the segmented tier toggle at the top
+            of the page already covers "switch to the other plan",
+            and the activation aside now sits directly above the
+            iframe where it answers the "what happens after I pay"
+            question at the moment of payment. */}
 
         <Reveal delay={400}>
           <aside className="mt-4 rounded-md border border-dashed border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-5 py-4">
@@ -324,15 +397,50 @@ function CheckoutPage() {
         <div className="mt-10 flex justify-center">
           <Link
             to="/"
-            className="inline-flex items-center gap-1.5 text-[0.875rem] text-sumi-soft hover:text-sumi"
+            className="group zen-link-lift inline-flex items-center gap-1.5 text-[0.875rem] text-sumi-soft"
           >
-            <ArrowLeft className="h-3.5 w-3.5" strokeWidth={1.8} aria-hidden />
+            <ArrowLeft className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-x-0.5" strokeWidth={1.8} aria-hidden />
             {t('checkout.backToHome')}
           </Link>
         </div>
       </main>
       <Footer />
     </>
+  )
+}
+
+/**
+ * Smaller sibling of `TierTab` for the currency switcher (USD/EUR).
+ * Visual language matches the tier toggle so the two segmented
+ * controls read as a family, but the currency one is denser since it
+ * lives inline above the iframe rather than above the headline.
+ */
+function CurrencyTab({
+  active,
+  onClick,
+  label,
+}: {
+  active: boolean
+  onClick: () => void
+  label: string
+}) {
+  return (
+    <button
+      type="button"
+      role="tab"
+      aria-selected={active}
+      onClick={onClick}
+      className={[
+        'rounded-[5px] px-3 py-1 text-[0.75rem] font-medium tabular-nums',
+        'transition-colors duration-200 cursor-pointer',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40',
+        active
+          ? 'bg-sumi text-[var(--washi)] shadow-sm'
+          : 'text-sumi-soft hover:text-sumi',
+      ].join(' ')}
+    >
+      {label}
+    </button>
   )
 }
 

@@ -527,6 +527,7 @@
         "a": "After checkout via Polar you get a license key by email. Open Sensei → Settings → Premium and paste the key. Sensei activates it against the Polar API and stores the result locally; no account, no login. The key works on every Mac you own."
       },
       {
+        "id": "refund",
         "q": "Can I get a refund?",
         "a": "Yes. Email within 14 days of purchase and we refund, no questions asked. Polar handles the payment so the refund hits the original card."
       },
@@ -706,6 +707,12 @@
       "support": "Per year"
     },
     "originalLabel": "was",
+    "currency": {
+      "label": "Currency",
+      "usd": "USD",
+      "eur": "EUR",
+      "hint": "Polar charges in your chosen currency at today's mid-market rate."
+    },
     "inline": {
       "title": "Battery Sensei secure checkout",
       "hint": "Launch discount applied automatically — <0>{{remaining}}</0> codes left at this price.",
@@ -867,7 +874,8 @@
         "p2": "Because Battery Sensei is delivered as digital content immediately on payment, by completing checkout you expressly agree that performance begins immediately and acknowledge that, under <0>§1837(l) of the Czech Civil Code</0>, you lose the right of withdrawal once the licence key has been issued.",
         "p3": "If your key has not yet been issued, or you have not yet activated it, you can still withdraw within 14 days — write to <0>info@battery-sensei.app</0> and we will coordinate with Polar to refund. Polar's own refund flow (available from your purchase email or the Polar dashboard) is usually the fastest path.",
         "refundCta": "Request a refund",
-        "refundCtaHint": "Please email from the address you used at checkout — that helps us match your purchase in seconds."
+        "refundCtaHint": "Please email from the address you used at checkout — that helps us match your purchase in seconds.",
+        "faqLink": "More on refunds in the FAQ →"
       },
       "contentLiability": {
         "kicker": "四 · Content",

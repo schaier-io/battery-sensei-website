@@ -527,6 +527,7 @@
         "a": "Tras la compra vía Polar recibes una clave de licencia por correo. Abre Sensei → Ajustes → Premium y pega la clave. Sensei la activa contra la API de Polar y guarda el resultado en local; sin cuenta, sin inicio de sesión. La clave funciona en cada Mac que tengas."
       },
       {
+        "id": "refund",
         "q": "¿Puedo solicitar un reembolso?",
         "a": "Sí. Escríbenos dentro de los 14 días siguientes a la compra y te lo devolvemos, sin preguntas. Polar gestiona el pago, así que el reembolso vuelve a la tarjeta original."
       },
@@ -706,6 +707,12 @@
       "support": "Al año"
     },
     "originalLabel": "antes",
+    "currency": {
+      "label": "Moneda",
+      "usd": "USD",
+      "eur": "EUR",
+      "hint": "Polar cobra en la moneda elegida al tipo medio del mercado actual."
+    },
     "inline": {
       "title": "Pago seguro de Battery Sensei",
       "hint": "Descuento de lanzamiento aplicado automáticamente — <0>{{remaining}}</0> códigos restantes a este precio.",
@@ -865,7 +872,10 @@
         "heading": "Tu derecho de desistimiento de 14 días",
         "p1": "Como persona consumidora residente en la Unión Europea, dispones por lo general de <0>14 días</0> para desistir de un contrato a distancia conforme al §1829 del Código Civil checo (Ley n.º 89/2012 Rec.).",
         "p2": "Dado que Battery Sensei se entrega como contenido digital inmediatamente tras el pago, al completar la compra aceptas expresamente que la ejecución comience de inmediato y reconoces que, conforme al <0>§1837(l) del Código Civil checo</0>, pierdes el derecho de desistimiento una vez emitida la clave de licencia.",
-        "p3": "Si tu clave aún no se ha emitido, o todavía no la has activado, puedes desistir dentro de los 14 días — escribe a <0>info@battery-sensei.app</0> y coordinaremos la devolución con Polar. El flujo de devolución del propio Polar (disponible desde tu correo de compra o el panel de Polar) suele ser la vía más rápida."
+        "p3": "Si tu clave aún no se ha emitido, o todavía no la has activado, puedes desistir dentro de los 14 días — escribe a <0>info@battery-sensei.app</0> y coordinaremos la devolución con Polar. El flujo de devolución del propio Polar (disponible desde tu correo de compra o el panel de Polar) suele ser la vía más rápida.",
+        "refundCta": "Solicitar reembolso",
+        "refundCtaHint": "Escríbenos, por favor, desde el correo que usaste al pagar — así emparejamos tu compra en segundos.",
+        "faqLink": "Más sobre reembolsos en las FAQ →"
       },
       "contentLiability": {
         "kicker": "四 · Contenido",

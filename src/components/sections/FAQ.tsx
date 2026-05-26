@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+import { Mail } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
   Accordion,
@@ -8,10 +10,22 @@ import {
 import { Hanko } from '#/components/zen/Hanko'
 import { Reveal } from '#/components/zen/Reveal'
 
+/** Pre-filled refund mailto — identical body to the /legal `Request a
+ *  refund` CTA so both surfaces produce the same support thread shape. */
+const REFUND_MAILTO =
+  'mailto:info@battery-sensei.app?subject=Refund%20request%20%E2%80%94%20Battery%20Sensei' +
+  '&body=Hi%2C%0A%0AI%27d%20like%20to%20request%20a%20refund%20for%20my%20Battery%20Sensei%20purchase.%0A%0A' +
+  'Polar%20order%20id%20%28if%20handy%29%3A%20%0AReason%20%28optional%29%3A%20%0A%0A' +
+  'Please%20note%3A%20I%20am%20sending%20this%20from%20the%20email%20I%20used%20at%20checkout.%0A%0AThanks%2C'
+
 /**
- * Shared FAQ data — also consumed by the FAQPage JSON-LD schema in
- * src/routes/__root.tsx so the answers can earn rich results.
+ * One FAQ item. The optional `id` is a STABLE locale-independent
+ * identifier used for deep-linking (e.g. `#faq-refund`) + for the
+ * accordion's internal `value` so order changes don't break links.
+ * Items without an `id` fall back to a positional `item-N` slug.
  */
+type FaqItem = { id?: string; q: string; a: string }
+
 /**
  * Static EN copy of the FAQ. Mirrors `faq.items` in en.json — both must
  * stay in sync because:
@@ -26,7 +40,7 @@ import { Reveal } from '#/components/zen/Reveal'
  * so search engines see a fully-resolved answer. If the canonical price
  * changes, update both en.json AND this array.
  */
-export const FAQ_ITEMS: ReadonlyArray<{ q: string; a: string }> = [
+export const FAQ_ITEMS: ReadonlyArray<FaqItem> = [
   {
     q: 'Which Macs and macOS versions does Battery Sensei support?',
     a: 'macOS 13 Ventura, Sonoma, Sequoia, and later, on both Apple Silicon (M1/M2/M3/M4) and Intel MacBooks.',
@@ -40,6 +54,7 @@ export const FAQ_ITEMS: ReadonlyArray<{ q: string; a: string }> = [
     a: 'After checkout via Polar you get a license key by email. Open Sensei → Settings → Premium and paste the key. Sensei activates it against the Polar API and stores the result locally; no account, no login. The key works on every Mac you own.',
   },
   {
+    id: 'refund',
     q: 'Can I get a refund?',
     a: 'Yes. Email within 14 days of purchase and we refund, no questions asked. Polar handles the payment so the refund hits the original card.',
   },
@@ -73,9 +88,65 @@ export const FAQ_ITEMS: ReadonlyArray<{ q: string; a: string }> = [
   },
 ]
 
+/**
+ * Convert an FAQ item to the stable accordion value used in
+ * `<AccordionItem value=...>`. Items tagged with `id` use `id-<id>`
+ * (e.g. `id-refund`), others fall back to `item-<index>`. The leading
+ * `id-` namespace lets the hash-handler below distinguish "user
+ * deep-linked to a tagged item" from "an internal anchor collision".
+ */
+function valueFor(item: FaqItem, index: number): string {
+  return item.id ? `id-${item.id}` : `item-${index}`
+}
+
+/**
+ * Read the current URL hash and turn it into an accordion value, if it
+ * targets a tagged FAQ. Supported anchor shapes:
+ *   #faq-refund   ← preferred, human-friendly
+ *   #refund       ← also accepted as a shortcut
+ *   #id-refund    ← the raw accordion value (for completeness)
+ * Returns `null` when the hash doesn't address a tagged FAQ; that's
+ * the cue to leave the accordion fully collapsed.
+ */
+function valueFromHash(items: ReadonlyArray<FaqItem>): string | null {
+  if (typeof window === 'undefined') return null
+  const raw = window.location.hash.replace(/^#/, '').toLowerCase()
+  if (!raw) return null
+  for (const it of items) {
+    if (!it.id) continue
+    if (
+      raw === `faq-${it.id}` ||
+      raw === it.id ||
+      raw === `id-${it.id}`
+    ) {
+      return `id-${it.id}`
+    }
+  }
+  return null
+}
+
 export function FAQ() {
   const { t } = useTranslation()
-  const items = t('faq.items', { returnObjects: true }) as Array<{ q: string; a: string }>
+  const items = t('faq.items', { returnObjects: true }) as Array<FaqItem>
+  // Open-item state. Empty string means "all collapsed". We sync it to
+  // the URL hash on mount + on hash changes so deep-links like
+  // `/#faq-refund` from the legal page or footer expand the right row.
+  const [openValue, setOpenValue] = useState<string>('')
+
+  useEffect(() => {
+    const next = valueFromHash(items)
+    if (next) setOpenValue(next)
+    const onHash = () => {
+      const v = valueFromHash(items)
+      if (v) setOpenValue(v)
+    }
+    window.addEventListener('hashchange', onHash)
+    return () => window.removeEventListener('hashchange', onHash)
+    // The items array comes back from i18n.t — stable identity per
+    // render is fine here; we only need to re-read on hash change.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
     <section id="faq" className="zen-section mx-auto max-w-3xl px-6">
       <div className="mb-12 flex flex-col items-center text-center">
@@ -90,18 +161,51 @@ export function FAQ() {
         </Reveal>
       </div>
       <Reveal delay={260}>
-      <Accordion type="single" collapsible className="paper-card divide-y divide-[var(--line)]">
-        {items.map(({ q, a }, i) => (
-          <AccordionItem key={i} value={`item-${i}`} className="border-0 px-6">
-            <AccordionTrigger className="display-title text-left text-sumi text-[1.0625rem] font-medium hover:no-underline py-5">
-              {q}
-            </AccordionTrigger>
-            <AccordionContent className="text-sumi-soft leading-[1.65] pb-5 text-[0.9375rem]">
-              {a}
-            </AccordionContent>
-          </AccordionItem>
-        ))}
-      </Accordion>
+        <Accordion
+          type="single"
+          collapsible
+          value={openValue}
+          onValueChange={setOpenValue}
+          className="paper-card divide-y divide-[var(--line)]"
+        >
+          {items.map((item, i) => {
+            const value = valueFor(item, i)
+            // Stable DOM anchor for tagged items only. `faq-refund` is
+            // the URL slug we link to from /legal, the footer trust
+            // line, and the checkout trust badge — keep it lowercase
+            // and locale-independent.
+            const anchorId = item.id ? `faq-${item.id}` : undefined
+            return (
+              <AccordionItem
+                key={value}
+                value={value}
+                id={anchorId}
+                className="border-0 scroll-mt-24 px-6"
+              >
+                <AccordionTrigger className="display-title text-left text-sumi text-[1.0625rem] font-medium hover:no-underline py-5">
+                  {item.q}
+                </AccordionTrigger>
+                <AccordionContent className="text-sumi-soft leading-[1.65] pb-5 text-[0.9375rem]">
+                  {item.a}
+                  {item.id === 'refund' && (
+                    <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-[var(--line)] pt-4">
+                      <a
+                        href={REFUND_MAILTO}
+                        className="btn-sumi inline-flex h-10 items-center gap-2 rounded-md px-4 text-[0.8125rem] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
+                      >
+                        <Mail className="h-3.5 w-3.5" strokeWidth={1.8} aria-hidden />
+                        {t('legal.body.withdrawal.refundCta')}
+                      </a>
+                      <span className="text-[0.8125rem] text-sumi-soft">
+                        {t('legal.body.withdrawal.refundCtaHint')}
+                      </span>
+                    </div>
+                  )}
+                </AccordionContent>
+              </AccordionItem>
+            )
+          })}
+        </Accordion>
       </Reveal>
     </section>
   )

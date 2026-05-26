@@ -5,6 +5,7 @@ import {
   formatPriceAmount,
   formatZero,
   priceForCountry,
+  priceForCurrency,
   priceForLocale,
   type PriceEntry,
 } from './pricing'
@@ -82,35 +83,48 @@ type ApiResponse =
 // homepage don't fire `/api/price` more than once per minute. The actual
 // HTTP layer also caches (Vercel + browser) but in-memory short-circuit
 // is faster on warm navigations.
+//
+// The cache key is the chosen currency (`auto` for "no override"). The
+// /checkout switcher remounts the hook with `currency='USD' | 'EUR'`
+// and we keep one entry per key — flipping the switch never serves a
+// stale preview from the other currency.
 const SHARED_TTL_MS = 60 * 1000
-let inFlight: Promise<ApiResponse | null> | null = null
-let cached: { at: number; data: ApiResponse } | null = null
+const inFlightByKey: Map<string, Promise<ApiResponse | null>> = new Map()
+const cachedByKey: Map<string, { at: number; data: ApiResponse }> = new Map()
 
-function fetchPrice(): Promise<ApiResponse | null> {
+function fetchPrice(currency?: 'USD' | 'EUR'): Promise<ApiResponse | null> {
+  const key = currency ?? 'auto'
   const now = Date.now()
-  if (cached && now - cached.at < SHARED_TTL_MS) {
-    return Promise.resolve(cached.data)
-  }
-  if (inFlight) return inFlight
-  inFlight = fetch('/api/price', { headers: { accept: 'application/json' } })
+  const c = cachedByKey.get(key)
+  if (c && now - c.at < SHARED_TTL_MS) return Promise.resolve(c.data)
+  const ip = inFlightByKey.get(key)
+  if (ip) return ip
+  const url =
+    '/api/price' + (currency ? `?currency=${currency.toLowerCase()}` : '')
+  const promise = fetch(url, { headers: { accept: 'application/json' } })
     .then((res) => (res.ok ? (res.json() as Promise<ApiResponse>) : null))
     .then((data) => {
-      if (data) cached = { at: Date.now(), data }
-      inFlight = null
+      if (data) cachedByKey.set(key, { at: Date.now(), data })
+      inFlightByKey.delete(key)
       return data
     })
     .catch(() => {
-      inFlight = null
+      inFlightByKey.delete(key)
       return null
     })
-  return inFlight
+  inFlightByKey.set(key, promise)
+  return promise
 }
 
 // SSR/prerender renders the canonical USD price; the first client effect
 // applies a fast locale-based guess, then a /api/price round trip swaps in
 // the live Polar preview (real FX + VAT). Each stage only paints when the
 // value actually differs, so steady-state countries see one paint.
-export function usePremiumPrice(): DisplayPrice {
+//
+// `currency` is an OPTIONAL explicit override coming from the /checkout
+// switcher. When unset, the server picks USD or EUR based on the
+// visitor's detected country (CZK / GBP / etc. are never auto-chosen).
+export function usePremiumPrice(currency?: 'USD' | 'EUR'): DisplayPrice {
   const [price, setPrice] = useState<DisplayPrice>(FALLBACK)
 
   useEffect(() => {
@@ -120,10 +134,16 @@ export function usePremiumPrice(): DisplayPrice {
       (typeof navigator !== 'undefined' &&
         (navigator.language || navigator.languages?.[0])) ||
       'en-US'
-    const localGuess = priceForLocale(locale)
+    // When the caller forced a currency (USD/EUR switcher), respect
+    // it for the pre-API fallback paint too. Keep the visitor's
+    // locale so number separators stay native. Otherwise fall back to
+    // the locale-based country guess.
+    const localGuess: PriceEntry = currency
+      ? { ...priceForCurrency(currency), locale }
+      : priceForLocale(locale)
     setPrice(fromEntry(localGuess, { isLive: false }))
 
-    fetchPrice().then((data) => {
+    fetchPrice(currency).then((data) => {
       if (cancelled || !data) return
       if (data.ok) {
         // Use the Polar preview directly — currency + amount come from
@@ -137,8 +157,17 @@ export function usePremiumPrice(): DisplayPrice {
           zero: formatZero({ amount: 0, currency: data.currency, locale }),
           isCanonical: data.currency === CANONICAL_PRICE.currency,
           isLive: true,
-          taxNote:
-            data.has_tax && data.tax_formatted ? `incl. ${data.tax_formatted} tax` : '',
+          // Headline tax note intentionally blank. The /api/price
+          // preview is fetched against a currency-matched billing
+          // country (US for USD, DE for EUR — see
+          // `previewCountryFor` in api/price.ts) so its `tax_*`
+          // values reflect *that* jurisdiction, not the visitor's
+          // real one. Surfacing "incl. CZK 8.64 tax" to a Czech
+          // visitor whose preview was fetched as US/DE is worse
+          // than no tax line. Polar's iframe shows the correct tax
+          // breakdown live once the buyer enters their billing
+          // address, so the on-page note has no job left to do.
+          taxNote: '',
         })
         return
       }
@@ -156,7 +185,9 @@ export function usePremiumPrice(): DisplayPrice {
     return () => {
       cancelled = true
     }
-  }, [])
+    // Re-run on currency change so the /checkout switcher repaints
+    // both the fallback guess and the live preview in the new code.
+  }, [currency])
 
   return price
 }
@@ -186,14 +217,14 @@ export type LifetimePrice = {
  * sensible placeholder while the operator wires up the lifetime
  * product. For real prices the operator must set the env var.
  */
-export function useLifetimePrice(): LifetimePrice {
-  const yearly = usePremiumPrice()
+export function useLifetimePrice(currency?: 'USD' | 'EUR'): LifetimePrice {
+  const yearly = usePremiumPrice(currency)
   const [live, setLive] = useState<LifetimeBlock | null>(null)
   const [hasDiscount, setHasDiscount] = useState<boolean>(true)
 
   useEffect(() => {
     let cancelled = false
-    fetchPrice().then((data) => {
+    fetchPrice(currency).then((data) => {
       if (cancelled) return
       if (data && data.ok && data.lifetime) {
         setLive(data.lifetime)
@@ -205,7 +236,10 @@ export function useLifetimePrice(): LifetimePrice {
     return () => {
       cancelled = true
     }
-  }, [])
+    // Re-fetch the lifetime block when the currency switcher flips —
+    // otherwise the strikethrough + discounted total would stay in
+    // the previous currency until the next session-level cache miss.
+  }, [currency])
 
   const base = {
     currency: yearly.currency,
@@ -226,7 +260,11 @@ export function useLifetimePrice(): LifetimePrice {
         ...base,
         amount: live.discounted_amount / 100,
         formatted: live.discounted_formatted,
-        taxNote: live.tax_formatted ? `incl. ${live.tax_formatted} tax` : '',
+        // Tax note suppressed — see rationale in `usePremiumPrice`.
+        // The lifetime block carries the same caveat: its tax field
+        // reflects the forced US/DE preview jurisdiction, not the
+        // visitor's real billing country.
+        taxNote: '',
       },
       original: {
         ...base,

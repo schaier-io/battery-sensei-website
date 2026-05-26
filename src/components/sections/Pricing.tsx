@@ -303,7 +303,7 @@ export function Pricing() {
               </p>
               <Link
                 to="/checkout"
-                search={{ tier: 'lifetime' }}
+                search={{ tier: 'lifetime', cur: undefined }}
                 className="btn-sumi group mt-3 mb-9 inline-flex h-11 w-full items-center justify-center gap-2 rounded-md px-6 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
               >
                 <Sparkles className="h-4 w-4" strokeWidth={1.8} />
@@ -382,7 +382,7 @@ export function Pricing() {
               </p>
               <Link
                 to="/checkout"
-                search={{ tier: 'support' }}
+                search={{ tier: 'support', cur: undefined }}
                 className="btn-sumi-soft group mt-3 mb-9 inline-flex h-11 w-full items-center justify-center gap-2 rounded-md border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-6 text-sm font-medium text-sumi transition-colors duration-200 hover:bg-[color-mix(in_oklab,var(--washi)_40%,#fff)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
               >
                 <Heart className="h-4 w-4 text-hinomaru" strokeWidth={1.8} />
