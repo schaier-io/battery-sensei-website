@@ -19,14 +19,17 @@
  *   POLAR_ACCESS_TOKEN   Organization access token from Polar dashboard
  *                        → Settings → Developers
  *
- * The discount code itself + max are imported from the shared
- * `lib/polar` module so the client and server agree on the cap.
+ * Note: the discount code + max-redemptions cap are duplicated here
+ * instead of imported from `src/lib/polar`. Vercel's serverless
+ * bundler does NOT reliably traverse `../src/*` imports out of the
+ * `api/` directory under this project's TanStack Start + Vite build
+ * (prod fails with `ERR_MODULE_NOT_FOUND: '/var/task/src/lib/polar'`).
+ * Two constants are cheap to duplicate; if they ever drift, search
+ * the codebase for `ZENMODE` to find both copies.
  */
 
-import {
-  LIFETIME_DISCOUNT_CODE,
-  LIFETIME_DISCOUNT_MAX_REDEMPTIONS,
-} from '../src/lib/polar'
+const LIFETIME_DISCOUNT_CODE = 'ZENMODE'
+const LIFETIME_DISCOUNT_MAX_REDEMPTIONS = 500
 
 const CACHE_TTL_MS = 5 * 60 * 1000
 const POLAR_TIMEOUT_MS = 4_000
@@ -126,14 +129,15 @@ async function fetchAvailability(): Promise<Availability> {
   }
 }
 
-export default async function handler(request: Request): Promise<Response> {
-  if (request.method !== 'GET' && request.method !== 'HEAD') {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
-      status: 405,
-      headers: { 'content-type': 'application/json' },
-    })
-  }
-
+/**
+ * Vercel routes Web Request/Response (`request: Request`) to handlers
+ * exported as named HTTP methods. `export default function handler`
+ * gets the Node IncomingMessage instead, which is why prod was failing
+ * with "request.headers.get is not a function" on every API route.
+ *
+ * Reference: https://vercel.com/docs/functions/runtimes/node-js#web-standard-api
+ */
+export async function GET(_request: Request): Promise<Response> {
   const now = Date.now()
   if (cache && now - cache.at < CACHE_TTL_MS) {
     return json(cache.payload, 200, { 'x-discount-cache': 'hit' })
@@ -152,3 +156,7 @@ export default async function handler(request: Request): Promise<Response> {
     'cache-control': 'private, max-age=60',
   })
 }
+
+// HEAD is a freebie — same headers as GET but no body. Browsers send
+// it occasionally for link previews; cleaner to answer than to 405.
+export const HEAD = GET

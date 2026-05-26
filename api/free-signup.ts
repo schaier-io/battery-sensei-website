@@ -25,13 +25,21 @@
  *    address, but one fewer signup form down the road.
  */
 
+import { z } from 'zod'
 import { prisma } from '../lib/db'
 
-type SignupBody = {
-  email?: string
-  locale?: string
-  source?: string
-}
+/**
+ * Request body validator. Email format is enforced by zod itself; the
+ * regex below stays as a defensive double-check (zod's email regex is
+ * intentionally lax in v4). Locale is capped to 8 chars to match the
+ * existing field length; source is normalised to a known enum.
+ */
+const RequestSchema = z.object({
+  email: z.string().trim().min(1).max(200).toLowerCase(),
+  locale: z.string().trim().min(2).max(8).optional(),
+  source: z.string().trim().max(32).optional(),
+})
+type SignupBody = z.infer<typeof RequestSchema>
 
 type Ok = { ok: true }
 type Err = { ok: false; reason: 'invalid' | 'parse' | 'method' }
@@ -109,27 +117,35 @@ function normalizedSource(input: string | undefined): 'pricing_free' | 'thanks_p
   return 'other'
 }
 
-export default async function handler(request: Request): Promise<Response> {
-  if (request.method !== 'POST') {
-    return new Response(JSON.stringify({ ok: false, reason: 'method' }), {
-      status: 405,
-      headers: { 'content-type': 'application/json' },
-    })
-  }
-
+/**
+ * Vercel routes Web Request/Response to handlers exported as named
+ * HTTP methods (POST/GET/...). A `export default function handler`
+ * gets a Node IncomingMessage instead, which crashes any `.headers.get`
+ * call. Keep this as `export async function POST`.
+ *
+ * Reference: https://vercel.com/docs/functions/runtimes/node-js#web-standard-api
+ */
+export async function POST(request: Request): Promise<Response> {
   let body: SignupBody
   try {
-    body = (await request.json()) as SignupBody
-  } catch {
-    return json({ ok: false, reason: 'parse' }, 400)
-  }
-
-  const email = (body.email || '').trim().toLowerCase()
-  if (!EMAIL_RE.test(email) || email.length > 200) {
+    const raw = (await request.json()) as unknown
+    body = RequestSchema.parse(raw)
+  } catch (err) {
+    console.warn('[free-signup] invalid body', {
+      err: err instanceof Error ? err.message : String(err),
+    })
     return json({ ok: false, reason: 'invalid' }, 400)
   }
 
-  const locale = (body.locale || 'en').slice(0, 8)
+  const email = body.email
+  // Belt-and-braces: zod accepts technically-valid-but-weird shapes
+  // (e.g. multiple `@` if encoded oddly). The regex enforces our
+  // strict-enough definition before we hand the address to Resend.
+  if (!EMAIL_RE.test(email)) {
+    return json({ ok: false, reason: 'invalid' }, 400)
+  }
+
+  const locale = body.locale ?? 'en'
   const source = normalizedSource(body.source)
   const ipAddress = clientIp(request)
   const userAgent = request.headers.get('user-agent')?.slice(0, 256) ?? undefined

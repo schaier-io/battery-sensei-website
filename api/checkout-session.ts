@@ -43,13 +43,21 @@
  *                             (defaults to https://battery-sensei.app)
  */
 
+import { z } from 'zod'
+
 type Tier = 'lifetime' | 'support'
 
-type RequestBody = {
-  tier?: Tier
-  /** Optional promo code to pre-apply (Lifetime's ZENMODE, mostly). */
-  discountCode?: string
-}
+/**
+ * Request body validator. Caller only needs `tier`; `discountCode` is
+ * optional and capped at 64 chars to keep a malformed promo field from
+ * being smuggled into Polar's API. `.catch` collapses any invalid input
+ * to undefined so a bad client payload never crashes the handler.
+ */
+const RequestSchema = z.object({
+  tier: z.enum(['lifetime', 'support']),
+  discountCode: z.string().trim().max(64).optional(),
+})
+type RequestBody = z.infer<typeof RequestSchema>
 
 type OkResponse = {
   ok: true
@@ -87,21 +95,22 @@ function defaultEmbedOrigin(): string {
   return (process.env.POLAR_EMBED_ORIGIN ?? 'https://battery-sensei.app').replace(/\/+$/, '')
 }
 
-function isTier(value: unknown): value is Tier {
-  return value === 'lifetime' || value === 'support'
-}
-
-export default async function handler(request: Request): Promise<Response> {
-  if (request.method !== 'POST') {
-    return json({ ok: false, reason: 'method' }, 405)
-  }
-
+/**
+ * Vercel routes Web Request/Response (`request: Request`) to handlers
+ * exported as named HTTP methods (POST/GET/...). A `export default
+ * function handler(request)` gets the Node `IncomingMessage` instead,
+ * which is why prod was crashing with "request.headers.get is not a
+ * function". Keep this as a named POST export; do NOT switch back to
+ * `export default`.
+ *
+ * Reference: https://vercel.com/docs/functions/runtimes/node-js#web-standard-api
+ */
+export async function POST(request: Request): Promise<Response> {
   // Cheap CSRF defense: only accept requests from our own origin (or
-  // same-origin no-Origin GETs, which can't reach POST anyway). The
-  // endpoint mints sessions against our paid Polar org so a third
-  // party calling us to harvest sessions has zero value but they'd
-  // still consume the Polar API rate budget. Allow no-Origin (curl,
-  // health checks) so server-to-server tooling keeps working.
+  // same-origin no-Origin POSTs, which can't really happen from a
+  // browser). The endpoint mints sessions against our paid Polar org
+  // so a third party calling us to harvest sessions has zero value but
+  // they'd still consume the Polar API rate budget.
   const origin = request.headers.get('origin')
   if (origin && origin !== defaultEmbedOrigin()) {
     console.warn('[checkout-session] cross-origin rejected', { origin })
@@ -110,12 +119,12 @@ export default async function handler(request: Request): Promise<Response> {
 
   let body: RequestBody
   try {
-    body = (await request.json()) as RequestBody
-  } catch {
-    return json({ ok: false, reason: 'parse' }, 400)
-  }
-
-  if (!isTier(body.tier)) {
+    const raw = (await request.json()) as unknown
+    body = RequestSchema.parse(raw)
+  } catch (err) {
+    console.warn('[checkout-session] invalid body', {
+      err: err instanceof Error ? err.message : String(err),
+    })
     return json({ ok: false, reason: 'invalid-tier' }, 400)
   }
   const tier = body.tier
@@ -127,8 +136,17 @@ export default async function handler(request: Request): Promise<Response> {
       : process.env.POLAR_PRODUCT_ID_SUPPORT
 
   if (!token || !productId) {
-    // No off-domain fallback by design — client surfaces an inline
-    // error overlay rather than redirect away from the brand site.
+    // Log WHICH env var is missing so the Vercel function logs make
+    // the misconfiguration obvious without leaking values. Most common
+    // prod gotcha: token was set in "Preview" env but not "Production",
+    // or the product id env name was misspelled.
+    console.error('[checkout-session] missing config', {
+      tier,
+      hasToken: Boolean(token),
+      hasProductId: Boolean(productId),
+      envVarName:
+        tier === 'lifetime' ? 'POLAR_PRODUCT_ID_LIFETIME' : 'POLAR_PRODUCT_ID_SUPPORT',
+    })
     return json({ ok: false, reason: 'missing-config' }, 503)
   }
 
@@ -144,10 +162,9 @@ export default async function handler(request: Request): Promise<Response> {
     success_url: successUrl,
     // Lifetime ZENMODE is auto-applied client-side via `polar.ts`; the
     // discountCode here is only set when the visitor typed something
-    // different into the checkout-page promo field.
-    ...(body.discountCode?.trim()
-      ? { discount_code: body.discountCode.trim() }
-      : {}),
+    // different into the checkout-page promo field. zod's .trim()
+    // already normalised the value.
+    ...(body.discountCode ? { discount_code: body.discountCode } : {}),
   }
 
   try {
@@ -165,14 +182,21 @@ export default async function handler(request: Request): Promise<Response> {
       signal: AbortSignal.timeout(6000),
     })
     if (!res.ok) {
+      // Read Polar's error body so the function log explains *why*
+      // the call was rejected (invalid product id, wrong token scope,
+      // discount-code expired, embed_origin not allowlisted, etc.).
+      const bodyText = await res.text().catch(() => '')
       console.warn('[checkout-session] polar non-2xx', {
         status: res.status,
         tier,
+        embedOrigin,
+        body: bodyText.slice(0, 500),
       })
       return json({ ok: false, reason: 'polar-error' }, 502)
     }
     const data = (await res.json()) as { url?: string }
     if (!data?.url) {
+      console.warn('[checkout-session] polar response missing url', { tier })
       return json({ ok: false, reason: 'polar-error' }, 502)
     }
     return json({ ok: true, url: data.url, tier })

@@ -518,11 +518,15 @@ async function countRecentByIp(ip: string): Promise<number> {
   })
 }
 
-export default async function handler(request: Request): Promise<Response> {
-  if (request.method !== 'POST') {
-    return json({ error: 'Method not allowed' }, 405)
-  }
-
+/**
+ * Vercel routes Web Request/Response (`request: Request`) to handlers
+ * exported as named HTTP methods (POST/GET/...). A `export default
+ * function handler` gets a Node IncomingMessage instead, which crashes
+ * on `request.headers.get`. Keep this as `export async function POST`.
+ *
+ * Reference: https://vercel.com/docs/functions/runtimes/node-js#web-standard-api
+ */
+export async function POST(request: Request): Promise<Response> {
   // Reject anything that is not a same-site browser POST. Curl, Postman, and
   // cross-origin pages all fail here; the contact form on this site sends an
   // Origin matching the allowlist below. CSRF-style cross-origin POSTs from

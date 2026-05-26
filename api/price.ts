@@ -184,11 +184,16 @@ async function fetchPolarPreview(country: string): Promise<PricePayload | PriceF
   }
 }
 
-export default async function handler(request: Request): Promise<Response> {
-  if (request.method !== 'GET' && request.method !== 'HEAD') {
-    return json({ error: 'Method not allowed' }, 405)
-  }
-
+/**
+ * Vercel routes Web Request/Response (`request: Request`) to handlers
+ * exported as named HTTP methods (GET/POST/...). `export default
+ * function handler` gets a Node IncomingMessage instead, which crashes
+ * on `request.headers.get` and `new URL(request.url)`. Keep this as
+ * `export async function GET`.
+ *
+ * Reference: https://vercel.com/docs/functions/runtimes/node-js#web-standard-api
+ */
+export async function GET(request: Request): Promise<Response> {
   const country = pickCountry(request)
 
   const now = Date.now()
@@ -211,3 +216,7 @@ export default async function handler(request: Request): Promise<Response> {
     'cache-control': 'private, max-age=60',
   })
 }
+
+// HEAD is a freebie — alias of GET. Some link-preview crawlers
+// (Slack, Discord, etc.) probe with HEAD; better to answer than 405.
+export const HEAD = GET

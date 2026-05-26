@@ -75,14 +75,23 @@ type SessionResponse =
   | { ok: false; reason: string }
 
 /**
+ * Module-scoped slot for the last server reason, so the error overlay
+ * can show a tiny diagnostic chip without forcing the fetch helper to
+ * return a richer shape. Acceptable globalish state because the
+ * checkout flow is strictly serial (one button click at a time).
+ */
+let lastReason: string | null = null
+
+/**
  * Ask the server to mint a fresh embed-eligible Checkout Session.
  * Returns the session URL on success, or null on any failure (caller
- * is expected to fall back to a full-page redirect).
+ * shows an inline overlay).
  */
 async function fetchSessionUrl(
   tier: 'lifetime' | 'support',
   discountCode: string | undefined,
 ): Promise<string | null> {
+  lastReason = null
   try {
     const res = await fetch('/api/checkout-session', {
       method: 'POST',
@@ -93,16 +102,21 @@ async function fetchSessionUrl(
       }),
     })
     if (!res.ok) {
-      console.warn('[polar-embed] session create non-2xx', res.status)
+      // 4xx/5xx still carries a JSON body with a `reason` we can show.
+      const data = await res.json().catch(() => null) as SessionResponse | null
+      lastReason = data && 'reason' in data ? data.reason : `http-${res.status}`
+      console.warn('[polar-embed] session create non-2xx', res.status, lastReason)
       return null
     }
     const data = (await res.json()) as SessionResponse
     if (!data.ok) {
+      lastReason = data.reason
       console.warn('[polar-embed] session create returned ok=false', data.reason)
       return null
     }
     return data.url
   } catch (err) {
+    lastReason = 'network'
     console.warn(
       '[polar-embed] session create threw',
       err instanceof Error ? err.message : String(err),
@@ -128,9 +142,12 @@ export function usePolarCheckout() {
       // hosted Checkout Link as a fallback — the whole point of the
       // embed is to keep the visitor inside our washi/sumi context.
       // Surface an inline overlay so they know to try again instead
-      // of silently doing nothing on click.
+      // of silently doing nothing on click. `lastReason` carries the
+      // server's hint into the overlay so operators see at a glance
+      // whether it was missing config vs Polar 5xx vs CSRF.
       openCheckoutErrorOverlay({
         tier: opts.tier,
+        reason: lastReason,
         onClose: opts.onClose,
       })
       return null
@@ -159,6 +176,18 @@ export function usePolarCheckout() {
   }, [])
 }
 
+/** Minimal HTML escape for the reason chip — only used on values we
+ *  generate (`missing-config`, `polar-error`, `forbidden`, etc.) but
+ *  cheap insurance in case a server reason ever contains user input. */
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
 /**
  * Inline error overlay shown when the session-create API can't mint a
  * Checkout Session (token missing on the server, Polar 5xx, etc.). We
@@ -173,6 +202,10 @@ export function usePolarCheckout() {
  */
 function openCheckoutErrorOverlay(opts: {
   tier: 'lifetime' | 'support'
+  /** Server-reported reason for the failure, surfaced as a tiny chip
+   *  so operators can diagnose without opening DevTools. Values:
+   *  `missing-config` `polar-error` `forbidden` `network` etc. */
+  reason?: string | null
   onClose?: () => void
 }): { close: () => void } {
   const wrap = document.createElement('div')
@@ -198,6 +231,16 @@ function openCheckoutErrorOverlay(opts: {
   // keeping i18n out of vanilla DOM avoids carting around an i18n bundle
   // into a hook callback. If checkout outages become common enough that
   // the copy needs translating, lift this to a real React component.
+  // Tiny diagnostic chip when the server returned a hint. Helps the
+  // site operator (and any tech-savvy buyer) tell apart missing env
+  // vars (`missing-config`) from Polar outage (`polar-error`) from
+  // CSRF (`forbidden`) without opening DevTools.
+  const reasonChip = opts.reason
+    ? `<div style="margin:8px 0 12px;display:inline-flex;align-items:center;gap:6px;padding:3px 8px;border-radius:999px;background:rgba(28,26,23,0.06);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.5px;letter-spacing:.04em;color:#6f6a64">
+        <span style="width:6px;height:6px;border-radius:999px;background:#c93434"></span>
+        ${escapeHtml(opts.reason)}
+      </div>`
+    : ''
   card.innerHTML = `
     <div style="font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#8a847c;margin-bottom:8px">
       Checkout · unavailable
@@ -205,6 +248,7 @@ function openCheckoutErrorOverlay(opts: {
     <div style="font-family:'Spectral',serif;font-size:22px;font-weight:600;line-height:1.2;margin-bottom:6px">
       Couldn't reach the checkout.
     </div>
+    ${reasonChip}
     <p style="font-size:13px;color:#6f6a64;margin:0 0 18px 0;line-height:1.5">
       Something on our side blinked. Please try the ${opts.tier === 'lifetime' ? 'Lifetime' : 'Support'} button again in a moment. If it keeps failing, drop us a line at sandro@schaier.io and we'll send you a payment link directly.
     </p>
@@ -213,7 +257,7 @@ function openCheckoutErrorOverlay(opts: {
         style="height:38px;padding:0 14px;border:1px solid rgba(28,26,23,0.18);background:transparent;border-radius:8px;font-size:13px;color:#3f3a35;cursor:pointer">
         Close
       </button>
-      <a href="mailto:sandro@schaier.io?subject=Checkout%20issue&body=Hi%2C%20I%20tried%20to%20buy%20the%20${opts.tier}%20tier%20and%20got%20an%20error.%20Could%20you%20send%20me%20a%20direct%20payment%20link%3F"
+      <a href="mailto:sandro@schaier.io?subject=Checkout%20issue%20(${encodeURIComponent(opts.reason ?? 'unknown')})&body=Hi%2C%20I%20tried%20to%20buy%20the%20${opts.tier}%20tier%20and%20got%20an%20error.%20Could%20you%20send%20me%20a%20direct%20payment%20link%3F"
         style="height:38px;padding:0 16px;display:inline-flex;align-items:center;border:0;background:#1c1a17;color:#fbf7ef;border-radius:8px;font-size:13px;font-weight:500;text-decoration:none">
         Email us
       </a>

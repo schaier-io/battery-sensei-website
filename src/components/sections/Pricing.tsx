@@ -546,6 +546,13 @@ function FreeDownloadForm() {
         placeholder={t('pricing.free.email.placeholder')}
         className="mt-2 block h-11 w-full min-w-0 rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_55%,#fff)] px-3 text-[0.875rem] text-sumi placeholder:text-nezumi/70 focus:outline-none focus:ring-2 focus:ring-sumi/30"
       />
+      {/* Footnote sits directly under the input so the "what you're
+          signing up for" disclosure is read BEFORE the visitor commits
+          to the click — reciprocity is clearest when the ask is named
+          before the button label, not after. */}
+      <p className="mt-2 text-center text-[0.7rem] leading-[1.45] text-nezumi">
+        {t('pricing.free.email.footnote')}
+      </p>
       <button
         type="submit"
         disabled={status === 'sending'}
@@ -568,9 +575,6 @@ function FreeDownloadForm() {
           {t('pricing.free.email.errorInvalid')}
         </p>
       )}
-      <p className="mt-2 text-center text-[0.7rem] leading-[1.45] text-nezumi">
-        {t('pricing.free.email.footnote')}
-      </p>
       {/* Skip link is intentionally bolder than the footnote above —
           self-determination beats "captured" lead-gen, and we don't want
           visitors to feel the email is a hard paywall. Underline always
