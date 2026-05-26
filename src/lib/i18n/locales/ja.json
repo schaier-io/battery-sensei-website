@@ -321,12 +321,14 @@
     "openApp": "Senseiを開く",
     "downloadApp": "Senseiをダウンロード",
     "backToHome": "ホームに戻る",
+    "managePurchase": "購入の管理",
     "checkoutHint": "注文 #{{id}}",
     "delivery": {
       "label": "ライセンスキー（メールにて）",
       "from": "<0>Polar</0>（決済プロバイダー）より、通常は1分以内に届きます。",
       "spam": "受信トレイに見当たらない場合は、迷惑メールフォルダをご確認ください。5分経ってもまだ届かないときは、<0>info@battery-sensei.app</0> までご連絡ください。当日中に再送いたします。",
-      "supportEmail": "info@battery-sensei.app"
+      "supportEmail": "info@battery-sensei.app",
+      "downloadCta": "Senseiをダウンロード"
     },
     "lifetime": {
       "heading": "Lifetimeへようこそ。",
@@ -661,6 +663,7 @@
     "reportIssue": "問題を報告",
     "releases": "リリース",
     "pricing": "値段",
+    "managePurchase": "購入の管理",
     "copyright": "© {{year}} · Battery Sensei",
     "lastUpdated": "最終更新 2026年5月24日"
   },

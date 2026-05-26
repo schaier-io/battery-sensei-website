@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { Download, MessageCircle, ShoppingBag } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { LanguageSwitcher } from '#/components/LanguageSwitcher'
-import { lifetimeCheckoutUrl } from '#/lib/polar'
+import { CUSTOMER_PORTAL_URL, lifetimeCheckoutUrl } from '#/lib/polar'
 import { useLifetimePrice } from '#/lib/use-price'
 
 export function Footer() {
@@ -119,6 +119,19 @@ export function Footer() {
           <span aria-hidden className="text-nezumi/50">·</span>
           <a href="#pricing" className="hover:text-sumi transition-colors">
             {t('footer.pricing')}
+          </a>
+          <span aria-hidden className="text-nezumi/50">·</span>
+          {/* Polar customer portal — buyers sign in with the email they
+              used at checkout to: view receipts, download invoices, manage
+              the support subscription, or resend a lost license key.
+              External target so the on-page state isn't lost. */}
+          <a
+            href={CUSTOMER_PORTAL_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="hover:text-sumi transition-colors"
+          >
+            {t('footer.managePurchase')}
           </a>
           <span aria-hidden className="text-nezumi/50">·</span>
           <Link to="/privacy" className="hover:text-sumi transition-colors">

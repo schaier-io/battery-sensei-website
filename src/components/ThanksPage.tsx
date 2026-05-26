@@ -1,12 +1,19 @@
 import { Link, useSearch } from '@tanstack/react-router'
 import { track } from '@vercel/analytics'
-import { ArrowLeft, Download as DownloadIcon, Mail, Sparkles } from 'lucide-react'
+import {
+  ArrowLeft,
+  Download as DownloadIcon,
+  ExternalLink,
+  Mail,
+  Sparkles,
+} from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { Hanko } from '#/components/zen/Hanko'
 import { Reveal } from '#/components/zen/Reveal'
 import { Nav } from '#/components/sections/Nav'
 import { Footer } from '#/components/sections/Footer'
+import { CUSTOMER_PORTAL_URL } from '#/lib/polar'
 
 // How long to wait after the page lands before kicking off the ninja
 // animation. The longest existing Reveal delay is ~580ms (CTA bar), so
@@ -18,6 +25,14 @@ const VIDEO_DELAY_MS = 3000
 // dissolve rather than a hard cut.
 const VIDEO_FADE_IN_MS = 520
 const VIDEO_FADE_OUT_MS = 760
+// Delay between the video starting its fade-out and the license card
+// starting its fade-in. Half the video's fade-out duration so the two
+// transitions cross-fade through the midpoint without either feeling
+// abrupt — the slot is never visually empty.
+const LICENSE_CROSSFADE_MS = Math.round(VIDEO_FADE_OUT_MS / 2)
+// Reduced-motion shortcut: if the user has asked the browser to settle
+// down, we skip the bow entirely and reveal the license card sooner.
+const REDUCED_MOTION_REVEAL_MS = 800
 
 type Tier = 'lifetime' | 'support'
 
@@ -26,12 +41,14 @@ type Tier = 'lifetime' | 'support'
  * (or after the fake-checkout overlay in dev). Receives an optional
  * `checkout_id` query param injected by Polar's success URL template.
  *
- * The ninja video is a small MP4 that plays ONCE on land (no loop), no
- * controls, no border — `mix-blend-mode: multiply` against the washi
- * page background blends the video's light backdrop into the page tone
- * so the ninja looks like he's bowing on the same paper, not floating
- * on a video card. `playsInline` keeps iOS from fullscreen-popping it;
- * `prefers-reduced-motion` users see the first frame as a still poster.
+ * Single "moment slot"
+ * --------------------
+ * The ninja video used to play and then leave a yawning gap of empty
+ * page below the headline. We now treat the slot as a stage: the bow
+ * plays once, fades out, and then the license-delivery block fades IN
+ * inside the same physical space. The slot is fixed-height (aspect-
+ * video on the bow side, matched min-height on the license side) so
+ * the page doesn't reflow during the cross-fade.
  */
 export function ThanksPage({ tier, kanji }: { tier: Tier; kanji: string }) {
   const { t } = useTranslation()
@@ -58,6 +75,12 @@ export function ThanksPage({ tier, kanji }: { tier: Tier; kanji: string }) {
       // Analytics never blocks the page.
     }
   }, [tier, checkoutId])
+
+  // `licenseShown` flips true when the bow has finished its fade-out
+  // (or sooner under reduced-motion). The cross-fade is parent-driven
+  // so the two children never overlap in flow — both absolute-pos
+  // inside the slot wrapper.
+  const [licenseShown, setLicenseShown] = useState(false)
 
   return (
     <>
@@ -107,40 +130,45 @@ export function ThanksPage({ tier, kanji }: { tier: Tier; kanji: string }) {
           </div>
         </section>
 
-        {/* Ninja bow — fades in after the text moment, plays once, fades
-            out at the end. `mix-blend-mode: multiply` blends the video's
-            light backdrop into the page's washi tone so the ninja reads
-            as a brush-ink figure painted on the same paper, not a video
-            clip on a white card. `playsInline` keeps iOS from fullscreen-
-            popping it; `prefers-reduced-motion` is honored by the
-            DelayedBowVideo wrapper which simply doesn't autoplay. */}
+        {/* The "moment slot" — first the bow plays, then the license-
+            delivery card fades in over the same space. Two absolutely-
+            positioned children inside a relative wrapper with a fixed
+            min-height so the page doesn't shift during the cross-fade.
+            The min-height matches a 16:9 video at the max-width below
+            (440 / 16 * 9 ≈ 248 px) plus generous breathing room for
+            the license card on the other side. */}
         <section className="mx-auto max-w-2xl px-5 pb-2 pt-10 sm:px-6 md:pt-14">
-          <DelayedBowVideo />
+          <div className="relative mx-auto w-full max-w-[440px] min-h-[300px] sm:min-h-[320px]">
+            <DelayedBowVideo
+              hidden={licenseShown}
+              onComplete={() => {
+                // Wait the cross-fade interval so the video has begun
+                // its fade-out before we start fading the license card
+                // in. The slot is never visually empty between the two.
+                window.setTimeout(() => setLicenseShown(true), LICENSE_CROSSFADE_MS)
+              }}
+            />
+            <LicenseDelivery visible={licenseShown} />
+          </div>
         </section>
 
         <section className="zen-section mx-auto max-w-3xl px-5 pt-2 sm:px-6">
-          {/* Delivery card — explicit sender + spam guidance so visitors
-              know exactly which message to look for and where to write
-              if it never lands. The kanji 鍵 (kagi / key) anchors the
-              card as a "key arrives here" piece of brand language; the
-              ruled brush-divider mirrors the LanguageSwitcher header so
-              the card feels native to the site's washi-and-ink system. */}
-          <Reveal delay={480}>
-            <DeliveryCard />
-          </Reveal>
-
           <Reveal
             as="p"
             delay={540}
-            className="mt-6 text-center text-[0.9375rem] leading-[1.65] text-sumi-soft"
+            className="mt-2 text-center text-[0.9375rem] leading-[1.65] text-sumi-soft"
           >
             {t(`${key}.next`)}
           </Reveal>
 
           {/* CTA row — three actions ordered by buyer intent.
-                Primary  · Open Sensei  (most buyers already installed during the 5-day trial)
-                Secondary · Download    (newcomers who paid before downloading)
-                Tertiary · Back to home (escape hatch, plain link) */}
+                Primary  · Open Sensei      (most buyers already installed during the 5-day trial)
+                Secondary · Manage purchase (Polar customer portal — receipts, invoices, license resend)
+                Tertiary · Back to home     (escape hatch, plain link)
+
+              Download moved INTO the license card above where it's the
+              natural next action; keeping it here too would double the
+              affordance for the same intent. */}
           <Reveal
             delay={620}
             className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap"
@@ -156,14 +184,16 @@ export function ThanksPage({ tier, kanji }: { tier: Tier; kanji: string }) {
               {t('thanks.openApp')}
             </a>
             <a
-              href="/download/latest"
+              href={CUSTOMER_PORTAL_URL}
+              target="_blank"
+              rel="noreferrer"
               className="group inline-flex h-11 items-center gap-2.5 rounded-md border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] px-6 text-sm font-medium text-sumi transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:bg-[color-mix(in_oklab,var(--washi)_45%,#fff)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
             >
-              <DownloadIcon
+              <ExternalLink
                 className="h-4 w-4 transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5"
                 strokeWidth={1.8}
               />
-              {t('thanks.downloadApp')}
+              {t('thanks.managePurchase')}
             </a>
             <Link
               to="/"
@@ -181,23 +211,37 @@ export function ThanksPage({ tier, kanji }: { tier: Tier; kanji: string }) {
 }
 
 /**
- * Delivery card — surfaces the email sender + spam-folder reassurance
- * so a buyer knows exactly which message to look for. Brand parity:
- * 鍵 (kagi / key) kanji + tracked label + brush rule mirrors the
- * LanguageSwitcher dropdown header so the card feels native to the
- * site's ink-on-washi system rather than bolted on.
+ * License-delivery block. Renders inside the same "moment slot" the
+ * bow video occupied — fades in after the video has finished and
+ * begun its fade-out. Surfaces the email sender + spam-folder
+ * reassurance so a buyer knows exactly which message to look for, and
+ * pairs it with a clear download CTA (the natural next action once
+ * the key arrives).
  *
- * The two paragraphs use rich-text components so the locale string can
- * bold the sender ("Polar") and the support address without forcing
- * the translator to assemble HTML themselves.
+ * Brand parity: 鍵 (kagi / key) kanji + tracked label + brush rule
+ * mirrors the LanguageSwitcher dropdown header so the card feels
+ * native to the site's ink-on-washi system.
  */
-function DeliveryCard() {
+function LicenseDelivery({ visible }: { visible: boolean }) {
   const { t } = useTranslation()
   return (
     <div
       role="note"
       aria-label={t('thanks.delivery.label')}
-      className="mx-auto max-w-xl rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] px-5 py-5 sm:px-6"
+      // Absolute fill of the parent slot so it occupies exactly the
+      // space the video vacated. `pointer-events` flips with visibility
+      // so links don't get pressed while invisible behind the fading
+      // video; aria-hidden mirrors the same for screen readers.
+      aria-hidden={!visible}
+      className="absolute inset-0 flex flex-col rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] px-5 py-5 sm:px-6"
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? 'translateY(0)' : 'translateY(8px)',
+        transitionProperty: 'opacity, transform',
+        transitionDuration: '620ms',
+        transitionTimingFunction: 'cubic-bezier(0.2, 0.8, 0.2, 1)',
+        pointerEvents: visible ? 'auto' : 'none',
+      }}
     >
       <div className="flex items-center gap-3">
         {/* 鍵 = "key". Matches the kanji-seal vocabulary the rest of the
@@ -234,6 +278,21 @@ function DeliveryCard() {
           ]}
         />
       </p>
+      {/* Download CTA — the natural next action once the key arrives.
+          Sized full-width inside the card so it reads as the resolution
+          of the delivery story rather than a separate affordance. */}
+      <div className="mt-4 flex justify-center">
+        <a
+          href="/download/latest"
+          className="group inline-flex h-10 items-center justify-center gap-2 rounded-md border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-5 text-[0.875rem] font-medium text-sumi transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:bg-[color-mix(in_oklab,var(--washi)_40%,#fff)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
+        >
+          <DownloadIcon
+            className="h-4 w-4 transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5"
+            strokeWidth={1.7}
+          />
+          {t('thanks.delivery.downloadCta')}
+        </a>
+      </div>
     </div>
   )
 }
@@ -257,17 +316,34 @@ function DeliveryCard() {
  *      A 350 ms safety timeout falls back to fading in regardless, in
  *      case `playing` never fires (autoplay rejection, codec hiccup).
  *
- * `prefers-reduced-motion` skips play() entirely — the still first
- * frame fades in once and stays put, which is the gentler thing to
- * show someone who has asked the browser to settle down.
+ * `prefers-reduced-motion` skips play() entirely — the parent gets an
+ * `onComplete` fired after `REDUCED_MOTION_REVEAL_MS` so the license
+ * card reveals quickly without forcing the video to animate.
  *
  * `preload="auto"` lets the browser fetch the frames during the 3 s
  * idle wait so play() doesn't have to wait on the network when it
  * eventually fires.
+ *
+ * `hidden` is set by the parent once the license card has taken over
+ * the slot so the dissolved-out video can't trap focus or accept
+ * pointer events behind the new content.
  */
-function DelayedBowVideo() {
+function DelayedBowVideo({
+  onComplete,
+  hidden,
+}: {
+  onComplete: () => void
+  hidden: boolean
+}) {
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const [phase, setPhase] = useState<'hidden' | 'in' | 'out'>('hidden')
+  const completedRef = useRef(false)
+
+  const fireComplete = () => {
+    if (completedRef.current) return
+    completedRef.current = true
+    onComplete()
+  }
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
@@ -275,12 +351,23 @@ function DelayedBowVideo() {
     ).matches
 
     const timers: number[] = []
+
+    if (prefersReducedMotion) {
+      // Reduced-motion path: skip the bow entirely. The parent reveals
+      // the license card after REDUCED_MOTION_REVEAL_MS so the page
+      // still has a paced moment of arrival rather than an instant pop.
+      timers.push(window.setTimeout(fireComplete, REDUCED_MOTION_REVEAL_MS))
+      return () => {
+        for (const id of timers) window.clearTimeout(id)
+      }
+    }
+
     const startTimer = window.setTimeout(() => {
       const el = videoRef.current
-      if (!el) return
-      if (prefersReducedMotion) {
-        // Reduced-motion path: skip play, just bring the poster in.
-        setPhase('in')
+      if (!el) {
+        // No element to play — let the parent reveal the card anyway
+        // so the page doesn't stall on the bow slot forever.
+        fireComplete()
         return
       }
       // Kick off playback. The matching onPlaying handler flips phase
@@ -293,12 +380,17 @@ function DelayedBowVideo() {
       timers.push(
         window.setTimeout(() => setPhase((p) => (p === 'hidden' ? 'in' : p)), 350),
       )
+      // Belt-and-braces completion: if `ended` never fires (codec
+      // glitch, network stall mid-clip), surface the license card
+      // after a generous fallback so the page never appears frozen.
+      timers.push(window.setTimeout(fireComplete, 12_000))
     }, VIDEO_DELAY_MS)
     timers.push(startTimer)
 
     return () => {
       for (const id of timers) window.clearTimeout(id)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -313,7 +405,10 @@ function DelayedBowVideo() {
       disablePictureInPicture
       controlsList="nodownload noplaybackrate nofullscreen"
       onPlaying={() => setPhase((p) => (p === 'hidden' ? 'in' : p))}
-      onEnded={() => setPhase('out')}
+      onEnded={() => {
+        setPhase('out')
+        fireComplete()
+      }}
       // Two transition durations — slower on the way out so the bow
       // settles into the page rather than blinking off. CSS transition
       // honors whichever target opacity is set on the element.
@@ -323,8 +418,13 @@ function DelayedBowVideo() {
           phase === 'out' ? `${VIDEO_FADE_OUT_MS}ms` : `${VIDEO_FADE_IN_MS}ms`,
         transitionTimingFunction: 'cubic-bezier(0.2, 0.8, 0.2, 1)',
         opacity: phase === 'in' ? 1 : 0,
+        // Once the license card has taken over, drop the video out of
+        // hit-testing so it can't trap pointer/focus behind the new
+        // content. visibility:hidden also lets the parent recover the
+        // GPU layer when the video is no longer needed.
+        visibility: hidden ? 'hidden' : 'visible',
       }}
-      className="pointer-events-none mx-auto block aspect-video w-full max-w-[440px] select-none bg-transparent [mix-blend-mode:multiply]"
+      className="pointer-events-none absolute inset-0 m-auto block aspect-video w-full max-w-[440px] select-none bg-transparent [mix-blend-mode:multiply]"
     />
   )
 }
