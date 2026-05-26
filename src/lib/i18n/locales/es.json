@@ -681,7 +681,6 @@
       "lifetime": "Polar Software, Inc. es el vendedor oficial — se encarga del cobro, el IVA y tu recibo. Recibirás tu clave de licencia por correo en menos de un minuto y la activarás desde la app en Ajustes → Premium.",
       "support": "Polar Software, Inc. es el vendedor oficial — se encarga del cobro, el IVA y tu recibo. Recibirás tu clave de licencia por correo en menos de un minuto — sigue activa mientras tu apoyo anual lo esté."
     },
-    "lifetimeAutoNote": "ZENMODE aplicado automáticamente — solo primeros 500 compradores.",
     "supportSwapNote": "¿Prefieres pagar una vez y conservarlo? <0>Cambiar a Lifetime</0>.",
     "lifetimeSwapNote": "¿Prefieres compromiso anual? <0>Cambiar a Apoyo continuo al desarrollador</0>.",
     "summaryTitle": "Lo que recibes",
@@ -721,6 +720,7 @@
     "refundNote": "Garantía de devolución de 14 días",
     "alreadyOwnTitle": "¿Ya lo compraste?",
     "alreadyOwnBody": "Abre Battery Sensei → Ajustes → Premium. Pega tu clave y el correo que usaste en la compra, y pulsa Activar Premium.",
+    "alreadyOwnDownload": "Descargar Sensei",
     "backToHome": "Volver a la página principal"
   },
   "privacy": {
@@ -731,7 +731,6 @@
     "intro": "Battery Sensei es una pequeña app indie para macOS. Recopilamos lo mínimo necesario para mantener el sitio, procesar pagos y avisarte de nuevas versiones — y abajo te contamos exactamente qué significa eso en lenguaje claro.",
     "backHome": "Volver a la página principal",
     "footerLink": "Privacidad",
-    "translationNote": "El texto legal de abajo es vinculante en inglés. Si necesitas un resumen en tu idioma, pídenoslo sin problema — escríbenos a <0>info@battery-sensei.app</0>.",
     "body": {
       "controller": {
         "kicker": "一 · Responsable del tratamiento",
@@ -836,7 +835,6 @@
     "intro": "Quién está detrás de battery-sensei.app, cómo contactarnos y las condiciones legales que rigen tu uso del sitio.",
     "backHome": "Volver a la página principal",
     "footerLink": "Aviso legal",
-    "translationNote": "El texto legal de abajo es vinculante en inglés. Si necesitas un resumen en tu idioma, pídenoslo sin problema — escríbenos a <0>info@battery-sensei.app</0>.",
     "body": {
       "operator": {
         "kicker": "一 · Operador",

@@ -16,7 +16,7 @@
     "db:studio": "prisma studio"
   },
   "dependencies": {
-    "@polar-sh/checkout": "^0.2.1",
+    "@polar-sh/checkout": "^0.3.0",
     "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.8.0",
     "@tailwindcss/vite": "^4.3.0",

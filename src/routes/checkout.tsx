@@ -1,11 +1,11 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import {
   ArrowLeft,
+  Download,
   ShieldCheck,
   RotateCcw,
   KeyRound,
   Sparkles,
-  Tag,
   Heart,
   XCircle,
   Mail,
@@ -185,12 +185,22 @@ function CheckoutPage() {
               </div>
             </header>
 
-            {/* "ZENMODE applied automatically" pill — only meaningful
-                while the launch is open. Hidden once exhausted. */}
+            {/* Launch-discount chip with live remaining count. Replaces
+                the older static "ZENMODE applied" pill — same intent,
+                but now visible above the fold and self-updating from
+                /api/discount-availability. Hidden once the cap is hit
+                so we don't dangle "0 of 500 left" stale copy. */}
             {isLifetime && launchOpen ? (
-              <p className="mt-4 inline-flex items-center gap-2 rounded-full bg-hinomaru/10 px-3 py-1 text-[0.75rem] font-medium text-hinomaru">
-                <Sparkles className="h-3 w-3" strokeWidth={2} aria-hidden />
-                {t('checkout.lifetimeAutoNote')}
+              <p className="mt-4 inline-flex items-center gap-2 rounded-full bg-hinomaru/10 px-3 py-1 text-[0.75rem] font-medium text-hinomaru tabular-nums">
+                <Sparkles className="h-3 w-3 shrink-0" strokeWidth={2} aria-hidden />
+                <Trans
+                  i18nKey="checkout.inline.hint"
+                  values={{ remaining: zenmodeRemaining, max: zenmodeMax }}
+                  components={[
+                    <span className="font-semibold" />,
+                    <span className="font-semibold" />,
+                  ]}
+                />
               </p>
             ) : null}
 
@@ -215,28 +225,10 @@ function CheckoutPage() {
 
             <div aria-hidden className="my-7 h-px w-full bg-[var(--line)]" />
 
-            {/* Launch-discount hint chip — visible only while ZENMODE
-                has redemptions left. The pill above (`lifetimeAutoNote`)
-                already confirms the discount is on; this row adds the
-                live count so the urgency reads from a real number, not
-                a slogan. Once the cap is hit the entire chip
-                disappears — page reverts to a plain full-price view. */}
-            {isLifetime && launchOpen && (
-              <div className="flex items-start gap-3 rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_72%,#fff)] px-4 py-3">
-                <Tag className="mt-0.5 h-4 w-4 shrink-0 text-hinomaru" strokeWidth={1.7} aria-hidden />
-                <p className="text-[0.8125rem] leading-[1.55] text-sumi-soft tabular-nums">
-                  <Trans
-                    i18nKey="checkout.inline.hint"
-                    values={{ remaining: zenmodeRemaining, max: zenmodeMax }}
-                    components={[
-                      <span className="font-semibold tracking-[0.04em] text-sumi" />,
-                      <span className="font-semibold tracking-[0.04em] text-sumi" />,
-                    ]}
-                  />
-                </p>
-              </div>
-            )}
-
+            {/* Live-count chip moved up next to the price (above the
+                fold). Polar iframe drops straight under the divider
+                here — no extra chrome between the visitor's eyes and
+                the card form. */}
             <div className="mt-5">
               <PolarInlineCheckout tier={tier} />
             </div>
@@ -317,6 +309,18 @@ function CheckoutPage() {
             <p className="mt-2 text-[0.875rem] leading-snug text-sumi-soft">
               {t('checkout.alreadyOwnBody')}
             </p>
+            {/* Newcomers occasionally land here without Sensei installed
+                — usually visitors clicking through from a referral with
+                a key in hand. Surface the download as an outlined
+                secondary CTA so it's reachable without burying the
+                primary "paste your key" instructions above. */}
+            <a
+              href="/download/latest"
+              className="mt-3 inline-flex h-9 items-center gap-2 rounded-md border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_55%,#fff)] px-3.5 text-[0.8125rem] font-medium text-sumi transition-colors duration-200 hover:bg-[color-mix(in_oklab,var(--washi)_35%,#fff)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
+            >
+              <Download className="h-3.5 w-3.5" strokeWidth={1.7} aria-hidden />
+              {t('checkout.alreadyOwnDownload')}
+            </a>
           </aside>
         </Reveal>
 

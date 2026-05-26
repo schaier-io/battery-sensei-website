@@ -681,7 +681,6 @@
       "lifetime": "Polar Software, Inc. est le vendeur officiel — ils gèrent le paiement, la TVA et votre reçu. Vous recevrez votre clé de licence par e-mail en moins d'une minute, puis l'activerez dans l'app via Réglages → Premium.",
       "support": "Polar Software, Inc. est le vendeur officiel — ils gèrent le paiement, la TVA et votre reçu. Vous recevrez votre clé de licence par e-mail en moins d'une minute — elle reste active tant que votre soutien annuel l'est."
     },
-    "lifetimeAutoNote": "ZENMODE appliqué automatiquement — 500 premiers acheteurs uniquement.",
     "supportSwapNote": "Vous préférez payer une fois et posséder ? <0>Passer à Lifetime</0>.",
     "lifetimeSwapNote": "Vous préférez un engagement annuel ? <0>Passer au Soutien continu au développeur</0>.",
     "summaryTitle": "Ce que vous recevez",
@@ -721,6 +720,7 @@
     "refundNote": "Garantie de remboursement 14 jours",
     "alreadyOwnTitle": "Déjà acheté ?",
     "alreadyOwnBody": "Ouvrez Battery Sensei → Réglages → Premium. Collez votre clé, saisissez l'e-mail utilisé lors de l'achat, puis cliquez sur Activer Premium.",
+    "alreadyOwnDownload": "Télécharger Sensei",
     "backToHome": "Retour à l'accueil"
   },
   "privacy": {
@@ -731,7 +731,6 @@
     "intro": "Battery Sensei est une petite app indé pour macOS. Nous collectons le strict minimum pour faire tourner le site, encaisser les paiements et te prévenir des nouvelles versions — et on t'explique en clair ci-dessous ce que ça veut dire.",
     "backHome": "Retour à l'accueil",
     "footerLink": "Confidentialité",
-    "translationNote": "Le texte juridique ci-dessous fait foi en anglais. Un résumé dans ta langue est dispo sur demande — écris-nous à <0>info@battery-sensei.app</0>.",
     "body": {
       "controller": {
         "kicker": "一 · Responsable du traitement",
@@ -836,7 +835,6 @@
     "intro": "Qui se cache derrière battery-sensei.app, comment nous joindre, et les conditions légales qui régissent ton utilisation du site.",
     "backHome": "Retour à l'accueil",
     "footerLink": "Mentions légales",
-    "translationNote": "Le texte juridique ci-dessous fait foi en anglais. Un résumé dans ta langue est dispo sur demande — écris-nous à <0>info@battery-sensei.app</0>.",
     "body": {
       "operator": {
         "kicker": "一 · Exploitant",

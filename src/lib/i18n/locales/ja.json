@@ -681,7 +681,6 @@
       "lifetime": "販売代行業者(merchant of record)はPolar Software, Inc.です — 決済・消費税・領収書を担当します。1分以内にライセンスキーをメールでお届けし、アプリの 設定 → Premium から有効化できます。",
       "support": "販売代行業者(merchant of record)はPolar Software, Inc.です — 決済・消費税・領収書を担当します。1分以内にライセンスキーをメールでお届け — 毎年のご支援が続く限り有効です。"
     },
-    "lifetimeAutoNote": "ZENMODEは自動適用 — 先着500名のみ。",
     "supportSwapNote": "一度きりで自分のものに?<0>Lifetimeに切り替える</0>。",
     "lifetimeSwapNote": "毎年のお支払いをご希望?<0>開発の応援プランに切り替える</0>。",
     "summaryTitle": "含まれるもの",
@@ -721,6 +720,7 @@
     "refundNote": "14日間の返金保証",
     "alreadyOwnTitle": "すでに購入済みですか?",
     "alreadyOwnBody": "Battery Senseiを開き、設定 → Premiumを選択。キーと購入時のメールアドレスを入力し、「Premiumを有効化」を押してください。",
+    "alreadyOwnDownload": "Senseiをダウンロード",
     "backToHome": "ホームに戻る"
   },
   "privacy": {
@@ -731,7 +731,6 @@
     "intro": "Battery Senseiは小さなインディー製のmacOSアプリです。サイトの運営、お支払いの処理、新バージョンのお知らせに必要な最小限の情報のみを収集しています。その内容を以下にわかりやすくご説明します。",
     "backHome": "ホームに戻る",
     "footerLink": "プライバシー",
-    "translationNote": "以下の法的文書は英語版が正本となります。お使いの言語での要約をご希望の場合は、お気軽に <0>info@battery-sensei.app</0> までご連絡ください。",
     "body": {
       "controller": {
         "kicker": "一 · 個人データ管理者",
@@ -836,7 +835,6 @@
     "intro": "battery-sensei.appの運営者、お問い合わせ方法、本サイトのご利用に関する法的条件についてご案内します。",
     "backHome": "ホームに戻る",
     "footerLink": "法的情報",
-    "translationNote": "以下の法的文書は英語版が正本となります。お使いの言語での要約をご希望の場合は、お気軽に <0>info@battery-sensei.app</0> までご連絡ください。",
     "body": {
       "operator": {
         "kicker": "一 · 運営者",

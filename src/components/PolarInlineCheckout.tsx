@@ -14,18 +14,24 @@ import { AlertTriangle, Loader2 } from 'lucide-react'
  *     session URL configured for our origin (`embed_origin`). The
  *     endpoint silently auto-applies ZENMODE for Lifetime and falls
  *     back to no code if Polar rejects.
- *  2. Mount that URL inside an in-page <iframe>. The iframe has no
- *     border / shadow chrome — the surrounding washi paper-card
- *     carries the framing.
- *  3. Listen for `postMessage` from `polar.sh` for the lifecycle events
- *     Polar publishes: `loaded`, `confirmed`, `success`. On `success`
- *     with `redirect: true` we navigate the parent window to the
- *     server-supplied success URL (Polar substitutes `{CHECKOUT_ID}`
- *     server-side).
+ *  2. Mount that URL inside an in-page <iframe>.
+ *  3. Listen for `postMessage` from Polar origins for the lifecycle
+ *     events the embed publishes: `loaded`, `confirmed`, `success`.
+ *     On `success` with `redirect: true` we navigate the parent
+ *     window to the server-supplied success URL.
  *
- * Failure paths surface inline with a small error block, not a
- * full-page redirect — by design, the visitor stays on
- * battery-sensei.app even when Polar is having a moment.
+ * Why not the headless `<CheckoutForm>` React kit
+ * ------------------------------------------------
+ * `@polar-sh/checkout/components` (tested through 0.3.0) ships
+ * chunks that wrap a CJS `require("react")` in a runtime factory.
+ * Pure-ESM Vite leaves the inner require untouched; the browser
+ * crashes with "require is not defined" the moment <CheckoutForm>
+ * mounts. Neither `optimizeDeps.include` nor `ssr.noExternal` could
+ * rewrite the runtime require — it's an upstream Polar packaging
+ * issue. Revisit when Polar ships proper ESM chunks, or jump
+ * straight to a custom Stripe-Elements implementation (Polar
+ * exposes the underlying `payment_processor_metadata` so the same
+ * Polar Checkout Session can drive a hand-rolled card form).
  */
 type Tier = 'lifetime' | 'support'
 
@@ -37,23 +43,15 @@ type Phase = 'creating' | 'mounted' | 'loaded' | 'confirmed' | 'success' | 'erro
 
 interface Props {
   tier: Tier
-  /**
-   * Promo code typed by the visitor on the /checkout page promo field.
-   * Forwarded to the session-create endpoint; overrides the silent
-   * ZENMODE auto-apply for that one click.
-   */
+  /** Promo code typed by the visitor on the /checkout page promo field.
+   *  Forwarded to the session-create endpoint; overrides the silent
+   *  ZENMODE auto-apply for that one click. */
   discountCode?: string
-  /**
-   * Light or dark theme handoff to Polar. Matches washi page tone by
-   * default.
-   */
+  /** Light or dark theme handoff to Polar. Matches washi page tone by
+   *  default. */
   theme?: 'light' | 'dark'
 }
 
-// Origins Polar's iframe is allowed to postMessage from. The audit found
-// the embed SDK pins to `polar.sh` for postMessage origin matching, so
-// we match the same set here. Add `sandbox.polar.sh` so dev / sandbox
-// orgs work too.
 const POLAR_MESSAGE_ORIGINS = new Set([
   'https://polar.sh',
   'https://www.polar.sh',
@@ -92,10 +90,6 @@ export function PolarInlineCheckout({ tier, discountCode, theme = 'light' }: Pro
   const [errorReason, setErrorReason] = useState<string | null>(null)
   const iframeRef = useRef<HTMLIFrameElement | null>(null)
 
-  // Re-create the session whenever the tier or typed discount code
-  // changes. Sessions are one-shot on Polar's side, so swapping codes
-  // means a fresh round trip. The endpoint dedupes via Polar; no
-  // client-side throttle needed.
   useEffect(() => {
     let cancelled = false
     setPhase('creating')
@@ -114,10 +108,6 @@ export function PolarInlineCheckout({ tier, discountCode, theme = 'light' }: Pro
         const body = (await res.json().catch(() => null)) as SessionResponse | null
         if (cancelled) return
         if (body && body.ok && body.url) {
-          // Forward the visitor's UI language to Polar so their form
-          // labels match the rest of our page when we support more
-          // than EN (Polar accepts a `locale` query param on the
-          // session URL).
           const url = new URL(body.url)
           if (!url.searchParams.has('locale')) {
             url.searchParams.set('locale', i18n.language || 'en')
@@ -147,10 +137,6 @@ export function PolarInlineCheckout({ tier, discountCode, theme = 'light' }: Pro
     }
   }, [tier, discountCode, theme, i18n.language])
 
-  // Listen for Polar's lifecycle messages. Same protocol the SDK uses:
-  // `loaded`, `confirmed`, `success` (with successURL + redirect),
-  // `close`. We only act on `success` with redirect=true; everything
-  // else just updates the phase for the in-page loader / progress hint.
   useEffect(() => {
     function onMessage(event: MessageEvent) {
       if (!POLAR_MESSAGE_ORIGINS.has(event.origin)) return
@@ -166,7 +152,6 @@ export function PolarInlineCheckout({ tier, discountCode, theme = 'light' }: Pro
           window.location.assign(data.successURL)
         }
       }
-      // `close` events are ignored — there's no modal to close.
     }
     window.addEventListener('message', onMessage)
     return () => window.removeEventListener('message', onMessage)
@@ -186,31 +171,12 @@ export function PolarInlineCheckout({ tier, discountCode, theme = 'light' }: Pro
           {t('checkout.error.body')}
         </p>
         {errorReason && (
-          <p className="mt-1 font-mono text-[11px] text-nezumi">
-            {errorReason}
-          </p>
+          <p className="mt-1 font-mono text-[11px] text-nezumi">{errorReason}</p>
         )}
         <div className="mt-4 flex flex-wrap gap-3">
           <button
             type="button"
-            onClick={() => {
-              // Bump a state to re-run the create effect. Re-setting
-              // phase is enough — the discountCode / tier dependency
-              // stays the same but the effect compares via state.
-              setPhase('creating')
-              setErrorReason(null)
-              setSessionUrl(null)
-              // Trigger a fresh fetch by re-running the effect:
-              // simplest is a reload of just this hook via key bump.
-              // We piggyback on the location hash so React state stays
-              // local; alternative would be a useReducer + dispatch.
-              const ev = new Event('polar-retry')
-              window.dispatchEvent(ev)
-              // Re-invoke fetch by tweaking phase, then the effect's
-              // deps haven't changed, so we do a one-off direct call.
-              // (Pragmatic; if this becomes common we'd useReducer.)
-              location.reload()
-            }}
+            onClick={() => location.reload()}
             className="inline-flex h-10 items-center rounded-md border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-4 text-[0.8125rem] font-medium text-sumi transition-colors hover:bg-[color-mix(in_oklab,var(--washi)_40%,#fff)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40"
           >
             {t('checkout.error.retry')}
@@ -228,9 +194,6 @@ export function PolarInlineCheckout({ tier, discountCode, theme = 'light' }: Pro
 
   return (
     <div className="relative">
-      {/* Skeleton + status overlay shown until Polar's iframe sends the
-          `loaded` postMessage. Sits absolutely on top of the iframe so
-          the layout doesn't reflow when the form arrives. */}
       {phase !== 'loaded' && phase !== 'success' && (
         <div
           aria-hidden
@@ -254,22 +217,12 @@ export function PolarInlineCheckout({ tier, discountCode, theme = 'light' }: Pro
           ref={iframeRef}
           src={sessionUrl}
           title={t('checkout.inline.title')}
-          // The `allow` attribute is required for some Stripe payment
-          // methods (Apple Pay, Google Pay) which gate behind
-          // permission policy. Polar's iframe rides on Stripe under
-          // the hood, so we forward the whole bouquet.
           allow="payment *; publickey-credentials-get *"
-          // `loading="lazy"` would hold the iframe back until the
-          // visitor scrolls near it — but on /checkout this IS the
-          // primary content, so eager-load.
           loading="eager"
           className="block w-full min-h-[760px] rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,#fff)]"
         />
       )}
 
-      {/* No-JS / iframe-blocked fallback. The visitor can still buy by
-          clicking through to Polar's hosted page; same product, same
-          discount autoapply via the Checkout Link query string. */}
       <noscript>
         <p className="mt-3 text-center text-[0.875rem] text-sumi-soft">
           {t('checkout.inline.noscript')}

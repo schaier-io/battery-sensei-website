@@ -681,7 +681,6 @@
       "lifetime": "Polar Software, Inc. is the merchant of record — they handle payment, VAT and your receipt. You'll get your license key by email within a minute, then activate it from Settings → Premium inside the app.",
       "support": "Polar Software, Inc. is the merchant of record — they handle payment, VAT and your receipt. You'll get your license key by email within a minute, and it stays active for as long as your yearly support is."
     },
-    "lifetimeAutoNote": "ZENMODE applied automatically — first 500 buyers only.",
     "supportSwapNote": "Prefer to pay once and own it? <0>Switch to Lifetime</0>.",
     "lifetimeSwapNote": "Prefer a yearly commitment? <0>Switch to Ongoing Developer Support</0>.",
     "summaryTitle": "What you're getting",
@@ -721,6 +720,7 @@
     "refundNote": "14-day refund guarantee",
     "alreadyOwnTitle": "Already bought?",
     "alreadyOwnBody": "Open Battery Sensei → Settings → Premium. Paste your key and the email you used at purchase, then click Activate Premium.",
+    "alreadyOwnDownload": "Download Sensei",
     "backToHome": "Back to homepage"
   },
   "privacy": {

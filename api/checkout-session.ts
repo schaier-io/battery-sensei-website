@@ -75,7 +75,9 @@ type RequestBody = z.infer<typeof RequestSchema>
 
 type OkResponse = {
   ok: true
-  /** Polar-hosted URL to load into the embed iframe. */
+  /** Polar-hosted session URL the iframe mounts. Carries the
+   *  `embed_origin` configured at create time so Polar serves it with
+   *  the correct `frame-ancestors` header. */
   url: string
   /** Echoed so client analytics / dedupe can correlate. */
   tier: Tier
