@@ -457,7 +457,7 @@
       "originalLabel": "was",
       "discountNote": "Limited-time offer · code ZENMODE",
       "redeem": {
-        "label": "<0>{{remaining}}</0> of <1>{{max}}</1> ZENMODE codes remaining",
+        "label": "<0>{{remaining}}</0> ZENMODE codes remaining",
         "almostGone": "Almost gone — only {{remaining}} left",
         "soldOut": "ZENMODE fully redeemed",
         "soldOutHint": "Price returns to {{full}}"
@@ -705,7 +705,7 @@
     "originalLabel": "was",
     "inline": {
       "title": "Battery Sensei secure checkout",
-      "hint": "Launch discount applied automatically — <0>{{remaining}}</0> of <1>{{max}}</1> codes left at this price.",
+      "hint": "Launch discount applied automatically — <0>{{remaining}}</0> codes left at this price.",
       "loading": "Opening checkout",
       "preparing": "Preparing payment",
       "confirming": "Confirming payment",

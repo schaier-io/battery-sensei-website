@@ -45,21 +45,20 @@
 
 import { z } from 'zod'
 
+import { LIFETIME_DISCOUNT_CODE, resolveDiscountId } from './_polar'
+
 type Tier = 'lifetime' | 'support'
 
 /**
  * Code we silently auto-apply to every Lifetime session when the
  * visitor didn't type one themselves. Mirrors `LIFETIME_DISCOUNT_CODE`
- * in `src/lib/polar.ts` (deliberately duplicated — Vercel's serverless
- * bundler can't follow cross-package imports from `api/` into `src/`
- * reliably under Vite-built deployments, see the discount-availability
- * regression we hit earlier).
+ * in `src/lib/polar.ts` (kept in sync via the shared `_polar` helper).
  *
  * Polar caps redemptions at 500 server-side and 422s once exhausted;
  * the handler below catches that and retries without the code so the
  * session still creates.
  */
-const AUTO_DISCOUNT_CODE = 'ZENMODE'
+const AUTO_DISCOUNT_CODE = LIFETIME_DISCOUNT_CODE
 
 /**
  * Request body validator. Caller only needs `tier`; `discountCode` is
@@ -223,8 +222,25 @@ export async function POST(request: Request): Promise<Response> {
   //     /checkout UI hides every "launch discount" surface once the
   //     cap is reached, so the visitor sees the plain full price.
   //   - Support tier never gets an auto-apply.
-  const autoDiscount =
+  const autoDiscountCode =
     body.discountCode ?? (tier === 'lifetime' ? AUTO_DISCOUNT_CODE : undefined)
+
+  // CRITICAL: Polar's `POST /v1/checkouts/` schema accepts `discount_id`
+  // (UUID) and silently ignores `discount_code` (string). We resolve the
+  // code → UUID via the shared helper (cached, 10 min TTL) and pass it
+  // as `discount_id`. Live testing confirmed sending `discount_code` in
+  // the body OR appending `?discount_code=` to the returned URL both
+  // result in `discount: null` server-side.
+  const discountId = autoDiscountCode
+    ? await resolveDiscountId(autoDiscountCode, token)
+    : null
+
+  if (autoDiscountCode && !discountId) {
+    console.warn('[checkout-session] discount code did not resolve to UUID', {
+      tier,
+      code: autoDiscountCode,
+    })
+  }
 
   const basePayload: Record<string, unknown> = {
     products: [productId],
@@ -252,7 +268,7 @@ export async function POST(request: Request): Promise<Response> {
 
   try {
     let res = await createSession(
-      autoDiscount ? { discount_code: autoDiscount } : {},
+      discountId ? { discount_id: discountId } : {},
     )
 
     // 422 with a discount usually means Polar rejected the code (cap
@@ -260,10 +276,11 @@ export async function POST(request: Request): Promise<Response> {
     // visitor still gets a session at the regular price — the UI on
     // /checkout will already be showing the full price by then since
     // the discount-availability hook reports `remaining === 0`.
-    if (!res.ok && res.status === 422 && autoDiscount) {
+    if (!res.ok && res.status === 422 && discountId) {
       console.warn('[checkout-session] discount rejected — retrying without', {
         tier,
-        code: autoDiscount,
+        code: autoDiscountCode,
+        discountId,
       })
       res = await createSession()
     }

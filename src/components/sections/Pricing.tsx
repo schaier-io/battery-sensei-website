@@ -446,11 +446,8 @@ function LimitedRedeemBar({ fullPriceFormatted }: { fullPriceFormatted: string }
           <span className="text-sumi-soft">
             <Trans
               i18nKey="pricing.lifetime.redeem.label"
-              values={{ remaining, max }}
-              components={[
-                <span className="font-semibold text-sumi tabular-nums" />,
-                <span className="tabular-nums" />,
-              ]}
+              values={{ remaining }}
+              components={[<span className="font-semibold text-sumi tabular-nums" />]}
             />
           </span>
         )}
