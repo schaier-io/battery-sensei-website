@@ -266,7 +266,13 @@ export function Pricing() {
                   // no-JS / right-click fallback. `tier` is used only by
                   // fake-checkout mode to pick the right thank-you page.
                   e.preventDefault()
-                  void openPolarCheckout({ url: lifetimeCheckoutUrl(), tier: 'lifetime' })
+                  // `tier` resolves the product server-side; `fallbackUrl`
+                  // is the pre-created Checkout Link we redirect to if
+                  // the session-create API is unreachable.
+                  void openPolarCheckout({
+                    tier: 'lifetime',
+                    fallbackUrl: lifetimeCheckoutUrl(),
+                  })
                 }}
                 className="btn-sumi group mt-3 inline-flex h-11 w-full items-center justify-center gap-2 rounded-md px-6 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
               >
@@ -340,7 +346,10 @@ export function Pricing() {
                 href={supportCheckoutUrl()}
                 onClick={(e) => {
                   e.preventDefault()
-                  void openPolarCheckout({ url: supportCheckoutUrl(), tier: 'support' })
+                  void openPolarCheckout({
+                    tier: 'support',
+                    fallbackUrl: supportCheckoutUrl(),
+                  })
                 }}
                 className="btn-sumi-soft group mt-3 inline-flex h-11 w-full items-center justify-center gap-2 rounded-md border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-6 text-sm font-medium text-sumi transition-colors duration-200 hover:bg-[color-mix(in_oklab,var(--washi)_40%,#fff)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
               >

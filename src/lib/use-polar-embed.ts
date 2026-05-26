@@ -3,18 +3,36 @@ import { useCallback } from 'react'
 /**
  * Polar.sh embedded-checkout hook.
  *
- * Wraps `@polar-sh/checkout/embed`'s `EmbedCheckout.create()` so the
- * Lifetime / Support buy buttons open the checkout in a modal iframe
- * instead of doing a full-page redirect to `buy.polar.sh`. Feels
- * native, keeps the user on our domain, and lets us hook events
- * (success / close) for analytics or post-purchase UI.
+ * Wraps `@polar-sh/checkout/embed`'s `PolarEmbedCheckout.create()` so
+ * the Lifetime / Support buy buttons open the checkout in a modal
+ * iframe instead of doing a full-page redirect to `buy.polar.sh`.
+ * Keeps the visitor on our domain and lets us hook events (success /
+ * close) for analytics or post-purchase UI.
  *
- * The SDK is dynamically imported on first invocation — the embed
- * runtime (~30 KB gzipped) is fetched only when a visitor actually
- * intends to buy, keeping the initial bundle lean.
+ * ## Two-stage flow (post-2026-05 fix)
  *
- * Polar webhook handling (license issuance, fulfilment) stays
- * server-side in your Polar dashboard; this hook only drives the UI.
+ * Polar's pre-created Checkout LINKS respond with `frame-ancestors:
+ * 'none'`, so naively pointing the iframe at a Link URL gets blocked
+ * by the browser ("polar.sh will not allow this page to be displayed
+ * because another site has embedded it"). The fix is to create a
+ * Checkout SESSION via the API with `embed_origin` set to our public
+ * origin — Polar then serves that session page with frame-ancestors
+ * permitting our domain, and the embed loads cleanly.
+ *
+ * So the real-mode path is:
+ *
+ *   1. POST `/api/checkout-session` with `{tier, discountCode?}`
+ *   2. Receive `{url}` (a session URL like `https://api.polar.sh/v1/
+ *      checkouts/client/<secret>/`) configured for our embed origin
+ *   3. Pass that URL to `PolarEmbedCheckout.create(url, {theme})`
+ *
+ * If the session create fails (token missing, network blip, Polar
+ * outage) the API responds with `{ok: false, fallbackUrl}` — we then
+ * full-page redirect to the pre-created Checkout Link. The visitor
+ * still completes the purchase, just outside an iframe.
+ *
+ * The embed SDK is dynamically imported on first invocation — the
+ * ~30 KB runtime is fetched only when a visitor actually clicks Buy.
  *
  * ## Fake / dev mode
  *
@@ -32,14 +50,17 @@ const FAKE_MODE =
 type Theme = 'light' | 'dark'
 
 export type PolarCheckoutOptions = {
-  /** Polar Checkout Link URL or programmatically created session URL. */
-  url: string
+  /** Buyer tier — drives which product the server-created session uses,
+   *  and which thank-you page the fake-mode overlay redirects to. */
+  tier: 'lifetime' | 'support'
+  /** Optional promo / discount code to pre-apply (ZENMODE on Lifetime). */
+  discountCode?: string
+  /** Fallback Checkout Link URL used when the session-create API is
+   *  unreachable. Full-page redirect — visitor still buys, just outside
+   *  the iframe. Same URL the no-JS anchor `href` already uses. */
+  fallbackUrl?: string
   /** Embed theme. Defaults to `light` to match the washi page tone. */
   theme?: Theme
-  /** Tier hint used by fake mode to send the visitor to the right
-   *  thank-you page (`/thanks/lifetime` vs `/thanks/support`). Real
-   *  Polar mode ignores this — Polar's success URL drives navigation. */
-  tier?: 'lifetime' | 'support'
   /** Called when the checkout reports a successful purchase. If
    *  `willRedirect` is true, Polar's embed will navigate the parent
    *  window to `successURL` itself — usually you don't need to do
@@ -52,17 +73,77 @@ export type PolarCheckoutOptions = {
   onConfirmed?: () => void
 }
 
+type SessionResponse =
+  | { ok: true; url: string; tier: 'lifetime' | 'support' }
+  | { ok: false; reason: string; fallbackUrl?: string }
+
+/**
+ * Ask the server to mint a fresh embed-eligible Checkout Session.
+ * Returns the session URL on success, or null on any failure (caller
+ * is expected to fall back to a full-page redirect).
+ */
+async function fetchSessionUrl(
+  tier: 'lifetime' | 'support',
+  discountCode: string | undefined,
+): Promise<string | null> {
+  try {
+    const res = await fetch('/api/checkout-session', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        tier,
+        ...(discountCode ? { discountCode } : {}),
+      }),
+    })
+    if (!res.ok) {
+      console.warn('[polar-embed] session create non-2xx', res.status)
+      return null
+    }
+    const data = (await res.json()) as SessionResponse
+    if (!data.ok) {
+      console.warn('[polar-embed] session create returned ok=false', data.reason)
+      return null
+    }
+    return data.url
+  } catch (err) {
+    console.warn(
+      '[polar-embed] session create threw',
+      err instanceof Error ? err.message : String(err),
+    )
+    return null
+  }
+}
+
 export function usePolarCheckout() {
   return useCallback(async (opts: PolarCheckoutOptions) => {
     if (FAKE_MODE) {
       return openFakeCheckout(opts)
     }
+
+    // Mint an embed-eligible session URL. Polar's pre-created Checkout
+    // Links return `frame-ancestors: 'none'` and cannot be iframed; a
+    // session created with `embed_origin: <our origin>` can. The API
+    // route hides the Polar API token + product ids server-side.
+    const sessionUrl = await fetchSessionUrl(opts.tier, opts.discountCode)
+
+    if (!sessionUrl) {
+      // Fail closed but useful: degrade to full-page redirect against
+      // the pre-created Checkout Link if the caller supplied one.
+      if (opts.fallbackUrl) {
+        window.location.assign(opts.fallbackUrl)
+        return null
+      }
+      // No fallback — surface the failure rather than silently doing
+      // nothing on click.
+      throw new Error('Polar checkout session could not be created')
+    }
+
     // Lazy load: the embed bundle is only fetched when a visitor
     // actually clicks a buy button. The export is named
     // `PolarEmbedCheckout` (not `EmbedCheckout`) — the v0.2.x package
     // re-export aliased it to avoid collision with any host class.
     const { PolarEmbedCheckout } = await import('@polar-sh/checkout/embed')
-    const embed = await PolarEmbedCheckout.create(opts.url, {
+    const embed = await PolarEmbedCheckout.create(sessionUrl, {
       theme: opts.theme ?? 'light',
     })
     if (opts.onSuccess) {
