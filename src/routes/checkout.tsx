@@ -14,6 +14,7 @@ import { useMemo, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { z } from 'zod'
 import { Hanko } from '#/components/zen/Hanko'
+import { PriceDisplay } from '#/components/zen/PriceDisplay'
 import { Reveal } from '#/components/zen/Reveal'
 import { Nav } from '#/components/sections/Nav'
 import { Footer } from '#/components/sections/Footer'
@@ -23,6 +24,7 @@ import {
   supportCheckoutUrl,
 } from '#/lib/polar'
 import { usePremiumPrice, useLifetimePrice } from '#/lib/use-price'
+import { usePolarCheckout } from '#/lib/use-polar-embed'
 
 const SITE_URL = 'https://battery-sensei.app'
 const PATH = '/checkout'
@@ -58,6 +60,7 @@ function CheckoutPage() {
   const { t } = useTranslation()
   const { tier } = Route.useSearch()
   const navigate = Route.useNavigate()
+  const openPolarCheckout = usePolarCheckout()
   const yearly = usePremiumPrice()
   const lifetime = useLifetimePrice()
   const [discountCode, setDiscountCode] = useState('')
@@ -160,14 +163,19 @@ function CheckoutPage() {
                 <span className="block text-xs uppercase tracking-[0.22em] text-sumi-soft">
                   {priceLabel}
                 </span>
-                <span className="display-title text-[2rem] md:text-[2.5rem] font-medium text-sumi leading-none tabular-nums">
-                  {price.formatted}
-                </span>
+                <PriceDisplay
+                  entry={price}
+                  className="display-title inline-flex items-baseline text-[2rem] md:text-[2.5rem] font-medium text-sumi leading-none"
+                />
                 {isLifetime ? (
-                  <span className="mt-1 block text-[0.6875rem] text-nezumi tabular-nums">
+                  <span className="mt-1 block text-[0.6875rem] text-nezumi">
                     {t('checkout.originalLabel')}{' '}
                     <span className="line-through decoration-hinomaru/50">
-                      {lifetime.original.formatted}
+                      <PriceDisplay
+                        entry={lifetime.original}
+                        className="inline-flex items-baseline"
+                        symbolClassName="text-[0.85em] font-sans text-nezumi"
+                      />
                     </span>
                   </span>
                 ) : null}
@@ -238,6 +246,13 @@ function CheckoutPage() {
 
             <a
               href={checkoutHref}
+              onClick={(e) => {
+                e.preventDefault()
+                void openPolarCheckout({
+                  url: checkoutHref,
+                  tier: isLifetime ? 'lifetime' : 'support',
+                })
+              }}
               className="btn-sumi group mt-7 inline-flex h-12 w-full items-center justify-center gap-2 rounded-md text-[0.9375rem] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
               aria-label={t('checkout.continueAria')}
             >

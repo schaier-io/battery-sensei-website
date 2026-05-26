@@ -13,6 +13,8 @@ import { Route as WalkthroughRouteImport } from './routes/walkthrough'
 import { Route as VsAldenteRouteImport } from './routes/vs-aldente'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ThanksSupportRouteImport } from './routes/thanks.support'
+import { Route as ThanksLifetimeRouteImport } from './routes/thanks.lifetime'
 import { Route as FeaturesTravelModeRouteImport } from './routes/features.travel-mode'
 import { Route as FeaturesMeetingBatteryGuardRouteImport } from './routes/features.meeting-battery-guard'
 import { Route as FeaturesEnergyUsageRouteImport } from './routes/features.energy-usage'
@@ -38,6 +40,16 @@ const CheckoutRoute = CheckoutRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ThanksSupportRoute = ThanksSupportRouteImport.update({
+  id: '/thanks/support',
+  path: '/thanks/support',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ThanksLifetimeRoute = ThanksLifetimeRouteImport.update({
+  id: '/thanks/lifetime',
+  path: '/thanks/lifetime',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FeaturesTravelModeRoute = FeaturesTravelModeRouteImport.update({
@@ -84,6 +96,8 @@ export interface FileRoutesByFullPath {
   '/features/energy-usage': typeof FeaturesEnergyUsageRoute
   '/features/meeting-battery-guard': typeof FeaturesMeetingBatteryGuardRoute
   '/features/travel-mode': typeof FeaturesTravelModeRoute
+  '/thanks/lifetime': typeof ThanksLifetimeRoute
+  '/thanks/support': typeof ThanksSupportRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -96,6 +110,8 @@ export interface FileRoutesByTo {
   '/features/energy-usage': typeof FeaturesEnergyUsageRoute
   '/features/meeting-battery-guard': typeof FeaturesMeetingBatteryGuardRoute
   '/features/travel-mode': typeof FeaturesTravelModeRoute
+  '/thanks/lifetime': typeof ThanksLifetimeRoute
+  '/thanks/support': typeof ThanksSupportRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -109,6 +125,8 @@ export interface FileRoutesById {
   '/features/energy-usage': typeof FeaturesEnergyUsageRoute
   '/features/meeting-battery-guard': typeof FeaturesMeetingBatteryGuardRoute
   '/features/travel-mode': typeof FeaturesTravelModeRoute
+  '/thanks/lifetime': typeof ThanksLifetimeRoute
+  '/thanks/support': typeof ThanksSupportRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -123,6 +141,8 @@ export interface FileRouteTypes {
     | '/features/energy-usage'
     | '/features/meeting-battery-guard'
     | '/features/travel-mode'
+    | '/thanks/lifetime'
+    | '/thanks/support'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -135,6 +155,8 @@ export interface FileRouteTypes {
     | '/features/energy-usage'
     | '/features/meeting-battery-guard'
     | '/features/travel-mode'
+    | '/thanks/lifetime'
+    | '/thanks/support'
   id:
     | '__root__'
     | '/'
@@ -147,6 +169,8 @@ export interface FileRouteTypes {
     | '/features/energy-usage'
     | '/features/meeting-battery-guard'
     | '/features/travel-mode'
+    | '/thanks/lifetime'
+    | '/thanks/support'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -160,6 +184,8 @@ export interface RootRouteChildren {
   FeaturesEnergyUsageRoute: typeof FeaturesEnergyUsageRoute
   FeaturesMeetingBatteryGuardRoute: typeof FeaturesMeetingBatteryGuardRoute
   FeaturesTravelModeRoute: typeof FeaturesTravelModeRoute
+  ThanksLifetimeRoute: typeof ThanksLifetimeRoute
+  ThanksSupportRoute: typeof ThanksSupportRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -190,6 +216,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/thanks/support': {
+      id: '/thanks/support'
+      path: '/thanks/support'
+      fullPath: '/thanks/support'
+      preLoaderRoute: typeof ThanksSupportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/thanks/lifetime': {
+      id: '/thanks/lifetime'
+      path: '/thanks/lifetime'
+      fullPath: '/thanks/lifetime'
+      preLoaderRoute: typeof ThanksLifetimeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/features/travel-mode': {
@@ -248,6 +288,8 @@ const rootRouteChildren: RootRouteChildren = {
   FeaturesEnergyUsageRoute: FeaturesEnergyUsageRoute,
   FeaturesMeetingBatteryGuardRoute: FeaturesMeetingBatteryGuardRoute,
   FeaturesTravelModeRoute: FeaturesTravelModeRoute,
+  ThanksLifetimeRoute: ThanksLifetimeRoute,
+  ThanksSupportRoute: ThanksSupportRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

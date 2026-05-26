@@ -188,6 +188,25 @@
     ],
     "footnote": "D'après les sites publics de chaque outil, mai 2026. Chaque appli est bonne dans son domaine — voir leurs sites pour le tableau complet."
   },
+  "thanks": {
+    "kicker": "Merci · ありがとう",
+    "videoCaption": "Sensei s'incline.",
+    "openApp": "Ouvrir Sensei",
+    "backToHome": "Retour à l'accueil",
+    "checkoutHint": "Commande #{{id}}",
+    "lifetime": {
+      "heading": "Bienvenue dans À vie.",
+      "headingItalic": "Toutes les fonctionnalités Premium, pour toujours.",
+      "body": "Ta clé arrive par e-mail. Ouvre Sensei, puis <0>Réglages → Premium</0>, et colle-la. C'est la dernière étape — <1>trois Macs à toi</1>, toutes les fonctionnalités Premium que Sensei livrera, pour toujours. Pas de connexion. Pas de compte.",
+      "next": "Si l'e-mail n'arrive pas dans les cinq minutes, vérifie les spams. Toujours rien ? Écris-nous — on le renvoie le jour même."
+    },
+    "support": {
+      "heading": "Merci pour l'année à venir.",
+      "headingItalic": "Premium déverrouillé, sur jusqu'à 5 Macs.",
+      "body": "Ta clé arrive par e-mail. Ouvre Sensei, puis <0>Réglages → Premium</0>, et colle-la. <1>Jusqu'à cinq Macs</1>, une année entière de nouvelles versions et un support e-mail discret. Gère ou annule à tout moment depuis ton tableau de bord Polar.",
+      "next": "On t'écrira une seule fois, peu avant la fin de l'année — jamais de prélèvement silencieux."
+    }
+  },
   "walkthrough": {
     "kicker": "Présentation · 動画",
     "heading": "60 secondes avec Sensei.",
@@ -271,7 +290,7 @@
         "placeholder": "toi@exemple.fr",
         "cta": "Obtenir le téléchargement",
         "skip": "ou télécharge sans e-mail",
-        "footnote": "Un e-mail à la sortie d'une nouvelle version. Désabonnement en un clic.",
+        "footnote": "Un e-mail à la sortie d'une nouvelle version, et parfois un mot sur une nouvelle appli du même créateur. Désabonnement en un clic.",
         "errorInvalid": "Ça ne ressemble pas à un e-mail.",
         "sending": "Envoi…"
       },

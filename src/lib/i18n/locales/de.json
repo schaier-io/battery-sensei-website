@@ -188,6 +188,25 @@
     ],
     "footnote": "Basierend auf den öffentlichen Websites der jeweiligen Tools, Stand Mai 2026. Jede App ist in ihrem Bereich gut — vollständige Funktionslisten auf den jeweiligen Websites."
   },
+  "thanks": {
+    "kicker": "Danke · ありがとう",
+    "videoCaption": "Sensei verbeugt sich.",
+    "openApp": "Sensei öffnen",
+    "backToHome": "Zurück zur Startseite",
+    "checkoutHint": "Bestellung #{{id}}",
+    "lifetime": {
+      "heading": "Willkommen bei Lifetime.",
+      "headingItalic": "Jede Premium-Funktion, für immer.",
+      "body": "Dein Schlüssel ist per E-Mail unterwegs. Öffne Sensei, dann <0>Einstellungen → Premium</0>, und füge ihn ein. Mehr ist nicht zu tun — <1>drei eigene Macs</1>, jede Premium-Funktion, die Sensei je ausliefert, für immer. Kein Login. Kein Konto.",
+      "next": "Sollte die E-Mail nicht innerhalb von fünf Minuten ankommen, schau in den Spam-Ordner. Immer noch nichts? Schreib uns — wir senden sie noch am selben Tag erneut."
+    },
+    "support": {
+      "heading": "Danke für das kommende Jahr.",
+      "headingItalic": "Premium freigeschaltet, auf bis zu 5 Macs.",
+      "body": "Dein Schlüssel ist per E-Mail unterwegs. Öffne Sensei, dann <0>Einstellungen → Premium</0>, und füge ihn ein. <1>Bis zu fünf Macs</1>, ein ganzes Jahr neue Builds und ruhiger E-Mail-Support. Jederzeit über dein Polar-Dashboard verwalten oder kündigen.",
+      "next": "Wir melden uns einmal per Mail, kurz bevor das Jahr vorbei ist — nie eine stille erneute Abbuchung."
+    }
+  },
   "walkthrough": {
     "kicker": "Rundgang · 動画",
     "heading": "60 Sekunden mit Sensei.",
@@ -271,7 +290,7 @@
         "placeholder": "du@beispiel.de",
         "cta": "Download holen",
         "skip": "oder ohne E-Mail herunterladen",
-        "footnote": "Eine E-Mail bei einer neuen Version. Abmeldung mit einem Klick.",
+        "footnote": "Eine E-Mail bei einer neuen Version, plus gelegentlich ein Hinweis auf eine neue App vom selben Entwickler. Abmeldung mit einem Klick.",
         "errorInvalid": "Das sieht nicht nach einer E-Mail aus.",
         "sending": "Senden…"
       },

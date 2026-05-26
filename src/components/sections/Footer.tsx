@@ -1,5 +1,6 @@
-import { Download, ShoppingBag } from 'lucide-react'
+import { Download, MessageCircle, ShoppingBag } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { LanguageSwitcher } from '#/components/LanguageSwitcher'
 import { lifetimeCheckoutUrl } from '#/lib/polar'
 import { useLifetimePrice } from '#/lib/use-price'
 
@@ -65,6 +66,24 @@ export function Footer() {
             {t('common.purchaseNow')}
             <span className="text-nezumi font-normal">{t('footer.purchaseSub', { price: price.formatted })}</span>
           </a>
+        </div>
+
+        {/* Header utilities relocated for sub-lg viewports. The header
+            drops the chat icon + language switcher below lg to keep the
+            wordmark visible without crowding the nav; this row puts both
+            back in reach without forcing a hamburger trip. The lg:hidden
+            keeps it invisible on desktop where the header already shows
+            both, so the affordance only appears where it's needed. */}
+        <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 lg:hidden">
+          <a
+            href="#contact"
+            aria-label={t('nav.supportAria')}
+            className="inline-flex h-9 items-center gap-2 rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] px-3 text-[0.8125rem] text-sumi-soft transition-colors duration-200 hover:text-hinomaru hover:border-[var(--line-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40"
+          >
+            <MessageCircle className="h-3.5 w-3.5" strokeWidth={1.7} aria-hidden />
+            <span>{t('nav.support')}</span>
+          </a>
+          <LanguageSwitcher />
         </div>
 
         <nav

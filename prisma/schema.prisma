@@ -23,6 +23,50 @@ enum SupportRequestStatus {
   honeypot
 }
 
+enum NewsletterSource {
+  pricing_free
+  thanks_page
+  other
+}
+
+/// Free-download email capture (homepage Pricing card + future surfaces).
+///
+/// Every successful signup is upserted here AND mirrored to two Resend
+/// Audiences:
+///   - releases: per-app build alerts ("new Sensei version is out")
+///   - launches: cross-app announcements ("new app from the same maker")
+/// The mirror happens server-side in `api/free-signup.ts`. We store the
+/// returned Resend contact ids so retries / unsubscribes can target the
+/// right rows.
+model NewsletterSignup {
+  id     String @id @default(cuid())
+  email  String @unique
+  locale String @default("en")
+  source NewsletterSource @default(pricing_free)
+
+  /// Contact id returned by Resend for the "Sensei releases" audience.
+  /// Null until the first fan-out succeeds; non-null on retry skips.
+  releasesContactId String?
+  /// Contact id returned by Resend for the "future app launches" audience.
+  launchesContactId String?
+
+  /// Request metadata — same pattern as SupportRequest, used purely for
+  /// abuse investigation. Never displayed back to the visitor.
+  ipAddress String?
+  userAgent String?
+  origin    String?
+
+  /// Soft opt-out so we can stop emailing without losing the row (and the
+  /// ability to dedupe a future re-signup against the same address).
+  unsubscribedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([createdAt])
+  @@index([source, createdAt])
+}
+
 model SupportRequest {
   id       String @id @default(cuid())
   // Short shared identifier shown to the visitor and in the inbox.

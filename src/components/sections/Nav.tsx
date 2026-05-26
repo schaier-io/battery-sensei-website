@@ -103,11 +103,15 @@ export function Nav() {
             decoding="async"
             className="h-10 w-10 shrink-0 transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-rotate-3 sm:h-11 sm:w-11"
           />
-          <span className="hidden lg:flex flex-col items-start gap-[2px] min-w-0">
+          {/* Wordmark reappears from md+ now that chat + language live in
+              the footer below lg. The kanji subtitle only joins at lg
+              where there's slack — md keeps it single-line so the bar
+              doesn't shoulder past the nav links. */}
+          <span className="hidden md:flex flex-col items-start gap-[2px] min-w-0">
             <span className="display-title text-[12px] font-semibold uppercase tracking-[0.22em] text-sumi whitespace-nowrap leading-none">
               Battery Sensei
             </span>
-            <span className="font-jp text-[10px] tracking-[0.36em] text-hinomaru/80 whitespace-nowrap leading-none">
+            <span className="hidden lg:inline font-jp text-[10px] tracking-[0.36em] text-hinomaru/80 whitespace-nowrap leading-none">
               電池先生
             </span>
           </span>
@@ -128,18 +132,21 @@ export function Nav() {
 
         <div className="flex items-center gap-2">
           {/* Quiet support affordance — signals "humans answer here" without
-              competing with the primary nav. Icon-only on md to save room;
-              label appears at lg where the wordmark also shows. */}
+              competing with the primary nav. Visible only at lg+ where
+              the bar has room; below lg the same link is in the footer
+              and the mobile drawer. */}
           <a
             href="#contact"
             aria-label={t('nav.supportAria')}
-            className="nav-support hidden md:inline-flex items-center gap-2 h-9 px-2.5 lg:px-3 rounded-md text-sm text-sumi-soft hover:text-hinomaru transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40"
+            className="nav-support hidden lg:inline-flex items-center gap-2 h-9 px-3 rounded-md text-sm text-sumi-soft hover:text-hinomaru transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40"
           >
             <MessageCircle className="h-4 w-4" strokeWidth={1.7} aria-hidden />
-            <span className="hidden lg:inline">{t('nav.support')}</span>
+            <span>{t('nav.support')}</span>
           </a>
-          {/* Language switcher: visible on md+; mobile gets it inside the drawer. */}
-          <LanguageSwitcher className="hidden md:block" />
+          {/* Language switcher: visible only at lg+ where the bar has
+              room. Below lg it sits in the footer; on mobile it lives
+              inside the drawer. */}
+          <LanguageSwitcher className="hidden lg:block" />
           <a
             href="#download"
             className="btn-sumi hidden md:inline-flex h-9 items-center gap-2 rounded-md px-4 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
@@ -313,8 +320,20 @@ function MobileDrawer({
           />
         </div>
 
-        {/* Language switcher — inline variant so it reads as part of the menu. */}
+        {/* Chat + language switcher — both header utilities mirrored here
+            so mobile visitors get every affordance the desktop bar has
+            without scrolling to the footer. */}
         <div className="px-5 pt-6">
+          <a
+            href="#contact"
+            onClick={onClose}
+            className="inline-flex h-10 items-center gap-2 rounded-md px-3 text-sm text-sumi-soft transition-colors duration-200 hover:text-hinomaru focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40"
+          >
+            <MessageCircle className="h-4 w-4" strokeWidth={1.7} aria-hidden />
+            <span>{t('nav.support')}</span>
+          </a>
+        </div>
+        <div className="px-5 pt-3">
           <LanguageSwitcher variant="inline" />
         </div>
 

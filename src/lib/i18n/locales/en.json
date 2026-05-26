@@ -188,6 +188,25 @@
     ],
     "footnote": "Based on each tool's public site as of May 2026. Each app is great at its own thing — see their sites for the full picture."
   },
+  "thanks": {
+    "kicker": "Thank you · ありがとう",
+    "videoCaption": "Sensei bows.",
+    "openApp": "Open Sensei",
+    "backToHome": "Back to homepage",
+    "checkoutHint": "Order #{{id}}",
+    "lifetime": {
+      "heading": "Welcome to Lifetime.",
+      "headingItalic": "Every Premium feature, forever.",
+      "body": "Your key is on its way by email. Open Sensei, then <0>Settings → Premium</0>, and paste it in. That's the last ask — <1>three Macs of your own</1>, every Premium feature Sensei ever ships, forever. No login. No account.",
+      "next": "If the email doesn't arrive within five minutes, check spam. Still nothing? Write to us — we'll resend it the same day."
+    },
+    "support": {
+      "heading": "Thank you for the year ahead.",
+      "headingItalic": "Premium unlocked, on up to five Macs.",
+      "body": "Your key is on its way by email. Open Sensei, then <0>Settings → Premium</0>, and paste it in. <1>Up to five Macs</1>, a full year of new builds and quiet email support. Manage or cancel any time from your Polar dashboard.",
+      "next": "We'll email you once when the year is nearly up — never a silent re-charge."
+    }
+  },
   "walkthrough": {
     "kicker": "Walkthrough · 動画",
     "heading": "60 seconds with Sensei.",
@@ -271,7 +290,7 @@
         "placeholder": "you@example.com",
         "cta": "Get download",
         "skip": "or download without email",
-        "footnote": "One email when a new version ships. Unsubscribe in one click.",
+        "footnote": "One email when a new version ships, plus the occasional note about a new app from the same maker. Unsubscribe in one click.",
         "errorInvalid": "That doesn't look like an email.",
         "sending": "Sending…"
       },

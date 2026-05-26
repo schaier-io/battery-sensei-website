@@ -188,6 +188,25 @@
     ],
     "footnote": "Basado en las webs públicas de cada herramienta a mayo de 2026. Cada app es buena en lo suyo — listas completas en sus respectivas webs."
   },
+  "thanks": {
+    "kicker": "Gracias · ありがとう",
+    "videoCaption": "Sensei se inclina.",
+    "openApp": "Abrir Sensei",
+    "backToHome": "Volver a la página principal",
+    "checkoutHint": "Pedido #{{id}}",
+    "lifetime": {
+      "heading": "Bienvenida a Lifetime.",
+      "headingItalic": "Cada función Premium, para siempre.",
+      "body": "Tu clave va de camino por correo. Abre Sensei, luego <0>Ajustes → Premium</0>, y pégala. Eso es todo — <1>tres Macs tuyos</1>, cada función Premium que Sensei publique, para siempre. Sin login. Sin cuenta.",
+      "next": "Si el correo no llega en cinco minutos, mira el spam. ¿Aún nada? Escríbenos — lo reenviamos el mismo día."
+    },
+    "support": {
+      "heading": "Gracias por el año que viene.",
+      "headingItalic": "Premium desbloqueado, hasta en 5 Macs.",
+      "body": "Tu clave va de camino por correo. Abre Sensei, luego <0>Ajustes → Premium</0>, y pégala. <1>Hasta cinco Macs</1>, un año entero de nuevas versiones y soporte por correo, sin ruido. Gestiona o cancela cuando quieras desde tu panel de Polar.",
+      "next": "Te escribiremos una sola vez cuando el año esté por terminar — nunca un cargo silencioso."
+    }
+  },
   "walkthrough": {
     "kicker": "Vista guiada · 動画",
     "heading": "60 segundos con Sensei.",
@@ -271,7 +290,7 @@
         "placeholder": "tu@ejemplo.com",
         "cta": "Obtener descarga",
         "skip": "o descarga sin correo",
-        "footnote": "Un correo cuando salga una nueva versión. Cancela en un clic.",
+        "footnote": "Un correo cuando salga una nueva versión, y de vez en cuando una nota sobre alguna nueva app del mismo autor. Cancela en un clic.",
         "errorInvalid": "Eso no parece un correo.",
         "sending": "Enviando…"
       },

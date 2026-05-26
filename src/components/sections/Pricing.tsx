@@ -21,10 +21,12 @@ import { useState, type FormEvent } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import i18n from 'i18next'
 import { Hanko } from '#/components/zen/Hanko'
+import { PriceDisplay } from '#/components/zen/PriceDisplay'
 import { Reveal } from '#/components/zen/Reveal'
 import { TRIAL_DAYS, lifetimeCheckoutUrl, supportCheckoutUrl } from '#/lib/polar'
 import { usePremiumPrice, useLifetimePrice } from '#/lib/use-price'
 import { useDiscountAvailability } from '#/lib/use-discount-availability'
+import { usePolarCheckout } from '#/lib/use-polar-embed'
 
 const lifetimeIcons: readonly LucideIcon[] = [Sparkles, InfinityIcon, Clock, Headphones]
 const supportIcons: readonly LucideIcon[] = [Sparkles, TrendingUp, XCircle, Inbox]
@@ -44,6 +46,7 @@ export function Pricing() {
   const yearly = usePremiumPrice()
   const lifetime = useLifetimePrice()
   const { t } = useTranslation()
+  const openPolarCheckout = usePolarCheckout()
   const freeFeatures = t('pricing.free.items', {
     returnObjects: true,
   }) as Array<{ title: string; body: string }>
@@ -95,9 +98,10 @@ export function Pricing() {
               </span>
             </div>
             <div className="mt-2 flex items-baseline gap-2">
-              <span className="display-title text-[2.25rem] md:text-[2.625rem] font-medium text-sumi leading-none tabular-nums">
-                {yearly.zero}
-              </span>
+              <PriceDisplay
+                entry={{ amount: 0, currency: yearly.currency, locale: yearly.locale }}
+                className="display-title inline-flex items-baseline text-[2.25rem] md:text-[2.625rem] font-medium text-sumi leading-none"
+              />
               <span className="text-[1rem] text-sumi-soft tracking-normal">
                 {t('pricing.free.period')}
               </span>
@@ -175,24 +179,29 @@ export function Pricing() {
             {/* Strikethrough is now stacked ABOVE the current price and
                 visually focused — anchoring effect: the eye sees the higher
                 number first, then the discounted price lands as relief. */}
-            <div className="mt-2.5 inline-flex items-baseline gap-2 text-sumi-soft tabular-nums">
+            <div className="mt-2.5 inline-flex items-baseline gap-2 text-sumi-soft">
               <span className="uppercase tracking-[0.2em] text-[0.6875rem] text-nezumi">
                 {t('pricing.lifetime.originalLabel')}
               </span>
-              <span className="display-title relative text-[1.25rem] md:text-[1.375rem] font-medium text-sumi/85 leading-none">
-                <span className="relative inline-block">
-                  {lifetime.original.formatted}
-                  <span
-                    aria-hidden
-                    className="pointer-events-none absolute left-[-2px] right-[-2px] top-1/2 h-[2px] -translate-y-1/2 rotate-[-6deg] bg-hinomaru"
-                  />
-                </span>
+              {/* Strikethrough original price — same symbol-split treatment
+                  as the headline so the slash + diagonal line still cross
+                  cleanly even with two glyph families in the run. */}
+              <span className="relative inline-block leading-none">
+                <PriceDisplay
+                  entry={lifetime.original}
+                  className="display-title inline-flex items-baseline text-[1.25rem] md:text-[1.375rem] font-medium text-sumi/85 leading-none"
+                />
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute left-[-2px] right-[-2px] top-1/2 h-[2px] -translate-y-1/2 rotate-[-6deg] bg-hinomaru"
+                />
               </span>
             </div>
             <div className="mt-1.5 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-              <span className="display-title text-[2.25rem] md:text-[2.625rem] font-medium text-sumi leading-none tabular-nums">
-                {lifetime.discounted.formatted}
-              </span>
+              <PriceDisplay
+                entry={lifetime.discounted}
+                className="display-title inline-flex items-baseline text-[2.25rem] md:text-[2.625rem] font-medium text-sumi leading-none"
+              />
               <span className="text-[1rem] text-sumi-soft tracking-normal">
                 {t('pricing.lifetime.period')}
               </span>
@@ -241,6 +250,14 @@ export function Pricing() {
               </p>
               <a
                 href={lifetimeCheckoutUrl()}
+                onClick={(e) => {
+                  // Intercept and open the Polar embed in a modal instead
+                  // of navigating away. Plain anchor href remains as the
+                  // no-JS / right-click fallback. `tier` is used only by
+                  // fake-checkout mode to pick the right thank-you page.
+                  e.preventDefault()
+                  void openPolarCheckout({ url: lifetimeCheckoutUrl(), tier: 'lifetime' })
+                }}
                 className="btn-sumi group mt-3 inline-flex h-11 w-full items-center justify-center gap-2 rounded-md px-6 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
               >
                 <Sparkles className="h-4 w-4" strokeWidth={1.8} />
@@ -262,9 +279,10 @@ export function Pricing() {
               </span>
             </div>
             <div className="mt-2 flex items-baseline gap-2">
-              <span className="display-title text-[2.25rem] md:text-[2.625rem] font-medium text-sumi leading-none tabular-nums">
-                {yearly.formatted}
-              </span>
+              <PriceDisplay
+                entry={yearly}
+                className="display-title inline-flex items-baseline text-[2.25rem] md:text-[2.625rem] font-medium text-sumi leading-none"
+              />
               <span className="text-[1rem] text-sumi-soft tracking-normal">
                 {t('pricing.support.period')}
               </span>
@@ -304,6 +322,10 @@ export function Pricing() {
               </p>
               <a
                 href={supportCheckoutUrl()}
+                onClick={(e) => {
+                  e.preventDefault()
+                  void openPolarCheckout({ url: supportCheckoutUrl(), tier: 'support' })
+                }}
                 className="btn-sumi-soft group mt-3 inline-flex h-11 w-full items-center justify-center gap-2 rounded-md border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-6 text-sm font-medium text-sumi transition-colors duration-200 hover:bg-[color-mix(in_oklab,var(--washi)_40%,#fff)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
               >
                 <Heart className="h-4 w-4 text-hinomaru" strokeWidth={1.8} />
@@ -336,9 +358,13 @@ export function Pricing() {
  */
 function LimitedRedeemBar({ fullPriceFormatted }: { fullPriceFormatted: string }) {
   const { t } = useTranslation()
-  const { used, max, remaining, live } = useDiscountAvailability()
+  const { max, remaining, live } = useDiscountAvailability()
   if (max <= 0) return null
-  const pct = Math.min(100, (used / max) * 100)
+  // Fill = `remaining`, not `used`. Starts at 100% on day one with
+  // the full 500 codes available; shrinks as buyers claim. The
+  // visual matches the verbal copy ("X of 500 remaining") and reads
+  // intuitively as scarcity: a wide bar today, a sliver tomorrow.
+  const pct = Math.min(100, Math.max(0, (remaining / max) * 100))
   const soldOut = remaining === 0
   const almostGone = !soldOut && remaining <= 50
 
@@ -492,10 +518,14 @@ function FreeDownloadForm() {
       <p className="mt-2 text-center text-[0.7rem] leading-[1.45] text-nezumi">
         {t('pricing.free.email.footnote')}
       </p>
-      <p className="mt-1.5 text-center">
+      {/* Skip link is intentionally bolder than the footnote above —
+          self-determination beats "captured" lead-gen, and we don't want
+          visitors to feel the email is a hard paywall. Underline always
+          visible so it reads as an actionable second path, not legalese. */}
+      <p className="mt-2 text-center">
         <a
           href="/download/latest"
-          className="text-[0.7rem] text-nezumi underline-offset-[6px] hover:text-sumi-soft hover:underline"
+          className="text-[0.75rem] font-semibold text-sumi-soft underline decoration-[var(--line)] underline-offset-[5px] transition-colors duration-[220ms] hover:text-sumi hover:decoration-sumi"
         >
           {t('pricing.free.email.skip')}
         </a>
