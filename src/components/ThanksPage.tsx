@@ -1,11 +1,6 @@
 import { Link, useSearch } from '@tanstack/react-router'
 import { track } from '@vercel/analytics'
-import {
-  ArrowLeft,
-  Download as DownloadIcon,
-  ExternalLink,
-  Sparkles,
-} from 'lucide-react'
+import { ArrowLeft, ExternalLink, Sparkles } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { Hanko } from '#/components/zen/Hanko'
@@ -133,19 +128,23 @@ export function ThanksPage({ tier, kanji }: { tier: Tier; kanji: string }) {
                   <1> wraps the device-count phrase ("three Macs", "up to
                   five Macs") in the body text-color so the headline number
                   pops above the surrounding sumi-soft body. */}
+              {/* Body intentionally celebratory, NOT instructional —
+                  the install + key card below handles "how do I use
+                  this." Duplicating instructions here pads the page
+                  and dilutes the moment. <0> wraps the device-count
+                  phrase so it pops in body text-color above the
+                  surrounding sumi-soft. */}
               <Trans
                 i18nKey={`${key}.body`}
                 components={[
-                  <em className="font-display italic font-medium text-sumi" />,
                   <span className="font-medium text-sumi" />,
                 ]}
               />
             </Reveal>
-            {checkoutId && (
-              <Reveal as="p" delay={340} className="mt-3 text-[11px] uppercase tracking-[0.18em] text-nezumi">
-                {t('thanks.checkoutHint', { id: checkoutId })}
-              </Reveal>
-            )}
+            {/* Order id moved INTO the delivery card header so the
+                hero stays focused on the celebratory line; the
+                buyer's reference data lives at the top of the
+                composite card below. */}
           </div>
         </section>
 
@@ -193,23 +192,13 @@ export function ThanksPage({ tier, kanji }: { tier: Tier; kanji: string }) {
           </div>
         </section>
 
-        {/* Two staggered after-the-bow cards. Both mount only when
-            licenseShown flips true so the polling fetch in
-            LicenseRevealCard fires *after* the video has played out —
-            the upstream usually beats us to it during that window.
-            Tight pt-2 here (was pt-10) because the collapsing video
-            slot above already drops to nothing — any additional
-            padding here just rebuilds the gap we just removed. */}
-        {licenseShown && (
-          <>
-            <LicenseRevealCard checkoutId={checkoutId} />
-            <section className="mx-auto max-w-2xl px-5 pb-2 pt-6 sm:px-6">
-              <div className="mx-auto w-full max-w-[440px]">
-                <LicenseDelivery />
-              </div>
-            </section>
-          </>
-        )}
+        {/* The composite delivery card. Mounts only after the bow
+            video plays out so the polling fetch in LicenseRevealCard
+            fires *after* the video has cleared — the upstream usually
+            beats us to it during that window. The card itself owns
+            both install (primary) AND key delivery (secondary strip)
+            so the two never read as disconnected boxes. */}
+        {licenseShown && <LicenseRevealCard checkoutId={checkoutId} />}
 
         <section className="zen-section mx-auto max-w-3xl px-5 pt-2 sm:px-6">
           <Reveal
@@ -266,108 +255,6 @@ export function ThanksPage({ tier, kanji }: { tier: Tier; kanji: string }) {
       </main>
       <Footer />
     </>
-  )
-}
-
-/**
- * Install-Sensei block. Renders inside the same "moment slot" the bow
- * video occupied — fades in after the video has finished and begun
- * its fade-out.
- *
- * Intent: the LicenseRevealCard above the video already handles key
- * delivery (reveals the key or shows provisioning/portal fallback).
- * What's left to resolve in the buyer's mind is the *install* — most
- * buyers downloaded during the 5-day trial, but some haven't. This
- * card frames the natural next action ("grab the macOS build, drop
- * your key into Settings → Premium") and offers same-day support as
- * the safety net.
- *
- * Brand parity: 装 (sō / install·equip) kanji + tracked label + brush
- * rule mirrors the kanji-seal vocabulary used elsewhere on the site
- * (基 features, 価 pricing, 鍵 in the reveal card above).
- */
-function LicenseDelivery() {
-  const { t } = useTranslation()
-  // Mount-time fade — flips on the next frame so the CSS transition
-  // has a "from" → "to" delta to interpolate. Without the rAF the
-  // browser collapses both states into the rendered frame and there's
-  // no visible animation.
-  const [mounted, setMounted] = useState(false)
-  useEffect(() => {
-    const id = window.requestAnimationFrame(() => setMounted(true))
-    return () => window.cancelAnimationFrame(id)
-  }, [])
-  return (
-    <div
-      role="note"
-      aria-label={t('thanks.delivery.label')}
-      className="flex flex-col rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] px-6 py-6 sm:px-7 sm:py-7"
-      style={{
-        opacity: mounted ? 1 : 0,
-        transform: mounted ? 'translateY(0)' : 'translateY(8px)',
-        transitionProperty: 'opacity, transform',
-        transitionDuration: '620ms',
-        transitionDelay: '120ms',
-        transitionTimingFunction: 'cubic-bezier(0.2, 0.8, 0.2, 1)',
-      }}
-    >
-      <div className="flex items-center gap-3">
-        {/* 装 = "install / equip". Picks up where the LicenseRevealCard
-            above (鍵, key) leaves off — key in hand, now install. */}
-        <span
-          aria-hidden
-          className="font-jp text-base leading-none text-hinomaru/85 w-5 text-center"
-        >
-          装
-        </span>
-        <span className="display-title text-[11px] font-semibold uppercase tracking-[0.22em] text-sumi-soft">
-          {t('thanks.delivery.label')}
-        </span>
-        <span
-          aria-hidden
-          className="h-px flex-1 bg-gradient-to-r from-[var(--line-strong)] via-[var(--line)] to-transparent"
-        />
-        <DownloadIcon
-          aria-hidden
-          className="h-3.5 w-3.5 text-nezumi"
-          strokeWidth={1.7}
-        />
-      </div>
-      <p className="mt-4 text-[0.875rem] leading-[1.6] text-sumi-soft">
-        <Trans
-          i18nKey="thanks.delivery.from"
-          components={[
-            <em className="font-display italic font-medium text-sumi" />,
-          ]}
-        />
-      </p>
-      <p className="mt-2 text-[0.875rem] leading-[1.6] text-sumi-soft">
-        <Trans
-          i18nKey="thanks.delivery.spam"
-          components={[
-            <a
-              href={`mailto:${t('thanks.delivery.supportEmail')}?subject=Install%20help`}
-              className="font-semibold text-sumi underline decoration-[var(--line-strong)] underline-offset-[3px] hover:decoration-sumi transition-colors"
-            />,
-          ]}
-        />
-      </p>
-      {/* Download CTA — the natural action this card is built around.
-          Sized full-width inside the card so it reads as the resolution
-          of the install story rather than a separate affordance. */}
-      <div className="mt-6 flex justify-center">
-        <a
-          href="/download/latest"
-          className="group inline-flex h-10 items-center justify-center gap-2 rounded-md border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-5 text-[0.875rem] font-medium text-sumi transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:bg-[color-mix(in_oklab,var(--washi)_40%,#fff)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
-        >
-          <DownloadIcon
-            className="h-4 w-4 transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5"
-            strokeWidth={1.7}
-          />
-          {t('thanks.delivery.downloadCta')}
-        </a>
-      </div>
-    </div>
   )
 }
 

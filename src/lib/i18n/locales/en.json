@@ -324,10 +324,20 @@
     "checkoutHint": "Order #{{id}}",
     "delivery": {
       "label": "Install Sensei",
-      "from": "Grab the latest macOS build. Once Sensei is running, drop your key into <0>Settings → Premium</0> and you're done.",
-      "spam": "Stuck on the download, the paste, or anything else: write to <0>info@battery-sensei.app</0> and we'll sort it the same day.",
+      "from": "Get the latest macOS build, then drop your key into <0>Settings → Premium</0>.",
+      "spam": "Anything stuck (download, paste, activation): write to <0>info@battery-sensei.app</0> and we'll sort it the same day.",
       "supportEmail": "info@battery-sensei.app",
-      "downloadCta": "Download for macOS"
+      "downloadCta": "Download for macOS",
+      "preparing": "Preparing your key",
+      "keyLabel": "License key",
+      "copy": "Copy",
+      "copied": "Copied",
+      "copyAria": "Copy license key",
+      "alsoSentTo": "Also sent to",
+      "alsoSentDefault": "Also sent to your email",
+      "portalLink": "Customer portal",
+      "expiredKicker": "Check your email",
+      "expiredBody": "Polar emailed your key when the order completed (check spam too). It also lives in the customer portal under the same email."
     },
     "provisioning": {
       "kicker": "Key on its way",
@@ -344,14 +354,14 @@
     "lifetime": {
       "heading": "Welcome to Lifetime.",
       "headingItalic": "Every Premium feature, forever.",
-      "body": "Your key is on its way by email. Open Sensei, then <0>Settings → Premium</0>, and paste it in. That's the last ask — <1>three Macs of your own</1>, every Premium feature Sensei ever ships, forever. No login. No account.",
+      "body": "<0>Three Macs of your own</0>. Every Premium feature Sensei ever ships, forever. No login. No account.",
       "next": "Haven't downloaded Sensei yet? Grab it below, then drop the key into Settings → Premium."
     },
     "support": {
       "heading": "Thank you for the year ahead.",
       "headingItalic": "Premium unlocked, on up to five Macs.",
-      "body": "Your key is on its way by email. Open Sensei, then <0>Settings → Premium</0>, and paste it in. <1>Up to five Macs</1>, a full year of new builds and quiet email support. Manage or cancel any time from your Polar dashboard.",
-      "next": "We'll email you once when the year is nearly up — never a silent re-charge. Haven't downloaded Sensei yet? Grab it below."
+      "body": "<0>Up to five Macs</0>. A full year of new builds and quiet email support. Manage or cancel any time from your Polar dashboard.",
+      "next": "We'll email you once when the year is nearly up, never a silent re-charge. Haven't downloaded Sensei yet? Grab it below."
     }
   },
   "walkthrough": {

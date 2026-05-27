@@ -324,10 +324,20 @@
     "checkoutHint": "Pedido #{{id}}",
     "delivery": {
       "label": "Instalar Sensei",
-      "from": "Descarga la última versión para macOS. Cuando Sensei esté corriendo, pega tu clave en <0>Ajustes → Premium</0> y listo.",
-      "spam": "¿Se atasca la descarga, el pegado o cualquier otra cosa? Escríbenos a <0>info@battery-sensei.app</0> y lo resolvemos el mismo día.",
+      "from": "Descarga la última versión para macOS y pega tu clave en <0>Ajustes → Premium</0>.",
+      "spam": "Si algo se atasca (descarga, pegado, activación), escríbenos a <0>info@battery-sensei.app</0> y lo resolvemos el mismo día.",
       "supportEmail": "info@battery-sensei.app",
-      "downloadCta": "Descargar para macOS"
+      "downloadCta": "Descargar para macOS",
+      "preparing": "Preparando tu clave",
+      "keyLabel": "Clave de licencia",
+      "copy": "Copiar",
+      "copied": "Copiada",
+      "copyAria": "Copiar clave de licencia",
+      "alsoSentTo": "También enviada a",
+      "alsoSentDefault": "También enviada a tu correo",
+      "portalLink": "Portal de cliente",
+      "expiredKicker": "Revisa tu correo",
+      "expiredBody": "Polar envió tu clave por correo al completarse el pedido (echa un ojo a spam también). Además vive de forma permanente en el portal de cliente, con el mismo correo."
     },
     "provisioning": {
       "kicker": "Tu clave está en camino",
@@ -344,14 +354,14 @@
     "lifetime": {
       "heading": "Bienvenida a Lifetime.",
       "headingItalic": "Cada función Premium, para siempre.",
-      "body": "Tu clave va de camino por correo. Abre Sensei, luego <0>Ajustes → Premium</0>, y pégala. Eso es todo — <1>tres Macs tuyos</1>, cada función Premium que Sensei publique, para siempre. Sin login. Sin cuenta.",
+      "body": "<0>Tres Macs tuyos</0>. Cada función Premium que Sensei publique, para siempre. Sin login. Sin cuenta.",
       "next": "¿Aún no has descargado Sensei? Hazlo abajo y pega la clave en Ajustes → Premium."
     },
     "support": {
       "heading": "Gracias por el año que viene.",
       "headingItalic": "Premium desbloqueado, hasta en 5 Macs.",
-      "body": "Tu clave va de camino por correo. Abre Sensei, luego <0>Ajustes → Premium</0>, y pégala. <1>Hasta cinco Macs</1>, un año entero de nuevas versiones y soporte por correo, sin ruido. Gestiona o cancela cuando quieras desde tu panel de Polar.",
-      "next": "Te escribiremos una sola vez cuando el año esté por terminar — nunca un cargo silencioso. ¿Aún no has descargado Sensei? Hazlo abajo."
+      "body": "<0>Hasta cinco Macs</0>. Un año entero de nuevas versiones y soporte por correo, sin ruido. Gestiona o cancela cuando quieras desde tu panel de Polar.",
+      "next": "Te escribiremos una sola vez cuando el año esté por terminar, nunca un cargo silencioso. ¿Aún no has descargado Sensei? Hazlo abajo."
     }
   },
   "walkthrough": {
