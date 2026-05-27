@@ -540,59 +540,67 @@ body::after {
    (ported from Surfaces/Zen/InkStroke.swift: an offset 0.4px shadow line
    beneath a 0.8px primary stroke gives the edge an uneven, brush-set feel).
    The ::before holds a faint procedural fiber overlay so each card reads
-   as a separate sheet of paper, not a flat panel. */
-.paper-card {
-  position: relative;
-  background: linear-gradient(180deg, var(--card) 0%, color-mix(in oklab, var(--card) 96%, var(--washi-deep)) 100%);
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  box-shadow:
-    /* InkStroke: offset secondary stroke */
-    0.4px 0.4px 0 0 var(--line),
-    0 1px 0 rgba(255, 255, 255, 0.5) inset,
-    0 1px 2px var(--paper-shadow),
-    0 8px 24px rgba(28, 26, 23, 0.05);
-  transition: transform 250ms cubic-bezier(0.2, 0.8, 0.2, 1),
-              border-color 250ms ease,
-              box-shadow 250ms ease;
-  isolation: isolate;
-  overflow: hidden;
-}
+   as a separate sheet of paper, not a flat panel.
+   Wrapped in `@layer components` so Tailwind utilities (which live in
+   `@layer utilities`, applied AFTER components) can override anything
+   inside — e.g. an `absolute` blur span on a card child stays out of
+   flow instead of being silently downgraded to `relative` by the
+   default `.paper-card > *` rule. */
+@layer components {
+  .paper-card {
+    position: relative;
+    background: linear-gradient(180deg, var(--card) 0%, color-mix(in oklab, var(--card) 96%, var(--washi-deep)) 100%);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    box-shadow:
+      /* InkStroke: offset secondary stroke */
+      0.4px 0.4px 0 0 var(--line),
+      0 1px 0 rgba(255, 255, 255, 0.5) inset,
+      0 1px 2px var(--paper-shadow),
+      0 8px 24px rgba(28, 26, 23, 0.05);
+    transition: transform 250ms cubic-bezier(0.2, 0.8, 0.2, 1),
+                border-color 250ms ease,
+                box-shadow 250ms ease;
+    isolation: isolate;
+    overflow: hidden;
+  }
 
-.paper-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.35;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220'><filter id='c'><feTurbulence type='fractalNoise' baseFrequency='2.1' numOctaves='2' seed='8'/><feColorMatrix values='0 0 0 0 0.42  0 0 0 0 0.36  0 0 0 0 0.28  0 0 0 0.10 0'/></filter><rect width='100%25' height='100%25' filter='url(%23c)'/></svg>");
-  mix-blend-mode: multiply;
-  border-radius: inherit;
-}
+  .paper-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.35;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220'><filter id='c'><feTurbulence type='fractalNoise' baseFrequency='2.1' numOctaves='2' seed='8'/><feColorMatrix values='0 0 0 0 0.42  0 0 0 0 0.36  0 0 0 0 0.28  0 0 0 0.10 0'/></filter><rect width='100%25' height='100%25' filter='url(%23c)'/></svg>");
+    mix-blend-mode: multiply;
+    border-radius: inherit;
+  }
 
-.dark .paper-card::before {
-  opacity: 0.22;
-  mix-blend-mode: screen;
-}
+  .dark .paper-card::before {
+    opacity: 0.22;
+    mix-blend-mode: screen;
+  }
 
-.paper-card > * {
-  position: relative;
-  z-index: 1;
-}
+  /* Default children above the ::before fiber overlay. */
+  .paper-card > * {
+    position: relative;
+    z-index: 1;
+  }
 
-.paper-card:hover {
-  transform: translateY(-3px);
-  border-color: var(--line-strong);
-  box-shadow:
-    0.4px 0.4px 0 0 var(--line-strong),
-    0 1px 0 rgba(255, 255, 255, 0.5) inset,
-    0 2px 4px var(--paper-shadow),
-    0 18px 40px rgba(28, 26, 23, 0.10);
-}
+  .paper-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--line-strong);
+    box-shadow:
+      0.4px 0.4px 0 0 var(--line-strong),
+      0 1px 0 rgba(255, 255, 255, 0.5) inset,
+      0 2px 4px var(--paper-shadow),
+      0 18px 40px rgba(28, 26, 23, 0.10);
+  }
 
-.paper-card:focus-within {
-  border-color: var(--line-strong);
+  .paper-card:focus-within {
+    border-color: var(--line-strong);
+  }
 }
 
 /* Ink button (primary) */
