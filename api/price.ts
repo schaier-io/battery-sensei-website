@@ -362,15 +362,29 @@ async function fetchPolarPreview(
   // gets the mapped value.
   const previewCountry = previewCountryFor(currency)
 
-  // Fire yearly + lifetime previews in parallel. Lifetime is optional —
-  // if its env var isn't set, we skip the second call and the payload
-  // simply lacks a `lifetime` block (client derives like before).
-  const [yearlyCheckout, lifetimeCheckoutWithDiscount] = await Promise.all([
-    fetchCheckoutPreview(yearlyProductId, previewCountry, token, null, currency),
-    lifetimeProductId
-      ? fetchCheckoutPreview(lifetimeProductId, previewCountry, token, discountId, currency)
-      : Promise.resolve(null),
-  ])
+  // Fire all three previews in parallel:
+  //   1. yearly support (no discount)
+  //   2. lifetime WITHOUT discount — gives us the full price for the
+  //      strikethrough anchor. Polar's checkout response sets
+  //      `subtotal_amount` to the AFTER-discount value when discount_id
+  //      is passed, so using one call with discount_id and reading
+  //      subtotal as "original" would show the same value as the
+  //      discounted total (which is the bug this two-call shape fixes).
+  //   3. lifetime WITH ZENMODE discount — the discounted headline.
+  //
+  // Lifetime is optional — if its env var isn't set, both lifetime
+  // promises resolve to null and the payload simply lacks a `lifetime`
+  // block (client falls back to LIFETIME_FALLBACK table).
+  const [yearlyCheckout, lifetimeFullCheckout, lifetimeDiscountedCheckout] =
+    await Promise.all([
+      fetchCheckoutPreview(yearlyProductId, previewCountry, token, null, currency),
+      lifetimeProductId
+        ? fetchCheckoutPreview(lifetimeProductId, previewCountry, token, null, currency)
+        : Promise.resolve(null),
+      lifetimeProductId
+        ? fetchCheckoutPreview(lifetimeProductId, previewCountry, token, discountId, currency)
+        : Promise.resolve(null),
+    ])
 
   if (!isValidCheckout(yearlyCheckout)) {
     return { ok: false, country, reason: 'no_totals', source: 'fallback' }
@@ -394,38 +408,47 @@ async function fetchPolarPreview(
     source: 'polar',
   }
 
-  // Attach the live lifetime block when we got a valid preview back.
-  // `has_discount` reflects whether Polar's response shows the discount
-  // landed (total < subtotal) — once Polar caps ZENMODE the discounted
-  // preview comes back at full price and we flip the flag so the client
-  // knows to hide the strikethrough.
-  if (isValidCheckout(lifetimeCheckoutWithDiscount)) {
-    const lifeTotal = lifetimeCheckoutWithDiscount.total_amount
-    const lifeSubtotal = lifetimeCheckoutWithDiscount.subtotal_amount
-    const lifeTax =
-      typeof lifetimeCheckoutWithDiscount.tax_amount === 'number'
-        ? lifetimeCheckoutWithDiscount.tax_amount
+  // Attach the live lifetime block when both previews (with + without
+  // discount) returned valid checkouts. We need BOTH to populate the
+  // strikethrough vs discounted lines correctly:
+  //   originalAmount   = full-price preview total (no discount applied)
+  //   discountedAmount = discounted preview total (ZENMODE applied)
+  //   hasDiscount      = true when the two differ (i.e. ZENMODE is
+  //                      still being honoured by Polar — once Polar
+  //                      caps it, the discounted call comes back at
+  //                      full price and we hide the strikethrough)
+  if (
+    isValidCheckout(lifetimeFullCheckout) &&
+    isValidCheckout(lifetimeDiscountedCheckout)
+  ) {
+    const fullTotal = lifetimeFullCheckout.total_amount
+    const discTotal = lifetimeDiscountedCheckout.total_amount
+    const discTax =
+      typeof lifetimeDiscountedCheckout.tax_amount === 'number'
+        ? lifetimeDiscountedCheckout.tax_amount
         : 0
-    const hasDiscount = lifeTotal < lifeSubtotal
+    const hasDiscount = discTotal < fullTotal
 
     payload.lifetime = {
-      discounted_amount: lifeTotal,
-      discounted_formatted: formatAmount(lifeTotal, quotedCurrency),
-      original_amount: lifeSubtotal,
-      original_formatted: formatAmount(lifeSubtotal, quotedCurrency),
+      discounted_amount: discTotal,
+      discounted_formatted: formatAmount(discTotal, quotedCurrency),
+      original_amount: fullTotal,
+      original_formatted: formatAmount(fullTotal, quotedCurrency),
       has_discount: hasDiscount,
-      tax_formatted: lifeTax > 0 ? formatAmount(lifeTax, quotedCurrency) : '',
+      tax_formatted: discTax > 0 ? formatAmount(discTax, quotedCurrency) : '',
     }
   } else if (lifetimeProductId) {
-    // Configured but the preview call didn't return a valid checkout.
-    // Surface it loudly — silent failure here is what makes the page
-    // quietly fall back to the stale heuristic and show wrong prices.
-    console.warn('[price] lifetime preview missing or invalid', {
+    // Configured but one or both lifetime previews didn't return a
+    // valid checkout. Surface it loudly — silent failure here is what
+    // makes the page quietly fall back to the stale heuristic and show
+    // wrong prices.
+    console.warn('[price] lifetime preview(s) missing or invalid', {
       currency,
       previewCountry,
       lifetimeProductId,
       hasDiscountId: Boolean(discountId),
-      gotCheckout: Boolean(lifetimeCheckoutWithDiscount),
+      gotFull: Boolean(lifetimeFullCheckout),
+      gotDiscounted: Boolean(lifetimeDiscountedCheckout),
     })
   }
 

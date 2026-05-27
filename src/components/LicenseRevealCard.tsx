@@ -6,6 +6,7 @@ import {
   Download as DownloadIcon,
   ExternalLink,
   Mail,
+  Sparkles,
 } from 'lucide-react'
 import { CUSTOMER_PORTAL_URL } from '#/lib/polar'
 
@@ -603,6 +604,31 @@ function KeyLine({
             </>
           )}
         </button>
+      </div>
+      {/* Activate-in-app deeplink. Once the key is in hand, the
+          primary action is "open Sensei and prefill this key" — the
+          macOS app registers the `batterysensei://activate?key=...`
+          URL scheme and routes straight to the Premium activation
+          sheet with the key already filled. Falls back gracefully:
+          if the URL scheme isn't registered (app not installed),
+          the OS shows its standard "no app" dialog, and the user
+          still has the Copy button + the email above.
+
+          Built with encodeURIComponent on the key to escape any
+          characters Polar might one day put in the format (today
+          they're ASCII-only). */}
+      <div className="mt-3 pl-[2rem]">
+        <a
+          href={`batterysensei://activate?key=${encodeURIComponent(licenseKey)}`}
+          className="btn-sumi group inline-flex h-9 w-full items-center justify-center gap-2 rounded-md px-4 text-[12.5px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
+        >
+          <Sparkles
+            className="h-3.5 w-3.5 transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5"
+            strokeWidth={1.8}
+            aria-hidden
+          />
+          {t('thanks.delivery.activateInApp')}
+        </a>
       </div>
       <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 pl-[2rem] text-[11.5px] text-nezumi">
         <span className="inline-flex items-center gap-1.5">

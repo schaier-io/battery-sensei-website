@@ -36,7 +36,7 @@ const SUPPORT_CHECKOUT_URL =
  */
 export const CUSTOMER_PORTAL_URL =
   import.meta.env.VITE_POLAR_CUSTOMER_PORTAL_URL ??
-  'https://polar.sh/login'
+  'https://polar.sh/schaier-io/portal/overview'
 
 /**
  * Launch discount for the Lifetime tier.

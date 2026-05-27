@@ -1,6 +1,6 @@
 import { Link, useSearch } from '@tanstack/react-router'
 import { track } from '@vercel/analytics'
-import { ArrowLeft, ExternalLink, Sparkles } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { Hanko } from '#/components/zen/Hanko'
@@ -8,7 +8,6 @@ import { Reveal } from '#/components/zen/Reveal'
 import { Nav } from '#/components/sections/Nav'
 import { Footer } from '#/components/sections/Footer'
 import { LicenseRevealCard } from '#/components/LicenseRevealCard'
-import { CUSTOMER_PORTAL_URL } from '#/lib/polar'
 
 // How long to wait after the page lands before kicking off the ninja
 // animation. The longest existing Reveal delay is ~580ms (CTA bar), so
@@ -240,47 +239,28 @@ export function ThanksPage({ tier, kanji }: { tier: Tier; kanji: string }) {
             {t(`${key}.next`)}
           </Reveal>
 
-          {/* CTA row — three actions ordered by buyer intent.
-                Primary  · Open Sensei      (most buyers already installed during the 5-day trial)
-                Secondary · Manage purchase (Polar customer portal — receipts, invoices, license resend)
-                Tertiary · Back to home     (escape hatch, plain link)
-
-              Download moved INTO the license card above where it's the
-              natural next action; keeping it here too would double the
-              affordance for the same intent. */}
+          {/* CTA row — single tertiary action.
+              Removed in this pass:
+                · "Open Sensei" (batterysensei://open) — the URL
+                  scheme isn't registered in the macOS app yet, so
+                  clicking did nothing for everyone. Better to omit
+                  than to ship a dead link.
+                · "Manage purchase" (Polar portal) — duplicate of
+                  the "Customer portal" link inside the delivery
+                  card above. The card's link is the contextual
+                  one; this CTA was redundant chrome.
+              Download lives INSIDE the card as primary action. */}
           <Reveal
             delay={620}
             className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap"
           >
             <Link
               to="/"
-              className="inline-flex h-11 items-center gap-2 px-4 text-sm text-sumi-soft transition-colors duration-[280ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:text-sumi sm:order-first"
+              className="inline-flex h-11 items-center gap-2 px-4 text-sm text-sumi-soft transition-colors duration-[280ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:text-sumi"
             >
               <ArrowLeft className="h-3.5 w-3.5" strokeWidth={1.7} aria-hidden />
               {t('thanks.backToHome')}
             </Link>
-            <a
-              href="batterysensei://open"
-              className="btn-sumi group inline-flex h-11 items-center gap-2.5 rounded-md px-6 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
-            >
-              <Sparkles
-                className="h-4 w-4 transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5"
-                strokeWidth={1.8}
-              />
-              {t('thanks.openApp')}
-            </a>
-            <a
-              href={CUSTOMER_PORTAL_URL}
-              target="_blank"
-              rel="noreferrer"
-              className="group inline-flex h-11 items-center gap-2.5 rounded-md border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] px-6 text-sm font-medium text-sumi transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:bg-[color-mix(in_oklab,var(--washi)_45%,#fff)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
-            >
-              <ExternalLink
-                className="h-4 w-4 transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5"
-                strokeWidth={1.8}
-              />
-              {t('thanks.managePurchase')}
-            </a>
           </Reveal>
         </section>
       </main>

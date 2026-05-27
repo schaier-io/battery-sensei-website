@@ -75,9 +75,16 @@ async function readBodyExcerpt(res: Response): Promise<string> {
 }
 
 function customerPortalFallback(): string {
+  // Default fallback matches the actual Polar org slug + path.
+  // Overrideable via env so an operator running their own deploy
+  // can point at their own org without editing source. Without the
+  // per-customer session token (which only the live checkout
+  // response carries) this URL lands on the org's portal login
+  // page; the buyer signs in with their checkout email and lands
+  // on their own dashboard from there.
   return (
     process.env.POLAR_CUSTOMER_PORTAL_URL ??
-    'https://polar.sh/battery-sensei/portal'
+    'https://polar.sh/schaier-io/portal/overview'
   )
 }
 
@@ -214,71 +221,204 @@ async function fetchCheckoutLicense(
     }
   }
 
-  // 4.5. The proper order-tied lookup. License keys live on benefit
-  //      grants (a separate Polar resource from orders), and the
-  //      benefit-grants endpoint accepts an order_id filter — so this
-  //      returns only the grants attached to THIS specific order, no
-  //      matter how many other purchases the customer has made.
+  // 4.5. Proper order-tied lookup, verified against Polar's published
+  //      API schema (https://api.polar.sh/openapi.json + the
+  //      polarsource/polar GitHub repo schemas):
   //
-  //      The license-key value is nested under `properties.license_key`
-  //      in the grant object. We try a few path variants to absorb
-  //      shape changes between Polar releases.
-  if (!licenseKey && orderId) {
-    try {
+  //        a) /v1/benefit-grants/ accepts customer_id (NOT order_id)
+  //           as a filter. Each returned grant carries its own
+  //           top-level `order_id` field, so we filter by customer
+  //           upstream then strict-match `order_id` in code.
+  //        b) The license-keys benefit grant's `properties` does NOT
+  //           include the key value itself — only `license_key_id`
+  //           and `display_key`. The actual key string lives on the
+  //           LicenseKeyRead resource at `key`.
+  //        c) So once we have the matching grant, we fetch
+  //           /v1/license-keys/{license_key_id} for the real value.
+  //
+  //      Earlier versions of this code tried `?order_id=` on the
+  //      grants endpoint and walked `properties.license_key.key`
+  //      paths — Polar's API ignores the order_id filter silently
+  //      and that property path doesn't exist on grants. This block
+  //      was returning nothing for everyone.
+  const customerId =
+    pluck<string>(
+      checkoutData,
+      'customer.id',
+      'customer_id',
+      'customer.uuid',
+      'customer_uuid',
+    ) ?? null
+
+  if (!licenseKey && orderId && customerId) {
+    // Pagination strategy:
+    //   PAGE_LIMIT=10 → small payload per request. Polar's default
+    //   sort is `-created_at` (newest first, verified against their
+    //   OpenAPI spec), and the grant for THIS order was created
+    //   moments ago, so it is almost always within the first 10. We
+    //   pass the limit explicitly so we don't depend on Polar's
+    //   default staying at 10 forever.
+    //
+    //   MAX_PAGES=5 → safety net for customers with many recent
+    //   grants (concurrent purchases firing within seconds, prior
+    //   subscriptions auto-renewing). 5 × 10 = 50 grants ceiling
+    //   per buyer is plenty without letting a runaway loop hammer
+    //   Polar. Loop early-exits the moment a matching grant is
+    //   found, so the common case is one request.
+    const PAGE_LIMIT = 10
+    const MAX_PAGES = 5
+
+    let matchedGrant: Record<string, unknown> | null = null
+    let totalScanned = 0
+    let lastPageReturned = -1
+    let firstPageFirst: Record<string, unknown> | null = null
+
+    for (let page = 1; page <= MAX_PAGES; page++) {
       const grantsUrl = new URL(`${POLAR_API_BASE}/v1/benefit-grants/`)
-      grantsUrl.searchParams.set('order_id', orderId)
-      grantsUrl.searchParams.set('limit', '10')
+      grantsUrl.searchParams.set('customer_id', customerId)
+      grantsUrl.searchParams.set('is_granted', 'true')
+      grantsUrl.searchParams.set('limit', String(PAGE_LIMIT))
+      grantsUrl.searchParams.set('page', String(page))
+      // Explicit sort param so we don't depend on Polar's default
+      // staying `-created_at` forever. Newest first guarantees the
+      // grant from this checkout is near the top of page 1.
+      grantsUrl.searchParams.set('sorting', '-created_at')
       const org = orgId()
       if (org) grantsUrl.searchParams.set('organization_id', org)
-      const grantsRes = await fetch(grantsUrl, { headers: authHeaders })
-      if (grantsRes.ok) {
-        const grantsBody = (await grantsRes.json()) as {
-          items?: Array<Record<string, unknown>>
-        }
-        const items = Array.isArray(grantsBody.items) ? grantsBody.items : []
-        // Walk each grant and pull the license_key value from any of
-        // the known nested paths. First non-empty key wins.
-        for (const grant of items) {
-          const key =
-            pluck<string>(
-              grant,
-              'properties.license_key.key',
-              'properties.license_key',
-              'license_key.key',
-              'license_key',
-              'key',
-            ) ?? null
-          if (typeof key === 'string' && key.trim()) {
-            licenseKey = key.trim()
-            break
-          }
-        }
-        if (!licenseKey) {
-          console.warn(
-            '[checkout/[id]] benefit-grants returned items but no license_key value',
-            {
-              checkoutId,
-              orderId,
-              returned: items.length,
-              sampleKeys: items[0] ? Object.keys(items[0]) : [],
-            },
-          )
-        }
-      } else {
+
+      let grantsRes: Response
+      try {
+        grantsRes = await fetch(grantsUrl, { headers: authHeaders })
+      } catch (err) {
+        console.warn('[checkout/[id]] benefit-grants threw', {
+          checkoutId,
+          orderId,
+          customerId,
+          page,
+          err: err instanceof Error ? err.message : String(err),
+        })
+        break
+      }
+      if (!grantsRes.ok) {
         console.warn('[checkout/[id]] benefit-grants non-2xx', {
           checkoutId,
           orderId,
+          customerId,
+          page,
           status: grantsRes.status,
           body: await readBodyExcerpt(grantsRes),
         })
+        break
       }
-    } catch (err) {
-      console.warn('[checkout/[id]] benefit-grants threw', {
-        checkoutId,
-        orderId,
-        err: err instanceof Error ? err.message : String(err),
+      const grantsBody = (await grantsRes.json()) as {
+        items?: Array<Record<string, unknown>>
+        pagination?: { total_count?: number; max_page?: number }
+      }
+      const items = Array.isArray(grantsBody.items) ? grantsBody.items : []
+      lastPageReturned = page
+      totalScanned += items.length
+      if (page === 1 && items[0]) firstPageFirst = items[0]
+
+      // STRICT: only grants whose order_id matches this checkout's
+      // order. Early-exits the loop the moment we find one.
+      const match = items.find((grant) => {
+        const gid = pluck<string>(grant, 'order_id')
+        return typeof gid === 'string' && gid === orderId
       })
+      if (match) {
+        matchedGrant = match
+        break
+      }
+
+      // Stop walking once we've drained the result set.
+      if (items.length < PAGE_LIMIT) break
+      const maxPage = grantsBody.pagination?.max_page
+      if (typeof maxPage === 'number' && page >= maxPage) break
     }
+
+    if (matchedGrant) {
+      const licenseKeyId =
+        pluck<string>(matchedGrant, 'properties.license_key_id') ?? null
+      if (!licenseKeyId) {
+        const grantPropsKeys =
+          typeof matchedGrant.properties === 'object' && matchedGrant.properties
+            ? Object.keys(matchedGrant.properties as Record<string, unknown>)
+            : []
+        console.warn('[checkout/[id]] matching grant has no license_key_id', {
+          checkoutId,
+          orderId,
+          grantKeys: Object.keys(matchedGrant),
+          grantPropsKeys,
+        })
+      } else {
+        try {
+          const lkRes = await fetch(
+            `${POLAR_API_BASE}/v1/license-keys/${encodeURIComponent(licenseKeyId)}`,
+            { headers: authHeaders },
+          )
+          if (lkRes.ok) {
+            const lkData = (await lkRes.json()) as Record<string, unknown>
+            const key =
+              typeof lkData.key === 'string' ? lkData.key.trim() : ''
+            if (key) {
+              licenseKey = key
+            } else {
+              console.warn('[checkout/[id]] license-key resource lacks key', {
+                checkoutId,
+                orderId,
+                licenseKeyId,
+                topKeys: Object.keys(lkData),
+              })
+            }
+          } else {
+            console.warn('[checkout/[id]] license-key fetch non-2xx', {
+              checkoutId,
+              orderId,
+              licenseKeyId,
+              status: lkRes.status,
+              body: await readBodyExcerpt(lkRes),
+            })
+          }
+        } catch (err) {
+          console.warn('[checkout/[id]] license-key fetch threw', {
+            checkoutId,
+            orderId,
+            licenseKeyId,
+            err: err instanceof Error ? err.message : String(err),
+          })
+        }
+      }
+    } else if (lastPageReturned > 0) {
+      // Diagnostic: ran the paginated loop but never found a grant
+      // tagged with this order_id. Logs how much we scanned plus the
+      // shape of the first grant so we can spot field changes.
+      const firstProps =
+        firstPageFirst && typeof firstPageFirst.properties === 'object'
+          ? Object.keys(firstPageFirst.properties as Record<string, unknown>)
+          : []
+      console.warn(
+        '[checkout/[id]] no benefit-grant matched order_id',
+        {
+          checkoutId,
+          orderId,
+          customerId,
+          pagesScanned: lastPageReturned,
+          grantsScanned: totalScanned,
+          firstGrantKeys: firstPageFirst ? Object.keys(firstPageFirst) : [],
+          firstGrantPropertiesKeys: firstProps,
+        },
+      )
+    }
+  } else if (!licenseKey && orderId && !customerId) {
+    // Diagnostic: we have an order but couldn't pluck a customer id
+    // from the checkout. Without it we can't query benefit-grants.
+    // Most likely cause: Polar API shape change for the checkout
+    // response's customer fields.
+    console.warn('[checkout/[id]] cannot list grants: no customer_id', {
+      checkoutId,
+      orderId,
+      checkoutTopKeys: Object.keys(checkoutData ?? {}),
+    })
   }
 
   // No customer-list / email fallbacks. Steps 1–4.5 above are the
