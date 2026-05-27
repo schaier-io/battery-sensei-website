@@ -53,12 +53,37 @@ export const CUSTOMER_PORTAL_URL =
 export const LIFETIME_DISCOUNT_CODE = 'ZENMODE'
 export const LIFETIME_DISCOUNT_MAX_REDEMPTIONS = 500
 
-/** Lifetime price (in the visitor's currency) is `yearly + 1`. */
-export const LIFETIME_DELTA_OVER_YEARLY = 1
-/** Lifetime "original" / strikethrough price is `yearly × 3`. */
-export const LIFETIME_FULL_MULTIPLIER = 3
+/**
+ * Lifetime fallback prices, per currency. ONLY rendered before the
+ * live `/api/price` round-trip lands (SSR, first-paint window, or
+ * when the Polar API call fails). Live Polar preview overrides
+ * these everywhere once it returns. Keep in sync with the Polar
+ * dashboard configuration for the Lifetime product, or the slow-
+ * connection FOIT flashes quotes the wrong number for a beat.
+ *
+ * Source of truth (Polar Lifetime product + ZENMODE discount):
+ *   Currency │  Full   │  Discount removes  │  Final
+ *   ─────────┼─────────┼────────────────────┼────────
+ *   USD      │ $11.99  │  $7.50             │  $4.49
+ *   EUR      │ €10.99  │  €7.00             │  €3.99
+ *   CZK      │ 205 Kč  │  110 Kč            │  95 Kč
+ *
+ * The "discounted" value is what buyers pay during the first-500
+ * window. "full" is the strikethrough anchor (and the headline once
+ * ZENMODE is exhausted).
+ */
+export const LIFETIME_FALLBACK: Record<
+  string,
+  { discounted: number; full: number }
+> = {
+  USD: { discounted: 4.49, full: 11.99 },
+  EUR: { discounted: 3.99, full: 10.99 },
+  CZK: { discounted: 95, full: 205 },
+}
+/** Used when the visitor's currency isn't in LIFETIME_FALLBACK. */
+export const LIFETIME_FALLBACK_DEFAULT = LIFETIME_FALLBACK.USD
 
-export const SUPPORT_PRICE_USD = 3.99
+export const SUPPORT_PRICE_USD = 2.99
 export const TRIAL_DAYS = 5
 
 export type CheckoutUrlOptions = {

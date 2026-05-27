@@ -12,23 +12,25 @@ const supportingMeta: Array<{
   key: string
   seal: string
   icon: typeof BatteryCharging
-  chip: typeof Plane | null
-  mockup: null | (() => JSX.Element)
+  mockup: () => JSX.Element
   href: string | null
 }> = [
   {
     key: 'chargeLimit',
     seal: '保',
     icon: BatteryCharging,
-    chip: Plane,
-    mockup: null,
+    // Was `mockup: null` — the card stood awkwardly empty next to its
+    // siblings. The new ChargeLimitMockup is a compact horizontal
+    // scale showing the 80% cap with the 80→100 region drawn as
+    // dashed "Travel Mode" overlay. Same height envelope as the
+    // other two mockups so the row aligns at the baseline.
+    mockup: ChargeLimitMockup,
     href: '/features/travel-mode',
   },
   {
     key: 'glance',
     seal: '見',
     icon: Eye,
-    chip: null,
     mockup: MenuBarGlanceMockup,
     href: null,
   },
@@ -36,7 +38,6 @@ const supportingMeta: Array<{
     key: 'meetings',
     seal: '会',
     icon: CalendarClock,
-    chip: Lock,
     mockup: MeetingGuardMockup,
     href: '/features/meeting-battery-guard',
   },
@@ -110,97 +111,137 @@ function MenuBarGlanceMockup() {
 }
 
 /**
- * Compact mockup for the Meeting Battery Guard feature card. Mirrors the
- * loss-aversion-forward warning the macOS app surfaces 30/15/5 min before
- * a critical meeting: a small calendar entry strip + the warning copy
- * Sensei would actually show. Kept deliberately quiet — the privacy chip
- * does the heavy lifting, the mockup just shows the shape of the alert.
+ * Charge Limit + Travel Mode mockup. A compact horizontal capacity
+ * scale: the 0–80% range is filled solid ink (the cap Sensei holds
+ * in the background), the 80–100% range is drawn as a dashed "Travel
+ * Mode" overlay (the one-tap full charge for flights). A pill below
+ * names the action. Same vertical envelope as the other two
+ * supporting mockups so the row of three cards aligns at the
+ * baseline rather than two having visuals and one being empty.
+ */
+function ChargeLimitMockup() {
+  const { t } = useTranslation()
+  return (
+    <div className="mt-5 w-full">
+      <div className="mb-2 flex items-baseline justify-between text-[10px] uppercase tracking-[0.18em] text-sumi-soft">
+        <span>{t('features.chargeLimit.scaleLabel')}</span>
+        <span className="tabular-nums font-semibold text-sumi">80%</span>
+      </div>
+      {/* Cap bar — solid ink 0→80, dashed pattern 80→100. The vertical
+          tick at the cap line draws the eye to where Sensei actually
+          stops the charge. h-2.5 keeps it visually quiet beside the
+          other mockups which already carry text content. */}
+      <div
+        className="relative h-2.5 w-full overflow-hidden rounded-full border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_45%,#fff)]"
+        role="presentation"
+        aria-hidden
+      >
+        {/* Solid fill to the cap. */}
+        <div
+          className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-sumi to-[color-mix(in_oklab,var(--sumi)_72%,transparent)]"
+          style={{ width: '80%' }}
+        />
+        {/* Dashed Travel-Mode region above the cap. */}
+        <div
+          className="absolute inset-y-0 right-0"
+          style={{
+            width: '20%',
+            background:
+              'repeating-linear-gradient(135deg, color-mix(in oklab, var(--kin) 60%, transparent) 0 2px, transparent 2px 5px)',
+          }}
+        />
+        {/* Cap marker (vertical hairline + dot). */}
+        <span
+          className="absolute top-[-3px] bottom-[-3px] w-px bg-hinomaru"
+          style={{ left: '80%' }}
+        />
+        <span
+          className="absolute h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-hinomaru"
+          style={{ left: '80%', top: 'calc(50% - 3px)' }}
+        />
+      </div>
+      {/* 0 / 80 / 100 ticks. Each label is absolutely positioned so
+          the "80" sits exactly under the cap marker above (left:80%
+          + translateX(-50%) centers the digits on the tick line)
+          regardless of card width. The previous flex+margin-auto
+          hack collapsed at narrow widths and let "80" drift off
+          the cap line. */}
+      <div className="relative mt-1.5 h-3 text-[9px] tabular-nums uppercase tracking-[0.18em] text-nezumi">
+        <span className="absolute left-0">0</span>
+        <span
+          className="absolute -translate-x-1/2 font-semibold text-sumi-soft"
+          style={{ left: '80%' }}
+        >
+          80
+        </span>
+        <span className="absolute right-0">100</span>
+      </div>
+      {/* Travel Mode action row — one line, plane glyph, the verb. */}
+      <div className="mt-3 inline-flex items-center gap-2 rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] px-2.5 py-1.5 text-[11px] text-sumi-soft">
+        <Plane className="h-3 w-3 text-hinomaru" strokeWidth={1.8} aria-hidden />
+        <span>
+          <span className="font-medium text-sumi">
+            {t('features.chargeLimit.travelLabel')}
+          </span>{' '}
+          {t('features.chargeLimit.travelHint')}
+        </span>
+      </div>
+    </div>
+  )
+}
+
+/**
+ * Meeting Battery Guard mockup. Was four stacked blocks (calendar
+ * entry, warning card, reminder buckets, footer chip) — too much
+ * detail for a homepage card. Collapsed to a single combined
+ * meeting+warning panel with an inline on-device chip below: the
+ * shape of the warning is what matters, not enumerating every
+ * reminder bucket. The dedicated /features/meeting-battery-guard
+ * page still goes deep for visitors who click Learn more.
  */
 function MeetingGuardMockup() {
   const { t } = useTranslation()
   return (
-    <div className="mt-5 mx-auto w-full max-w-[320px]">
-      <div className="rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,#fff)] px-3 py-2.5 shadow-[0_1px_0_rgba(255,255,255,0.5)_inset,0_8px_18px_-12px_rgba(28,26,23,0.22)]">
-        <div className="flex items-center gap-2.5">
-          <CalendarClock className="h-3.5 w-3.5 text-sumi-soft" strokeWidth={1.8} aria-hidden />
-          <span className="text-[10px] uppercase tracking-[0.18em] text-sumi-soft">
-            {t('features.meetings.nextOnCalendar')}
-          </span>
-          <span className="ml-auto rounded-sm bg-sumi/8 px-1.5 py-0.5 text-[9px] font-semibold tracking-wider text-sumi-soft">
-            {t('features.meetings.duration')}
+    <div className="mt-5 w-full">
+      <div className="rounded-md border border-hinomaru/25 bg-[color-mix(in_oklab,var(--hinomaru)_5%,var(--washi))] p-3 shadow-[0_1px_0_rgba(255,255,255,0.5)_inset]">
+        {/* Header row: kicker on the left, meeting time on the right.
+            Reads "NEXT ON CALENDAR · 3:00 PM" as a single line of
+            metadata, no border, no separator chip. */}
+        <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.18em] text-sumi-soft">
+          <CalendarClock className="h-3 w-3" strokeWidth={1.8} aria-hidden />
+          {t('features.meetings.nextOnCalendar')}
+          <span className="ml-auto font-semibold normal-case tracking-[0.04em] text-sumi">
+            {t('features.meetings.startsAt')}
           </span>
         </div>
-        <p className="display-title mt-1.5 text-[15px] font-semibold text-sumi leading-tight">
+        {/* Meeting title — display-serif so it stands out as the
+            subject of the alert. */}
+        <p className="display-title mt-1 text-[14px] font-semibold leading-tight text-sumi">
           {t('features.meetings.meetingTitle')}
         </p>
-      </div>
-
-      <div className="mt-2 rounded-md border border-hinomaru/30 bg-[color-mix(in_oklab,var(--hinomaru)_6%,var(--washi))] px-3 py-2.5 shadow-[0_1px_0_rgba(255,255,255,0.5)_inset]">
-        <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.18em] text-hinomaru">
-          <span className="inline-block h-1.5 w-1.5 rounded-full bg-hinomaru" />
-          {t('features.meetings.warnHeading')}
+        {/* Warning + fix, separated from the meta by a thin hinomaru
+            rule. The dot anchors the eye to the warning verb. */}
+        <div className="mt-2 border-t border-hinomaru/20 pt-2">
+          <p className="flex items-start gap-1.5 text-[12px] leading-snug text-sumi">
+            <span
+              aria-hidden
+              className="mt-[5px] inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-hinomaru"
+            />
+            <span>
+              <span className="font-semibold text-hinomaru">
+                {t('features.meetings.warnShort')}
+              </span>{' '}
+              {t('features.meetings.warnFix')}
+            </span>
+          </p>
         </div>
-        <p
-          className="mt-1.5 text-[13px] font-medium leading-snug text-sumi [&_strong]:font-semibold [&_strong]:text-hinomaru"
-          dangerouslySetInnerHTML={{
-            __html: t('features.meetings.warnBody', { interpolation: { escapeValue: false } }).replace(
-              /<0>([\s\S]*?)<\/0>/,
-              '<strong>$1</strong>',
-            ),
-          }}
-        />
-        <p className="mt-1 text-[11px] text-sumi-soft leading-snug">
-          {t('features.meetings.warnFix')}
-        </p>
       </div>
-
-      <div className="mt-2.5 rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,#fff)] px-3 py-2">
-        <div className="flex items-center justify-between text-[9px] uppercase tracking-[0.18em] text-sumi-soft">
-          <span className="font-jp normal-case tracking-[0.3em] text-sumi-soft/80">
-            予 告
-          </span>
-          <span>{t('features.meetings.remindsYou')}</span>
-        </div>
-        <ol
-          aria-label={t('features.meetings.remindsYou')}
-          className="mt-1.5 grid grid-cols-4 items-end gap-1 text-center"
-        >
-          {[
-            { v: '30', tone: 'sumi-soft' },
-            { v: '15', tone: 'sumi-soft' },
-            { v: '5', tone: 'hinomaru' },
-            { v: '1', tone: 'hinomaru' },
-          ].map(({ v, tone }, i) => (
-            <li key={v} className="flex flex-col items-center gap-1">
-              <span
-                aria-hidden
-                className={`h-1 w-full rounded-full ${
-                  tone === 'hinomaru'
-                    ? 'bg-hinomaru/70'
-                    : 'bg-sumi-soft/35'
-                }`}
-                style={{ opacity: 0.55 + i * 0.12 }}
-              />
-              <span
-                className={`tabular-nums text-[10px] font-semibold ${
-                  tone === 'hinomaru' ? 'text-hinomaru' : 'text-sumi'
-                }`}
-              >
-                {t('features.meetings.minBefore', { min: v })}
-              </span>
-            </li>
-          ))}
-        </ol>
-      </div>
-
-      <div className="mt-2 flex items-center justify-between text-[9px] text-sumi-soft">
-        <span className="inline-flex items-center gap-1">
-          <Lock className="h-2.5 w-2.5" strokeWidth={2} aria-hidden />
-          {t('features.meetings.onDevice')}
-        </span>
-        <span className="font-jp tracking-[0.3em] text-hinomaru/70">
-          会 議
-        </span>
+      {/* On-device privacy line — outside the panel, inline footer
+          treatment so it reads as a static guarantee rather than part
+          of the live alert. */}
+      <div className="mt-2 flex items-center gap-1.5 text-[10px] uppercase tracking-[0.18em] text-nezumi">
+        <Lock className="h-2.5 w-2.5" strokeWidth={2} aria-hidden />
+        {t('features.meetings.onDevice')}
       </div>
     </div>
   )
@@ -451,10 +492,23 @@ export function Features() {
         </article>
       </Reveal>
 
+      {/* Supporting-card layout rules (revised in this pass):
+            1. Mockup leads. Visual right after the title, body and
+               learn-more underneath. Was: body-then-mockup-at-bottom
+               which buried the explanation image and made glance's
+               menu-bar mockup invisible above the fold.
+            2. Per-card "chip" affordance removed. The mockups now
+               carry that information directly (Travel-Mode pill in
+               the charge-limit bar, on-device line under the meeting
+               panel, the menu-bar mockup IS the glance demo) and
+               having both was redundant typography weight.
+            3. Padding tightened p-7 → p-6 and the kanji + icon row
+               sits closer to the title (mt-6 → mt-4) so the three
+               cards align at the baseline rather than having the
+               chargeLimit card tower over the other two. */}
       <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {supportingMeta.map(({ key, seal, icon: Icon, chip: ChipIcon, mockup: Mockup, href }, i) => {
+        {supportingMeta.map(({ key, seal, icon: Icon, mockup: Mockup, href }, i) => {
           const titleSub = t(`features.${key}.titleSub`, { defaultValue: '' })
-          const chipLabel = t(`features.${key}.chip`, { defaultValue: '' })
           // At the 2-col breakpoint we have 3 cards: rows 1 (cards 1+2) and
           // row 2 (card 3 alone). Spanning the third card across both columns
           // there closes the dead space under card 2. At 3-col (lg+) the
@@ -466,58 +520,47 @@ export function Features() {
               delay={140 + i * 100}
               className={isOrphan ? 'h-full sm:col-span-2 lg:col-span-1' : 'h-full'}
             >
-              {/* No TiltCard — same reasoning as the featured card above.
-                  The 3D rotation was clipping the Mockup behind a fresh
-                  stacking context and intercepting the Learn-more click
-                  on the Meetings card. Subtle hover still comes from
-                  the paper-card class. */}
-              <article className="paper-card p-7 h-full flex flex-col">
-                  <div className="flex items-start justify-between">
-                    <Icon className="h-6 w-6 text-sumi" strokeWidth={1.5} />
-                    <span className="kanji-accent font-jp text-2xl text-hinomaru/80 leading-none">
-                      {seal}
+              <article className="paper-card p-6 h-full flex flex-col">
+                <div className="flex items-start justify-between">
+                  <Icon className="h-6 w-6 text-sumi" strokeWidth={1.5} />
+                  <span className="kanji-accent font-jp text-2xl text-hinomaru/80 leading-none">
+                    {seal}
+                  </span>
+                </div>
+                <h3 className="display-title mt-4 text-[1.25rem] font-medium text-sumi leading-tight">
+                  {t(`features.${key}.title`)}
+                  {titleSub && (
+                    <span className="block italic text-sumi-soft font-normal text-[0.9rem] mt-0.5 leading-snug">
+                      {titleSub}
                     </span>
+                  )}
+                </h3>
+                {/* Mockup placed directly under the title so it reads
+                    as the visual claim, with the body underneath as
+                    the explanation. Overflow guard for the menu-bar
+                    glance which can hit the card edge on narrow
+                    breakpoints. */}
+                <div className="overflow-hidden">
+                  <Mockup />
+                </div>
+                <p className="mt-4 text-[0.875rem] leading-[1.55] text-sumi-soft">
+                  {t(`features.${key}.body`)}
+                </p>
+                {href && (
+                  <div className="mt-auto pt-4">
+                    <Link
+                      to={href}
+                      className="group/learn inline-flex items-center gap-1.5 text-[12px] font-medium text-hinomaru/85 hover:text-hinomaru transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-hinomaru/30 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)] rounded-sm"
+                    >
+                      {t('common.learnMore')}
+                      <ArrowUpRight
+                        className="h-3.5 w-3.5 transition-transform duration-[280ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover/learn:translate-x-0.5 group-hover/learn:-translate-y-0.5"
+                        strokeWidth={2}
+                        aria-hidden
+                      />
+                    </Link>
                   </div>
-                  <h3 className="display-title mt-6 text-[1.3125rem] font-medium text-sumi">
-                    {t(`features.${key}.title`)}
-                    {titleSub && (
-                      <span className="block italic text-sumi-soft font-normal text-[0.95rem] mt-0.5 leading-snug">
-                        {titleSub}
-                      </span>
-                    )}
-                  </h3>
-                  <p className="mt-1.5 font-jp text-xs text-nezumi tracking-wider">
-                    {t(`features.${key}.jp`)}
-                  </p>
-                  <p className="mt-4 text-[0.9375rem] leading-[1.6] text-sumi-soft">
-                    {t(`features.${key}.body`)}
-                  </p>
-                  <div className="mt-auto pt-5 flex flex-col gap-4">
-                    {ChipIcon && chipLabel && (
-                      <div className="inline-flex w-fit items-center gap-2 rounded-md bg-[var(--washi-deep)] px-3 py-1.5 text-[0.7rem] text-sumi">
-                        <ChipIcon className="h-3.5 w-3.5 shrink-0" strokeWidth={1.6} />
-                        <span className="truncate">{chipLabel}</span>
-                      </div>
-                    )}
-                    {Mockup && (
-                      <div className="overflow-hidden">
-                        <Mockup />
-                      </div>
-                    )}
-                    {href && (
-                      <Link
-                        to={href}
-                        className="group/learn mt-1 inline-flex items-center gap-1.5 text-[12px] font-medium text-hinomaru/85 hover:text-hinomaru transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-hinomaru/30 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)] rounded-sm"
-                      >
-                        {t('common.learnMore')}
-                        <ArrowUpRight
-                          className="h-3.5 w-3.5 transition-transform duration-[280ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover/learn:translate-x-0.5 group-hover/learn:-translate-y-0.5"
-                          strokeWidth={2}
-                          aria-hidden
-                        />
-                      </Link>
-                    )}
-                  </div>
+                )}
               </article>
             </Reveal>
           )

@@ -79,7 +79,10 @@
       "titleSub": "mit Travel Mode",
       "jp": "長く保つ・旅",
       "body": "Apple sagt: Lithium-Ionen-Akkus altern schneller, je länger sie bei 100% stehen. Wählen Sie eine Grenze (wir empfehlen 80%). Sensei hält sie im Hintergrund. Fliegen Sie morgen? Ein Klick für eine volle Ladung — Ihre Grenze kehrt zurück, sobald Sie wieder zu Hause sind.",
-      "chip": "Travel Mode · volle Ladung vor der Reise"
+      "chip": "Travel Mode · volle Ladung vor der Reise",
+      "scaleLabel": "Ladelimit",
+      "travelLabel": "Travel Mode",
+      "travelHint": "hebt es nur für die Reise auf 100 %"
     },
     "glance": {
       "title": "Ein Blick, die ganze Geschichte",
@@ -101,8 +104,10 @@
       "chip": "Premium · Nur lesend, Titel bleiben auf Ihrem Mac",
       "nextOnCalendar": "Als Nächstes im Kalender",
       "duration": "15:00 · 60 Min.",
+      "startsAt": "15:00",
       "meetingTitle": "Wöchentliches Standup",
       "warnHeading": "Akku überlebt das Meeting nicht",
+      "warnShort": "Hält nicht durch.",
       "warnBody": "Ihr Laptop schaltet sich nach <0>17 Min.</0> im Standup ab. Jetzt anschließen.",
       "warnFix": "22 Min. am Ladegerät und Sie kommen durch.",
       "remindsYou": "Erinnert Sie um",
@@ -322,6 +327,7 @@
     "backToHome": "Zurück zur Startseite",
     "managePurchase": "Kauf verwalten",
     "checkoutHint": "Bestellung #{{id}}",
+    "orderLabel": "Bestellung",
     "delivery": {
       "label": "Sensei installieren",
       "from": "Hol dir die aktuelle macOS-Version, dann trägst du deinen Schlüssel unter <0>Einstellungen → Premium</0> ein.",
@@ -622,13 +628,21 @@
     },
     "fields": {
       "name": "Ihr Name",
+      "namePlaceholder": "Wie dürfen wir Sie ansprechen?",
       "email": "E-Mail",
+      "emailPlaceholder": "du@beispiel.de",
       "subject": "Betreff",
       "subjectHint": "Optional, hilft uns aber beim Sortieren.",
       "subjectPlaceholderBilling": "Rückerstattung für Bestellung LMS-…",
       "subjectPlaceholder": "In einer Zeile.",
       "message": "Nachricht",
       "messageHint": "Ein, zwei Sätze reichen. Geben Sie Ihre Lizenz-E-Mail an, wenn es eine Rechnungsfrage ist.",
+      "messagePlaceholder": {
+        "feature": "Ich würde mir wünschen, dass Sensei …",
+        "bug": "Wenn ich X mache, zeigt Sensei Y. Schritte zum Reproduzieren + macOS-Version helfen uns enorm.",
+        "billing": "Bestellung #…, ich brauche …",
+        "other": "Hallo! Ich wollte fragen, …"
+      },
       "company": "Unternehmen"
     },
     "formHelp": "Das Formular sendet Ihre Nachricht an den Support-Posteingang von Battery Sensei. Wir speichern keine Einreichungen und geben sie nicht an Dritte weiter.",
@@ -663,7 +677,9 @@
     },
     "before": {
       "title": "Bevor Sie schreiben",
-      "body": "Die meisten Fragen sind bereits in den <0>FAQ</0> beantwortet. Geht es um eine Rückerstattung, geben Sie bitte Ihre Bestell-ID an (Polar mailt sie beim Kauf), damit wir ohne Rückfragen erstatten können."
+      "faqHint": "Die meisten Fragen sind dort schon beantwortet, <0>einmal nachsehen lohnt sich</0>.",
+      "refundLabel": "Rückerstattung",
+      "refundHint": "Geben Sie Ihre Bestell-ID an (Polar mailt sie beim Kauf), damit wir ohne Rückfragen erstatten können."
     }
   },
   "download": {

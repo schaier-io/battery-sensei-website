@@ -416,6 +416,17 @@ async function fetchPolarPreview(
       has_discount: hasDiscount,
       tax_formatted: lifeTax > 0 ? formatAmount(lifeTax, quotedCurrency) : '',
     }
+  } else if (lifetimeProductId) {
+    // Configured but the preview call didn't return a valid checkout.
+    // Surface it loudly — silent failure here is what makes the page
+    // quietly fall back to the stale heuristic and show wrong prices.
+    console.warn('[price] lifetime preview missing or invalid', {
+      currency,
+      previewCountry,
+      lifetimeProductId,
+      hasDiscountId: Boolean(discountId),
+      gotCheckout: Boolean(lifetimeCheckoutWithDiscount),
+    })
   }
 
   return payload
@@ -453,7 +464,17 @@ export async function GET(request: Request): Promise<Response> {
 
   if (result.ok) {
     cache.set(cacheKey, { expiresAt: now + CACHE_TTL_MS, payload: result })
-    return json(result, 200, { 'x-price-cache': 'miss' })
+    // `x-price-lifetime` makes it possible to verify from the browser
+    // network panel whether the live Polar lifetime block was wired
+    // up. `present` means the homepage card will show Polar's exact
+    // figures; `missing` means the client will fall back to the
+    // explicit LIFETIME_FALLBACK table in src/lib/polar.ts (which is
+    // close but not Polar-quoted). See the warn line in
+    // fetchPolarPreview for the reason.
+    return json(result, 200, {
+      'x-price-cache': 'miss',
+      'x-price-lifetime': result.lifetime ? 'present' : 'missing',
+    })
   }
 
   // Fallbacks are not cached — the next request gets another chance to

@@ -10,8 +10,8 @@ import {
   type PriceEntry,
 } from './pricing'
 import {
-  LIFETIME_DELTA_OVER_YEARLY,
-  LIFETIME_FULL_MULTIPLIER,
+  LIFETIME_FALLBACK,
+  LIFETIME_FALLBACK_DEFAULT,
 } from './polar'
 
 export type DisplayPrice = PriceEntry & {
@@ -275,22 +275,28 @@ export function useLifetimePrice(currency?: 'USD' | 'EUR' | 'CZK'): LifetimePric
     }
   }
 
-  // Fallback derivation — only when the lifetime product isn't wired
-  // up server-side. Wrong for non-USD currencies; the live path above
-  // is the correct one once `POLAR_PRODUCT_ID_LIFETIME` is set.
-  const discountedAmount = yearly.amount + LIFETIME_DELTA_OVER_YEARLY
-  const originalAmount = yearly.amount * LIFETIME_FULL_MULTIPLIER
+  // Fallback — when the live Polar lifetime preview isn't available
+  // (env var missing, network failure, etc.). Reads explicit per-
+  // currency figures that mirror the Polar dashboard config; this
+  // replaced the old `yearly + 1` / `yearly × 3` heuristic, which
+  // hard-coded a 3× anchor that no longer matches the actual
+  // Lifetime price (Lifetime is 4× yearly now, not 3×, and the
+  // discount is a fixed $7.50 / €7.00 / 110 Kč drop rather than a
+  // simple $1 delta).
+  const fallback =
+    LIFETIME_FALLBACK[yearly.currency.toUpperCase()] ??
+    LIFETIME_FALLBACK_DEFAULT
 
   return {
     discounted: {
       ...base,
-      amount: discountedAmount,
-      formatted: formatPriceAmount(yearly, discountedAmount),
+      amount: fallback.discounted,
+      formatted: formatPriceAmount(yearly, fallback.discounted),
     },
     original: {
       ...base,
-      amount: originalAmount,
-      formatted: formatPriceAmount(yearly, originalAmount),
+      amount: fallback.full,
+      formatted: formatPriceAmount(yearly, fallback.full),
     },
     hasDiscount: true,
   }

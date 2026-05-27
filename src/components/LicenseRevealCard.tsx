@@ -56,18 +56,33 @@ const POLL_INTERVAL_MS = 10_000
 // stall. List does NOT loop — the last line is the resting state.
 const SLOGAN_INTERVAL_MS = 3400
 
+// Minimum wait before flipping the strip to the key reveal, even when
+// Polar returns the key on the first poll. With the bow-video buffer
+// the API call usually lands ready, but a hard cut from "preparing"
+// to a fully revealed key reads as a glitch. Holding for ~4 s lets
+// the spinner spin and at least two slogans cycle so the reveal
+// feels earned, not snatched away from the spinner.
+const MIN_HOLD_MS = 4000
+
 // Fallback used only if the locale ships without the slogan array
 // (broken JSON, mid-deploy gap, etc.) so the strip never blanks.
 const FALLBACK_SLOGAN = 'Polar is preparing the paperwork.'
 
 export function LicenseRevealCard({
   checkoutId: checkoutIdProp,
+  onOrderId,
 }: {
   /** Optional — when the parent already pulled the id off the URL and
    *  stripped the query string, pass it in here so the card doesn't
    *  have to re-read window.location. The card falls back to reading
    *  the URL itself when no prop is given (legacy callers). */
   checkoutId?: string | undefined
+  /** Optional callback fired once the polling resolves an order id
+   *  (and again if the order id ever changes for the same checkout,
+   *  which shouldn't happen but the guard is cheap). Used by the
+   *  thank-you page to surface the order id in the hero area, not
+   *  just inside the card header. */
+  onOrderId?: (orderId: string) => void
 }) {
   const { t } = useTranslation()
   const [state, setState] = useState<DeliveryState>({ phase: 'loading' })
@@ -79,13 +94,41 @@ export function LicenseRevealCard({
 
     let cancelled = false
     let timeoutId: number | undefined
+    let holdTimeoutId: number | undefined
+    const pollStart = Date.now()
 
     cancelRef.current = () => {
       cancelled = true
       if (timeoutId !== undefined) window.clearTimeout(timeoutId)
+      if (holdTimeoutId !== undefined) window.clearTimeout(holdTimeoutId)
     }
 
     setState({ phase: 'loading' })
+
+    /** Flip to the ready state, deferring if we're still inside the
+     *  minimum hold window. While deferred we sit in the provisioning
+     *  state (with the real customer/order data already attached) so
+     *  the spinner + slogan rotator keep playing and the reveal lands
+     *  as a clean cross-fade rather than a snap. */
+    const flipToReady = (
+      ready: Extract<DeliveryState, { phase: 'ready' }>,
+    ): void => {
+      if (cancelled) return
+      const elapsed = Date.now() - pollStart
+      if (elapsed >= MIN_HOLD_MS) {
+        setState(ready)
+        return
+      }
+      setState({
+        phase: 'provisioning',
+        orderId: ready.orderId,
+        customerEmail: ready.customerEmail,
+        customerPortalUrl: ready.customerPortalUrl,
+      })
+      holdTimeoutId = window.setTimeout(() => {
+        if (!cancelled) setState(ready)
+      }, MIN_HOLD_MS - elapsed)
+    }
 
     const attempt = async (): Promise<void> => {
       try {
@@ -114,7 +157,7 @@ export function LicenseRevealCard({
 
         const licenseKey = String(data.licenseKey ?? '').trim()
         if (licenseKey) {
-          setState({
+          flipToReady({
             phase: 'ready',
             licenseKey,
             orderId,
@@ -173,6 +216,28 @@ export function LicenseRevealCard({
     }
   }, [checkoutIdProp, startPolling])
 
+  // Surface the order id to the parent the moment polling resolves
+  // one. Cached in a ref so we only call the parent's callback when
+  // the id ACTUALLY changes (each re-render of the same state would
+  // otherwise fire it). The callback ref pattern keeps the effect
+  // closed over the latest callback identity without re-firing on
+  // every parent render.
+  const onOrderIdRef = useRef(onOrderId)
+  onOrderIdRef.current = onOrderId
+  const lastReportedOrderIdRef = useRef<string | null>(null)
+  useEffect(() => {
+    const id =
+      state.phase === 'ready' ||
+      state.phase === 'provisioning' ||
+      state.phase === 'expired'
+        ? state.orderId
+        : null
+    if (id && id !== lastReportedOrderIdRef.current) {
+      lastReportedOrderIdRef.current = id
+      onOrderIdRef.current?.(id)
+    }
+  }, [state])
+
   if (state.phase === 'missing') return null
 
   // Pull the order id out of the active state for the header chip.
@@ -188,7 +253,12 @@ export function LicenseRevealCard({
       aria-label={t('thanks.delivery.label')}
       className="mx-auto max-w-2xl px-5 sm:px-6"
     >
-      <div className="mx-auto w-full max-w-[460px] overflow-hidden rounded-2xl border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,#fff)] shadow-[0_1px_0_rgba(255,255,255,0.5)_inset,0_30px_60px_-32px_rgba(28,26,23,0.22)]">
+      {/* Card frame mounts with a soft rise + scale (see
+          .thanks-card-mount in styles.css). Internal sections layer
+          their own staggered rises on top via inline animationDelay
+          so the eye walks the card top → bottom rather than landing
+          on everything at once. */}
+      <div className="thanks-card-mount mx-auto w-full max-w-[460px] overflow-hidden rounded-2xl border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,#fff)] shadow-[0_1px_0_rgba(255,255,255,0.5)_inset,0_30px_60px_-32px_rgba(28,26,23,0.22)]">
         <Header orderId={orderId} />
         <InstallSection />
         <Hairline />
@@ -235,11 +305,15 @@ type DeliveryState =
 /** Order id chip. Sits in the very top of the card so the buyer always
  *  has something concrete to quote in support, regardless of which
  *  delivery state they're looking at. Quiet typography — this is
- *  reference data, not a headline. */
+ *  reference data, not a headline. First in the stagger sequence
+ *  (120 ms after the card frame mounts). */
 function Header({ orderId }: { orderId: string | null }) {
   if (!orderId) return null
   return (
-    <div className="flex items-center justify-end gap-2 border-b border-[color-mix(in_oklab,var(--line)_60%,transparent)] px-5 py-2 sm:px-6">
+    <div
+      className="thanks-section-rise flex items-center justify-end gap-2 border-b border-[color-mix(in_oklab,var(--line)_60%,transparent)] px-5 py-2 sm:px-6"
+      style={{ animationDelay: '120ms' }}
+    >
       <span className="text-[10px] uppercase tracking-[0.18em] text-nezumi">
         Order
       </span>
@@ -259,7 +333,10 @@ function Header({ orderId }: { orderId: string | null }) {
 function InstallSection() {
   const { t } = useTranslation()
   return (
-    <div className="px-5 pb-6 pt-5 sm:px-6 sm:pt-6">
+    <div
+      className="thanks-section-rise px-5 pb-6 pt-5 sm:px-6 sm:pt-6"
+      style={{ animationDelay: '240ms' }}
+    >
       <div className="flex items-center gap-3">
         {/* 装 = "install / equip". Matches the kanji-seal vocabulary
             used elsewhere on the site (基 features, 価 pricing, 鍵 key). */}
@@ -318,11 +395,16 @@ function InstallSection() {
 
 /** Soft horizontal rule between install and delivery sections. Edges
  *  fade so it reads as a divider, not a sharp cut. Inset from the card
- *  edge so the surface still feels continuous. */
+ *  edge so the surface still feels continuous. On mount it draws from
+ *  center outward (.thanks-hairline-draw) so the eye reads the join
+ *  forming, rather than a band appearing whole. */
 function Hairline() {
   return (
     <div className="px-5 sm:px-6">
-      <div className="h-px bg-gradient-to-r from-transparent via-[var(--line-strong)] to-transparent" />
+      <div
+        className="thanks-hairline-draw h-px bg-gradient-to-r from-transparent via-[var(--line-strong)] to-transparent"
+        style={{ animationDelay: '380ms' }}
+      />
     </div>
   )
 }
@@ -339,50 +421,42 @@ function DeliveryStrip({
   checkoutEmailHint: string | null
 }) {
   // Tinted surface so the strip reads as a different layer of the
-  // card without becoming a nested container. ~3% darker washi.
-  const surface =
-    'bg-[color-mix(in_oklab,var(--washi)_84%,var(--sumi)_4%)] px-5 py-4 sm:px-6'
-
-  if (state.phase === 'loading') {
-    return (
-      <div className={surface}>
-        <LoadingLine label={t('thanks.delivery.preparing')} />
+  // card without becoming a nested container. ~3% darker washi. Stays
+  // on the OUTER wrapper so the colored band doesn't flash during
+  // state changes — only the contents inside `<StripContent>` morph.
+  return (
+    <div
+      className="thanks-section-rise bg-[color-mix(in_oklab,var(--washi)_84%,var(--sumi)_4%)] px-5 py-4 sm:px-6"
+      style={{ animationDelay: '460ms' }}
+    >
+      {/* `key={state.phase}` makes React unmount + remount the inner
+          contents whenever the polling loop hands off between states,
+          which re-fires .thanks-strip-state's keyframe. The visual
+          result: each new state lands with a small breath rather than
+          a hard swap, and the surrounding card frame stays put. */}
+      <div key={state.phase} className="thanks-strip-state">
+        {state.phase === 'loading' && (
+          <LoadingLine label={t('thanks.delivery.preparing')} />
+        )}
+        {state.phase === 'provisioning' && (
+          <ProvisioningLine
+            customerEmail={state.customerEmail}
+            customerPortalUrl={state.customerPortalUrl}
+          />
+        )}
+        {state.phase === 'ready' && (
+          <KeyLine
+            licenseKey={state.licenseKey}
+            customerEmail={state.customerEmail ?? checkoutEmailHint}
+            customerPortalUrl={state.customerPortalUrl}
+          />
+        )}
+        {state.phase === 'expired' && (
+          <ExpiredLine customerPortalUrl={state.customerPortalUrl} />
+        )}
       </div>
-    )
-  }
-
-  if (state.phase === 'provisioning') {
-    return (
-      <div className={surface}>
-        <ProvisioningLine
-          customerEmail={state.customerEmail}
-          customerPortalUrl={state.customerPortalUrl}
-        />
-      </div>
-    )
-  }
-
-  if (state.phase === 'ready') {
-    return (
-      <div className={surface}>
-        <KeyLine
-          licenseKey={state.licenseKey}
-          customerEmail={state.customerEmail ?? checkoutEmailHint}
-          customerPortalUrl={state.customerPortalUrl}
-        />
-      </div>
-    )
-  }
-
-  if (state.phase === 'expired') {
-    return (
-      <div className={surface}>
-        <ExpiredLine customerPortalUrl={state.customerPortalUrl} />
-      </div>
-    )
-  }
-
-  return null
+    </div>
+  )
 }
 
 // ─── Strip variants ────────────────────────────────────────────────────────
@@ -472,19 +546,15 @@ function KeyLine({
 }) {
   const { t } = useTranslation()
   const [copied, setCopied] = useState(false)
-
-  // Mount-time fade so the key arrival reads as a quiet morph from
-  // the spinner state into the key, not a hard swap.
-  const [mounted, setMounted] = useState(false)
-  useEffect(() => {
-    const id = window.requestAnimationFrame(() => setMounted(true))
-    return () => window.cancelAnimationFrame(id)
-  }, [])
+  // Re-key the copy button on each successful copy so the bump
+  // keyframe replays even when the user clicks twice rapidly.
+  const [copyAnim, setCopyAnim] = useState(0)
 
   async function copy() {
     try {
       await navigator.clipboard.writeText(licenseKey)
       setCopied(true)
+      setCopyAnim((n) => n + 1)
       window.setTimeout(() => setCopied(false), 1800)
     } catch {
       /* clipboard API unavailable — user can select-all instead */
@@ -492,19 +562,14 @@ function KeyLine({
   }
 
   return (
-    <div
-      style={{
-        opacity: mounted ? 1 : 0,
-        transform: mounted ? 'translateY(0)' : 'translateY(4px)',
-        transitionProperty: 'opacity, transform',
-        transitionDuration: '520ms',
-        transitionTimingFunction: 'cubic-bezier(0.2, 0.8, 0.2, 1)',
-      }}
-    >
+    <div>
       <div className="flex items-center gap-3">
+        {/* Kanji lands like a hanko press: starts oversize + invisible,
+            settles to 1× with a quick easing curve (.thanks-kanji-stamp).
+            Reads as the key being "stamped" into existence. */}
         <span
           aria-hidden
-          className="font-jp text-base leading-none text-hinomaru/85 w-5 text-center"
+          className="thanks-kanji-stamp font-jp text-base leading-none text-hinomaru/85 w-5 text-center"
         >
           鍵
         </span>
@@ -520,9 +585,10 @@ function KeyLine({
           {licenseKey || '—'}
         </code>
         <button
+          key={copyAnim}
           type="button"
           onClick={copy}
-          className="btn-sumi inline-flex items-center justify-center gap-1.5 rounded-md px-3 text-[12px] font-medium shrink-0"
+          className={`btn-sumi inline-flex items-center justify-center gap-1.5 rounded-md px-3 text-[12px] font-medium shrink-0 transition-transform active:scale-[0.97] ${copied ? 'thanks-copy-bump' : ''}`}
           aria-label={t('thanks.delivery.copyAria')}
         >
           {copied ? (

@@ -186,7 +186,8 @@ async function fetchCheckoutLicense(
   }
 
   // 4. Have an order id but still no key? Fetch the full order — it
-  //    nests the benefit grants with the license key value.
+  //    may inline the benefit grant on some Polar API shapes. Even
+  //    when it doesn't, this confirms the order exists and is paid.
   if (!licenseKey && orderId) {
     try {
       const orderRes = await fetch(
@@ -213,110 +214,87 @@ async function fetchCheckoutLicense(
     }
   }
 
-  // 5. Last-ditch: list license keys directly. /v1/license-keys/
-  //    returns objects with the key value as a top-level `key` field.
-  //    Polar's default ordering is created_at DESC, so the most recent
-  //    grant (the one from THIS checkout) is the first item. This is
-  //    what reliably lands the key when the order-based lookups miss
-  //    (e.g. benefit grant arrives before the order's `items` are
-  //    populated). We try in this order:
-  //       a) filtered by customer_id — most precise
-  //       b) filtered by org only, then match by customer_email — fallback
-  //          when the customer_id pluck missed Polar's shape entirely
-  const customerId =
-    pluck<string>(
-      checkoutData,
-      'customer.id',
-      'customer_id',
-      'customer.uuid',
-      'customer_uuid',
-    ) ?? null
-  const customerEmail =
-    pluck<string>(checkoutData, 'customer.email', 'customer_email') ?? null
-
-  async function listLicenseKeys(
-    params: Record<string, string>,
-  ): Promise<Array<Record<string, unknown>>> {
-    const url = new URL(`${POLAR_API_BASE}/v1/license-keys/`)
-    for (const [k, v] of Object.entries(params)) url.searchParams.set(k, v)
-    url.searchParams.set('limit', '10')
-    const org = orgId()
-    if (org) url.searchParams.set('organization_id', org)
-    const res = await fetch(url, { headers: authHeaders })
-    if (!res.ok) {
-      console.warn('[checkout/[id]] license-keys list non-2xx', {
-        checkoutId,
-        url: url.toString(),
-        status: res.status,
-        body: await readBodyExcerpt(res),
-      })
-      return []
-    }
-    const body = (await res.json()) as { items?: Array<Record<string, unknown>> }
-    return Array.isArray(body.items) ? body.items : []
-  }
-
-  if (!licenseKey && customerId) {
+  // 4.5. The proper order-tied lookup. License keys live on benefit
+  //      grants (a separate Polar resource from orders), and the
+  //      benefit-grants endpoint accepts an order_id filter — so this
+  //      returns only the grants attached to THIS specific order, no
+  //      matter how many other purchases the customer has made.
+  //
+  //      The license-key value is nested under `properties.license_key`
+  //      in the grant object. We try a few path variants to absorb
+  //      shape changes between Polar releases.
+  if (!licenseKey && orderId) {
     try {
-      const items = await listLicenseKeys({ customer_id: customerId })
-      const first = items[0]
-      if (first && typeof first.key === 'string') {
-        licenseKey = first.key
-      } else if (items.length === 0) {
-        console.warn('[checkout/[id]] license-keys empty for customer_id', {
+      const grantsUrl = new URL(`${POLAR_API_BASE}/v1/benefit-grants/`)
+      grantsUrl.searchParams.set('order_id', orderId)
+      grantsUrl.searchParams.set('limit', '10')
+      const org = orgId()
+      if (org) grantsUrl.searchParams.set('organization_id', org)
+      const grantsRes = await fetch(grantsUrl, { headers: authHeaders })
+      if (grantsRes.ok) {
+        const grantsBody = (await grantsRes.json()) as {
+          items?: Array<Record<string, unknown>>
+        }
+        const items = Array.isArray(grantsBody.items) ? grantsBody.items : []
+        // Walk each grant and pull the license_key value from any of
+        // the known nested paths. First non-empty key wins.
+        for (const grant of items) {
+          const key =
+            pluck<string>(
+              grant,
+              'properties.license_key.key',
+              'properties.license_key',
+              'license_key.key',
+              'license_key',
+              'key',
+            ) ?? null
+          if (typeof key === 'string' && key.trim()) {
+            licenseKey = key.trim()
+            break
+          }
+        }
+        if (!licenseKey) {
+          console.warn(
+            '[checkout/[id]] benefit-grants returned items but no license_key value',
+            {
+              checkoutId,
+              orderId,
+              returned: items.length,
+              sampleKeys: items[0] ? Object.keys(items[0]) : [],
+            },
+          )
+        }
+      } else {
+        console.warn('[checkout/[id]] benefit-grants non-2xx', {
           checkoutId,
-          customerId,
+          orderId,
+          status: grantsRes.status,
+          body: await readBodyExcerpt(grantsRes),
         })
       }
     } catch (err) {
-      console.warn('[checkout/[id]] license-keys threw (customer_id)', {
+      console.warn('[checkout/[id]] benefit-grants threw', {
         checkoutId,
-        customerId,
+        orderId,
         err: err instanceof Error ? err.message : String(err),
       })
     }
   }
 
-  // 5b. Still no key? Try org-only and match by email. Catches the
-  //     case where our customer_id pluck didn't find the right path
-  //     but the email did — happens on Polar API shape changes.
-  if (!licenseKey && customerEmail) {
-    try {
-      const items = await listLicenseKeys({})
-      const match = items.find((it) => {
-        const email = pluck<string>(it, 'customer.email', 'customer_email')
-        return (
-          typeof email === 'string' &&
-          email.toLowerCase() === customerEmail.toLowerCase()
-        )
-      })
-      if (match && typeof match.key === 'string') {
-        licenseKey = match.key
-        console.warn('[checkout/[id]] license-key resolved via email fallback', {
-          checkoutId,
-          customerEmail,
-        })
-      }
-    } catch (err) {
-      console.warn('[checkout/[id]] license-keys threw (email fallback)', {
-        checkoutId,
-        customerEmail,
-        err: err instanceof Error ? err.message : String(err),
-      })
-    }
-  }
-
-  // Diagnostic breadcrumb when we end up returning provisioning even
-  // though we exhausted every lookup. Surfaces the customer/order ids
-  // we had to work with so the next debugging round has somewhere to
-  // start, and dumps the checkout's top-level keys so we can spot a
-  // missing field path quickly.
+  // No customer-list / email fallbacks. Steps 1–4.5 above are the
+  // only paths that can yield a license key, and step 4.5 (the
+  // benefit-grants order-tied lookup) is the proper Polar-native way
+  // to do it. If none of them resolve a key, we return null and the
+  // UI keeps polling until the 15-min server window closes — at
+  // which point the buyer sees "check your email", which is the
+  // correct fallback (Polar always emails the right key tied to the
+  // right order). The previous customer-id / email-match steps could
+  // silently return the WRONG key for buyers with multiple orders,
+  // so they were ripped out.
   if (!licenseKey) {
-    console.warn('[checkout/[id]] no key resolved after all lookups', {
+    console.warn('[checkout/[id]] no key resolved via order-tied lookup', {
       checkoutId,
       orderId,
-      customerId,
-      customerEmail,
       checkoutTopKeys: Object.keys(checkoutData ?? {}),
     })
   }

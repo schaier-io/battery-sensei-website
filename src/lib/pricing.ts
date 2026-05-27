@@ -30,12 +30,18 @@ export type PriceEntry = {
   locale: string
 }
 
-const US: PriceEntry = { amount: 3.99, currency: 'USD', locale: 'en-US' }
-const EU: PriceEntry = { amount: 3.99, currency: 'EUR', locale: 'de-DE' }
-// CZK fallback is a clean whole number — decimals on a koruna read
-// as spammy. Polar's live preview replaces it whenever the API call
-// succeeds.
-const CZ: PriceEntry = { amount: 89, currency: 'CZK', locale: 'cs-CZ' }
+// Canonical yearly support fallback prices. These ONLY render before
+// /api/price returns (SSR, the first-paint pre-API-roundtrip window,
+// or when the live preview fails). The live values come from Polar
+// and override these everywhere after first paint. Keep them in
+// lockstep with the actual Polar product or the FOIT flash on slow
+// connections quotes the wrong figure.
+//
+// Source of truth (Polar dashboard, support subscription product):
+//   USD 2.99 · EUR 2.95 · CZK 55
+const US: PriceEntry = { amount: 2.99, currency: 'USD', locale: 'en-US' }
+const EU: PriceEntry = { amount: 2.95, currency: 'EUR', locale: 'de-DE' }
+const CZ: PriceEntry = { amount: 55, currency: 'CZK', locale: 'cs-CZ' }
 
 /**
  * Countries that use the euro as their everyday currency.

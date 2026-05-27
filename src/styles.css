@@ -1073,6 +1073,144 @@ body::after {
   }
 }
 
+/* ─── /thanks composite delivery card animations ───────────────────────
+   Choreography on first mount (after the bow video clears):
+
+      t=0      card frame fades up + scales 0.985 → 1
+      t=120ms  header (order id) fades up
+      t=240ms  install section fades up
+      t=380ms  hairline draws from center outward
+      t=460ms  delivery strip fades up
+
+   When the strip transitions between internal states
+   (loading → provisioning → ready → expired) the strip wrapper's
+   React `key` changes and replays the .delivery-strip-state fade so
+   each new state lands with a small breath rather than a hard swap.
+*/
+
+@keyframes thanks-card-mount {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.thanks-card-mount {
+  animation: thanks-card-mount 680ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  transform-origin: 50% 0;
+  /* The header / install / strip below each have their own delayed
+     fade-in. `will-change` keeps the compositor warm so the staggered
+     children don't induce a paint storm on mid-tier hardware. */
+  will-change: transform, opacity;
+}
+
+@keyframes thanks-section-rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.thanks-section-rise {
+  animation: thanks-section-rise 540ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes thanks-hairline-draw {
+  from {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+.thanks-hairline-draw {
+  /* scale-from-center so the hairline reads as ink flowing outward
+     from the middle, not a band sliding in from one edge. */
+  animation: thanks-hairline-draw 720ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  transform-origin: 50% 50%;
+}
+
+/* Strip state cross-fade — applied to the inner wrapper with
+   key={state.phase} so React unmounts + remounts when the polling
+   loop hands off between loading / provisioning / ready / expired,
+   re-firing this keyframe at each transition. */
+@keyframes thanks-strip-state {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.thanks-strip-state {
+  animation: thanks-strip-state 480ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+/* Kanji stamp — when the key reveal mounts, the 鍵 character lands
+   like a quick hanko press. Borrows the visual feel of .hanko-stamp
+   but at a smaller, less ceremonial scale for the in-strip context. */
+@keyframes thanks-kanji-stamp {
+  0% {
+    opacity: 0;
+    transform: scale(1.4);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.thanks-kanji-stamp {
+  animation: thanks-kanji-stamp 520ms cubic-bezier(0.4, 0, 0.2, 1) both;
+  transform-origin: 50% 50%;
+  display: inline-block;
+}
+
+/* Copy-button feedback — gentle press-and-rebound when the user
+   triggers a successful copy. Scale-only so it never displaces
+   surrounding layout. */
+@keyframes thanks-copy-bump {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(0.94);
+  }
+  70% {
+    transform: scale(1.04);
+  }
+}
+.thanks-copy-bump {
+  animation: thanks-copy-bump 360ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .thanks-card-mount,
+  .thanks-section-rise,
+  .thanks-hairline-draw,
+  .thanks-strip-state,
+  .thanks-kanji-stamp,
+  .thanks-copy-bump {
+    animation: none;
+    transform: none;
+    opacity: 1;
+  }
+}
+
 /* Section spacing — generous "ma" 間 */
 .zen-section {
   padding-block: clamp(4.5rem, 9vw, 8rem);

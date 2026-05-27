@@ -95,6 +95,12 @@ export function ThanksPage({ tier, kanji }: { tier: Tier; kanji: string }) {
   // so the two children never overlap in flow — both absolute-pos
   // inside the slot wrapper.
   const [licenseShown, setLicenseShown] = useState(false)
+  // Order id resolved by the delivery card's polling. Hoisted to the
+  // page so we can render it in the hero area, not just inside the
+  // card header. Stays null until the API call returns the order id
+  // (typically within ~1 s of the card mounting). When non-null, a
+  // small chip fades in below the body copy.
+  const [orderId, setOrderId] = useState<string | null>(null)
 
   return (
     <>
@@ -141,10 +147,30 @@ export function ThanksPage({ tier, kanji }: { tier: Tier; kanji: string }) {
                 ]}
               />
             </Reveal>
-            {/* Order id moved INTO the delivery card header so the
-                hero stays focused on the celebratory line; the
-                buyer's reference data lives at the top of the
-                composite card below. */}
+            {/* Order id resolved by the polling card. Fades in once
+                the API returns it (usually ~1 s after the card
+                mounts) so the buyer has a reference they can quote
+                in support without scrolling to the card header. The
+                inline-block + opacity transition avoids a layout
+                shift when the chip lands. */}
+            <p
+              className="mt-4 text-center text-[11px] uppercase tracking-[0.18em] text-nezumi transition-opacity duration-[520ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)]"
+              style={{ opacity: orderId ? 1 : 0 }}
+              aria-live="polite"
+            >
+              {orderId ? (
+                <>
+                  {t('thanks.orderLabel')}{' '}
+                  <span className="font-mono normal-case tracking-[0.04em] text-sumi-soft">
+                    #{orderId}
+                  </span>
+                </>
+              ) : (
+                /* Reserve the line height so the hero doesn't jump
+                   when the chip fades in. */
+                <>&nbsp;</>
+              )}
+            </p>
           </div>
         </section>
 
@@ -198,7 +224,12 @@ export function ThanksPage({ tier, kanji }: { tier: Tier; kanji: string }) {
             beats us to it during that window. The card itself owns
             both install (primary) AND key delivery (secondary strip)
             so the two never read as disconnected boxes. */}
-        {licenseShown && <LicenseRevealCard checkoutId={checkoutId} />}
+        {licenseShown && (
+          <LicenseRevealCard
+            checkoutId={checkoutId}
+            onOrderId={setOrderId}
+          />
+        )}
 
         <section className="zen-section mx-auto max-w-3xl px-5 pt-2 sm:px-6">
           <Reveal

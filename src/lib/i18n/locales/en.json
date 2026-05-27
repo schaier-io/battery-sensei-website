@@ -78,8 +78,11 @@
       "title": "Charge limit",
       "titleSub": "with Travel Mode",
       "jp": "長く保つ・旅",
-      "body": "Apple says lithium-ion ages faster the longer it sits at 100%. Pick a cap (we suggest 80%). Sensei holds it in the background. Flying tomorrow? One click for a full charge, then your cap returns when you are home.",
-      "chip": "Travel Mode · full charge before a trip"
+      "body": "Apple says lithium-ion ages faster at 100%. Pick a cap (we suggest 80%); Sensei holds it in the background. Flying tomorrow? One tap for a full charge, then the cap comes back when you're home.",
+      "chip": "Travel Mode · full charge before a trip",
+      "scaleLabel": "Charge limit",
+      "travelLabel": "Travel Mode",
+      "travelHint": "lifts to 100% just for the trip"
     },
     "glance": {
       "title": "One glance, the whole story",
@@ -97,12 +100,14 @@
       "title": "Meetings, met.",
       "titleSub": "Sensei reads ahead, so your battery does too.",
       "jp": "会議の前に",
-      "body": "Opt-in. Sensei peeks at your next few meetings and, when the battery won't survive the one that matters, warns you at 30, 15, 5, and 0 minutes before — with a clear fix (\"22 min on the charger and you're clear through\"). Event titles never leave your Mac.",
+      "body": "Opt-in. Sensei peeks at your next few meetings and, when the battery won't make it, warns you at 30, 15, 5, and 1 minutes before with a clear fix. Event titles never leave your Mac.",
       "chip": "Premium · Read-only, titles stay on your Mac",
       "nextOnCalendar": "Next on calendar",
       "duration": "3:00 PM · 60 min",
+      "startsAt": "3:00 PM",
       "meetingTitle": "Weekly standup",
       "warnHeading": "Battery won't last your meeting",
+      "warnShort": "Won't survive.",
       "warnBody": "Your laptop dies <0>17 min</0> into standup. Plug in now.",
       "warnFix": "22 min on the charger and you're clear through.",
       "remindsYou": "Reminds you at",
@@ -322,6 +327,7 @@
     "backToHome": "Back to homepage",
     "managePurchase": "Manage purchase",
     "checkoutHint": "Order #{{id}}",
+    "orderLabel": "Order",
     "delivery": {
       "label": "Install Sensei",
       "from": "Get the latest macOS build, then drop your key into <0>Settings → Premium</0>.",
@@ -622,13 +628,21 @@
     },
     "fields": {
       "name": "Your name",
+      "namePlaceholder": "How should we address you?",
       "email": "Email",
+      "emailPlaceholder": "you@example.com",
       "subject": "Subject",
       "subjectHint": "Optional, but helps us triage.",
       "subjectPlaceholderBilling": "Refund for order LMS-…",
       "subjectPlaceholder": "In one line.",
       "message": "Message",
       "messageHint": "A sentence or two is plenty. Include your license email if it's a billing question.",
+      "messagePlaceholder": {
+        "feature": "I wish Sensei could…",
+        "bug": "When I do X, Sensei shows Y. Steps to reproduce + macOS version help us a lot.",
+        "billing": "Order #…, I need …",
+        "other": "Hi! I wanted to ask about…"
+      },
       "company": "Company"
     },
     "formHelp": "The form sends your message to Battery Sensei's support inbox. We do not store submissions or share them with third parties.",
@@ -663,7 +677,9 @@
     },
     "before": {
       "title": "Before you write",
-      "body": "Most questions are already answered in the <0>FAQ</0>. If it's a refund, mention your order ID (Polar emails it on purchase) so we can refund without going back and forth."
+      "faqHint": "Most questions are answered there already, <0>check first</0>.",
+      "refundLabel": "Refund",
+      "refundHint": "Include your order ID (Polar emails it on purchase) so we can act without back-and-forth."
     }
   },
   "download": {
