@@ -114,6 +114,41 @@
         length="20497999"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.1.1</title>
+      <pubDate>Wed, 27 May 2026 05:32:37 +0000</pubDate>
+      <sparkle:version>40</sparkle:version>
+      <sparkle:shortVersionString>1.1.1</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>Battery Sensei 1.1.1</h1>
+<p>A small patch focused on the update experience and two layout polish fixes.</p>
+<h2>Silent auto-updates by default</h2>
+<p>Battery Sensei now ships with <code>SUAutomaticallyUpdate = true</code> baked into the Info.plist. From this version onward, Sparkle finds new releases, downloads them via its XPC service, and applies them on next quit — without showing the &quot;Install Update?&quot; dialog at all.</p>
+<p>If you&#x27;d rather review each release before it lands, uncheck <strong>Automatically download and install updates in the future</strong> in the Sparkle update dialog. Your preference persists across releases.</p>
+<ul>
+<li><strong>First-time installs</strong>: the auto-install checkbox starts checked, and the very first update arrives silently.</li>
+<li><strong>Existing users upgrading from 1.1.0</strong>: this is the last update that will prompt — from 1.1.1 onward, future patches arrive in the background unless you opt out.</li>
+</ul>
+<h2>Layout polish</h2>
+<ul>
+<li><strong>License section button alignment</strong> — the <strong>Activate Pro</strong> button no longer outsizes the <strong>Buy</strong> button next to it. Both controls share a consistent macOS-native height now; the previous 44 pt touch-target on Activate Pro made Buy look squashed.</li>
+<li><strong>Latest forecast spacing</strong> — header, timing row, event title, and prediction message all align to the same leading edge with a single consistent gap between each. The earlier mix of an indented event title and a tighter-than-everything-else message gap is gone.</li>
+</ul>
+<h2>Requires</h2>
+<ul>
+<li>macOS 14 (Sonoma) or later</li>
+<li>Apple Silicon or Intel</li>
+</ul>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.1.1/Battery-Sensei.pkg"
+        sparkle:edSignature="b1dGmyape2VXWf8mY3xGvj5CoY/9CLZ//+mrX7Q+x4n8UsFktdsVr+F4+wrCgsD2MWLvAJKH54pM3Qej87QDCg=="
+        length="20497510"
+        type="application/octet-stream" />
+    </item>
+
 
 </channel>
 </rss>
