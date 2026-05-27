@@ -13,52 +13,92 @@ function token(): string {
 }
 
 export type FetchedLicenseDelivery = {
-  licenseKey: string
+  /** Always returned, even if the license key couldn't be located. */
+  checkoutId: string
+  orderId: string | null
+  /** The license key value. Null when Polar didn't expose one yet
+   *  (e.g. the order hasn't finished provisioning the benefit grant). */
+  licenseKey: string | null
   customerEmail: string | null
   productName: string | null
   customerPortalUrl: string | null
-  /** When the checkout was paid (ms since epoch). Used for the freshness
+  /** When the checkout was paid (ms since epoch). Drives the freshness
    *  window on the success page. Falls back to checkout `created_at`. */
   createdAt: number | null
 }
 
 /**
  * Fetch a checkout (with its order + benefit grants) by ID and pull the
- * license key out. Polar returns the license key value on the
- * Order/Benefit-grant payload after payment is confirmed; this function
- * walks the response defensively because the exact field path has shifted
- * across Polar SDK versions.
+ * license key out. Polar's API layout has shifted across releases: the
+ * license-key benefit lives on the *order*, but some Checkout shapes
+ * inline a subset of order data, others don't. So:
+ *
+ *   1. Fetch /v1/checkouts/{id} — always works, gives us the order id,
+ *      customer, product, paid_at.
+ *   2. If the checkout response already contains a benefit-grant with a
+ *      license key, return it.
+ *   3. Otherwise, follow up with /v1/orders/{order_id} and pull the
+ *      benefit grant from there.
+ *
+ * The function always returns a delivery record, never null, so the
+ * caller can always render order-id / email / portal-url even when the
+ * key itself is still being provisioned.
  */
 export async function fetchCheckoutLicense(
   checkoutId: string,
 ): Promise<FetchedLicenseDelivery | null> {
-  const res = await fetch(
-    `${POLAR_API_BASE}/v1/checkouts/${encodeURIComponent(checkoutId)}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token()}`,
-        Accept: 'application/json',
+  let checkoutData: Record<string, unknown> | null = null
+  try {
+    const res = await fetch(
+      `${POLAR_API_BASE}/v1/checkouts/${encodeURIComponent(checkoutId)}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token()}`,
+          Accept: 'application/json',
+        },
       },
-    },
-  )
-  if (!res.ok) return null
-  const data = (await res.json()) as Record<string, unknown>
+    )
+    if (!res.ok) return null
+    checkoutData = (await res.json()) as Record<string, unknown>
+  } catch {
+    return null
+  }
 
-  const licenseKey =
+  const orderId =
     pluck<string>(
-      data,
-      'order.items.0.benefits.0.license_key.key',
-      'order.benefit_grants.0.properties.license_key.key',
-      'order.benefit_grants.0.license_key.key',
-      'license_key.key',
-      'license_keys.0.key',
+      checkoutData,
+      'order.id',
+      'order_id',
+      'order.uuid',
     ) ?? null
 
-  if (!licenseKey) return null
+  let licenseKey = findLicenseKey(checkoutData)
+
+  // Checkout response didn't expose the benefit grant — try the Order.
+  if (!licenseKey && orderId) {
+    try {
+      const orderRes = await fetch(
+        `${POLAR_API_BASE}/v1/orders/${encodeURIComponent(orderId)}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token()}`,
+            Accept: 'application/json',
+          },
+        },
+      )
+      if (orderRes.ok) {
+        const orderData = (await orderRes.json()) as Record<string, unknown>
+        licenseKey = findLicenseKey(orderData)
+      }
+    } catch {
+      /* fall through — return delivery without key so the UI can still
+         display the order id + portal link. */
+    }
+  }
 
   const createdIso =
     pluck<string>(
-      data,
+      checkoutData,
       'order.paid_at',
       'order.created_at',
       'paid_at',
@@ -68,13 +108,19 @@ export async function fetchCheckoutLicense(
   const createdAt = createdIso ? Date.parse(createdIso) : NaN
 
   return {
+    checkoutId,
+    orderId,
     licenseKey,
     customerEmail:
-      pluck<string>(data, 'customer.email', 'customer_email') ?? null,
-    productName: pluck<string>(data, 'product.name', 'product_name') ?? null,
+      pluck<string>(checkoutData, 'customer.email', 'customer_email') ?? null,
+    productName:
+      pluck<string>(checkoutData, 'product.name', 'product_name') ?? null,
     customerPortalUrl:
-      pluck<string>(data, 'customer_portal_url', 'customer.portal_url') ??
-      customerPortalFallback(),
+      pluck<string>(
+        checkoutData,
+        'customer_portal_url',
+        'customer.portal_url',
+      ) ?? customerPortalFallback(),
     createdAt: Number.isFinite(createdAt) ? createdAt : null,
   }
 }
@@ -87,6 +133,29 @@ export function customerPortalFallback(): string {
 }
 
 // ---- helpers --------------------------------------------------------------
+
+/**
+ * Walk every known Polar response shape for the license-key benefit and
+ * return the first one that resolves. Robust against the field-path
+ * shifts between SDK versions.
+ */
+function findLicenseKey(data: unknown): string | null {
+  if (!data) return null
+  return (
+    pluck<string>(
+      data,
+      'order.items.0.benefits.0.license_key.key',
+      'order.benefit_grants.0.properties.license_key.key',
+      'order.benefit_grants.0.license_key.key',
+      'order.items.0.product.benefits.0.license_key.key',
+      'items.0.benefits.0.license_key.key',
+      'benefit_grants.0.properties.license_key.key',
+      'benefit_grants.0.license_key.key',
+      'license_key.key',
+      'license_keys.0.key',
+    ) ?? null
+  )
+}
 
 function pluck<T>(obj: unknown, ...paths: string[]): T | undefined {
   for (const path of paths) {

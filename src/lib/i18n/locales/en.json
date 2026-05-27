@@ -323,11 +323,11 @@
     "managePurchase": "Manage purchase",
     "checkoutHint": "Order #{{id}}",
     "delivery": {
-      "label": "License key",
-      "from": "Polar (our payment provider) emails your key, usually within a minute.",
-      "spam": "Any trouble at all (key not arriving, activation failing, anything): write to <0>info@battery-sensei.app</0> and we'll sort it the same day.",
+      "label": "Install Sensei",
+      "from": "Grab the latest macOS build. Once Sensei is running, drop your key into <0>Settings → Premium</0> and you're done.",
+      "spam": "Stuck on the download, the paste, or anything else: write to <0>info@battery-sensei.app</0> and we'll sort it the same day.",
       "supportEmail": "info@battery-sensei.app",
-      "downloadCta": "Download Sensei"
+      "downloadCta": "Download for macOS"
     },
     "lifetime": {
       "heading": "Welcome to Lifetime.",

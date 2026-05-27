@@ -323,11 +323,11 @@
     "managePurchase": "購入の管理",
     "checkoutHint": "注文 #{{id}}",
     "delivery": {
-      "label": "ライセンスキー",
-      "from": "決済プロバイダーの <0>Polar</0> から、通常は1分以内にメールでお届けします。",
-      "spam": "何か気になることがあれば（メールが届かない、アクティベーションがうまくいかない、どんな小さなことでも）、<0>info@battery-sensei.app</0> までお気軽にご連絡ください。当日中に対応いたします。",
+      "label": "Senseiをインストール",
+      "from": "macOS版の最新ビルドをダウンロードしてください。Senseiを起動したら、<0>設定 → Premium</0> にライセンスキーを貼り付けるだけです。",
+      "spam": "ダウンロードや貼り付け、その他何かうまくいかないことがあれば、<0>info@battery-sensei.app</0> までご連絡ください。当日中に対応いたします。",
       "supportEmail": "info@battery-sensei.app",
-      "downloadCta": "Senseiをダウンロード"
+      "downloadCta": "macOS版をダウンロード"
     },
     "lifetime": {
       "heading": "Lifetimeへようこそ。",

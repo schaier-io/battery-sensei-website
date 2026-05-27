@@ -11,17 +11,16 @@ import {
  * appended to its `success_url` redirect.
  *
  * Contract:
- *   - 200 { licenseKey, customerEmail?, productName?, customerPortalUrl }
- *     when the Polar checkout is still inside the freshness window.
- *   - 410 { expired: true, customerPortalUrl } once the freshness window
- *     has passed (or Polar didn't return a license key — e.g. the order
- *     hasn't been finalised yet, or the checkout didn't grant a key).
+ *   - 200 ready       — license key present
+ *   - 200 provisioning — order paid but Polar hasn't returned the key
+ *     yet (rare but real on fresh checkouts). The UI shows an
+ *     "in-your-inbox-soon" panel with the order id.
+ *   - 410 expired     — freshness window passed OR the upstream
+ *     completely failed. Includes order id when we have one so the UI
+ *     can still surface it.
  *
  * Freshness check is derived from Polar's own checkout timestamp
- * (`created_at` or `paid_at`), so there's no need for a webhook receiver
- * to "open" the window. The client renders the 410 → portal URL as a
- * graceful fallback that points the buyer at their permanent customer
- * portal where the key always lives.
+ * (`created_at` or `paid_at`), so there's no webhook needed.
  */
 
 const FRESHNESS_MS = 15 * 60 * 1000 // 15 minutes
@@ -29,26 +28,51 @@ const FRESHNESS_MS = 15 * 60 * 1000 // 15 minutes
 async function handleGet(checkoutId: string): Promise<Response> {
   const id = (checkoutId ?? '').trim()
   if (!id) {
-    return expired('missing-checkout-id')
+    return expired('missing-checkout-id', null, null)
   }
 
   let delivery
   try {
     delivery = await fetchCheckoutLicense(id)
   } catch {
-    return expired('upstream-error')
+    return expired('upstream-error', id, null)
   }
 
-  if (!delivery) return expired('license-unavailable')
+  if (!delivery) return expired('not-found', id, null)
 
-  if (delivery.createdAt) {
-    const age = Date.now() - delivery.createdAt
-    if (age > FRESHNESS_MS) return expired('window-passed')
+  // Freshness check — if the order finished more than 15 minutes ago,
+  // we're past the on-screen reveal window regardless of key state.
+  if (delivery.createdAt && Date.now() - delivery.createdAt > FRESHNESS_MS) {
+    return expired('window-passed', id, delivery.orderId)
+  }
+
+  // Inside the freshness window but Polar hasn't returned the key yet —
+  // typically because the order finished but the benefit grant is still
+  // being created upstream. Don't lie about "closed window"; tell the
+  // truth: it's on its way.
+  if (!delivery.licenseKey) {
+    return json(
+      {
+        provisioning: true,
+        checkoutId: delivery.checkoutId,
+        orderId: delivery.orderId,
+        customerEmail: delivery.customerEmail,
+        customerPortalUrl:
+          delivery.customerPortalUrl ?? customerPortalFallback(),
+      },
+      {
+        headers: {
+          'Cache-Control': 'no-store',
+        },
+      },
+    )
   }
 
   return json(
     {
       licenseKey: delivery.licenseKey,
+      checkoutId: delivery.checkoutId,
+      orderId: delivery.orderId,
       customerEmail: delivery.customerEmail,
       productName: delivery.productName,
       customerPortalUrl:
@@ -64,11 +88,17 @@ async function handleGet(checkoutId: string): Promise<Response> {
   )
 }
 
-function expired(reason: string): Response {
+function expired(
+  reason: string,
+  checkoutId: string | null,
+  orderId: string | null,
+): Response {
   return json(
     {
       expired: true,
       reason,
+      checkoutId,
+      orderId,
       customerPortalUrl: customerPortalFallback(),
     },
     {

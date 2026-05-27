@@ -4,7 +4,6 @@ import {
   ArrowLeft,
   Download as DownloadIcon,
   ExternalLink,
-  Mail,
   Sparkles,
 } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
@@ -221,16 +220,21 @@ export function ThanksPage({ tier, kanji }: { tier: Tier; kanji: string }) {
 }
 
 /**
- * License-delivery block. Renders inside the same "moment slot" the
- * bow video occupied — fades in after the video has finished and
- * begun its fade-out. Surfaces the email sender + spam-folder
- * reassurance so a buyer knows exactly which message to look for, and
- * pairs it with a clear download CTA (the natural next action once
- * the key arrives).
+ * Install-Sensei block. Renders inside the same "moment slot" the bow
+ * video occupied — fades in after the video has finished and begun
+ * its fade-out.
  *
- * Brand parity: 鍵 (kagi / key) kanji + tracked label + brush rule
- * mirrors the LanguageSwitcher dropdown header so the card feels
- * native to the site's ink-on-washi system.
+ * Intent: the LicenseRevealCard above the video already handles key
+ * delivery (reveals the key or shows provisioning/portal fallback).
+ * What's left to resolve in the buyer's mind is the *install* — most
+ * buyers downloaded during the 5-day trial, but some haven't. This
+ * card frames the natural next action ("grab the macOS build, drop
+ * your key into Settings → Premium") and offers same-day support as
+ * the safety net.
+ *
+ * Brand parity: 装 (sō / install·equip) kanji + tracked label + brush
+ * rule mirrors the kanji-seal vocabulary used elsewhere on the site
+ * (基 features, 価 pricing, 鍵 in the reveal card above).
  */
 function LicenseDelivery({ visible }: { visible: boolean }) {
   const { t } = useTranslation()
@@ -254,13 +258,13 @@ function LicenseDelivery({ visible }: { visible: boolean }) {
       }}
     >
       <div className="flex items-center gap-3">
-        {/* 鍵 = "key". Matches the kanji-seal vocabulary the rest of the
-            site uses (基 features, 価 pricing, etc.). */}
+        {/* 装 = "install / equip". Picks up where the LicenseRevealCard
+            above (鍵, key) leaves off — key in hand, now install. */}
         <span
           aria-hidden
           className="font-jp text-base leading-none text-hinomaru/85 w-5 text-center"
         >
-          鍵
+          装
         </span>
         <span className="display-title text-[11px] font-semibold uppercase tracking-[0.22em] text-sumi-soft">
           {t('thanks.delivery.label')}
@@ -269,12 +273,18 @@ function LicenseDelivery({ visible }: { visible: boolean }) {
           aria-hidden
           className="h-px flex-1 bg-gradient-to-r from-[var(--line-strong)] via-[var(--line)] to-transparent"
         />
-        <Mail aria-hidden className="h-3.5 w-3.5 text-nezumi" strokeWidth={1.7} />
+        <DownloadIcon
+          aria-hidden
+          className="h-3.5 w-3.5 text-nezumi"
+          strokeWidth={1.7}
+        />
       </div>
       <p className="mt-4 text-[0.875rem] leading-[1.6] text-sumi-soft">
         <Trans
           i18nKey="thanks.delivery.from"
-          components={[<span className="font-semibold text-sumi" />]}
+          components={[
+            <em className="font-display italic font-medium text-sumi" />,
+          ]}
         />
       </p>
       <p className="mt-2 text-[0.875rem] leading-[1.6] text-sumi-soft">
@@ -282,15 +292,15 @@ function LicenseDelivery({ visible }: { visible: boolean }) {
           i18nKey="thanks.delivery.spam"
           components={[
             <a
-              href={`mailto:${t('thanks.delivery.supportEmail')}?subject=License%20key%20resend`}
+              href={`mailto:${t('thanks.delivery.supportEmail')}?subject=Install%20help`}
               className="font-semibold text-sumi underline decoration-[var(--line-strong)] underline-offset-[3px] hover:decoration-sumi transition-colors"
             />,
           ]}
         />
       </p>
-      {/* Download CTA — the natural next action once the key arrives.
+      {/* Download CTA — the natural action this card is built around.
           Sized full-width inside the card so it reads as the resolution
-          of the delivery story rather than a separate affordance. */}
+          of the install story rather than a separate affordance. */}
       <div className="mt-6 flex justify-center">
         <a
           href="/download/latest"

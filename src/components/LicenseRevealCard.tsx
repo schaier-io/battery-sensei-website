@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Check, Copy, ExternalLink, KeyRound } from 'lucide-react'
+import { Check, Clock, Copy, ExternalLink, KeyRound, Mail } from 'lucide-react'
 import { CUSTOMER_PORTAL_URL } from '#/lib/polar'
 
 /**
@@ -8,48 +8,31 @@ import { CUSTOMER_PORTAL_URL } from '#/lib/polar'
  *
  * Lifecycle
  * ---------
- *  1. Mount with a `checkoutId` from Polar's `success_url` query param.
- *  2. Fetch /api/checkout/[id] server-side (Polar token never reaches
- *     the bundle).
- *  3. While in flight → quiet loading placeholder.
- *  4. On success → "Reveal your license key" button. Click animates a
- *     slide-down panel with the key, Copy button, activation steps.
- *  5. On 410 / failure → fallback card pointing at the Polar customer
- *     portal (the key always lives there).
- *  6. Either way, the card emails the key in parallel via Polar.
+ *  1. Mount, state = loading.
+ *  2. Read `checkout_id` from window.location.search (client only).
+ *  3. Strip the query via history.replaceState so the URL doesn't leak.
+ *  4. Fetch /api/checkout/[id] (server hits Polar with org token).
+ *  5. Switch to one of three terminal states:
+ *       - ready        — key present, click-to-reveal panel
+ *       - provisioning — order paid, key not yet exposed by Polar;
+ *                        show "on its way to your inbox" with order id
+ *       - expired      — outside the 15-min window or upstream failed;
+ *                        fall back to the customer portal
  *
- * Privacy
- * -------
- * The page itself sets robots:noindex + referrer:no-referrer at the
- * route level. This component additionally strips the `checkout_id`
- * query from window.location via `history.replaceState` on mount so
- * the URL doesn't propagate through history-sync, screenshots, or any
- * accidental sharing.
+ * Every card shows the order id at the top so the buyer always has
+ * something concrete to quote in support.
  */
 export function LicenseRevealCard({
   checkoutId: _checkoutIdProp,
 }: {
   checkoutId?: string | undefined
 }) {
-  // Default to `loading` so the card slot is always *visible* during
-  // hydration. We don't trust the prop / SSR-derived value here — we
-  // read window.location.search inside the effect and decide on the
-  // client. That avoids two failure modes that hid this card in
-  // production before:
-  //   1. SSR rendered with checkoutId=undefined (search not parsed yet)
-  //      → ref-snapshot locked the state at `missing` → returned null
-  //      → reveal card never appeared even though Polar provided the
-  //         id in the URL.
-  //   2. TanStack's useSearch re-firing after our history.replaceState
-  //      could tear down the in-flight fetch.
-  // Reading the URL directly + a one-shot ref sidesteps both.
   const [state, setState] = useState<DeliveryState>({ phase: 'loading' })
   const startedRef = useRef(false)
 
   useEffect(() => {
     if (startedRef.current) return
     startedRef.current = true
-
     if (typeof window === 'undefined') return
 
     const params = new URLSearchParams(window.location.search)
@@ -60,9 +43,6 @@ export function LicenseRevealCard({
       return
     }
 
-    // Strip checkout_id (and any other params) from the visible URL so
-    // it doesn't propagate via history-sync, screenshots, or accidental
-    // sharing. Route stays at its canonical path.
     const { pathname } = window.location
     window.history.replaceState({}, '', pathname)
 
@@ -82,34 +62,50 @@ export function LicenseRevealCard({
           string,
           unknown
         >
+        const orderId = (data.orderId as string) ?? null
+        const customerEmail = (data.customerEmail as string) ?? null
+        const customerPortalUrl =
+          (data.customerPortalUrl as string) ?? CUSTOMER_PORTAL_URL
+
         if (res.status === 410 || data.expired) {
           setState({
             phase: 'expired',
-            customerPortalUrl:
-              (data.customerPortalUrl as string) ?? CUSTOMER_PORTAL_URL,
+            orderId,
+            customerPortalUrl,
+          })
+          return
+        }
+        if (data.provisioning) {
+          setState({
+            phase: 'provisioning',
+            orderId,
+            customerEmail,
+            customerPortalUrl,
           })
           return
         }
         const licenseKey = String(data.licenseKey ?? '').trim()
         if (!licenseKey) {
           setState({
-            phase: 'expired',
-            customerPortalUrl:
-              (data.customerPortalUrl as string) ?? CUSTOMER_PORTAL_URL,
+            phase: 'provisioning',
+            orderId,
+            customerEmail,
+            customerPortalUrl,
           })
           return
         }
         setState({
           phase: 'ready',
           licenseKey,
-          customerEmail: (data.customerEmail as string) ?? null,
-          customerPortalUrl:
-            (data.customerPortalUrl as string) ?? CUSTOMER_PORTAL_URL,
+          orderId,
+          customerEmail,
+          customerPortalUrl,
         })
       } catch {
         if (!cancelled) {
           setState({
             phase: 'expired',
+            orderId: null,
             customerPortalUrl: CUSTOMER_PORTAL_URL,
           })
         }
@@ -121,10 +117,6 @@ export function LicenseRevealCard({
     }
   }, [])
 
-  // No `checkout_id` in the URL at all — render nothing so the page
-  // still works as a generic thank-you (legacy links, support resends).
-  // The downstream LicenseDelivery card still covers the "find your
-  // key" story in that case.
   if (state.phase === 'missing') return null
 
   return (
@@ -135,11 +127,22 @@ export function LicenseRevealCard({
       <div className="mx-auto w-full max-w-[440px]">
         {state.phase === 'loading' && <LoadingCard />}
         {state.phase === 'expired' && (
-          <ExpiredCard customerPortalUrl={state.customerPortalUrl} />
+          <ExpiredCard
+            orderId={state.orderId}
+            customerPortalUrl={state.customerPortalUrl}
+          />
+        )}
+        {state.phase === 'provisioning' && (
+          <ProvisioningCard
+            orderId={state.orderId}
+            customerEmail={state.customerEmail}
+            customerPortalUrl={state.customerPortalUrl}
+          />
         )}
         {state.phase === 'ready' && (
           <ReadyCard
             licenseKey={state.licenseKey}
+            orderId={state.orderId}
             customerEmail={state.customerEmail}
             customerPortalUrl={state.customerPortalUrl}
           />
@@ -157,10 +160,33 @@ type DeliveryState =
   | {
       phase: 'ready'
       licenseKey: string
+      orderId: string | null
       customerEmail: string | null
       customerPortalUrl: string
     }
-  | { phase: 'expired'; customerPortalUrl: string }
+  | {
+      phase: 'provisioning'
+      orderId: string | null
+      customerEmail: string | null
+      customerPortalUrl: string
+    }
+  | {
+      phase: 'expired'
+      orderId: string | null
+      customerPortalUrl: string
+    }
+
+/** Compact, tracked order-id chip rendered at the top of every state.
+ *  Gives the buyer something concrete to quote in support regardless of
+ *  the delivery branch they ended up on. */
+function OrderIdLine({ orderId }: { orderId: string | null }) {
+  if (!orderId) return null
+  return (
+    <p className="text-center text-[10px] uppercase tracking-[0.18em] text-nezumi">
+      Order <span className="font-mono normal-case tracking-[0.04em] text-sumi-soft">#{orderId}</span>
+    </p>
+  )
+}
 
 function LoadingCard() {
   return (
@@ -179,20 +205,64 @@ function LoadingCard() {
   )
 }
 
-function ExpiredCard({ customerPortalUrl }: { customerPortalUrl: string }) {
+function ProvisioningCard({
+  orderId,
+  customerEmail,
+  customerPortalUrl,
+}: {
+  orderId: string | null
+  customerEmail: string | null
+  customerPortalUrl: string
+}) {
   return (
     <div className="rounded-2xl border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,#fff)] px-6 py-7 text-center shadow-[0_1px_0_rgba(255,255,255,0.5)_inset,0_24px_50px_-24px_rgba(28,26,23,0.18)]">
-      <p className="flex items-center justify-center gap-2 text-[11px] uppercase tracking-[0.22em] text-sumi-soft">
+      <OrderIdLine orderId={orderId} />
+      <p className="mt-3 flex items-center justify-center gap-2 text-[11px] uppercase tracking-[0.22em] text-sumi-soft">
+        <Clock className="h-3.5 w-3.5 text-hinomaru" strokeWidth={1.8} />
+        Key on its way
+      </p>
+      <h2 className="display-title mt-2 text-xl font-semibold text-sumi">
+        Polar is finishing the paperwork.
+      </h2>
+      <p className="mt-2 text-sm leading-relaxed text-sumi-soft">
+        Your license key{customerEmail ? <> is being sent to <span className="font-semibold text-sumi">{customerEmail}</span> right now</> : ' is being generated and emailed to you right now'}.
+        Usually within a minute. You can refresh this page — or open the
+        customer portal where it lives permanently.
+      </p>
+      <a
+        href={customerPortalUrl}
+        target="_blank"
+        rel="noreferrer"
+        className="mt-5 inline-flex h-10 items-center gap-2 rounded-md border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] px-5 text-[13px] font-medium text-sumi transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:bg-[color-mix(in_oklab,var(--washi)_45%,#fff)]"
+      >
+        <ExternalLink className="h-3.5 w-3.5" strokeWidth={1.8} />
+        Open customer portal
+      </a>
+    </div>
+  )
+}
+
+function ExpiredCard({
+  orderId,
+  customerPortalUrl,
+}: {
+  orderId: string | null
+  customerPortalUrl: string
+}) {
+  return (
+    <div className="rounded-2xl border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,#fff)] px-6 py-7 text-center shadow-[0_1px_0_rgba(255,255,255,0.5)_inset,0_24px_50px_-24px_rgba(28,26,23,0.18)]">
+      <OrderIdLine orderId={orderId} />
+      <p className="mt-3 flex items-center justify-center gap-2 text-[11px] uppercase tracking-[0.22em] text-sumi-soft">
         <KeyRound className="h-3.5 w-3.5 text-hinomaru" strokeWidth={1.8} />
         License delivery
       </p>
-      <h2 className="display-title mt-3 text-xl font-semibold text-sumi">
-        This delivery window has closed.
+      <h2 className="display-title mt-2 text-xl font-semibold text-sumi">
+        Pick up your key in the portal.
       </h2>
       <p className="mt-2 text-sm leading-relaxed text-sumi-soft">
-        Your key has either been revealed already or the 15-minute window
-        has passed. It is permanently available in the customer portal,
-        signed in with the email you used at checkout.
+        Your key lives permanently in the customer portal, signed in with
+        the email you used at checkout. (And it was emailed to you when
+        the order completed.)
       </p>
       <a
         href={customerPortalUrl}
@@ -209,10 +279,12 @@ function ExpiredCard({ customerPortalUrl }: { customerPortalUrl: string }) {
 
 function ReadyCard({
   licenseKey,
+  orderId,
   customerEmail,
   customerPortalUrl,
 }: {
   licenseKey: string
+  orderId: string | null
   customerEmail: string | null
   customerPortalUrl: string
 }) {
@@ -246,8 +318,9 @@ function ReadyCard({
                 'radial-gradient(80% 60% at 50% 30%, color-mix(in oklab, var(--kin) 18%, transparent) 0%, transparent 70%)',
             }}
           />
+          <OrderIdLine orderId={orderId} />
           <KeyRound
-            className="mx-auto h-7 w-7 text-hinomaru"
+            className="mx-auto mt-3 h-7 w-7 text-hinomaru"
             strokeWidth={1.6}
             aria-hidden
           />
@@ -267,7 +340,8 @@ function ReadyCard({
         aria-hidden={!revealed}
       >
         <div className="rounded-2xl border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,#fff)] px-6 py-6 shadow-[0_1px_0_rgba(255,255,255,0.5)_inset,0_24px_50px_-22px_rgba(28,26,23,0.18)]">
-          <p className="flex items-center gap-2 text-[11px] uppercase tracking-[0.22em] text-sumi-soft">
+          <OrderIdLine orderId={orderId} />
+          <p className="mt-3 flex items-center gap-2 text-[11px] uppercase tracking-[0.22em] text-sumi-soft">
             <KeyRound className="h-3.5 w-3.5 text-hinomaru" strokeWidth={1.8} />
             License key
           </p>
@@ -315,14 +389,18 @@ function ReadyCard({
 
           <div className="mt-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 text-[12px] text-sumi-soft">
             {customerEmail ? (
-              <span>
+              <span className="inline-flex items-center gap-1.5">
+                <Mail className="h-3.5 w-3.5" strokeWidth={1.6} />
                 Also sent to{' '}
                 <span className="font-semibold text-sumi">
                   {customerEmail}
                 </span>
               </span>
             ) : (
-              <span>Also sent to your email.</span>
+              <span className="inline-flex items-center gap-1.5">
+                <Mail className="h-3.5 w-3.5" strokeWidth={1.6} />
+                Also sent to your email.
+              </span>
             )}
             <a
               href={customerPortalUrl}
