@@ -1,4 +1,4 @@
-# Battery Sensei — https://battery-sensei.app
+# Battery Sensei — https://www.battery-sensei.app
 # robotstxt.org
 
 # Default: allow all standard search and AI crawlers.
@@ -45,4 +45,4 @@ Allow: /
 User-agent: CCBot
 Disallow: /
 
-Sitemap: https://battery-sensei.app/sitemap.xml
+Sitemap: https://www.battery-sensei.app/sitemap.xml

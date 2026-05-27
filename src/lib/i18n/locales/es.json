@@ -98,7 +98,7 @@
       "titleSub": "Sensei se anticipa, y tu batería también.",
       "jp": "会議の前に",
       "body": "Opcional. Sensei echa un vistazo a tus próximas reuniones y, cuando la batería no aguantará la que importa, te avisa 30, 15, 5 y 0 minutos antes — con una solución clara («22 min en el cargador y llegas hasta el final»). Los títulos de los eventos nunca salen de tu Mac.",
-      "chip": "Solo lectura · los títulos nunca salen de tu Mac",
+      "chip": "Premium · Solo lectura, los títulos no salen de tu Mac",
       "nextOnCalendar": "Próximo en el calendario",
       "duration": "15:00 · 60 min",
       "meetingTitle": "Reunión semanal",
@@ -397,7 +397,7 @@
       "kicker": "Premium · 会議",
       "heading": "Meeting Battery Guard.",
       "headingItalic": "No pierdas la reunión que importa.",
-      "body": "Opcional. Sensei lee las próximas 4 horas de eventos del calendario en el dispositivo (EventKit, ventana por defecto). Puntúa cada reunión contra tu batería actual — Cómoda, Justa, Crítica o Catastrófica — y solo avisa cuando debe. Crítica: 30 / 15 / 5 / 0 min antes, con el minuto exacto en que el portátil se apagaría y la solución («22 min en el cargador y llegas hasta el final»). Catastrófica: aviso inmediato. Justa: un único aviso a 30 min. Cómoda: silencio. Si enchufas a tiempo, los avisos pendientes se cancelan. Los títulos siguen siendo legibles en las notificaciones por defecto; un interruptor los oculta.",
+      "body": "Una función Premium — incluida en la prueba gratuita y, después, parte del desbloqueo Lifetime. Opcional. Sensei lee las próximas 4 horas de eventos del calendario en el dispositivo (EventKit, ventana por defecto). Puntúa cada reunión contra tu batería actual — Cómoda, Justa, Crítica o Catastrófica — y solo avisa cuando debe. Crítica: 30 / 15 / 5 / 0 min antes, con el minuto exacto en que el portátil se apagaría y la solución («22 min en el cargador y llegas hasta el final»). Catastrófica: aviso inmediato. Justa: un único aviso a 30 min. Cómoda: silencio. Si enchufas a tiempo, los avisos pendientes se cancelan. Los títulos siguen siendo legibles en las notificaciones por defecto; un interruptor los oculta.",
       "mockupCaption": "Ventana de 4 horas. Solo avisa cuando debe.",
       "why": "Un aviso al 10 % en plena reunión no sirve: no puedes salir a buscar un cargador. Leer el calendario permite a Sensei avisarte cuando aún hay tiempo — y callar el resto."
     },
@@ -432,19 +432,31 @@
       },
       "whatYouKeep": "Lo que te quedas · 基本",
       "trialEnd": "Día {{day}}, Sensei pregunta una vez:",
-      "trialChoice": "<0>Quédate con Premium ({{price}})</0> o <1>cambia a gratis</1>. Sin insistir, sin tarjeta.",
+      "trialChoice": "<0>Quédate con Premium ({{price}})</0> o <1>pasa al gratuito</1>. Sin tarjeta guardada, sin cobros silenciosos.",
       "items": [
         {
           "title": "Avisos inteligentes de batería baja",
-          "body": "Tres modos escalonados — Zen, Regular, Senpai."
+          "body": "Cambia entre tres modos — Zen, Regular, Senpai. Ajusta el estilo y tiempo de cierre por regla; los umbrales quedan fijos."
         },
         {
           "title": "Límite de carga + Travel Mode",
           "body": "Limita la carga. Un toque al 100 % antes de viajar, vuelve a las 9."
         },
         {
-          "title": "30 días de Sensei Saga",
+          "title": "Historial de batería de 24 h",
           "body": "Historial de carga, panel de salud, Recibos de Rescate — guardado en tu Mac."
+        },
+        {
+          "title": "Batería por app · última hora",
+          "body": "Mira exactamente qué apps consumieron batería la última hora — por nombre."
+        },
+        {
+          "title": "Carga + vatios en vivo en la barra",
+          "body": "Porcentaje, vatios entrada/salida, tiempo restante — un vistazo, sin icono en el dock."
+        },
+        {
+          "title": "Cinco idiomas",
+          "body": "EN · DE · ES · FR · 日本語."
         },
         {
           "title": "App nativa de macOS notarizada",
@@ -481,12 +493,12 @@
           "body": "Sensei lee tus próximas reuniones (los títulos no salen del dispositivo) y, cuando la batería no aguantará la que importa, te avisa 30, 15, 5 y 0 minutos antes — con una solución clara."
         },
         {
-          "title": "Historia Saga ilimitada",
-          "body": "Guarda cada ciclo, cada meseta y cada lectura de capacidad para siempre — no solo los últimos 30 días."
+          "title": "Historial de batería ilimitado",
+          "body": "Ventanas más largas en la línea principal (3 d, 7 d) y en el desglose por app (24 h, 7 d) — no solo las últimas 24 horas."
         },
         {
-          "title": "Avisos personalizados",
-          "body": "Define tus propios umbrales y tiempos de cierre más allá de los tres modos incluidos."
+          "title": "Reglas de aviso personalizadas",
+          "body": "Añade, elimina y edita reglas — fija porcentajes exactos y mezcla estilos por regla. Los presets siguen siendo gratis."
         },
         {
           "title": "Cada futura función Premium",
@@ -520,7 +532,7 @@
       },
       {
         "q": "¿Cuánto cuesta Battery Sensei?",
-        "a": "Sensei Premium cuesta {{price}} una vez, un pago, licencia de por vida — cada futura función Premium, cada Mac que tengas. Pruébalo gratis {{trial}} días primero — sin tarjeta para empezar, sin insistir al terminar la prueba. Después de la prueba, lo esencial (límite de carga, avisos inteligentes, historia de 30 días) sigue siendo gratis para siempre; Premium desbloquea Meeting Battery Guard, historia Saga ilimitada y avisos personalizados. El pago muestra el precio en tu moneda local."
+        "a": "Sensei Premium cuesta {{price}} una vez, un pago, licencia de por vida — cada futura función Premium, cada Mac que tengas. Pruébalo gratis {{trial}} días primero — sin tarjeta para empezar. Al terminar la prueba Sensei pregunta una vez al inicio — sin tarjeta guardada y sin cobros silenciosos. Después, lo esencial (límite de carga + Travel Mode, avisos inteligentes vía tres presets, historial de batería de 24 h, batería por app de la última hora, carga y vatios en vivo en la barra) sigue siendo gratis para siempre; Premium desbloquea Meeting Battery Guard, historial de batería ilimitado y reglas de aviso personalizadas (añadir, eliminar, editar umbrales). Tu interruptor de Meeting Battery Guard conserva su estado anterior pero deja de avisar — tu configuración no se reinicia. El pago muestra el precio en tu moneda local."
       },
       {
         "q": "¿Cómo funciona la clave de licencia?",
@@ -549,7 +561,7 @@
       },
       {
         "q": "¿Es Battery Sensei una alternativa a AlDente?",
-        "a": "Sí. Sensei cubre la función central de límite de carga de AlDente en cada nivel, añade avisos inteligentes y una historia personal de la batería, y se distribuye como un único instalador .pkg notarizado. Premium añade Meeting Battery Guard e historia Saga ilimitada por un pago único. Tienes una comparación detallada lado a lado en battery-sensei.app/vs-aldente."
+        "a": "Sí. Sensei cubre la función central de límite de carga de AlDente en cada nivel, añade avisos inteligentes y una historia personal de la batería, y se distribuye como un único instalador .pkg notarizado. Premium añade Meeting Battery Guard, historial de batería ilimitado y reglas de aviso personalizadas por un pago único. Tienes una comparación detallada lado a lado en battery-sensei.app/vs-aldente."
       },
       {
         "q": "¿Cómo actualizo Battery Sensei?",
@@ -557,7 +569,7 @@
       },
       {
         "q": "¿Cómo funciona el aviso de Meeting Battery Guard?",
-        "a": "Opcional. Sensei mira los próximos eventos de tu calendario y predice si tu batería actual aguantará cada reunión según el consumo habitual. Cuando una reunión está en riesgo, lanza hasta cuatro notificaciones: 30, 15 y 5 minutos antes de que empiece, y un último aviso al inicio. Cada notificación incluye el minuto exacto en que se prevé que el portátil se apague («se apaga a los 17 min de la reunión») y una solución concreta («22 min en el cargador y llegas hasta el final»). Los títulos de los eventos nunca salen de tu Mac — Sensei lee el calendario en local vía EventKit. Si una reunión deja de estar en riesgo (porque enchufaste el cable o la reunión terminó), los recordatorios pendientes se cancelan en silencio."
+        "a": "Meeting Battery Guard es una función Premium, disponible durante la prueba gratuita y tras activar una licencia Premium. Opcional. Sensei mira los próximos eventos de tu calendario y predice si tu batería actual aguantará cada reunión según el consumo habitual. Cuando una reunión está en riesgo, lanza hasta cuatro notificaciones: 30, 15 y 5 minutos antes de que empiece, y un último aviso al inicio. Cada notificación incluye el minuto exacto en que se prevé que el portátil se apague («se apaga a los 17 min de la reunión») y una solución concreta («22 min en el cargador y llegas hasta el final»). Los títulos de los eventos nunca salen de tu Mac — Sensei lee el calendario en local vía EventKit. Si una reunión deja de estar en riesgo (porque enchufaste el cable o la reunión terminó), los recordatorios pendientes se cancelan en silencio."
       }
     ]
   },
@@ -692,7 +704,7 @@
       "lifetime": [
         "Meeting Battery Guard — aviso antes de la reunión que importa",
         "Historia Saga ilimitada — cada ciclo, para siempre",
-        "Avisos personalizados — tus propios umbrales y tiempos de cierre",
+        "Reglas de aviso personalizadas — añade, elimina, edita umbrales",
         "Actualizaciones de por vida, sin suscripción"
       ],
       "support": [
@@ -1022,7 +1034,7 @@
     "faq": [
       {
         "q": "¿Battery Sensei es gratis?",
-        "a": "Lo esencial es gratis para siempre — límite de carga, avisos inteligentes, historia de 30 días. Premium es un desbloqueo único para Meeting Battery Guard, historia Saga ilimitada y presets personalizados. Sin suscripción, sin cuenta. Sensei es de código abierto en GitHub."
+        "a": "Lo esencial es gratis para siempre — límite de carga, avisos inteligentes vía tres presets, historial de batería de 24 h, batería por app de la última hora. Premium es un desbloqueo único para Meeting Battery Guard, historial de batería ilimitado y reglas de aviso personalizadas. Sin suscripción, sin cuenta. Sensei es de código abierto en GitHub."
       },
       {
         "q": "¿Battery Sensei hace todo lo que hace AlDente?",

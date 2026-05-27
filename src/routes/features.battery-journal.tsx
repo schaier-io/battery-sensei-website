@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { FeaturePage } from '#/components/FeaturePage'
 import { BatteryJournal } from '#/components/zen/BatteryJournal'
 
-const SITE_URL = 'https://battery-sensei.app'
+const SITE_URL = 'https://www.battery-sensei.app'
 const PATH = '/features/battery-journal'
 const PAGE_TITLE = 'Battery Journal — Battery Sensei'
 const PAGE_DESC =

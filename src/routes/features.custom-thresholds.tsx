@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { FeaturePage } from '#/components/FeaturePage'
 
-const SITE_URL = 'https://battery-sensei.app'
+const SITE_URL = 'https://www.battery-sensei.app'
 const PATH = '/features/custom-thresholds'
 const PAGE_TITLE = 'Custom Thresholds — Battery Sensei'
 const PAGE_DESC =

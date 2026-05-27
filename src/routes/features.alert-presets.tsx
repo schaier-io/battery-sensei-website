@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Leaf, Bell, AlertOctagon } from 'lucide-react'
 import { FeaturePage } from '#/components/FeaturePage'
 
-const SITE_URL = 'https://battery-sensei.app'
+const SITE_URL = 'https://www.battery-sensei.app'
 const PATH = '/features/alert-presets'
 const PAGE_TITLE = 'Alert Presets — Battery Sensei'
 const PAGE_DESC =

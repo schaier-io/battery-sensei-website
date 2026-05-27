@@ -1,7 +1,23 @@
 import { useEffect, useRef, useState } from 'react'
 import { Download, MessageCircle, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { useRouterState } from '@tanstack/react-router'
 import { LanguageSwitcher } from '#/components/LanguageSwitcher'
+
+/**
+ * Build a section anchor href that works from every route.
+ *
+ * The header lives inside `__root.tsx`, so it renders on every page —
+ * but the section ids (`#features`, `#pricing`, …) only exist on the
+ * homepage. A bare `href="#pricing"` on `/checkout` just appends the
+ * hash to the URL without navigating, leaving the user stuck. By
+ * returning `"/#pricing"` whenever we're NOT on `"/"`, the browser
+ * does a real cross-route navigation home and the scroll-to-anchor
+ * fires correctly after the home route mounts.
+ */
+function sectionHref(id: string, pathname: string): string {
+  return pathname === '/' ? `#${id}` : `/#${id}`
+}
 
 const SECTIONS = ['features', 'saga', 'health', 'pricing', 'faq', 'contact'] as const
 type SectionId = (typeof SECTIONS)[number]
@@ -25,6 +41,11 @@ const SECTION_KANJI: Record<SectionId, string> = {
 
 export function Nav() {
   const { t } = useTranslation()
+  // `pathname` drives `sectionHref` — on `/` we keep bare `#id`
+  // anchors so the IntersectionObserver-driven active state still
+  // tracks; on subpages we rewrite to `/#id` so the link actually
+  // navigates home instead of becoming a no-op.
+  const pathname = useRouterState({ select: (s) => s.location.pathname })
   const [scrolled, setScrolled] = useState(false)
   const [active, setActive] = useState<SectionId | null>(null)
   const [progress, setProgress] = useState(0)
@@ -143,7 +164,7 @@ export function Nav() {
           {DESKTOP_SECTIONS.map((id) => (
             <a
               key={id}
-              href={`#${id}`}
+              href={sectionHref(id, pathname)}
               data-active={active === id ? 'true' : 'false'}
               className="nav-link"
             >
@@ -158,7 +179,7 @@ export function Nav() {
               the bar has room; below lg the same link is in the footer
               and the mobile drawer. */}
           <a
-            href="#contact"
+            href={sectionHref('contact', pathname)}
             aria-label={t('nav.supportAria')}
             className="nav-support hidden lg:inline-flex items-center gap-2 h-9 px-3 rounded-md text-sm text-sumi-soft hover:text-hinomaru transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40"
           >
@@ -170,7 +191,7 @@ export function Nav() {
               inside the drawer. */}
           <LanguageSwitcher className="hidden lg:block" />
           <a
-            href="#download"
+            href={sectionHref('download', pathname)}
             className="btn-sumi hidden md:inline-flex h-9 items-center gap-2 rounded-md px-4 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
           >
             <Download className="h-3.5 w-3.5" strokeWidth={1.8} />
@@ -202,6 +223,7 @@ export function Nav() {
       <MobileDrawer
         open={menuOpen}
         active={active}
+        pathname={pathname}
         onClose={() => setMenuOpen(false)}
       />
     </header>
@@ -231,10 +253,15 @@ function BrushBurger() {
 function MobileDrawer({
   open,
   active,
+  pathname,
   onClose,
 }: {
   open: boolean
   active: SectionId | null
+  /** Forwarded from `<Nav>` so the drawer's anchor links rewrite to
+   *  `/#id` when the user is on a subpage (e.g. `/checkout`). Same
+   *  fix as the desktop nav — see `sectionHref` rationale. */
+  pathname: string
   onClose: () => void
 }) {
   const { t } = useTranslation()
@@ -320,7 +347,7 @@ function MobileDrawer({
               return (
                 <li key={id}>
                   <a
-                    href={`#${id}`}
+                    href={sectionHref(id, pathname)}
                     onClick={onClose}
                     data-active={isActive ? 'true' : 'false'}
                     // Row-level hover treatment: the inner kanji + label
@@ -369,7 +396,7 @@ function MobileDrawer({
             of two unrelated links stacked vertically. */}
         <div className="px-5 pt-6">
           <a
-            href="#contact"
+            href={sectionHref('contact', pathname)}
             onClick={onClose}
             className="group flex items-center gap-3 rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_72%,#fff)] px-3.5 py-2.5 transition-colors duration-200 hover:border-[var(--line-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40"
           >
@@ -393,7 +420,7 @@ function MobileDrawer({
         {/* Primary CTA + closing hanko-style mark. */}
         <div className="px-5 pt-7 pb-8 flex flex-col gap-4">
           <a
-            href="#download"
+            href={sectionHref('download', pathname)}
             onClick={onClose}
             className="btn-sumi inline-flex h-12 items-center justify-center gap-2.5 rounded-md px-6 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40"
           >

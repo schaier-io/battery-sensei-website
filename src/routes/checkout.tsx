@@ -21,7 +21,7 @@ import { Footer } from '#/components/sections/Footer'
 import { useDiscountAvailability } from '#/lib/use-discount-availability'
 import { usePremiumPrice, useLifetimePrice } from '#/lib/use-price'
 
-const SITE_URL = 'https://battery-sensei.app'
+const SITE_URL = 'https://www.battery-sensei.app'
 const PATH = '/checkout'
 const PAGE_TITLE = 'Checkout — Battery Sensei Pro'
 const PAGE_DESC =

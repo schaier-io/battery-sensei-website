@@ -6,7 +6,7 @@ import { Reveal } from '#/components/zen/Reveal'
 import { Nav } from '#/components/sections/Nav'
 import { Footer } from '#/components/sections/Footer'
 
-const SITE_URL = 'https://battery-sensei.app'
+const SITE_URL = 'https://www.battery-sensei.app'
 const PATH = '/privacy'
 const PAGE_TITLE = 'Privacy — Battery Sensei'
 const PAGE_DESC =

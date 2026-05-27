@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Plane, Home, Sunrise } from 'lucide-react'
 import { FeaturePage } from '#/components/FeaturePage'
 
-const SITE_URL = 'https://battery-sensei.app'
+const SITE_URL = 'https://www.battery-sensei.app'
 const PATH = '/features/travel-mode'
 const PAGE_TITLE = 'Travel prep mode — Battery Sensei'
 const PAGE_DESC =

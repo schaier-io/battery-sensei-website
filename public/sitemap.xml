@@ -2,19 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://battery-sensei.app/</loc>
+    <loc>https://www.battery-sensei.app/</loc>
     <lastmod>2026-05-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://battery-sensei.app/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://battery-sensei.app/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.battery-sensei.app/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.battery-sensei.app/" />
   </url>
   <url>
-    <loc>https://battery-sensei.app/vs-aldente</loc>
+    <loc>https://www.battery-sensei.app/vs-aldente</loc>
     <lastmod>2026-05-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://battery-sensei.app/vs-aldente" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://battery-sensei.app/vs-aldente" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.battery-sensei.app/vs-aldente" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.battery-sensei.app/vs-aldente" />
   </url>
 </urlset>

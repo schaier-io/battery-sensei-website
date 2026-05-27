@@ -9,7 +9,7 @@ const thanksSearchSchema = z.object({
   checkout_id: z.string().min(1).max(80).optional(),
 }).catch({})
 
-const SITE_URL = 'https://battery-sensei.app'
+const SITE_URL = 'https://www.battery-sensei.app'
 const PATH = '/thanks/support'
 const PAGE_TITLE = 'Thanks — Battery Sensei Ongoing Support'
 const PAGE_DESC =

@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Calendar, AlertTriangle, Zap } from 'lucide-react'
 import { FeaturePage } from '#/components/FeaturePage'
 
-const SITE_URL = 'https://battery-sensei.app'
+const SITE_URL = 'https://www.battery-sensei.app'
 const PATH = '/features/meeting-battery-guard'
 const PAGE_TITLE = 'Meeting Battery Guard — Battery Sensei'
 const PAGE_DESC =

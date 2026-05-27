@@ -8,7 +8,7 @@ import appCss from '../styles.css?url'
 import { FAQ_ITEMS } from '#/components/sections/FAQ'
 import { I18nProvider } from '#/lib/i18n/I18nProvider'
 
-const SITE_URL = 'https://battery-sensei.app'
+const SITE_URL = 'https://www.battery-sensei.app'
 
 // Title: 58 chars. Primary kw ("MacBook Battery") at the front, value-pop
 // after, brand at the end. Punctuation chosen to render as a compact title

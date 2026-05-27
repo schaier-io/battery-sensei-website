@@ -47,7 +47,7 @@ export const FAQ_ITEMS: ReadonlyArray<FaqItem> = [
   },
   {
     q: 'How much does Battery Sensei cost?',
-    a: 'Sensei Premium is $3.99, one payment, lifetime license — every future Premium feature, every Mac you own. Try it free for 5 days first — no card needed to start, no nag when the trial ends. After the trial the core essentials (charge limit, smart alerts, 30-day history) stay free forever; Premium unlocks Meeting Battery Guard, unlimited Saga history, and custom warning presets. Checkout shows the price in your local currency.',
+    a: 'Sensei Premium is $3.99, one payment, lifetime license — every future Premium feature, every Mac you own. Try it free for 5 days first — no card needed to start. When the trial ends Sensei asks once at launch — no card on file, never any silent charge. After the trial the core essentials (charge limit + Travel Mode, smart alerts via three presets, 24-hour battery history, last-hour per-app battery, menu-bar live watts) stay free forever; Premium unlocks Meeting Battery Guard, unlimited battery history, and custom warning rules (add, remove, edit thresholds). Your Meeting Battery Guard toggle keeps its previous state but stops firing — your config isn\'t reset. Checkout shows the price in your local currency.',
   },
   {
     q: 'How does the license key work?',
@@ -76,7 +76,7 @@ export const FAQ_ITEMS: ReadonlyArray<FaqItem> = [
   },
   {
     q: 'Is Battery Sensei an AlDente alternative?',
-    a: 'Yes. Sensei covers AlDente\'s core charge-limit feature in every tier, adds smart warnings and a plain-English battery history, and ships as a single notarized .pkg installer. Premium adds Meeting Battery Guard and unlimited Saga history for one payment. A detailed side-by-side comparison lives at battery-sensei.app/vs-aldente.',
+    a: 'Yes. Sensei covers AlDente\'s core charge-limit feature in every tier, adds smart warnings and a plain-English battery history, and ships as a single notarized .pkg installer. Premium adds Meeting Battery Guard, unlimited battery history, and custom warning rules for one payment. A detailed side-by-side comparison lives at www.battery-sensei.app/vs-aldente.',
   },
   {
     q: 'How do I update Battery Sensei?',
@@ -84,7 +84,7 @@ export const FAQ_ITEMS: ReadonlyArray<FaqItem> = [
   },
   {
     q: 'How does the Meeting Battery Guard timeout work?',
-    a: 'Opt-in. Sensei looks at the next few events on your calendar and predicts whether your current battery will survive each meeting given typical drain. When a meeting is at risk, it fires up to four notifications: 30, 15, and 5 minutes before the meeting starts, and one final nudge at start time. Each notification includes the exact minute the laptop is predicted to die ("dies 17 min into standup") and a plug-in remedy ("22 min on the charger and you\'re clear through"). Event titles never leave your Mac — Sensei reads the calendar locally via EventKit. If a meeting is no longer at risk (you plugged in, or the meeting ended), pending reminders are cancelled silently.',
+    a: 'Meeting Battery Guard is a Premium feature, available during the free trial and after activating a Premium license. Opt-in: Sensei looks at the next few events on your calendar and predicts whether your current battery will survive each meeting given typical drain. When a meeting is at risk, it fires up to four notifications: 30, 15, and 5 minutes before the meeting starts, and one final nudge at start time. Each notification includes the exact minute the laptop is predicted to die ("dies 17 min into standup") and a plug-in remedy ("22 min on the charger and you\'re clear through"). Event titles never leave your Mac — Sensei reads the calendar locally via EventKit. If a meeting is no longer at risk (you plugged in, or the meeting ended), pending reminders are cancelled silently.',
   },
 ]
 

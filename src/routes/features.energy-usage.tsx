@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Flame, Search } from 'lucide-react'
 import { FeaturePage } from '#/components/FeaturePage'
 
-const SITE_URL = 'https://battery-sensei.app'
+const SITE_URL = 'https://www.battery-sensei.app'
 const PATH = '/features/energy-usage'
 const PAGE_TITLE = 'Top power-hungry apps — Battery Sensei'
 const PAGE_DESC =
