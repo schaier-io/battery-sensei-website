@@ -98,6 +98,26 @@
         length="20501056"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.2.1</title>
+      <pubDate>Wed, 27 May 2026 15:18:08 +0000</pubDate>
+      <sparkle:version>42</sparkle:version>
+      <sparkle:shortVersionString>1.2.1</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.2.1</h1>
+<p>Two reliability fixes.</p>
+<p>The &quot;Install and Relaunch&quot; window now actually comes to the front when Sparkle has an update ready. Previously the app was a menu-bar accessory and the prompt could be born behind whatever you were doing.</p>
+<p>Activating a new license no longer risks leaving you locked out. The new key gets activated first; the old one only releases if the new one succeeds. Network blip, typo, cancelled mid-flow — your existing license stays put. The sheet now shows a small warning when you&#x27;re about to swap.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.2.1/Battery-Sensei.pkg"
+        sparkle:edSignature="KCPul0/ceF8qUQ5Udux/dxVCpRkMLGctFgynbeWSwuaJzzZ0dtwv85Y1eQqYetjeH5YmODjRdSU1NFkjUZjHDg=="
+        length="20514291"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
