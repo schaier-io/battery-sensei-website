@@ -55,6 +55,81 @@ Drag the installer into Applications and Sensei takes it from there.
         length="20491997"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.1.0</title>
+      <pubDate>Wed, 27 May 2026 05:09:54 +0000</pubDate>
+      <sparkle:version>1.1.0</sparkle:version>
+      <sparkle:shortVersionString>1.1.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+# Battery Sensei 1.1
+
+A polish-and-precision release for Meeting Battery Guard, the warnings UI, and the auto-update plumbing. If you're on 1.0, Sparkle will offer you this build the next time you launch the app.
+
+## Highlights
+
+### Meeting Battery Guard — redesigned reminder system
+
+The single "max two fires per meeting" rule has been replaced with a **multi-checkpoint system** that mirrors the website's `REMINDS YOU AT  −30  −15  −5  −1` strip. Toggle which checkpoints fire — Sensei sends exactly one notification per enabled checkpoint, per meeting.
+
+- **Default checkpoints**: `−30 min` (early heads-up) and `−1 min` plus `−5 min` available, all chips in a dashed-border row inside the meeting guard settings.
+- **Visual emphasis** on the final chip (`−1 min`) when selected — matches the warning tint the website uses to mark the last reminder.
+- **Always-visible Latest forecast** card. When no meeting needs attention, the section shows a calm "No conflicts" empty state with the lookahead window. The Preview button stays in reach in both states.
+- **Live countdown** — the "Happening now · N min left" / "Starts in X min" strip now redraws on a 30-second wall-clock schedule, independent of Combine state updates, so the minute counter actually counts down.
+- **`Forecast.event.titleRedacted` updates the moment you flip "Show event titles"** — previously the title cached at forecast time and stayed stale until the next refresh.
+- **OSLog instrumentation** — every fire (or suppression) logs to Console.app under `subsystem:io.schaier.battery-sensei category:calendar.notifier` so you can verify the cadence in real time.
+
+### Overlay polish — meeting alerts look different from battery warnings
+
+Meeting overlays now use a dedicated layout:
+- Calendar icon (`calendar.badge.exclamationmark`) instead of the battery glyph.
+- Prediction sentence ("Your laptop dies 17 min into standup. Plug in now.") promoted to **serif display** typography as the hero.
+- Percentage readout and drain bar suppressed — the message is the message.
+- Small uppercase tracked kicker ("Meeting battery guard") anchors the context.
+
+All three notification styles (Info / Warning / Alert) carry these changes; the alert tint differentiates urgency.
+
+### Hover affordances — the small things
+
+Audited every custom button in the app for hover state. Three buttons that had no visible affordance now scale + brighten on pointer-over with `prefers-reduced-motion` respected:
+
+- Snooze title button in the warning overlay
+- Snooze `−` / `+` step buttons (disabled state honoured — no scale lift when the button is unavailable)
+- Reminder chips in Meeting Battery Guard (border thickens + scale lifts; pointing-hand cursor on entry)
+
+### Settings window — proper Mac app, not a popover
+
+The Settings window now owns the app's activation policy. When Settings is open, Battery Sensei behaves like a regular Mac app: Dock icon visible, Cmd-Tab targetable, and windows stay anchored when you click another app. When Settings closes, the app drops back to its menu-bar-only state. **Calendar permission prompts and other system dialogs no longer make the Settings window vanish.**
+
+- Removed the zoom + miniaturize traffic-light buttons — Settings is a sized, single-purpose surface, not a free-floating document window.
+
+### Reminder fires, audited
+
+Notifications are now strictly `(eventID, checkpoint)`-deduped. No severity escalation between checkpoints can sneak in a third fire; downgrades never re-emit. The OSLog stream lets you verify this in real time.
+
+## Bug fixes
+
+- **EventKit prompt + accessory policy**: clicking "Allow Full Access" no longer closes the Settings window. The fix lives at the window layer instead of the per-call workaround that shipped in 1.0.
+- **Lookahead persistence**: removed the user-facing Lookahead control. The fixed 4-hour scan window applies for everyone; reminders cap how many notifications fire so the extra knob added no signal. Any previously-persisted custom value (8h, 12h) collapses to 4h on next launch.
+- **Show / Hide event titles toggle inversion**: the toggle now reads positively ("Show event titles in notifications"). Defaults to on, with a one-time migration that resets the old "Hide" preference so users who previously enabled redaction can opt back in deliberately under the new framing.
+
+## Requires
+
+- macOS 14 (Sonoma) or later
+- Apple Silicon or Intel
+
+Drag the installer into Applications and Sensei takes it from there.
+
+ありがとうございます。
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.1.0/Battery-Sensei.pkg"
+        sparkle:edSignature="O19AkzCUXIbHQTmnzqZw9DSAudAUmNtRvTZeTI9EZaloCfiZ+N0GBJFgBa8CPrpdK5m+u/gLlGjsJhFuTSH7AQ=="
+        length="20497999"
+        type="application/octet-stream" />
+    </item>
+
 
   </channel>
 </rss>
