@@ -6,7 +6,7 @@ const SITE_URL = 'https://www.battery-sensei.app'
 const PATH = '/features/meeting-battery-guard'
 const PAGE_TITLE = 'Meeting Battery Guard — Battery Sensei'
 const PAGE_DESC =
-  'Calendar-aware battery warning. Sensei predicts whether your battery will survive each meeting and warns at 30/15/5/0 minutes — all on-device.'
+  'Calendar-aware battery warning. Sensei predicts whether your battery will survive each meeting and warns at 30/15/5/1 minutes — all on-device.'
 
 export const Route = createFileRoute('/features/meeting-battery-guard')({
   head: () => ({
@@ -58,7 +58,7 @@ function MeetingMockup() {
           <span>−30</span>
           <span>−15</span>
           <span>−5</span>
-          <span className="text-hinomaru">now</span>
+          <span className="text-hinomaru">−1</span>
         </span>
       </div>
     </div>

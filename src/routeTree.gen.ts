@@ -23,6 +23,7 @@ import { Route as FeaturesEnergyUsageRouteImport } from './routes/features.energ
 import { Route as FeaturesCustomThresholdsRouteImport } from './routes/features.custom-thresholds'
 import { Route as FeaturesBatteryJournalRouteImport } from './routes/features.battery-journal'
 import { Route as FeaturesAlertPresetsRouteImport } from './routes/features.alert-presets'
+import { Route as ApiCheckoutIdRouteImport } from './routes/api/checkout.$id'
 
 const WalkthroughRoute = WalkthroughRouteImport.update({
   id: '/walkthrough',
@@ -96,6 +97,11 @@ const FeaturesAlertPresetsRoute = FeaturesAlertPresetsRouteImport.update({
   path: '/features/alert-presets',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiCheckoutIdRoute = ApiCheckoutIdRouteImport.update({
+  id: '/api/checkout/$id',
+  path: '/api/checkout/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -112,6 +118,7 @@ export interface FileRoutesByFullPath {
   '/features/travel-mode': typeof FeaturesTravelModeRoute
   '/thanks/lifetime': typeof ThanksLifetimeRoute
   '/thanks/support': typeof ThanksSupportRoute
+  '/api/checkout/$id': typeof ApiCheckoutIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -128,6 +135,7 @@ export interface FileRoutesByTo {
   '/features/travel-mode': typeof FeaturesTravelModeRoute
   '/thanks/lifetime': typeof ThanksLifetimeRoute
   '/thanks/support': typeof ThanksSupportRoute
+  '/api/checkout/$id': typeof ApiCheckoutIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -145,6 +153,7 @@ export interface FileRoutesById {
   '/features/travel-mode': typeof FeaturesTravelModeRoute
   '/thanks/lifetime': typeof ThanksLifetimeRoute
   '/thanks/support': typeof ThanksSupportRoute
+  '/api/checkout/$id': typeof ApiCheckoutIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -163,6 +172,7 @@ export interface FileRouteTypes {
     | '/features/travel-mode'
     | '/thanks/lifetime'
     | '/thanks/support'
+    | '/api/checkout/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -179,6 +189,7 @@ export interface FileRouteTypes {
     | '/features/travel-mode'
     | '/thanks/lifetime'
     | '/thanks/support'
+    | '/api/checkout/$id'
   id:
     | '__root__'
     | '/'
@@ -195,6 +206,7 @@ export interface FileRouteTypes {
     | '/features/travel-mode'
     | '/thanks/lifetime'
     | '/thanks/support'
+    | '/api/checkout/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -212,6 +224,7 @@ export interface RootRouteChildren {
   FeaturesTravelModeRoute: typeof FeaturesTravelModeRoute
   ThanksLifetimeRoute: typeof ThanksLifetimeRoute
   ThanksSupportRoute: typeof ThanksSupportRoute
+  ApiCheckoutIdRoute: typeof ApiCheckoutIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -314,6 +327,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FeaturesAlertPresetsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/checkout/$id': {
+      id: '/api/checkout/$id'
+      path: '/api/checkout/$id'
+      fullPath: '/api/checkout/$id'
+      preLoaderRoute: typeof ApiCheckoutIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -332,6 +352,7 @@ const rootRouteChildren: RootRouteChildren = {
   FeaturesTravelModeRoute: FeaturesTravelModeRoute,
   ThanksLifetimeRoute: ThanksLifetimeRoute,
   ThanksSupportRoute: ThanksSupportRoute,
+  ApiCheckoutIdRoute: ApiCheckoutIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

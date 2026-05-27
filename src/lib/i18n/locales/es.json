@@ -106,7 +106,6 @@
       "warnBody": "Tu portátil se apaga a los <0>17 min</0> de la reunión. Enchúfalo ya.",
       "warnFix": "22 min en el cargador y llegas hasta el final.",
       "remindsYou": "Te avisa en",
-      "now": "ahora",
       "minBefore": "−{{min}} min",
       "onDevice": "Solo en el dispositivo"
     }
@@ -303,7 +302,7 @@
       },
       {
         "label": "Meeting Battery Guard",
-        "desc": "Lee las próximas 4 horas de reuniones en el dispositivo. Riesgo crítico: avisa 30/15/5/0 min antes. Catastrófico: avisa al instante.",
+        "desc": "Lee las próximas 4 horas de reuniones en el dispositivo. Riesgo crítico: avisa 30/15/5/1 min antes. Catastrófico: avisa al instante.",
         "key": "meeting-battery-guard",
         "sensei": "yes",
         "aldente": "no",
@@ -324,9 +323,9 @@
     "managePurchase": "Gestionar compra",
     "checkoutHint": "Pedido #{{id}}",
     "delivery": {
-      "label": "Clave de licencia · por correo",
-      "from": "De <0>Polar</0> (nuestra plataforma de pago), normalmente en menos de un minuto.",
-      "spam": "¿No está en tu bandeja? Mira el spam. ¿Aún nada después de cinco minutos? Escribe a <0>info@battery-sensei.app</0> y la reenviamos el mismo día.",
+      "label": "Clave de licencia",
+      "from": "Polar (nuestra plataforma de pago) te envía la clave por correo, normalmente en menos de un minuto.",
+      "spam": "¿Algún problema — la clave no llega, la activación falla, lo que sea? Escríbenos a <0>info@battery-sensei.app</0> y lo resolvemos el mismo día.",
       "supportEmail": "info@battery-sensei.app",
       "downloadCta": "Descargar Sensei"
     },

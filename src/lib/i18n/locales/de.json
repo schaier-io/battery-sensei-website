@@ -106,7 +106,6 @@
       "warnBody": "Ihr Laptop schaltet sich nach <0>17 Min.</0> im Standup ab. Jetzt anschließen.",
       "warnFix": "22 Min. am Ladegerät und Sie kommen durch.",
       "remindsYou": "Erinnert Sie um",
-      "now": "jetzt",
       "minBefore": "−{{min}} Min.",
       "onDevice": "Nur auf dem Gerät"
     }
@@ -303,7 +302,7 @@
       },
       {
         "label": "Meeting Battery Guard",
-        "desc": "Liest die nächsten 4 Stunden Termine auf dem Gerät. Kritisches Risiko: warnt 30/15/5/0 Min. vorher. Katastrophal: warnt sofort.",
+        "desc": "Liest die nächsten 4 Stunden Termine auf dem Gerät. Kritisches Risiko: warnt 30/15/5/1 Min. vorher. Katastrophal: warnt sofort.",
         "key": "meeting-battery-guard",
         "sensei": "yes",
         "aldente": "no",
@@ -324,9 +323,9 @@
     "managePurchase": "Kauf verwalten",
     "checkoutHint": "Bestellung #{{id}}",
     "delivery": {
-      "label": "Lizenzschlüssel · per E-Mail",
-      "from": "Von <0>Polar</0> (unser Zahlungsanbieter), meist innerhalb einer Minute.",
-      "spam": "Nicht im Posteingang? Schau in den Spam-Ordner. Nach fünf Minuten immer noch nichts? Schreib an <0>info@battery-sensei.app</0>, wir schicken ihn noch am selben Tag erneut.",
+      "label": "Lizenzschlüssel",
+      "from": "Polar (unser Zahlungsanbieter) schickt deinen Schlüssel per E-Mail, meist innerhalb einer Minute.",
+      "spam": "Irgendetwas hakt — Schlüssel kommt nicht an, Aktivierung schlägt fehl, irgendwas? Schreib an <0>info@battery-sensei.app</0> und wir kümmern uns noch am selben Tag darum.",
       "supportEmail": "info@battery-sensei.app",
       "downloadCta": "Sensei laden"
     },

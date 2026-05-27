@@ -13,6 +13,7 @@ import { Hanko } from '#/components/zen/Hanko'
 import { Reveal } from '#/components/zen/Reveal'
 import { Nav } from '#/components/sections/Nav'
 import { Footer } from '#/components/sections/Footer'
+import { LicenseRevealCard } from '#/components/LicenseRevealCard'
 import { CUSTOMER_PORTAL_URL } from '#/lib/polar'
 
 // How long to wait after the page lands before kicking off the ninja
@@ -130,6 +131,15 @@ export function ThanksPage({ tier, kanji }: { tier: Tier; kanji: string }) {
           </div>
         </section>
 
+        {/* License key reveal — sits above the bow video so the buyer
+            sees their key first, then the celebration. Self-contained:
+            fetches /api/checkout/[id] using the same `checkout_id` query
+            param Polar appends to the success URL, strips the URL on
+            mount, gracefully degrades to a "find your key in the portal"
+            card on 410 / failure. Renders nothing when no checkout_id is
+            present (legacy / resent links). */}
+        <LicenseRevealCard checkoutId={checkoutId} />
+
         {/* The "moment slot" — first the bow plays, then the license-
             delivery card fades in over the same space. Two absolutely-
             positioned children inside a relative wrapper with a fixed
@@ -233,7 +243,7 @@ function LicenseDelivery({ visible }: { visible: boolean }) {
       // so links don't get pressed while invisible behind the fading
       // video; aria-hidden mirrors the same for screen readers.
       aria-hidden={!visible}
-      className="absolute inset-0 flex flex-col rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] px-5 py-5 sm:px-6"
+      className="absolute inset-0 flex flex-col rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] px-6 py-6 sm:px-7 sm:py-7"
       style={{
         opacity: visible ? 1 : 0,
         transform: visible ? 'translateY(0)' : 'translateY(8px)',
@@ -261,13 +271,13 @@ function LicenseDelivery({ visible }: { visible: boolean }) {
         />
         <Mail aria-hidden className="h-3.5 w-3.5 text-nezumi" strokeWidth={1.7} />
       </div>
-      <p className="mt-3 text-[0.875rem] leading-[1.6] text-sumi-soft">
+      <p className="mt-4 text-[0.875rem] leading-[1.6] text-sumi-soft">
         <Trans
           i18nKey="thanks.delivery.from"
           components={[<span className="font-semibold text-sumi" />]}
         />
       </p>
-      <p className="mt-1.5 text-[0.875rem] leading-[1.6] text-sumi-soft">
+      <p className="mt-2 text-[0.875rem] leading-[1.6] text-sumi-soft">
         <Trans
           i18nKey="thanks.delivery.spam"
           components={[
@@ -281,7 +291,7 @@ function LicenseDelivery({ visible }: { visible: boolean }) {
       {/* Download CTA — the natural next action once the key arrives.
           Sized full-width inside the card so it reads as the resolution
           of the delivery story rather than a separate affordance. */}
-      <div className="mt-4 flex justify-center">
+      <div className="mt-6 flex justify-center">
         <a
           href="/download/latest"
           className="group inline-flex h-10 items-center justify-center gap-2 rounded-md border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-5 text-[0.875rem] font-medium text-sumi transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:bg-[color-mix(in_oklab,var(--washi)_40%,#fff)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
