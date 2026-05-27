@@ -690,14 +690,25 @@ body::after {
   text-shadow: none;
 }
 
-/* Gentle scroll-down bob — used on hero scroll cue + Read more arrow. */
+/* Gentle scroll-down bob — used on the hero scroll cue + the Read
+   more arrow. Symmetric sine-ish easing reads as breath rather than
+   jump; small opacity sway on the same beat adds life without
+   pulling the eye. Travel held at 3 px so it never feels like the
+   icon is escaping its circle. The animation must own `transform`
+   exclusively on whichever element it's applied to — never combine
+   with a Tailwind translate utility on the same element, or both
+   will overwrite each other every frame. Put hover-lifts on a
+   wrapping element instead. */
 @keyframes gentle-bob {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(5px); }
+  0%, 100% { transform: translateY(0); opacity: 0.85; }
+  50%      { transform: translateY(3px); opacity: 1; }
 }
-.animate-gentle-bob { animation: gentle-bob 1.9s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite; }
+.animate-gentle-bob {
+  animation: gentle-bob 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  will-change: transform, opacity;
+}
 @media (prefers-reduced-motion: reduce) {
-  .animate-gentle-bob { animation: none; }
+  .animate-gentle-bob { animation: none; opacity: 0.85; }
 }
 
 /* Language dropdown — open/close + per-item stagger.

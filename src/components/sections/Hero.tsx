@@ -166,12 +166,15 @@ export function Hero() {
             className="group inline-flex h-11 items-center gap-2.5 rounded-md pl-4 pr-2 text-sm text-sumi-soft hover:text-sumi transition-colors duration-[280ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
           >
             {t('hero.readMore')}
+            {/* Circle wrapper carries the hover lift / glow so the
+                inner chevron can own `transform` for its bob keyframe
+                without two transforms fighting on the same element. */}
             <span
-              className="relative inline-flex h-7 w-7 items-center justify-center rounded-full border border-sumi/15 bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] transition-all duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:border-sumi/35 group-hover:bg-[color-mix(in_oklab,var(--washi)_45%,#fff)] group-hover:shadow-[0_4px_12px_-6px_rgba(28,26,23,0.25)]"
+              className="relative inline-flex h-7 w-7 items-center justify-center rounded-full border border-sumi/15 bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] transition-[transform,background-color,border-color,box-shadow] duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:translate-y-0.5 group-hover:border-sumi/35 group-hover:bg-[color-mix(in_oklab,var(--washi)_45%,#fff)] group-hover:shadow-[0_4px_12px_-6px_rgba(28,26,23,0.25)]"
               aria-hidden
             >
               <ChevronDown
-                className="h-3.5 w-3.5 animate-gentle-bob transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:translate-y-0.5 group-hover:[animation-play-state:paused]"
+                className="h-3.5 w-3.5 animate-gentle-bob text-sumi-soft group-hover:text-sumi"
                 strokeWidth={2}
               />
             </span>
