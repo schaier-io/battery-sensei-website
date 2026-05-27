@@ -191,7 +191,7 @@ export function LicenseRevealCard({
   return (
     <section
       aria-label="License key delivery"
-      className="mx-auto max-w-2xl px-5 pb-2 pt-10 sm:px-6 md:pt-12"
+      className="mx-auto max-w-2xl px-5 pb-2 pt-2 sm:px-6"
     >
       <div className="mx-auto w-full max-w-[440px]">
         {state.phase === 'loading' && <LoadingCard />}
@@ -534,21 +534,26 @@ function ReadyCard({
         </button>
       )}
 
-      {/* The revealed key panel — slides + fades in from below. */}
+      {/* The revealed key panel — slides + fades in from below.
+          Deliberately compact: the key + copy + a single-line meta
+          row are all the buyer needs in this card. The "paste it into
+          Settings → Premium" instruction lives in the Install Sensei
+          card below this one, so repeating the 3-step OL here just
+          padded the surface for no UX gain. */}
       <div
         data-revealed={revealed ? 'true' : 'false'}
         className="license-reveal"
         aria-hidden={!revealed}
       >
-        <div className="rounded-2xl border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,#fff)] px-6 py-6 shadow-[0_1px_0_rgba(255,255,255,0.5)_inset,0_24px_50px_-22px_rgba(28,26,23,0.18)]">
+        <div className="rounded-2xl border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,#fff)] px-5 py-5 shadow-[0_1px_0_rgba(255,255,255,0.5)_inset,0_24px_50px_-22px_rgba(28,26,23,0.18)]">
           <OrderIdLine orderId={orderId} />
-          <p className="mt-3 flex items-center gap-2 text-[11px] uppercase tracking-[0.22em] text-sumi-soft">
+          <p className="mt-2 flex items-center gap-2 text-[11px] uppercase tracking-[0.22em] text-sumi-soft">
             <KeyRound className="h-3.5 w-3.5 text-hinomaru" strokeWidth={1.8} />
             License key
           </p>
-          <div className="mt-3 flex items-stretch gap-2">
+          <div className="mt-2 flex items-stretch gap-2">
             <code
-              className="flex-1 min-w-0 select-all rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] px-3 py-2.5 font-mono text-[13px] leading-tight tracking-[0.04em] text-sumi"
+              className="flex-1 min-w-0 select-all rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] px-2.5 py-2 font-mono text-[12px] leading-tight tracking-[0.04em] text-sumi"
               style={{ wordBreak: 'break-all' }}
             >
               {licenseKey || '—'}
@@ -573,22 +578,7 @@ function ReadyCard({
             </button>
           </div>
 
-          <ol className="mt-5 space-y-1.5 text-[13px] leading-relaxed text-sumi-soft">
-            <li>
-              <span className="text-sumi font-semibold">1.</span> Open
-              Battery Sensei in your menu bar.
-            </li>
-            <li>
-              <span className="text-sumi font-semibold">2.</span> Open{' '}
-              <span className="text-sumi">Sensei → Activate Premium</span>.
-            </li>
-            <li>
-              <span className="text-sumi font-semibold">3.</span> Paste the
-              key above. Sensei activates and unlocks Premium.
-            </li>
-          </ol>
-
-          <div className="mt-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 text-[12px] text-sumi-soft">
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 text-[11.5px] text-sumi-soft">
             {customerEmail ? (
               <span className="inline-flex items-center gap-1.5">
                 <Mail className="h-3.5 w-3.5" strokeWidth={1.6} />

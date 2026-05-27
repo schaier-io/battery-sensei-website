@@ -156,16 +156,21 @@ export function ThanksPage({ tier, kanji }: { tier: Tier; kanji: string }) {
             usually goes straight from loading → ready without ever
             showing the "Polar is finishing the paperwork" state.
 
-            The slot collapses (max-height → 0) after the video fades
-            so the reveal card below slides up to fill the space rather
-            than the page sitting on a 300 px scar of empty pixels. */}
-        <section className="mx-auto max-w-2xl px-5 pt-10 sm:px-6 md:pt-14">
+            The OUTER section has NO padding so the whole slot can
+            collapse to a hairline of nothing once the video fades —
+            putting padding on an outer wrapper around a collapsing
+            element leaves a permanent ghost of empty space (the bug
+            this section originally had). All vertical space lives on
+            the inner collapsing div, including the top padding that
+            spaces it from the hero copy. */}
+        <section className="mx-auto max-w-2xl px-5 sm:px-6">
           <div
             className="relative mx-auto w-full max-w-[440px]"
             style={{
-              maxHeight: licenseShown ? 0 : 320,
+              maxHeight: licenseShown ? 0 : 380,
+              paddingTop: licenseShown ? 0 : '2.5rem',
               overflow: 'hidden',
-              transitionProperty: 'max-height',
+              transitionProperty: 'max-height, padding-top',
               transitionDuration: '620ms',
               transitionTimingFunction: 'cubic-bezier(0.2, 0.8, 0.2, 1)',
             }}
@@ -191,11 +196,14 @@ export function ThanksPage({ tier, kanji }: { tier: Tier; kanji: string }) {
         {/* Two staggered after-the-bow cards. Both mount only when
             licenseShown flips true so the polling fetch in
             LicenseRevealCard fires *after* the video has played out —
-            the upstream usually beats us to it during that window. */}
+            the upstream usually beats us to it during that window.
+            Tight pt-2 here (was pt-10) because the collapsing video
+            slot above already drops to nothing — any additional
+            padding here just rebuilds the gap we just removed. */}
         {licenseShown && (
           <>
             <LicenseRevealCard checkoutId={checkoutId} />
-            <section className="mx-auto max-w-2xl px-5 pb-2 pt-8 sm:px-6">
+            <section className="mx-auto max-w-2xl px-5 pb-2 pt-6 sm:px-6">
               <div className="mx-auto w-full max-w-[440px]">
                 <LicenseDelivery />
               </div>
