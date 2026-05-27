@@ -257,12 +257,13 @@ function ExpiredCard({
         License delivery
       </p>
       <h2 className="display-title mt-2 text-xl font-semibold text-sumi">
-        Pick up your key in the portal.
+        Check your email for the key.
       </h2>
       <p className="mt-2 text-sm leading-relaxed text-sumi-soft">
-        Your key lives permanently in the customer portal, signed in with
-        the email you used at checkout. (And it was emailed to you when
-        the order completed.)
+        Polar emailed your license key to the address you used at
+        checkout when the order completed (worth a peek in spam if it's
+        not in the inbox). It also lives permanently in the customer
+        portal, signed in with the same email.
       </p>
       <a
         href={customerPortalUrl}
@@ -271,7 +272,7 @@ function ExpiredCard({
         className="btn-sumi mt-5 inline-flex h-10 items-center gap-2 rounded-md px-5 text-[13px] font-medium"
       >
         <ExternalLink className="h-3.5 w-3.5" strokeWidth={1.8} />
-        Find my key in the portal
+        Open customer portal
       </a>
     </div>
   )
