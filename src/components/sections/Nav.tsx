@@ -125,7 +125,13 @@ export function Nav() {
   return (
     <header
       data-scrolled={scrolled ? 'true' : 'false'}
-      className="sticky top-0 z-40 w-full border-b border-transparent bg-[color-mix(in_oklab,var(--washi)_78%,transparent)] backdrop-blur-md transition-[background-color,border-color,box-shadow,height] duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] data-[scrolled=true]:border-[var(--line-strong)] data-[scrolled=true]:shadow-[0_1px_0_rgba(28,26,23,0.04),0_8px_24px_-12px_rgba(28,26,23,0.18)]"
+      // Mobile gets a near-opaque washi fill so headings + section text
+      // never bleed through the translucent layer when scrolled past
+      // the hero. Above md the bar reverts to the translucent frosted
+      // look that lets the washi page tone show through `backdrop-blur`.
+      // The scrolled state nudges the mobile fill another notch + adds
+      // the soft drop shadow so the bar reads as a separate plane.
+      className="sticky top-0 z-40 w-full border-b border-transparent bg-[color-mix(in_oklab,var(--washi)_96%,#fff)] backdrop-blur-md transition-[background-color,border-color,box-shadow,height] duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] data-[scrolled=true]:border-[var(--line-strong)] data-[scrolled=true]:shadow-[0_1px_0_rgba(28,26,23,0.04),0_8px_24px_-12px_rgba(28,26,23,0.18)] md:bg-[color-mix(in_oklab,var(--washi)_78%,transparent)] md:data-[scrolled=true]:bg-[color-mix(in_oklab,var(--washi)_88%,transparent)]"
     >
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-5 sm:h-20 sm:px-8 md:gap-5 lg:gap-6 lg:px-10">
         {/* Anchor href "/" (not "#") so the browser back button + history
