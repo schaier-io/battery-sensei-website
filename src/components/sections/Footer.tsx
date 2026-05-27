@@ -47,7 +47,7 @@ export function Footer() {
           className="flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center"
         >
           <a
-            href="/download/latest"
+            href="/#free-download-email"
             className="group inline-flex h-10 items-center justify-center gap-2 rounded-md border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] px-5 text-[0.875rem] font-medium text-sumi transition-colors duration-200 hover:bg-[color-mix(in_oklab,var(--washi)_45%,#fff)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
           >
             <Download

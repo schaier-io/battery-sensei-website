@@ -102,7 +102,7 @@ export function FeaturePage({ slug, kanji, mockup }: Props) {
             className="mt-10 flex flex-col items-start gap-3 sm:flex-row sm:items-center"
           >
             <a
-              href="/download/latest"
+              href="/#free-download-email"
               className="btn-sumi group inline-flex h-11 items-center gap-2.5 rounded-md px-6 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
             >
               <Download

@@ -183,6 +183,13 @@ export function ThanksPage({ tier, kanji }: { tier: Tier; kanji: string }) {
             delay={620}
             className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap"
           >
+            <Link
+              to="/"
+              className="inline-flex h-11 items-center gap-2 px-4 text-sm text-sumi-soft transition-colors duration-[280ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:text-sumi sm:order-first"
+            >
+              <ArrowLeft className="h-3.5 w-3.5" strokeWidth={1.7} aria-hidden />
+              {t('thanks.backToHome')}
+            </Link>
             <a
               href="batterysensei://open"
               className="btn-sumi group inline-flex h-11 items-center gap-2.5 rounded-md px-6 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
@@ -205,13 +212,6 @@ export function ThanksPage({ tier, kanji }: { tier: Tier; kanji: string }) {
               />
               {t('thanks.managePurchase')}
             </a>
-            <Link
-              to="/"
-              className="inline-flex h-11 items-center gap-2 px-4 text-sm text-sumi-soft transition-colors duration-[280ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:text-sumi"
-            >
-              <ArrowLeft className="h-3.5 w-3.5" strokeWidth={1.7} aria-hidden />
-              {t('thanks.backToHome')}
-            </Link>
           </Reveal>
         </section>
       </main>

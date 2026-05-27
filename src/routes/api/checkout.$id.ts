@@ -6,8 +6,9 @@ import {
 } from '#/lib/polar-server'
 
 /**
- * License delivery endpoint. The /welcome page calls this with the
- * `checkout_id` Polar appended to its `success_url` redirect.
+ * License delivery endpoint. The /thanks/lifetime and /thanks/support
+ * pages (via LicenseRevealCard) call this with the `checkout_id` Polar
+ * appended to its `success_url` redirect.
  *
  * Contract:
  *   - 200 { licenseKey, customerEmail?, productName?, customerPortalUrl }

@@ -325,7 +325,7 @@
     "delivery": {
       "label": "License key",
       "from": "Polar (our payment provider) emails your key, usually within a minute.",
-      "spam": "Any trouble at all — key not arriving, activation failing, anything — write to <0>info@battery-sensei.app</0> and we'll sort it the same day.",
+      "spam": "Any trouble at all (key not arriving, activation failing, anything): write to <0>info@battery-sensei.app</0> and we'll sort it the same day.",
       "supportEmail": "info@battery-sensei.app",
       "downloadCta": "Download Sensei"
     },

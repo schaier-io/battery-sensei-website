@@ -27,46 +27,50 @@ import { CUSTOMER_PORTAL_URL } from '#/lib/polar'
  * accidental sharing.
  */
 export function LicenseRevealCard({
-  checkoutId,
+  checkoutId: _checkoutIdProp,
 }: {
-  checkoutId: string | undefined
+  checkoutId?: string | undefined
 }) {
-  // Snapshot the checkout_id on first mount and don't react to changes.
-  // Reasons:
-  //   1. We strip the URL via history.replaceState below — if TanStack's
-  //      useSearch picks that up and re-fires with checkoutId=undefined,
-  //      the effect would otherwise tear down our in-flight fetch and
-  //      leave the card stuck on "Preparing your key".
-  //   2. The license delivery is conceptually one-shot per page load.
-  //      Re-fetching mid-render serves no purpose.
-  const initialIdRef = useRef<string | undefined>(checkoutId)
-  const initialId = initialIdRef.current
-
-  const [state, setState] = useState<DeliveryState>(() =>
-    initialId ? { phase: 'loading' } : { phase: 'missing' },
-  )
-
-  // Track that we kicked off the fetch so React's dev StrictMode
-  // double-invocation doesn't fire two parallel requests.
+  // Default to `loading` so the card slot is always *visible* during
+  // hydration. We don't trust the prop / SSR-derived value here — we
+  // read window.location.search inside the effect and decide on the
+  // client. That avoids two failure modes that hid this card in
+  // production before:
+  //   1. SSR rendered with checkoutId=undefined (search not parsed yet)
+  //      → ref-snapshot locked the state at `missing` → returned null
+  //      → reveal card never appeared even though Polar provided the
+  //         id in the URL.
+  //   2. TanStack's useSearch re-firing after our history.replaceState
+  //      could tear down the in-flight fetch.
+  // Reading the URL directly + a one-shot ref sidesteps both.
+  const [state, setState] = useState<DeliveryState>({ phase: 'loading' })
   const startedRef = useRef(false)
 
   useEffect(() => {
-    if (!initialId) return
     if (startedRef.current) return
     startedRef.current = true
 
-    // Strip the checkout_id (and anything else) from the URL once we
-    // have it in memory. The route stays at its canonical path.
-    if (typeof window !== 'undefined') {
-      const { pathname } = window.location
-      window.history.replaceState({}, '', pathname)
+    if (typeof window === 'undefined') return
+
+    const params = new URLSearchParams(window.location.search)
+    const checkoutId = params.get('checkout_id')?.trim() ?? ''
+
+    if (!checkoutId) {
+      setState({ phase: 'missing' })
+      return
     }
+
+    // Strip checkout_id (and any other params) from the visible URL so
+    // it doesn't propagate via history-sync, screenshots, or accidental
+    // sharing. Route stays at its canonical path.
+    const { pathname } = window.location
+    window.history.replaceState({}, '', pathname)
 
     let cancelled = false
     ;(async () => {
       try {
         const res = await fetch(
-          `/api/checkout/${encodeURIComponent(initialId)}`,
+          `/api/checkout/${encodeURIComponent(checkoutId)}`,
           {
             credentials: 'same-origin',
             cache: 'no-store',
@@ -115,13 +119,12 @@ export function LicenseRevealCard({
     return () => {
       cancelled = true
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // No `checkout_id` in the URL at all — render nothing so the page
-  // still works as a generic thank-you (e.g. legacy links, support
-  // resends). The downstream LicenseDelivery card already covers the
-  // "find your key" story in that case.
+  // still works as a generic thank-you (legacy links, support resends).
+  // The downstream LicenseDelivery card still covers the "find your
+  // key" story in that case.
   if (state.phase === 'missing') return null
 
   return (

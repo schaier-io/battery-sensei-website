@@ -155,7 +155,7 @@ export function Hero() {
 
         <Reveal delay={480} className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <a
-            href="/download/latest"
+            href="#free-download-email"
             className="btn-sumi group inline-flex h-11 items-center gap-2.5 rounded-md px-6 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
           >
             <Download className="h-4 w-4 transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5" strokeWidth={1.8} />

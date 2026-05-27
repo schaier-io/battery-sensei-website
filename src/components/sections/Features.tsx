@@ -169,7 +169,7 @@ function MeetingGuardMockup() {
             { v: '30', tone: 'sumi-soft' },
             { v: '15', tone: 'sumi-soft' },
             { v: '5', tone: 'hinomaru' },
-            { v: '0', tone: 'hinomaru' },
+            { v: '1', tone: 'hinomaru' },
           ].map(({ v, tone }, i) => (
             <li key={v} className="flex flex-col items-center gap-1">
               <span
@@ -186,7 +186,7 @@ function MeetingGuardMockup() {
                   tone === 'hinomaru' ? 'text-hinomaru' : 'text-sumi'
                 }`}
               >
-                {v === '0' ? t('features.meetings.now') : t('features.meetings.minBefore', { min: v })}
+                {t('features.meetings.minBefore', { min: v })}
               </span>
             </li>
           ))}

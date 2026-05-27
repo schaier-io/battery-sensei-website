@@ -16,7 +16,12 @@ import { LanguageSwitcher } from '#/components/LanguageSwitcher'
  * fires correctly after the home route mounts.
  */
 function sectionHref(id: string, pathname: string): string {
-  return pathname === '/' ? `#${id}` : `/#${id}`
+  // The legacy standalone Download section is gone; every "download"
+  // intent now scrolls to the email-capture input inside the Pricing
+  // section's free tier. Aliased here so all `sectionHref('download',
+  // …)` call sites pick up the new target without per-site edits.
+  const target = id === 'download' ? 'free-download-email' : id
+  return pathname === '/' ? `#${target}` : `/#${target}`
 }
 
 const SECTIONS = ['features', 'saga', 'health', 'pricing', 'faq', 'contact'] as const

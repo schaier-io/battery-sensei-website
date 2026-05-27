@@ -325,7 +325,7 @@
     "delivery": {
       "label": "Clé de licence",
       "from": "Polar (notre prestataire de paiement) t'envoie ta clé par e-mail, généralement en moins d'une minute.",
-      "spam": "Le moindre souci — clé qui n'arrive pas, activation qui coince, quoi que ce soit — écris à <0>info@battery-sensei.app</0> et on règle ça le jour même.",
+      "spam": "Le moindre souci (clé qui n'arrive pas, activation qui coince, quoi que ce soit) ? Écris à <0>info@battery-sensei.app</0> et on règle ça le jour même.",
       "supportEmail": "info@battery-sensei.app",
       "downloadCta": "Télécharger Sensei"
     },

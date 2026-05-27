@@ -325,7 +325,7 @@
     "delivery": {
       "label": "Clave de licencia",
       "from": "Polar (nuestra plataforma de pago) te envía la clave por correo, normalmente en menos de un minuto.",
-      "spam": "¿Algún problema — la clave no llega, la activación falla, lo que sea? Escríbenos a <0>info@battery-sensei.app</0> y lo resolvemos el mismo día.",
+      "spam": "¿Algún problema (la clave no llega, la activación falla, lo que sea)? Escríbenos a <0>info@battery-sensei.app</0> y lo resolvemos el mismo día.",
       "supportEmail": "info@battery-sensei.app",
       "downloadCta": "Descargar Sensei"
     },

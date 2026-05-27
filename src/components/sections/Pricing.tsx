@@ -18,7 +18,7 @@ import {
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
-import { useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import i18n from 'i18next'
 import { Hanko } from '#/components/zen/Hanko'
@@ -497,6 +497,29 @@ function FreeDownloadForm() {
   const { t } = useTranslation()
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'sending' | 'error'>('idle')
+  const inputRef = useRef<HTMLInputElement | null>(null)
+
+  // Every "Download for macOS" CTA on the site now scrolls to this
+  // input via `href="#free-download-email"`. Mirror that with a focus
+  // pass on landing so the visitor can start typing immediately — both
+  // on initial mount (deep link) and on subsequent hash changes
+  // (in-page nav). Reads must be client-only.
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const isTarget = () => window.location.hash === '#free-download-email'
+    function focusInput() {
+      if (!isTarget()) return
+      // Wait one frame so the browser finishes the smooth scroll before
+      // we focus — focusing earlier yanks the page back to the field
+      // and skips the easing.
+      window.requestAnimationFrame(() => {
+        inputRef.current?.focus({ preventScroll: true })
+      })
+    }
+    focusInput()
+    window.addEventListener('hashchange', focusInput)
+    return () => window.removeEventListener('hashchange', focusInput)
+  }, [])
 
   const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())
 
@@ -543,6 +566,7 @@ function FreeDownloadForm() {
           neighbouring cards, so all three columns end on the same
           shape. */}
       <input
+        ref={inputRef}
         id="free-download-email"
         type="email"
         required
