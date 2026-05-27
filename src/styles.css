@@ -1019,6 +1019,49 @@ body::after {
   }
 }
 
+/* Zen spinner — a thin enso arc that rotates slowly. Used on the
+   provisioning card while the polling loop waits for Polar. The
+   `transform-box: fill-box` + `transform-origin: center` keeps the
+   rotation centered on the SVG viewBox regardless of the parent's
+   sizing context. */
+@keyframes zen-spinner-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.zen-spinner {
+  animation: zen-spinner-rotate 2.4s linear infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+@media (prefers-reduced-motion: reduce) {
+  .zen-spinner {
+    animation-duration: 6s;
+  }
+}
+
+/* Slogan cross-fade — applied to each new slogan via React `key` so
+   the keyframe re-fires whenever the line changes. Tiny vertical
+   drift keeps the motion feeling deliberate rather than blinky. */
+@keyframes zen-slogan-fade {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.zen-slogan {
+  animation: zen-slogan-fade 520ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .zen-slogan {
+    animation: none;
+  }
+}
+
 /* Section spacing — generous "ma" 間 */
 .zen-section {
   padding-block: clamp(4.5rem, 9vw, 8rem);

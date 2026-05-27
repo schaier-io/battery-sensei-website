@@ -329,6 +329,18 @@
       "supportEmail": "info@battery-sensei.app",
       "downloadCta": "Für macOS laden"
     },
+    "provisioning": {
+      "kicker": "Dein Schlüssel ist unterwegs",
+      "slogans": [
+        "Polar bereitet alles vor.",
+        "Dein Schlüssel wird gerade erstellt.",
+        "Letzte Schritte im Hintergrund.",
+        "Gleich ist alles fertig.",
+        "Noch einen kleinen Moment.",
+        "Fast geschafft.",
+        "Bereit, jeden Augenblick."
+      ]
+    },
     "lifetime": {
       "heading": "Willkommen bei Lifetime.",
       "headingItalic": "Jede Premium-Funktion, für immer.",

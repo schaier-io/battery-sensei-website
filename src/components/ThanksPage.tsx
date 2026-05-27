@@ -28,7 +28,7 @@ const VIDEO_FADE_OUT_MS = 760
 // Delay between the video starting its fade-out and the license card
 // starting its fade-in. Half the video's fade-out duration so the two
 // transitions cross-fade through the midpoint without either feeling
-// abrupt — the slot is never visually empty.
+// abrupt — the page is never visually empty.
 const LICENSE_CROSSFADE_MS = Math.round(VIDEO_FADE_OUT_MS / 2)
 // Reduced-motion shortcut: if the user has asked the browser to settle
 // down, we skip the bow entirely and reveal the license card sooner.
@@ -53,8 +53,27 @@ type Tier = 'lifetime' | 'support'
 export function ThanksPage({ tier, kanji }: { tier: Tier; kanji: string }) {
   const { t } = useTranslation()
   const search = useSearch({ strict: false }) as { checkout_id?: string }
-  const checkoutId = search.checkout_id
+  // Snapshot the id once on first render. We strip the URL via
+  // history.replaceState below so a later read of useSearch would come
+  // back empty — but the polling card may not mount until after the
+  // bow video finishes (3–12 s), so we need a stable copy here.
+  const checkoutIdRef = useRef<string | null>(null)
+  if (checkoutIdRef.current === null && search.checkout_id) {
+    checkoutIdRef.current = search.checkout_id
+  }
+  const checkoutId = checkoutIdRef.current ?? search.checkout_id
   const key = `thanks.${tier}`
+
+  // Strip ?checkout_id=… from the visible URL the moment the page
+  // hydrates so a refresh / share / back-forward navigation can never
+  // re-trigger a key fetch with a stale id (and so the address bar
+  // doesn't expose the id while the bow video plays).
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    if (!window.location.search) return
+    const { pathname } = window.location
+    window.history.replaceState({}, '', pathname)
+  }, [])
 
   // Track the purchase exactly once per mount. This is the *reliable*
   // conversion event — visitors only land here after Polar (or the dev
@@ -130,36 +149,59 @@ export function ThanksPage({ tier, kanji }: { tier: Tier; kanji: string }) {
           </div>
         </section>
 
-        {/* License key reveal — sits above the bow video so the buyer
-            sees their key first, then the celebration. Self-contained:
-            fetches /api/checkout/[id] using the same `checkout_id` query
-            param Polar appends to the success URL, strips the URL on
-            mount, gracefully degrades to a "find your key in the portal"
-            card on 410 / failure. Renders nothing when no checkout_id is
-            present (legacy / resent links). */}
-        <LicenseRevealCard checkoutId={checkoutId} />
+        {/* The bow video plays first — gives Polar a free 3–12 s of
+            quiet time before we start polling for the license key. By
+            the time the bow finishes, the key has almost always already
+            been provisioned upstream, so the LicenseRevealCard below
+            usually goes straight from loading → ready without ever
+            showing the "Polar is finishing the paperwork" state.
 
-        {/* The "moment slot" — first the bow plays, then the license-
-            delivery card fades in over the same space. Two absolutely-
-            positioned children inside a relative wrapper with a fixed
-            min-height so the page doesn't shift during the cross-fade.
-            The min-height matches a 16:9 video at the max-width below
-            (440 / 16 * 9 ≈ 248 px) plus generous breathing room for
-            the license card on the other side. */}
-        <section className="mx-auto max-w-2xl px-5 pb-2 pt-10 sm:px-6 md:pt-14">
-          <div className="relative mx-auto w-full max-w-[440px] min-h-[300px] sm:min-h-[320px]">
-            <DelayedBowVideo
-              hidden={licenseShown}
-              onComplete={() => {
-                // Wait the cross-fade interval so the video has begun
-                // its fade-out before we start fading the license card
-                // in. The slot is never visually empty between the two.
-                window.setTimeout(() => setLicenseShown(true), LICENSE_CROSSFADE_MS)
-              }}
-            />
-            <LicenseDelivery visible={licenseShown} />
+            The slot collapses (max-height → 0) after the video fades
+            so the reveal card below slides up to fill the space rather
+            than the page sitting on a 300 px scar of empty pixels. */}
+        <section className="mx-auto max-w-2xl px-5 pt-10 sm:px-6 md:pt-14">
+          <div
+            className="relative mx-auto w-full max-w-[440px]"
+            style={{
+              maxHeight: licenseShown ? 0 : 320,
+              overflow: 'hidden',
+              transitionProperty: 'max-height',
+              transitionDuration: '620ms',
+              transitionTimingFunction: 'cubic-bezier(0.2, 0.8, 0.2, 1)',
+            }}
+            aria-hidden={licenseShown}
+          >
+            <div className="relative min-h-[300px] sm:min-h-[320px]">
+              <DelayedBowVideo
+                hidden={licenseShown}
+                onComplete={() => {
+                  // Half the video's fade-out so the reveal slot starts
+                  // expanding while the bow is still dissolving — feels
+                  // like one continuous moment instead of a hard cut.
+                  window.setTimeout(
+                    () => setLicenseShown(true),
+                    LICENSE_CROSSFADE_MS,
+                  )
+                }}
+              />
+            </div>
           </div>
         </section>
+
+        {/* Two staggered after-the-bow cards. Both mount only when
+            licenseShown flips true so the polling fetch in
+            LicenseRevealCard fires *after* the video has played out —
+            the upstream usually beats us to it during that window. */}
+        {licenseShown && (
+          <>
+            <LicenseRevealCard checkoutId={checkoutId} />
+            <section className="mx-auto max-w-2xl px-5 pb-2 pt-8 sm:px-6">
+              <div className="mx-auto w-full max-w-[440px]">
+                <LicenseDelivery />
+              </div>
+            </section>
+          </>
+        )}
 
         <section className="zen-section mx-auto max-w-3xl px-5 pt-2 sm:px-6">
           <Reveal
@@ -236,25 +278,29 @@ export function ThanksPage({ tier, kanji }: { tier: Tier; kanji: string }) {
  * rule mirrors the kanji-seal vocabulary used elsewhere on the site
  * (基 features, 価 pricing, 鍵 in the reveal card above).
  */
-function LicenseDelivery({ visible }: { visible: boolean }) {
+function LicenseDelivery() {
   const { t } = useTranslation()
+  // Mount-time fade — flips on the next frame so the CSS transition
+  // has a "from" → "to" delta to interpolate. Without the rAF the
+  // browser collapses both states into the rendered frame and there's
+  // no visible animation.
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => {
+    const id = window.requestAnimationFrame(() => setMounted(true))
+    return () => window.cancelAnimationFrame(id)
+  }, [])
   return (
     <div
       role="note"
       aria-label={t('thanks.delivery.label')}
-      // Absolute fill of the parent slot so it occupies exactly the
-      // space the video vacated. `pointer-events` flips with visibility
-      // so links don't get pressed while invisible behind the fading
-      // video; aria-hidden mirrors the same for screen readers.
-      aria-hidden={!visible}
-      className="absolute inset-0 flex flex-col rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] px-6 py-6 sm:px-7 sm:py-7"
+      className="flex flex-col rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] px-6 py-6 sm:px-7 sm:py-7"
       style={{
-        opacity: visible ? 1 : 0,
-        transform: visible ? 'translateY(0)' : 'translateY(8px)',
+        opacity: mounted ? 1 : 0,
+        transform: mounted ? 'translateY(0)' : 'translateY(8px)',
         transitionProperty: 'opacity, transform',
         transitionDuration: '620ms',
+        transitionDelay: '120ms',
         transitionTimingFunction: 'cubic-bezier(0.2, 0.8, 0.2, 1)',
-        pointerEvents: visible ? 'auto' : 'none',
       }}
     >
       <div className="flex items-center gap-3">

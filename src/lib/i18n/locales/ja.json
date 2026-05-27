@@ -329,6 +329,18 @@
       "supportEmail": "info@battery-sensei.app",
       "downloadCta": "macOS版をダウンロード"
     },
+    "provisioning": {
+      "kicker": "鍵をお届け中",
+      "slogans": [
+        "Polarが準備をしています。",
+        "鍵を作成しています。",
+        "最終確認をしています。",
+        "もう少しお待ちください。",
+        "間もなくお届けします。",
+        "あと一歩です。",
+        "いつでもお渡しできます。"
+      ]
+    },
     "lifetime": {
       "heading": "Lifetimeへようこそ。",
       "headingItalic": "すべてのPremium機能を、永久に。",

@@ -329,6 +329,18 @@
       "supportEmail": "info@battery-sensei.app",
       "downloadCta": "Télécharger pour macOS"
     },
+    "provisioning": {
+      "kicker": "Ta clé arrive",
+      "slogans": [
+        "Polar prépare tout.",
+        "Ta clé est en train d'être créée.",
+        "Derniers ajustements.",
+        "Encore un instant.",
+        "C'est presque prêt.",
+        "Bientôt en main.",
+        "Prête d'un instant à l'autre."
+      ]
+    },
     "lifetime": {
       "heading": "Bienvenue dans À vie.",
       "headingItalic": "Toutes les fonctionnalités Premium, pour toujours.",

@@ -329,6 +329,18 @@
       "supportEmail": "info@battery-sensei.app",
       "downloadCta": "Download for macOS"
     },
+    "provisioning": {
+      "kicker": "Key on its way",
+      "slogans": [
+        "Polar is preparing the paperwork.",
+        "Inking your license.",
+        "Polishing the seal.",
+        "Pressing the wax.",
+        "Sealing the scroll.",
+        "One last brushstroke.",
+        "Holding the brush steady."
+      ]
+    },
     "lifetime": {
       "heading": "Welcome to Lifetime.",
       "headingItalic": "Every Premium feature, forever.",

@@ -1,14 +1,24 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
-import {
-  Check,
-  Clock,
-  Copy,
-  ExternalLink,
-  KeyRound,
-  Mail,
-  RefreshCw,
-} from 'lucide-react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Check, Copy, ExternalLink, KeyRound, Mail } from 'lucide-react'
 import { CUSTOMER_PORTAL_URL } from '#/lib/polar'
+
+// How long each provisioning slogan stays on screen before the next
+// one takes over. 3.4 s reads comfortably without becoming jittery.
+//
+// The slogan list itself lives in i18n (thanks.provisioning.slogans)
+// so all five locales can phrase the wait in voice — see the locale
+// files for the craft-step progression (paperwork → ink → polish →
+// wax → seal → final stroke → resting). The list does NOT loop: once
+// we reach the final line we stop rotating and let it sit. Looping
+// would tell the truth ("we're still waiting") in a way that undoes
+// the progress feeling we just built.
+const SLOGAN_INTERVAL_MS = 3400
+
+// Hardcoded fallback used only when the locale somehow ships without
+// the slogan array (broken JSON, mid-deploy gap, etc.) so the card
+// never renders an empty headline.
+const FALLBACK_SLOGAN = 'Polar is preparing the paperwork.'
 
 /**
  * Click-to-reveal license key card. Mounted above the bow video on the
@@ -21,66 +31,51 @@ import { CUSTOMER_PORTAL_URL } from '#/lib/polar'
  *  3. Strip the query via history.replaceState so the URL doesn't leak.
  *  4. Fetch /api/checkout/[id] and act on the response:
  *       - ready                 → key present, click-to-reveal panel
- *       - hard expired (410)    → outside the 15-min server window or
- *                                 upstream failed; fall back to the
- *                                 customer portal (no retry — the
- *                                 server has already given up)
  *       - provisioning          → order paid, key not yet exposed by
  *                                 Polar. We poll the API every
- *                                 POLL_INTERVAL_MS for up to
- *                                 POLL_BUDGET_MS total before giving
- *                                 the user a manual "check again"
- *                                 button. The card visible during the
- *                                 poll is the same ProvisioningCard
- *                                 with a quiet "checking…" indicator
- *                                 so they're not staring at a static
- *                                 message.
- *       - polled-out            → we polled for the full budget and
- *                                 Polar still hadn't returned a key.
- *                                 Surface the email fallback + a
- *                                 "Check again" button so they can
- *                                 trigger another round without
- *                                 reloading the page.
+ *                                 POLL_INTERVAL_MS until either the
+ *                                 key arrives or the server tells us
+ *                                 the window has passed (410). No
+ *                                 manual recheck — the loop runs for
+ *                                 the full server-side 15-min
+ *                                 freshness window.
+ *       - hard expired (410)    → outside the 15-min server window or
+ *                                 upstream failed; show the email
+ *                                 fallback and stop polling. Terminal.
  *
  * Every card shows the order id at the top so the buyer always has
  * something concrete to quote in support.
  */
 
 // How often to re-hit /api/checkout/[id] while the order is in the
-// provisioning state. 3 s is a comfortable middle ground: tight enough
-// that a key landing 6–9 s after checkout still feels instant, slack
-// enough that we're not hammering Polar through our own API.
-const POLL_INTERVAL_MS = 3000
-
-// How long to keep auto-polling before handing the wheel back to the
-// user. 30 s covers the vast majority of Polar's benefit-grant lag
-// without making the page feel stuck. After this we show a "Check
-// again" button so the user can keep going manually.
-const POLL_BUDGET_MS = 30_000
+// provisioning state. 10 s is slack enough to not hammer Polar through
+// our own API across the full 15-minute window (~90 calls worst case)
+// and tight enough that a key landing partway through still feels
+// near-instant on the page.
+const POLL_INTERVAL_MS = 10_000
 
 export function LicenseRevealCard({
-  checkoutId: _checkoutIdProp,
+  checkoutId: checkoutIdProp,
 }: {
+  /** Optional — when the parent already pulled the id off the URL and
+   *  stripped the query string, pass it in here so the card doesn't
+   *  have to re-read window.location. The card falls back to reading
+   *  the URL itself when no prop is given (legacy callers). */
   checkoutId?: string | undefined
 }) {
   const [state, setState] = useState<DeliveryState>({ phase: 'loading' })
   const startedRef = useRef(false)
-  // Remembered so the "Check again" button can restart polling after
-  // history.replaceState has already stripped the query string.
-  const checkoutIdRef = useRef<string | null>(null)
   // Handle to whichever poll runner is currently in flight, so we can
-  // cancel it on unmount or before kicking off a manual recheck.
+  // cancel it on unmount.
   const cancelRef = useRef<(() => void) | null>(null)
 
   const startPolling = useCallback((checkoutId: string) => {
-    // If a previous runner is still alive (manual recheck during a
-    // pending fetch, StrictMode double-invocation, etc.), cancel it
-    // first so callbacks from the old one can't race the new state.
+    // Cancel any prior runner so its callbacks can't race the new state
+    // (StrictMode double-invocation, etc.).
     cancelRef.current?.()
 
     let cancelled = false
     let timeoutId: number | undefined
-    const pollStart = Date.now()
 
     cancelRef.current = () => {
       cancelled = true
@@ -109,8 +104,9 @@ export function LicenseRevealCard({
         const customerPortalUrl =
           (data.customerPortalUrl as string) ?? CUSTOMER_PORTAL_URL
 
-        // Hard server-side expiry (15-min window passed OR the upstream
-        // call completely failed). No point retrying.
+        // Hard server-side expiry: 15-min window passed OR upstream
+        // call completely failed. Terminal — stop polling and show the
+        // email fallback.
         if (res.status === 410 || data.expired) {
           setState({ phase: 'expired', orderId, customerPortalUrl })
           return
@@ -128,22 +124,11 @@ export function LicenseRevealCard({
           return
         }
 
-        // Provisioning — Polar hasn't surfaced the key yet. Decide
-        // whether to keep auto-polling or hand the wheel to the user.
-        const elapsed = Date.now() - pollStart
-        if (elapsed >= POLL_BUDGET_MS) {
-          setState({
-            phase: 'polled-out',
-            orderId,
-            customerEmail,
-            customerPortalUrl,
-          })
-          return
-        }
-
-        // Update the visible card to the provisioning state (so it
-        // stops showing "Preparing your key…" forever) and schedule
-        // the next attempt.
+        // Provisioning — Polar hasn't surfaced the key yet. Update the
+        // visible card (so it stops showing the initial "Preparing
+        // your key…" loader) and schedule the next poll. We keep
+        // looping until the server returns either a key or a 410; the
+        // 410 ends the loop naturally at the 15-min mark.
         setState({
           phase: 'provisioning',
           orderId,
@@ -167,37 +152,39 @@ export function LicenseRevealCard({
     attempt()
   }, [])
 
-  // Bound to the polled-out card's "Check again" button. Re-uses the
-  // cached checkoutId so the user doesn't have to reload the page.
-  const recheck = useCallback(() => {
-    const id = checkoutIdRef.current
-    if (!id) return
-    startPolling(id)
-  }, [startPolling])
-
   useEffect(() => {
     if (startedRef.current) return
     startedRef.current = true
     if (typeof window === 'undefined') return
 
-    const params = new URLSearchParams(window.location.search)
-    const checkoutId = params.get('checkout_id')?.trim() ?? ''
+    // Prefer the prop the parent handed us. Falls back to reading the
+    // URL ourselves — useful when the card is mounted by a caller that
+    // hasn't already parsed the success-redirect query.
+    let checkoutId = (checkoutIdProp ?? '').trim()
+    if (!checkoutId) {
+      const params = new URLSearchParams(window.location.search)
+      checkoutId = params.get('checkout_id')?.trim() ?? ''
+    }
 
     if (!checkoutId) {
       setState({ phase: 'missing' })
       return
     }
 
-    checkoutIdRef.current = checkoutId
-    const { pathname } = window.location
-    window.history.replaceState({}, '', pathname)
+    // Strip the query string regardless of where the id came from, so
+    // a back/forward navigation or a copied URL can never leak the
+    // checkout id again.
+    if (window.location.search) {
+      const { pathname } = window.location
+      window.history.replaceState({}, '', pathname)
+    }
 
     startPolling(checkoutId)
 
     return () => {
       cancelRef.current?.()
     }
-  }, [startPolling])
+  }, [checkoutIdProp, startPolling])
 
   if (state.phase === 'missing') return null
 
@@ -219,14 +206,6 @@ export function LicenseRevealCard({
             orderId={state.orderId}
             customerEmail={state.customerEmail}
             customerPortalUrl={state.customerPortalUrl}
-          />
-        )}
-        {state.phase === 'polled-out' && (
-          <PolledOutCard
-            orderId={state.orderId}
-            customerEmail={state.customerEmail}
-            customerPortalUrl={state.customerPortalUrl}
-            onRecheck={recheck}
           />
         )}
         {state.phase === 'ready' && (
@@ -256,12 +235,6 @@ type DeliveryState =
     }
   | {
       phase: 'provisioning'
-      orderId: string | null
-      customerEmail: string | null
-      customerPortalUrl: string
-    }
-  | {
-      phase: 'polled-out'
       orderId: string | null
       customerEmail: string | null
       customerPortalUrl: string
@@ -310,6 +283,35 @@ function ProvisioningCard({
   customerEmail: string | null
   customerPortalUrl: string
 }) {
+  const { t } = useTranslation()
+
+  // Pull the slogan list out of i18n once per render. `returnObjects`
+  // hands back the raw array; we defensively normalize anything weird
+  // (missing key, wrong shape, empty array) back to a single-line
+  // fallback so the card never blanks out the headline.
+  const slogans = useMemo<readonly string[]>(() => {
+    const raw = t('thanks.provisioning.slogans', { returnObjects: true })
+    if (Array.isArray(raw) && raw.length > 0) {
+      return raw.filter((s): s is string => typeof s === 'string')
+    }
+    return [FALLBACK_SLOGAN]
+  }, [t])
+
+  // Walk through the slogan list once, then stop on the final line.
+  // Re-renders the headline with a new React key on every step, which
+  // re-fires the CSS fade animation. We use setTimeout-per-step rather
+  // than setInterval so the loop can self-terminate at the last index
+  // without a `clearInterval` race.
+  const [sloganIdx, setSloganIdx] = useState(0)
+  useEffect(() => {
+    if (sloganIdx >= slogans.length - 1) return
+    const id = window.setTimeout(
+      () => setSloganIdx((i) => i + 1),
+      SLOGAN_INTERVAL_MS,
+    )
+    return () => window.clearTimeout(id)
+  }, [sloganIdx, slogans.length])
+
   return (
     <div
       className="rounded-2xl border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,#fff)] px-6 py-7 text-center shadow-[0_1px_0_rgba(255,255,255,0.5)_inset,0_24px_50px_-24px_rgba(28,26,23,0.18)]"
@@ -317,14 +319,32 @@ function ProvisioningCard({
       aria-live="polite"
     >
       <OrderIdLine orderId={orderId} />
-      <p className="mt-3 flex items-center justify-center gap-2 text-[11px] uppercase tracking-[0.22em] text-sumi-soft">
-        <Clock className="h-3.5 w-3.5 text-hinomaru" strokeWidth={1.8} />
-        Key on its way
-      </p>
-      <h2 className="display-title mt-2 text-xl font-semibold text-sumi">
-        Polar is finishing the paperwork.
+
+      {/* Zen enso spinner + tiny tracked label. Sits between the order
+          line and the rotating slogan as the card's visual anchor —
+          the eye lands on it first and reads "something is happening"
+          before the words register. */}
+      <div className="mt-3 flex flex-col items-center gap-2">
+        <ZenSpinner />
+        <p className="text-[11px] uppercase tracking-[0.22em] text-sumi-soft">
+          {t('thanks.provisioning.kicker')}
+        </p>
+      </div>
+
+      {/* Rotating slogan. The `key` change makes React unmount + remount
+          the span, re-firing the .zen-slogan fade-in keyframe. Min
+          height holds the line so the surrounding text doesn't jump
+          when a longer slogan rotates in. */}
+      <h2
+        className="display-title mt-3 text-xl font-semibold text-sumi"
+        style={{ minHeight: '1.6em' }}
+      >
+        <span key={sloganIdx} className="zen-slogan inline-block">
+          {slogans[sloganIdx] ?? FALLBACK_SLOGAN}
+        </span>
       </h2>
-      <p className="mt-2 text-sm leading-relaxed text-sumi-soft">
+
+      <p className="mt-3 text-sm leading-relaxed text-sumi-soft">
         Your license key
         {customerEmail ? (
           <>
@@ -336,18 +356,10 @@ function ProvisioningCard({
           ' is being generated and emailed to you'
         )}
         . We're rechecking every few seconds and will reveal it the moment
-        it lands.
+        it lands. If nothing arrives, your inbox is the safe fallback.
       </p>
-      {/* Subtle live-pulse so the card visibly belongs to a running
-          process rather than a frozen static message. */}
-      <div className="mt-5 inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.22em] text-nezumi">
-        <span
-          aria-hidden
-          className="inline-block h-1.5 w-1.5 rounded-full bg-hinomaru animate-pulse"
-        />
-        Checking…
-      </div>
-      <div className="mt-4">
+
+      <div className="mt-5">
         <a
           href={customerPortalUrl}
           target="_blank"
@@ -362,79 +374,71 @@ function ProvisioningCard({
   )
 }
 
-function PolledOutCard({
-  orderId,
-  customerEmail,
-  customerPortalUrl,
-  onRecheck,
-}: {
-  orderId: string | null
-  customerEmail: string | null
-  customerPortalUrl: string
-  onRecheck: () => void
-}) {
-  const [busy, setBusy] = useState(false)
-
-  function handleRecheck() {
-    if (busy) return
-    setBusy(true)
-    onRecheck()
-    // The parent flips state via setState; this local flag just guards
-    // against double-firing while React queues the next render.
-    window.setTimeout(() => setBusy(false), 600)
-  }
-
+/**
+ * Zen enso spinner. A thin circular brush arc rotating slowly, with
+ * a subtle gold (kin) accent fading into a deeper sumi at the tail
+ * end — echoes the ChargeRing in the hero. Background ring is the
+ * site's faint line color so the rotating arc reads as ink on paper
+ * rather than as a hard loader.
+ *
+ * Two-layer rendering:
+ *   1. Static faint full circle — the "paper" the brush draws on.
+ *   2. Animated stroked arc — the brush itself, rotated by CSS.
+ *
+ * Linecap is round so the leading and trailing ends taper softly
+ * rather than ending in geometric caps. The dash pattern (60/88)
+ * exposes ~40% of the circumference as inked.
+ */
+function ZenSpinner() {
   return (
-    <div className="rounded-2xl border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,#fff)] px-6 py-7 text-center shadow-[0_1px_0_rgba(255,255,255,0.5)_inset,0_24px_50px_-24px_rgba(28,26,23,0.18)]">
-      <OrderIdLine orderId={orderId} />
-      <p className="mt-3 flex items-center justify-center gap-2 text-[11px] uppercase tracking-[0.22em] text-sumi-soft">
-        <Mail className="h-3.5 w-3.5 text-hinomaru" strokeWidth={1.8} />
-        Check your email
-      </p>
-      <h2 className="display-title mt-2 text-xl font-semibold text-sumi">
-        Polar's still finishing up.
-      </h2>
-      <p className="mt-2 text-sm leading-relaxed text-sumi-soft">
-        We checked for 30 seconds and Polar hasn't returned the key yet.
-        It usually lands within a minute, so the safest place to look
-        right now is your inbox
-        {customerEmail ? (
-          <>
-            {' '}
-            (
-            <span className="font-semibold text-sumi">{customerEmail}</span>,
-            spam too)
-          </>
-        ) : (
-          ' (and the spam folder)'
-        )}
-        . You can also try one more check, or open the customer portal
-        where the key lives permanently.
-      </p>
-      <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
-        <button
-          type="button"
-          onClick={handleRecheck}
-          disabled={busy}
-          className="btn-sumi inline-flex h-10 items-center gap-2 rounded-md px-5 text-[13px] font-medium disabled:cursor-not-allowed disabled:opacity-60"
+    <svg
+      role="presentation"
+      aria-hidden
+      viewBox="0 0 40 40"
+      className="h-8 w-8"
+    >
+      <defs>
+        <linearGradient
+          id="zen-spinner-grad"
+          x1="100%"
+          y1="0%"
+          x2="0%"
+          y2="100%"
         >
-          <RefreshCw
-            className={`h-3.5 w-3.5 ${busy ? 'animate-spin' : ''}`}
-            strokeWidth={1.8}
-          />
-          Check again
-        </button>
-        <a
-          href={customerPortalUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex h-10 items-center gap-2 rounded-md border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] px-5 text-[13px] font-medium text-sumi transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:bg-[color-mix(in_oklab,var(--washi)_45%,#fff)]"
-        >
-          <ExternalLink className="h-3.5 w-3.5" strokeWidth={1.8} />
-          Open customer portal
-        </a>
-      </div>
-    </div>
+          {/* Tail of the brushstroke — transparent so the ink fades
+              into the paper rather than starting hard. */}
+          <stop offset="0%" stopColor="var(--sumi)" stopOpacity="0" />
+          <stop offset="55%" stopColor="var(--sumi)" stopOpacity="0.55" />
+          {/* Leading edge — a hint of hinomaru red so the brush has a
+              clear direction of travel without becoming a "loading
+              spinner" cliché. */}
+          <stop offset="100%" stopColor="var(--hinomaru)" stopOpacity="0.95" />
+        </linearGradient>
+      </defs>
+      {/* Faint "paper" circle — same value as the site's --line so it
+          almost disappears against the washi background. */}
+      <circle
+        cx="20"
+        cy="20"
+        r="14.5"
+        fill="none"
+        stroke="var(--line)"
+        strokeWidth="1"
+      />
+      {/* Animated arc. strokeDasharray + offset exposes ~40% of the
+          circumference; CSS class spins the whole element. */}
+      <circle
+        className="zen-spinner"
+        cx="20"
+        cy="20"
+        r="14.5"
+        fill="none"
+        stroke="url(#zen-spinner-grad)"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeDasharray="38 100"
+      />
+    </svg>
   )
 }
 
