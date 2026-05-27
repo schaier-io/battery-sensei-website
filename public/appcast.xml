@@ -79,6 +79,26 @@
         length="20497510"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.2.0</title>
+      <pubDate>Wed, 27 May 2026 14:45:37 +0000</pubDate>
+      <sparkle:version>41</sparkle:version>
+      <sparkle:shortVersionString>1.2.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.2</h1>
+<p>One-click activation after you buy.</p>
+<p>Click &quot;Open Sensei &amp; activate&quot; on the thank-you page and the app opens with your license key already typed in. You click Activate. That&#x27;s it. No more copy-paste from the email.</p>
+<p>Also: the in-app Buy button now drops you straight into the checkout flow instead of bouncing through the marketing page.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.2.0/Battery-Sensei.pkg"
+        sparkle:edSignature="Umc4Wh2xDBaHena+F6JIooaKMUlJsF4eXCqFDN8Zlm7lkvfwKHKL2izKvjrQpHwEZKIP1q6uSBb/l+9gla7HAw=="
+        length="20501056"
+        type="application/octet-stream" />
+    </item>
+
 
 
 </channel>
