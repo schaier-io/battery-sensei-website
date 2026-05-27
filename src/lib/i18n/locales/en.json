@@ -464,7 +464,7 @@
       "items": [
         {
           "title": "Smart low-battery alerts",
-          "body": "Switch between three preset moods — Zen, Regular, Senpai. Tune each rule's style and dismiss time; thresholds stay fixed."
+          "body": "Three preset moods — Zen, Regular, Senpai. Tune each rule's style and dismiss time."
         },
         {
           "title": "Charge limit + Travel Mode",
@@ -472,23 +472,15 @@
         },
         {
           "title": "24-hour battery history",
-          "body": "Charge history, health tiles, Rescue Receipts — kept locally."
-        },
-        {
-          "title": "Last-hour per-app battery",
-          "body": "See exactly which apps drained the last hour — by name."
+          "body": "Charge history, health tiles, Rescue Receipts. Last-hour per-app drain. All local."
         },
         {
           "title": "Menu-bar live charge + watts",
           "body": "Percentage, watts in / out, time left — one glance, no dock icon."
         },
         {
-          "title": "Five languages",
-          "body": "EN · DE · ES · FR · 日本語."
-        },
-        {
-          "title": "Notarized native macOS app",
-          "body": "AppKit + SwiftUI. No Electron, no cloud, no account."
+          "title": "Native, private, multilingual",
+          "body": "Notarized AppKit + SwiftUI. EN · DE · ES · FR · 日本語. Nothing leaves your Mac."
         }
       ]
     },
@@ -535,17 +527,29 @@
       ]
     },
     "support": {
-      "tier": "応援 · Ongoing Developer Support",
+      "tier": "応援 · Yearly Patron",
       "period": "per year",
       "badge": "Cancel anytime",
-      "blurb": "Premium features while subscribed, plus you keep Sensei in active development. Lower upfront — yearly commitment.",
-      "ctaLabel": "Support yearly",
-      "perksTitle": "What your year buys · 応援",
+      "blurb": "Every Premium feature, billed yearly. Lower upfront than Lifetime — and your subscription is what keeps the next release coming.",
+      "ctaLabel": "Become a patron",
+      "perksTitle": "What you get · 応援",
       "items": [
-        "Every current Premium feature while subscribed",
-        "Funds the next year of Sensei development",
-        "Cancel anytime from your Polar account",
-        "Direct line for ideas + feature requests"
+        {
+          "title": "The full Premium feature set",
+          "body": "Meeting Battery Guard, unlimited battery history, custom warning rules — same as Lifetime, for as long as you're subscribed."
+        },
+        {
+          "title": "You fund the next release",
+          "body": "Sensei is built by one developer. Every yearly patron pays for a slice of the next feature, the next macOS update, the next bug squash."
+        },
+        {
+          "title": "Direct line to the maker",
+          "body": "Patrons get a private channel for feature requests, early betas, and a say in what ships next. Your idea jumps the public queue."
+        },
+        {
+          "title": "Cancel in two clicks",
+          "body": "Manage from your Polar account anytime — no email, no haggling. Sensei stays installed and the free essentials keep working."
+        }
       ]
     },
     "alreadyBought": "Already bought? Enter your license key in Sensei → Settings → Premium."

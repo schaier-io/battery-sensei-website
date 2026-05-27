@@ -29,7 +29,9 @@ import { usePremiumPrice, useLifetimePrice } from '#/lib/use-price'
 import { useDiscountAvailability } from '#/lib/use-discount-availability'
 
 const lifetimeIcons: readonly LucideIcon[] = [Sparkles, InfinityIcon, Clock, Headphones]
-const supportIcons: readonly LucideIcon[] = [Sparkles, TrendingUp, XCircle, Inbox]
+// Order mirrors `pricing.support.items` in en.json:
+// 1. full Premium feature set, 2. you fund the next release, 3. direct line, 4. cancel anytime.
+const supportIcons: readonly LucideIcon[] = [Sparkles, TrendingUp, Inbox, XCircle]
 // Mirrors the order of `pricing.free.items`. Icons are intentionally
 // quieter (sumi-soft / nezumi container) than Lifetime's hinomaru wash
 // so the Free card stays second-fiddle visually.
@@ -52,7 +54,19 @@ export function Pricing() {
   // a plain full-price product, not a stale "was X / now Y" anchor that
   // would lie about the active offer.
   const { remaining: zenmodeRemaining } = useDiscountAvailability()
-  const launchOpen = zenmodeRemaining > 0
+  // "Launch is open" only when BOTH gates agree:
+  //   1. ZENMODE redemption count > 0 (marketing scarcity bar)
+  //   2. Polar's live price preview reports the discount is still being
+  //      honoured AND the two amounts actually differ.
+  //
+  // Without the Polar gate, the strikethrough used to render even after
+  // Polar quietly stopped applying ZENMODE — the page then showed
+  // "was $4.49 / $4.49" because `lifetime.original` and `lifetime.discounted`
+  // came back identical from `/api/price` while `zenmodeRemaining` was
+  // still positive on our side.
+  const hasRealDiscount =
+    lifetime.hasDiscount && lifetime.original.amount > lifetime.discounted.amount
+  const launchOpen = zenmodeRemaining > 0 && hasRealDiscount
   // While the launch discount is active we show the discounted price as
   // the headline; once exhausted, the original full price becomes the
   // headline and the strikethrough is gone too.
@@ -63,9 +77,16 @@ export function Pricing() {
   const lifetimeFeatures = t('pricing.lifetime.items', {
     returnObjects: true,
   }) as Array<{ title: string; body: string }>
-  const supportFeatures = t('pricing.support.items', {
+  // English now ships `support.items` as `{ title, body }[]` so the Yearly
+  // card matches the marketing weight of Lifetime. Legacy locales still
+  // have it as `string[]`; normalize both shapes here so the JSX stays one
+  // template until the other locales are translated.
+  const rawSupportItems = t('pricing.support.items', {
     returnObjects: true,
-  }) as string[]
+  }) as Array<string | { title: string; body?: string }>
+  const supportFeatures: Array<{ title: string; body?: string }> = (
+    Array.isArray(rawSupportItems) ? rawSupportItems : []
+  ).map((entry) => (typeof entry === 'string' ? { title: entry } : entry))
 
   return (
     <section id="pricing" className="zen-section mx-auto max-w-6xl px-5 sm:px-6">
@@ -355,15 +376,22 @@ export function Pricing() {
               {t('pricing.support.perksTitle')}
             </p>
             <ul className="mt-4 space-y-4">
-              {supportFeatures.map((line, idx) => {
+              {supportFeatures.map(({ title, body }, idx) => {
                 const Icon = supportIcons[idx] ?? Sparkles
                 return (
-                  <li key={line} className="flex items-start gap-3">
+                  <li key={title} className="flex items-start gap-3">
                     <span className="mt-[2px] inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-sumi/5 text-sumi-soft">
                       <Icon className="h-3.5 w-3.5" strokeWidth={1.8} aria-hidden />
                     </span>
-                    <span className="text-[0.9375rem] leading-snug text-sumi-soft">
-                      {line}
+                    <span className="min-w-0">
+                      <span className="block text-[0.9375rem] font-medium text-sumi leading-tight">
+                        {title}
+                      </span>
+                      {body && (
+                        <span className="mt-0.5 block text-[0.8125rem] leading-snug text-sumi-soft">
+                          {body}
+                        </span>
+                      )}
                     </span>
                   </li>
                 )
