@@ -139,6 +139,29 @@
         length="20520548"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.2.3</title>
+      <pubDate>Wed, 27 May 2026 17:15:39 +0000</pubDate>
+      <sparkle:version>44</sparkle:version>
+      <sparkle:shortVersionString>1.2.3</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.2.3</h1>
+<p>Quieter idle, sharper feedback.</p>
+<p>Battery Sensei now does noticeably less work when nothing&#x27;s happening. The menu-bar charging pulse runs at half the previous rate (still reads as motion, half the redraws), the icon render cache holds 4× more entries so the percent/time display stops thrashing, and the meeting forecast only re-publishes when the predicted severity actually changes. A few CPU hot spots in the per-app history store got cleaned up too.</p>
+<p>Hover affordances filled in across the app. Every interactive surface, including the warning-mode wizard cards, the language picker, the saga search clear button, and the rescue-receipt dismiss, now responds to pointer-over with a subtle scale lift and pointing-hand cursor. Six gaps closed.</p>
+<p>Removing a license from this Mac now asks first. Confirmation dialog explains the slot returns to your pool, and the destructive button is clearly labeled. Hover on the button is consistent with the Manage link beside it.</p>
+<p>The settings window stops floating above other apps&#x27; full-screen Spaces. Click a full-screen app behind it and the settings drops behind, like every other Mac window.</p>
+<p>A few visual fit-and-finish bits: the Lifetime badge corner radius now matches the Remove button beside it, the hero card kanji watermark lights red on hover like all the other cards, and the menu-bar icon picker has a uniform battery glyph width across Percent / Time / Icon.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.2.3/Battery-Sensei.pkg"
+        sparkle:edSignature="QQFB2FLbavh94Or2T+c48TR/H5rzkNSDr4maXy2o6LkzHdJ18T2hO7h12LVZkvfZtmPvPPiUxBnCvUWGKosxDA=="
+        length="20544937"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
