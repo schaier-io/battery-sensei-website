@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { Bug, Mail, Send, ShieldCheck, Lightbulb, Sparkles } from 'lucide-react'
+import { ArrowRight, Bug, Mail, Send, ShieldCheck, Lightbulb, Sparkles } from 'lucide-react'
 import { Trans, useTranslation } from 'react-i18next'
 import { GithubMark } from '#/components/icons/GithubMark'
 import { Hanko } from '#/components/zen/Hanko'
@@ -278,27 +278,32 @@ export function Contact() {
                   brings it closer to the email card below and
                   stops the right column from towering over the
                   form on the left. */}
+              {/* Roadmap card — tightened padding to p-4 (was p-5) so the
+                  header chip sits closer to the title. Arrow no longer
+                  lives inside a tracked-letter circle that made it
+                  look like it was orbiting; it's now a proper SVG
+                  chevron that slides + brightens on group hover. */}
               <a
                 href={ISSUES_URL}
                 target="_blank"
                 rel="noreferrer"
-                className="paper-card group relative flex flex-col gap-3 overflow-hidden p-5 transition-transform duration-300"
+                className="paper-card group relative flex flex-col gap-2.5 overflow-hidden p-3.5 sm:p-4 transition-transform duration-300"
               >
                 <span
                   aria-hidden
-                  className="pointer-events-none absolute -right-8 -top-10 h-32 w-32 rounded-full bg-hinomaru/[0.06] blur-2xl"
+                  className="pointer-events-none absolute -right-8 -top-10 h-32 w-32 rounded-full bg-hinomaru/[0.06] blur-2xl transition-opacity duration-500 group-hover:opacity-100 group-hover:bg-hinomaru/[0.10]"
                 />
                 <header className="relative flex items-center justify-between gap-3">
                   <span className="inline-flex items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.22em] text-sumi-soft display-title">
                     <Sparkles
-                      className="h-3.5 w-3.5 text-hinomaru"
+                      className="h-3.5 w-3.5 text-hinomaru transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:rotate-[12deg] group-hover:scale-110"
                       strokeWidth={1.7}
                       aria-hidden
                     />
                     {t('contact.github.label')}
                   </span>
                   <GithubMark
-                    className="h-4 w-4 text-nezumi transition-colors group-hover:text-sumi"
+                    className="h-4 w-4 text-nezumi transition-colors duration-[220ms] group-hover:text-sumi"
                     strokeWidth={1.6}
                   />
                 </header>
@@ -323,21 +328,37 @@ export function Contact() {
                   />
                   {/* CTA inline at the end of the chip row on wide
                       screens, wraps to its own line on narrow. The
-                      separator dot tracks the chip rhythm; arrow
-                      animates on parent hover (the <a> is `group`). */}
+                      arrow now uses a clipped reveal — the chevron sits
+                      inside a fixed-width slot and translates within
+                      that slot on hover, so it never looks like it's
+                      escaping a parent circle or pushing the label. */}
                   <span
                     aria-hidden
                     className="hidden text-[var(--line-strong)] sm:inline"
                   >
                     ·
                   </span>
-                  <span className="inline-flex items-center gap-1 text-[0.8125rem] font-medium text-sumi transition-colors group-hover:text-hinomaru">
+                  {/* "Find your thread →" — arrow lives in a 16px slot
+                      with overflow-hidden. At rest the arrow sits flush
+                      left; on group hover it translates a full slot-
+                      width right (16px) and a second arrow eases in
+                      from -100% to 0. Two ArrowRights crossing through
+                      the slot means the eye reads "advance / next",
+                      not a single glyph wiggling in place. */}
+                  <span className="inline-flex items-center gap-1.5 text-[0.8125rem] font-medium text-sumi transition-colors duration-[220ms] group-hover:text-hinomaru">
                     {t('contact.github.cta')}
                     <span
                       aria-hidden
-                      className="transition-transform duration-300 group-hover:translate-x-0.5"
+                      className="relative inline-block h-4 w-4 overflow-hidden align-middle"
                     >
-                      →
+                      <ArrowRight
+                        className="absolute inset-0 h-4 w-4 transition-transform duration-[360ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:translate-x-4"
+                        strokeWidth={1.8}
+                      />
+                      <ArrowRight
+                        className="absolute inset-0 h-4 w-4 -translate-x-4 transition-transform duration-[360ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:translate-x-0"
+                        strokeWidth={1.8}
+                      />
                     </span>
                   </span>
                 </div>
@@ -467,9 +488,24 @@ function PathChip({
       : accent === 'kin'
         ? 'text-kin'
         : 'text-nezumi'
+  // Tinted hover surface keyed to the chip's accent so each path
+  // briefly lights up in its own colour when the parent card is
+  // hovered — Lightbulb/idea blushes hinomaru, Bug glows kin, etc.
+  const hoverBg =
+    accent === 'hinomaru'
+      ? 'group-hover:bg-[color-mix(in_oklab,var(--hinomaru)_8%,var(--washi))]'
+      : accent === 'kin'
+        ? 'group-hover:bg-[color-mix(in_oklab,var(--kin)_10%,var(--washi))]'
+        : 'group-hover:bg-[color-mix(in_oklab,var(--washi)_50%,#fff)]'
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] px-2.5 py-1 text-[11px] font-medium text-sumi-soft transition-colors duration-[220ms] group-hover:border-[var(--line-strong)] group-hover:text-sumi">
-      <Icon className={`h-3 w-3 ${iconColor}`} strokeWidth={1.8} aria-hidden />
+    <span
+      className={`inline-flex items-center gap-1.5 rounded-full border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] px-2.5 py-1 text-[11px] font-medium text-sumi-soft transition-[colors,transform,box-shadow] duration-[260ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5 group-hover:border-[var(--line-strong)] group-hover:text-sumi group-hover:shadow-[0_2px_6px_-4px_rgba(28,26,23,0.18)] ${hoverBg}`}
+    >
+      <Icon
+        className={`h-3 w-3 ${iconColor} transition-transform duration-[260ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-110`}
+        strokeWidth={1.8}
+        aria-hidden
+      />
       {label}
     </span>
   )

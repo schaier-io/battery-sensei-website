@@ -54,8 +54,8 @@ export function Health() {
           >
             <TiltCard rotateAmplitude={feature ? 4 : 6} scaleOnHover={feature ? 1.01 : 1.02}>
               <div
-                className={`paper-card h-full p-6 flex flex-col ${
-                  feature ? 'gap-5' : 'gap-4'
+                className={`paper-card h-full flex flex-col ${
+                  feature ? 'p-5 gap-3.5 sm:p-6 sm:gap-4' : 'p-4 gap-2.5'
                 }`}
               >
                 <div className="flex items-start justify-between">
@@ -89,8 +89,8 @@ export function Health() {
                     {t(`health.cells.${key}.title`)}
                   </h3>
                   <p
-                    className={`mt-2 leading-[1.6] text-sumi-soft ${
-                      feature ? 'text-[1rem]' : 'text-[0.9375rem]'
+                    className={`leading-[1.55] text-sumi-soft ${
+                      feature ? 'mt-2 text-[1rem]' : 'mt-1.5 text-[0.9375rem]'
                     }`}
                   >
                     {t(`health.cells.${key}.body`)}

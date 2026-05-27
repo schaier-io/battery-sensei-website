@@ -20,6 +20,7 @@ import { Nav } from '#/components/sections/Nav'
 import { Footer } from '#/components/sections/Footer'
 import { useDiscountAvailability } from '#/lib/use-discount-availability'
 import { usePremiumPrice, useLifetimePrice } from '#/lib/use-price'
+import { setCurrencyPreference } from '#/lib/currency-preference'
 
 const SITE_URL = 'https://www.battery-sensei.app'
 const PATH = '/checkout'
@@ -119,12 +120,16 @@ function CheckoutPage() {
     void navigate({ search: { tier: next, cur }, replace: true })
   }
 
-  // Currency switcher: writes the choice into `?cur=` so the page
-  // reload-survives + each toggle remounts PolarInlineCheckout (the
+  // Currency switcher: writes the choice into BOTH `?cur=` (per-page
+  // override that survives refresh + can be linked) AND the global
+  // localStorage preference (so the choice persists across pages —
+  // visit /checkout in EUR, navigate back to /, the homepage still
+  // shows EUR). Each toggle remounts PolarInlineCheckout (the
   // `currency` prop is in its effect deps, so Polar mints a fresh
   // session in the new currency).
   function switchCurrency(next: Currency) {
     if (next === cur) return
+    setCurrencyPreference(next ?? null)
     void navigate({ search: { tier, cur: next }, replace: true })
   }
 

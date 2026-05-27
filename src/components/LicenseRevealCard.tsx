@@ -310,15 +310,20 @@ type DeliveryState =
  *  (120 ms after the card frame mounts). */
 function Header({ orderId }: { orderId: string | null }) {
   if (!orderId) return null
+  // Quiet meta row at the top — small kerned `Order` label, dot, then
+  // the UUID in monospace. Right-aligned so it reads as reference
+  // data rather than a headline. Border below uses the same soft
+  // hairline treatment the rest of the card uses.
   return (
     <div
-      className="thanks-section-rise flex items-center justify-end gap-2 border-b border-[color-mix(in_oklab,var(--line)_60%,transparent)] px-5 py-2 sm:px-6"
+      className="thanks-section-rise flex flex-wrap items-baseline justify-end gap-x-2 gap-y-0.5 border-b border-[color-mix(in_oklab,var(--line)_60%,transparent)] px-5 py-2.5 sm:px-6"
       style={{ animationDelay: '120ms' }}
     >
-      <span className="text-[10px] uppercase tracking-[0.18em] text-nezumi">
+      <span className="text-[10px] font-medium uppercase tracking-[0.22em] text-nezumi">
         Order
       </span>
-      <code className="font-mono text-[10.5px] tracking-[0.04em] text-sumi-soft">
+      <span aria-hidden className="text-nezumi/50">·</span>
+      <code className="font-mono text-[10.5px] tracking-[0.04em] text-sumi-soft tabular-nums break-all">
         #{orderId}
       </code>
     </div>
@@ -334,11 +339,14 @@ function Header({ orderId }: { orderId: string | null }) {
 function InstallSection() {
   const { t } = useTranslation()
   return (
-    <div
-      className="thanks-section-rise px-5 pb-6 pt-5 sm:px-6 sm:pt-6"
-      style={{ animationDelay: '240ms' }}
-    >
-      <div className="flex items-center gap-3">
+    <div className="px-5 pb-6 pt-5 sm:px-6 sm:pt-6">
+      {/* Per-row stagger — kanji header → body → CTA → spam line.
+          Each row carries its own animationDelay so the eye walks
+          top-down rather than landing on the whole section at once. */}
+      <div
+        className="thanks-section-rise flex items-center gap-3"
+        style={{ animationDelay: '240ms' }}
+      >
         {/* 装 = "install / equip". Matches the kanji-seal vocabulary
             used elsewhere on the site (基 features, 価 pricing, 鍵 key). */}
         <span
@@ -355,7 +363,10 @@ function InstallSection() {
           className="h-px flex-1 bg-gradient-to-r from-[var(--line-strong)] via-[var(--line)] to-transparent"
         />
       </div>
-      <p className="mt-3 text-[0.9375rem] leading-[1.6] text-sumi-soft">
+      <p
+        className="thanks-section-rise mt-3 text-[0.9375rem] leading-[1.6] text-sumi-soft"
+        style={{ animationDelay: '320ms' }}
+      >
         <Trans
           i18nKey="thanks.delivery.from"
           components={[
@@ -363,13 +374,14 @@ function InstallSection() {
           ]}
         />
       </p>
-      {/* Full-width on small screens, naturally sized above sm. Primary
-          visual weight: the btn-sumi treatment is the loudest thing on
-          the whole card and that's intentional — install is the
-          unblocking action. */}
+      {/* Primary CTA — full-width so it reads as the unblocking action.
+          Above sm the button stays wide for visual weight rather than
+          shrinking to content (the activate step below mirrors this
+          width so both sequential CTAs share a baseline). */}
       <a
         href="/download/latest"
-        className="btn-sumi group mt-5 inline-flex h-11 w-full items-center justify-center gap-2 rounded-md px-5 text-[0.9375rem] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)] sm:w-auto"
+        className="thanks-section-rise btn-sumi group mt-5 inline-flex h-11 w-full items-center justify-center gap-2 rounded-md px-5 text-[0.9375rem] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
+        style={{ animationDelay: '400ms' }}
       >
         <DownloadIcon
           className="h-4 w-4 transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5"
@@ -377,7 +389,10 @@ function InstallSection() {
         />
         {t('thanks.delivery.downloadCta')}
       </a>
-      <p className="mt-3 text-[12px] leading-[1.55] text-nezumi">
+      <p
+        className="thanks-section-rise mt-3 text-[12px] leading-[1.55] text-nezumi"
+        style={{ animationDelay: '480ms' }}
+      >
         <Trans
           i18nKey="thanks.delivery.spam"
           components={[
@@ -404,7 +419,7 @@ function Hairline() {
     <div className="px-5 sm:px-6">
       <div
         className="thanks-hairline-draw h-px bg-gradient-to-r from-transparent via-[var(--line-strong)] to-transparent"
-        style={{ animationDelay: '380ms' }}
+        style={{ animationDelay: '500ms' }}
       />
     </div>
   )
@@ -427,8 +442,8 @@ function DeliveryStrip({
   // state changes — only the contents inside `<StripContent>` morph.
   return (
     <div
-      className="thanks-section-rise bg-[color-mix(in_oklab,var(--washi)_84%,var(--sumi)_4%)] px-5 py-4 sm:px-6"
-      style={{ animationDelay: '460ms' }}
+      className="thanks-section-rise bg-[color-mix(in_oklab,var(--washi)_84%,var(--sumi)_4%)] px-5 py-5 sm:px-6 sm:py-6"
+      style={{ animationDelay: '560ms' }}
     >
       {/* `key={state.phase}` makes React unmount + remount the inner
           contents whenever the polling loop hands off between states,
@@ -466,7 +481,7 @@ function LoadingLine({ label }: { label: string }) {
   return (
     <div className="flex items-center gap-3" role="status" aria-live="polite">
       <ZenSpinner small />
-      <span className="text-[12px] uppercase tracking-[0.22em] text-sumi-soft">
+      <span className="display-title text-[11px] font-semibold uppercase tracking-[0.22em] text-sumi-soft">
         {label}
       </span>
     </div>
@@ -501,10 +516,10 @@ function ProvisioningLine({
   }, [sloganIdx, slogans.length])
 
   return (
-    <div role="status" aria-live="polite">
+    <div className="space-y-3" role="status" aria-live="polite">
       <div className="flex items-center gap-3">
         <ZenSpinner small />
-        <span className="text-[11px] uppercase tracking-[0.22em] text-sumi-soft">
+        <span className="display-title text-[11px] font-semibold uppercase tracking-[0.22em] text-sumi-soft">
           {t('thanks.provisioning.kicker')}
           {customerEmail && (
             <>
@@ -516,22 +531,20 @@ function ProvisioningLine({
           )}
         </span>
       </div>
-      <p className="mt-2 pl-[1.625rem] text-[14px] leading-[1.45] text-sumi">
+      <p className="text-[14px] leading-[1.5] text-sumi">
         <span key={sloganIdx} className="zen-slogan inline-block">
           {slogans[sloganIdx] ?? FALLBACK_SLOGAN}
         </span>
       </p>
-      <div className="mt-2 pl-[1.625rem]">
-        <a
-          href={customerPortalUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex items-center gap-1.5 text-[12px] text-nezumi underline-offset-4 hover:text-sumi-soft hover:underline"
-        >
-          <ExternalLink className="h-3 w-3" strokeWidth={1.6} />
-          {t('thanks.delivery.portalLink')}
-        </a>
-      </div>
+      <a
+        href={customerPortalUrl}
+        target="_blank"
+        rel="noreferrer"
+        className="inline-flex items-center gap-1.5 text-[12px] text-nezumi underline-offset-4 transition-colors hover:text-sumi-soft hover:underline"
+      >
+        <ExternalLink className="h-3 w-3" strokeWidth={1.6} />
+        {t('thanks.delivery.portalLink')}
+      </a>
     </div>
   )
 }
@@ -563,8 +576,18 @@ function KeyLine({
   }
 
   return (
-    <div>
-      <div className="flex items-center gap-3">
+    // Inner stack with consistent vertical rhythm. Each row sits flush
+    // with the section padding (no kanji-column indent) so the content
+    // edges line up with the InstallSection above. Per-row stagger
+    // turns the key reveal into a small cascade: label → code+copy →
+    // activate CTA → meta line. Delays are computed off the strip
+    // state-change so they fire each time `<DeliveryStrip>` swaps
+    // states (the parent `key={state.phase}` remount).
+    <div className="space-y-3.5">
+      <div
+        className="thanks-key-row flex items-center gap-3"
+        style={{ ['--row-delay' as string]: '0ms' }}
+      >
         {/* Kanji lands like a hanko press: starts oversize + invisible,
             settles to 1× with a quick easing curve (.thanks-kanji-stamp).
             Reads as the key being "stamped" into existence. */}
@@ -574,13 +597,24 @@ function KeyLine({
         >
           鍵
         </span>
-        <span className="text-[11px] uppercase tracking-[0.22em] text-sumi-soft">
+        <span className="display-title text-[11px] font-semibold uppercase tracking-[0.22em] text-sumi-soft">
           {t('thanks.delivery.keyLabel')}
         </span>
+        <span
+          aria-hidden
+          className="h-px flex-1 bg-gradient-to-r from-[var(--line-strong)] via-[var(--line)] to-transparent"
+        />
       </div>
-      <div className="mt-2 flex items-stretch gap-2 pl-[2rem]">
+
+      {/* Code + Copy. Stack vertically on phones (so the UUID gets the
+          full width and the copy button reads as a separate affordance,
+          not a sliver glued to the code). Side-by-side from sm up. */}
+      <div
+        className="thanks-key-row flex flex-col gap-2 sm:flex-row sm:items-stretch"
+        style={{ ['--row-delay' as string]: '120ms' }}
+      >
         <code
-          className="flex-1 min-w-0 select-all rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] px-2.5 py-2 font-mono text-[12px] leading-tight tracking-[0.04em] text-sumi"
+          className="flex-1 min-w-0 select-all rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] px-3 py-2.5 font-mono text-[12.5px] leading-[1.4] tracking-[0.05em] text-sumi shadow-[0_1px_0_rgba(255,255,255,0.55)_inset,0_1px_2px_rgba(28,26,23,0.04)]"
           style={{ wordBreak: 'break-all' }}
         >
           {licenseKey || '—'}
@@ -589,22 +623,30 @@ function KeyLine({
           key={copyAnim}
           type="button"
           onClick={copy}
-          className={`btn-sumi inline-flex items-center justify-center gap-1.5 rounded-md px-3 text-[12px] font-medium shrink-0 transition-transform active:scale-[0.97] ${copied ? 'thanks-copy-bump' : ''}`}
+          className={`group inline-flex items-center justify-center gap-1.5 rounded-md border px-3 py-2 text-[12px] font-medium shrink-0 transition-[colors,transform,box-shadow] duration-[200ms] active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 ${
+            copied
+              ? 'thanks-copy-bump border-matcha/45 bg-[color-mix(in_oklab,var(--matcha)_14%,var(--washi))] text-matcha'
+              : 'border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_55%,#fff)] text-sumi hover:bg-[color-mix(in_oklab,var(--washi)_35%,#fff)]'
+          }`}
           aria-label={t('thanks.delivery.copyAria')}
         >
           {copied ? (
             <>
-              <Check className="h-3.5 w-3.5" strokeWidth={2} />
+              <Check className="h-3.5 w-3.5" strokeWidth={2.2} />
               {t('thanks.delivery.copied')}
             </>
           ) : (
             <>
-              <Copy className="h-3.5 w-3.5" strokeWidth={1.8} />
+              <Copy
+                className="h-3.5 w-3.5 transition-transform duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-px"
+                strokeWidth={1.8}
+              />
               {t('thanks.delivery.copy')}
             </>
           )}
         </button>
       </div>
+
       {/* Activate-in-app deeplink. Once the key is in hand, the
           primary action is "open Sensei and prefill this key" — the
           macOS app registers the `batterysensei://activate?key=...`
@@ -614,31 +656,34 @@ function KeyLine({
           the OS shows its standard "no app" dialog, and the user
           still has the Copy button + the email above.
 
-          Built with encodeURIComponent on the key to escape any
-          characters Polar might one day put in the format (today
-          they're ASCII-only). */}
-      <div className="mt-3 pl-[2rem]">
-        <a
-          href={`batterysensei://activate?key=${encodeURIComponent(licenseKey)}`}
-          className="btn-sumi group inline-flex h-9 w-full items-center justify-center gap-2 rounded-md px-4 text-[12.5px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
-        >
-          <Sparkles
-            className="h-3.5 w-3.5 transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5"
-            strokeWidth={1.8}
-            aria-hidden
-          />
-          {t('thanks.delivery.activateInApp')}
-        </a>
-      </div>
-      <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 pl-[2rem] text-[11.5px] text-nezumi">
+          `encodeURIComponent` on the key escapes any characters Polar
+          might one day put in the format (today they're ASCII-only). */}
+      <a
+        href={`batterysensei://activate?key=${encodeURIComponent(licenseKey)}`}
+        className="thanks-key-row btn-sumi group inline-flex h-11 w-full items-center justify-center gap-2 rounded-md px-5 text-[0.9375rem] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
+        style={{ ['--row-delay' as string]: '240ms' }}
+      >
+        <Sparkles
+          className="h-4 w-4 transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5"
+          strokeWidth={1.8}
+          aria-hidden
+        />
+        {t('thanks.delivery.activateInApp')}
+      </a>
+
+      {/* Meta row — email confirmation + portal link. Two separate
+          inline-flex chunks so each is its own focus/hit target.
+          Wraps gracefully to a second line on narrow widths. */}
+      <div
+        className="thanks-key-row flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[11.5px] leading-[1.45] text-nezumi"
+        style={{ ['--row-delay' as string]: '360ms' }}
+      >
         <span className="inline-flex items-center gap-1.5">
-          <Mail className="h-3 w-3" strokeWidth={1.6} />
+          <Mail className="h-3 w-3 text-sumi-soft/70" strokeWidth={1.6} />
           {customerEmail ? (
             <>
               {t('thanks.delivery.alsoSentTo')}{' '}
-              <span className="font-medium text-sumi-soft">
-                {customerEmail}
-              </span>
+              <span className="font-medium text-sumi-soft">{customerEmail}</span>
             </>
           ) : (
             t('thanks.delivery.alsoSentDefault')
@@ -651,7 +696,7 @@ function KeyLine({
           href={customerPortalUrl}
           target="_blank"
           rel="noreferrer"
-          className="inline-flex items-center gap-1.5 underline-offset-4 hover:text-sumi-soft hover:underline"
+          className="inline-flex items-center gap-1.5 underline-offset-4 transition-colors hover:text-sumi-soft hover:underline"
         >
           <ExternalLink className="h-3 w-3" strokeWidth={1.6} />
           {t('thanks.delivery.portalLink')}
@@ -664,27 +709,25 @@ function KeyLine({
 function ExpiredLine({ customerPortalUrl }: { customerPortalUrl: string }) {
   const { t } = useTranslation()
   return (
-    <div>
+    <div className="space-y-3">
       <div className="flex items-center gap-3">
         <Mail className="h-4 w-4 text-hinomaru" strokeWidth={1.8} />
-        <span className="text-[11px] uppercase tracking-[0.22em] text-sumi-soft">
+        <span className="display-title text-[11px] font-semibold uppercase tracking-[0.22em] text-sumi-soft">
           {t('thanks.delivery.expiredKicker')}
         </span>
       </div>
-      <p className="mt-2 pl-[1.75rem] text-[13px] leading-[1.5] text-sumi-soft">
+      <p className="text-[13px] leading-[1.55] text-sumi-soft">
         {t('thanks.delivery.expiredBody')}
       </p>
-      <div className="mt-2 pl-[1.75rem]">
-        <a
-          href={customerPortalUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex items-center gap-1.5 text-[12px] text-nezumi underline-offset-4 hover:text-sumi-soft hover:underline"
-        >
-          <ExternalLink className="h-3 w-3" strokeWidth={1.6} />
-          {t('thanks.delivery.portalLink')}
-        </a>
-      </div>
+      <a
+        href={customerPortalUrl}
+        target="_blank"
+        rel="noreferrer"
+        className="inline-flex items-center gap-1.5 text-[12px] text-nezumi underline-offset-4 transition-colors hover:text-sumi-soft hover:underline"
+      >
+        <ExternalLink className="h-3 w-3" strokeWidth={1.6} />
+        {t('thanks.delivery.portalLink')}
+      </a>
     </div>
   )
 }

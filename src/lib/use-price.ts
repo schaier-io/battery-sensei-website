@@ -13,6 +13,7 @@ import {
   LIFETIME_FALLBACK,
   LIFETIME_FALLBACK_DEFAULT,
 } from './polar'
+import { useCurrencyPreference } from './currency-preference'
 
 export type DisplayPrice = PriceEntry & {
   /** e.g. "$3.99", "€3.99", "¥590" — the headline price */
@@ -125,6 +126,12 @@ function fetchPrice(currency?: 'USD' | 'EUR' | 'CZK'): Promise<ApiResponse | nul
 // switcher. When unset, the server picks USD or EUR based on the
 // visitor's detected country (CZK / GBP / etc. are never auto-chosen).
 export function usePremiumPrice(currency?: 'USD' | 'EUR' | 'CZK'): DisplayPrice {
+  // When the caller doesn't force a currency, fall through to the
+  // user-stored preference (footer / nav `CurrencySwitcher`). Empty
+  // override == auto-detect on the server side.
+  const stored = useCurrencyPreference()
+  const effective = currency ?? stored ?? undefined
+
   const [price, setPrice] = useState<DisplayPrice>(FALLBACK)
 
   useEffect(() => {
@@ -134,16 +141,16 @@ export function usePremiumPrice(currency?: 'USD' | 'EUR' | 'CZK'): DisplayPrice 
       (typeof navigator !== 'undefined' &&
         (navigator.language || navigator.languages?.[0])) ||
       'en-US'
-    // When the caller forced a currency (USD/EUR switcher), respect
-    // it for the pre-API fallback paint too. Keep the visitor's
-    // locale so number separators stay native. Otherwise fall back to
-    // the locale-based country guess.
-    const localGuess: PriceEntry = currency
-      ? { ...priceForCurrency(currency), locale }
+    // When the caller (or the stored preference) forced a currency,
+    // respect it for the pre-API fallback paint too. Keep the
+    // visitor's locale so number separators stay native. Otherwise
+    // fall back to the locale-based country guess.
+    const localGuess: PriceEntry = effective
+      ? { ...priceForCurrency(effective), locale }
       : priceForLocale(locale)
     setPrice(fromEntry(localGuess, { isLive: false }))
 
-    fetchPrice(currency).then((data) => {
+    fetchPrice(effective).then((data) => {
       if (cancelled || !data) return
       if (data.ok) {
         // Use the Polar preview directly — currency + amount come from
@@ -185,9 +192,9 @@ export function usePremiumPrice(currency?: 'USD' | 'EUR' | 'CZK'): DisplayPrice 
     return () => {
       cancelled = true
     }
-    // Re-run on currency change so the /checkout switcher repaints
-    // both the fallback guess and the live preview in the new code.
-  }, [currency])
+    // Re-run when the effective currency changes — either the caller's
+    // explicit prop OR the global stored preference (footer switcher).
+  }, [effective])
 
   return price
 }
@@ -218,13 +225,16 @@ export type LifetimePrice = {
  * product. For real prices the operator must set the env var.
  */
 export function useLifetimePrice(currency?: 'USD' | 'EUR' | 'CZK'): LifetimePrice {
+  const stored = useCurrencyPreference()
+  const effective = currency ?? stored ?? undefined
+
   const yearly = usePremiumPrice(currency)
   const [live, setLive] = useState<LifetimeBlock | null>(null)
   const [hasDiscount, setHasDiscount] = useState<boolean>(true)
 
   useEffect(() => {
     let cancelled = false
-    fetchPrice(currency).then((data) => {
+    fetchPrice(effective).then((data) => {
       if (cancelled) return
       if (data && data.ok && data.lifetime) {
         setLive(data.lifetime)
@@ -236,10 +246,11 @@ export function useLifetimePrice(currency?: 'USD' | 'EUR' | 'CZK'): LifetimePric
     return () => {
       cancelled = true
     }
-    // Re-fetch the lifetime block when the currency switcher flips —
-    // otherwise the strikethrough + discounted total would stay in
-    // the previous currency until the next session-level cache miss.
-  }, [currency])
+    // Re-fetch the lifetime block when the effective currency flips —
+    // either the explicit prop or the global stored preference — so
+    // the strikethrough + discounted total swap to the new code without
+    // waiting for the next session-level cache miss.
+  }, [effective])
 
   const base = {
     currency: yearly.currency,
