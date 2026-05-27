@@ -117,6 +117,29 @@
         length="20514291"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.2.2</title>
+      <pubDate>Wed, 27 May 2026 16:33:37 +0000</pubDate>
+      <sparkle:version>43</sparkle:version>
+      <sparkle:shortVersionString>1.2.2</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.2.2</h1>
+<p>Settings polish.</p>
+<p>The settings window no longer floats above other apps&#x27; full-screen Spaces. Standard window ordering applies: click the full-screen app behind it and the settings drops behind, like every other Mac window.</p>
+<p>The menu-bar display picker (Percent / Time / Icon) got a once-over. All three battery glyphs are now the same width regardless of which mode you pick. The selected tile is outlined in red in light mode and white in dark mode — border only, no background fill, so the preview strip behind reads through.</p>
+<p>Manage and Run Setup Wizard Again lost their trailing dots, along with Settings, Share image, Activate Pro, Check for Updates, and Check now. Cleaner action labels across the app.</p>
+<p>License section: Manage Subscription is now a proper accent link with hover, matching how Manage Activations already looks in the activation sheet. Remove from this Mac stays a bordered button — destructive actions earn deliberate buttons.</p>
+<p>Activating a different license key no longer risks locking you out. The new key is activated first; the old one only releases if that succeeds. Failed network, typo, sheet cancellation — your existing license stays put. The activation sheet shows a small warning banner when you&#x27;re about to swap so you know what&#x27;s happening.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.2.2/Battery-Sensei.pkg"
+        sparkle:edSignature="5xXpC//dHXsVLWzAU5KHYDvTzZe8fU2dw2/gPdmWzOXawRrLaovHg2l9kTsylpWvrW9OMa2tEsTGAk9wz55IAg=="
+        length="20520548"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
