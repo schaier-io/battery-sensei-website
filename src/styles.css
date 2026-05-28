@@ -1,13 +1,48 @@
 /* Type pairing:
-   - Spectral: bookish display serif. Loaded via `<link>` in __root.tsx so the
-     stylesheet fetches in parallel with this file instead of chaining behind
-     it. Italic 400 carries the whispered second-line voice; other italics
-     and the 700 weight aren't used here.
+   - Spectral: bookish display serif. Italic 400 carries the whispered
+     second-line voice; other italics and the 700 weight aren't used.
    - Source Sans 3: humanist body sans. Weights 400/500/600/700, no italic
      (italic in the design is always on the display serif).
-   - Noto Serif JP: kept for the seal/kanji accents at 400/700/900. */
+   - Noto Serif JP: seal/kanji accents at 400/700/900.
+   - Geist Mono: license-key block + code-shaped tokens (400/500/600).
+
+   All four are self-hosted via @fontsource. Each weight file ships ~124
+   @font-face declarations split by Google's unicode-range subsets, so the
+   browser fetches only the subsets containing characters actually rendered
+   (e.g. the Cyrillic / Vietnamese / Japanese subsets stay dormant on the
+   English homepage). Removes the render-blocking fetch from fonts.googleapis. */
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
+
+/* Latin fonts: import only the latin + latin-ext subsets we actually use.
+   The default `<weight>.css` entry points include Cyrillic, Greek,
+   Vietnamese, etc — none of which are typeset on this site — and each
+   unused @font-face still costs CSS bytes. */
+@import '@fontsource/spectral/latin-400.css';
+@import '@fontsource/spectral/latin-400-italic.css';
+@import '@fontsource/spectral/latin-500.css';
+@import '@fontsource/spectral/latin-600.css';
+@import '@fontsource/spectral/latin-ext-400.css';
+@import '@fontsource/spectral/latin-ext-400-italic.css';
+@import '@fontsource/spectral/latin-ext-500.css';
+@import '@fontsource/spectral/latin-ext-600.css';
+@import '@fontsource/source-sans-3/latin-400.css';
+@import '@fontsource/source-sans-3/latin-500.css';
+@import '@fontsource/source-sans-3/latin-600.css';
+@import '@fontsource/source-sans-3/latin-700.css';
+@import '@fontsource/source-sans-3/latin-ext-400.css';
+@import '@fontsource/source-sans-3/latin-ext-500.css';
+@import '@fontsource/source-sans-3/latin-ext-600.css';
+@import '@fontsource/source-sans-3/latin-ext-700.css';
+@import '@fontsource/geist-mono/latin-400.css';
+@import '@fontsource/geist-mono/latin-500.css';
+@import '@fontsource/geist-mono/latin-600.css';
+/* Noto Serif JP: keep the full subset map (124 unicode-range entries per
+   weight) so the browser fetches only the subsets containing kanji actually
+   rendered on the page (e.g. the brand mark 電池先生 vs the full JP locale). */
+@import '@fontsource/noto-serif-jp/400.css';
+@import '@fontsource/noto-serif-jp/700.css';
+@import '@fontsource/noto-serif-jp/900.css';
 
 @import 'tw-animate-css';
 

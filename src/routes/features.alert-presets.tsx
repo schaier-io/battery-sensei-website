@@ -1,12 +1,23 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Leaf, Bell, AlertOctagon } from 'lucide-react'
 import { FeaturePage } from '#/components/FeaturePage'
+import { extended, faqs } from '#/data/features/alert-presets'
 
 const SITE_URL = 'https://www.battery-sensei.app'
 const PATH = '/features/alert-presets'
 const PAGE_TITLE = 'Alert Presets — Battery Sensei'
 const PAGE_DESC =
   'Zen Mode, Regular Mode, Teach Me Senpai — three escalating low-battery alert presets. Pick the mood that fits your day, or build your own.'
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+}
 
 export const Route = createFileRoute('/features/alert-presets')({
   head: () => ({
@@ -19,8 +30,17 @@ export const Route = createFileRoute('/features/alert-presets')({
       { property: 'og:description', content: PAGE_DESC },
     ],
     links: [{ rel: 'canonical', href: `${SITE_URL}${PATH}` }],
+    scripts: [{ type: 'application/ld+json', children: JSON.stringify(faqLd) }],
   }),
-  component: () => <FeaturePage slug="alert-presets" kanji="警" mockup={<PresetsMockup />} />,
+  component: () => (
+    <FeaturePage
+      slug="alert-presets"
+      kanji="警"
+      mockup={<PresetsMockup />}
+      extended={extended}
+      faqs={faqs}
+    />
+  ),
 })
 
 type Preset = {

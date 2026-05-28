@@ -5,6 +5,11 @@ import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/react'
 
 import appCss from '../styles.css?url'
+// Preload the two fonts the hero relies on. Imported as URLs so Vite hashes
+// them the same way the @fontsource @import in styles.css does, keeping
+// preload + @font-face pointed at the same file (browser dedupes the fetch).
+import spectral500Url from '@fontsource/spectral/files/spectral-latin-500-normal.woff2?url'
+import sourceSans400Url from '@fontsource/source-sans-3/files/source-sans-3-latin-400-normal.woff2?url'
 import { FAQ_ITEMS } from '#/components/sections/FAQ'
 import { I18nProvider } from '#/lib/i18n/I18nProvider'
 
@@ -268,29 +273,23 @@ export const Route = createRootRoute({
       // (browser fetches the WebP at 1x DPR) without the false-positive devtool
       // noise; HiDPI DPR will request via the Nav's srcSet on hydration.
       { rel: 'preload', as: 'image', href: '/logo-256.webp', type: 'image/webp' },
-      // Fonts: preconnect first, then the stylesheet itself — loading it from
-      // <head> (instead of a CSS @import inside styles.css) lets the browser
-      // fetch fonts in parallel with the app CSS instead of chaining the two.
-      // Weights trimmed to what the design uses: Spectral 400/500/600 + 400i,
-      // Source Sans 3 400/500/600/700, Noto Serif JP 400/700/900.
-      { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-      { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' },
-      // Polar preconnect trio:
-      //   - api.polar.sh: client POSTs to /api/checkout-session which
-      //     proxies to api.polar.sh, AND the embed iframe loads pages
-      //     that postMessage from polar.sh after the session URL renders
-      //   - polar.sh: postMessage origin for the embed's success/close
-      //     events; also the cookie domain Polar uses
-      //   - buy.polar.sh: the fallback Checkout Link domain we
-      //     full-page-redirect to if the session-create API is down
-      // All three are TLS-warmed up-front so the Buy click feels instant.
-      { rel: 'preconnect', href: 'https://api.polar.sh' },
-      { rel: 'preconnect', href: 'https://polar.sh' },
+      // Fonts are now self-hosted via @fontsource (see styles.css). No
+      // preconnect to fonts.googleapis / fonts.gstatic — those origins are
+      // never contacted. Removing the render-blocking Google stylesheet was
+      // the biggest single LCP win (Lighthouse flagged ~240 ms render block
+      // and ~92 KB of @font-face CSS that was almost entirely unused).
+      //
+      // Preload the two weights every above-fold page renders: Spectral 500
+      // (H1 / section headings) and Source Sans 3 400 (body). The browser
+      // can start the fetch in parallel with CSS parsing instead of waiting
+      // for the @font-face declaration to be discovered.
+      { rel: 'preload', as: 'font', href: spectral500Url, type: 'font/woff2', crossOrigin: 'anonymous' },
+      { rel: 'preload', as: 'font', href: sourceSans400Url, type: 'font/woff2', crossOrigin: 'anonymous' },
+      //
+      // `buy.polar.sh` keeps its preconnect: that's the one origin a
+      // visitor's BROWSER actually hits directly (the Buy click is a
+      // full-page navigation to the hosted Polar checkout).
       { rel: 'preconnect', href: 'https://buy.polar.sh' },
-      {
-        rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Source+Sans+3:wght@400;500;600;700&family=Noto+Serif+JP:wght@400;700;900&family=Geist+Mono:wght@400;500;600&display=swap',
-      },
       { rel: 'stylesheet', href: appCss },
     ],
     scripts: [

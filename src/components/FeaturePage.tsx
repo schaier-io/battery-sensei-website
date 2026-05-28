@@ -21,9 +21,18 @@ type Props = {
   /** Visual mockup rendered under the body. Live components preferred over
    * static images — they stay sharp at any DPI and weigh ~0 bytes extra. */
   mockup?: ReactNode
+  /** Optional English-only long-form guide rendered below "Why it matters".
+   * The above-fold content (kicker, heading, body, why) stays i18n-driven
+   * across all 5 locales; the extended guide is the SEO + AI-Overviews
+   * surface and stays English to keep editorial control tight. */
+  extended?: ReactNode
+  /** Optional FAQ list serialized to Schema.org FAQPage in the route file.
+   * Rendered here as a visible Q&A block at the end of the page. English
+   * only, same reasoning as `extended`. */
+  faqs?: ReadonlyArray<{ q: string; a: string }>
 }
 
-export function FeaturePage({ slug, kanji, mockup }: Props) {
+export function FeaturePage({ slug, kanji, mockup, extended, faqs }: Props) {
   const { t } = useTranslation()
   const key = `featurePages.${slug}`
   return (
@@ -96,6 +105,37 @@ export function FeaturePage({ slug, kanji, mockup }: Props) {
               </p>
             </div>
           </Reveal>
+
+          {/* Extended English-only guide. Renders directly after the
+              "Why it matters" block so the page reads as: intro → mockup →
+              why → deep guide → FAQ → CTA. The extra prose is the SEO +
+              AI-search payload (long-tail keywords, internal links to
+              glossary + journal, citable sources). */}
+          {extended && (
+            <Reveal delay={560} className="mt-12 space-y-5">
+              {extended}
+            </Reveal>
+          )}
+
+          {faqs && faqs.length > 0 && (
+            <Reveal delay={580} className="mt-14">
+              <h2 className="display-title mb-6 text-[1.375rem] font-semibold leading-[1.2] tracking-[-0.01em] text-sumi md:text-[1.625rem]">
+                Frequently asked.
+              </h2>
+              <dl className="space-y-6">
+                {faqs.map((entry) => (
+                  <div key={entry.q} className="border-l-2 border-hinomaru/30 pl-5 md:pl-6">
+                    <dt className="display-title text-[1rem] font-medium text-sumi md:text-[1.0625rem]">
+                      {entry.q}
+                    </dt>
+                    <dd className="mt-2 text-[0.9375rem] leading-relaxed text-sumi-soft md:text-[1rem]">
+                      {entry.a}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </Reveal>
+          )}
 
           {/* Bottom row simplified to ONE primary action — the
               back-to-home anchor lives at the top-left of the page

@@ -24,6 +24,8 @@ import i18n from 'i18next'
 import { Hanko } from '#/components/zen/Hanko'
 import { PriceDisplay } from '#/components/zen/PriceDisplay'
 import { Reveal } from '#/components/zen/Reveal'
+import { MacOnlyConfirm, MacOnlyConfirmDialog } from '#/components/MacOnlyConfirm'
+import { detectIsMac } from '#/lib/use-is-mac'
 import { TRIAL_DAYS } from '#/lib/polar'
 import { usePremiumPrice, useLifetimePrice } from '#/lib/use-price'
 import { useDiscountAvailability } from '#/lib/use-discount-availability'
@@ -540,6 +542,7 @@ function FreeDownloadForm() {
   const { t } = useTranslation()
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'sending' | 'error'>('idle')
+  const [macConfirmOpen, setMacConfirmOpen] = useState(false)
   const inputRef = useRef<HTMLInputElement | null>(null)
   const buttonRef = useRef<HTMLButtonElement | null>(null)
 
@@ -577,6 +580,10 @@ function FreeDownloadForm() {
 
   const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())
 
+  function startDownload() {
+    window.location.assign('/download/latest')
+  }
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     if (!isValid || status === 'sending') {
@@ -600,7 +607,16 @@ function FreeDownloadForm() {
     } catch {
       // intentional: don't block download on network/api failure
     }
-    window.location.assign('/download/latest')
+    // Platform check happens after the API ping so the email-capture
+    // signup still lands even if the visitor cancels the download
+    // (someone researching on Windows for a Mac at home is still a
+    // qualified lead). On Mac or pre-hydration: go straight to the
+    // download. On a confirmed non-Mac: open the dialog instead.
+    if (detectIsMac()) {
+      startDownload()
+    } else {
+      setMacConfirmOpen(true)
+    }
   }
 
   return (
@@ -675,13 +691,29 @@ function FreeDownloadForm() {
           visitors to feel the email is a hard paywall. Underline always
           visible so it reads as an actionable second path, not legalese. */}
       <p className="mt-2 text-center">
-        <a
-          href="/download/latest"
-          className="text-[0.75rem] font-semibold text-sumi underline decoration-[var(--line-strong)] underline-offset-[5px] transition-colors duration-[220ms] hover:text-sumi hover:decoration-sumi"
-        >
-          {t('pricing.free.email.skip')}
-        </a>
+        <MacOnlyConfirm onConfirm={startDownload}>
+          {({ onClick }) => (
+            <a
+              href="/download/latest"
+              onClick={onClick}
+              className="text-[0.75rem] font-semibold text-sumi underline decoration-[var(--line-strong)] underline-offset-[5px] transition-colors duration-[220ms] hover:text-sumi hover:decoration-sumi"
+            >
+              {t('pricing.free.email.skip')}
+            </a>
+          )}
+        </MacOnlyConfirm>
       </p>
+      {/* Controlled dialog for the form-submit path. The render-prop
+          variant above handles its own state for the skip-link click;
+          this one is opened from `handleSubmit` after the email POST. */}
+      <MacOnlyConfirmDialog
+        open={macConfirmOpen}
+        onOpenChange={setMacConfirmOpen}
+        onContinue={() => {
+          setMacConfirmOpen(false)
+          startDownload()
+        }}
+      />
     </form>
   )
 }

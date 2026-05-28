@@ -11,6 +11,16 @@
     "recommended": "Recommandé",
     "learnMore": "En savoir plus"
   },
+  "macOnly": {
+    "kicker": "Uniquement macOS",
+    "title": "Battery Sensei ne fonctionne que sur macOS.",
+    "body": "L'application ne s'installera pas sur votre appareil actuel. Continuez si vous souhaitez la télécharger pour un Mac, ou si vous vous renseignez pour quelqu'un d'autre.",
+    "cancel": "Plus tard",
+    "continue": "Télécharger quand même",
+    "bannerHeading": "Note — uniquement macOS.",
+    "bannerBody": "Vous pouvez acheter une licence depuis cet appareil, mais l'application ne tourne que sur un Mac (macOS 13 Ventura ou plus récent).",
+    "dismiss": "Fermer"
+  },
   "licenseScope": {
     "lifetime": "Déblocage Lifetime : jusqu'à 3 Macs que vous possédez.",
     "yearly": "Mécène annuel : jusqu'à 5 Macs pendant l'abonnement.",
@@ -756,7 +766,7 @@
   },
   "footer": {
     "tagline": "D'un propriétaire de MacBook à un autre.",
-    "ariaGetApp": "Obtenir l'application",
+    "ariaPrefs": "Contact et préférences",
     "ariaFooter": "Pied de page",
     "contact": "Contact",
     "reportIssue": "Signaler un problème",

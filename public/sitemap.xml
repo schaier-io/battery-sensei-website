@@ -3,7 +3,7 @@
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://www.battery-sensei.app/</loc>
-    <lastmod>2026-05-24</lastmod>
+    <lastmod>2026-05-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.battery-sensei.app/" />
@@ -19,15 +19,15 @@
   </url>
   <url>
     <loc>https://www.battery-sensei.app/features/travel-mode</loc>
-    <lastmod>2026-05-24</lastmod>
+    <lastmod>2026-05-28</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.battery-sensei.app/features/travel-mode" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.battery-sensei.app/features/travel-mode" />
   </url>
   <url>
     <loc>https://www.battery-sensei.app/features/energy-usage</loc>
-    <lastmod>2026-05-24</lastmod>
+    <lastmod>2026-05-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.battery-sensei.app/features/energy-usage" />
@@ -35,15 +35,15 @@
   </url>
   <url>
     <loc>https://www.battery-sensei.app/features/custom-thresholds</loc>
-    <lastmod>2026-05-24</lastmod>
+    <lastmod>2026-05-28</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.battery-sensei.app/features/custom-thresholds" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.battery-sensei.app/features/custom-thresholds" />
   </url>
   <url>
     <loc>https://www.battery-sensei.app/features/alert-presets</loc>
-    <lastmod>2026-05-24</lastmod>
+    <lastmod>2026-05-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.battery-sensei.app/features/alert-presets" />
@@ -51,20 +51,127 @@
   </url>
   <url>
     <loc>https://www.battery-sensei.app/features/battery-journal</loc>
-    <lastmod>2026-05-24</lastmod>
+    <lastmod>2026-05-28</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.battery-sensei.app/features/battery-journal" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.battery-sensei.app/features/battery-journal" />
   </url>
   <url>
     <loc>https://www.battery-sensei.app/features/meeting-battery-guard</loc>
-    <lastmod>2026-05-24</lastmod>
+    <lastmod>2026-05-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.battery-sensei.app/features/meeting-battery-guard" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.battery-sensei.app/features/meeting-battery-guard" />
   </url>
+
+  <!-- Journal (long-form blog) — English only for now -->
+  <url>
+    <loc>https://www.battery-sensei.app/blog</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.battery-sensei.app/blog/should-i-keep-macbook-plugged-in</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.battery-sensei.app/blog/healthy-cycle-count-macbook</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.battery-sensei.app/blog/optimized-battery-charging-explained</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Glossary — English only for now -->
+  <url>
+    <loc>https://www.battery-sensei.app/glossary</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.battery-sensei.app/glossary/cycle-count</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.battery-sensei.app/glossary/battery-health</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.battery-sensei.app/glossary/design-capacity</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.battery-sensei.app/glossary/optimized-battery-charging</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.battery-sensei.app/glossary/travel-mode</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.battery-sensei.app/glossary/thermal-throttling</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.battery-sensei.app/glossary/charge-cycle</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.battery-sensei.app/glossary/calibration</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.battery-sensei.app/glossary/low-power-mode</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.battery-sensei.app/glossary/cycle-count-threshold</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.battery-sensei.app/glossary/trickle-charging</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.battery-sensei.app/glossary/watts-in-out</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
   <url>
     <loc>https://www.battery-sensei.app/privacy</loc>
     <lastmod>2026-05-24</lastmod>

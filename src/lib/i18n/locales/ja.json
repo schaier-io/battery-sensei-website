@@ -11,6 +11,16 @@
     "recommended": "おすすめ",
     "learnMore": "詳しく見る"
   },
+  "macOnly": {
+    "kicker": "macOS専用",
+    "title": "Battery SenseiはmacOS専用です。",
+    "body": "今お使いの端末では動作しません。Macに後でインストールする場合や、他の方のために調べている場合は、そのままダウンロードできます。",
+    "cancel": "あとで",
+    "continue": "それでもダウンロード",
+    "bannerHeading": "ご案内 — macOS専用です。",
+    "bannerBody": "このデバイスからライセンスを購入できますが、アプリ本体はMac（macOS 13 Ventura以降）でのみ動作します。",
+    "dismiss": "閉じる"
+  },
   "licenseScope": {
     "lifetime": "Lifetimeアンロック：所有する最大3台のMac。",
     "yearly": "年間パトロン：購読中は最大5台のMac。",
@@ -756,7 +766,7 @@
   },
   "footer": {
     "tagline": "MacBookユーザーから、MacBookユーザーへ。",
-    "ariaGetApp": "アプリを入手",
+    "ariaPrefs": "お問い合わせと設定",
     "ariaFooter": "フッター",
     "contact": "連絡",
     "reportIssue": "問題を報告",

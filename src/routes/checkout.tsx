@@ -15,6 +15,7 @@ import { Trans, useTranslation } from 'react-i18next'
 import { z } from 'zod'
 import { Hanko } from '#/components/zen/Hanko'
 import { PolarInlineCheckout } from '#/components/PolarInlineCheckout'
+import { NotOnMacBanner } from '#/components/NotOnMacBanner'
 import { PriceDisplay } from '#/components/zen/PriceDisplay'
 import { Reveal } from '#/components/zen/Reveal'
 import { Nav } from '#/components/sections/Nav'
@@ -324,6 +325,13 @@ function CheckoutPage() {
                 here — no extra chrome between the visitor's eyes and
                 the card form. */}
             <div className="mt-5">
+              {/* Non-blocking macOS-only callout. Renders nothing on
+                  Macs (and during SSR / first paint to avoid hydration
+                  flash). Dismissible per visit. They can still buy a
+                  license from a Windows / iPhone — the common cases
+                  are buying ahead of a new Mac, or buying for a family
+                  member. */}
+              <NotOnMacBanner />
               <PolarInlineCheckout tier={tier} currency={cur} />
             </div>
 

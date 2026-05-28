@@ -94,6 +94,7 @@ export function Saga() {
           <Reveal delay={420}>
             <Link
               to="/features/battery-journal"
+              aria-label={`${t('common.learnMore')} — ${t('saga.heading')}`}
               className="group/learn mt-8 inline-flex items-center gap-1.5 text-[13px] font-medium text-hinomaru/85 hover:text-hinomaru transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-hinomaru/30 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)] rounded-sm"
             >
               {t('common.learnMore')}

@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { Download, MessageCircle } from 'lucide-react'
+import { MessageCircle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { LanguageSwitcher } from '#/components/LanguageSwitcher'
 import { CurrencySwitcher } from '#/components/CurrencySwitcher'
@@ -39,45 +39,31 @@ export function Footer() {
           </p>
         </div>
 
-        {/* Actions row — single primary chip (Download free) + the two
-            preference switchers. Earlier rev had Download + Get-in-touch
-            + Purchase + Lang + Currency all jostling in one line, which
-            read as a button salad. Purchase moved up to the Pricing
-            section + Nav CTA; Get-in-touch dropped to a quiet text
-            link below the row. */}
+        {/* Utility row — Get in touch link + the two preference
+            switchers, all in one line. Download CTA dropped: the
+            primary purchase / trial paths are reached via the Nav
+            and Pricing sections, the Footer's job is colophon /
+            settings, not a fifth download repeat. `flex-wrap` lets
+            the row break gracefully on small viewports if the
+            three items don't fit; padding stays the same. */}
         <div
-          aria-label={t('footer.ariaGetApp')}
-          className="flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center"
+          aria-label={t('footer.ariaPrefs')}
+          className="flex flex-wrap items-center justify-center gap-3 sm:gap-4"
         >
           <a
-            href="/#free-download-email"
-            className="btn-sumi group inline-flex h-10 items-center justify-center gap-2 rounded-md px-5 text-[0.875rem] font-medium transition-[transform,box-shadow] duration-[260ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-px hover:shadow-[0_6px_18px_-8px_rgba(28,26,23,0.45)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
+            href="#contact"
+            className="group inline-flex items-center gap-1.5 text-[0.8125rem] text-sumi-soft underline-offset-[5px] decoration-[var(--line-strong)] transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:text-hinomaru hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:rounded-md"
           >
-            <Download
-              className="h-4 w-4 transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5"
+            <MessageCircle
+              className="h-3.5 w-3.5 transition-transform duration-[260ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-px"
               strokeWidth={1.7}
+              aria-hidden
             />
-            {t('common.downloadFree')}
+            <span>{t('nav.support')}</span>
           </a>
-
           <LanguageSwitcher />
           <CurrencySwitcher />
         </div>
-
-        {/* Quiet link + icon, beneath the actions row. Replaces the
-            UPPERCASE "Get in touch" chip — same destination, less
-            shouty visual weight. */}
-        <a
-          href="#contact"
-          className="group inline-flex items-center gap-1.5 text-[0.8125rem] text-sumi-soft underline-offset-[5px] decoration-[var(--line-strong)] transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:text-hinomaru hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:rounded-md"
-        >
-          <MessageCircle
-            className="h-3.5 w-3.5 transition-transform duration-[260ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-px"
-            strokeWidth={1.7}
-            aria-hidden
-          />
-          <span>{t('nav.support')}</span>
-        </a>
 
         {/* Hairline divider — narrow centered brush so the secondary
             nav below reads as the footer's colophon row. */}
@@ -115,6 +101,18 @@ export function Footer() {
           <a href="#pricing" className="zen-link-lift">
             {t('footer.pricing')}
           </a>
+          <FooterDot />
+          {/* English-only links (no i18n key) — the journal and glossary
+              stay EN-only for now while we build out the content.
+              Footer label is hardcoded; translations can be added later
+              once we localize the body content. */}
+          <Link to="/blog" className="zen-link-lift">
+            Journal
+          </Link>
+          <FooterDot />
+          <Link to="/glossary" className="zen-link-lift">
+            Glossary
+          </Link>
           <FooterDot />
           {/* Polar customer portal — buyers sign in with the email
               they used at checkout to view receipts, manage the

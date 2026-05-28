@@ -1,12 +1,23 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Flame, Search } from 'lucide-react'
 import { FeaturePage } from '#/components/FeaturePage'
+import { extended, faqs } from '#/data/features/energy-usage'
 
 const SITE_URL = 'https://www.battery-sensei.app'
 const PATH = '/features/energy-usage'
 const PAGE_TITLE = 'Top power-hungry apps — Battery Sensei'
 const PAGE_DESC =
   'See which apps are draining your MacBook battery on the Saga page — 1h / 24h / 7d windows, Activity-Monitor-style impact score, with a search filter.'
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+}
 
 export const Route = createFileRoute('/features/energy-usage')({
   head: () => ({
@@ -19,8 +30,17 @@ export const Route = createFileRoute('/features/energy-usage')({
       { property: 'og:description', content: PAGE_DESC },
     ],
     links: [{ rel: 'canonical', href: `${SITE_URL}${PATH}` }],
+    scripts: [{ type: 'application/ld+json', children: JSON.stringify(faqLd) }],
   }),
-  component: () => <FeaturePage slug="energy-usage" kanji="電" mockup={<EnergyMockup />} />,
+  component: () => (
+    <FeaturePage
+      slug="energy-usage"
+      kanji="電"
+      mockup={<EnergyMockup />}
+      extended={extended}
+      faqs={faqs}
+    />
+  ),
 })
 
 type Row = {

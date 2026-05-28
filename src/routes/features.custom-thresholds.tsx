@@ -1,11 +1,22 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { FeaturePage } from '#/components/FeaturePage'
+import { extended, faqs } from '#/data/features/custom-thresholds'
 
 const SITE_URL = 'https://www.battery-sensei.app'
 const PATH = '/features/custom-thresholds'
 const PAGE_TITLE = 'Custom Thresholds — Battery Sensei'
 const PAGE_DESC =
   'Per-tier custom low-battery thresholds and auto-dismiss times. Your numbers, your timing.'
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+}
 
 export const Route = createFileRoute('/features/custom-thresholds')({
   head: () => ({
@@ -18,8 +29,17 @@ export const Route = createFileRoute('/features/custom-thresholds')({
       { property: 'og:description', content: PAGE_DESC },
     ],
     links: [{ rel: 'canonical', href: `${SITE_URL}${PATH}` }],
+    scripts: [{ type: 'application/ld+json', children: JSON.stringify(faqLd) }],
   }),
-  component: () => <FeaturePage slug="custom-thresholds" kanji="設" mockup={<ThresholdsMockup />} />,
+  component: () => (
+    <FeaturePage
+      slug="custom-thresholds"
+      kanji="設"
+      mockup={<ThresholdsMockup />}
+      extended={extended}
+      faqs={faqs}
+    />
+  ),
 })
 
 function ThresholdsMockup() {

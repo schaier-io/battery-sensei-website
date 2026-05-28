@@ -14,14 +14,18 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as LegalRouteImport } from './routes/legal'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as GlossaryIndexRouteImport } from './routes/glossary/index'
+import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as ThanksSupportRouteImport } from './routes/thanks.support'
 import { Route as ThanksLifetimeRouteImport } from './routes/thanks.lifetime'
+import { Route as GlossarySlugRouteImport } from './routes/glossary/$slug'
 import { Route as FeaturesTravelModeRouteImport } from './routes/features.travel-mode'
 import { Route as FeaturesMeetingBatteryGuardRouteImport } from './routes/features.meeting-battery-guard'
 import { Route as FeaturesEnergyUsageRouteImport } from './routes/features.energy-usage'
 import { Route as FeaturesCustomThresholdsRouteImport } from './routes/features.custom-thresholds'
 import { Route as FeaturesBatteryJournalRouteImport } from './routes/features.battery-journal'
 import { Route as FeaturesAlertPresetsRouteImport } from './routes/features.alert-presets'
+import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
 import { Route as ApiCheckoutIdRouteImport } from './routes/api/checkout.$id'
 
 const WalkthroughRoute = WalkthroughRouteImport.update({
@@ -49,6 +53,16 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GlossaryIndexRoute = GlossaryIndexRouteImport.update({
+  id: '/glossary/',
+  path: '/glossary/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ThanksSupportRoute = ThanksSupportRouteImport.update({
   id: '/thanks/support',
   path: '/thanks/support',
@@ -57,6 +71,11 @@ const ThanksSupportRoute = ThanksSupportRouteImport.update({
 const ThanksLifetimeRoute = ThanksLifetimeRouteImport.update({
   id: '/thanks/lifetime',
   path: '/thanks/lifetime',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GlossarySlugRoute = GlossarySlugRouteImport.update({
+  id: '/glossary/$slug',
+  path: '/glossary/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FeaturesTravelModeRoute = FeaturesTravelModeRouteImport.update({
@@ -91,6 +110,11 @@ const FeaturesAlertPresetsRoute = FeaturesAlertPresetsRouteImport.update({
   path: '/features/alert-presets',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/blog/$slug',
+  path: '/blog/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiCheckoutIdRoute = ApiCheckoutIdRouteImport.update({
   id: '/api/checkout/$id',
   path: '/api/checkout/$id',
@@ -103,14 +127,18 @@ export interface FileRoutesByFullPath {
   '/legal': typeof LegalRoute
   '/privacy': typeof PrivacyRoute
   '/walkthrough': typeof WalkthroughRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/features/alert-presets': typeof FeaturesAlertPresetsRoute
   '/features/battery-journal': typeof FeaturesBatteryJournalRoute
   '/features/custom-thresholds': typeof FeaturesCustomThresholdsRoute
   '/features/energy-usage': typeof FeaturesEnergyUsageRoute
   '/features/meeting-battery-guard': typeof FeaturesMeetingBatteryGuardRoute
   '/features/travel-mode': typeof FeaturesTravelModeRoute
+  '/glossary/$slug': typeof GlossarySlugRoute
   '/thanks/lifetime': typeof ThanksLifetimeRoute
   '/thanks/support': typeof ThanksSupportRoute
+  '/blog/': typeof BlogIndexRoute
+  '/glossary/': typeof GlossaryIndexRoute
   '/api/checkout/$id': typeof ApiCheckoutIdRoute
 }
 export interface FileRoutesByTo {
@@ -119,14 +147,18 @@ export interface FileRoutesByTo {
   '/legal': typeof LegalRoute
   '/privacy': typeof PrivacyRoute
   '/walkthrough': typeof WalkthroughRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/features/alert-presets': typeof FeaturesAlertPresetsRoute
   '/features/battery-journal': typeof FeaturesBatteryJournalRoute
   '/features/custom-thresholds': typeof FeaturesCustomThresholdsRoute
   '/features/energy-usage': typeof FeaturesEnergyUsageRoute
   '/features/meeting-battery-guard': typeof FeaturesMeetingBatteryGuardRoute
   '/features/travel-mode': typeof FeaturesTravelModeRoute
+  '/glossary/$slug': typeof GlossarySlugRoute
   '/thanks/lifetime': typeof ThanksLifetimeRoute
   '/thanks/support': typeof ThanksSupportRoute
+  '/blog': typeof BlogIndexRoute
+  '/glossary': typeof GlossaryIndexRoute
   '/api/checkout/$id': typeof ApiCheckoutIdRoute
 }
 export interface FileRoutesById {
@@ -136,14 +168,18 @@ export interface FileRoutesById {
   '/legal': typeof LegalRoute
   '/privacy': typeof PrivacyRoute
   '/walkthrough': typeof WalkthroughRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/features/alert-presets': typeof FeaturesAlertPresetsRoute
   '/features/battery-journal': typeof FeaturesBatteryJournalRoute
   '/features/custom-thresholds': typeof FeaturesCustomThresholdsRoute
   '/features/energy-usage': typeof FeaturesEnergyUsageRoute
   '/features/meeting-battery-guard': typeof FeaturesMeetingBatteryGuardRoute
   '/features/travel-mode': typeof FeaturesTravelModeRoute
+  '/glossary/$slug': typeof GlossarySlugRoute
   '/thanks/lifetime': typeof ThanksLifetimeRoute
   '/thanks/support': typeof ThanksSupportRoute
+  '/blog/': typeof BlogIndexRoute
+  '/glossary/': typeof GlossaryIndexRoute
   '/api/checkout/$id': typeof ApiCheckoutIdRoute
 }
 export interface FileRouteTypes {
@@ -154,14 +190,18 @@ export interface FileRouteTypes {
     | '/legal'
     | '/privacy'
     | '/walkthrough'
+    | '/blog/$slug'
     | '/features/alert-presets'
     | '/features/battery-journal'
     | '/features/custom-thresholds'
     | '/features/energy-usage'
     | '/features/meeting-battery-guard'
     | '/features/travel-mode'
+    | '/glossary/$slug'
     | '/thanks/lifetime'
     | '/thanks/support'
+    | '/blog/'
+    | '/glossary/'
     | '/api/checkout/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -170,14 +210,18 @@ export interface FileRouteTypes {
     | '/legal'
     | '/privacy'
     | '/walkthrough'
+    | '/blog/$slug'
     | '/features/alert-presets'
     | '/features/battery-journal'
     | '/features/custom-thresholds'
     | '/features/energy-usage'
     | '/features/meeting-battery-guard'
     | '/features/travel-mode'
+    | '/glossary/$slug'
     | '/thanks/lifetime'
     | '/thanks/support'
+    | '/blog'
+    | '/glossary'
     | '/api/checkout/$id'
   id:
     | '__root__'
@@ -186,14 +230,18 @@ export interface FileRouteTypes {
     | '/legal'
     | '/privacy'
     | '/walkthrough'
+    | '/blog/$slug'
     | '/features/alert-presets'
     | '/features/battery-journal'
     | '/features/custom-thresholds'
     | '/features/energy-usage'
     | '/features/meeting-battery-guard'
     | '/features/travel-mode'
+    | '/glossary/$slug'
     | '/thanks/lifetime'
     | '/thanks/support'
+    | '/blog/'
+    | '/glossary/'
     | '/api/checkout/$id'
   fileRoutesById: FileRoutesById
 }
@@ -203,14 +251,18 @@ export interface RootRouteChildren {
   LegalRoute: typeof LegalRoute
   PrivacyRoute: typeof PrivacyRoute
   WalkthroughRoute: typeof WalkthroughRoute
+  BlogSlugRoute: typeof BlogSlugRoute
   FeaturesAlertPresetsRoute: typeof FeaturesAlertPresetsRoute
   FeaturesBatteryJournalRoute: typeof FeaturesBatteryJournalRoute
   FeaturesCustomThresholdsRoute: typeof FeaturesCustomThresholdsRoute
   FeaturesEnergyUsageRoute: typeof FeaturesEnergyUsageRoute
   FeaturesMeetingBatteryGuardRoute: typeof FeaturesMeetingBatteryGuardRoute
   FeaturesTravelModeRoute: typeof FeaturesTravelModeRoute
+  GlossarySlugRoute: typeof GlossarySlugRoute
   ThanksLifetimeRoute: typeof ThanksLifetimeRoute
   ThanksSupportRoute: typeof ThanksSupportRoute
+  BlogIndexRoute: typeof BlogIndexRoute
+  GlossaryIndexRoute: typeof GlossaryIndexRoute
   ApiCheckoutIdRoute: typeof ApiCheckoutIdRoute
 }
 
@@ -251,6 +303,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/glossary/': {
+      id: '/glossary/'
+      path: '/glossary'
+      fullPath: '/glossary/'
+      preLoaderRoute: typeof GlossaryIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/thanks/support': {
       id: '/thanks/support'
       path: '/thanks/support'
@@ -263,6 +329,13 @@ declare module '@tanstack/react-router' {
       path: '/thanks/lifetime'
       fullPath: '/thanks/lifetime'
       preLoaderRoute: typeof ThanksLifetimeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/glossary/$slug': {
+      id: '/glossary/$slug'
+      path: '/glossary/$slug'
+      fullPath: '/glossary/$slug'
+      preLoaderRoute: typeof GlossarySlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/features/travel-mode': {
@@ -307,6 +380,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FeaturesAlertPresetsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/blog/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/checkout/$id': {
       id: '/api/checkout/$id'
       path: '/api/checkout/$id'
@@ -323,14 +403,18 @@ const rootRouteChildren: RootRouteChildren = {
   LegalRoute: LegalRoute,
   PrivacyRoute: PrivacyRoute,
   WalkthroughRoute: WalkthroughRoute,
+  BlogSlugRoute: BlogSlugRoute,
   FeaturesAlertPresetsRoute: FeaturesAlertPresetsRoute,
   FeaturesBatteryJournalRoute: FeaturesBatteryJournalRoute,
   FeaturesCustomThresholdsRoute: FeaturesCustomThresholdsRoute,
   FeaturesEnergyUsageRoute: FeaturesEnergyUsageRoute,
   FeaturesMeetingBatteryGuardRoute: FeaturesMeetingBatteryGuardRoute,
   FeaturesTravelModeRoute: FeaturesTravelModeRoute,
+  GlossarySlugRoute: GlossarySlugRoute,
   ThanksLifetimeRoute: ThanksLifetimeRoute,
   ThanksSupportRoute: ThanksSupportRoute,
+  BlogIndexRoute: BlogIndexRoute,
+  GlossaryIndexRoute: GlossaryIndexRoute,
   ApiCheckoutIdRoute: ApiCheckoutIdRoute,
 }
 export const routeTree = rootRouteImport
