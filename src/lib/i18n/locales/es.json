@@ -4,21 +4,19 @@
     "currency": "Moneda",
     "auto": "Auto",
     "autoDetect": "Detección automática",
-    "languageName": {
-      "en": "English",
-      "de": "Deutsch",
-      "es": "Español",
-      "fr": "Français",
-      "ja": "日本語"
-    },
+    "languageName": {},
     "download": "Descargar",
     "downloadFree": "Descarga gratis",
     "downloadMac": "Descargar para macOS",
-    "buyNow": "Compra ahora — {{price}}",
-    "purchaseNow": "Comprar ahora",
-    "onceForever": "una vez, para siempre",
     "recommended": "Recomendado",
     "learnMore": "Saber más"
+  },
+  "licenseScope": {
+    "lifetime": "Desbloqueo Lifetime: hasta 3 Macs tuyos.",
+    "yearly": "Yearly Patron: hasta 5 Macs mientras estés suscrito.",
+    "lifetimeShort": "Lifetime · hasta 3 Macs",
+    "yearlyShort": "Yearly · hasta 5 Macs · cancela cuando quieras",
+    "notarizedCombined": "Notarizada por Apple · hasta 3 Macs"
   },
   "nav": {
     "ariaPrimary": "Principal",
@@ -80,16 +78,13 @@
     "chargeLimit": {
       "title": "Límite de carga",
       "titleSub": "con Travel Mode",
-      "jp": "長く保つ・旅",
       "body": "Apple advierte que las baterías de iones de litio envejecen más rápido cuanto más tiempo pasan al 100%. Elige un tope (sugerimos 80%). Sensei lo mantiene en segundo plano. ¿Viajas mañana? Un clic para una carga completa, y al volver a casa se restablece tu tope.",
-      "chip": "Travel Mode · carga completa antes de un viaje",
       "scaleLabel": "Límite de carga",
       "travelLabel": "Travel Mode",
       "travelHint": "sube al 100 % solo para el viaje"
     },
     "glance": {
       "title": "Un vistazo, toda la historia",
-      "jp": "一目で",
       "body": "Carga, fuente, vatios de entrada o salida, tiempo restante. La imagen completa, en una mirada. Sin icono en el Dock. Sin ruido de notificaciones. Nada que pulsar a menos que lo desees.",
       "timeLeft": "Quedan 1h 52m",
       "chargingTo": "Cargando hasta 80%",
@@ -102,19 +97,12 @@
     "meetings": {
       "title": "Reuniones, cumplidas.",
       "titleSub": "Sensei se anticipa, y tu batería también.",
-      "jp": "会議の前に",
       "body": "Opcional. Sensei echa un vistazo a tus próximas reuniones y, cuando la batería no aguantará la que importa, te avisa 30, 15, 5 y 0 minutos antes — con una solución clara («22 min en el cargador y llegas hasta el final»). Los títulos de los eventos nunca salen de tu Mac.",
-      "chip": "Premium · Solo lectura, los títulos no salen de tu Mac",
       "nextOnCalendar": "Próximo en el calendario",
-      "duration": "15:00 · 60 min",
       "startsAt": "15:00",
       "meetingTitle": "Reunión semanal",
-      "warnHeading": "La batería no aguantará tu reunión",
       "warnShort": "No llegará.",
-      "warnBody": "Tu portátil se apaga a los <0>17 min</0> de la reunión. Enchúfalo ya.",
       "warnFix": "22 min en el cargador y llegas hasta el final.",
-      "remindsYou": "Te avisa en",
-      "minBefore": "−{{min}} min",
       "onDevice": "Solo en el dispositivo"
     }
   },
@@ -349,12 +337,7 @@
   },
   "thanks": {
     "kicker": "Gracias · ありがとう",
-    "videoCaption": "Sensei se inclina.",
-    "openApp": "Abrir Sensei",
-    "downloadApp": "Descargar Sensei",
     "backToHome": "Volver a la página principal",
-    "managePurchase": "Gestionar compra",
-    "checkoutHint": "Pedido #{{id}}",
     "orderLabel": "Pedido",
     "delivery": {
       "label": "Instalar Sensei",
@@ -388,14 +371,14 @@
     },
     "lifetime": {
       "heading": "Bienvenida a Lifetime.",
-      "headingItalic": "Cada función Premium, para siempre.",
-      "body": "<0>Tres Macs tuyos</0>. Cada función Premium que Sensei publique, para siempre. Sin login. Sin cuenta.",
+      "headingItalic": "Cada función Premium, {{lifetimeScopeShort}}.",
+      "body": "<0>{{lifetimeScope}}</0> Cada función Premium que Sensei publique. Sin login. Sin cuenta.",
       "next": "¿Aún no has descargado Sensei? Hazlo abajo y pega la clave en Ajustes → Premium."
     },
     "support": {
       "heading": "Gracias por el año que viene.",
-      "headingItalic": "Premium desbloqueado, hasta en 5 Macs.",
-      "body": "<0>Hasta cinco Macs</0>. Un año entero de nuevas versiones y soporte por correo, sin ruido. Gestiona o cancela cuando quieras desde tu panel de Polar.",
+      "headingItalic": "Premium desbloqueado, {{yearlyScopeShort}}.",
+      "body": "<0>{{yearlyScope}}</0> Un año entero de nuevas versiones y soporte por correo, sin ruido. Gestiona o cancela cuando quieras desde tu panel de Polar.",
       "next": "Te escribiremos una sola vez cuando el año esté por terminar, nunca un cargo silencioso. ¿Aún no has descargado Sensei? Hazlo abajo."
     }
   },
@@ -413,9 +396,7 @@
   },
   "featurePages": {
     "backLink": "Battery Sensei",
-    "backToHome": "Volver a la página principal",
     "tryFree": "Prueba Battery Sensei gratis",
-    "howItHeading": "Cómo funciona",
     "whyItHeading": "Por qué importa",
     "travel-mode": {
       "kicker": "Función · 旅",
@@ -470,13 +451,12 @@
     "kicker": "Precio · 値段",
     "heading": "Tres formas de usar Sensei.",
     "headingItalic": "Lifetime una vez, o apoyo anual.",
-    "intro": "Empieza gratis con {{trial}} días de prueba Premium. Después: compra Lifetime una vez ({{lifetime}}, solo primeros 500) — o apoya el desarrollo continuo por {{support}}/año.",
+    "intro": "Empieza gratis con {{trial}} días de prueba Premium. Después: desbloquea Lifetime ({{lifetimeScope}}, {{lifetime}}, solo primeros 500) — o apoya como Yearly Patron ({{yearlyScope}}) por {{support}}/año.",
     "free": {
       "tier": "基本 · Free",
       "period": "para siempre",
       "blurb": "Tuyo para siempre. Sin tarjeta, sin cuenta.",
       "blurbBonus": "Más cada función Premium, gratis durante {{trial}} días.",
-      "ctaSub": "Descarga directa — sin tarjeta, sin cuenta.",
       "email": {
         "label": "Email — aviso de nuevas versiones",
         "placeholder": "tu@ejemplo.com",
@@ -515,7 +495,7 @@
     "lifetime": {
       "tier": "永遠 · Lifetime",
       "period": "una vez, para siempre",
-      "blurb": "Sáltate la prueba. Desbloquéalo todo al instante y consérvalo para siempre — cada Mac, cada futura función Premium.",
+      "blurb": "Sáltate la prueba. Desbloquéalo todo al instante — {{lifetimeScope}}, incluidas todas las futuras funciones Premium.",
       "originalLabel": "antes",
       "discountNote": "Oferta por tiempo limitado · código ZENMODE",
       "redeem": {
@@ -527,14 +507,13 @@
       "ctaLabel": "Obtener Lifetime",
       "trust": {
         "notarized": "Notarizada por Apple · actualizaciones automáticas seguras",
-        "refund": "Devolución en 14 días, sin preguntas",
-        "noSub": "Vitalicia · hasta 3 Macs",
-        "subscription": "Anual · hasta 5 Macs · cancela cuando quieras",
+        "noSub": "{{lifetimeScopeShort}}",
+        "subscription": "{{yearlyScopeShort}}",
         "combined": "Notarizada por Apple · hasta 3 Macs"
       },
       "premiumAdds": "Lifetime incluye · 先生",
       "activationLabel": "Cómo funciona la activación",
-      "activationBody": "Clave de licencia por correo desde Polar. Pégala una vez en <0>Sensei → Ajustes → Premium</0>. La Vitalicia desbloquea cada función Premium para siempre (hasta 3 Macs). La Anual es la misma, con tope de 5 Macs e incluye un año de actualizaciones y soporte por correo — gestiona o cancela en Polar cuando quieras. Sin inicio de sesión, sin cuenta en la app.",
+      "activationBody": "Clave de licencia por correo desde Polar. Pégala una vez en <0>Sensei → Ajustes → Premium</0>. {{lifetimeScope}} {{yearlyScope}} Incluye un año de actualizaciones y soporte por correo — gestiona o cancela en Polar cuando quieras. Sin inicio de sesión, sin cuenta en la app.",
       "items": [
         {
           "title": "Meeting Battery Guard",
@@ -735,10 +714,8 @@
     "github": {
       "label": "Hoja de ruta abierta · GitHub",
       "title": "¿Qué haría que Sensei fuera mejor para ti?",
-      "body": "Errores, ideas o un «ojalá hiciera X» — todo es bienvenido. Las plantillas solo piden lo que necesitamos para entregar. 👍 las ideas existentes para subirlas.",
       "cta": "Encuentra tu hilo",
       "paths": {
-        "label": "Elige tu camino",
         "idea": "Tengo una idea",
         "bug": "Algo no va",
         "curious": "Solo curiosidad"
@@ -761,7 +738,6 @@
     "heading": "Instálalo una vez.",
     "headingItalic": "Deja respirar a tu batería.",
     "body": "{{trial}} días para probarlo a fondo. Después {{price}} una vez, nunca más. Notarizado por Apple. Se instala en tu barra de menús desde el primer día y cuida de tu batería sin volver a pedir nada. Tu MacBook, siempre con las pilas puestas.",
-    "source": "Código",
     "trust": {
       "native": {
         "title": "macOS nativo",
@@ -782,7 +758,6 @@
     "tagline": "De un dueño de MacBook a otro.",
     "ariaGetApp": "Conseguir la app",
     "ariaFooter": "Pie de página",
-    "purchaseSub": "· {{price}} una vez",
     "contact": "Contacto",
     "reportIssue": "Reportar un problema",
     "releases": "Versiones",
@@ -795,21 +770,16 @@
     "kicker": "Pago · 会計",
     "tierToggleLabel": "Plan",
     "tierLifetime": "Lifetime · una vez",
-    "tierSupport": "Apoyo · anual",
+    "tierSupport": "Yearly Patron",
     "heading": {
       "lifetime": "Compra única.",
-      "support": "Apoyo anual."
+      "support": "Yearly Patron."
     },
-    "headingItalic": {
-      "lifetime": "Premium para siempre.",
-      "support": "Cancela cuando quieras."
-    },
+    "headingItalic": {},
     "intro": {
       "lifetime": "Polar Software, Inc. es el vendedor oficial — se encarga del cobro, el IVA y tu recibo. Recibirás tu clave de licencia por correo en menos de un minuto y la activarás desde la app en Ajustes → Premium.",
       "support": "Polar Software, Inc. es el vendedor oficial — se encarga del cobro, el IVA y tu recibo. Recibirás tu clave de licencia por correo en menos de un minuto — sigue activa mientras tu apoyo anual lo esté."
     },
-    "supportSwapNote": "¿Prefieres pagar una vez y conservarlo? <0>Cambiar a Lifetime</0>.",
-    "lifetimeSwapNote": "¿Prefieres compromiso anual? <0>Cambiar a Apoyo continuo al desarrollador</0>.",
     "summaryTitle": "Lo que recibes",
     "summaryLines": {
       "lifetime": [
@@ -835,8 +805,7 @@
       "payIn": "Pagar en:",
       "usd": "USD",
       "eur": "EUR",
-      "czk": "CZK",
-      "hint": "Polar cobra en la moneda elegida al tipo medio del mercado actual."
+      "czk": "CZK"
     },
     "inline": {
       "title": "Pago seguro de Battery Sensei",

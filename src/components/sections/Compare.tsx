@@ -137,7 +137,7 @@ export function Compare() {
         <div className="overflow-x-auto rounded-xl border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_92%,#fff)] shadow-[0_1px_0_rgba(255,255,255,0.45)_inset,0_18px_40px_-22px_rgba(28,26,23,0.18)]">
           <table className="w-full min-w-[720px] text-left text-sm">
             <thead>
-              <tr className="border-b border-[var(--line)] text-[11px] uppercase tracking-[0.18em] text-sumi-soft">
+              <tr className="meta-label border-b border-[var(--line)] text-sumi-soft">
                 <th className="w-[36%] px-5 py-4 font-semibold">
                   {t('compare.headers.feature')}
                 </th>
@@ -241,7 +241,9 @@ function FeatureLabel({
   moreInfoLabel: string
   openFeatureLabel: string
 }) {
+  const [mobileOpen, setMobileOpen] = useState(false)
   const path = featureKey ? FEATURE_PATHS[featureKey] : undefined
+  const mobileDescId = `compare-desc-${label.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`
   const labelNode = (
     <span className="inline-flex items-center gap-1.5">
       {label}
@@ -266,17 +268,38 @@ function FeatureLabel({
     labelNode
   )
   return (
-    <span className="inline-flex items-center gap-2">
-      {labelEl}
-      <span
-        title={desc}
-        aria-label={`${moreInfoLabel}: ${desc}`}
-        tabIndex={0}
-        className="inline-flex h-4 w-4 cursor-help items-center justify-center rounded-full text-nezumi/55 transition-colors duration-[220ms] hover:text-sumi-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/30 focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--washi)]"
-      >
-        <Info className="h-3.5 w-3.5" strokeWidth={1.8} aria-hidden />
+    <div className="space-y-1.5">
+      <span className="inline-flex items-center gap-2">
+        {labelEl}
+        <span
+          title={desc}
+          aria-label={`${moreInfoLabel}: ${desc}`}
+          tabIndex={0}
+          className="hidden md:inline-flex h-4 w-4 cursor-help items-center justify-center rounded-full text-nezumi/55 transition-colors duration-[220ms] hover:text-sumi-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/30 focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--washi)]"
+        >
+          <Info className="h-3.5 w-3.5" strokeWidth={1.8} aria-hidden />
+        </span>
+        <button
+          type="button"
+          onClick={() => setMobileOpen((open) => !open)}
+          aria-expanded={mobileOpen}
+          aria-controls={mobileDescId}
+          className="meta-label inline-flex items-center gap-1 rounded-sm text-nezumi/95 transition-colors duration-[220ms] hover:text-sumi focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/30 focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--washi)] md:hidden"
+        >
+          {moreInfoLabel}
+          <ChevronDown
+            className={`h-3.5 w-3.5 transition-transform duration-200 ${mobileOpen ? 'rotate-180' : ''}`}
+            aria-hidden
+            strokeWidth={2}
+          />
+        </button>
       </span>
-    </span>
+      {mobileOpen && (
+        <p id={mobileDescId} className="text-[0.875rem] leading-snug text-sumi-soft md:hidden">
+          {desc}
+        </p>
+      )}
+    </div>
   )
 }
 
@@ -304,7 +327,7 @@ function Cell({
   }
   if (value === 'partial') {
     return (
-      <td className={`${cls} text-[10px] uppercase tracking-[0.16em] text-sumi-soft`}>
+      <td className={`${cls} meta-label text-sumi-soft`}>
         {partialLabel}
       </td>
     )

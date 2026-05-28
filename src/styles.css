@@ -509,6 +509,16 @@ body::after {
   flex-shrink: 0;
 }
 
+/* Unified tiny uppercase metadata labels used in pricing/compare.
+   Floor at 12px for small screens and soften tracking to improve legibility. */
+.meta-label {
+  font-size: 0.75rem;
+  line-height: 1.35;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
 /* Tiny spec-strip caption — for the meta line under hero CTAs. Reads as
    subtitled metadata rather than a third tracked kicker. */
 .spec-strip {

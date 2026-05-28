@@ -34,6 +34,8 @@ const REFUND_MAILTO =
  * `value` so order changes don't break links.
  */
 type FaqItem = { id?: string; q: string; a: ReadonlyArray<string> }
+const LICENSE_SCOPE_LIFETIME = 'Lifetime unlock: up to 3 Macs you own.'
+const LICENSE_SCOPE_YEARLY = 'Yearly Patron: up to 5 Macs while subscribed.'
 
 /**
  * Static EN copy of the FAQ. Mirrors `faq.items` in en.json — both
@@ -62,7 +64,7 @@ export const FAQ_ITEMS: ReadonlyArray<FaqItem> = [
   {
     q: 'How much does Battery Sensei cost?',
     a: [
-      '**$3.99 once, lifetime license.** No subscription. Every Mac you own.',
+      `**$3.99 once, lifetime license.** ${LICENSE_SCOPE_LIFETIME} No subscription.`,
       'Free for 5 days first. No card, no account.',
       'When the trial ends, Sensei asks once at launch. Skip the purchase and the core stays free forever: charge limit, Travel Mode, smart alerts, 24-hour history, per-app drain, live menu-bar watts.',
       'Premium adds Meeting Battery Guard, unlimited history, and custom warning rules. Checkout shows your local currency.',
@@ -73,7 +75,7 @@ export const FAQ_ITEMS: ReadonlyArray<FaqItem> = [
     a: [
       'After checkout, your key arrives by email.',
       'Open Sensei → Settings → Premium and paste it in. Activates against Polar, stores locally.',
-      '**No account. No login.** Works on every Mac you own.',
+      `**No account. No login.** ${LICENSE_SCOPE_LIFETIME} ${LICENSE_SCOPE_YEARLY}`,
     ],
   },
   {
@@ -249,6 +251,8 @@ export function FAQ() {
   const vars = {
     price: lifetime.discounted.formatted,
     trial: TRIAL_DAYS,
+    lifetimeScope: t('licenseScope.lifetime'),
+    yearlyScope: t('licenseScope.yearly'),
   }
   // Open-item state. Empty string means "all collapsed". We sync it to
   // the URL hash on mount + on hash changes so deep-links like

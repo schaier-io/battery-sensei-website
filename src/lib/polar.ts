@@ -6,7 +6,7 @@
 //   VITE_POLAR_CHECKOUT_URL_LIFETIME   Checkout Link for the one-time
 //                                      Lifetime product
 //   VITE_POLAR_CHECKOUT_URL_SUPPORT    Checkout Link for the yearly
-//                                      "Ongoing Developer Support" product
+//                                      "Yearly Patron" product
 //
 // Server-only env (used by `api/price.ts` for per-country totals — never
 // exposed to the bundle):
@@ -99,7 +99,7 @@ function withDiscount(base: string, code: string | undefined): string {
   return url.toString()
 }
 
-/** Yearly "Ongoing Developer Support" subscription. */
+/** Yearly "Yearly Patron" subscription. */
 export function supportCheckoutUrl(opts: CheckoutUrlOptions = {}): string {
   return withDiscount(SUPPORT_CHECKOUT_URL, opts.discountCode)
 }

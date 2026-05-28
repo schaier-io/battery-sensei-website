@@ -48,6 +48,11 @@ export function Pricing() {
   const yearly = usePremiumPrice()
   const lifetime = useLifetimePrice()
   const { t } = useTranslation()
+  const lifetimeScope = t('licenseScope.lifetime')
+  const yearlyScope = t('licenseScope.yearly')
+  const lifetimeScopeShort = t('licenseScope.lifetimeShort')
+  const yearlyScopeShort = t('licenseScope.yearlyShort')
+  const notarizedCombined = t('licenseScope.notarizedCombined')
   // ZENMODE redemption count drives every "launch discount" surface on
   // this section. Once `remaining` hits 0 we hide the scarcity bar, the
   // discount-note chip, AND the strikethrough — the page then reads as
@@ -110,12 +115,14 @@ export function Pricing() {
             trial: TRIAL_DAYS,
             lifetime: lifetime.discounted.formatted,
             support: yearly.formatted,
+            lifetimeScope,
+            yearlyScope,
           })}
         </Reveal>
       </div>
 
       {/* Three-card layout. Lifetime sits in the middle as the recommended
-          tier (headline buy); Free on the left, Ongoing Developer Support on
+          tier (headline buy); Free on the left, Yearly Patron on
           the right as the lower-commitment yearly alternative. RECOMMENDED
           is an inline pill in the normal flow so the .paper-card > * rule
           doesn't pin it out of place. */}
@@ -156,7 +163,7 @@ export function Pricing() {
 
             <div aria-hidden className="mt-7 h-px w-full bg-[var(--line)]" />
 
-            <p className="mt-6 font-jp text-[11px] tracking-[0.32em] text-nezumi uppercase">
+            <p className="meta-label mt-6 font-jp text-nezumi">
               {t('pricing.free.whatYouKeep')}
             </p>
             <ul className="mt-4 space-y-4">
@@ -171,7 +178,7 @@ export function Pricing() {
                       <span className="block text-[0.9375rem] font-medium text-sumi leading-tight">
                         {title}
                       </span>
-                      <span className="mt-0.5 block text-[0.8125rem] leading-snug text-sumi-soft">
+                      <span className="mt-0.5 block text-[0.875rem] leading-snug text-sumi-soft">
                         {body}
                       </span>
                     </span>
@@ -186,11 +193,11 @@ export function Pricing() {
                 between feature list and CTA. */}
             <div className="mt-auto pt-8">
               <div className="rounded-md border border-dashed border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-4 py-3.5">
-                <p className="flex items-center gap-2 text-[0.7rem] uppercase tracking-[0.22em] font-medium text-sumi-soft">
+                <p className="meta-label flex items-center gap-2 text-sumi-soft">
                   <span className="font-jp normal-case tracking-normal text-hinomaru/80">日 {TRIAL_DAYS}</span>
                   {t('pricing.free.trialEnd', { day: TRIAL_DAYS })}
                 </p>
-                <p className="mt-2 text-[0.8125rem] leading-snug text-sumi-soft">
+                <p className="mt-2 text-[0.875rem] leading-snug text-sumi-soft">
                   <Trans
                     i18nKey="pricing.free.trialChoice"
                     values={{ price: lifetime.discounted.formatted }}
@@ -219,7 +226,7 @@ export function Pricing() {
               >
                 {t('pricing.lifetime.tier')}
               </h3>
-              <span className="inline-flex items-center gap-1 rounded-full bg-hinomaru/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-hinomaru">
+              <span className="meta-label inline-flex items-center gap-1 rounded-full bg-hinomaru/10 px-2 py-0.5 text-hinomaru">
                 {t('common.recommended')}
               </span>
             </div>
@@ -229,7 +236,7 @@ export function Pricing() {
                 top of that would be a lie. */}
             {launchOpen && (
               <div className="mt-2.5 inline-flex items-baseline gap-2 text-sumi-soft">
-                <span className="uppercase tracking-[0.2em] text-[0.6875rem] text-nezumi">
+                <span className="meta-label text-nezumi">
                   {t('pricing.lifetime.originalLabel')}
                 </span>
                 {/* Strikethrough original price — same symbol-split
@@ -280,12 +287,12 @@ export function Pricing() {
               </>
             )}
             <p className="mt-3 text-[0.9375rem] leading-snug text-sumi-soft max-w-md">
-              {t('pricing.lifetime.blurb')}
+              {t('pricing.lifetime.blurb', { lifetimeScope })}
             </p>
 
             <div aria-hidden className="mt-7 h-px w-full bg-[var(--line)]" />
 
-            <p className="mt-6 font-jp text-[11px] tracking-[0.32em] text-hinomaru/80 uppercase">
+            <p className="meta-label mt-6 font-jp text-hinomaru/80">
               {t('pricing.lifetime.premiumAdds')}
             </p>
             <ul className="mt-4 space-y-4">
@@ -300,7 +307,7 @@ export function Pricing() {
                       <span className="block text-[0.9375rem] font-medium text-sumi leading-tight">
                         {title}
                       </span>
-                      <span className="mt-0.5 block text-[0.8125rem] leading-snug text-sumi-soft">
+                      <span className="mt-0.5 block text-[0.875rem] leading-snug text-sumi-soft">
                         {body}
                       </span>
                     </span>
@@ -318,9 +325,13 @@ export function Pricing() {
                 buttons aligned even when one locale's trust copy
                 wraps to two lines. */}
             <div className="mt-auto pt-8">
-              <p className="inline-flex min-h-[2.5rem] items-center gap-1.5 text-[0.7rem] text-nezumi">
+              <p className="inline-flex min-h-[2.5rem] items-center gap-1.5 text-[0.75rem] text-sumi-soft">
                 <ShieldCheck className="h-3 w-3 shrink-0" strokeWidth={1.8} aria-hidden />
-                {t('pricing.lifetime.trust.combined')}
+                {t('pricing.lifetime.trust.combined', {
+                  lifetimeScopeShort,
+                  yearlyScopeShort,
+                  notarizedCombined,
+                })}
               </p>
               <Link
                 to="/checkout"
@@ -334,7 +345,7 @@ export function Pricing() {
           </article>
         </Reveal>
 
-        {/* ---------- Ongoing Developer Support card (right) ---------- */}
+        {/* ---------- Yearly Patron card (right) ---------- */}
         <Reveal delay={320} className="h-full">
           <article
             aria-labelledby="pricing-tier-support"
@@ -347,7 +358,7 @@ export function Pricing() {
               >
                 {t('pricing.support.tier')}
               </h3>
-              <span className="inline-flex items-center gap-1 rounded-full bg-sumi/5 px-2 py-0.5 text-[10px] font-medium uppercase tracking-[0.18em] text-sumi-soft">
+              <span className="meta-label inline-flex items-center gap-1 rounded-full bg-sumi/5 px-2 py-0.5 text-sumi-soft">
                 {t('pricing.support.badge')}
               </span>
             </div>
@@ -372,7 +383,7 @@ export function Pricing() {
 
             <div aria-hidden className="mt-7 h-px w-full bg-[var(--line)]" />
 
-            <p className="mt-6 font-jp text-[11px] tracking-[0.32em] text-sumi-soft uppercase">
+            <p className="meta-label mt-6 font-jp text-sumi-soft">
               {t('pricing.support.perksTitle')}
             </p>
             <ul className="mt-4 space-y-4">
@@ -388,7 +399,7 @@ export function Pricing() {
                         {title}
                       </span>
                       {body && (
-                        <span className="mt-0.5 block text-[0.8125rem] leading-snug text-sumi-soft">
+                        <span className="mt-0.5 block text-[0.875rem] leading-snug text-sumi-soft">
                           {body}
                         </span>
                       )}
@@ -404,9 +415,13 @@ export function Pricing() {
                 cards reserve the same vertical area and the buttons
                 end on the same baseline. */}
             <div className="mt-auto pt-8">
-              <p className="inline-flex min-h-[2.5rem] items-center gap-1.5 text-[0.7rem] text-nezumi">
+              <p className="inline-flex min-h-[2.5rem] items-center gap-1.5 text-[0.75rem] text-sumi-soft">
                 <RefreshCw className="h-3 w-3 shrink-0" strokeWidth={1.8} aria-hidden />
-                {t('pricing.lifetime.trust.subscription')}
+                {t('pricing.lifetime.trust.subscription', {
+                  lifetimeScopeShort,
+                  yearlyScopeShort,
+                  notarizedCombined,
+                })}
               </p>
               <Link
                 to="/checkout"
@@ -461,7 +476,7 @@ function LimitedRedeemBar({ fullPriceFormatted }: { fullPriceFormatted: string }
 
   return (
     <div className="mt-3.5 select-none" aria-live="polite">
-      <div className="flex items-baseline justify-between gap-3 text-[10.5px] uppercase tracking-[0.16em]">
+      <div className="meta-label flex items-baseline justify-between gap-3">
         {soldOut ? (
           <span className="font-semibold text-nezumi">
             {t('pricing.lifetime.redeem.soldOut')}
@@ -495,7 +510,7 @@ function LimitedRedeemBar({ fullPriceFormatted }: { fullPriceFormatted: string }
         />
       </div>
       {soldOut && (
-        <p className="mt-1.5 text-[11px] text-nezumi">
+        <p className="mt-1.5 text-[0.75rem] text-sumi-soft">
           {t('pricing.lifetime.redeem.soldOutHint', { full: fullPriceFormatted })}
         </p>
       )}
@@ -592,7 +607,7 @@ function FreeDownloadForm() {
     <form onSubmit={handleSubmit} className="mt-5" noValidate>
       <label
         htmlFor="free-download-email"
-        className="block text-center text-[0.7rem] uppercase tracking-[0.16em] text-sumi-soft"
+        className="meta-label block text-center text-sumi-soft"
       >
         {t('pricing.free.email.label')}
       </label>
@@ -623,7 +638,7 @@ function FreeDownloadForm() {
           signing up for" disclosure is read BEFORE the visitor commits
           to the click — reciprocity is clearest when the ask is named
           before the button label, not after. */}
-      <p className="mt-2 text-center text-[0.7rem] leading-[1.45] text-nezumi">
+      <p className="mt-2 text-center text-[0.75rem] leading-[1.5] text-sumi-soft">
         {t('pricing.free.email.footnote')}
       </p>
       <button
@@ -651,7 +666,7 @@ function FreeDownloadForm() {
           the moment they appear; the visual hinomaru text already
           carries the visual signal. */}
       {status === 'error' && (
-        <p role="alert" className="mt-1.5 text-center text-[11px] text-hinomaru">
+        <p role="alert" className="mt-1.5 text-center text-[0.75rem] text-hinomaru">
           {t('pricing.free.email.errorInvalid')}
         </p>
       )}
@@ -662,7 +677,7 @@ function FreeDownloadForm() {
       <p className="mt-2 text-center">
         <a
           href="/download/latest"
-          className="text-[0.75rem] font-semibold text-sumi-soft underline decoration-[var(--line)] underline-offset-[5px] transition-colors duration-[220ms] hover:text-sumi hover:decoration-sumi"
+          className="text-[0.75rem] font-semibold text-sumi underline decoration-[var(--line-strong)] underline-offset-[5px] transition-colors duration-[220ms] hover:text-sumi hover:decoration-sumi"
         >
           {t('pricing.free.email.skip')}
         </a>

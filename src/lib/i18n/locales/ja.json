@@ -4,21 +4,19 @@
     "currency": "通貨",
     "auto": "自動",
     "autoDetect": "自動検出",
-    "languageName": {
-      "en": "English",
-      "de": "Deutsch",
-      "es": "Español",
-      "fr": "Français",
-      "ja": "日本語"
-    },
+    "languageName": {},
     "download": "ダウンロード",
     "downloadFree": "無料でダウンロード",
     "downloadMac": "macOS版をダウンロード",
-    "buyNow": "今すぐ購入 — {{price}}",
-    "purchaseNow": "今すぐ購入",
-    "onceForever": "一度きり、永続",
     "recommended": "おすすめ",
     "learnMore": "詳しく見る"
+  },
+  "licenseScope": {
+    "lifetime": "Lifetimeアンロック：所有する最大3台のMac。",
+    "yearly": "Yearly Patron：購読中は最大5台のMac。",
+    "lifetimeShort": "Lifetime · 最大3台のMac",
+    "yearlyShort": "Yearly · 最大5台のMac · いつでも解約可能",
+    "notarizedCombined": "Apple公証済み · 最大3台のMac"
   },
   "nav": {
     "ariaPrimary": "メインナビゲーション",
@@ -80,16 +78,13 @@
     "chargeLimit": {
       "title": "充電上限",
       "titleSub": "旅モード付き",
-      "jp": "長く保つ・旅",
       "body": "Appleによれば、リチウムイオン電池は100%のままでいる時間が長いほど早く劣化します。上限を選んでください(80%をおすすめします)。先生はそれを背後で保ちます。明日は飛行機ですか?ワンクリックで満充電、家に戻ればまた上限へ戻ります。",
-      "chip": "旅モード · 出発前に満充電",
       "scaleLabel": "充電上限",
       "travelLabel": "旅モード",
       "travelHint": "旅の間だけ100%まで充電"
     },
     "glance": {
       "title": "一目で、すべてが伝わる",
-      "jp": "一目で",
       "body": "充電量、電源、入出力ワット、残り時間。全体像が、ひと目で。Dockアイコンなし。通知の騒がしさなし。クリックしたいときだけ、クリックしてください。",
       "timeLeft": "残り1時間52分",
       "chargingTo": "80%まで充電中",
@@ -102,19 +97,12 @@
     "meetings": {
       "title": "会議に、間に合う。",
       "titleSub": "先生が先を読み、電池もそれに備えます。",
-      "jp": "会議の前に",
       "body": "オプトイン式です。先生は次の数件の予定をそっと覗き、肝心な会議を電池が持ちこたえられないとわかれば、30分前、15分前、5分前、開始時刻に明確な対処法と共にお知らせします(「22分充電すれば最後まで持ちます」)。予定のタイトルがMacの外に出ることはありません。",
-      "chip": "Premium · 読み取り専用、タイトルはMac内にとどまります",
       "nextOnCalendar": "次の予定",
-      "duration": "午後3:00 · 60分",
       "startsAt": "午後3:00",
       "meetingTitle": "週次ミーティング",
-      "warnHeading": "会議の途中で電池が切れます",
       "warnShort": "途中で切れます。",
-      "warnBody": "スタンドアップ開始から<0>17分</0>でラップトップが落ちます。今すぐ充電を。",
       "warnFix": "22分充電すれば最後まで持ちます。",
-      "remindsYou": "お知らせするタイミング",
-      "minBefore": "−{{min}}分",
       "onDevice": "端末内のみ"
     }
   },
@@ -349,12 +337,7 @@
   },
   "thanks": {
     "kicker": "ありがとうございます · Thank you",
-    "videoCaption": "先生がお辞儀します。",
-    "openApp": "Senseiを開く",
-    "downloadApp": "Senseiをダウンロード",
     "backToHome": "ホームに戻る",
-    "managePurchase": "購入の管理",
-    "checkoutHint": "注文 #{{id}}",
     "orderLabel": "注文",
     "delivery": {
       "label": "Senseiをインストール",
@@ -388,14 +371,14 @@
     },
     "lifetime": {
       "heading": "Lifetimeへようこそ。",
-      "headingItalic": "すべてのPremium機能を、永久に。",
-      "body": "<0>ご自身のMac3台まで</0>。Senseiが今後リリースするすべてのPremium機能を、永久に。ログインなし、アカウントなし。",
+      "headingItalic": "すべてのPremium機能を、{{lifetimeScopeShort}}。",
+      "body": "<0>{{lifetimeScope}}</0>Senseiが今後リリースするすべてのPremium機能を利用できます。ログインなし、アカウントなし。",
       "next": "まだSenseiをダウンロードしていませんか？下からどうぞ。その後、設定 → Premiumにキーを貼り付けてください。"
     },
     "support": {
       "heading": "1年間のご支援、ありがとうございます。",
-      "headingItalic": "Premiumを最大5台のMacで解放。",
-      "body": "<0>Mac最大5台まで</0>。1年間の新ビルドと、静かなメールサポート付き。Polarのダッシュボードから、いつでも管理・解約できます。",
+      "headingItalic": "Premiumを、{{yearlyScopeShort}}で解放。",
+      "body": "<0>{{yearlyScope}}</0>1年間の新ビルドと、静かなメールサポート付き。Polarのダッシュボードから、いつでも管理・解約できます。",
       "next": "1年が満了する少し前に、メールで1度だけお知らせします。静かな自動再請求はありません。まだSenseiをダウンロードしていませんか？下からどうぞ。"
     }
   },
@@ -413,9 +396,7 @@
   },
   "featurePages": {
     "backLink": "Battery Sensei",
-    "backToHome": "ホームに戻る",
     "tryFree": "Battery Senseiを無料で試す",
-    "howItHeading": "仕組み",
     "whyItHeading": "なぜ大切か",
     "travel-mode": {
       "kicker": "機能 · 旅",
@@ -470,13 +451,12 @@
     "kicker": "値段 · Pricing",
     "heading": "先生を使う、3つの道。",
     "headingItalic": "Lifetimeを一度きり、または毎年の応援。",
-    "intro": "まずは無料で{{trial}}日間のPremiumお試し。その後はLifetimeを一度きりお買い上げ({{lifetime}}、先着500名のみ)— または{{support}}/年で開発を支えてください。",
+    "intro": "まずは無料で{{trial}}日間のPremiumお試し。その後はLifetimeを解放({{lifetimeScope}}、{{lifetime}}、先着500名のみ) — またはYearly Patronとして({{yearlyScope}}) {{support}}/年で開発を支えてください。",
     "free": {
       "tier": "基本 · Free",
       "period": "ずっと",
       "blurb": "ずっとあなたのもの。カード不要、アカウント不要。",
       "blurbBonus": "さらに{{trial}}日間、すべてのPremium機能が無料。",
-      "ctaSub": "直接ダウンロード — カード不要、アカウント不要。",
       "email": {
         "label": "メール — 新バージョンのお知らせ",
         "placeholder": "you@example.com",
@@ -515,7 +495,7 @@
     "lifetime": {
       "tier": "永遠 · Lifetime",
       "period": "一度きり、ずっと",
-      "blurb": "試用期間をスキップ。今すぐすべてを解放し、ずっとあなたのものに — すべてのMacで、未来のすべてのPremium機能まで。",
+      "blurb": "試用期間をスキップ。今すぐすべてを解放 — {{lifetimeScope}}。未来のすべてのPremium機能まで含まれます。",
       "originalLabel": "元の価格",
       "discountNote": "期間限定オファー · コード ZENMODE",
       "redeem": {
@@ -527,14 +507,13 @@
       "ctaLabel": "Lifetimeを入手",
       "trust": {
         "notarized": "Apple公証済み · 安全な自動アップデート",
-        "refund": "14日間返金、理由不要",
-        "noSub": "ライフタイム · 最大3台のMac",
-        "subscription": "年額 · 最大5台のMac · いつでも解約",
+        "noSub": "{{lifetimeScopeShort}}",
+        "subscription": "{{yearlyScopeShort}}",
         "combined": "Apple公証済み · 最大3台のMac"
       },
       "premiumAdds": "Lifetimeに含まれるもの · 先生",
       "activationLabel": "アクティベーションの流れ",
-      "activationBody": "Polarからメールでライセンスキーをお届け。<0>Sensei → 設定 → Premium</0>に一度貼り付けるだけ。ライフタイムは全Premium機能を永久に解放(最大3台のMac)。年額オプションは同じ内容で5台までに拡大、1年間のアップデートとメールサポート付き — Polarからいつでも管理・解約可能。アプリにログインもアカウントも不要。",
+      "activationBody": "Polarからメールでライセンスキーをお届け。<0>Sensei → 設定 → Premium</0>に一度貼り付けるだけ。{{lifetimeScope}} {{yearlyScope}} 1年間のアップデートとメールサポート付きで、Polarからいつでも管理・解約できます。アプリにログインもアカウントも不要。",
       "items": [
         {
           "title": "会議の電池ガード",
@@ -735,10 +714,8 @@
     "github": {
       "label": "公開ロードマップ · GitHub",
       "title": "Senseiをもっと良くするには、何があれば?",
-      "body": "バグ、アイデア、「こうだったらいいのに」 — どれも歓迎です。テンプレートは出荷に必要なことだけを尋ねます。既存のアイデアには👍で投票して順位を上げてください。",
       "cta": "あなたのスレッドを見つける",
       "paths": {
-        "label": "あなたの道を選ぶ",
         "idea": "アイデアがある",
         "bug": "うまくいかない",
         "curious": "ちょっと気になる"
@@ -761,7 +738,6 @@
     "heading": "一度入れたら、",
     "headingItalic": "電池に息をさせてあげてください。",
     "body": "{{trial}}日間、一緒に暮らしてみてください。その後は{{price}}を一度きり、それきりです。Apple公証済み。初日からメニューバーに座り、二度と尋ねることなく電池を見守ります。電気はMacに、元気はあなたに。",
-    "source": "ソース",
     "trust": {
       "native": {
         "title": "ネイティブmacOS",
@@ -782,7 +758,6 @@
     "tagline": "MacBookユーザーから、MacBookユーザーへ。",
     "ariaGetApp": "アプリを入手",
     "ariaFooter": "フッター",
-    "purchaseSub": "· {{price}}一度きり",
     "contact": "連絡",
     "reportIssue": "問題を報告",
     "releases": "リリース",
@@ -795,21 +770,16 @@
     "kicker": "会計 · Checkout",
     "tierToggleLabel": "プラン",
     "tierLifetime": "Lifetime · 一度",
-    "tierSupport": "応援 · 毎年",
+    "tierSupport": "Yearly Patron",
     "heading": {
       "lifetime": "買い切り。",
-      "support": "毎年のご支援。"
+      "support": "Yearly Patron。"
     },
-    "headingItalic": {
-      "lifetime": "Premiumはずっと。",
-      "support": "いつでも解約可能。"
-    },
+    "headingItalic": {},
     "intro": {
       "lifetime": "販売代行業者(merchant of record)はPolar Software, Inc.です — 決済・消費税・領収書を担当します。1分以内にライセンスキーをメールでお届けし、アプリの 設定 → Premium から有効化できます。",
       "support": "販売代行業者(merchant of record)はPolar Software, Inc.です — 決済・消費税・領収書を担当します。1分以内にライセンスキーをメールでお届け — 毎年のご支援が続く限り有効です。"
     },
-    "supportSwapNote": "一度きりで自分のものに?<0>Lifetimeに切り替える</0>。",
-    "lifetimeSwapNote": "毎年のお支払いをご希望?<0>開発の応援プランに切り替える</0>。",
     "summaryTitle": "含まれるもの",
     "summaryLines": {
       "lifetime": [
@@ -835,8 +805,7 @@
       "payIn": "支払い通貨:",
       "usd": "USD",
       "eur": "EUR",
-      "czk": "CZK",
-      "hint": "Polarは選択された通貨で、本日の仲値レートにて請求します。"
+      "czk": "CZK"
     },
     "inline": {
       "title": "Battery Sensei 安全な決済",

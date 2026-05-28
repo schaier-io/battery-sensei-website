@@ -9,12 +9,23 @@ import { useLifetimePrice } from '#/lib/use-price'
 function ScrollCue() {
   const [hidden, setHidden] = useState(false)
   useEffect(() => {
-    const onScroll = () => {
-      if (window.scrollY > 24) setHidden(true)
+    let rafId = 0
+    const updateHidden = () => {
+      setHidden((prev) => prev || window.scrollY > 24)
     }
-    onScroll()
+    const onScroll = () => {
+      if (rafId !== 0) return
+      rafId = window.requestAnimationFrame(() => {
+        rafId = 0
+        updateHidden()
+      })
+    }
+    updateHidden()
     window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      if (rafId !== 0) window.cancelAnimationFrame(rafId)
+    }
   }, [])
   return (
     <a
@@ -40,16 +51,29 @@ function ScrollCue() {
 function useScrollProgress(maxAtProgress = 0.45): number {
   const [progress, setProgress] = useState(0)
   useEffect(() => {
-    const onScroll = () => {
+    let rafId = 0
+    const updateProgress = () => {
       const y = window.scrollY
       const max = document.documentElement.scrollHeight - window.innerHeight
       if (max > 0) {
         setProgress(Math.min(1, Math.max(0, y / max / maxAtProgress)))
+      } else {
+        setProgress(0)
       }
     }
-    onScroll()
+    const onScroll = () => {
+      if (rafId !== 0) return
+      rafId = window.requestAnimationFrame(() => {
+        rafId = 0
+        updateProgress()
+      })
+    }
+    updateProgress()
     window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      if (rafId !== 0) window.cancelAnimationFrame(rafId)
+    }
   }, [maxAtProgress])
   return progress
 }

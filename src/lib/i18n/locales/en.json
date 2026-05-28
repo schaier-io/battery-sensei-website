@@ -1,24 +1,22 @@
 {
   "common": {
     "language": "Language",
-    "languageName": {
-      "en": "English",
-      "de": "Deutsch",
-      "es": "Español",
-      "fr": "Français",
-      "ja": "日本語"
-    },
+    "languageName": {},
     "currency": "Currency",
     "auto": "Auto",
     "autoDetect": "Auto-detect",
     "download": "Download",
     "downloadFree": "Download free",
     "downloadMac": "Download for macOS",
-    "buyNow": "Buy now — {{price}}",
-    "purchaseNow": "Purchase now",
-    "onceForever": "once, forever",
     "recommended": "Recommended",
     "learnMore": "Learn more"
+  },
+  "licenseScope": {
+    "lifetime": "Lifetime unlock: up to 3 Macs you own.",
+    "yearly": "Yearly Patron: up to 5 Macs while subscribed.",
+    "lifetimeShort": "Lifetime · up to 3 Macs",
+    "yearlyShort": "Yearly · up to 5 Macs · cancel anytime",
+    "notarizedCombined": "Notarized by Apple · up to 3 Macs"
   },
   "nav": {
     "ariaPrimary": "Primary",
@@ -80,16 +78,13 @@
     "chargeLimit": {
       "title": "Charge limit",
       "titleSub": "with Travel Mode",
-      "jp": "長く保つ・旅",
       "body": "Apple says lithium-ion ages faster at 100%. Pick a cap (we suggest 80%); Sensei holds it in the background. Flying tomorrow? One tap for a full charge, then the cap comes back when you're home.",
-      "chip": "Travel Mode · full charge before a trip",
       "scaleLabel": "Charge limit",
       "travelLabel": "Travel Mode",
       "travelHint": "lifts to 100% just for the trip"
     },
     "glance": {
       "title": "One glance, the whole story",
-      "jp": "一目で",
       "body": "Charge, source, watts in or out, time left. The whole picture, one look. No dock icon. No notification noise. Nothing to click unless you want to. Stay current — in every sense.",
       "timeLeft": "1h 52m left",
       "chargingTo": "Charging to 80%",
@@ -102,19 +97,12 @@
     "meetings": {
       "title": "Meetings, met.",
       "titleSub": "Sensei reads ahead, so your battery does too.",
-      "jp": "会議の前に",
       "body": "Opt-in. Sensei peeks at your next few meetings and, when the battery won't make it, warns you at 30, 15, 5, and 1 minutes before with a clear fix. Event titles never leave your Mac.",
-      "chip": "Premium · Read-only, titles stay on your Mac",
       "nextOnCalendar": "Next on calendar",
-      "duration": "3:00 PM · 60 min",
       "startsAt": "3:00 PM",
       "meetingTitle": "Weekly standup",
-      "warnHeading": "Battery won't last your meeting",
       "warnShort": "Won't survive.",
-      "warnBody": "Your laptop dies <0>17 min</0> into standup. Plug in now.",
       "warnFix": "22 min on the charger and you're clear through.",
-      "remindsYou": "Reminds you at",
-      "minBefore": "−{{min}} min",
       "onDevice": "On-device only"
     }
   },
@@ -349,12 +337,7 @@
   },
   "thanks": {
     "kicker": "Thank you · ありがとう",
-    "videoCaption": "Sensei bows.",
-    "openApp": "Open Sensei",
-    "downloadApp": "Download Sensei",
     "backToHome": "Back to homepage",
-    "managePurchase": "Manage purchase",
-    "checkoutHint": "Order #{{id}}",
     "orderLabel": "Order",
     "delivery": {
       "label": "Install Sensei",
@@ -388,14 +371,14 @@
     },
     "lifetime": {
       "heading": "Welcome to Lifetime.",
-      "headingItalic": "Every Premium feature, forever.",
-      "body": "<0>Three Macs of your own</0>. Every Premium feature Sensei ever ships, forever. No login. No account.",
+      "headingItalic": "Every Premium feature, {{lifetimeScopeShort}}.",
+      "body": "<0>{{lifetimeScope}}</0> Every Premium feature Sensei ever ships. No login. No account.",
       "next": "Already running Sensei? Open Settings → Premium and paste the key. The same key is also waiting in your inbox."
     },
     "support": {
       "heading": "Thank you for the year ahead.",
-      "headingItalic": "Premium unlocked, on up to five Macs.",
-      "body": "<0>Up to five Macs</0>. A full year of new builds and quiet email support. Manage or cancel any time from your Polar dashboard.",
+      "headingItalic": "Premium unlocked, {{yearlyScopeShort}}.",
+      "body": "<0>{{yearlyScope}}</0> A full year of new builds and quiet email support. Manage or cancel any time from your Polar dashboard.",
       "next": "We'll email you once when the year is nearly up — never a silent re-charge. Your key also lives in your inbox and in the customer portal."
     }
   },
@@ -413,9 +396,7 @@
   },
   "featurePages": {
     "backLink": "Battery Sensei",
-    "backToHome": "Back to homepage",
     "tryFree": "Try Battery Sensei free",
-    "howItHeading": "How it works",
     "whyItHeading": "Why it matters",
     "travel-mode": {
       "kicker": "Feature · 旅",
@@ -469,14 +450,13 @@
   "pricing": {
     "kicker": "Pricing · 値段",
     "heading": "Three ways to use Sensei.",
-    "headingItalic": "Lifetime once, or yearly support.",
-    "intro": "Start free with a {{trial}}-day Premium trial. Then own it forever ({{lifetime}}, first 500 only) — or back ongoing development at {{support}}/year.",
+    "headingItalic": "Lifetime once, or Yearly Patron.",
+    "intro": "Start free with a {{trial}}-day Premium trial. Then unlock Lifetime ({{lifetimeScope}}, {{lifetime}}, first 500 only) — or choose Yearly Patron ({{yearlyScope}}) at {{support}}/year.",
     "free": {
       "tier": "基本 · Free",
       "period": "forever",
       "blurb": "Yours forever. No card, no account.",
       "blurbBonus": "Plus every Premium feature, free for your first {{trial}} days.",
-      "ctaSub": "Direct download — no card, no account.",
       "email": {
         "label": "Email — heads-up on new versions",
         "placeholder": "you@example.com",
@@ -514,8 +494,8 @@
     },
     "lifetime": {
       "tier": "永遠 · Lifetime",
-      "period": "once, forever",
-      "blurb": "Skip the trial. Unlock everything immediately and own it forever — every Mac, every future Premium feature.",
+      "period": "once · up to 3 Macs",
+      "blurb": "Skip the trial. Unlock everything immediately — {{lifetimeScope}}, including every future Premium feature.",
       "originalLabel": "was",
       "discountNote": "Limited-time offer · code ZENMODE",
       "redeem": {
@@ -527,14 +507,13 @@
       "ctaLabel": "Get Lifetime",
       "trust": {
         "notarized": "Notarized by Apple · safe auto-updates",
-        "refund": "14-day refund, no questions",
-        "noSub": "Lifetime · up to 3 Macs",
-        "subscription": "Yearly · up to 5 Macs · cancel anytime",
-        "combined": "Notarized by Apple · up to 3 Macs"
+        "noSub": "{{lifetimeScopeShort}}",
+        "subscription": "{{yearlyScopeShort}}",
+        "combined": "{{notarizedCombined}}"
       },
       "premiumAdds": "Lifetime includes · 先生",
       "activationLabel": "How activation works",
-      "activationBody": "License key by email from Polar. Paste once in <0>Sensei → Settings → Premium</0>. Lifetime unlocks every Premium feature forever (up to 3 Macs). The Yearly option is the same, capped at 5 Macs, and includes one year of updates and email support — manage or cancel from Polar any time. No login, no account in the app.",
+      "activationBody": "License key by email from Polar. Paste once in <0>Sensei → Settings → Premium</0>. {{lifetimeScope}} {{yearlyScope}} Includes one year of updates and email support — manage or cancel from Polar any time. No login, no account in the app.",
       "items": [
         {
           "title": "Meeting Battery Guard",
@@ -550,7 +529,7 @@
         },
         {
           "title": "Every future Premium feature",
-          "body": "One payment. Every Mac you own. Every update Sensei ever ships."
+          "body": "One payment. Up to 3 Macs you own. Every update Sensei ever ships."
         }
       ]
     },
@@ -596,7 +575,7 @@
       {
         "q": "How much does Battery Sensei cost?",
         "a": [
-          "**{{price}} once, lifetime license.** No subscription. Every Mac you own.",
+          "**{{price}} once, lifetime license.** {{lifetimeScope}} No subscription.",
           "Free for {{trial}} days first. No card, no account.",
           "When the trial ends, Sensei asks once at launch. Skip the purchase and the core stays free forever: charge limit, Travel Mode, smart alerts, 24-hour history, per-app drain, live menu-bar watts.",
           "Premium adds Meeting Battery Guard, unlimited history, and custom warning rules. Checkout shows your local currency."
@@ -607,7 +586,7 @@
         "a": [
           "After checkout, your key arrives by email.",
           "Open Sensei → Settings → Premium and paste it in. Activates against Polar, stores locally.",
-          "**No account. No login.** Works on every Mac you own."
+          "**No account. No login.** {{lifetimeScope}} {{yearlyScope}}"
         ]
       },
       {
@@ -735,10 +714,8 @@
     "github": {
       "label": "Open roadmap · GitHub",
       "title": "What would make Sensei better for you?",
-      "body": "Bugs, feature ideas, or a quiet \"wish it did X\" — all welcome. Templates ask only what we need to ship. 👍 existing ideas to bump them up.",
       "cta": "Find your thread",
       "paths": {
-        "label": "Pick your path",
         "idea": "Have an idea",
         "bug": "Hit a wall",
         "curious": "Just curious"
@@ -761,7 +738,6 @@
     "heading": "Install once.",
     "headingItalic": "Let your battery breathe.",
     "body": "{{trial}} days to live with it. Then {{price}} once, never again. Notarized by Apple. Sits in your menu bar from day one and looks after your battery without asking again. Charged once. Yours for life.",
-    "source": "Source",
     "trust": {
       "native": {
         "title": "Native macOS",
@@ -782,7 +758,6 @@
     "tagline": "From one MacBook owner to another.",
     "ariaGetApp": "Get the app",
     "ariaFooter": "Footer",
-    "purchaseSub": "· {{price}} once",
     "contact": "Contact",
     "reportIssue": "Report an issue",
     "releases": "Releases",
@@ -795,26 +770,21 @@
     "kicker": "Checkout · 会計",
     "tierToggleLabel": "Plan",
     "tierLifetime": "Lifetime · once",
-    "tierSupport": "Support · yearly",
+    "tierSupport": "Yearly Patron",
     "heading": {
       "lifetime": "One-time purchase.",
-      "support": "Yearly support."
+      "support": "Yearly Patron."
     },
-    "headingItalic": {
-      "lifetime": "Premium forever.",
-      "support": "Cancel anytime."
-    },
+    "headingItalic": {},
     "intro": {
       "lifetime": "Polar Software, Inc. is the merchant of record — they handle payment, VAT and your receipt. You'll get your license key by email within a minute, then activate it from Settings → Premium inside the app.",
-      "support": "Polar Software, Inc. is the merchant of record — they handle payment, VAT and your receipt. You'll get your license key by email within a minute, and it stays active for as long as your yearly support is."
+      "support": "Polar Software, Inc. is the merchant of record — they handle payment, VAT and your receipt. You'll get your license key by email within a minute, and it stays active for as long as your Yearly Patron subscription is active."
     },
-    "supportSwapNote": "Prefer to pay once and own it? <0>Switch to Lifetime</0>.",
-    "lifetimeSwapNote": "Prefer a yearly commitment? <0>Switch to Ongoing Developer Support</0>.",
     "summaryTitle": "What you're getting",
     "summaryLines": {
       "lifetime": [
         "Meeting Battery Guard — alerts before the meeting that matters",
-        "Unlimited Saga history — every cycle, forever",
+        "Unlimited Saga history — every cycle, across your 3-Mac Lifetime unlock",
         "Custom warning rules — add, remove, edit thresholds",
         "Lifetime updates, no subscription"
       ],
@@ -835,8 +805,7 @@
       "payIn": "Pay in:",
       "usd": "USD",
       "eur": "EUR",
-      "czk": "CZK",
-      "hint": "Polar charges in your chosen currency at today's mid-market rate."
+      "czk": "CZK"
     },
     "inline": {
       "title": "Battery Sensei secure checkout",

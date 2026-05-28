@@ -28,7 +28,7 @@ const SITE_URL = 'https://www.battery-sensei.app'
 const PATH = '/checkout'
 const PAGE_TITLE = 'Checkout — Battery Sensei Pro'
 const PAGE_DESC =
-  'Secure purchase of Battery Sensei Pro through Polar. Lifetime or yearly support. Promo codes accepted. 14-day refund guarantee.'
+  'Secure purchase of Battery Sensei Pro through Polar. Lifetime or Yearly Patron. Promo codes accepted. 14-day refund guarantee.'
 
 const tierSchema = z.enum(['lifetime', 'support']).catch('lifetime')
 type Tier = z.infer<typeof tierSchema>
@@ -71,6 +71,11 @@ export const Route = createFileRoute('/checkout')({
 
 function CheckoutPage() {
   const { t } = useTranslation()
+  const lifetimeScope = t('licenseScope.lifetime')
+  const yearlyScope = t('licenseScope.yearly')
+  const lifetimeScopeShort = t('licenseScope.lifetimeShort')
+  const yearlyScopeShort = t('licenseScope.yearlyShort')
+  const notarizedCombined = t('licenseScope.notarizedCombined')
   const { tier, cur } = Route.useSearch()
   const navigate = Route.useNavigate()
   // `cur` is the explicit user override (USD/EUR from the switcher).
@@ -109,9 +114,10 @@ function CheckoutPage() {
     support: string[]
   })[tier]
   const headingMain = (t('checkout.heading', { returnObjects: true }) as Record<Tier, string>)[tier]
-  const headingItalic = (t('checkout.headingItalic', {
-    returnObjects: true,
-  }) as Record<Tier, string>)[tier]
+  const headingItalic = t(`checkout.headingItalic.${tier}`, {
+    lifetimeScopeShort,
+    yearlyScopeShort,
+  })
   const intro = (t('checkout.intro', { returnObjects: true }) as Record<Tier, string>)[tier]
   const priceLabel = (t('checkout.priceLabel', {
     returnObjects: true,
@@ -176,7 +182,7 @@ function CheckoutPage() {
         </div>
 
         {/* Tier toggle — segmented control swapping between Lifetime and
-            yearly Ongoing Developer Support. Stays in URL via ?tier= so a
+            recurring Yearly Patron. Stays in URL via ?tier= so a
             user can deep-link or refresh without losing their selection. */}
         <Reveal delay={160}>
           <div
@@ -304,6 +310,10 @@ function CheckoutPage() {
               <p className="mt-2 text-[0.875rem] leading-snug text-sumi-soft">
                 <Trans
                   i18nKey="pricing.lifetime.activationBody"
+                  values={{
+                    lifetimeScope,
+                    yearlyScope,
+                  }}
                   components={[<span className="font-medium text-sumi" />]}
                 />
               </p>
@@ -341,7 +351,11 @@ function CheckoutPage() {
                   </li>
                   <li className="inline-flex items-center gap-1.5">
                     <KeyRound className="h-3 w-3 shrink-0" strokeWidth={1.8} aria-hidden />
-                    {t('pricing.lifetime.trust.noSub')}
+                    {t('pricing.lifetime.trust.noSub', {
+                      lifetimeScopeShort,
+                      yearlyScopeShort,
+                      notarizedCombined,
+                    })}
                   </li>
                 </>
               ) : (

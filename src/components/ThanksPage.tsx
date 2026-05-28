@@ -46,6 +46,10 @@ type Tier = 'lifetime' | 'support'
  */
 export function ThanksPage({ tier, kanji }: { tier: Tier; kanji: string }) {
   const { t } = useTranslation()
+  const lifetimeScope = t('licenseScope.lifetime')
+  const yearlyScope = t('licenseScope.yearly')
+  const lifetimeScopeShort = t('licenseScope.lifetimeShort')
+  const yearlyScopeShort = t('licenseScope.yearlyShort')
   const search = useSearch({ strict: false }) as { checkout_id?: string }
   // Snapshot the id once on first render. We strip the URL via
   // history.replaceState below so a later read of useSearch would come
@@ -132,7 +136,10 @@ export function ThanksPage({ tier, kanji }: { tier: Tier; kanji: string }) {
             >
               {t(`${key}.heading`)}
               <span className="block italic text-sumi-soft font-normal">
-                {t(`${key}.headingItalic`)}
+                {t(`${key}.headingItalic`, {
+                  lifetimeScopeShort,
+                  yearlyScopeShort,
+                })}
               </span>
             </Reveal>
             <Reveal
@@ -155,6 +162,10 @@ export function ThanksPage({ tier, kanji }: { tier: Tier; kanji: string }) {
                   surrounding sumi-soft. */}
               <Trans
                 i18nKey={`${key}.body`}
+                values={{
+                  lifetimeScope,
+                  yearlyScope,
+                }}
                 components={[
                   <span className="font-medium text-sumi" />,
                 ]}
