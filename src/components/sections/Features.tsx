@@ -68,8 +68,7 @@ function MenuBarGlanceMockup() {
             srcSet="/logo-256.webp 1x, /logo-512.webp 2x"
             width="32"
             height="32"
-            alt=""
-            aria-hidden
+            alt="Battery Sensei app icon"
             decoding="async"
             loading="lazy"
             className="h-8 w-8 drop-shadow-[0_2px_4px_rgba(28,26,23,0.15)]"

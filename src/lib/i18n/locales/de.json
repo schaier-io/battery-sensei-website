@@ -13,9 +13,9 @@
   },
   "licenseScope": {
     "lifetime": "Lifetime-Freischaltung: bis zu 3 Macs, die dir gehören.",
-    "yearly": "Yearly Patron: bis zu 5 Macs während des Abos.",
+    "yearly": "Jahres-Patron: bis zu 5 Macs während des Abos.",
     "lifetimeShort": "Lifetime · bis zu 3 Macs",
-    "yearlyShort": "Yearly · bis zu 5 Macs · jederzeit kündbar",
+    "yearlyShort": "Jahres-Patron · bis zu 5 Macs · jederzeit kündbar",
     "notarizedCombined": "Von Apple notarisiert · bis zu 3 Macs"
   },
   "nav": {
@@ -451,7 +451,7 @@
     "kicker": "Preise · 値段",
     "heading": "Drei Wege, Sensei zu nutzen.",
     "headingItalic": "Lifetime einmal — oder jährliche Unterstützung.",
-    "intro": "Starten Sie kostenlos mit {{trial}} Tagen Premium-Test. Danach: Lifetime freischalten ({{lifetimeScope}}, {{lifetime}}, nur die ersten 500) — oder als Yearly Patron unterstützen ({{yearlyScope}}) für {{support}}/Jahr.",
+    "intro": "Starten Sie kostenlos mit {{trial}} Tagen Premium-Test. Danach: Lifetime freischalten ({{lifetimeScope}}, {{lifetime}}, nur die ersten 500) — oder als Jahres-Patron unterstützen ({{yearlyScope}}) für {{support}}/Jahr.",
     "free": {
       "tier": "基本 · Free",
       "period": "für immer",
@@ -770,10 +770,10 @@
     "kicker": "Kasse · 会計",
     "tierToggleLabel": "Tarif",
     "tierLifetime": "Lifetime · einmal",
-    "tierSupport": "Yearly Patron",
+    "tierSupport": "Jahres-Patron",
     "heading": {
       "lifetime": "Einmaliger Kauf.",
-      "support": "Yearly Patron."
+      "support": "Jahres-Patron."
     },
     "headingItalic": {},
     "intro": {

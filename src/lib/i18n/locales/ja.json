@@ -13,9 +13,9 @@
   },
   "licenseScope": {
     "lifetime": "Lifetimeアンロック：所有する最大3台のMac。",
-    "yearly": "Yearly Patron：購読中は最大5台のMac。",
+    "yearly": "年間パトロン：購読中は最大5台のMac。",
     "lifetimeShort": "Lifetime · 最大3台のMac",
-    "yearlyShort": "Yearly · 最大5台のMac · いつでも解約可能",
+    "yearlyShort": "年間パトロン · 最大5台のMac · いつでも解約可能",
     "notarizedCombined": "Apple公証済み · 最大3台のMac"
   },
   "nav": {
@@ -451,7 +451,7 @@
     "kicker": "値段 · Pricing",
     "heading": "先生を使う、3つの道。",
     "headingItalic": "Lifetimeを一度きり、または毎年の応援。",
-    "intro": "まずは無料で{{trial}}日間のPremiumお試し。その後はLifetimeを解放({{lifetimeScope}}、{{lifetime}}、先着500名のみ) — またはYearly Patronとして({{yearlyScope}}) {{support}}/年で開発を支えてください。",
+    "intro": "まずは無料で{{trial}}日間のPremiumお試し。その後はLifetimeを解放({{lifetimeScope}}、{{lifetime}}、先着500名のみ) — または年間パトロンとして({{yearlyScope}}) {{support}}/年で開発を支えてください。",
     "free": {
       "tier": "基本 · Free",
       "period": "ずっと",
@@ -770,10 +770,10 @@
     "kicker": "会計 · Checkout",
     "tierToggleLabel": "プラン",
     "tierLifetime": "Lifetime · 一度",
-    "tierSupport": "Yearly Patron",
+    "tierSupport": "年間パトロン",
     "heading": {
       "lifetime": "買い切り。",
-      "support": "Yearly Patron。"
+      "support": "年間パトロン。"
     },
     "headingItalic": {},
     "intro": {

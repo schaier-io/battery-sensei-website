@@ -19,8 +19,7 @@ export function Footer() {
               srcSet="/logo-256.webp 1x, /logo-512.webp 2x"
               width="48"
               height="48"
-              alt=""
-              aria-hidden
+              alt="Battery Sensei logo"
               decoding="async"
               loading="lazy"
               className="h-11 w-11 sm:h-12 sm:w-12"

@@ -147,8 +147,7 @@ export function Nav() {
             srcSet="/logo-256.webp 1x, /logo-512.webp 2x"
             width="44"
             height="44"
-            alt=""
-            aria-hidden
+            alt="Battery Sensei logo"
             // First above-fold image → LCP candidate. Eager + high priority
             // + the matching <link rel="preload"> in __root.tsx kick the
             // request off before hydration discovers this img.
@@ -324,8 +323,7 @@ function MobileDrawer({
               srcSet="/logo-256.webp 1x, /logo-512.webp 2x"
               width="36"
               height="36"
-              alt=""
-              aria-hidden
+              alt="Battery Sensei logo"
               decoding="async"
               className="h-9 w-9"
             />
