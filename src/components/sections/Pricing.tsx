@@ -18,7 +18,7 @@ import {
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
-import { useEffect, useRef, useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import i18n from 'i18next'
 import { Hanko } from '#/components/zen/Hanko'
@@ -45,6 +45,35 @@ const freeIcons: readonly LucideIcon[] = [
   ShieldCheck,      // notarized + signed auto-updates
   Laptop,           // runs entirely on your Mac
 ]
+
+/** Shared primary CTA geometry — all three tiers lock to exactly 2.75rem tall. */
+const PRICING_CTA_BTN =
+  'group box-border inline-flex h-11 min-h-11 max-h-11 w-full shrink-0 items-center justify-center gap-2 rounded-md px-5 text-sm font-medium leading-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]'
+
+/**
+ * Pins pre-CTA copy, the CTA, and the post-CTA row (skip link / spacer) to the
+ * card bottom with a fixed footer height so all three primary buttons share
+ * the same baseline across the pricing grid.
+ */
+function PricingCardFooter({
+  pre,
+  cta,
+  post,
+}: {
+  pre: ReactNode
+  cta: ReactNode
+  post?: ReactNode
+}) {
+  return (
+    <div className="pricing-card-footer">
+      <div className="pricing-card-footer__pre">{pre}</div>
+      <div className="pricing-card-footer__cta">{cta}</div>
+      <div className="pricing-card-footer__post">
+        {post ?? <span className="block w-full" aria-hidden />}
+      </div>
+    </div>
+  )
+}
 
 export function Pricing() {
   const yearly = usePremiumPrice()
@@ -206,9 +235,7 @@ export function Pricing() {
                 mt-auto wrapper so the whole conversion block pins to the
                 bottom of the card. Avoids the floating-whitespace look
                 between feature list and CTA. */}
-            <div className="mt-auto pt-6">
-              <FreeDownloadForm />
-            </div>
+            <FreeDownloadForm />
           </article>
         </Reveal>
 
@@ -311,32 +338,28 @@ export function Pricing() {
               })}
             </ul>
 
-            {/* Trust line + CTA bundled in mt-auto so they sit glued
-                together at the bottom — peak-end rule: trust is the
-                last thing the visitor reads before clicking. The
-                trust line uses `min-h-[2.5rem]` so its row always
-                reserves the same vertical space across all three
-                cards (Free / Lifetime / Support), keeping the CTA
-                buttons aligned even when one locale's trust copy
-                wraps to two lines. */}
-            <div className="mt-auto pt-8">
-              <p className="inline-flex min-h-[2.5rem] items-center gap-1.5 text-[0.75rem] text-sumi-soft">
-                <ShieldCheck className="h-3 w-3 shrink-0" strokeWidth={1.8} aria-hidden />
-                {t('pricing.lifetime.trust.combined', {
-                  lifetimeScopeShort,
-                  yearlyScopeShort,
-                  notarizedCombined,
-                })}
-              </p>
-              <Link
-                to="/checkout"
-                search={{ tier: 'lifetime', cur: undefined }}
-                className="btn-sumi group mt-2 mb-9 inline-flex h-11 w-full items-center justify-center gap-2 rounded-md px-6 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
-              >
-                <Sparkles className="h-4 w-4" strokeWidth={1.8} />
-                {t('pricing.lifetime.ctaLabel')}
-              </Link>
-            </div>
+            <PricingCardFooter
+              pre={
+                <p className="inline-flex items-center gap-1.5 text-[0.73rem] leading-[1.55] text-sumi-soft/90">
+                  <ShieldCheck className="h-3 w-3 shrink-0" strokeWidth={1.8} aria-hidden />
+                  {t('pricing.lifetime.trust.combined', {
+                    lifetimeScopeShort,
+                    yearlyScopeShort,
+                    notarizedCombined,
+                  })}
+                </p>
+              }
+              cta={
+                <Link
+                  to="/checkout"
+                  search={{ tier: 'lifetime', cur: undefined }}
+                  className={`btn-sumi ${PRICING_CTA_BTN}`}
+                >
+                  <Sparkles className="h-4 w-4" strokeWidth={1.8} />
+                  {t('pricing.lifetime.ctaLabel')}
+                </Link>
+              }
+            />
           </article>
         </Reveal>
 
@@ -381,16 +404,43 @@ export function Pricing() {
             <ul className="mt-4 space-y-4">
               {supportFeatures.map(({ title, body }, idx) => {
                 const Icon = supportIcons[idx] ?? Sparkles
+                const goldSparkle = idx === 0
+                const goldPerkStatic = idx === 1
+                const goldChip = goldSparkle || goldPerkStatic
                 return (
                   <li key={title} className="flex items-start gap-3">
-                    <span className="mt-[2px] inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-sumi/5 text-sumi-soft">
-                      <Icon className="h-3.5 w-3.5" strokeWidth={1.8} aria-hidden />
+                    <span
+                      className={
+                        goldChip
+                          ? 'mt-[2px] inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-[color-mix(in_oklab,var(--kin)_14%,var(--washi))] text-[var(--kin)]'
+                          : 'mt-[2px] inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-sumi/5 text-sumi-soft'
+                      }
+                    >
+                      {goldSparkle ? (
+                        <span className="pricing-sparkle-shimmer-shell">
+                          <Icon
+                            className="pricing-sparkle-gold h-3.5 w-3.5"
+                            fill="currentColor"
+                            stroke="currentColor"
+                            strokeWidth={0.85}
+                            aria-hidden
+                          />
+                        </span>
+                      ) : (
+                        <Icon
+                          className="h-3.5 w-3.5"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth={1.8}
+                          aria-hidden
+                        />
+                      )}
                     </span>
-                    <span className="min-w-0">
-                      <span className="flex flex-wrap items-center gap-2 text-[0.9375rem] font-medium text-sumi leading-tight">
+                    <span className="min-w-0 flex-1">
+                      <span className="flex w-full flex-wrap items-center gap-2 text-[0.9375rem] font-medium text-sumi leading-tight">
                         <span>{title}</span>
                         {idx === 3 && (
-                          <span className="ml-1 inline-flex rotate-3 items-center rounded-full border border-hinomaru/35 bg-[color-mix(in_oklab,var(--hinomaru)_12%,#fff)] px-1.5 py-0.5 text-[0.625rem] font-semibold uppercase tracking-[0.12em] text-hinomaru">
+                          <span className="ml-auto shrink-0 inline-flex rotate-3 items-center rounded-full border border-hinomaru/35 bg-[color-mix(in_oklab,var(--hinomaru)_12%,#fff)] px-1.5 py-0.5 text-[0.625rem] font-semibold uppercase tracking-[0.12em] text-hinomaru">
                             {t('pricing.support.anytimeTag', { defaultValue: 'Anytime' })}
                           </span>
                         )}
@@ -406,32 +456,31 @@ export function Pricing() {
               })}
             </ul>
 
-            {/* Same pattern as Lifetime: trust + CTA bundled at the
-                bottom so the white space lives ABOVE the conversion
-                block. Trust line uses `min-h-[2.5rem]` so all three
-                cards reserve the same vertical area and the buttons
-                end on the same baseline. */}
-            <div className="mt-auto pt-8">
-              <p className="inline-flex min-h-[2.5rem] items-center gap-1.5 text-[0.75rem] text-sumi-soft">
-                <RefreshCw className="h-3 w-3 shrink-0" strokeWidth={1.8} aria-hidden />
-                {t('pricing.lifetime.trust.subscription', {
-                  lifetimeScopeShort,
-                  yearlyScopeShort,
-                  notarizedCombined,
-                })}
-              </p>
-              <Link
-                to="/checkout"
-                search={{ tier: 'support', cur: undefined }}
-                className="btn-sumi-soft group mt-2 mb-9 inline-flex h-11 w-full items-center justify-center gap-2 rounded-md border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-6 text-sm font-medium text-sumi transition-colors duration-200 hover:bg-[color-mix(in_oklab,var(--washi)_40%,#fff)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
-              >
-                <Heart
-                  className="h-4 w-4 text-hinomaru fill-transparent transition-[fill,transform] duration-[460ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:fill-current group-hover:scale-110"
-                  strokeWidth={1.8}
-                />
-                {t('pricing.support.ctaLabel')}
-              </Link>
-            </div>
+            <PricingCardFooter
+              pre={
+                <p className="inline-flex items-center gap-1.5 text-[0.73rem] leading-[1.55] text-sumi-soft/90">
+                  <RefreshCw className="h-3 w-3 shrink-0" strokeWidth={1.8} aria-hidden />
+                  {t('pricing.lifetime.trust.subscription', {
+                    lifetimeScopeShort,
+                    yearlyScopeShort,
+                    notarizedCombined,
+                  })}
+                </p>
+              }
+              cta={
+                <Link
+                  to="/checkout"
+                  search={{ tier: 'support', cur: undefined }}
+                  className={`btn-sumi-soft border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] text-sumi transition-colors duration-200 hover:bg-[color-mix(in_oklab,var(--washi)_40%,#fff)] ${PRICING_CTA_BTN}`}
+                >
+                  <Heart
+                    className="h-4 w-4 text-hinomaru fill-transparent transition-[fill,transform] duration-[460ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:fill-current group-hover:scale-110"
+                    strokeWidth={1.8}
+                  />
+                  {t('pricing.support.ctaLabel')}
+                </Link>
+              }
+            />
           </article>
         </Reveal>
       </div>
@@ -618,92 +667,78 @@ function FreeDownloadForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mt-4" noValidate>
-      <label
-        htmlFor="free-download-email"
-        className="block text-center text-[0.74rem] font-medium uppercase tracking-[0.14em] text-sumi-soft/85"
-      >
-        {t('pricing.free.email.label')}
-      </label>
-
-      {/* Input + CTA are always stacked. On the previous side-by-side
-          layout the placeholder `you@example.com` got chopped on small
-          phones once the h-11 button squeezed alongside it; stacking
-          also makes the submit button a full-width affordance that
-          visually parallels the Lifetime / Support CTAs in the
-          neighbouring cards, so all three columns end on the same
-          shape. */}
-      <input
-        ref={inputRef}
-        id="free-download-email"
-        type="email"
-        required
-        autoComplete="email"
-        inputMode="email"
-        value={email}
-        onChange={(e) => {
-          setEmail(e.target.value)
-          if (status === 'error') setStatus('idle')
-        }}
-        placeholder={t('pricing.free.email.placeholder')}
-        className="mt-2 block h-11 w-full min-w-0 rounded-md border border-[color-mix(in_oklab,var(--sumi)_16%,transparent)] bg-[color-mix(in_oklab,var(--washi)_72%,#fff)] px-3 text-[0.875rem] text-sumi placeholder:text-nezumi/70 focus:outline-none focus:ring-2 focus:ring-sumi/25"
-      />
-      {/* Footnote sits directly under the input so the "what you're
-          signing up for" disclosure is read BEFORE the visitor commits
-          to the click — reciprocity is clearest when the ask is named
-          before the button label, not after. */}
-      <p className="mt-2 text-center text-[0.73rem] leading-[1.55] text-sumi-soft/90">
-        {t('pricing.free.email.footnote')}
-      </p>
-      <button
-        ref={buttonRef}
-        id="free-download-submit"
-        type="submit"
-        disabled={status === 'sending'}
-        // `scroll-margin-bottom` gives the button breathing room from
-        // the viewport edge when `scrollIntoView({ block: 'end' })` lands
-        // on it from a Download link click — sits ~1.25rem above the
-        // bottom edge instead of glued to it.
-        style={{ scrollMarginBottom: '1.25rem' }}
-        className="btn-sumi group mt-3 inline-flex h-11 w-full items-center justify-center gap-2 rounded-md px-5 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)] disabled:opacity-70"
-      >
-        <Download
-          className="h-4 w-4 transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5"
-          strokeWidth={1.8}
-          aria-hidden
-        />
-        {status === 'sending'
-          ? t('pricing.free.email.sending')
-          : t('pricing.free.email.cta')}
-      </button>
-      {/* `role="alert"` so screen readers announce validation failures
-          the moment they appear; the visual hinomaru text already
-          carries the visual signal. */}
-      {status === 'error' && (
-        <p role="alert" className="mt-1.5 text-center text-[0.75rem] text-hinomaru">
-          {t('pricing.free.email.errorInvalid')}
-        </p>
-      )}
-      {/* Skip link is intentionally bolder than the footnote above —
-          self-determination beats "captured" lead-gen, and we don't want
-          visitors to feel the email is a hard paywall. Underline always
-          visible so it reads as an actionable second path, not legalese. */}
-      <p className="mt-3 text-center">
-        <MacOnlyConfirm onConfirm={startDownload}>
-          {({ onClick }) => (
-            <a
-              href="/download/latest"
-              onClick={onClick}
-              className="text-[0.8rem] font-medium text-sumi/90 underline decoration-[var(--line-strong)] underline-offset-[5px] transition-colors duration-[220ms] hover:text-sumi hover:decoration-sumi"
+    <>
+      <form onSubmit={handleSubmit} noValidate>
+        <PricingCardFooter
+          pre={
+            <>
+              <label
+                htmlFor="free-download-email"
+                className="block text-[0.74rem] font-medium uppercase tracking-[0.14em] text-sumi-soft/85"
+              >
+                {t('pricing.free.email.label')}
+              </label>
+              <input
+                ref={inputRef}
+                id="free-download-email"
+                type="email"
+                required
+                autoComplete="email"
+                inputMode="email"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value)
+                  if (status === 'error') setStatus('idle')
+                }}
+                placeholder={t('pricing.free.email.placeholder')}
+                className="mt-2 block h-11 w-full min-w-0 rounded-md border border-[color-mix(in_oklab,var(--sumi)_16%,transparent)] bg-[color-mix(in_oklab,var(--washi)_72%,#fff)] px-3 text-[0.875rem] text-sumi placeholder:text-nezumi/70 focus:outline-none focus:ring-2 focus:ring-sumi/25"
+              />
+              <p className="mt-2 text-[0.73rem] leading-[1.55] text-sumi-soft/90">
+                {t('pricing.free.email.footnote')}
+              </p>
+              {status === 'error' && (
+                <p role="alert" className="mt-1.5 text-[0.75rem] text-hinomaru">
+                  {t('pricing.free.email.errorInvalid')}
+                </p>
+              )}
+            </>
+          }
+          cta={
+            <button
+              ref={buttonRef}
+              id="free-download-submit"
+              type="submit"
+              disabled={status === 'sending'}
+              style={{ scrollMarginBottom: '1.25rem' }}
+              className={`btn-sumi ${PRICING_CTA_BTN} disabled:opacity-70`}
             >
-              {t('pricing.free.email.skip')}
-            </a>
-          )}
-        </MacOnlyConfirm>
-      </p>
-      {/* Controlled dialog for the form-submit path. The render-prop
-          variant above handles its own state for the skip-link click;
-          this one is opened from `handleSubmit` after the email POST. */}
+              <Download
+                className="h-4 w-4 transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5"
+                strokeWidth={1.8}
+                aria-hidden
+              />
+              {status === 'sending'
+                ? t('pricing.free.email.sending')
+                : t('pricing.free.email.cta')}
+            </button>
+          }
+          post={
+            <p className="text-center">
+              <MacOnlyConfirm onConfirm={startDownload}>
+                {({ onClick }) => (
+                  <a
+                    href="/download/latest"
+                    onClick={onClick}
+                    className="text-[0.8rem] font-medium text-sumi/90 underline decoration-[var(--line-strong)] underline-offset-[5px] transition-colors duration-[220ms] hover:text-sumi hover:decoration-sumi"
+                  >
+                    {t('pricing.free.email.skip')}
+                  </a>
+                )}
+              </MacOnlyConfirm>
+            </p>
+          }
+        />
+      </form>
       <MacOnlyConfirmDialog
         open={macConfirmOpen}
         onOpenChange={setMacConfirmOpen}
@@ -712,6 +747,6 @@ function FreeDownloadForm() {
           startDownload()
         }}
       />
-    </form>
+    </>
   )
 }

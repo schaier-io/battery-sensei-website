@@ -354,7 +354,7 @@ function CycleMockup({ className = '' }: { className?: string }) {
  * dev + media at the bottom. Replace with live data once the
  * marketing site is wired to the app's API.
  */
-function AppDrainMockup() {
+function AppDrainMockup({ className = '' }: { className?: string }) {
   const { t } = useTranslation()
   const rows: { name: string; pct: number; dot: string }[] = [
     { name: 'Chrome',  pct: 14, dot: '#4a90e2' },
@@ -367,7 +367,7 @@ function AppDrainMockup() {
   const max = Math.max(...rows.map((r) => r.pct))
   return (
     <div
-      className="app-drain-mockup mt-3 rounded-md bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-3.5 py-3"
+      className={`app-drain-mockup mt-3 rounded-md bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-3.5 py-3 ${className}`}
       style={{
         boxShadow: '0.4px 0.4px 0 0 var(--line), 0 0 0 1px var(--line)',
       }}
@@ -476,7 +476,7 @@ function HeatMockup({ className = '' }: { className?: string }) {
  * A quick two-side split (in/out) plus net indicator mirrors
  * the app's data-minded style while staying lightweight.
  */
-function WattsMockup() {
+function WattsMockup({ className = '' }: { className?: string }) {
   const wattsIn = 61.3
   const wattsOut = 28.7
   const net = wattsIn - wattsOut
@@ -485,7 +485,7 @@ function WattsMockup() {
   const outPct = total > 0 ? (wattsOut / total) * 100 : 0
   return (
     <div
-      className="watts-mockup mt-3 rounded-md bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-3.5 py-3"
+      className={`watts-mockup mt-3 rounded-md bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-3.5 py-3 ${className}`}
       style={{
         boxShadow: '0.4px 0.4px 0 0 var(--line), 0 0 0 1px var(--line)',
       }}
@@ -564,7 +564,7 @@ function PrivacyMockup() {
   ] as const
   return (
     <div
-      className="app-drain-mockup relative mt-3 rounded-md bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-3.5 py-3"
+      className="app-drain-mockup relative mt-2.5 rounded-md bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-3.5 py-2.5 lg:mt-2 lg:py-2"
       style={{
         boxShadow: '0.4px 0.4px 0 0 var(--line), 0 0 0 1px var(--line)',
       }}
@@ -580,8 +580,8 @@ function PrivacyMockup() {
         </span>
       </div>
 
-      <div className="mt-2.5 rounded-[8px] px-2 py-2">
-        <ul className="mt-2.5 space-y-1.5">
+      <div className="mt-2 rounded-[8px] px-2 py-1.5 lg:py-1">
+        <ul className="mt-1.5 space-y-1.5">
           {rows.map((r, i) => (
             <li
               key={r.labelKey}
@@ -591,7 +591,7 @@ function PrivacyMockup() {
               <span className="text-[11.5px] font-medium text-sumi truncate">
                 {t(`health.mockups.privacy.rows.${r.labelKey}`)}
               </span>
-              <span className="inline-flex items-center gap-1.5 shrink-0 text-[10px] font-semibold uppercase tracking-[0.12em] text-sumi-soft">
+              <span className="inline-flex items-center gap-1.5 shrink-0 text-[9.5px] font-semibold uppercase tracking-[0.12em] text-sumi-soft">
                 <span className="grid h-3.5 w-3.5 place-items-center rounded-full bg-[color-mix(in_oklab,var(--hinomaru)_14%,#fff)] text-hinomaru">
                   <ShieldCheck className="h-2.5 w-2.5" strokeWidth={2.3} aria-hidden />
                 </span>
@@ -632,13 +632,14 @@ export function Health() {
         </Reveal>
       </div>
 
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:auto-rows-[minmax(11rem,_1fr)]">
+      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:auto-rows-[minmax(11rem,_auto)]">
         {cells.map(({ key, kanji, icon: Icon, span, feature }, i) => {
-          const alignMockupCards = key === 'cycles' || key === 'heat'
+          const stretchRowCard =
+            key === 'heat' || key === 'languages' || key === 'watts' || key === 'cycles'
           const cardBody = (
             <div
-              className={`paper-card ${key === 'languages' ? '' : 'h-full'} flex flex-col ${
-                feature ? 'p-5 gap-3.5 sm:p-6 sm:gap-4' : 'p-4 gap-2.5'
+              className={`paper-card ${key === 'privacy' ? 'lg:h-auto' : 'h-full'} flex flex-col ${
+                feature ? 'p-5 gap-3.5 sm:p-6 sm:gap-4' : key === 'privacy' ? 'p-4 pt-3 lg:pt-2.5 gap-2' : 'p-4 gap-2.5'
               }`}
             >
               <div className="flex items-start justify-between">
@@ -712,7 +713,11 @@ export function Health() {
                   </div>
                 </div>
               )}
-              <div className={feature ? 'mt-auto' : alignMockupCards ? 'min-h-[6.75rem]' : ''}>
+              <div
+                className={
+                  feature ? 'mt-auto' : stretchRowCard ? 'flex min-h-0 flex-1 flex-col' : ''
+                }
+              >
                 <h3
                   className={`display-title font-medium text-sumi ${
                     feature ? 'text-[1.625rem]' : 'text-[1.0625rem]'
@@ -727,15 +732,29 @@ export function Health() {
                 >
                   {t(`health.cells.${key}.body`)}
                 </p>
+                {/* Per-cell mini-mockups — below title + body; paired-row
+                    cards pin mockup to the bottom when the grid stretches. */}
+                {stretchRowCard && key === 'cycles' && (
+                  <div className="mt-3 mt-auto shrink-0">
+                    <CycleMockup className="!mt-0" />
+                  </div>
+                )}
+                {stretchRowCard && key === 'heat' && (
+                  <div className="mt-3 mt-auto shrink-0">
+                    <HeatMockup className="!mt-0 min-h-[10.75rem] lg:min-h-[10.25rem]" />
+                  </div>
+                )}
+                {stretchRowCard && key === 'watts' && (
+                  <div className="mt-3 mt-auto shrink-0">
+                    <WattsMockup className="!mt-0" />
+                  </div>
+                )}
+                {stretchRowCard && key === 'languages' && (
+                  <div className="mt-3 mt-auto shrink-0">
+                    <AppDrainMockup className="!mt-0 min-h-[10.75rem] lg:min-h-[10.25rem]" />
+                  </div>
+                )}
               </div>
-              {/* Per-cell mini-mockups — render BELOW the title +
-                  body so they read as "here's what that looks like"
-                  rather than chrome at the top of the card. Only the
-                  cells with a data-shaped feature get one. */}
-              {key === 'cycles' && <CycleMockup className="min-h-[10.75rem]" />}
-              {key === 'heat' && <HeatMockup className="min-h-[10.75rem]" />}
-              {key === 'watts' && <WattsMockup />}
-              {key === 'languages' && <AppDrainMockup />}
               {key === 'privacy' && <PrivacyMockup />}
             </div>
           )
@@ -743,7 +762,7 @@ export function Health() {
           <Reveal
             key={key}
             delay={(i % 4) * 80}
-            className={span ?? ''}
+            className={`${span ?? ''} ${key === 'privacy' ? 'lg:self-start lg:-mt-2' : 'h-full'}`}
           >
             {feature ? (
               cardBody

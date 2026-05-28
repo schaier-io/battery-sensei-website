@@ -7,6 +7,13 @@ import {
   setCurrencyPreference,
   useCurrencyPreference,
 } from '#/lib/currency-preference'
+import { usePremiumPrice } from '#/lib/use-price'
+
+function asSupportedCurrency(code: string): SupportedCurrency {
+  if (code === 'EUR') return 'EUR'
+  if (code === 'CZK') return 'CZK'
+  return 'USD'
+}
 
 // Symbol + native locale label shown in the menu. Picked so each option
 // reads instantly even before the visitor has interacted with prices.
@@ -20,9 +27,6 @@ const LABEL: Record<SupportedCurrency, string> = {
   EUR: 'Euro',
   CZK: 'Česká koruna',
 }
-
-type AutoChoice = 'AUTO'
-type Choice = AutoChoice | SupportedCurrency
 
 // 円 = "yen / round" → most-readable kanji shorthand for "money". We use it
 // the same way the language switcher uses 言, so the two chips read as
@@ -53,7 +57,9 @@ export function CurrencySwitcher({
 }) {
   const { t } = useTranslation()
   const stored = useCurrencyPreference()
-  const active: Choice = stored ?? 'AUTO'
+  const { currency: detectedCode } = usePremiumPrice()
+  const resolved = asSupportedCurrency(detectedCode)
+  const display = stored ?? resolved
 
   const [open, setOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
@@ -118,16 +124,17 @@ export function CurrencySwitcher({
     }
   }, [mounted])
 
-  const handlePick = (choice: Choice) => {
-    if (choice === active) {
+  const handlePick = (choice: SupportedCurrency) => {
+    if (stored === choice) {
       setOpen(false)
       return
     }
-    setCurrencyPreference(choice === 'AUTO' ? null : choice)
+    setCurrencyPreference(choice)
     setOpen(false)
   }
 
-  const triggerShort = active === 'AUTO' ? t('common.auto', { defaultValue: 'AUTO' }) : active
+  const isChoiceActive = (choice: SupportedCurrency) =>
+    stored ? stored === choice : resolved === choice
 
   // Inline variant: mirror LanguageSwitcher's mobile drawer layout — list
   // of buttons in a two-column grid.
@@ -145,8 +152,8 @@ export function CurrencySwitcher({
           />
         </div>
         <ul className="grid grid-cols-2 gap-2" role="radiogroup" aria-label={t('common.currency', { defaultValue: 'Currency' })}>
-          {(['AUTO', ...SUPPORTED_CURRENCIES] as Choice[]).map((choice) => {
-            const isActive = choice === active
+          {SUPPORTED_CURRENCIES.map((choice) => {
+            const isActive = isChoiceActive(choice)
             return (
               <li key={choice}>
                 <button
@@ -163,12 +170,10 @@ export function CurrencySwitcher({
                 >
                   <span className="flex items-baseline gap-2 min-w-0">
                     <span className="font-jp text-base leading-none text-hinomaru/80 w-7 text-center">
-                      {choice === 'AUTO' ? '自' : SYMBOL[choice]}
+                      {SYMBOL[choice]}
                     </span>
                     <span className="display-title text-[0.9375rem] font-medium text-sumi truncate">
-                      {choice === 'AUTO'
-                        ? t('common.autoDetect', { defaultValue: 'Auto-detect' })
-                        : LABEL[choice]}
+                      {LABEL[choice]}
                     </span>
                   </span>
                   {isActive && (
@@ -204,7 +209,7 @@ export function CurrencySwitcher({
           aria-hidden
           className="h-3 w-px bg-[var(--line)] group-hover:bg-[var(--line-strong)] transition-colors"
         />
-        <span className="tabular-nums">{triggerShort}</span>
+        <span className="tabular-nums">{display}</span>
         <ChevronDown
           aria-hidden
           className="lang-chevron h-3 w-3 text-nezumi/70 group-hover:text-sumi-soft"
@@ -236,8 +241,8 @@ export function CurrencySwitcher({
           </div>
 
           <ul role="listbox" aria-label={t('common.currency', { defaultValue: 'Currency' })}>
-            {(['AUTO', ...SUPPORTED_CURRENCIES] as Choice[]).map((choice, i) => {
-              const isActive = choice === active
+            {SUPPORTED_CURRENCIES.map((choice, i) => {
+              const isActive = isChoiceActive(choice)
               return (
                 <li
                   key={choice}
@@ -258,12 +263,10 @@ export function CurrencySwitcher({
                   >
                     <span className="flex items-baseline gap-2.5 min-w-0">
                       <span className="font-jp text-base leading-none text-hinomaru/80 w-7 text-center shrink-0">
-                        {choice === 'AUTO' ? '自' : SYMBOL[choice]}
+                        {SYMBOL[choice]}
                       </span>
                       <span className="display-title text-[13px] text-sumi truncate">
-                        {choice === 'AUTO'
-                          ? t('common.autoDetect', { defaultValue: 'Auto-detect' })
-                          : LABEL[choice]}
+                        {LABEL[choice]}
                       </span>
                     </span>
                     {isActive && (

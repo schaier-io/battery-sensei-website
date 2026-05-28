@@ -1,52 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import type { CSSProperties } from 'react'
 import { Download, ChevronDown } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Reveal } from '#/components/zen/Reveal'
 import { MenuBarMockup } from '#/components/zen/MenuBarMockup'
 import { TRIAL_DAYS } from '#/lib/polar'
 import { useLifetimePrice } from '#/lib/use-price'
-
-function ScrollCue() {
-  const [hidden, setHidden] = useState(false)
-  useEffect(() => {
-    let rafId = 0
-    const updateHidden = () => {
-      setHidden((prev) => prev || window.scrollY > 24)
-    }
-    const onScroll = () => {
-      if (rafId !== 0) return
-      rafId = window.requestAnimationFrame(() => {
-        rafId = 0
-        updateHidden()
-      })
-    }
-    updateHidden()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => {
-      window.removeEventListener('scroll', onScroll)
-      if (rafId !== 0) window.cancelAnimationFrame(rafId)
-    }
-  }, [])
-  return (
-    <a
-      href="#features"
-      aria-label="Scroll down"
-      className={`fixed bottom-5 left-1/2 z-30 -translate-x-1/2 transition-[opacity,transform] duration-700 ease-out ${
-        hidden
-          ? 'pointer-events-none translate-y-2 opacity-0'
-          : 'pointer-events-auto opacity-60 hover:opacity-100'
-      }`}
-    >
-      <span className="flex h-9 w-9 items-center justify-center rounded-full border border-sumi/10 bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] shadow-[0_6px_20px_-10px_rgba(28,26,23,0.25)] backdrop-blur-sm">
-        <ChevronDown
-          className="h-4 w-4 animate-gentle-bob text-sumi-soft"
-          strokeWidth={1.8}
-          aria-hidden
-        />
-      </span>
-    </a>
-  )
-}
 
 function useScrollProgress(maxAtProgress = 0.45): number {
   const [progress, setProgress] = useState(0)
@@ -127,6 +86,11 @@ function KanjiRail({
 export function Hero() {
   const progress = useScrollProgress(0.12)
   const [hasStartedScroll, setHasStartedScroll] = useState(false)
+  const [isChevronSettling, setIsChevronSettling] = useState(false)
+  const [chevronInlineStyle, setChevronInlineStyle] = useState<CSSProperties>()
+  const chevronRef = useRef<SVGSVGElement | null>(null)
+  const settleRafRef = useRef<number | null>(null)
+  const settleTimeoutRef = useRef<number | null>(null)
   const lifetime = useLifetimePrice()
   const price = lifetime.discounted
   const { t } = useTranslation()
@@ -134,7 +98,7 @@ export function Hero() {
   useEffect(() => {
     let rafId = 0
     const updateHasStartedScroll = () => {
-      setHasStartedScroll((prev) => prev || window.scrollY > 24)
+      setHasStartedScroll(window.scrollY > 24)
     }
     const onScroll = () => {
       if (rafId !== 0) return
@@ -150,6 +114,68 @@ export function Hero() {
       if (rafId !== 0) window.cancelAnimationFrame(rafId)
     }
   }, [])
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches
+
+    if (!hasStartedScroll) {
+      if (settleRafRef.current !== null) {
+        window.cancelAnimationFrame(settleRafRef.current)
+        settleRafRef.current = null
+      }
+      if (settleTimeoutRef.current !== null) {
+        window.clearTimeout(settleTimeoutRef.current)
+        settleTimeoutRef.current = null
+      }
+      setIsChevronSettling(false)
+      setChevronInlineStyle(undefined)
+      return
+    }
+
+    if (prefersReducedMotion || !chevronRef.current) return
+
+    const computed = window.getComputedStyle(chevronRef.current)
+    setIsChevronSettling(true)
+    setChevronInlineStyle({
+      transform:
+        computed.transform === 'none' ? 'translateY(0)' : computed.transform,
+      opacity: computed.opacity,
+      transition:
+        'transform 280ms cubic-bezier(0.2,0.8,0.2,1), opacity 280ms cubic-bezier(0.2,0.8,0.2,1)',
+    })
+
+    settleRafRef.current = window.requestAnimationFrame(() => {
+      settleRafRef.current = null
+      setChevronInlineStyle((prev) =>
+        prev
+          ? {
+              ...prev,
+              transform: 'translateY(0)',
+              opacity: '1',
+            }
+          : prev,
+      )
+    })
+
+    settleTimeoutRef.current = window.setTimeout(() => {
+      settleTimeoutRef.current = null
+      setIsChevronSettling(false)
+      setChevronInlineStyle(undefined)
+    }, 320)
+
+    return () => {
+      if (settleRafRef.current !== null) {
+        window.cancelAnimationFrame(settleRafRef.current)
+        settleRafRef.current = null
+      }
+      if (settleTimeoutRef.current !== null) {
+        window.clearTimeout(settleTimeoutRef.current)
+        settleTimeoutRef.current = null
+      }
+    }
+  }, [hasStartedScroll])
 
   return (
     <section
@@ -174,7 +200,6 @@ export function Hero() {
         className="vertical-jp drift pointer-events-none absolute right-[max(1.25rem,calc(50%-32rem))] top-1/2 -translate-y-1/2 font-jp text-[2rem] lg:text-[2.4rem] leading-tight tracking-[0.02em] hidden md:block"
       />
 
-      <ScrollCue />
       <div className="relative mx-auto max-w-3xl px-5 sm:px-6 text-center">
         <Reveal as="p" delay={80} className="kicker-row mx-auto justify-center mb-8 text-center">
           <span>{t('hero.kicker', { trial: TRIAL_DAYS, price: price.formatted })}</span>
@@ -208,18 +233,26 @@ export function Hero() {
           </a>
           <a
             href="#features"
-            className="group inline-flex h-11 items-center gap-2.5 rounded-md pl-4 pr-2 text-sm text-sumi-soft hover:text-sumi transition-colors duration-[280ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
+            className="group inline-flex h-11 items-center gap-2.5 rounded-md pl-4 pr-2 text-sm text-sumi-soft transition-colors duration-[360ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:text-sumi focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
           >
-            {t('hero.readMore')}
+            <span className="transition-transform duration-[360ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-[1px] motion-reduce:transform-none">
+              {t('hero.readMore')}
+            </span>
             <span
-              className="relative inline-flex h-7 w-7 items-center justify-center rounded-full border border-sumi/15 bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] transition-[transform,background-color,border-color,box-shadow] duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:translate-y-0.5 group-hover:border-sumi/35 group-hover:bg-[color-mix(in_oklab,var(--washi)_45%,#fff)] group-hover:shadow-[0_4px_12px_-6px_rgba(28,26,23,0.25)]"
+              className={`relative inline-flex h-8 w-8 items-center justify-center rounded-full border bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] shadow-[0_6px_20px_-12px_rgba(28,26,23,0.25)] backdrop-blur-sm transition-[opacity,transform,background-color,border-color,box-shadow] duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-110 group-hover:border-sumi/35 group-hover:bg-[color-mix(in_oklab,var(--washi)_45%,#fff)] group-hover:shadow-[0_8px_18px_-12px_rgba(28,26,23,0.32)] motion-reduce:transform-none ${
+                hasStartedScroll
+                  ? 'border-sumi/15 opacity-100'
+                  : 'border-sumi/10 opacity-70 group-hover:opacity-100'
+              }`}
               aria-hidden
             >
               <ChevronDown
-                className={`h-3.5 w-3.5 text-sumi-soft transition-colors group-hover:text-sumi ${
-                  hasStartedScroll
-                    ? ''
-                    : 'animate-gentle-bob motion-reduce:animate-none'
+                ref={chevronRef}
+                style={chevronInlineStyle}
+                className={`h-4 w-4 text-sumi-soft transition-colors duration-[360ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:text-sumi motion-reduce:transform-none ${
+                  !hasStartedScroll && !isChevronSettling
+                    ? 'animate-gentle-bob motion-reduce:animate-none'
+                    : ''
                 }`}
                 strokeWidth={2}
               />

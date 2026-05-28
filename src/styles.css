@@ -860,6 +860,120 @@ body::after {
   .animate-gentle-pulse { animation: none; opacity: 1; }
 }
 
+/*
+ * Pricing card footer — heights derived from the free tier (tallest pre-CTA stack):
+ *   pt-6                     1.5rem
+ *   pre offset (ex-form mt-4) 1rem
+ *   label                    ~1.25rem  (0.74rem caps line)
+ *   mt-2 + input h-11        3.25rem   (0.5 + 2.75)
+ *   mt-2 + footnote          ~1.63rem   (0.5 + 0.73×1.55)
+ *   pre row total            7.125rem  (1 + 6.125)
+ *   gap → CTA                0.75rem
+ *   button h-11              2.75rem
+ *   gap → post               0.75rem
+ *   post (skip / spacer)     2.5rem
+ *   footer min-height        15.375rem (246px)
+ */
+.pricing-card-footer {
+  --pricing-footer-pt: 1.5rem;
+  --pricing-footer-pre: 7.125rem;
+  --pricing-footer-gap: 0.75rem;
+  --pricing-footer-btn: 2.75rem;
+  --pricing-footer-post: 2.5rem;
+
+  margin-top: auto;
+  padding-top: var(--pricing-footer-pt);
+  display: grid;
+  grid-template-rows: var(--pricing-footer-pre) var(--pricing-footer-btn) var(
+      --pricing-footer-post
+    );
+  row-gap: var(--pricing-footer-gap);
+  min-height: calc(
+    var(--pricing-footer-pt) + var(--pricing-footer-pre) + var(--pricing-footer-gap) +
+      var(--pricing-footer-btn) + var(--pricing-footer-gap) + var(--pricing-footer-post)
+  );
+}
+.pricing-card-footer__pre {
+  box-sizing: border-box;
+  display: flex;
+  min-height: 0;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-top: 1rem;
+}
+.pricing-card-footer__cta {
+  display: flex;
+  align-items: stretch;
+}
+.pricing-card-footer__post {
+  display: flex;
+  min-height: var(--pricing-footer-post);
+  align-items: flex-start;
+}
+
+/* Pricing support tier — static kin gold + sweeping sheen over the glyph. */
+@keyframes pricing-sparkle-sheen {
+  0% {
+    transform: translateX(-160%) skewX(-14deg);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  38% {
+    transform: translateX(280%) skewX(-14deg);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(280%) skewX(-14deg);
+    opacity: 0;
+  }
+}
+.pricing-sparkle-shimmer-shell {
+  position: relative;
+  display: inline-flex;
+  overflow: hidden;
+  isolation: isolate;
+}
+.pricing-sparkle-shimmer-shell::after {
+  content: '';
+  position: absolute;
+  z-index: 2;
+  top: -25%;
+  bottom: -25%;
+  left: -80%;
+  width: 55%;
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0) 32%,
+    rgba(255, 252, 240, 0.95) 50%,
+    rgba(255, 255, 255, 0) 68%,
+    transparent 100%
+  );
+  animation: pricing-sparkle-sheen 4.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+  will-change: transform, opacity;
+}
+.pricing-sparkle-gold {
+  position: relative;
+  z-index: 1;
+  color: var(--kin);
+}
+.pricing-sparkle-gold path {
+  fill: currentColor;
+  stroke: color-mix(in oklab, var(--kin) 68%, #8a6420 32%);
+  stroke-width: 0.85;
+  stroke-linejoin: round;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pricing-sparkle-shimmer-shell::after {
+    animation: none;
+    opacity: 0;
+  }
+}
+
 /* Chevron nudge — small downward tap on hover, hinting "scroll down".
    Uses translate only so it composes with the parent circle's hover
    lift without fighting the idle opacity pulse on the same element. */

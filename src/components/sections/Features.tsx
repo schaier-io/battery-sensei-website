@@ -62,53 +62,24 @@ function MenuBarGlanceMockup() {
       </div>
 
       <div className="ml-auto mt-1 w-[244px] overflow-hidden rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,#fff)] shadow-[0_1px_0_rgba(255,255,255,0.5)_inset,0_14px_30px_-14px_rgba(28,26,23,0.30),0_4px_10px_-6px_rgba(28,26,23,0.18)]">
-        <div className="flex items-center gap-3 px-3 pt-3 pb-2.5">
-          <img
-            src="/logo-256.webp"
-            srcSet="/logo-256.webp 1x, /logo-512.webp 2x"
-            width="32"
-            height="32"
-            alt="Battery Sensei app icon"
-            decoding="async"
-            loading="lazy"
-            className="h-8 w-8 drop-shadow-[0_2px_4px_rgba(28,26,23,0.15)]"
-          />
-          <div className="min-w-0 leading-tight">
-            <p className="display-title text-[18px] font-semibold tabular-nums text-sumi leading-none">
+        <div className="px-3 py-3">
+          <div className="flex items-end justify-between gap-3">
+            <p className="display-title tabular-nums text-[20px] font-semibold leading-none text-sumi">
               84%
             </p>
-            <p className="mt-1 text-[10px] uppercase tracking-[0.16em] text-sumi-soft">
+            <p className="text-[12px] tabular-nums text-sumi-soft leading-none">
               {t('features.glance.timeLeft')}
             </p>
           </div>
-          <span className="ml-auto rounded-md bg-hinomaru px-2 py-1 text-[9px] font-semibold uppercase tracking-[0.12em] text-[#fff8eb]">
-            29.7 W
-          </span>
-        </div>
-
-        <MenuSep />
-
-        <div className="grid grid-cols-2 gap-x-3 gap-y-2 px-3 py-2 text-[10px]">
-          <div className="rounded-sm bg-[color-mix(in_oklab,var(--washi)_82%,#fff)] px-2 py-1">
-            <p className="uppercase tracking-[0.14em] text-nezumi">{t('features.glance.source')}</p>
-            <p className="mt-0.5 truncate font-medium text-sumi">{t('features.glance.powerAdapter')}</p>
+          <div className="mt-2 flex items-center gap-1.5 text-[10px] text-sumi-soft">
+            <Zap className="h-3 w-3 shrink-0 text-hinomaru/85" strokeWidth={1.8} aria-hidden />
+            <span className="truncate">
+              {t('features.glance.source')}: {t('features.glance.powerAdapter')} · 29.7 W
+            </span>
           </div>
-          <div className="rounded-sm bg-[color-mix(in_oklab,var(--washi)_82%,#fff)] px-2 py-1">
-            <p className="uppercase tracking-[0.14em] text-nezumi">{t('features.glance.cycles')}</p>
-            <p className="mt-0.5 font-medium tabular-nums text-sumi">217</p>
-          </div>
-        </div>
-
-        <MenuSep />
-
-        <div className="flex items-center justify-between gap-2 px-3 py-1.5 text-[10px] text-sumi">
-          <span className="flex items-center gap-1.5 truncate">
-            <Zap className="h-3 w-3 shrink-0 text-hinomaru" strokeWidth={2} aria-hidden />
-            <span className="truncate">{t('features.glance.chargingTo')}</span>
-          </span>
-          <span className="rounded-sm bg-sumi px-1.5 py-0.5 text-[9px] font-semibold tracking-wider text-washi shrink-0">
-            {t('features.glance.on')} · 80%
-          </span>
+          <p className="mt-1 text-[10px] text-sumi">
+            {t('features.glance.chargingTo')} 80%
+          </p>
         </div>
       </div>
     </div>
@@ -242,10 +213,6 @@ function MeetingGuardMockup() {
       </div>
     </div>
   )
-}
-
-function MenuSep() {
-  return <span aria-hidden className="block h-px w-full bg-[var(--line)]" />
 }
 
 function MenuBarBatteryBadge({

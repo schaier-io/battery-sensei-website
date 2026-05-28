@@ -13,8 +13,9 @@ import { isSupportedCurrency, type SupportedCurrency } from './pricing'
  *   5. USD canonical fallback
  *
  * Steps 1–2 are user-driven and persist; 3–5 are auto-detect and never
- * write to storage so the visitor stays free to clear their override
- * (`null` from `setCurrencyPreference`) and fall back to auto.
+ * write to storage. The footer switcher always shows the resolved code
+ * and saves an explicit pick (`setCurrencyPreference`) so later visits
+ * skip auto-detect. `null` means no override yet (auto still active).
  */
 
 const STORAGE_KEY = 'bs:currency'
