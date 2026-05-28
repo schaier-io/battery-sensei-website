@@ -183,6 +183,27 @@
         length="20581057"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.2.5</title>
+      <pubDate>Thu, 28 May 2026 04:20:59 +0000</pubDate>
+      <sparkle:version>46</sparkle:version>
+      <sparkle:shortVersionString>1.2.5</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.2.5</h1>
+<p>Per-app energy chart and ranking, fixed.</p>
+<p>The 24-hour and 7-day per-app charts now downsample. Previously every 5-minute sample landed as its own point, so the curve was a fuzzy band on the day view (≈288 points) and visual noise on the week view (≈2016 points). Buckets are anchored to the chart&#x27;s visible window — 24h collapses to ~30-minute averages, 7d to ~3-hour averages — and a freshly-installed app with only 30 minutes of samples now occupies one bucket at the right time position instead of stacking five dots on top of each other at the right edge. The 1-hour view stays raw. PointMarks removed from the per-app chart; the line alone reads cleanly.</p>
+<p>Row ordering matches the displayed number. The top-apps list now sorts by estimated battery percent — the value actually printed under each app name — instead of the per-sample energy impact score. Previously a row reading &quot;238% in the last 7 days&quot; could appear below a row reading &quot;34%&quot; because their internal impact scores ran the other way. On Intel Macs (no battery attribution), the ranking falls back to energy impact as before.</p>
+<p>24-hour and 7-day views now exclude apps that weren&#x27;t observed for most of the window. An app whose earliest sample lands more than 10% into the window — 2.4h on the day view, 16.8h on the week view — was either recently installed or only started running late, and its battery share isn&#x27;t comparable to apps that ran the whole time. The 1-hour view keeps all apps visible so fresh-launch UX still has something to show on the first tick.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.2.5/Battery-Sensei.pkg"
+        sparkle:edSignature="pGB7miSKQg/dBknP86F+uT5/iBGTOIRpDtYgTZCSolEHNEFTvw4Z6ZLpJbMcELNiegZnpBs4GroCDZOXp8YlBg=="
+        length="20581717"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
