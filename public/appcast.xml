@@ -161,6 +161,29 @@
         length="20544937"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.2.4</title>
+      <pubDate>Thu, 28 May 2026 03:47:12 +0000</pubDate>
+      <sparkle:version>45</sparkle:version>
+      <sparkle:shortVersionString>1.2.4</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.2.4</h1>
+<p>Lighter idle, sharper history, calmer meeting alerts.</p>
+<p>The per-app history store no longer blocks the main thread on every sample tick. JSON re-encodes and disk writes now run on a background queue and coalesce back-to-back saves into a single write — the sampler itself returns instantly. Top-app aggregations are memoized inside each tick so the same window query never re-runs the filter, group, and battery-attribution pass twice. A battery app shouldn&#x27;t drain battery; it now drains noticeably less.</p>
+<p>The Saga charge history chart got a hover crosshair. Scrub the line and a pinned tooltip shows the timestamp and exact percentage of the nearest sample, anchored to the chart bounds so it never clips off-screen. Tap-away clears it. The annotation snaps to real readings instead of interpolating between them.</p>
+<p>Meeting battery alerts dropped the redundant &quot;Meeting battery guard&quot; kicker. The calendar hero already establishes context and the sentence already names the event, so the alert now leads straight with the prediction at hero typography. Line spacing widens on the more urgent surfaces so multi-clause predictions stay readable when they wrap.</p>
+<p>Removing a license from this Mac and swapping in a new key now both prompt with clear consequences. The deactivate dialog explains the activation slot returns to your pool. Activating a new key when one is already on the Mac warns that the existing license stays put if the new one fails or you cancel — no silent overwrite.</p>
+<p>First-run calendar guard surface gained a one-line hint pointing at the master switch up top, so the empty state doesn&#x27;t read as broken before you&#x27;ve enabled monitoring.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.2.4/Battery-Sensei.pkg"
+        sparkle:edSignature="K93gfb8eKfQseCR4LuhNHn2xkPZz5Bwfa/WCPY1NyEu+FrLocenu+DJRlC2FYixW8nfpTjV3QHZbWZPYNk6NAA=="
+        length="20581057"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
