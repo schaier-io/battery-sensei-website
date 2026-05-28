@@ -253,6 +253,44 @@
         length="20608360"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.2.8</title>
+      <pubDate>Thu, 28 May 2026 12:53:17 +0000</pubDate>
+      <sparkle:version>49</sparkle:version>
+      <sparkle:shortVersionString>1.2.8</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.2.8</h1>
+<p>Menu polish, meeting forecast in the menu, redesigned Battery Health.</p>
+<p>The menu-bar dropdown got context-aware about the time-remaining line. When a charge limit is set, it now reads &quot;1h 45m until 85%&quot; instead of the bare &quot;1h 45m&quot;; the now-redundant &quot;Charging to 85%&quot; segment drops out so the line stops repeating itself. On battery it reads &quot;1h 45m left&quot;; without a limit it reads &quot;1h 45m until full&quot;. The lightning bolt next to the line is now a template image, so it tints white on dark menus and black on light menus the same way macOS&#x27;s own menu glyphs do. The Pro badge in the menu header lifts ~2pt above the title baseline so it reads as a superscript flourish instead of hanging off the bottom.</p>
+<p>A new meeting-forecast row sits directly below the status line whenever Calendar Battery Guard is enabled. Layout is <code>[icon]  Accent  ·  body text</code> at 10pt — the accent label is the only thing that picks up a colour. Severity → accent:</p>
+<ul>
+<li>comfortable → green &quot;Clear&quot;</li>
+<li>tight → orange &quot;Tight&quot;</li>
+<li>critical → red &quot;Charge&quot;</li>
+<li>catastrophic → red &quot;Charge now&quot;</li>
+</ul>
+<p>Icon matches the accent (<code>calendar.badge.checkmark</code> / <code>.clock</code> / <code>.exclamationmark</code>). Body text stays in <code>labelColor</code> (white on dark, black on light) so the row doesn&#x27;t saturate. When the guard is on but nothing&#x27;s pending in the lookahead window, the row shows a green &quot;Clear · No meetings in next 4h&quot; confirmation. When the guard is off, the row hides entirely.</p>
+<p>The Top Power-Hungry Apps panel gained a small info-circle next to its subtitle on the 24-hour and 7-day windows. On hover the system tooltip explains the coverage filter — &quot;Only apps observed for most of the last 24 hours appear here, so percentages stay comparable across rows.&quot; The 1-hour view stays badge-less.</p>
+<p>Battery Health got a full redesign. Each of the four tiles now leads with a tinted glyph in a soft tinted disc and stacks the value + kicker label beside it. Each metric carries its own colour band:</p>
+<ul>
+<li>Capacity: green ≥85%, kin (gold) 75–84%, hinomaru &lt;75%. Inline 3pt rail visualises 0–100%.</li>
+<li>Cycles: neutral 0–600, kin 600–899, hinomaru ≥900 (against Apple&#x27;s ~1000-cycle design target).</li>
+<li>Temperature: aizome blue &lt;10°C, neutral 10–34°C, kin 35–39°C, hinomaru ≥40°C.</li>
+<li>Condition: green &quot;Normal&quot;, hinomaru &quot;Service&quot; — the verdict text itself picks up the tint so the row reads at a glance.</li>
+</ul>
+<p>Narrow layouts collapse to a 2×2 grid instead of a single column so the tiles keep a comfortable reading width.</p>
+<p>The BATTERY · SENSEI title chrome stopped being translucent. The strip previously used <code>.ultraThinMaterial</code>, which let the hero card and parchment patina bleed through even at full opacity. The top of the chrome is now a solid theme fill — only the lower ~40% fades into the parchment below, so the title region no longer overlaps the content underneath it.</p>
+<p>Marketing 1.2.7 → 1.2.8, build 48 → 49.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.2.8/Battery-Sensei.pkg"
+        sparkle:edSignature="4j1uxMrCfqDtI+ohVxYnLoZiJN4KZAn6ItYWKskvt4hkNSnmsDxR4AZDIMwjPtGgnF9TIiwdHmaRUwajnCmKDA=="
+        length="20625635"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
