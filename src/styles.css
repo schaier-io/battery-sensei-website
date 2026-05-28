@@ -29,20 +29,40 @@
 @import '@fontsource/source-sans-3/latin-400.css';
 @import '@fontsource/source-sans-3/latin-500.css';
 @import '@fontsource/source-sans-3/latin-600.css';
-@import '@fontsource/source-sans-3/latin-700.css';
+/* Source Sans 700 dropped: no `font-bold` / weight:700 on Source Sans elements
+   above or below the fold (the only `font-bold` uses are scoped to .font-jp
+   and resolve to Noto Serif JP 700). */
 @import '@fontsource/source-sans-3/latin-ext-400.css';
 @import '@fontsource/source-sans-3/latin-ext-500.css';
 @import '@fontsource/source-sans-3/latin-ext-600.css';
-@import '@fontsource/source-sans-3/latin-ext-700.css';
 @import '@fontsource/geist-mono/latin-400.css';
 @import '@fontsource/geist-mono/latin-500.css';
 @import '@fontsource/geist-mono/latin-600.css';
-/* Noto Serif JP: keep the full subset map (124 unicode-range entries per
-   weight) so the browser fetches only the subsets containing kanji actually
-   rendered on the page (e.g. the brand mark 電池先生 vs the full JP locale). */
-@import '@fontsource/noto-serif-jp/400.css';
-@import '@fontsource/noto-serif-jp/700.css';
-@import '@fontsource/noto-serif-jp/900.css';
+/* Noto Serif JP: custom-subsetted via scripts/subset-noto-jp.mjs to only the
+   ~760 chars used across all locales. One file per weight (~165 KiB each)
+   replaces ~25 unicode-range shards that otherwise hammer the connection on
+   first paint and starve the critical Spectral preload. */
+@font-face {
+  font-family: 'Noto Serif JP';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/noto-serif-jp-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Noto Serif JP';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/noto-serif-jp-700.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Noto Serif JP';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url('/fonts/noto-serif-jp-900.woff2') format('woff2');
+}
 
 @import 'tw-animate-css';
 
@@ -249,6 +269,16 @@ html {
 
 body {
   margin: 0;
+  /* Push the footer to the viewport floor on short pages. Every route
+     renders <Nav> + <main> + <Footer> as direct flex children of the
+     i18n provider, which lives at body > div. Making body itself a
+     flex column with min-h: 100dvh (dynamic viewport for mobile bars)
+     and the main element flex:1 means a "thin" page like
+     /newsletter/confirmed no longer leaves a cream gap below the
+     footer — the section grows to fill the slack instead. */
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
   color: var(--sumi);
   font-family: var(--font-sans);
   font-size: var(--text-body);
@@ -268,6 +298,13 @@ body {
   font-feature-settings: 'kern', 'liga', 'calt', 'ss01';
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
+}
+
+/* Pair to the flex body — main absorbs the leftover space so the
+   footer hugs the viewport floor on otherwise-short routes. */
+body > main,
+main {
+  flex: 1 0 auto;
 }
 
 /* Reading column — paragraphs cap at ~65ch so the eye returns cleanly. */

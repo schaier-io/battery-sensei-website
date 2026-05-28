@@ -2,8 +2,6 @@
   "common": {
     "language": "Langue",
     "currency": "Devise",
-    "auto": "Auto",
-    "autoDetect": "Détection automatique",
     "languageName": {},
     "download": "Télécharger",
     "downloadMac": "Télécharger pour macOS",
@@ -57,7 +55,7 @@
     "items": {
       "alerts": "Alertes intelligentes de batterie faible",
       "chargeLimit": "Limite de charge · 80 %",
-      "travelMode": "Travel Mode",
+      "travelMode": "Mode voyage",
       "cycle": "Cycle & capacité",
       "watts": "Watts en direct",
       "history": "Histoire de la batterie",
@@ -88,7 +86,7 @@
       "titleSub": "avec Travel Mode",
       "body": "Apple le dit : les batteries lithium-ion vieillissent plus vite quand elles restent à 100 %. Choisissez un plafond (nous suggérons 80 %). Sensei le maintient en arrière-plan. Vous prenez l'avion demain ? Un clic pour une charge complète, puis votre plafond revient une fois rentré.",
       "scaleLabel": "Limite de charge",
-      "travelLabel": "Travel Mode",
+      "travelLabel": "Mode voyage",
       "travelHint": "monte à 100 % juste pour le voyage"
     },
     "glance": {
@@ -170,19 +168,11 @@
       },
       "privacy": {
         "kicker": "Où ça vit · 24h",
-        "localTag": "100% local",
-        "thisMac": "ce Mac",
-        "staysHeader": "Reste sur ton Mac",
         "rows": {
           "history": "Historique de batterie",
           "cycles": "Registre des cycles",
           "drain": "Conso par app",
           "calendar": "Calendrier (Meeting Guard)"
-        },
-        "zeros": {
-          "uploads": "envois",
-          "accounts": "comptes",
-          "trackers": "traceurs"
         }
       }
     }
@@ -405,17 +395,45 @@
     "videoCaption": "Durée estimée · 60 s · 1080p",
     "notifyHeading": "Préviens-moi quand c'est en ligne.",
     "notifyBody": "Un court e-mail quand la vidéo est en ligne, plus quelques nouvelles du développeur. Pas de spam.",
-    "notifyCta": "Préviens-moi",
     "notifyForm": {
       "label": "E-mail pour alerte de la presentation",
       "placeholder": "toi@exemple.fr",
       "cta": "Previens-moi",
       "sending": "Envoi…",
-      "idle": "Tu recevras un message direct du développeur.",
       "success": "C'est noté. Tu recevras une mise à jour du développeur par e-mail.",
       "errorInvalid": "Cet e-mail ne semble pas valide."
     },
     "backToCompare": "Retour à la comparaison"
+  },
+  "newsletter": {
+    "confirmed": {
+      "success": {
+        "heading": "Vous êtes inscrit. Bienvenue.",
+        "body": "Votre e-mail est confirmé. Nous venons de vous envoyer un mot de bienvenue avec le lien de téléchargement — il devrait arriver dans votre boîte d'un instant à l'autre."
+      },
+      "invalid": {
+        "heading": "Ce lien a expiré.",
+        "body": "Les liens de confirmation sont valables 48 heures. Inscrivez-vous à nouveau depuis la page d'accueil et nous vous en enverrons un nouveau."
+      },
+      "error": {
+        "heading": "Quelque chose a dérapé.",
+        "body": "Nous n'avons pas pu finaliser votre confirmation. Essayez le lien à nouveau, ou écrivez-nous à info@battery-sensei.app et nous arrangerons cela à la main."
+      },
+      "cta": "Retour à l'accueil"
+    },
+    "unsubscribe": {
+      "heading": "Se désabonner de la liste ?",
+      "body": "Un clic et nous arrêtons de vous écrire. Vous pourrez vous réinscrire à tout moment depuis la page d'accueil.",
+      "cta": "Me désabonner",
+      "submitting": "Un instant…",
+      "error": "Quelque chose s'est mal passé. Réessayez dans un moment, ou répondez à n'importe quel e-mail du newsletter.",
+      "missingToken": "Ce lien n'a pas de jeton. Ouvrez le lien de désabonnement directement depuis l'e-mail."
+    },
+    "unsubscribed": {
+      "heading": "Vous n'êtes plus sur la liste. En silence.",
+      "body": "Nous ne vous écrirons plus. Si vous changez d'avis, le formulaire d'inscription reste sur la page d'accueil.",
+      "cta": "Retour à l'accueil"
+    }
   },
   "featurePages": {
     "backLink": "Battery Sensei",
@@ -477,10 +495,8 @@
     "intro": "Commencez avec l'offre Free — elle est à toi pour toujours. Besoin de plus ? Essaie Premium gratuitement pendant {{trial}} jours ; garde-le avec Lifetime, ou reste souple en Mécène annuel.",
     "free": {
       "tier": "基本 · Free",
-      "period": "pour toujours",
       "priceWord": "Gratuit",
       "blurb": "À toi pour toujours. Pas de carte, pas de compte.",
-      "blurbBonus": "Plus chaque fonctionnalité Premium, gratuite pendant {{trial}} jours.",
       "email": {
         "label": "E-mail — préviens-moi des nouvelles versions",
         "placeholder": "toi@exemple.fr",
@@ -788,7 +804,7 @@
     "pricing": "Tarifs",
     "managePurchase": "Gérer l'achat",
     "copyright": "© {{year}} · Battery Sensei",
-    "lastUpdated": "Dernière mise à jour le 24 mai 2026"
+    "lastUpdated": "Dernière mise à jour le 28 mai 2026"
   },
   "checkout": {
     "kicker": "Paiement · 会計",

@@ -422,6 +422,7 @@ export function Features() {
                     className="group/learn mt-7 inline-flex items-center gap-1.5 text-[13px] font-medium text-hinomaru/85 hover:text-hinomaru transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-hinomaru/30 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)] rounded-sm"
                   >
                     {t('common.learnMore')}
+                    <span className="sr-only"> — {t('features.featured.title')}</span>
                     <ArrowUpRight
                       className="h-4 w-4 transition-transform duration-[280ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover/learn:translate-x-0.5 group-hover/learn:-translate-y-0.5"
                       strokeWidth={2}
@@ -496,6 +497,7 @@ export function Features() {
                       className="group/learn inline-flex items-center gap-1.5 text-[12px] font-medium text-hinomaru/85 hover:text-hinomaru transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-hinomaru/30 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)] rounded-sm"
                     >
                       {t('common.learnMore')}
+                      <span className="sr-only"> — {t(`features.${key}.title`)}</span>
                       <ArrowUpRight
                         className="h-3.5 w-3.5 transition-transform duration-[280ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover/learn:translate-x-0.5 group-hover/learn:-translate-y-0.5"
                         strokeWidth={2}

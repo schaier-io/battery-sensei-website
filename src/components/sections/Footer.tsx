@@ -15,8 +15,8 @@ export function Footer() {
           <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
             <span className="inline-flex h-11 w-11 items-center justify-center overflow-hidden sm:h-12 sm:w-12">
               <img
-                src="/logo-256.webp"
-                srcSet="/logo-256.webp 1x, /logo-512.webp 2x"
+                src="/logo-64.webp"
+                srcSet="/logo-64.webp 1x, /logo-128.webp 2x"
                 width="48"
                 height="48"
                 alt="Battery Sensei logo"
@@ -120,7 +120,7 @@ export function Footer() {
         <p className="text-[0.7rem] tracking-[0.06em] text-nezumi tabular-nums">
           {t('footer.copyright', { year: new Date().getFullYear() })}
           <span className="mx-2 text-nezumi/60" aria-hidden>·</span>
-          <time dateTime="2026-05-24">{t('footer.lastUpdated')}</time>
+          <time dateTime="2026-05-28">{t('footer.lastUpdated')}</time>
         </p>
       </div>
     </footer>

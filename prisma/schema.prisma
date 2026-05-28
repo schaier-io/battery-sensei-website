@@ -60,9 +60,23 @@ model NewsletterSignup {
   /// ability to dedupe a future re-signup against the same address).
   unsubscribedAt DateTime?
 
+  /// Set when the double-opt-in confirm link is clicked. Lets the
+  /// confirm endpoint be idempotent without round-tripping Resend.
+  confirmedAt DateTime?
+
+  /// Monotonic version counter for outstanding signed tokens. Bumped
+  /// whenever the subscription state should invalidate prior links
+  /// (resubscribe after unsub, manual revocation). Both confirm and
+  /// unsubscribe tokens carry the epoch at issue-time; mismatch → token
+  /// rejected. Lets unsubscribe URLs live "forever" without becoming a
+  /// permanent off-switch leak.
+  tokenEpoch Int @default(0)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  /// IP rate limit lookup: count rows where ipAddress = ? and createdAt > ?.
+  @@index([ipAddress, createdAt])
   @@index([createdAt])
   @@index([source, createdAt])
 }

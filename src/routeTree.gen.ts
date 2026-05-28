@@ -18,6 +18,9 @@ import { Route as GlossaryIndexRouteImport } from './routes/glossary/index'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as ThanksSupportRouteImport } from './routes/thanks.support'
 import { Route as ThanksLifetimeRouteImport } from './routes/thanks.lifetime'
+import { Route as NewsletterUnsubscribedRouteImport } from './routes/newsletter.unsubscribed'
+import { Route as NewsletterUnsubscribeRouteImport } from './routes/newsletter.unsubscribe'
+import { Route as NewsletterConfirmedRouteImport } from './routes/newsletter.confirmed'
 import { Route as GlossarySlugRouteImport } from './routes/glossary/$slug'
 import { Route as FeaturesTravelModeRouteImport } from './routes/features.travel-mode'
 import { Route as FeaturesMeetingBatteryGuardRouteImport } from './routes/features.meeting-battery-guard'
@@ -26,6 +29,9 @@ import { Route as FeaturesCustomThresholdsRouteImport } from './routes/features.
 import { Route as FeaturesBatteryJournalRouteImport } from './routes/features.battery-journal'
 import { Route as FeaturesAlertPresetsRouteImport } from './routes/features.alert-presets'
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
+import { Route as ApiFreeSignupRouteImport } from './routes/api/free-signup'
+import { Route as ApiNewsletterUnsubscribeRouteImport } from './routes/api/newsletter.unsubscribe'
+import { Route as ApiNewsletterConfirmRouteImport } from './routes/api/newsletter.confirm'
 import { Route as ApiCheckoutIdRouteImport } from './routes/api/checkout.$id'
 
 const WalkthroughRoute = WalkthroughRouteImport.update({
@@ -73,6 +79,21 @@ const ThanksLifetimeRoute = ThanksLifetimeRouteImport.update({
   path: '/thanks/lifetime',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NewsletterUnsubscribedRoute = NewsletterUnsubscribedRouteImport.update({
+  id: '/newsletter/unsubscribed',
+  path: '/newsletter/unsubscribed',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NewsletterUnsubscribeRoute = NewsletterUnsubscribeRouteImport.update({
+  id: '/newsletter/unsubscribe',
+  path: '/newsletter/unsubscribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NewsletterConfirmedRoute = NewsletterConfirmedRouteImport.update({
+  id: '/newsletter/confirmed',
+  path: '/newsletter/confirmed',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GlossarySlugRoute = GlossarySlugRouteImport.update({
   id: '/glossary/$slug',
   path: '/glossary/$slug',
@@ -115,6 +136,22 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiFreeSignupRoute = ApiFreeSignupRouteImport.update({
+  id: '/api/free-signup',
+  path: '/api/free-signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiNewsletterUnsubscribeRoute =
+  ApiNewsletterUnsubscribeRouteImport.update({
+    id: '/api/newsletter/unsubscribe',
+    path: '/api/newsletter/unsubscribe',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiNewsletterConfirmRoute = ApiNewsletterConfirmRouteImport.update({
+  id: '/api/newsletter/confirm',
+  path: '/api/newsletter/confirm',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiCheckoutIdRoute = ApiCheckoutIdRouteImport.update({
   id: '/api/checkout/$id',
   path: '/api/checkout/$id',
@@ -127,6 +164,7 @@ export interface FileRoutesByFullPath {
   '/legal': typeof LegalRoute
   '/privacy': typeof PrivacyRoute
   '/walkthrough': typeof WalkthroughRoute
+  '/api/free-signup': typeof ApiFreeSignupRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/features/alert-presets': typeof FeaturesAlertPresetsRoute
   '/features/battery-journal': typeof FeaturesBatteryJournalRoute
@@ -135,11 +173,16 @@ export interface FileRoutesByFullPath {
   '/features/meeting-battery-guard': typeof FeaturesMeetingBatteryGuardRoute
   '/features/travel-mode': typeof FeaturesTravelModeRoute
   '/glossary/$slug': typeof GlossarySlugRoute
+  '/newsletter/confirmed': typeof NewsletterConfirmedRoute
+  '/newsletter/unsubscribe': typeof NewsletterUnsubscribeRoute
+  '/newsletter/unsubscribed': typeof NewsletterUnsubscribedRoute
   '/thanks/lifetime': typeof ThanksLifetimeRoute
   '/thanks/support': typeof ThanksSupportRoute
   '/blog/': typeof BlogIndexRoute
   '/glossary/': typeof GlossaryIndexRoute
   '/api/checkout/$id': typeof ApiCheckoutIdRoute
+  '/api/newsletter/confirm': typeof ApiNewsletterConfirmRoute
+  '/api/newsletter/unsubscribe': typeof ApiNewsletterUnsubscribeRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -147,6 +190,7 @@ export interface FileRoutesByTo {
   '/legal': typeof LegalRoute
   '/privacy': typeof PrivacyRoute
   '/walkthrough': typeof WalkthroughRoute
+  '/api/free-signup': typeof ApiFreeSignupRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/features/alert-presets': typeof FeaturesAlertPresetsRoute
   '/features/battery-journal': typeof FeaturesBatteryJournalRoute
@@ -155,11 +199,16 @@ export interface FileRoutesByTo {
   '/features/meeting-battery-guard': typeof FeaturesMeetingBatteryGuardRoute
   '/features/travel-mode': typeof FeaturesTravelModeRoute
   '/glossary/$slug': typeof GlossarySlugRoute
+  '/newsletter/confirmed': typeof NewsletterConfirmedRoute
+  '/newsletter/unsubscribe': typeof NewsletterUnsubscribeRoute
+  '/newsletter/unsubscribed': typeof NewsletterUnsubscribedRoute
   '/thanks/lifetime': typeof ThanksLifetimeRoute
   '/thanks/support': typeof ThanksSupportRoute
   '/blog': typeof BlogIndexRoute
   '/glossary': typeof GlossaryIndexRoute
   '/api/checkout/$id': typeof ApiCheckoutIdRoute
+  '/api/newsletter/confirm': typeof ApiNewsletterConfirmRoute
+  '/api/newsletter/unsubscribe': typeof ApiNewsletterUnsubscribeRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -168,6 +217,7 @@ export interface FileRoutesById {
   '/legal': typeof LegalRoute
   '/privacy': typeof PrivacyRoute
   '/walkthrough': typeof WalkthroughRoute
+  '/api/free-signup': typeof ApiFreeSignupRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/features/alert-presets': typeof FeaturesAlertPresetsRoute
   '/features/battery-journal': typeof FeaturesBatteryJournalRoute
@@ -176,11 +226,16 @@ export interface FileRoutesById {
   '/features/meeting-battery-guard': typeof FeaturesMeetingBatteryGuardRoute
   '/features/travel-mode': typeof FeaturesTravelModeRoute
   '/glossary/$slug': typeof GlossarySlugRoute
+  '/newsletter/confirmed': typeof NewsletterConfirmedRoute
+  '/newsletter/unsubscribe': typeof NewsletterUnsubscribeRoute
+  '/newsletter/unsubscribed': typeof NewsletterUnsubscribedRoute
   '/thanks/lifetime': typeof ThanksLifetimeRoute
   '/thanks/support': typeof ThanksSupportRoute
   '/blog/': typeof BlogIndexRoute
   '/glossary/': typeof GlossaryIndexRoute
   '/api/checkout/$id': typeof ApiCheckoutIdRoute
+  '/api/newsletter/confirm': typeof ApiNewsletterConfirmRoute
+  '/api/newsletter/unsubscribe': typeof ApiNewsletterUnsubscribeRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -190,6 +245,7 @@ export interface FileRouteTypes {
     | '/legal'
     | '/privacy'
     | '/walkthrough'
+    | '/api/free-signup'
     | '/blog/$slug'
     | '/features/alert-presets'
     | '/features/battery-journal'
@@ -198,11 +254,16 @@ export interface FileRouteTypes {
     | '/features/meeting-battery-guard'
     | '/features/travel-mode'
     | '/glossary/$slug'
+    | '/newsletter/confirmed'
+    | '/newsletter/unsubscribe'
+    | '/newsletter/unsubscribed'
     | '/thanks/lifetime'
     | '/thanks/support'
     | '/blog/'
     | '/glossary/'
     | '/api/checkout/$id'
+    | '/api/newsletter/confirm'
+    | '/api/newsletter/unsubscribe'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -210,6 +271,7 @@ export interface FileRouteTypes {
     | '/legal'
     | '/privacy'
     | '/walkthrough'
+    | '/api/free-signup'
     | '/blog/$slug'
     | '/features/alert-presets'
     | '/features/battery-journal'
@@ -218,11 +280,16 @@ export interface FileRouteTypes {
     | '/features/meeting-battery-guard'
     | '/features/travel-mode'
     | '/glossary/$slug'
+    | '/newsletter/confirmed'
+    | '/newsletter/unsubscribe'
+    | '/newsletter/unsubscribed'
     | '/thanks/lifetime'
     | '/thanks/support'
     | '/blog'
     | '/glossary'
     | '/api/checkout/$id'
+    | '/api/newsletter/confirm'
+    | '/api/newsletter/unsubscribe'
   id:
     | '__root__'
     | '/'
@@ -230,6 +297,7 @@ export interface FileRouteTypes {
     | '/legal'
     | '/privacy'
     | '/walkthrough'
+    | '/api/free-signup'
     | '/blog/$slug'
     | '/features/alert-presets'
     | '/features/battery-journal'
@@ -238,11 +306,16 @@ export interface FileRouteTypes {
     | '/features/meeting-battery-guard'
     | '/features/travel-mode'
     | '/glossary/$slug'
+    | '/newsletter/confirmed'
+    | '/newsletter/unsubscribe'
+    | '/newsletter/unsubscribed'
     | '/thanks/lifetime'
     | '/thanks/support'
     | '/blog/'
     | '/glossary/'
     | '/api/checkout/$id'
+    | '/api/newsletter/confirm'
+    | '/api/newsletter/unsubscribe'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -251,6 +324,7 @@ export interface RootRouteChildren {
   LegalRoute: typeof LegalRoute
   PrivacyRoute: typeof PrivacyRoute
   WalkthroughRoute: typeof WalkthroughRoute
+  ApiFreeSignupRoute: typeof ApiFreeSignupRoute
   BlogSlugRoute: typeof BlogSlugRoute
   FeaturesAlertPresetsRoute: typeof FeaturesAlertPresetsRoute
   FeaturesBatteryJournalRoute: typeof FeaturesBatteryJournalRoute
@@ -259,11 +333,16 @@ export interface RootRouteChildren {
   FeaturesMeetingBatteryGuardRoute: typeof FeaturesMeetingBatteryGuardRoute
   FeaturesTravelModeRoute: typeof FeaturesTravelModeRoute
   GlossarySlugRoute: typeof GlossarySlugRoute
+  NewsletterConfirmedRoute: typeof NewsletterConfirmedRoute
+  NewsletterUnsubscribeRoute: typeof NewsletterUnsubscribeRoute
+  NewsletterUnsubscribedRoute: typeof NewsletterUnsubscribedRoute
   ThanksLifetimeRoute: typeof ThanksLifetimeRoute
   ThanksSupportRoute: typeof ThanksSupportRoute
   BlogIndexRoute: typeof BlogIndexRoute
   GlossaryIndexRoute: typeof GlossaryIndexRoute
   ApiCheckoutIdRoute: typeof ApiCheckoutIdRoute
+  ApiNewsletterConfirmRoute: typeof ApiNewsletterConfirmRoute
+  ApiNewsletterUnsubscribeRoute: typeof ApiNewsletterUnsubscribeRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -331,6 +410,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ThanksLifetimeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/newsletter/unsubscribed': {
+      id: '/newsletter/unsubscribed'
+      path: '/newsletter/unsubscribed'
+      fullPath: '/newsletter/unsubscribed'
+      preLoaderRoute: typeof NewsletterUnsubscribedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/newsletter/unsubscribe': {
+      id: '/newsletter/unsubscribe'
+      path: '/newsletter/unsubscribe'
+      fullPath: '/newsletter/unsubscribe'
+      preLoaderRoute: typeof NewsletterUnsubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/newsletter/confirmed': {
+      id: '/newsletter/confirmed'
+      path: '/newsletter/confirmed'
+      fullPath: '/newsletter/confirmed'
+      preLoaderRoute: typeof NewsletterConfirmedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/glossary/$slug': {
       id: '/glossary/$slug'
       path: '/glossary/$slug'
@@ -387,6 +487,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/free-signup': {
+      id: '/api/free-signup'
+      path: '/api/free-signup'
+      fullPath: '/api/free-signup'
+      preLoaderRoute: typeof ApiFreeSignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/newsletter/unsubscribe': {
+      id: '/api/newsletter/unsubscribe'
+      path: '/api/newsletter/unsubscribe'
+      fullPath: '/api/newsletter/unsubscribe'
+      preLoaderRoute: typeof ApiNewsletterUnsubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/newsletter/confirm': {
+      id: '/api/newsletter/confirm'
+      path: '/api/newsletter/confirm'
+      fullPath: '/api/newsletter/confirm'
+      preLoaderRoute: typeof ApiNewsletterConfirmRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/checkout/$id': {
       id: '/api/checkout/$id'
       path: '/api/checkout/$id'
@@ -403,6 +524,7 @@ const rootRouteChildren: RootRouteChildren = {
   LegalRoute: LegalRoute,
   PrivacyRoute: PrivacyRoute,
   WalkthroughRoute: WalkthroughRoute,
+  ApiFreeSignupRoute: ApiFreeSignupRoute,
   BlogSlugRoute: BlogSlugRoute,
   FeaturesAlertPresetsRoute: FeaturesAlertPresetsRoute,
   FeaturesBatteryJournalRoute: FeaturesBatteryJournalRoute,
@@ -411,11 +533,16 @@ const rootRouteChildren: RootRouteChildren = {
   FeaturesMeetingBatteryGuardRoute: FeaturesMeetingBatteryGuardRoute,
   FeaturesTravelModeRoute: FeaturesTravelModeRoute,
   GlossarySlugRoute: GlossarySlugRoute,
+  NewsletterConfirmedRoute: NewsletterConfirmedRoute,
+  NewsletterUnsubscribeRoute: NewsletterUnsubscribeRoute,
+  NewsletterUnsubscribedRoute: NewsletterUnsubscribedRoute,
   ThanksLifetimeRoute: ThanksLifetimeRoute,
   ThanksSupportRoute: ThanksSupportRoute,
   BlogIndexRoute: BlogIndexRoute,
   GlossaryIndexRoute: GlossaryIndexRoute,
   ApiCheckoutIdRoute: ApiCheckoutIdRoute,
+  ApiNewsletterConfirmRoute: ApiNewsletterConfirmRoute,
+  ApiNewsletterUnsubscribeRoute: ApiNewsletterUnsubscribeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

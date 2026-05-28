@@ -3,8 +3,6 @@
     "language": "Language",
     "languageName": {},
     "currency": "Currency",
-    "auto": "Auto",
-    "autoDetect": "Auto-detect",
     "download": "Download",
     "downloadMac": "Download for macOS",
     "recommended": "Recommended",
@@ -170,19 +168,11 @@
       },
       "privacy": {
         "kicker": "Where it lives · 24h",
-        "localTag": "100% local",
-        "thisMac": "this Mac",
-        "staysHeader": "Stays on this Mac",
         "rows": {
           "history": "Battery history",
           "cycles": "Cycle ledger",
           "drain": "Per-app drain",
           "calendar": "Calendar (Meeting Guard)"
-        },
-        "zeros": {
-          "uploads": "uploads",
-          "accounts": "accounts",
-          "trackers": "trackers"
         }
       }
     }
@@ -405,17 +395,45 @@
     "videoCaption": "Estimated runtime · 60 sec · 1080p",
     "notifyHeading": "Notify me when it's live.",
     "notifyBody": "One short email when the walkthrough is live, plus occasional developer updates. No spam.",
-    "notifyCta": "Notify me",
     "notifyForm": {
       "label": "Email for walkthrough alert",
       "placeholder": "you@example.com",
       "cta": "Notify me",
       "sending": "Sending…",
-      "idle": "You'll hear directly from the developer.",
       "success": "Done. You'll get one developer update by email.",
       "errorInvalid": "That doesn't look like an email."
     },
     "backToCompare": "Back to comparison"
+  },
+  "newsletter": {
+    "confirmed": {
+      "success": {
+        "heading": "You're in. Welcome.",
+        "body": "Your email is confirmed. We just sent a welcome note with the download link — check your inbox in a moment."
+      },
+      "invalid": {
+        "heading": "This link has expired.",
+        "body": "Confirmation links live for 48 hours. Sign up again from the home page and we'll send a fresh one."
+      },
+      "error": {
+        "heading": "Something went sideways.",
+        "body": "We couldn't finish confirming you. Try the link again, or write to info@battery-sensei.app and we'll sort it by hand."
+      },
+      "cta": "Back to the homepage"
+    },
+    "unsubscribe": {
+      "heading": "Unsubscribe from updates?",
+      "body": "One click and we'll stop emailing you. You can always sign up again from the homepage.",
+      "cta": "Unsubscribe",
+      "submitting": "Working…",
+      "error": "Something went wrong. Try again in a moment, or reply to any newsletter email.",
+      "missingToken": "This link is missing its token. Open the unsubscribe link straight from the email."
+    },
+    "unsubscribed": {
+      "heading": "You're off the list. Quietly.",
+      "body": "We won't email you again. If you change your mind, the signup form is always on the homepage.",
+      "cta": "Back to the homepage"
+    }
   },
   "featurePages": {
     "backLink": "Battery Sensei",
@@ -477,10 +495,8 @@
     "intro": "Start with the Free tier — it's yours forever. Want more? Try Premium free for {{trial}} days; keep it with Lifetime, or stay flexible as a Yearly Patron.",
     "free": {
       "tier": "基本 · Forever",
-      "period": "forever",
       "priceWord": "Free",
       "blurb": "Yours forever. No card, no account.",
-      "blurbBonus": "Plus every Premium feature, free for your first {{trial}} days.",
       "email": {
         "label": "Email — heads-up on new versions",
         "placeholder": "you@example.com",
@@ -788,7 +804,7 @@
     "pricing": "Pricing",
     "managePurchase": "Manage purchase",
     "copyright": "© {{year}} · Battery Sensei",
-    "lastUpdated": "Last updated 24 May 2026"
+    "lastUpdated": "Last updated 28 May 2026"
   },
   "checkout": {
     "kicker": "Checkout · 会計",

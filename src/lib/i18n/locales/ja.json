@@ -2,8 +2,6 @@
   "common": {
     "language": "言語",
     "currency": "通貨",
-    "auto": "自動",
-    "autoDetect": "自動検出",
     "languageName": {},
     "download": "ダウンロード",
     "downloadMac": "macOS版をダウンロード",
@@ -170,19 +168,11 @@
       },
       "privacy": {
         "kicker": "保管場所 · 24h",
-        "localTag": "100% ローカル",
-        "thisMac": "このMac",
-        "staysHeader": "このMacから出ない",
         "rows": {
           "history": "バッテリー履歴",
           "cycles": "サイクル台帳",
           "drain": "アプリ別ドレイン",
           "calendar": "カレンダー (Meeting Guard)"
-        },
-        "zeros": {
-          "uploads": "送信",
-          "accounts": "アカウント",
-          "trackers": "トラッカー"
         }
       }
     }
@@ -405,17 +395,45 @@
     "videoCaption": "推定再生時間 · 60秒 · 1080p",
     "notifyHeading": "公開されたら知らせてください。",
     "notifyBody": "公開時に短いメールを1通、必要なときだけ開発者からの近況をお送りします。スパムはありません。",
-    "notifyCta": "知らせてもらう",
     "notifyForm": {
       "label": "ウォークスルー通知用メール",
       "placeholder": "you@example.com",
       "cta": "知らせてもらう",
       "sending": "送信中…",
-      "idle": "開発者本人から直接お届けします。",
       "success": "登録しました。開発者からの更新を1通お送りします。",
       "errorInvalid": "メールアドレスの形式が正しくありません。"
     },
     "backToCompare": "比較に戻る"
+  },
+  "newsletter": {
+    "confirmed": {
+      "success": {
+        "heading": "登録完了。ようこそ。",
+        "body": "メールアドレスが確認できました。ダウンロードリンク付きのウェルカムメールをお送りしました — まもなく受信トレイに届きます。"
+      },
+      "invalid": {
+        "heading": "このリンクは期限切れです。",
+        "body": "確認リンクの有効期間は48時間です。ホームページからもう一度ご登録ください。新しいリンクをお送りします。"
+      },
+      "error": {
+        "heading": "うまくいきませんでした。",
+        "body": "確認を完了できませんでした。もう一度リンクをお試しいただくか、info@battery-sensei.app までご連絡ください。手作業で対応いたします。"
+      },
+      "cta": "ホームに戻る"
+    },
+    "unsubscribe": {
+      "heading": "配信を解除しますか？",
+      "body": "クリックひとつでメールの配信を停止します。お気が変わったら、いつでもホームページから再登録できます。",
+      "cta": "配信を解除する",
+      "submitting": "処理中…",
+      "error": "うまくいきませんでした。少し時間をおいてもう一度お試しください。配信メールへの返信でもご連絡いただけます。",
+      "missingToken": "このリンクにはトークンが含まれていません。メール内の配信解除リンクから直接アクセスしてください。"
+    },
+    "unsubscribed": {
+      "heading": "リストから外しました。静かに。",
+      "body": "今後メールはお送りしません。お気が変わったら、登録フォームはいつでもホームページにあります。",
+      "cta": "ホームに戻る"
+    }
   },
   "featurePages": {
     "backLink": "Battery Sensei",
@@ -477,10 +495,8 @@
     "intro": "まずは無料プランから — ずっとあなたのものです。もっと必要なら、Premiumを{{trial}}日間無料でお試し。Lifetimeで永久に手に入れるか、年間パトロンとして柔軟に応援してください。",
     "free": {
       "tier": "基本 · Free",
-      "period": "ずっと",
       "priceWord": "無料",
       "blurb": "ずっとあなたのもの。カード不要、アカウント不要。",
-      "blurbBonus": "さらに{{trial}}日間、すべてのPremium機能が無料。",
       "email": {
         "label": "メール — 新バージョンのお知らせ",
         "placeholder": "you@example.com",
@@ -754,7 +770,7 @@
       "faqHint": "ほとんどのご質問はすでにお答えしています、<0>まずはご覧ください</0>。",
       "refundLabel": "返金",
       "refundHint": "Polarからの購入確認メールにある注文IDを添えてください — それだけで対応できます。",
-      "journalLabel": "Journal",
+      "journalLabel": "ジャーナル",
       "journalHint": "より詳しいヒントは、<0>Journalを見る</0>でバッテリーガイドと更新情報をご覧ください。"
     }
   },
@@ -788,7 +804,7 @@
     "pricing": "値段",
     "managePurchase": "購入の管理",
     "copyright": "© {{year}} · Battery Sensei",
-    "lastUpdated": "最終更新 2026年5月24日"
+    "lastUpdated": "最終更新 2026年5月28日"
   },
   "checkout": {
     "kicker": "会計 · Checkout",

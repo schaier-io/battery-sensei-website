@@ -654,6 +654,9 @@ function FreeDownloadForm() {
     } catch {
       // intentional: don't block download on network/api failure
     }
+    // Reset the button state — otherwise it stays at "Sending…" forever
+    // since the visitor stays on this page after the download/dialog opens.
+    setStatus('idle')
     // Platform check happens after the API ping so the email-capture
     // signup still lands even if the visitor cancels the download
     // (someone researching on Windows for a Mac at home is still a

@@ -5,13 +5,34 @@ import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/react'
 
 import appCss from '../styles.css?url'
-// Preload the two fonts the hero relies on. Imported as URLs so Vite hashes
-// them the same way the @fontsource @import in styles.css does, keeping
-// preload + @font-face pointed at the same file (browser dedupes the fetch).
+// Preload the fonts the above-fold render relies on. Imported as URLs so Vite
+// hashes them the same way the @fontsource @import in styles.css does — the
+// hashed URL is reused both in the preload links AND in the inline
+// `criticalFontCss` @font-face block below so the browser dedupes the fetch.
 import spectral500Url from '@fontsource/spectral/files/spectral-latin-500-normal.woff2?url'
+import spectral600Url from '@fontsource/spectral/files/spectral-latin-600-normal.woff2?url'
 import sourceSans400Url from '@fontsource/source-sans-3/files/source-sans-3-latin-400-normal.woff2?url'
+import sourceSans600Url from '@fontsource/source-sans-3/files/source-sans-3-latin-600-normal.woff2?url'
+
+/* Inline @font-face declarations for above-fold fonts. The external stylesheet
+   takes ~570 ms to download on cold cache; until it parses, the browser does
+   not know which font files to fetch. Inlining @font-face in the document
+   head lets font discovery happen during HTML parse — paired with the
+   <link rel="preload"> hints below this kicks the font fetches off before
+   styles.css arrives. Noto Serif JP files live at /fonts/... (subsetted by
+   scripts/subset-noto-jp.mjs); the Latin fonts use Vite-hashed @fontsource
+   URLs so the inline declaration matches the URL the rest of the CSS uses. */
+const criticalFontCss = `
+@font-face{font-family:'Spectral';font-style:normal;font-weight:500;font-display:swap;src:url(${spectral500Url}) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'Spectral';font-style:normal;font-weight:600;font-display:swap;src:url(${spectral600Url}) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'Source Sans 3';font-style:normal;font-weight:400;font-display:swap;src:url(${sourceSans400Url}) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'Source Sans 3';font-style:normal;font-weight:600;font-display:swap;src:url(${sourceSans600Url}) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'Noto Serif JP';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/noto-serif-jp-400.woff2) format('woff2');}
+@font-face{font-family:'Noto Serif JP';font-style:normal;font-weight:900;font-display:swap;src:url(/fonts/noto-serif-jp-900.woff2) format('woff2');}
+`
 import { FAQ_ITEMS } from '#/components/sections/FAQ'
 import { I18nProvider } from '#/lib/i18n/I18nProvider'
+import { RouteErrorBoundary, RouteNotFound } from '#/components/CatchBoundary'
 
 const SITE_URL = 'https://www.battery-sensei.app'
 
@@ -272,7 +293,7 @@ export const Route = createRootRoute({
       // link spreader. Sticking to `href` + `type` keeps the preload effective
       // (browser fetches the WebP at 1x DPR) without the false-positive devtool
       // noise; HiDPI DPR will request via the Nav's srcSet on hydration.
-      { rel: 'preload', as: 'image', href: '/logo-256.webp', type: 'image/webp' },
+      { rel: 'preload', as: 'image', href: '/logo-64.webp', type: 'image/webp' },
       // Fonts are now self-hosted via @fontsource (see styles.css). No
       // preconnect to fonts.googleapis / fonts.gstatic — those origins are
       // never contacted. Removing the render-blocking Google stylesheet was
@@ -285,6 +306,9 @@ export const Route = createRootRoute({
       // for the @font-face declaration to be discovered.
       { rel: 'preload', as: 'font', href: spectral500Url, type: 'font/woff2', crossOrigin: 'anonymous' },
       { rel: 'preload', as: 'font', href: sourceSans400Url, type: 'font/woff2', crossOrigin: 'anonymous' },
+      // Noto Serif JP 400: hero kanji rail (電池先生 / 静かな力) is above the fold.
+      // Self-hosted at /fonts/ so no Vite hashing — plain absolute path.
+      { rel: 'preload', as: 'font', href: '/fonts/noto-serif-jp-400.woff2', type: 'font/woff2', crossOrigin: 'anonymous' },
       //
       // `buy.polar.sh` keeps its preconnect: that's the one origin a
       // visitor's BROWSER actually hits directly (the Buy click is a
@@ -323,6 +347,8 @@ export const Route = createRootRoute({
     ],
   }),
   shellComponent: RootDocument,
+  errorComponent: RouteErrorBoundary,
+  notFoundComponent: RouteNotFound,
 })
 
 function RootDocument({ children }: { children: React.ReactNode }) {
@@ -330,6 +356,10 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     <html lang="en">
       <head>
         <HeadContent />
+        {/* Inline @font-face for above-fold weights. Parsed during HTML load,
+            before styles.css arrives — pairs with the preload hints to start
+            font fetches immediately on cold cache. */}
+        <style dangerouslySetInnerHTML={{ __html: criticalFontCss }} />
       </head>
       <body>
         <I18nProvider>{children}</I18nProvider>

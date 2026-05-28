@@ -2,8 +2,6 @@
   "common": {
     "language": "Sprache",
     "currency": "Währung",
-    "auto": "Auto",
-    "autoDetect": "Automatisch erkennen",
     "languageName": {},
     "download": "Download",
     "downloadMac": "Für macOS herunterladen",
@@ -57,7 +55,7 @@
     "items": {
       "alerts": "Intelligente Akkuwarnungen",
       "chargeLimit": "Ladelimit · 80%",
-      "travelMode": "Travel Mode",
+      "travelMode": "Reisemodus",
       "cycle": "Zyklen & Kapazität",
       "watts": "Watt in Echtzeit",
       "history": "Akkuverlauf",
@@ -88,7 +86,7 @@
       "titleSub": "mit Travel Mode",
       "body": "Apple sagt: Lithium-Ionen-Akkus altern schneller, je länger sie bei 100% stehen. Wählen Sie eine Grenze (wir empfehlen 80%). Sensei hält sie im Hintergrund. Fliegen Sie morgen? Ein Klick für eine volle Ladung — Ihre Grenze kehrt zurück, sobald Sie wieder zu Hause sind.",
       "scaleLabel": "Ladelimit",
-      "travelLabel": "Travel Mode",
+      "travelLabel": "Reisemodus",
       "travelHint": "hebt es nur für die Reise auf 100 %"
     },
     "glance": {
@@ -170,19 +168,11 @@
       },
       "privacy": {
         "kicker": "Wo es bleibt · 24h",
-        "localTag": "100% lokal",
-        "thisMac": "dieser Mac",
-        "staysHeader": "Bleibt auf deinem Mac",
         "rows": {
           "history": "Akku-Verlauf",
           "cycles": "Zyklen-Konto",
           "drain": "App-Verbrauch",
           "calendar": "Kalender (Meeting Guard)"
-        },
-        "zeros": {
-          "uploads": "Uploads",
-          "accounts": "Konten",
-          "trackers": "Tracker"
         }
       }
     }
@@ -405,17 +395,45 @@
     "videoCaption": "Geschätzte Länge · 60 Sek. · 1080p",
     "notifyHeading": "Sag mir Bescheid, wenn es live ist.",
     "notifyBody": "Eine kurze Mail, sobald der Walkthrough live ist, plus gelegentliche Entwickler-Updates. Kein Spam.",
-    "notifyCta": "Benachrichtige mich",
     "notifyForm": {
       "label": "E-Mail fuer den Rundgang-Hinweis",
       "placeholder": "du@beispiel.de",
       "cta": "Benachrichtige mich",
       "sending": "Senden…",
-      "idle": "Du hörst direkt vom Entwickler.",
       "success": "Erledigt. Du bekommst ein Entwickler-Update per E-Mail.",
       "errorInvalid": "Das sieht nicht nach einer E-Mail aus."
     },
     "backToCompare": "Zurück zum Vergleich"
+  },
+  "newsletter": {
+    "confirmed": {
+      "success": {
+        "heading": "Du bist dabei. Willkommen.",
+        "body": "Deine E-Mail ist bestätigt. Wir haben dir gerade eine kurze Willkommensnachricht mit dem Download-Link geschickt — sie sollte jeden Moment im Posteingang liegen."
+      },
+      "invalid": {
+        "heading": "Dieser Link ist abgelaufen.",
+        "body": "Bestätigungslinks sind 48 Stunden gültig. Melde dich noch einmal auf der Startseite an und wir schicken dir einen frischen."
+      },
+      "error": {
+        "heading": "Da ist etwas schiefgelaufen.",
+        "body": "Wir konnten die Bestätigung nicht abschließen. Versuche den Link erneut oder schreib uns an info@battery-sensei.app — wir kümmern uns persönlich darum."
+      },
+      "cta": "Zurück zur Startseite"
+    },
+    "unsubscribe": {
+      "heading": "Vom Newsletter abmelden?",
+      "body": "Ein Klick und wir schreiben dir nicht mehr. Du kannst dich jederzeit wieder über die Startseite anmelden.",
+      "cta": "Abmelden",
+      "submitting": "Einen Moment…",
+      "error": "Etwas ist schiefgelaufen. Versuch es gleich nochmal, oder antworte einfach auf eine Newsletter-Mail.",
+      "missingToken": "Diesem Link fehlt das Token. Öffne den Abmelde-Link direkt aus der E-Mail."
+    },
+    "unsubscribed": {
+      "heading": "Du bist von der Liste. Ganz leise.",
+      "body": "Wir schreiben dir nicht mehr. Falls du es dir anders überlegst, das Anmeldeformular wartet auf der Startseite.",
+      "cta": "Zurück zur Startseite"
+    }
   },
   "featurePages": {
     "backLink": "Battery Sensei",
@@ -477,10 +495,8 @@
     "intro": "Beginnen Sie mit dem Free-Plan — er bleibt für immer Ihnen. Mehr nötig? Testen Sie Premium {{trial}} Tage lang gratis; behalten Sie es mit Lifetime oder bleiben Sie flexibel als Jahres-Patron.",
     "free": {
       "tier": "基本 · Free",
-      "period": "für immer",
       "priceWord": "Gratis",
       "blurb": "Deins für immer. Keine Karte, kein Konto.",
-      "blurbBonus": "Plus jede Premium-Funktion, {{trial}} Tage gratis.",
       "email": {
         "label": "E-Mail — Bescheid bei neuen Versionen",
         "placeholder": "du@beispiel.de",
@@ -754,7 +770,7 @@
       "faqHint": "Die meisten Fragen sind dort schon beantwortet, <0>einmal nachsehen lohnt sich</0>.",
       "refundLabel": "Rückerstattung",
       "refundHint": "Fügen Sie die Bestell-ID aus Ihrer Polar-Bestätigungsmail bei — mehr brauchen wir nicht.",
-      "journalLabel": "Journal",
+      "journalLabel": "Tagebuch",
       "journalHint": "Mehr Tipps? <0>Schauen Sie ins Journal</0> für Akku-Guides und Updates."
     }
   },
@@ -788,7 +804,7 @@
     "pricing": "Preise",
     "managePurchase": "Kauf verwalten",
     "copyright": "© {{year}} · Battery Sensei",
-    "lastUpdated": "Zuletzt aktualisiert am 24. Mai 2026"
+    "lastUpdated": "Zuletzt aktualisiert am 28. Mai 2026"
   },
   "checkout": {
     "kicker": "Kasse · 会計",

@@ -257,13 +257,15 @@ function CheckoutPage() {
                 /api/discount-availability. Hidden once the cap is hit
                 so we don't dangle "0 codes left" stale copy. */}
             {isLifetime && launchOpen ? (
-              <p className="mt-4 inline-flex items-center gap-2 rounded-full bg-hinomaru/10 px-3 py-1 text-[0.75rem] font-medium text-hinomaru tabular-nums">
-                <Sparkles className="h-3 w-3 shrink-0" strokeWidth={2} aria-hidden />
-                <Trans
-                  i18nKey="checkout.inline.hint"
-                  values={{ remaining: zenmodeRemaining }}
-                  components={[<span className="font-semibold" />]}
-                />
+              <p className="mt-4 inline-flex max-w-full items-start gap-2 rounded-2xl bg-hinomaru/10 px-3 py-1.5 text-[0.75rem] font-medium text-hinomaru tabular-nums">
+                <Sparkles className="mt-[2px] h-3 w-3 shrink-0" strokeWidth={2} aria-hidden />
+                <span>
+                  <Trans
+                    i18nKey="checkout.inline.hint"
+                    values={{ remaining: zenmodeRemaining }}
+                    components={[<span className="font-semibold" />]}
+                  />
+                </span>
               </p>
             ) : null}
 

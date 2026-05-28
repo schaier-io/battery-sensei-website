@@ -6,6 +6,12 @@
       "runtimeExecutable": "sfw",
       "runtimeArgs": ["pnpm", "dev"],
       "port": 5174
+    },
+    {
+      "name": "email-preview",
+      "runtimeExecutable": "sfw",
+      "runtimeArgs": ["pnpm", "run", "email"],
+      "port": 3030
     }
   ]
 }

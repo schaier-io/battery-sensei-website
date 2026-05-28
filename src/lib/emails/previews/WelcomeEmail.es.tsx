@@ -1,0 +1,12 @@
+import { WelcomeEmail } from '../WelcomeEmail'
+
+export default function Preview() {
+  return (
+    <WelcomeEmail
+      downloadUrl="https://battery-sensei.app/#download"
+      unsubscribeUrl="https://battery-sensei.app/api/newsletter/unsubscribe?token=demo"
+      locale="es"
+      siteUrl="https://battery-sensei.app"
+    />
+  )
+}
