@@ -10,11 +10,75 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.battery-sensei.app/" />
   </url>
   <url>
-    <loc>https://www.battery-sensei.app/vs-aldente</loc>
+    <loc>https://www.battery-sensei.app/walkthrough</loc>
     <lastmod>2026-05-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.battery-sensei.app/vs-aldente" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.battery-sensei.app/vs-aldente" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.battery-sensei.app/walkthrough" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.battery-sensei.app/walkthrough" />
+  </url>
+  <url>
+    <loc>https://www.battery-sensei.app/features/travel-mode</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.battery-sensei.app/features/travel-mode" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.battery-sensei.app/features/travel-mode" />
+  </url>
+  <url>
+    <loc>https://www.battery-sensei.app/features/energy-usage</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.battery-sensei.app/features/energy-usage" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.battery-sensei.app/features/energy-usage" />
+  </url>
+  <url>
+    <loc>https://www.battery-sensei.app/features/custom-thresholds</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.battery-sensei.app/features/custom-thresholds" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.battery-sensei.app/features/custom-thresholds" />
+  </url>
+  <url>
+    <loc>https://www.battery-sensei.app/features/alert-presets</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.battery-sensei.app/features/alert-presets" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.battery-sensei.app/features/alert-presets" />
+  </url>
+  <url>
+    <loc>https://www.battery-sensei.app/features/battery-journal</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.battery-sensei.app/features/battery-journal" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.battery-sensei.app/features/battery-journal" />
+  </url>
+  <url>
+    <loc>https://www.battery-sensei.app/features/meeting-battery-guard</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.battery-sensei.app/features/meeting-battery-guard" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.battery-sensei.app/features/meeting-battery-guard" />
+  </url>
+  <url>
+    <loc>https://www.battery-sensei.app/privacy</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.battery-sensei.app/privacy" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.battery-sensei.app/privacy" />
+  </url>
+  <url>
+    <loc>https://www.battery-sensei.app/legal</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.battery-sensei.app/legal" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.battery-sensei.app/legal" />
   </url>
 </urlset>

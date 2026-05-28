@@ -106,6 +106,20 @@ export function ThanksPage({ tier, kanji }: { tier: Tier; kanji: string }) {
       <Nav />
       <main>
         <section className="zen-section mx-auto max-w-3xl px-5 sm:px-6">
+          {/* Top-left back-to-home anchor — quiet escape hatch above
+              the celebratory hero. Single placement per subpage
+              (the bottom-of-page duplicate was removed). */}
+          <Link
+            to="/"
+            className="group zen-link-lift mb-6 inline-flex items-center gap-1.5 text-[0.8125rem] text-sumi-soft hover:text-sumi"
+          >
+            <ArrowLeft
+              className="h-3.5 w-3.5 transition-transform duration-[260ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-x-0.5"
+              strokeWidth={1.8}
+              aria-hidden
+            />
+            {t('thanks.backToHome')}
+          </Link>
           <div className="flex flex-col items-center text-center">
             <Hanko kanji={kanji} className="mb-6" />
             <Reveal as="p" delay={120} className="kicker-row mb-4">
@@ -239,29 +253,10 @@ export function ThanksPage({ tier, kanji }: { tier: Tier; kanji: string }) {
             {t(`${key}.next`)}
           </Reveal>
 
-          {/* CTA row — single tertiary action.
-              Removed in this pass:
-                · "Open Sensei" (batterysensei://open) — the URL
-                  scheme isn't registered in the macOS app yet, so
-                  clicking did nothing for everyone. Better to omit
-                  than to ship a dead link.
-                · "Manage purchase" (Polar portal) — duplicate of
-                  the "Customer portal" link inside the delivery
-                  card above. The card's link is the contextual
-                  one; this CTA was redundant chrome.
-              Download lives INSIDE the card as primary action. */}
-          <Reveal
-            delay={620}
-            className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap"
-          >
-            <Link
-              to="/"
-              className="inline-flex h-11 items-center gap-2 px-4 text-sm text-sumi-soft transition-colors duration-[280ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:text-sumi"
-            >
-              <ArrowLeft className="h-3.5 w-3.5" strokeWidth={1.7} aria-hidden />
-              {t('thanks.backToHome')}
-            </Link>
-          </Reveal>
+          {/* Bottom back-to-home duplicate removed — the single anchor
+              at the top of the page covers the escape hatch. The
+              delivery card is now the page's final beat, no more
+              tertiary chrome below it. */}
         </section>
       </main>
       <Footer />

@@ -212,25 +212,46 @@ export function PolarInlineCheckout({ tier, discountCode, theme = 'light', curre
   // badges + footer below. Reserving the height up front pins the
   // page layout in place so nothing below jumps when the iframe
   // finally mounts.
+  // Cross-fade between the loader and the iframe — the iframe lives
+  // in the DOM the moment its session URL resolves but stays at
+  // opacity 0 + non-interactive while Polar hasn't reported `loaded`.
+  // Once it does, the loader fades out (300ms) and the iframe fades
+  // in (320ms) on the same easing curve so the transition reads as a
+  // single calm beat instead of a hard cut.
+  const isReady = phase === 'loaded' || phase === 'success' || phase === 'confirmed'
   return (
-    <div className="relative min-h-[760px] rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,#fff)]">
-      {phase !== 'loaded' && phase !== 'success' && (
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center rounded-md"
-        >
-          <div className="flex flex-col items-center gap-3 text-sumi-soft">
-            <Loader2 className="h-5 w-5 animate-spin" strokeWidth={1.6} />
-            <span className="text-[12px] uppercase tracking-[0.22em]">
-              {phase === 'creating'
-                ? t('checkout.inline.loading')
-                : phase === 'confirmed'
-                  ? t('checkout.inline.confirming')
-                  : t('checkout.inline.preparing')}
-            </span>
-          </div>
+    <div className="relative min-h-[760px] rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,#fff)] overflow-hidden">
+      {/* Skeleton wash — a subtle washi shimmer behind the loader so
+          the panel reads as "preparing" rather than blank washi. The
+          gradient pulses left→right via a CSS keyframe defined inline. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 polar-skeleton"
+        style={{
+          opacity: isReady ? 0 : 1,
+          transition: 'opacity 360ms cubic-bezier(0.22, 1, 0.36, 1)',
+        }}
+      />
+
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center rounded-md"
+        style={{
+          opacity: isReady ? 0 : 1,
+          transition: 'opacity 300ms cubic-bezier(0.22, 1, 0.36, 1)',
+        }}
+      >
+        <div className="flex flex-col items-center gap-3 text-sumi-soft">
+          <Loader2 className="h-5 w-5 animate-spin" strokeWidth={1.6} />
+          <span className="text-[12px] uppercase tracking-[0.22em]">
+            {phase === 'creating'
+              ? t('checkout.inline.loading')
+              : phase === 'confirmed'
+                ? t('checkout.inline.confirming')
+                : t('checkout.inline.preparing')}
+          </span>
         </div>
-      )}
+      </div>
 
       {sessionUrl && (
         <iframe
@@ -239,10 +260,11 @@ export function PolarInlineCheckout({ tier, discountCode, theme = 'light', curre
           title={t('checkout.inline.title')}
           allow="payment *; publickey-credentials-get *"
           loading="eager"
-          // Border + bg moved up to the wrapper so the loader sits
-          // on the same surface regardless of iframe state. The
-          // iframe itself stays transparent until it paints.
           className="block w-full min-h-[760px] rounded-md"
+          style={{
+            opacity: isReady ? 1 : 0,
+            transition: 'opacity 320ms cubic-bezier(0.22, 1, 0.36, 1) 80ms',
+          }}
         />
       )}
 

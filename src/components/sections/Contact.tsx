@@ -1,5 +1,15 @@
 import { useState, type FormEvent } from 'react'
-import { ArrowRight, Bug, Mail, Send, ShieldCheck, Lightbulb, Sparkles } from 'lucide-react'
+import {
+  ArrowRight,
+  AtSign,
+  Bug,
+  ListChecks,
+  Mail,
+  Send,
+  ShieldCheck,
+  Lightbulb,
+  Sparkles,
+} from 'lucide-react'
 import { Trans, useTranslation } from 'react-i18next'
 import { GithubMark } from '#/components/icons/GithubMark'
 import { Hanko } from '#/components/zen/Hanko'
@@ -90,8 +100,8 @@ export function Contact() {
                   {t('contact.privateMessage')}
                 </span>
                 <span className="inline-flex items-center gap-1.5 text-[11px] tracking-[0.04em] text-nezumi">
-                  <ShieldCheck className="h-3.5 w-3.5" strokeWidth={1.6} aria-hidden />
                   {t('contact.notStored')}
+                  <ShieldCheck className="h-3.5 w-3.5" strokeWidth={1.6} aria-hidden />
                 </span>
               </header>
 
@@ -371,13 +381,24 @@ export function Contact() {
             <Reveal delay={280}>
               <a
                 href={`mailto:${EMAIL}`}
-                className="paper-card group flex flex-col gap-3 p-6"
+                className="paper-card group relative flex flex-col gap-3 p-6"
               >
-                <header className="flex items-center gap-2">
+                {/* Ambient kin (gold) wash, mirrors the hinomaru one on
+                    the GitHub card so the two cards read as a pair. */}
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute -right-8 -top-10 h-32 w-32 rounded-full bg-kin/[0.06] blur-2xl transition-opacity duration-500 group-hover:bg-kin/[0.10]"
+                />
+                <header className="relative flex items-center justify-between gap-3">
                   <span className="inline-flex items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.22em] text-sumi-soft display-title">
                     <Mail className="h-3.5 w-3.5 text-kin" strokeWidth={1.7} aria-hidden />
                     {t('contact.email.label')}
                   </span>
+                  <AtSign
+                    className="h-4 w-4 text-nezumi transition-[colors,transform] duration-[260ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] group-hover:text-kin group-hover:scale-110"
+                    strokeWidth={1.6}
+                    aria-hidden
+                  />
                 </header>
                 <p className="display-title text-[1.125rem] font-medium text-sumi leading-snug">
                   {t('contact.email.title')}
@@ -402,16 +423,23 @@ export function Contact() {
                   uppercase title so the section reads native to the
                   site's kanji-seal vocabulary. */}
               <aside className="rounded-md border border-dashed border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_82%,transparent)] p-5">
-                <header className="mb-3 flex items-center gap-3">
-                  <span
+                <header className="mb-3 flex items-center justify-between gap-3">
+                  <span className="inline-flex items-center gap-3">
+                    <span
+                      aria-hidden
+                      className="font-jp text-base leading-none text-hinomaru/85 w-5 text-center"
+                    >
+                      注
+                    </span>
+                    <span className="display-title text-[0.8125rem] font-semibold uppercase tracking-[0.18em] text-sumi-soft">
+                      {t('contact.before.title')}
+                    </span>
+                  </span>
+                  <ListChecks
+                    className="h-4 w-4 text-nezumi/70"
+                    strokeWidth={1.6}
                     aria-hidden
-                    className="font-jp text-base leading-none text-hinomaru/85 w-5 text-center"
-                  >
-                    注
-                  </span>
-                  <span className="display-title text-[0.8125rem] font-semibold uppercase tracking-[0.18em] text-sumi-soft">
-                    {t('contact.before.title')}
-                  </span>
+                  />
                 </header>
                 <ul className="space-y-2.5 text-[0.875rem] leading-[1.5] text-sumi-soft">
                   <li className="flex gap-2.5">
@@ -446,8 +474,20 @@ export function Contact() {
   )
 }
 
+// Underline animates from 0%→100% on focus via background-size. The
+// gradient lives on the existing background (no overlay element), so
+// the effect ships on inputs, textareas, and any focus-able field
+// without wrapping them in extra divs. Stays subtle — a single
+// hinomaru hairline that paints in left→right like a sumi brush
+// finishing a label.
 const inputClass =
-  'w-full rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-3.5 py-2.5 text-[0.9375rem] text-sumi placeholder:text-nezumi/70 transition-colors duration-200 focus:border-[var(--line-strong)] focus:outline-none focus:ring-2 focus:ring-sumi/15'
+  [
+    'block w-full rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-3.5 py-2.5 text-[0.9375rem] text-sumi placeholder:text-nezumi/70',
+    'transition-[colors,background-size,box-shadow] duration-[320ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]',
+    'bg-no-repeat bg-[length:0%_1.5px] bg-[position:8px_calc(100%-2px)]',
+    "bg-[image:linear-gradient(to_right,var(--hinomaru),color-mix(in_oklab,var(--hinomaru)_30%,transparent))]",
+    'focus:bg-[length:calc(100%-16px)_1.5px] focus:border-[var(--line-strong)] focus:outline-none focus:ring-2 focus:ring-sumi/15',
+  ].join(' ')
 
 function Field({
   label,
@@ -502,10 +542,15 @@ function PathChip({
         : 'group-hover:bg-[color-mix(in_oklab,var(--washi)_50%,#fff)]'
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] px-2.5 py-1 text-[11px] font-medium text-sumi-soft transition-[colors,transform,box-shadow] duration-[260ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5 group-hover:border-[var(--line-strong)] group-hover:text-sumi group-hover:shadow-[0_2px_6px_-4px_rgba(28,26,23,0.18)] ${hoverBg}`}
+      // Direct chip hover adds a 2° rotation on top of the parent
+      // card's group-hover lift, so each path-chip feels independently
+      // alive — visitors can hover any single chip and feel it tilt
+      // before tapping. Combined with the accent-keyed tinted bg,
+      // each path lights up in its own colour.
+      className={`path-chip inline-flex items-center gap-1.5 rounded-full border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] px-2.5 py-1 text-[11px] font-medium text-sumi-soft transition-[colors,transform,box-shadow] duration-[260ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-0.5 group-hover:border-[var(--line-strong)] group-hover:text-sumi group-hover:shadow-[0_2px_6px_-4px_rgba(28,26,23,0.18)] hover:!-translate-y-1 hover:!rotate-[2deg] hover:!shadow-[0_6px_14px_-8px_rgba(28,26,23,0.30)] ${hoverBg}`}
     >
       <Icon
-        className={`h-3 w-3 ${iconColor} transition-transform duration-[260ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-110`}
+        className={`h-3 w-3 ${iconColor} transition-transform duration-[260ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110 [.path-chip:hover_&]:scale-125 [.path-chip:hover_&]:-rotate-[8deg]`}
         strokeWidth={1.8}
         aria-hidden
       />

@@ -1,4 +1,8 @@
+import { useRef } from 'react'
+import { Calendar, RefreshCcw, HeartPulse } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import { Sparkline } from '#/components/zen/Sparkline'
+import { useCountUp } from '#/lib/use-count-up'
 
 /**
  * A "journal page" — Sensei's personal history of one MacBook's battery.
@@ -28,9 +32,9 @@ export function BatteryJournal({ className = '' }: { className?: string }) {
 
       {/* Lifetime stats row */}
       <div className="grid grid-cols-3 gap-2 -mx-1">
-        <Stat label="Days" value="247" />
-        <Stat label="Cycles" value="217" />
-        <Stat label="Capacity" value="92%" />
+        <Stat icon={Calendar} label="Days" to={247} />
+        <Stat icon={RefreshCcw} label="Cycles" to={217} />
+        <Stat icon={HeartPulse} label="Capacity" to={92} suffix="%" />
       </div>
 
       {/* Capacity timeline */}
@@ -81,11 +85,30 @@ export function BatteryJournal({ className = '' }: { className?: string }) {
  * Stat tile — matches the app's `WrappedStatTile` (SagaSurface.swift):
  * a large numeric glyph in Fraunces over a small kerned label, on a washi
  * surface with the InkStroke double-border + a fiber-texture overlay.
+ * Counts up from 0 → `to` on the first time the tile scrolls into view
+ * (see `useCountUp`), so the number reads as ink saturating into shape
+ * rather than a static figure. `prefers-reduced-motion` lands the value
+ * instantly.
  */
-function Stat({ label, value }: { label: string; value: string }) {
+function Stat({
+  icon: Icon,
+  label,
+  to,
+  suffix = '',
+}: {
+  icon: LucideIcon
+  label: string
+  to: number
+  suffix?: string
+}) {
+  const ref = useRef<HTMLDivElement | null>(null)
+  const value = useCountUp({ to, ref, durationMs: 1400 })
+  const done = value === to
   return (
     <div
-      className="relative flex flex-col items-start gap-1.5 overflow-hidden rounded-md bg-[var(--washi-soft)] px-3 py-2.5"
+      ref={ref}
+      data-done={done ? 'true' : 'false'}
+      className="stat-tile group relative flex flex-col items-start gap-1.5 overflow-hidden rounded-md bg-[var(--washi-soft)] px-3 py-2.5"
       style={{
         boxShadow:
           // InkStroke: offset secondary stroke beneath the primary border.
@@ -100,12 +123,25 @@ function Stat({ label, value }: { label: string; value: string }) {
             "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'><filter id='c'><feTurbulence type='fractalNoise' baseFrequency='2.4' numOctaves='2' seed='9'/><feColorMatrix values='0 0 0 0 0.42  0 0 0 0 0.36  0 0 0 0 0.28  0 0 0 0.12 0'/></filter><rect width='100%25' height='100%25' filter='url(%23c)'/></svg>\")",
         }}
       />
+      <Icon
+        className="relative h-3 w-3 text-hinomaru/70 transition-colors duration-[260ms] group-data-[done=true]:text-hinomaru"
+        strokeWidth={1.8}
+        aria-hidden
+      />
       <span className="display-title relative text-xl font-semibold leading-none text-sumi tabular-nums tracking-tight">
         {value}
+        {suffix}
       </span>
       <span className="relative text-[9px] font-semibold uppercase tracking-[0.18em] text-sumi-soft">
         {label}
       </span>
+      {/* Hairline ink-stroke that draws across the bottom of the tile
+          the moment the count-up lands. Quiet "ink set" beat that
+          confirms the number is the final figure. */}
+      <span
+        aria-hidden
+        className="stat-tile__rule pointer-events-none absolute left-0 right-0 bottom-0 h-px origin-left bg-gradient-to-r from-transparent via-hinomaru/60 to-transparent"
+      />
     </div>
   )
 }

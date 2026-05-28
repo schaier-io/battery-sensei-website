@@ -309,23 +309,34 @@ type DeliveryState =
  *  reference data, not a headline. First in the stagger sequence
  *  (120 ms after the card frame mounts). */
 function Header({ orderId }: { orderId: string | null }) {
-  if (!orderId) return null
-  // Quiet meta row at the top — small kerned `Order` label, dot, then
-  // the UUID in monospace. Right-aligned so it reads as reference
-  // data rather than a headline. Border below uses the same soft
-  // hairline treatment the rest of the card uses.
+  // Always render the row — the order chip itself cross-fades in via
+  // `data-ready` once polling resolves an order id. Mounting the same
+  // box at all times keeps the card's top edge from jumping when the
+  // order id eventually arrives mid-cycle (the "popin" buyers see when
+  // the chip materializes after a few seconds of loading).
+  const ready = Boolean(orderId)
   return (
     <div
-      className="thanks-section-rise flex flex-wrap items-baseline justify-end gap-x-2 gap-y-0.5 border-b border-[color-mix(in_oklab,var(--line)_60%,transparent)] px-5 py-2.5 sm:px-6"
+      data-ready={ready ? 'true' : 'false'}
+      className="thanks-section-rise relative flex flex-wrap items-baseline justify-end gap-x-2 gap-y-0.5 border-b border-[color-mix(in_oklab,var(--line)_60%,transparent)] px-5 py-2.5 sm:px-6 min-h-[2rem]"
       style={{ animationDelay: '120ms' }}
     >
-      <span className="text-[10px] font-medium uppercase tracking-[0.22em] text-nezumi">
-        Order
-      </span>
-      <span aria-hidden className="text-nezumi/50">·</span>
-      <code className="font-mono text-[10.5px] tracking-[0.04em] text-sumi-soft tabular-nums break-all">
-        #{orderId}
-      </code>
+      <div
+        // `data-ready` flips when `orderId` becomes truthy; the chip
+        // fades over 360ms so the order id appears like ink soaking
+        // into paper rather than snapping into place.
+        className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 transition-opacity duration-[360ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)]"
+        style={{ opacity: ready ? 1 : 0 }}
+        aria-hidden={!ready}
+      >
+        <span className="text-[10px] font-medium uppercase tracking-[0.22em] text-nezumi">
+          Order
+        </span>
+        <span aria-hidden className="text-nezumi/50">·</span>
+        <code className="text-[10.5px] tracking-[0.02em] text-sumi-soft break-all license-mono">
+          #{orderId ?? ' '.repeat(16)}
+        </code>
+      </div>
     </div>
   )
 }
@@ -374,13 +385,14 @@ function InstallSection() {
           ]}
         />
       </p>
-      {/* Primary CTA — full-width so it reads as the unblocking action.
-          Above sm the button stays wide for visual weight rather than
-          shrinking to content (the activate step below mirrors this
-          width so both sequential CTAs share a baseline). */}
+      {/* Step 1 — Download Sensei. Secondary visual weight so the
+          downstream Activate CTA (step 2) wins the eye when the key
+          eventually lands in the strip below. Outlined washi chip
+          mirrors the secondary affordances elsewhere on /thanks and
+          /checkout. */}
       <a
         href="/download/latest"
-        className="thanks-section-rise btn-sumi group mt-5 inline-flex h-11 w-full items-center justify-center gap-2 rounded-md px-5 text-[0.9375rem] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
+        className="thanks-section-rise group mt-5 inline-flex h-11 w-full items-center justify-center gap-2 rounded-md border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_55%,#fff)] px-5 text-[0.9375rem] font-medium text-sumi transition-[background-color,transform,box-shadow] duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-px hover:bg-[color-mix(in_oklab,var(--washi)_35%,#fff)] hover:shadow-[0_4px_14px_-8px_rgba(28,26,23,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
         style={{ animationDelay: '400ms' }}
       >
         <DownloadIcon
@@ -614,8 +626,17 @@ function KeyLine({
         style={{ ['--row-delay' as string]: '120ms' }}
       >
         <code
-          className="flex-1 min-w-0 select-all rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] px-3 py-2.5 font-mono text-[12.5px] leading-[1.4] tracking-[0.05em] text-sumi shadow-[0_1px_0_rgba(255,255,255,0.55)_inset,0_1px_2px_rgba(28,26,23,0.04)]"
-          style={{ wordBreak: 'break-all' }}
+          // Geist Mono w/ slashed zero + slightly tighter tracking +
+          // small caps via OpenType `cv11` (alternate `a`) keeps the
+          // long UUID readable without looking like a developer log
+          // line. Falls back through ui-monospace → SF Mono on macOS.
+          className="flex-1 min-w-0 select-all rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] px-3 py-2.5 text-[12.5px] leading-[1.4] tracking-[0.015em] text-sumi shadow-[0_1px_0_rgba(255,255,255,0.55)_inset,0_1px_2px_rgba(28,26,23,0.04)]"
+          style={{
+            wordBreak: 'break-all',
+            fontFamily: 'var(--font-mono)',
+            fontFeatureSettings: '"ss01", "cv11", "zero"',
+            fontVariantNumeric: 'tabular-nums slashed-zero',
+          }}
         >
           {licenseKey || '—'}
         </code>
@@ -658,13 +679,18 @@ function KeyLine({
 
           `encodeURIComponent` on the key escapes any characters Polar
           might one day put in the format (today they're ASCII-only). */}
+      {/* Step 2 — Open Sensei & activate. The TRUE primary action of
+          the whole card: this is the deeplink that takes the buyer
+          from "I have a key" to "Premium is on". Slightly taller +
+          softer shadow than the secondary Download chip above so it
+          reads as the loudest affordance on the card. */}
       <a
         href={`batterysensei://activate?key=${encodeURIComponent(licenseKey)}`}
-        className="thanks-key-row btn-sumi group inline-flex h-11 w-full items-center justify-center gap-2 rounded-md px-5 text-[0.9375rem] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
+        className="thanks-key-row btn-sumi group inline-flex h-12 w-full items-center justify-center gap-2 rounded-md px-5 text-[0.9375rem] font-semibold shadow-[0_8px_22px_-10px_rgba(28,26,23,0.45)] transition-[transform,box-shadow] duration-[260ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-px hover:shadow-[0_12px_28px_-10px_rgba(28,26,23,0.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
         style={{ ['--row-delay' as string]: '240ms' }}
       >
         <Sparkles
-          className="h-4 w-4 transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5"
+          className="h-4 w-4 transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5 group-hover:rotate-[10deg]"
           strokeWidth={1.8}
           aria-hidden
         />

@@ -1,4 +1,4 @@
-import { useId } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 
 type SparklineProps = {
   /** Values 0..100. Renders the line through them in order. */
@@ -25,6 +25,38 @@ export function Sparkline({
   markLatest = true,
 }: SparklineProps) {
   const id = useId().replace(/[:]/g, '')
+  // Draw-in: line gets painted left → right via stroke-dashoffset on
+  // first scroll into view. Fill area + endpoint mark cross-fade in
+  // on the same beat (delayed slightly so the line lands first).
+  const svgRef = useRef<SVGSVGElement | null>(null)
+  const [revealed, setRevealed] = useState(false)
+  useEffect(() => {
+    const el = svgRef.current
+    if (!el) return
+    const prefersReduced =
+      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
+    if (prefersReduced) {
+      setRevealed(true)
+      return
+    }
+    if (typeof IntersectionObserver === 'undefined') {
+      setRevealed(true)
+      return
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setRevealed(true)
+            io.unobserve(entry.target)
+          }
+        }
+      },
+      { threshold: 0.35 },
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
   const w = 320
   const h = height
   const padX = 4
@@ -47,6 +79,7 @@ export function Sparkline({
 
   return (
     <svg
+      ref={svgRef}
       viewBox={`0 0 ${w} ${h}`}
       width="100%"
       height={h}
@@ -71,7 +104,16 @@ export function Sparkline({
         strokeDasharray="3 4"
       />
 
-      {fill && <path d={areaPath} fill={`url(#sl-grad-${id})`} />}
+      {fill && (
+        <path
+          d={areaPath}
+          fill={`url(#sl-grad-${id})`}
+          style={{
+            opacity: revealed ? 1 : 0,
+            transition: 'opacity 720ms cubic-bezier(0.22, 1, 0.36, 1) 600ms',
+          }}
+        />
+      )}
 
       <path
         d={linePath}
@@ -80,19 +122,26 @@ export function Sparkline({
         strokeWidth="1.8"
         strokeLinecap="round"
         strokeLinejoin="round"
+        pathLength={100}
+        strokeDasharray="100 100"
+        style={{
+          // 100 == fully hidden; transitions to 0 == fully drawn.
+          // ease-out-expo for confident L→R brush stroke landing.
+          strokeDashoffset: revealed ? 0 : 100,
+          transition: 'stroke-dashoffset 1100ms cubic-bezier(0.16, 1, 0.3, 1) 120ms',
+        }}
       />
 
       {markLatest && last && (
-        <>
-          <circle
-            cx={last[0]}
-            cy={last[1]}
-            r="3.8"
-            fill="var(--hinomaru)"
-            opacity="0.18"
-          />
+        <g
+          style={{
+            opacity: revealed ? 1 : 0,
+            transition: 'opacity 360ms cubic-bezier(0.22, 1, 0.36, 1) 1000ms',
+          }}
+        >
+          <circle cx={last[0]} cy={last[1]} r="3.8" fill="var(--hinomaru)" opacity="0.18" />
           <circle cx={last[0]} cy={last[1]} r="1.8" fill="var(--sumi)" />
-        </>
+        </g>
       )}
     </svg>
   )

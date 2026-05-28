@@ -526,27 +526,38 @@ function FreeDownloadForm() {
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'sending' | 'error'>('idle')
   const inputRef = useRef<HTMLInputElement | null>(null)
+  const buttonRef = useRef<HTMLButtonElement | null>(null)
 
-  // Every "Download for macOS" CTA on the site now scrolls to this
-  // input via `href="#free-download-email"`. Mirror that with a focus
-  // pass on landing so the visitor can start typing immediately — both
-  // on initial mount (deep link) and on subsequent hash changes
-  // (in-page nav). Reads must be client-only.
+  // Every "Download for macOS" CTA on the site scrolls to this input
+  // via `href="#free-download-email"`. Native hash navigation puts the
+  // anchor's top at the viewport top, which leaves the submit button
+  // below the fold on most laptops — visitors have to scroll again to
+  // see "Get download". Override: re-scroll so the BUTTON sits near
+  // the bottom of the viewport (block: 'end' + a `scroll-margin-bottom`
+  // breathing room), then focus the email input so they can start
+  // typing without losing the button from view.
   useEffect(() => {
     if (typeof window === 'undefined') return
     const isTarget = () => window.location.hash === '#free-download-email'
-    function focusInput() {
+    function landOnDownload() {
       if (!isTarget()) return
-      // Wait one frame so the browser finishes the smooth scroll before
-      // we focus — focusing earlier yanks the page back to the field
-      // and skips the easing.
+      // One frame after the browser's initial hash-jump scroll so our
+      // override lands without fighting the easing. Smooth so the two
+      // motions merge into a single feeling rather than a snap.
       window.requestAnimationFrame(() => {
-        inputRef.current?.focus({ preventScroll: true })
+        buttonRef.current?.scrollIntoView({ block: 'end', behavior: 'smooth' })
+        // Wait for the scroll to settle before focusing the input —
+        // `preventScroll` keeps focus from yanking the page back, but
+        // we still want the button visible at the time the focus ring
+        // appears so the visitor sees the full path: input → button.
+        window.setTimeout(() => {
+          inputRef.current?.focus({ preventScroll: true })
+        }, 420)
       })
     }
-    focusInput()
-    window.addEventListener('hashchange', focusInput)
-    return () => window.removeEventListener('hashchange', focusInput)
+    landOnDownload()
+    window.addEventListener('hashchange', landOnDownload)
+    return () => window.removeEventListener('hashchange', landOnDownload)
   }, [])
 
   const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())
@@ -616,8 +627,15 @@ function FreeDownloadForm() {
         {t('pricing.free.email.footnote')}
       </p>
       <button
+        ref={buttonRef}
+        id="free-download-submit"
         type="submit"
         disabled={status === 'sending'}
+        // `scroll-margin-bottom` gives the button breathing room from
+        // the viewport edge when `scrollIntoView({ block: 'end' })` lands
+        // on it from a Download link click — sits ~1.25rem above the
+        // bottom edge instead of glued to it.
+        style={{ scrollMarginBottom: '1.25rem' }}
         className="btn-sumi group mt-2 inline-flex h-11 w-full items-center justify-center gap-2 rounded-md px-5 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)] disabled:opacity-70"
       >
         <Download

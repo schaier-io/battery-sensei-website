@@ -2,6 +2,7 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import {
   ArrowLeft,
   Download,
+  ExternalLink,
   ShieldCheck,
   RotateCcw,
   KeyRound,
@@ -21,6 +22,7 @@ import { Footer } from '#/components/sections/Footer'
 import { useDiscountAvailability } from '#/lib/use-discount-availability'
 import { usePremiumPrice, useLifetimePrice } from '#/lib/use-price'
 import { setCurrencyPreference } from '#/lib/currency-preference'
+import { CUSTOMER_PORTAL_URL } from '#/lib/polar'
 
 const SITE_URL = 'https://www.battery-sensei.app'
 const PATH = '/checkout'
@@ -148,6 +150,11 @@ function CheckoutPage() {
     <>
       <Nav />
       <main className="zen-section mx-auto max-w-3xl px-5 sm:px-6">
+        {/* Back-to-home anchor — top-left, ahead of the page's hanko +
+            heading. Single anchor per subpage instead of the old
+            bottom-of-page placement so visitors can bail at any
+            scroll without hunting for it. */}
+        <BackToHomeLink className="mb-6" label={t('checkout.backToHome')} />
         <div className="mb-10 flex flex-col items-center text-center">
           <Hanko kanji="会" className="mb-5" />
           <Reveal as="p" delay={120} className="kicker-row mb-4">
@@ -181,11 +188,13 @@ function CheckoutPage() {
               active={isLifetime}
               onClick={() => switchTier('lifetime')}
               label={t('checkout.tierLifetime')}
+              icon={Sparkles}
             />
             <TierTab
               active={!isLifetime}
               onClick={() => switchTier('support')}
               label={t('checkout.tierSupport')}
+              icon={Heart}
             />
           </div>
         </Reveal>
@@ -445,30 +454,59 @@ function CheckoutPage() {
                     download as an outlined secondary CTA so it's
                     reachable without burying the "paste your key"
                     instruction above. */}
-                <a
-                  href="/download/latest"
-                  className="mt-3.5 inline-flex h-9 items-center gap-2 rounded-md border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_55%,#fff)] px-3.5 text-[0.8125rem] font-medium text-sumi transition-[background-color,transform,box-shadow] duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-px hover:bg-[color-mix(in_oklab,var(--washi)_30%,#fff)] hover:shadow-[0_4px_12px_-6px_rgba(28,26,23,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
-                >
-                  <Download className="h-3.5 w-3.5" strokeWidth={1.7} aria-hidden />
-                  {t('checkout.alreadyOwnDownload')}
-                </a>
+                {/* Two secondary affordances: re-download Sensei (for
+                    visitors arriving with a key but no install), and
+                    open the Polar customer portal (for lost-key /
+                    invoice / subscription-management cases). Same
+                    h-9 outlined chip treatment so they read as
+                    siblings, not a primary/secondary pair. */}
+                <div className="mt-3.5 flex flex-wrap items-center gap-2">
+                  <a
+                    href="/download/latest"
+                    className="inline-flex h-9 items-center gap-2 rounded-md border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_55%,#fff)] px-3.5 text-[0.8125rem] font-medium text-sumi transition-[background-color,transform,box-shadow] duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-px hover:bg-[color-mix(in_oklab,var(--washi)_30%,#fff)] hover:shadow-[0_4px_12px_-6px_rgba(28,26,23,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
+                  >
+                    <Download className="h-3.5 w-3.5" strokeWidth={1.7} aria-hidden />
+                    {t('checkout.alreadyOwnDownload')}
+                  </a>
+                  <a
+                    href={CUSTOMER_PORTAL_URL}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex h-9 items-center gap-2 rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] px-3.5 text-[0.8125rem] font-medium text-sumi-soft transition-[background-color,color,transform,box-shadow] duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-px hover:text-sumi hover:border-[var(--line-strong)] hover:bg-[color-mix(in_oklab,var(--washi)_50%,#fff)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
+                  >
+                    <ExternalLink className="h-3.5 w-3.5" strokeWidth={1.7} aria-hidden />
+                    {t('checkout.alreadyOwnPortal', { defaultValue: 'Customer portal' })}
+                  </a>
+                </div>
               </div>
             </div>
           </aside>
         </Reveal>
 
-        <div className="mt-10 flex justify-center">
-          <Link
-            to="/"
-            className="group zen-link-lift inline-flex items-center gap-1.5 text-[0.875rem] text-sumi-soft"
-          >
-            <ArrowLeft className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-x-0.5" strokeWidth={1.8} aria-hidden />
-            {t('checkout.backToHome')}
-          </Link>
-        </div>
       </main>
       <Footer />
     </>
+  )
+}
+
+/**
+ * Shared back-to-home anchor used at the top-left of every subpage
+ * (checkout, thanks, privacy, legal, feature deep-dives). Arrow tucks
+ * leftward on hover so the visitor reads "previous" without thinking.
+ */
+function BackToHomeLink({ label, className = '' }: { label: string; className?: string }) {
+  return (
+    <Link
+      to="/"
+      className={`group zen-link-lift inline-flex items-center gap-1.5 text-[0.8125rem] text-sumi-soft hover:text-sumi ${className}`}
+    >
+      <ArrowLeft
+        className="h-3.5 w-3.5 transition-transform duration-[260ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-x-0.5"
+        strokeWidth={1.8}
+        aria-hidden
+      />
+      {label}
+    </Link>
   )
 }
 
@@ -476,10 +514,12 @@ function TierTab({
   active,
   onClick,
   label,
+  icon: Icon,
 }: {
   active: boolean
   onClick: () => void
   label: string
+  icon?: typeof Sparkles
 }) {
   return (
     <button
@@ -490,9 +530,11 @@ function TierTab({
       // Inactive tabs get a soft washi-tint hover background + sumi
       // text shift so the toggle feels alive on pointer move; the
       // active tab keeps its sumi pill and only deepens slightly on
-      // hover so the click target stays self-evident.
+      // hover so the click target stays self-evident. A leading icon
+      // (Sparkles for Lifetime, Heart for Yearly) distinguishes the
+      // two tiers at a glance instead of relying on label parsing.
       className={[
-        'flex-1 rounded-[5px] px-4 py-2 text-[0.8125rem] font-medium',
+        'group flex-1 inline-flex items-center justify-center gap-2 rounded-[5px] px-4 py-2 text-[0.8125rem] font-medium',
         'transition-colors duration-200 cursor-pointer',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--washi)]',
         active
@@ -500,6 +542,13 @@ function TierTab({
           : 'text-sumi-soft hover:text-sumi hover:bg-[color-mix(in_oklab,var(--washi)_40%,#fff)]',
       ].join(' ')}
     >
+      {Icon ? (
+        <Icon
+          className={`h-3.5 w-3.5 transition-transform duration-[260ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] ${active ? 'group-hover:scale-110' : ''}`}
+          strokeWidth={1.8}
+          aria-hidden
+        />
+      ) : null}
       {label}
     </button>
   )

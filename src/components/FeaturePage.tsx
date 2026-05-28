@@ -97,10 +97,12 @@ export function FeaturePage({ slug, kanji, mockup }: Props) {
             </div>
           </Reveal>
 
-          <Reveal
-            delay={600}
-            className="mt-10 flex flex-col items-start gap-3 sm:flex-row sm:items-center"
-          >
+          {/* Bottom row simplified to ONE primary action — the
+              back-to-home anchor lives at the top-left of the page
+              (above the hanko) so the duplicate at the bottom was
+              redundant. Keep the "Try free" CTA as the page's
+              closing beat. */}
+          <Reveal delay={600} className="mt-10">
             <a
               href="/#free-download-email"
               className="btn-sumi group inline-flex h-11 items-center gap-2.5 rounded-md px-6 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
@@ -111,12 +113,6 @@ export function FeaturePage({ slug, kanji, mockup }: Props) {
               />
               {t('featurePages.tryFree')}
             </a>
-            <Link
-              to="/"
-              className="inline-flex h-11 items-center px-4 text-sm text-sumi-soft transition-colors duration-[280ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:text-sumi"
-            >
-              {t('featurePages.backToHome')}
-            </Link>
           </Reveal>
         </section>
       </main>

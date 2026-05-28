@@ -192,8 +192,13 @@ function AlertCard({ percent, revealed }: { percent: number; revealed: boolean }
         {percent}%
       </p>
 
+      {/* Forecast line, NOT a restatement. The earlier copy ("Battery is
+          now at 15%") just repeated the number above. Replaced with a
+          plain-English prediction so the preview demonstrates the
+          app's actual value (predictive insight) instead of a
+          redundant status echo. */}
       <p className="mx-auto mt-2 text-[11px] font-medium leading-relaxed text-sumi-soft">
-        Battery is now at {percent}%.
+        About <span className="text-sumi tabular-nums">1h 12m</span> left at this rate.
       </p>
 
       <div className="mt-3 flex items-center justify-between gap-2">

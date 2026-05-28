@@ -95,6 +95,10 @@
   --font-sans: 'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
   --font-display: 'Spectral', 'Source Serif 4', Georgia, ui-serif, serif;
   --font-jp: 'Noto Serif JP', 'Yu Mincho', 'Hiragino Mincho ProN', serif;
+  /* Geist Mono — calmer than JetBrains/Plex defaults, slashed zero,
+     pairs cleanly with Source Sans + Spectral. Used for the license
+     key block and any code-shaped tokens (order id, UUIDs). */
+  --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
   /* Modular type scale — 1.25 ratio with a fluid clamp on display sizes.
      Marketing register: clamp on h1/h2, fixed rem on body so reading rhythm
@@ -161,6 +165,39 @@ html,
 body,
 #app {
   min-height: 100%;
+}
+
+/* Cross-page route transition. Chrome 111+ / Edge / Safari 18+ snapshot
+   the outgoing and incoming documents and cross-fade between them. The
+   default `auto` behaviour fades with a slight blur for ~400ms — calmer
+   than a hard cut between /, /checkout, /thanks. Falls back to instant
+   navigation in browsers without support (no JS shim needed). */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 480ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+::view-transition-old(root) { animation-name: route-fade-out; }
+::view-transition-new(root) { animation-name: route-fade-in; }
+
+@keyframes route-fade-out {
+  to { opacity: 0; }
+}
+@keyframes route-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
 }
 
 /* Smooth in-page anchor jumps — affects nav and the hero's "Read more"
@@ -685,17 +722,45 @@ body::after {
 
 /* Text-selection contrast — washi (cream) backgrounds clash with the
    browser default light-blue selection on most platforms, washing out
-   the selected text. Override with a hinomaru wash that still passes
-   AA contrast against sumi text. */
+   the selected text. The default rule uses a hinomaru wash + sumi
+   text — passes AA on washi.
+
+   Dark surfaces (.btn-sumi and any element under `.bg-sumi` /
+   `.bg-sumi-*` utilities) flip the text colour to washi so the
+   highlight still reads. The hinomaru background tone stays consistent
+   across light + dark, so the brand voice carries through selection. */
 ::selection {
-  background-color: color-mix(in oklab, var(--hinomaru) 26%, transparent);
+  background-color: color-mix(in oklab, var(--hinomaru) 28%, transparent);
   color: var(--sumi);
   text-shadow: none;
 }
 ::-moz-selection {
-  background-color: color-mix(in oklab, var(--hinomaru) 26%, transparent);
+  background-color: color-mix(in oklab, var(--hinomaru) 28%, transparent);
   color: var(--sumi);
   text-shadow: none;
+}
+
+/* Dark-surface override — sumi-on-sumi was invisible. Switch text to
+   washi while keeping the hinomaru highlight so the brand voice
+   stays consistent across surfaces. Also bump the highlight tint a
+   touch (38% vs 28%) so it reads on the deeper sumi background. */
+.btn-sumi::selection,
+.btn-sumi *::selection,
+[class*="bg-sumi"]::selection,
+[class*="bg-sumi"] *::selection,
+.bg-hinomaru::selection,
+.bg-hinomaru *::selection {
+  background-color: color-mix(in oklab, var(--hinomaru) 38%, transparent);
+  color: var(--washi);
+}
+.btn-sumi::-moz-selection,
+.btn-sumi *::-moz-selection,
+[class*="bg-sumi"]::-moz-selection,
+[class*="bg-sumi"] *::-moz-selection,
+.bg-hinomaru::-moz-selection,
+.bg-hinomaru *::-moz-selection {
+  background-color: color-mix(in oklab, var(--hinomaru) 38%, transparent);
+  color: var(--washi);
 }
 
 /* Gentle scroll-down bob — used on the hero scroll cue + the Read
@@ -717,6 +782,23 @@ body::after {
 }
 @media (prefers-reduced-motion: reduce) {
   .animate-gentle-bob { animation: none; opacity: 0.85; }
+}
+
+/* Calm opacity breath — for elements where a vertical bob would
+   fight a parent hover-lift (e.g. the Hero "Read more" chevron
+   inside a circle that itself lifts on hover). Owns OPACITY only,
+   so it stacks cleanly with translate / scale on the same element
+   without the two animations cancelling each other. */
+@keyframes gentle-pulse {
+  0%, 100% { opacity: 0.7; }
+  50%      { opacity: 1; }
+}
+.animate-gentle-pulse {
+  animation: gentle-pulse 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  will-change: opacity;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-gentle-pulse { animation: none; opacity: 1; }
 }
 
 /* Language dropdown — open/close + per-item stagger.
@@ -1096,37 +1178,26 @@ body::after {
    each new state lands with a small breath rather than a hard swap.
 */
 
+/* Card frame mount — opacity-only fade so nothing on the card slides
+   into place. The earlier translateY + scale combo caused every child
+   to shift slightly as the parent settled, which read as "jumpy" once
+   the surrounding film cross-faded into the card. Pure opacity keeps
+   the layout still while the card materializes. */
 @keyframes thanks-card-mount {
-  from {
-    opacity: 0;
-    transform: translateY(16px) scale(0.985);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 .thanks-card-mount {
-  animation: thanks-card-mount 680ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
-  transform-origin: 50% 0;
-  /* The header / install / strip below each have their own delayed
-     fade-in. `will-change` keeps the compositor warm so the staggered
-     children don't induce a paint storm on mid-tier hardware. */
-  will-change: transform, opacity;
+  animation: thanks-card-mount 640ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  will-change: opacity;
 }
 
 @keyframes thanks-section-rise {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 .thanks-section-rise {
-  animation: thanks-section-rise 540ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation: thanks-section-rise 520ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
 @keyframes thanks-hairline-draw {
@@ -1151,17 +1222,11 @@ body::after {
    loop hands off between loading / provisioning / ready / expired,
    re-firing this keyframe at each transition. */
 @keyframes thanks-strip-state {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 .thanks-strip-state {
-  animation: thanks-strip-state 480ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation: thanks-strip-state 520ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
 /* Kanji stamp — when the key reveal mounts, the 鍵 character lands
@@ -1206,6 +1271,124 @@ body::after {
   animation: thanks-copy-bump 360ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* ---------- License key / order chip mono ----------
+   Geist Mono with slashed zero + tabular numerics applied to anything
+   that needs to read as "machine code, but on washi paper". Used for
+   the license code block and the order id chip on the thanks page. */
+.license-mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums slashed-zero;
+  font-feature-settings: 'zero', 'ss01', 'cv11';
+}
+
+/* Cycle-count mockup — the hairline fill ink-bars in on first reveal
+   via the parent Reveal's data-revealed flip. Stays at 0% width until
+   the parent is intersected; eases out to the computed `width` set
+   inline on the element. Uses scaleX from 0 with transform-origin
+   left so we don't have to read the computed pixel width back into
+   the transition. */
+.cycle-mockup__fill {
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 1100ms cubic-bezier(0.16, 1, 0.3, 1) 220ms;
+}
+[data-revealed='true'] .cycle-mockup__fill,
+.cycle-mockup[data-revealed='true'] .cycle-mockup__fill {
+  transform: scaleX(1);
+}
+
+/* You-are-here pin lands AFTER the fill finishes — fades + drops in
+   so the eye reads "the bar settled, here's where you sit". */
+.cycle-mockup__pin {
+  opacity: 0;
+  transform: translateX(-50%) translateY(-4px);
+  transition:
+    opacity 360ms cubic-bezier(0.22, 1, 0.36, 1) 1200ms,
+    transform 360ms cubic-bezier(0.22, 1, 0.36, 1) 1200ms;
+}
+[data-revealed='true'] .cycle-mockup__pin,
+.cycle-mockup[data-revealed='true'] .cycle-mockup__pin {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Per-app drain ledger — each row's bar fills L→R staggered via
+   `--app-row-delay` set inline per <li>. Pattern mirrors the cycle
+   mockup so the two mini-mockups feel like siblings. */
+.app-drain-mockup__fill {
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 920ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--app-row-delay, 0ms);
+}
+[data-revealed='true'] .app-drain-mockup__fill,
+.app-drain-mockup[data-revealed='true'] .app-drain-mockup__fill {
+  transform: scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cycle-mockup__fill,
+  .cycle-mockup__pin,
+  .app-drain-mockup__fill {
+    transform: none;
+    opacity: 1;
+    transition: none;
+  }
+}
+
+/* Polar checkout skeleton — washi-shimmer behind the loader before
+   the iframe paints. A wide hinomaru tint moves L→R over 2.4s so the
+   panel reads as "preparing", not blank space, without overwhelming
+   the page's calm rhythm. */
+.polar-skeleton {
+  background:
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      color-mix(in oklab, var(--hinomaru) 5%, transparent) 45%,
+      color-mix(in oklab, var(--hinomaru) 7%, transparent) 50%,
+      color-mix(in oklab, var(--hinomaru) 5%, transparent) 55%,
+      transparent 100%
+    );
+  background-size: 200% 100%;
+  background-position: -100% 0;
+  animation: polar-skeleton-shimmer 2400ms cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
+@keyframes polar-skeleton-shimmer {
+  0%   { background-position: -100% 0; }
+  100% { background-position:  100% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .polar-skeleton { animation: none; }
+}
+
+/* ---------- Stat tile · BatteryJournal ----------
+   The 0→target count-up takes 1.4s; a hairline at the tile's bottom
+   draws across left→right the moment the count lands (`data-done=true`).
+   Reads as a final ink-set under the figure — confirmation that the
+   number is settled, not still climbing. */
+.stat-tile__rule {
+  transform: scaleX(0);
+  opacity: 0;
+  transition:
+    transform 520ms cubic-bezier(0.22, 1, 0.36, 1) 1.4s,
+    opacity 520ms cubic-bezier(0.22, 1, 0.36, 1) 1.4s;
+}
+.stat-tile[data-done='true'] .stat-tile__rule {
+  transform: scaleX(1);
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stat-tile__rule {
+    transform: scaleX(1);
+    opacity: 1;
+    transition: none;
+  }
+}
+
 /* Per-row reveal for the contents of `DeliveryStrip` (key + copy + activate
    + meta). The strip itself fades in via `.thanks-strip-state` whenever the
    polling phase flips; this cascades each row inside so the buyer's eye
@@ -1213,17 +1396,11 @@ body::after {
    whole strip at once. Inline `style={{ ['--row-delay']: '120ms' }}` per
    row offsets the start time. */
 @keyframes thanks-key-row {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 .thanks-key-row {
-  animation: thanks-key-row 460ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation: thanks-key-row 500ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
   animation-delay: var(--row-delay, 0ms);
 }
 
@@ -1340,6 +1517,25 @@ section[id] {
     transform: rotate(-3deg) scale(1);
     opacity: 1;
   }
+}
+
+/* Hover re-press — tiny stamp gesture so the seal feels alive each
+   time the visitor's cursor hits it. Fires only AFTER the initial
+   reveal stamp has played (selector requires `data-revealed='true'`)
+   so the two animations never fight on first paint. */
+.hanko[data-revealed='true']:hover {
+  animation: hanko-restamp 320ms cubic-bezier(0.4, 1.6, 0.4, 1);
+}
+
+@keyframes hanko-restamp {
+  0%   { transform: rotate(-3deg) scale(1); }
+  35%  { transform: rotate(-6deg) scale(0.94); }
+  70%  { transform: rotate(-1.5deg) scale(1.06); }
+  100% { transform: rotate(-3deg) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hanko[data-revealed='true']:hover { animation: none; }
 }
 
 /* Brush divider stroke length is driven by scroll progress (see BrushDivider.tsx) */

@@ -110,12 +110,16 @@ const webSiteLd = {
 const faqPageLd = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
+  // `a` is an array of paragraphs with `**bold**` Markdown emphasis.
+  // Strip the markers + join with double newlines so the schema
+  // serves a clean, fully-resolved answer to Google's rich-result
+  // crawler. (The on-page renderer keeps the emphasis visually.)
   mainEntity: FAQ_ITEMS.map(({ q, a }) => ({
     '@type': 'Question',
     name: q,
     acceptedAnswer: {
       '@type': 'Answer',
-      text: a,
+      text: a.map((p) => p.replace(/\*\*/g, '')).join('\n\n'),
     },
   })),
 }
@@ -285,7 +289,7 @@ export const Route = createRootRoute({
       { rel: 'preconnect', href: 'https://buy.polar.sh' },
       {
         rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Source+Sans+3:wght@400;500;600;700&family=Noto+Serif+JP:wght@400;700;900&display=swap',
+        href: 'https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Source+Sans+3:wght@400;500;600;700&family=Noto+Serif+JP:wght@400;700;900&family=Geist+Mono:wght@400;500;600&display=swap',
       },
       { rel: 'stylesheet', href: appCss },
     ],

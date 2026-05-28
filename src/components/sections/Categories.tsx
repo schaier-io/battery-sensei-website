@@ -7,7 +7,9 @@ const items: { href: string; key: string }[] = [
   { href: '#health', key: 'cycle' },
   { href: '#health', key: 'watts' },
   { href: '#saga', key: 'history' },
-  { href: '/vs-aldente', key: 'aldenteAlt' },
+  // Comparison row now lives directly on the homepage Compare section,
+  // not on a separate /vs-aldente subpage — link points to the anchor.
+  { href: '#compare', key: 'aldenteAlt' },
 ]
 
 export function Categories() {

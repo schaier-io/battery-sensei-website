@@ -3,6 +3,11 @@
   "outputDirectory": "dist/client",
   "redirects": [
     {
+      "source": "/vs-aldente",
+      "destination": "/#compare",
+      "permanent": true
+    },
+    {
       "source": "/download/latest",
       "destination": "https://github.com/schaier-io/battery-sensei-releases/releases/latest/download/Battery-Sensei.pkg",
       "permanent": false

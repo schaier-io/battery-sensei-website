@@ -1,6 +1,9 @@
 {
   "common": {
     "language": "Sprache",
+    "currency": "Währung",
+    "auto": "Auto",
+    "autoDetect": "Automatisch erkennen",
     "languageName": {
       "en": "English",
       "de": "Deutsch",
@@ -132,10 +135,10 @@
     "headingItalic": "in einem Satz, den Sie wirklich sagen würden.",
     "cells": {
       "aging": {
-        "title": "Wie er altert, in einer Kurve",
-        "body": "Eine ruhige Linie, die Sie in einer Sekunde verstehen. Klares Deutsch, kein Herstellerjargon, keine alarmierenden roten Dashboards.",
-        "monthsAgo": "vor 14 Monaten",
-        "today": "92 % heute"
+        "title": "Dein Akkuverlauf, als Kurve",
+        "body": "Eine ruhige Linie, gezeichnet aus jeder Ladung.",
+        "timeStart": "vor 2 Std.",
+        "lifetime": "Lebensdauer · 92 %"
       },
       "cycles": {
         "title": "Zyklenzahl, im Kontext",
@@ -150,12 +153,35 @@
         "body": "Erkennen Sie ein wackeliges Kabel in Sekunden. Erwischen Sie eine durstige App, bevor sie Ihren Tag frisst."
       },
       "privacy": {
-        "title": "Bleibt auf Ihrem Mac",
-        "body": "Keine Cloud. Kein Konto. Keine Telemetrie. Die Geschichte Ihres Akkus gehört nur Ihnen."
+        "title": "Deine Daten gehören dir",
+        "body": "Keine Cloud, kein Konto, keine Telemetrie. Alles, was Sensei sieht, bleibt auf deinem Mac — für dich und niemanden sonst."
       },
       "languages": {
-        "title": "Spricht fünf Sprachen",
-        "body": "EN · DE · ES · FR · 日本語"
+        "title": "Was deine Stunden verbraucht",
+        "body": "Sensei sortiert die Apps, die in der letzten Stunde am stärksten zugelangt haben — mit Namen, die du erkennst. Einen Ausreißer siehst du auf einen Blick."
+      }
+    },
+    "mockups": {
+      "cycles": {
+        "kicker": "Zyklen-Konto",
+        "unit": "% verbraucht",
+        "denomLabel": "Designzyklen",
+        "footerLabel": "{{months}} Monate · Normalbereich"
+      },
+      "drain": {
+        "kicker": "Letzte Stunde · pro App",
+        "unit": "% / Std"
+      },
+      "privacy": {
+        "kicker": "Wo es bleibt · 24h",
+        "localTag": "100% lokal",
+        "thisMac": "dieser Mac",
+        "rows": {
+          "history": "Akku-Verlauf",
+          "cycles": "Zyklen-Konto",
+          "drain": "App-Verbrauch",
+          "calendar": "Kalender (Meeting Guard)"
+        }
       }
     }
   },
@@ -170,6 +196,8 @@
       "moreInfo": "Mehr Infos",
       "openFeature": "Funktion öffnen"
     },
+    "showAll": "Alle Funktionen anzeigen ({{count}} weitere)",
+    "showFewer": "Weniger anzeigen",
     "headers": {
       "feature": "Funktion",
       "sensei": "Battery Sensei",
@@ -180,16 +208,6 @@
       "macos": "macOS"
     },
     "rows": [
-      {
-        "label": "Nur auf dem Gerät",
-        "desc": "Alles läuft auf deinem Mac. Keine Cloud, kein Konto, keine Telemetrie.",
-        "sensei": "yes",
-        "aldente": "yes",
-        "batfi": "yes",
-        "coconut": "yes",
-        "istat": "yes",
-        "macos": "yes"
-      },
       {
         "label": "Native macOS-App",
         "desc": "Mit nativem AppKit + SwiftUI gebaut. Kein Electron, keine Web-Wrapper — sofortiger Start, geringer Speicher, System-Feel.",
@@ -228,6 +246,16 @@
         "batfi": "yes",
         "coconut": "yes",
         "istat": "partial",
+        "macos": "yes"
+      },
+      {
+        "label": "Stille Updates",
+        "desc": "Einmal aktivieren, dann prüft Sensei beim Start auf neue Builds und installiert sie ruhig im Hintergrund. Keine Nag-Dialoge, keine „Update verfügbar“-Popups mitten in der Arbeit. Standardmäßig aus — du behältst die Kontrolle.",
+        "sensei": "yes",
+        "aldente": "partial",
+        "batfi": "yes",
+        "coconut": "partial",
+        "istat": "yes",
         "macos": "yes"
       },
       {
@@ -464,7 +492,7 @@
       "items": [
         {
           "title": "Intelligente Akkuwarnungen",
-          "body": "Zwischen drei Voreinstellungen wechseln — Zen, Regular, Senpai. Stil und Ausblendzeit je Regel anpassen; Schwellenwerte bleiben fest."
+          "body": "Drei Voreinstellungen — Zen, Regular, Senpai. Stil und Ausblendzeit je Regel anpassen."
         },
         {
           "title": "Ladelimit + Travel Mode",
@@ -472,23 +500,15 @@
         },
         {
           "title": "24-Stunden-Akkuverlauf",
-          "body": "Ladeverlauf, Gesundheits-Kacheln, Rescue Receipts — lokal gespeichert."
-        },
-        {
-          "title": "Letzte Stunde · Akku pro App",
-          "body": "Sehen Sie genau, welche Apps in der letzten Stunde den Akku gefordert haben — namentlich."
+          "body": "Ladeverlauf, Gesundheits-Kacheln, Rescue Receipts. Letzte Stunde · Akku pro App. Alles lokal."
         },
         {
           "title": "Menüleiste: Ladung + Watt live",
           "body": "Prozent, Watt rein/raus, Restzeit — ein Blick, kein Dock-Symbol."
         },
         {
-          "title": "Fünf Sprachen",
-          "body": "EN · DE · ES · FR · 日本語."
-        },
-        {
-          "title": "Notarisierte native macOS-App",
-          "body": "AppKit + SwiftUI. Kein Electron, keine Cloud, kein Konto."
+          "title": "Nativ, privat, mehrsprachig",
+          "body": "Notarisiertes AppKit + SwiftUI. EN · DE · ES · FR · 日本語. Nichts verlässt deinen Mac."
         }
       ]
     },
@@ -535,17 +555,29 @@
       ]
     },
     "support": {
-      "tier": "応援 · Laufende Entwickler-Unterstützung",
+      "tier": "応援 · Jahres-Patron",
       "period": "pro Jahr",
       "badge": "Jederzeit kündbar",
-      "blurb": "Premium-Funktionen während des Abos — und Sie halten Sensei in aktiver Entwicklung. Geringere Anschaffung, jährliche Bindung.",
-      "ctaLabel": "Jährlich unterstützen",
-      "perksTitle": "Was Ihr Jahr bewirkt · 応援",
+      "blurb": "Alle Premium-Funktionen, jährlich abgerechnet. Niedrigerer Einstieg als Lifetime — und dein Beitrag finanziert die nächste Version.",
+      "ctaLabel": "Patron werden",
+      "perksTitle": "Was du bekommst · 応援",
       "items": [
-        "Alle aktuellen Premium-Funktionen während des Abos",
-        "Finanziert das nächste Jahr Sensei-Entwicklung",
-        "Jederzeit über Ihr Polar-Konto kündbar",
-        "Direkter Draht für Ideen und Feature-Wünsche"
+        {
+          "title": "Das volle Premium-Set",
+          "body": "Meeting Battery Guard, unbegrenzte Akku-Historie, eigene Warnregeln — alles, was auch Lifetime hat, solange du abonniert bist."
+        },
+        {
+          "title": "Du finanzierst das nächste Release",
+          "body": "Sensei wird von einer Person entwickelt. Jeder Jahres-Patron zahlt ein Stück der nächsten Funktion, des nächsten macOS-Updates, des nächsten Bugfixes."
+        },
+        {
+          "title": "Direkter Draht zum Maker",
+          "body": "Patrons bekommen einen privaten Kanal für Feature-Wünsche, frühe Betas und ein Mitspracherecht beim nächsten Release. Deine Idee überholt die öffentliche Liste."
+        },
+        {
+          "title": "In zwei Klicks kündbar",
+          "body": "Jederzeit über dein Polar-Konto verwalten — keine E-Mail, kein Hin und Her. Sensei bleibt installiert, die kostenlosen Essentials laufen weiter."
+        }
       ]
     },
     "alreadyBought": "Bereits gekauft? Lizenzschlüssel unter Sensei → Einstellungen → Premium eingeben."
@@ -555,49 +587,90 @@
     "heading": "Ruhig beantwortet.",
     "items": [
       {
-        "q": "Welche Macs und macOS-Versionen unterstützt Battery Sensei?",
-        "a": "macOS 13 Ventura, Sonoma, Sequoia und neuer, auf Apple Silicon (M1/M2/M3/M4) und Intel-MacBooks."
+        "q": "Welche Macs werden unterstützt?",
+        "a": [
+          "**macOS 13 Ventura oder neuer.** Sonoma, Sequoia und alles, was danach kommt.",
+          "Jeder Apple-Silicon-Mac. Intel-MacBooks ebenso."
+        ]
       },
       {
         "q": "Was kostet Battery Sensei?",
-        "a": "Sensei Premium kostet {{price}} einmalig, eine Zahlung, lebenslange Lizenz — jede künftige Premium-Funktion, jeder Mac, den Sie besitzen. Testen Sie es zuerst {{trial}} Tage gratis — keine Karte zum Starten nötig. Nach Ablauf der Testphase fragt Sensei einmal beim Start nach — ohne hinterlegte Karte und ohne stille Abbuchung. Danach bleiben die Grundfunktionen (Ladelimit + Travel Mode, intelligente Warnungen über drei Voreinstellungen, 24-Stunden-Akkuverlauf, App-Aufschlüsselung der letzten Stunde, Menüleiste mit Live-Watt) für immer kostenlos; Premium schaltet Meeting Battery Guard, unbegrenzten Akkuverlauf und eigene Warnregeln (hinzufügen, entfernen, Schwellenwerte bearbeiten) frei. Ihr Meeting-Battery-Guard-Schalter behält seinen vorherigen Zustand, löst aber nicht mehr aus — Ihre Konfiguration wird nicht zurückgesetzt. Der Checkout zeigt den Preis in Ihrer lokalen Währung."
+        "a": [
+          "**{{price}} einmalig, Lifetime-Lizenz.** Kein Abo. Jeder deiner Macs.",
+          "Erst {{trial}} Tage gratis. Keine Karte, kein Konto.",
+          "Wenn die Testphase endet, fragt Sensei einmal beim Start. Verzichtest du, bleibt das Wesentliche dauerhaft gratis: Ladelimit, Travel Mode, intelligente Warnungen, 24-Stunden-Verlauf, App-Verbrauch, Live-Watt in der Menüleiste.",
+          "Premium ergänzt Meeting Battery Guard, unbegrenzte Historie und eigene Warnregeln. Im Checkout siehst du deine lokale Währung."
+        ]
       },
       {
         "q": "Wie funktioniert der Lizenzschlüssel?",
-        "a": "Nach dem Kauf über Polar erhalten Sie einen Lizenzschlüssel per E-Mail. Öffnen Sie Sensei → Einstellungen → Premium und fügen Sie den Schlüssel ein. Sensei aktiviert ihn über die Polar-API und speichert das Ergebnis lokal; kein Konto, kein Login. Der Schlüssel funktioniert auf jedem Mac, den Sie besitzen."
+        "a": [
+          "Nach dem Kauf bekommst du den Schlüssel per E-Mail.",
+          "Öffne Sensei → Einstellungen → Premium und füge ihn ein. Aktivierung über Polar, gespeichert lokal.",
+          "**Kein Konto. Kein Login.** Gültig auf jedem deiner Macs."
+        ]
       },
       {
         "id": "refund",
         "q": "Kann ich eine Rückerstattung erhalten?",
-        "a": "Ja. Schreiben Sie innerhalb von 14 Tagen nach dem Kauf eine E-Mail und wir erstatten ohne Fragen. Polar wickelt die Zahlung ab, sodass die Rückerstattung auf die ursprüngliche Karte zurückgeht."
+        "a": [
+          "**Ja. 14 Tage, ohne Wenn und Aber.**",
+          "Eine E-Mail genügt, das Geld geht auf die ursprüngliche Karte zurück. Polar wickelt die Zahlung ab."
+        ]
       },
       {
-        "q": "Wie funktionieren Ladelimit und Travel Mode?",
-        "a": "Sensei begrenzt Ihr MacBook auf einen Ladestand Ihrer Wahl (Standard 80 Prozent), um die Akkulaufzeit zu verlängern. Ein Klick wechselt in den Travel Mode und Sensei lädt den Akku vor einer Reise auf 100 Prozent, danach kehrt er zu Ihrer normalen Grenze zurück, sobald Sie zu Hause sind."
+        "q": "Wie funktioniert das Ladelimit?",
+        "a": [
+          "Sensei stoppt das Laden auf dem Wert, den du wählst. Voreinstellung **80%**: kühlerer Akku, längeres Leben.",
+          "Travel Mode ist ein Klick. Sensei lädt mit **voller Geschwindigkeit** auf 100%, ohne die macOS-Verlangsamung auf den letzten 20%.",
+          "Bei deiner Rückkehr stellt er dein Limit wieder her."
+        ]
       },
       {
-        "q": "Sendet Battery Sensei meine Daten irgendwohin?",
-        "a": "Nein. Battery Sensei ist privacy-first. Es läuft vollständig auf Ihrem Mac. Keine Telemetrie, keine Analyse, kein Cloud-Konto. Ihr persönlicher Akkuverlauf bleibt lokal; nichts verlässt Ihr Gerät, außer Sie teilen es ausdrücklich."
+        "q": "Sendet Sensei meine Daten irgendwohin?",
+        "a": [
+          "**Nein. Nichts verlässt deinen Mac.**",
+          "Keine Telemetrie. Keine Analytik. Kein Cloud-Konto. Dein Akku-Verlauf bleibt auf dieser Maschine."
+        ]
       },
       {
-        "q": "Wie unterscheidet sich Battery Sensei vom eingebauten macOS-Akkumenü?",
-        "a": "macOS zeigt Ihnen eine Prozentzahl. Battery Sensei ergänzt intelligente Akkuwarnungen an Schwellenwerten Ihrer Wahl, ein Ladelimit mit Travel Mode, die Ladeleistung in Echtzeit, Zyklen- und Kapazitätsverfolgung sowie einen verständlichen Verlauf, wie Ihr Akku altert."
+        "q": "Was unterscheidet Battery Sensei vom macOS-Akkumenü?",
+        "a": [
+          "macOS zeigt dir einen Prozentwert. **Sensei liest den Rest.**",
+          "Intelligente Warnungen an Schwellen, die du wählst. Ladelimit mit Travel Mode. Live-Ladewatt. Zyklen und Kapazität über die Zeit.",
+          "Dazu ein ruhiger, klar verständlicher Bericht über die Alterung deines Akkus."
+        ]
       },
       {
-        "q": "Wie viel Akku verbraucht Battery Sensei selbst?",
-        "a": "Weniger als ein Prozent. Sensei ist eine native AppKit- und SwiftUI-Menüleisten-App ohne Hintergrund-Polling. Sie misst den System-Akku nur dann, wenn macOS eine Änderung meldet."
+        "q": "Wie viel Strom verbraucht Sensei selbst?",
+        "a": [
+          "**Weniger als 1%.**",
+          "Native AppKit- und SwiftUI-App. Kein Hintergrund-Polling. Sensei misst nur, wenn macOS eine Änderung meldet."
+        ]
       },
       {
         "q": "Ist Battery Sensei eine AlDente-Alternative?",
-        "a": "Ja. Sensei deckt die zentrale Ladelimit-Funktion von AlDente in jeder Stufe ab, ergänzt intelligente Warnungen und einen verständlichen Akkuverlauf und kommt als einzelner notarisierter .pkg-Installer. Premium ergänzt Meeting Battery Guard, unbegrenzten Akkuverlauf und eigene Warnregeln für eine einmalige Zahlung. Einen ausführlichen Direktvergleich finden Sie unter battery-sensei.app/vs-aldente."
+        "a": [
+          "**Ja.** Sensei deckt AlDentes Ladelimit in jeder Stufe ab, dazu intelligente Warnungen und einen Akku-Verlauf.",
+          "Kommt als ein notarisiertes .pkg-Installationspaket. Premium ergänzt Meeting Battery Guard, unbegrenzte Historie und eigene Warnregeln. Einmal zahlen, für immer.",
+          "Der direkte Vergleich steht im Compare-Abschnitt weiter oben."
+        ]
       },
       {
         "q": "Wie aktualisiere ich Battery Sensei?",
-        "a": "Sensei prüft beim Start auf Updates und benachrichtigt Sie, wenn eine neue Version verfügbar ist. Sie behalten die Kontrolle: Updates werden nur installiert, wenn Sie es zulassen."
+        "a": [
+          "Sensei prüft beim Start auf Updates.",
+          "Eine neue Version meldet sich leise. **Du installierst, wenn du es sagst.** Keine stillen Pushes, keine Erinnerungs-Popups."
+        ]
       },
       {
-        "q": "Wie funktioniert das Timing des Meeting Battery Guard?",
-        "a": "Meeting Battery Guard ist eine Premium-Funktion, verfügbar während der kostenlosen Testphase und nach Aktivierung einer Premium-Lizenz. Opt-in. Sensei sieht sich die nächsten Einträge in Ihrem Kalender an und sagt voraus, ob Ihr aktueller Akku jedes Meeting bei typischem Verbrauch überstehen wird. Wenn ein Meeting gefährdet ist, sendet Sensei bis zu vier Benachrichtigungen: 30, 15 und 5 Minuten vor Beginn sowie einen letzten Hinweis zum Startzeitpunkt. Jede Benachrichtigung enthält die genaue Minute, in der der Laptop voraussichtlich ausgeht („schaltet sich nach 17 Min. im Standup ab\") und einen Lösungshinweis („22 Min. am Ladegerät und Sie kommen durch\"). Termintitel verlassen niemals Ihren Mac — Sensei liest den Kalender lokal über EventKit. Ist ein Meeting nicht mehr gefährdet (Sie haben das Ladegerät angeschlossen oder das Meeting ist vorbei), werden ausstehende Erinnerungen still verworfen."
+        "q": "Wie funktioniert Meeting Battery Guard?",
+        "a": [
+          "Premium-Funktion, freiwillig aktivierbar. Sensei liest deinen Kalender lokal und sagt voraus, welche Meetings dein Akku eventuell nicht durchhält.",
+          "Wenn ein Meeting gefährdet ist, kommen bis zu vier Hinweise: **30, 15 und 5 Minuten vorher**, plus einer zum Start.",
+          "Jeder Hinweis nennt die genaue Minute, in der dein Laptop voraussichtlich ausgeht („stirbt 17 min nach Beginn des Stand-ups\") und die Ladezeit, die das Meeting rettet („22 min am Netzteil und du kommst durch\").",
+          "Termintitel verlassen deinen Mac nie. Sensei liest den Kalender lokal über EventKit. Verschwindet die Gefahr, werden ausstehende Erinnerungen still abgebrochen."
+        ]
       }
     ]
   },
@@ -607,7 +680,7 @@
     "headingItalic": "liest jede Nachricht.",
     "intro": "Fehler und Funktionswünsche leben offen auf GitHub, damit alle von der Antwort profitieren. Alles rund um Ihren Kauf oder Ihre Lizenz läuft über das Formular. Erste Antwort innerhalb von ~48 Stunden an Werktagen, oft schneller.",
     "privateMessage": "Private Nachricht",
-    "notStored": "Nicht gespeichert, nur weitergeleitet",
+    "notStored": "Nur zur Antwort, sonst nichts",
     "topicLegend": "Worum geht es?",
     "topics": {
       "billing": {
@@ -706,7 +779,7 @@
     "specStrip": "macOS 13+. Apple Silicon & Intel. {{trial}} Tage gratis, keine Karte. {{price}} einmalig. 14 Tage Rückgaberecht."
   },
   "footer": {
-    "tagline": "Gemacht von einem MacBook-Besitzer, für MacBook-Besitzer.",
+    "tagline": "Von einem MacBook-Besitzer für die anderen.",
     "ariaGetApp": "App herunterladen",
     "ariaFooter": "Fußzeile",
     "purchaseSub": "· {{price}} einmalig",
@@ -783,6 +856,7 @@
     "alreadyOwnTitle": "Bereits gekauft?",
     "alreadyOwnBody": "Öffnen Sie Battery Sensei → Einstellungen → Premium. Geben Sie Ihren Schlüssel und die beim Kauf verwendete E-Mail-Adresse ein und klicken Sie auf „Premium aktivieren“.",
     "alreadyOwnDownload": "Sensei laden",
+    "alreadyOwnPortal": "Kundenportal",
     "backToHome": "Zurück zur Startseite"
   },
   "privacy": {
@@ -964,134 +1038,5 @@
         "p1": "Wie wir personenbezogene Daten erheben, verwenden und schützen, ist gesondert dokumentiert und ist die maßgebliche Quelle zu diesem Thema. Siehe den <0>Datenschutzhinweis</0>."
       }
     }
-  },
-  "vsAldente": {
-    "backLink": "Battery Sensei",
-    "kicker": "Ehrlicher Vergleich · 比較",
-    "heading": "Battery Sensei vs. AlDente.",
-    "headingItalic": "Was gleich ist, was nicht.",
-    "intro": "AlDente ist das Werkzeug, zu dem viele MacBook-Besitzer zuerst greifen. Gute Software. Battery Sensei ist eine ruhigere Alternative mit eingebautem Akku-Tagebuch — Grundfunktionen für immer kostenlos, plus optionaler Premium-Freischalter. Hier der Direktvergleich, geschrieben von jemandem, der beides benutzt hat.",
-    "tableHeaders": {
-      "feature": "Funktion",
-      "sensei": "Battery Sensei",
-      "aldente": "AlDente"
-    },
-    "labels": {
-      "partial": "Teilweise"
-    },
-    "lastUpdatedNote": "Zuletzt aktualisiert am 24. Mai 2026. Funktionen für AlDente entsprechen ihrer öffentlichen Website zum Zeitpunkt der Erstellung — schauen Sie dort für den aktuellen Stand.",
-    "rows": [
-      {
-        "label": "Open Source",
-        "sensei": "ja",
-        "aldente": "nein"
-      },
-      {
-        "label": "Natives macOS (AppKit + SwiftUI)",
-        "sensei": "ja",
-        "aldente": "ja"
-      },
-      {
-        "label": "Ladelimit",
-        "sensei": "ja",
-        "aldente": "ja"
-      },
-      {
-        "label": "Travel Mode (vor der Reise voll laden)",
-        "sensei": "ja",
-        "aldente": "ja"
-      },
-      {
-        "label": "Intelligente Akkuwarnungen (3 Voreinstellungen + eigene)",
-        "sensei": "ja",
-        "aldente": "teilweise"
-      },
-      {
-        "label": "Zyklen- & Kapazitätsverfolgung",
-        "sensei": "ja",
-        "aldente": "ja"
-      },
-      {
-        "label": "Verständlicher Akkuverlauf",
-        "sensei": "ja",
-        "aldente": "nein"
-      },
-      {
-        "label": "Live-Watt rein/raus in der Menüleiste",
-        "sensei": "ja",
-        "aldente": "teilweise"
-      },
-      {
-        "label": "Entlade-/Sailing-/Kalibrierungsmodi",
-        "sensei": "nein",
-        "aldente": "ja (Pro)"
-      },
-      {
-        "label": "Hitzebewusste Lade-Hinweise",
-        "sensei": "ja",
-        "aldente": "teilweise"
-      },
-      {
-        "label": "Konto / Cloud erforderlich",
-        "sensei": "nein",
-        "aldente": "nein"
-      },
-      {
-        "label": "Sprachen",
-        "sensei": "EN · DE · ES · FR · 日本語",
-        "aldente": "Mehrere"
-      },
-      {
-        "label": "macOS-Unterstützung",
-        "sensei": "13 Ventura +",
-        "aldente": "11 Big Sur +"
-      }
-    ],
-    "differentHeading": "Wo Sensei anders ist",
-    "different": [
-      {
-        "title": "Grundfunktionen kostenlos, Premium optional einmalig.",
-        "body": "Kein Abo. Der Kern bleibt für alle kostenlos; Premium ist ein einmaliger Freischalter für die tieferen Funktionen. Open Source auf GitHub — Sie können den Code lesen und Sensei weiter nutzen, auch wenn das Projekt pausiert."
-      },
-      {
-        "title": "Intelligente Akkuwarnungen als erstklassige Funktion.",
-        "body": "Drei Voreinstellungen (Zen, Regular, Senpai) oder eigene Schwellenwerte, Ausblendzeiten und eine ruhige Hierarchie aus Hinweisen, Warnungen und Vollbild-Alarmen."
-      },
-      {
-        "title": "Ein verständliches Akku-Tagebuch.",
-        "body": "Zyklen, Rettungen, Plateaus, Kapazität im Zeitverlauf — in Sätzen statt in Herstellerjargon. Bleibt auf Ihrem Mac."
-      },
-      {
-        "title": "Ruhige Ästhetik.",
-        "body": "Ein Menüleisten-Werkzeug mit einem einzigen Zweck, Sumi- + Washi-Typografie, natives AppKit + SwiftUI. Kein Dock-Symbol, kein Benachrichtigungslärm."
-      }
-    ],
-    "wins": "Wo AlDente weiter vorn liegt",
-    "winsBody": "AlDente ist die bekannteste Ladelimit-App auf macOS und bietet fortgeschrittene Power-Funktionen: Entlademodus, Sailing, hitzebewusste Modi und eine längere Historie. Wenn Sie maximale Detailkontrolle wollen, ist AlDente das umfangreichere Werkzeug.",
-    "questions": "Häufige Fragen",
-    "faq": [
-      {
-        "q": "Ist Battery Sensei kostenlos?",
-        "a": "Die Grundfunktionen sind für immer kostenlos — Ladelimit, intelligente Warnungen über drei Voreinstellungen, 24-Stunden-Akkuverlauf, App-Aufschlüsselung der letzten Stunde. Premium ist ein einmaliger Freischalter für Meeting Battery Guard, unbegrenzten Akkuverlauf und eigene Warnregeln. Kein Abo, kein Konto. Sensei ist Open Source auf GitHub."
-      },
-      {
-        "q": "Kann Battery Sensei alles, was AlDente kann?",
-        "a": "Das meiste, wofür die meisten AlDente verwenden, ja: Ladelimit, Travel Mode für Reisen, native Menüleisten-Anzeige. Sensei ergänzt intelligente Akkuwarnungen an Schwellenwerten Ihrer Wahl und einen verständlichen Akkuverlauf. AlDente hat zusätzliche Power-Funktionen wie Entlademodus und Sailing/Kalibrierung, die Sensei nicht abdeckt."
-      },
-      {
-        "q": "Wann sollte ich stattdessen AlDente wählen?",
-        "a": "Wenn Sie heute die feinste Akkukontrolle auf macOS wollen (Hitzemodus, Sailing, Entladen), ist AlDente das umfangreichere Werkzeug. Sensei setzt auf ruhige Voreinstellungen und eine leise Menüleiste statt auf eine umfassende Funktionsliste."
-      },
-      {
-        "q": "Verliere ich Daten, wenn ich von AlDente zu Battery Sensei wechsle?",
-        "a": "In macOS selbst geht nichts verloren. Sensei beginnt am Tag der Installation ein frisches Akku-Tagebuch. Sie können beide Apps während des Wechsels kurz parallel laufen lassen und danach die deinstallieren, die Sie nicht wollen."
-      },
-      {
-        "q": "Sind Ladelimits sicher? Unterstützt Apple sie?",
-        "a": "Apple setzt in macOS bereits eine optimierte Akkuladung um, die auf Grundlage Ihrer Gewohnheiten bei etwa 80 % hält. Manuelle Ladelimit-Werkzeuge wie Battery Sensei oder AlDente setzen darauf auf und lassen Sie die Grenze ausdrücklich festlegen. Apples eigene Empfehlung ist: Lithium-Ionen-Akkus altern schneller, je länger sie bei 100 % stehen."
-      }
-    ],
-    "tryFree": "Battery Sensei kostenlos testen",
-    "readSource": "Quellcode auf GitHub lesen →"
   }
 }
