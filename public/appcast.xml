@@ -232,6 +232,28 @@
         length="20591848"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.2.7</title>
+      <pubDate>Thu, 28 May 2026 07:36:24 +0000</pubDate>
+      <sparkle:version>48</sparkle:version>
+      <sparkle:shortVersionString>1.2.7</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.2.7</h1>
+<p>Rescue receipt redesigned, copy quieted.</p>
+<p>The Battery Rescue Receipt sheet got the full zen pass. A hanko stamp glyph — concentric hinomaru rings around a checkmark seal — replaces the bolt-heart-in-warning-circle hero. A 印 (&quot;seal&quot;) kanji sits as a paper-faint watermark in the top corner. The receipt body now reads as a real receipt: two stat tiles for the saved-at percentage and the time-remaining estimate, then a hinomaru-tinted outcome strip below them — the equivalent of a &quot;PAID&quot; stamp on paper. A hairline washi divider separates the header from the body like a tear line.</p>
+<p>The Not Now button stopped looking like inert text. It&#x27;s now a real bordered button with the same icon-leading vocabulary as Copy and Share (xmark glyph), an inline &quot;Esc&quot; keycap so the keyboard shortcut is discoverable on the surface itself, and Esc actually dismisses the sheet now via the standard cancel-action binding.</p>
+<p>The copy across every language stepped away from the marketing-deck register. &quot;Sensei intervention: successful. Copy or share the receipt when the save is too dramatic to keep private.&quot; became &quot;A small moment worth keeping. Copy or share if you&#x27;d like.&quot; The receipt summary dropped its redundant &quot;intervention: successful&quot; tail. The outcome strip carries a single word — &quot;Saved.&quot; in English, &quot;Gerettet.&quot; in German, &quot;A salvo.&quot; in Spanish, &quot;Sauvé.&quot; in French, &quot;救えた。&quot; in Japanese — beside the seal stamp. Title shortened in English and German (&quot;Rescue Receipt&quot;, &quot;Rettungsbeleg&quot;) so it doesn&#x27;t repeat &quot;Battery&quot;. The kicker above the title carries the rescue timestamp now (&quot;印 · 28 May 14:20&quot;), not a duplicate of the title in caps.</p>
+<p>Stat tile labels swapped from &quot;BATTERY&quot; / &quot;RUNWAY&quot; to &quot;Low&quot; / &quot;Left&quot; — sentence case, less business-card.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.2.7/Battery-Sensei.pkg"
+        sparkle:edSignature="2uiRSemyAaNZG24QVqQPjA+bwl+Z7zYBxAf4EeV8a0lKvX+NlJuVwx0HbGvejCrGkJQqVjpTyU9jD/6dOiz6DA=="
+        length="20608360"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
