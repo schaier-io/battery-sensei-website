@@ -1,4 +1,4 @@
-import { ConfirmEmail } from '../ConfirmEmail'
+import { ConfirmEmail } from '../ConfirmEmail.js'
 
 export default function Preview() {
   return (

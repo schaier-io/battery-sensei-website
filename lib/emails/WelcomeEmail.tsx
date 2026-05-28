@@ -4,8 +4,8 @@
  * EmailLayout footer (legally required from here on out).
  */
 import { Button, Section, Text } from '@react-email/components'
-import { EmailLayout } from './EmailLayout'
-import { fontStack, jpStack, palette, serifStack } from './theme'
+import { EmailLayout } from './EmailLayout.js'
+import { fontStack, jpStack, palette, serifStack } from './theme.js'
 
 type Props = {
   downloadUrl: string

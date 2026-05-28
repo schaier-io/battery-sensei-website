@@ -406,6 +406,14 @@
     "backToCompare": "Volver a la comparación"
   },
   "newsletter": {
+    "confirm": {
+      "heading": "Confirma tu suscripción.",
+      "body": "Un último clic y añadimos tu dirección a la lista de avisos de nuevas versiones. No confirmamos automáticamente — así nada ocurre solo porque una bandeja de entrada escaneó el enlace.",
+      "cta": "Confirmar suscripción",
+      "submitting": "Confirmando…",
+      "error": "Algo salió mal. Inténtalo en un minuto, o escribe a info@battery-sensei.app.",
+      "missingToken": "A este enlace le falta el token. Abre el enlace de confirmación directamente desde el correo."
+    },
     "confirmed": {
       "success": {
         "heading": "Estás dentro. Bienvenido.",
@@ -413,26 +421,40 @@
       },
       "invalid": {
         "heading": "Este enlace ha caducado.",
-        "body": "Los enlaces de confirmación duran 48 horas. Regístrate de nuevo desde la página de inicio y te enviaremos uno nuevo."
+        "body": "Los enlaces de confirmación duran 48 horas. Deja tu correo abajo y te enviaremos uno nuevo.",
+        "emailLabel": "Correo electrónico",
+        "emailPlaceholder": "tu@ejemplo.com",
+        "resendCta": "Enviar un nuevo enlace",
+        "submitting": "Enviando…",
+        "resentSuccess": "Hecho — revisa tu bandeja de entrada en un momento.",
+        "resendError": "No se pudo enviar.",
+        "invalidEmail": "Eso no parece un correo válido.",
+        "tryAgain": "Inténtalo de nuevo."
       },
       "error": {
         "heading": "Algo se ha torcido.",
         "body": "No pudimos completar tu confirmación. Prueba el enlace otra vez, o escríbenos a info@battery-sensei.app y lo resolvemos a mano."
       },
-      "cta": "Volver a la página de inicio"
+      "cta": "Volver a la página de inicio",
+      "welcomeFailed": {
+        "cta": "Ir a la descarga",
+        "note": "No pudimos enviarte el correo de bienvenida ahora mismo; aquí tienes la descarga directa. Sigues suscrito: el próximo aviso de versión llegará con normalidad."
+      }
     },
     "unsubscribe": {
       "heading": "¿Darte de baja de las novedades?",
       "body": "Un clic y dejaremos de escribirte. Puedes volver a suscribirte cuando quieras desde la página de inicio.",
       "cta": "Darme de baja",
       "submitting": "Un momento…",
-      "error": "Algo salió mal. Inténtalo otra vez, o responde a cualquier correo del newsletter.",
+      "error": "No se pudo dar de baja.",
+      "tryAgain": "Inténtalo de nuevo.",
       "missingToken": "A este enlace le falta el token. Abre el enlace de baja directamente desde el correo."
     },
     "unsubscribed": {
       "heading": "Estás fuera de la lista. En silencio.",
       "body": "No volveremos a escribirte. Si cambias de opinión, el formulario de registro siempre está en la página de inicio.",
-      "cta": "Volver a la página de inicio"
+      "cta": "Volver a la página de inicio",
+      "subscribeAgain": "Suscribirme de nuevo"
     }
   },
   "featurePages": {
@@ -804,7 +826,7 @@
     "pricing": "Precios",
     "managePurchase": "Gestionar compra",
     "copyright": "© {{year}} · Battery Sensei",
-    "lastUpdated": "Actualizado el 28 de mayo de 2026"
+    "lastUpdated": "Actualizado el {{date}}"
   },
   "checkout": {
     "kicker": "Pago · 会計",

@@ -1,4 +1,4 @@
-import { WelcomeEmail } from '../WelcomeEmail'
+import { WelcomeEmail } from '../WelcomeEmail.js'
 
 export default function Preview() {
   return (

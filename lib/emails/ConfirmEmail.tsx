@@ -7,8 +7,8 @@
  * and matches how real opt-in funnels work).
  */
 import { Button, Link, Section, Text } from '@react-email/components'
-import { EmailLayout } from './EmailLayout'
-import { fontStack, jpStack, palette, serifStack } from './theme'
+import { EmailLayout } from './EmailLayout.js'
+import { fontStack, jpStack, palette, serifStack } from './theme.js'
 
 type Props = {
   confirmUrl: string

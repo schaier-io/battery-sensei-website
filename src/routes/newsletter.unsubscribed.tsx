@@ -7,10 +7,12 @@
  *     to avoid leaking membership)
  *
  * Layout matches /newsletter/confirmed and /thanks/* — centered hero,
- * back-to-home anchor top-left, max-w-3xl section.
+ * back-to-home anchor top-left, max-w-3xl section. Offers a single
+ * "Subscribe again" CTA back to the homepage signup so visitors who
+ * change their mind don't have to dig for the form.
  */
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, Mail } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Nav } from '#/components/sections/Nav'
 import { Footer } from '#/components/sections/Footer'
@@ -71,7 +73,26 @@ function UnsubscribedPage() {
             >
               {t('newsletter.unsubscribed.body')}
             </Reveal>
-            {/* No bottom CTA — top-left back-to-home anchor covers it. */}
+            {/* Subscribe-again CTA. Routes to the homepage Free
+                signup section — `#free-download-email` is the same
+                anchor the homepage hash-handler uses to focus the
+                input on landing. Mail icon mirrors the resend/confirm
+                family of buttons so the visual language is consistent
+                across opt-in surfaces. */}
+            <Reveal as="div" delay={300} className="mt-10">
+              <Link
+                to="/"
+                hash="free-download-email"
+                className="group inline-flex h-11 items-center justify-center gap-2 rounded-md bg-sumi px-5 text-[0.875rem] font-medium text-washi transition-colors duration-[220ms] hover:bg-sumi/90"
+              >
+                <Mail
+                  className="h-4 w-4 transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5"
+                  strokeWidth={1.8}
+                  aria-hidden
+                />
+                {t('newsletter.unsubscribed.subscribeAgain')}
+              </Link>
+            </Reveal>
           </div>
         </section>
       </main>

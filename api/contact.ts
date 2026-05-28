@@ -33,8 +33,10 @@
  */
 
 import { z } from 'zod'
-import { prisma } from '../lib/db'
-import type { Prisma } from '../lib/generated/prisma/client'
+// Explicit `.js` extensions — Node ESM (`"type":"module"`) on Vercel
+// rejects extensionless relative imports at runtime.
+import { prisma } from '../lib/db.js'
+import type { Prisma } from '../lib/generated/prisma/client.js'
 
 const MAX_BODY_BYTES = 32 * 1024
 

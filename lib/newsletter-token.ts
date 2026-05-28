@@ -82,6 +82,47 @@ export type VerifiedToken = {
   epoch: number
 }
 
+/**
+ * Recover the email + locale from a signed-but-expired token without
+ * accepting it for any action. Returns null on bad signature; otherwise
+ * the payload fields. Use only to pre-fill UI (e.g. the resend form on
+ * the "this link expired" page) — it intentionally ignores the `x`
+ * expiry so we can still hint at the right address after 48h.
+ *
+ * Safety: the caller already had the URL containing the same payload
+ * as raw bytes, so we leak nothing new by decoding it server-side. The
+ * signature gate is timing-safe and protects against a forged-token
+ * decode oracle — without the HMAC secret an attacker can't peek at
+ * arbitrary emails. The TokenSchema regex in the API routes adds a
+ * cheap front-line shape filter so we never burn HMAC work on garbage.
+ */
+export function peekToken(
+  token: string,
+): { email: string; locale: string } | null {
+  if (!token || typeof token !== 'string') return null
+  const parts = token.split('.')
+  if (parts.length !== 2) return null
+  const [payloadB64, sigB64] = parts
+  const expected = sign(payloadB64)
+  const a = Buffer.from(sigB64)
+  const b = Buffer.from(expected)
+  if (a.length !== b.length) return null
+  if (!timingSafeEqual(a, b)) return null
+  try {
+    const parsed = JSON.parse(b64urlDecode(payloadB64).toString('utf8')) as {
+      e?: string
+      l?: string
+    }
+    if (!parsed.e || typeof parsed.e !== 'string') return null
+    return {
+      email: parsed.e,
+      locale: typeof parsed.l === 'string' && parsed.l ? parsed.l : 'en',
+    }
+  } catch {
+    return null
+  }
+}
+
 export function verifyToken(token: string): VerifiedToken | null {
   if (!token || typeof token !== 'string') return null
   const parts = token.split('.')

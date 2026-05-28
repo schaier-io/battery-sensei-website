@@ -1,11 +1,11 @@
-import { WelcomeEmail } from '../WelcomeEmail'
+import { WelcomeEmail } from '../WelcomeEmail.js'
 
 export default function Preview() {
   return (
     <WelcomeEmail
       downloadUrl="https://battery-sensei.app/#download"
       unsubscribeUrl="https://battery-sensei.app/api/newsletter/unsubscribe?token=demo"
-      locale="fr"
+      locale="de"
       siteUrl="https://battery-sensei.app"
     />
   )

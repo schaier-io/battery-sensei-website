@@ -406,6 +406,14 @@
     "backToCompare": "Back to comparison"
   },
   "newsletter": {
+    "confirm": {
+      "heading": "Confirm your subscription.",
+      "body": "One last click to add your address to the release-alert list. We don't auto-confirm — that way nothing happens just because an inbox preview crawled the link.",
+      "cta": "Confirm subscription",
+      "submitting": "Confirming…",
+      "error": "Something went wrong. Try again in a moment, or write to info@battery-sensei.app.",
+      "missingToken": "This link is missing its token. Open the confirm link straight from the email."
+    },
     "confirmed": {
       "success": {
         "heading": "You're in. Welcome.",
@@ -413,26 +421,40 @@
       },
       "invalid": {
         "heading": "This link has expired.",
-        "body": "Confirmation links live for 48 hours. Sign up again from the home page and we'll send a fresh one."
+        "body": "Confirmation links live for 48 hours. Drop your email below and we'll send a fresh one.",
+        "emailLabel": "Email address",
+        "emailPlaceholder": "you@example.com",
+        "resendCta": "Send a new link",
+        "submitting": "Sending…",
+        "resentSuccess": "Done — check your inbox in a moment.",
+        "resendError": "Couldn't send.",
+        "invalidEmail": "That doesn't look like a valid email.",
+        "tryAgain": "Please try again."
       },
       "error": {
         "heading": "Something went sideways.",
         "body": "We couldn't finish confirming you. Try the link again, or write to info@battery-sensei.app and we'll sort it by hand."
       },
-      "cta": "Back to the homepage"
+      "cta": "Back to the homepage",
+      "welcomeFailed": {
+        "cta": "Get the download",
+        "note": "We couldn't send your welcome email just now, so here's the download direct. You're still subscribed — the next release alert will arrive normally."
+      }
     },
     "unsubscribe": {
       "heading": "Unsubscribe from updates?",
       "body": "One click and we'll stop emailing you. You can always sign up again from the homepage.",
       "cta": "Unsubscribe",
       "submitting": "Working…",
-      "error": "Something went wrong. Try again in a moment, or reply to any newsletter email.",
+      "error": "Couldn't unsubscribe.",
+      "tryAgain": "Please try again.",
       "missingToken": "This link is missing its token. Open the unsubscribe link straight from the email."
     },
     "unsubscribed": {
       "heading": "You're off the list. Quietly.",
       "body": "We won't email you again. If you change your mind, the signup form is always on the homepage.",
-      "cta": "Back to the homepage"
+      "cta": "Back to the homepage",
+      "subscribeAgain": "Subscribe again"
     }
   },
   "featurePages": {
@@ -804,7 +826,7 @@
     "pricing": "Pricing",
     "managePurchase": "Manage purchase",
     "copyright": "© {{year}} · Battery Sensei",
-    "lastUpdated": "Last updated 28 May 2026"
+    "lastUpdated": "Last updated {{date}}"
   },
   "checkout": {
     "kicker": "Checkout · 会計",

@@ -406,6 +406,14 @@
     "backToCompare": "Retour à la comparaison"
   },
   "newsletter": {
+    "confirm": {
+      "heading": "Confirmez votre inscription.",
+      "body": "Un dernier clic et votre adresse rejoint la liste des nouvelles versions. Nous ne confirmons rien automatiquement — ainsi rien ne se passe juste parce qu'une boîte mail a scanné le lien.",
+      "cta": "Confirmer l'inscription",
+      "submitting": "Confirmation…",
+      "error": "Quelque chose s'est mal passé. Réessayez dans un instant, ou écrivez à info@battery-sensei.app.",
+      "missingToken": "Ce lien n'a pas de jeton. Ouvrez le lien de confirmation directement depuis l'e-mail."
+    },
     "confirmed": {
       "success": {
         "heading": "Vous êtes inscrit. Bienvenue.",
@@ -413,26 +421,40 @@
       },
       "invalid": {
         "heading": "Ce lien a expiré.",
-        "body": "Les liens de confirmation sont valables 48 heures. Inscrivez-vous à nouveau depuis la page d'accueil et nous vous en enverrons un nouveau."
+        "body": "Les liens de confirmation sont valables 48 heures. Saisissez votre e-mail ci-dessous et nous vous en enverrons un nouveau.",
+        "emailLabel": "Adresse e-mail",
+        "emailPlaceholder": "vous@exemple.com",
+        "resendCta": "Envoyer un nouveau lien",
+        "submitting": "Envoi…",
+        "resentSuccess": "C'est fait — regardez votre boîte de réception dans un instant.",
+        "resendError": "Envoi impossible.",
+        "invalidEmail": "Cette adresse e-mail ne semble pas valide.",
+        "tryAgain": "Veuillez réessayer."
       },
       "error": {
         "heading": "Quelque chose a dérapé.",
         "body": "Nous n'avons pas pu finaliser votre confirmation. Essayez le lien à nouveau, ou écrivez-nous à info@battery-sensei.app et nous arrangerons cela à la main."
       },
-      "cta": "Retour à l'accueil"
+      "cta": "Retour à l'accueil",
+      "welcomeFailed": {
+        "cta": "Lancer le téléchargement",
+        "note": "L'e-mail de bienvenue n'a pas pu être envoyé tout de suite — voici le téléchargement direct. Vous êtes bien inscrit·e; la prochaine annonce de version arrivera normalement."
+      }
     },
     "unsubscribe": {
       "heading": "Se désabonner de la liste ?",
       "body": "Un clic et nous arrêtons de vous écrire. Vous pourrez vous réinscrire à tout moment depuis la page d'accueil.",
       "cta": "Me désabonner",
       "submitting": "Un instant…",
-      "error": "Quelque chose s'est mal passé. Réessayez dans un moment, ou répondez à n'importe quel e-mail du newsletter.",
+      "error": "Désabonnement impossible.",
+      "tryAgain": "Veuillez réessayer.",
       "missingToken": "Ce lien n'a pas de jeton. Ouvrez le lien de désabonnement directement depuis l'e-mail."
     },
     "unsubscribed": {
       "heading": "Vous n'êtes plus sur la liste. En silence.",
       "body": "Nous ne vous écrirons plus. Si vous changez d'avis, le formulaire d'inscription reste sur la page d'accueil.",
-      "cta": "Retour à l'accueil"
+      "cta": "Retour à l'accueil",
+      "subscribeAgain": "Se réabonner"
     }
   },
   "featurePages": {
@@ -804,7 +826,7 @@
     "pricing": "Tarifs",
     "managePurchase": "Gérer l'achat",
     "copyright": "© {{year}} · Battery Sensei",
-    "lastUpdated": "Dernière mise à jour le 28 mai 2026"
+    "lastUpdated": "Dernière mise à jour le {{date}}"
   },
   "checkout": {
     "kicker": "Paiement · 会計",

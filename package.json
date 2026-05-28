@@ -14,7 +14,7 @@
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
-    "email": "email dev --dir src/lib/emails --port 3030"
+    "email": "email dev --dir lib/emails --port 3030"
   },
   "dependencies": {
     "@fontsource/geist-mono": "^5.2.8",

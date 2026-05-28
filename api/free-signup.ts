@@ -1,226 +1,368 @@
 /**
- * POST /api/free-signup — capture an email from the homepage's Free
- * download card so we can:
- *   1. Email when a new Sensei build ships (release alerts)
- *   2. Send the occasional "new app from the same maker" announcement
+ * Newsletter signup endpoint (double opt-in).
  *
- * Two paths run in parallel:
- *   - DB upsert (`NewsletterSignup`) — persistent source of truth, used
- *     for abuse investigation, locale stats, and idempotent re-signups.
- *   - Resend Audiences mirror — fan out the same email to two Resend
- *     audiences (releases + launches) so we can broadcast from the
- *     Resend dashboard without rebuilding lists by hand.
+ *   POST /api/free-signup  { email, locale?, source? }  →  200 { ok: true }
  *
- * The endpoint NEVER blocks the user. A failed forward to Resend, or
- * a failed DB write, returns `ok: true` to the client so the download
- * still proceeds. Failures are logged server-side for follow-up.
+ * Always returns the same shape on valid input — never leak whether
+ * the address is new, already pending, or already confirmed.
  *
- * Marketing-psychology framing
- * ----------------------------
- *  - The visitor opts in (skip link below the form preserves autonomy).
- *  - Single tiny ask: an email, nothing else.
- *  - Reciprocity: they hand us an address, we hand them a download +
- *    one quiet update per release.
- *  - The cross-app opt-in is disclosed in the form footnote — same
- *    address, but one fewer signup form down the road.
+ * Flow:
+ *   1. CSRF check (Origin/Referer must match PUBLIC_SITE_URL).
+ *   2. Validate body with strict zod (unknown keys rejected).
+ *   3. Postgres-backed per-IP rate limit (count NewsletterSignup rows
+ *      in window). Replaces the prior in-memory Map — that broke as
+ *      soon as Fluid scaled to >1 instance.
+ *   4. Upsert NewsletterSignup. On re-signup after a prior unsub we
+ *      bump `tokenEpoch` so the dormant unsubscribe link from the
+ *      previous subscription stops working.
+ *   5. Mirror to Resend RELEASES audience as `unsubscribed: true`
+ *      (pending). Resend dedupes by email so this is idempotent.
+ *   6. Send the locale-matched confirmation email with an HMAC-signed
+ *      link bound to the row's current tokenEpoch.
+ *
+ * Vercel Function note
+ * --------------------
+ * This file lives at root `api/` so Vercel deploys it as a Function.
+ * The earlier TanStack Start file-route version (src/routes/api/*) did
+ * not deploy in this stack — keep the canonical implementation here.
+ * All relative imports carry `.js` because the runtime is Node ESM
+ * (`"type":"module"`) and extensionless resolution 404s in /var/task.
  */
-
+import { renderToStaticMarkup } from 'react-dom/server'
+import { createElement } from 'react'
 import { z } from 'zod'
-import { prisma } from '../lib/db'
+import { db } from '../lib/db.js'
+import { ConfirmEmail } from '../lib/emails/ConfirmEmail.js'
+import { confirmEmailText } from '../lib/emails/plaintext.js'
+import { confirmSubject } from '../lib/emails/subjects.js'
+import { createToken } from '../lib/newsletter-token.js'
+import {
+  getResendClient,
+  releasesAudienceId,
+  resendFrom,
+  resendReplyTo,
+  siteUrl,
+  SUPPORTED_LOCALES,
+} from '../lib/resend.js'
 
-/**
- * Request body validator. Email format is enforced by zod itself; the
- * regex below stays as a defensive double-check (zod's email regex is
- * intentionally lax in v4). Locale is capped to 8 chars to match the
- * existing field length; source is normalised to a known enum.
- */
-const RequestSchema = z.object({
-  email: z.string().trim().min(1).max(200).toLowerCase(),
-  locale: z.string().trim().min(2).max(8).optional(),
-  source: z.string().trim().max(32).optional(),
-})
-type SignupBody = z.infer<typeof RequestSchema>
-
-type Ok = { ok: true }
-type Err = { ok: false; reason: 'invalid' | 'parse' | 'method' }
-
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-
-function json(payload: Ok | Err, status = 200) {
+function json(payload: unknown, init: { status?: number } = {}): Response {
   return new Response(JSON.stringify(payload), {
-    status,
+    status: init.status ?? 200,
     headers: {
       'content-type': 'application/json',
-      // Don't cache POST responses; ensure proxies treat them per-request.
       'cache-control': 'no-store',
     },
   })
 }
 
 /**
- * Subscribe an email to a Resend Audience. Returns the contact id on
- * success, or null on any failure (so the caller can carry on without
- * blocking the visitor). Resend returns 200 with `{ data: { id } }` for
- * new contacts; the same shape with the existing id for duplicates.
+ * Request body schema. Every field is hard-validated before it ever
+ * reaches Resend or the email renderer.
  *
- * Docs: https://resend.com/docs/api-reference/contacts/create-contact
+ *   - `email`   trimmed, lowercased, RFC-shape check, length-capped.
+ *   - `locale`  must be one of the SUPPORTED_LOCALES allowlist; falls
+ *               back to 'en' if missing/unknown.
+ *   - `source`  short opaque tag from the form (which page it came
+ *               from). Strict alphanumeric+_- only — no HTML, no
+ *               whitespace, no quotes, no separators.
+ *   - `website` honeypot: must be empty/absent. Filled = bot.
+ *
+ * Strict mode prevents unknown keys (e.g. a forged `name` field that
+ * could try to seed Resend contact data).
  */
-async function addToResendAudience(
-  audienceId: string,
-  email: string,
-  apiKey: string,
-): Promise<string | null> {
-  try {
-    const res = await fetch(
-      `https://api.resend.com/audiences/${encodeURIComponent(audienceId)}/contacts`,
-      {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-          authorization: `Bearer ${apiKey}`,
-        },
-        body: JSON.stringify({ email, unsubscribed: false }),
-        // Resend's API is usually <300 ms; bail fast so a slow API call
-        // never holds the function open past the visitor's download click.
-        signal: AbortSignal.timeout(4000),
-      },
-    )
-    if (!res.ok) {
-      console.warn('[free-signup] resend audience non-2xx', {
-        audienceId,
-        status: res.status,
-      })
-      return null
-    }
-    const data = (await res.json()) as { data?: { id?: string } } | null
-    return data?.data?.id ?? null
-  } catch (err) {
-    console.warn('[free-signup] resend audience error', {
-      audienceId,
-      err: err instanceof Error ? err.message : String(err),
-    })
-    return null
-  }
-}
+const SignupSchema = z
+  .object({
+    email: z
+      .string()
+      .trim()
+      .toLowerCase()
+      .min(3)
+      .max(254)
+      .regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/),
+    // Accept the displayed website language. i18next may send a region
+    // subtag (e.g. "de-AT") — strip it before allowlist matching so
+    // legitimate visitors don't silently fall back to English.
+    locale: z
+      .preprocess(
+        (v) =>
+          typeof v === 'string' ? v.toLowerCase().split('-')[0] : v,
+        z.enum(SUPPORTED_LOCALES as unknown as [string, ...string[]]),
+      )
+      .default('en')
+      .catch('en'),
+    source: z
+      .string()
+      .max(64)
+      .regex(/^[a-zA-Z0-9_-]+$/)
+      .default('unknown')
+      .catch('unknown'),
+    website: z.string().max(0).optional(), // honeypot
+  })
+  .strict()
 
-function clientIp(request: Request): string | undefined {
-  // Vercel populates `x-forwarded-for` as a comma-separated list; the
-  // first entry is the originating client. Cap length defensively.
+const RATE_WINDOW_MS = 10 * 60 * 1000
+const RATE_MAX = 5
+// Coarse fallback bucket when no usable IP is present. Limits the total
+// throughput of "untrusted" callers per window so a header-stripping
+// botnet can't quietly flood the table while every individual request
+// has no IP to count against.
+const FALLBACK_RATE_MAX = 25
+const IP_HEADER_MAX = 64
+
+// IPs we refuse to count against — they're useless as buckets and a
+// trivial spoof target. Real Vercel traffic never produces these.
+const UNTRUSTED_IPS = new Set([
+  '0.0.0.0',
+  '127.0.0.1',
+  '::1',
+  '::ffff:0.0.0.0',
+  '::ffff:127.0.0.1',
+])
+
+/**
+ * Extract the client IP from the request. Returns null on anything we
+ * can't trust as a stable per-client bucket. The caller MUST treat null
+ * as "rate-limit unbucketed" rather than "skip the limit" — that's how
+ * we avoid the historical fail-open where a stripped proxy let one
+ * machine bypass the cap.
+ */
+function clientIp(request: Request): string | null {
+  // x-forwarded-for can be a comma list (proxy-chain). The leftmost
+  // entry is the originating client per the de-facto convention on
+  // Vercel + most major reverse proxies. Cap the slice so a malformed
+  // header can't blow up the cost of `LIKE` / equality lookups.
   const xff = request.headers.get('x-forwarded-for')
-  if (!xff) return undefined
-  return xff.split(',')[0]?.trim().slice(0, 64) || undefined
-}
-
-function normalizedSource(input: string | undefined): 'pricing_free' | 'thanks_page' | 'other' {
-  if (input === 'pricing-free' || input === 'pricing_free') return 'pricing_free'
-  if (input === 'thanks-page' || input === 'thanks_page') return 'thanks_page'
-  return 'other'
+  const raw = (xff?.split(',')[0]?.trim() ||
+    request.headers.get('x-real-ip') ||
+    '').slice(0, IP_HEADER_MAX)
+  if (!raw) return null
+  if (UNTRUSTED_IPS.has(raw)) return null
+  return raw
 }
 
 /**
- * Vercel routes Web Request/Response to handlers exported as named
- * HTTP methods (POST/GET/...). A `export default function handler`
- * gets a Node IncomingMessage instead, which crashes any `.headers.get`
- * call. Keep this as `export async function POST`.
+ * Postgres-backed rate limiter. When the IP is missing or untrusted we
+ * fall back to a coarser bucket: a `null`-ipAddress count across all
+ * signups in the window. That keeps the worst-case throughput of all
+ * header-stripped traffic to FALLBACK_RATE_MAX, instead of letting it
+ * sail past the per-IP wall entirely.
  *
- * Reference: https://vercel.com/docs/functions/runtimes/node-js#web-standard-api
+ * DB outages fail-OPEN (log + allow) — we don't want a transient
+ * Postgres blip to kill legitimate signups, and Resend itself caps
+ * outbound send volume so a flood mid-outage stays bounded.
  */
-export async function POST(request: Request): Promise<Response> {
-  let body: SignupBody
+async function rateLimited(ip: string | null): Promise<boolean> {
+  const since = new Date(Date.now() - RATE_WINDOW_MS)
   try {
-    const raw = (await request.json()) as unknown
-    body = RequestSchema.parse(raw)
-  } catch (err) {
-    console.warn('[free-signup] invalid body', {
-      err: err instanceof Error ? err.message : String(err),
+    if (ip) {
+      const count = await db.newsletterSignup.count({
+        where: { ipAddress: ip, createdAt: { gt: since } },
+      })
+      return count >= RATE_MAX
+    }
+    // No usable IP. Count the global "untrusted" bucket — every signup
+    // whose ipAddress is null in the window. This is intentionally
+    // coarse: any single untrusted caller eats into the same budget as
+    // every other untrusted caller, so a flood is throttled even if
+    // every individual request hides behind a stripped header.
+    const count = await db.newsletterSignup.count({
+      where: { ipAddress: null, createdAt: { gt: since } },
     })
-    return json({ ok: false, reason: 'invalid' }, 400)
+    return count >= FALLBACK_RATE_MAX
+  } catch (err) {
+    console.error('[newsletter] rate limit query failed', err)
+    return false
+  }
+}
+
+function isAllowedOrigin(request: Request): boolean {
+  const expected = siteUrl()
+  const origin = request.headers.get('origin')
+  if (origin) return origin === expected
+  const referer = request.headers.get('referer')
+  if (referer) {
+    try {
+      return new URL(referer).origin === expected
+    } catch {
+      return false
+    }
+  }
+  // No Origin/Referer at all is suspicious for a JSON POST — modern
+  // browsers send Origin on same-origin fetch. Treat as cross-origin.
+  return false
+}
+
+function hostname(): string {
+  try {
+    return new URL(siteUrl()).hostname
+  } catch {
+    return 'battery-sensei.app'
+  }
+}
+
+export async function POST(request: Request): Promise<Response> {
+  // CSRF defense. application/json POSTs aren't subject to a forged
+  // form-submit per the simple-request rule, but cross-origin fetch
+  // with custom headers is still possible from a misconfigured embed
+  // or a malicious extension. Require same-origin.
+  if (!isAllowedOrigin(request)) {
+    return json({ ok: false, error: 'bad-origin' }, { status: 403 })
   }
 
-  const email = body.email
-  // Belt-and-braces: zod accepts technically-valid-but-weird shapes
-  // (e.g. multiple `@` if encoded oddly). The regex enforces our
-  // strict-enough definition before we hand the address to Resend.
-  if (!EMAIL_RE.test(email)) {
-    return json({ ok: false, reason: 'invalid' }, 400)
+  let raw: unknown
+  try {
+    raw = await request.json()
+  } catch {
+    return json({ ok: false, error: 'invalid-json' }, { status: 400 })
   }
 
-  const locale = body.locale ?? 'en'
-  const source = normalizedSource(body.source)
-  const ipAddress = clientIp(request)
-  const userAgent = request.headers.get('user-agent')?.slice(0, 256) ?? undefined
-  const origin = request.headers.get('origin')?.slice(0, 256) ?? undefined
+  // Strict zod parse. Rejects unknown keys (would-be `name` injection),
+  // bad email shape, non-allowlist locales, and source values that
+  // contain anything but [A-Za-z0-9_-]. Honeypot must be empty.
+  const parsed = SignupSchema.safeParse(raw)
+  if (!parsed.success) {
+    // Honeypot trip looks identical from outside — return a quiet 200
+    // so bots can't tell schema failure from bad-email failure.
+    const isHoneypot =
+      parsed.error.issues.some((i) => i.path[0] === 'website') ||
+      parsed.error.issues.some((i) => i.code === 'unrecognized_keys')
+    if (isHoneypot) return json({ ok: true })
+    return json({ ok: false, error: 'invalid-input' }, { status: 400 })
+  }
 
-  // Lightweight server-side log so we can sanity-check signups without
-  // leaking full addresses into logs (first char + length is enough to
-  // correlate with the DB row if we need to follow up on an abuse case).
-  console.log('[free-signup]', {
-    first: email.charAt(0),
-    length: email.length,
-    locale,
-    source,
+  const { email, locale, source } = parsed.data
+  const ip = clientIp(request)
+
+  if (await rateLimited(ip)) {
+    // Quiet 200 — don't confirm to attackers that they hit the wall.
+    return json({ ok: true })
+  }
+
+  const releasesId = releasesAudienceId()
+  if (!releasesId) {
+    console.error('[newsletter] RESEND_AUDIENCE_RELEASES is not set')
+    return json({ ok: false, error: 'misconfigured' }, { status: 500 })
+  }
+
+  // Map zod `source` to the Prisma enum. The form may send either
+  // hyphenated (`pricing-free`, `walkthrough-notify`) or underscored
+  // (`pricing_free`, `resend_confirm`) variants — we normalise the
+  // hyphen→underscore first, then bucket anything outside the enum
+  // allowlist as `other` so a typo on the client never rejects a
+  // legitimate signup. Pricing free + thanks-page resends are the only
+  // values that map 1:1; anything else (walkthrough, resend-confirm,
+  // future surfaces) is recorded as `other` until the enum is widened.
+  const normalisedSource = source.replace(/-/g, '_')
+  const sourceEnum =
+    normalisedSource === 'pricing_free' || normalisedSource === 'thanks_page'
+      ? normalisedSource
+      : 'other'
+
+  // Upsert the row. On re-signup after a prior unsub, bump tokenEpoch
+  // so the old unsubscribe link can't unsubscribe the freshly opted-in
+  // address. confirmedAt is intentionally NOT cleared — we keep the
+  // historical opt-in record but rely on tokenEpoch + Resend state.
+  const row = await db.newsletterSignup.upsert({
+    where: { email },
+    create: {
+      email,
+      locale,
+      source: sourceEnum,
+      ipAddress: ip,
+      userAgent: request.headers.get('user-agent') ?? null,
+      origin: request.headers.get('origin') ?? null,
+    },
+    // A simple duplicate signup mid-flow (e.g. visitor double-clicks
+    // the button) must keep the prior confirm link working so the
+    // inbox-race doesn't confuse them — so we do NOT bump tokenEpoch
+    // here. Resubscribe-after-unsub is handled below via a follow-up
+    // update that bumps the epoch in one extra write.
+    update: {
+      locale,
+      ipAddress: ip,
+      userAgent: request.headers.get('user-agent') ?? null,
+      origin: request.headers.get('origin') ?? null,
+    },
   })
 
-  // 1. Resend audience fan-out — fire BEFORE the DB write so we can
-  //    store the returned contact ids alongside the row. Both run in
-  //    parallel; either failing is non-fatal.
-  const apiKey = process.env.RESEND_API_KEY
-  const releasesAudience = process.env.RESEND_AUDIENCE_RELEASES
-  const launchesAudience = process.env.RESEND_AUDIENCE_LAUNCHES
-
-  let releasesContactId: string | null = null
-  let launchesContactId: string | null = null
-  if (apiKey) {
-    const [releasesRes, launchesRes] = await Promise.all([
-      releasesAudience
-        ? addToResendAudience(releasesAudience, email, apiKey)
-        : Promise.resolve(null),
-      launchesAudience
-        ? addToResendAudience(launchesAudience, email, apiKey)
-        : Promise.resolve(null),
-    ])
-    releasesContactId = releasesRes
-    launchesContactId = launchesRes
-  } else {
-    console.warn('[free-signup] RESEND_API_KEY missing — skipped audience fan-out')
-  }
-
-  // 2. Persist or update. Upsert guards against unique-constraint blowups
-  //    on re-signups (visitor clicks twice / re-enters address on another
-  //    surface). We only refresh the contact ids if we successfully got
-  //    new ones — keeps previously stored ids when the API blips.
-  try {
-    await prisma.newsletterSignup.upsert({
+  // Compute the effective epoch for token issuance. If the address was
+  // previously unsubscribed, bump now (one extra write, but rare path).
+  let epoch = row.tokenEpoch
+  if (row.unsubscribedAt) {
+    const bumped = await db.newsletterSignup.update({
       where: { email },
-      create: {
-        email,
-        locale,
-        source,
-        releasesContactId: releasesContactId ?? undefined,
-        launchesContactId: launchesContactId ?? undefined,
-        ipAddress,
-        userAgent,
-        origin,
-      },
-      update: {
-        locale,
-        source,
-        ipAddress,
-        userAgent,
-        origin,
-        // Don't trash an existing contact id with `null` — only overwrite
-        // when this round produced a new one.
-        ...(releasesContactId ? { releasesContactId } : {}),
-        ...(launchesContactId ? { launchesContactId } : {}),
-        // A re-signup re-subscribes — clear any previous soft opt-out.
+      data: {
+        tokenEpoch: { increment: 1 },
         unsubscribedAt: null,
       },
     })
-  } catch (err) {
-    console.error('[free-signup] db upsert failed', {
-      err: err instanceof Error ? err.message : String(err),
+    epoch = bumped.tokenEpoch
+  }
+
+  const resend = getResendClient()
+
+  // Pending state lives only in the RELEASES audience. We add to
+  // LAUNCHES at confirm-time so that audience never holds unverified
+  // contacts.
+  try {
+    const created = await resend.contacts.create({
+      audienceId: releasesId,
+      email,
+      unsubscribed: true,
+      firstName: `src:${source}|lang:${locale}`,
     })
-    // Intentional: don't block the download on DB issues.
+    const contactId = (created as { data?: { id?: string } } | undefined)
+      ?.data?.id
+    if (contactId && contactId !== row.releasesContactId) {
+      await db.newsletterSignup
+        .update({
+          where: { email },
+          data: { releasesContactId: contactId },
+        })
+        .catch(() => {})
+    }
+  } catch (err) {
+    // Resend treats existing email as no-op here, so the only failures
+    // worth logging are real ones (network, auth).
+    console.error('[newsletter] contacts.create failed', err)
+  }
+
+  const confirmToken = createToken(email, 'confirm', locale, epoch)
+  const unsubToken = createToken(email, 'unsubscribe', locale, epoch)
+  const confirmUrl = `${siteUrl()}/api/newsletter/confirm?token=${confirmToken}`
+  // Used for the RFC 8058 List-Unsubscribe header only — not surfaced
+  // in the visible confirm email body, since the user hasn't opted in yet.
+  const unsubscribeUrl = `${siteUrl()}/api/newsletter/unsubscribe?token=${unsubToken}`
+
+  const html = renderToStaticMarkup(
+    createElement(ConfirmEmail, {
+      confirmUrl,
+      locale,
+      siteUrl: siteUrl(),
+    }),
+  )
+
+  try {
+    await resend.emails.send({
+      from: resendFrom(),
+      to: email,
+      replyTo: resendReplyTo(),
+      subject: confirmSubject(locale),
+      html,
+      text: confirmEmailText(locale, confirmUrl),
+      headers: {
+        'List-Unsubscribe': `<${unsubscribeUrl}>, <mailto:unsubscribe@${hostname()}?subject=unsubscribe>`,
+        'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+      },
+      tags: [
+        { name: 'kind', value: 'confirm' },
+        { name: 'locale', value: locale },
+        { name: 'source', value: source },
+      ],
+    })
+  } catch (err) {
+    console.error('[newsletter] confirm send failed', err)
+    return json({ ok: false, error: 'send-failed' }, { status: 502 })
   }
 
   return json({ ok: true })

@@ -11,9 +11,12 @@
  *
  * RFC 8058 one-click (POST from Gmail/Yahoo inbox UI) hits the API
  * directly and never lands here.
+ *
+ * Status banner above the button sits in a fixed-height slot so the
+ * layout doesn't jump between idle / submitting / error states.
  */
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
-import { ArrowLeft } from 'lucide-react'
+import { AlertCircle, ArrowLeft, UserMinus } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Nav } from '#/components/sections/Nav'
@@ -27,7 +30,16 @@ type Search = {
 
 export const Route = createFileRoute('/newsletter/unsubscribe')({
   validateSearch: (s: Record<string, unknown>): Search => ({
-    token: typeof s.token === 'string' ? s.token : undefined,
+    // Client-side shape sniff only — the API still does the strict zod
+    // regex + HMAC verify on POST. Keeps obviously-malformed tokens out
+    // of the form state without forking validation logic.
+    token:
+      typeof s.token === 'string' &&
+      s.token.length >= 20 &&
+      s.token.length <= 2048 &&
+      /^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(s.token)
+        ? s.token
+        : undefined,
   }),
   head: () => ({
     meta: [
@@ -38,33 +50,30 @@ export const Route = createFileRoute('/newsletter/unsubscribe')({
   component: UnsubscribePage,
 })
 
+type State = 'idle' | 'submitting' | 'error' | 'missing-token'
+
 function UnsubscribePage() {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { token } = Route.useSearch()
-  const [submitting, setSubmitting] = useState(false)
-  const [error, setError] = useState(false)
-
   const hasToken = typeof token === 'string' && token.length > 0
+  const [state, setState] = useState<State>(hasToken ? 'idle' : 'missing-token')
 
   async function onConfirm() {
-    if (!hasToken || submitting) return
-    setSubmitting(true)
-    setError(false)
+    if (!hasToken || state === 'submitting') return
+    setState('submitting')
     try {
       const res = await fetch(
         `/api/newsletter/unsubscribe?token=${encodeURIComponent(token!)}`,
         { method: 'POST' },
       )
       if (!res.ok) {
-        setError(true)
-        setSubmitting(false)
+        setState('error')
         return
       }
       navigate({ to: '/newsletter/unsubscribed' })
     } catch {
-      setError(true)
-      setSubmitting(false)
+      setState('error')
     }
   }
 
@@ -101,36 +110,50 @@ function UnsubscribePage() {
             >
               {t('newsletter.unsubscribe.body')}
             </Reveal>
-            <Reveal as="div" delay={300} className="mt-10">
+            <Reveal as="div" delay={300} className="mt-10 w-full max-w-sm">
+              {/* Fixed-height status slot above the button. Reserved
+                  even when empty so the layout never jumps when the
+                  error / missing-token banner appears. */}
+              <div
+                className="mb-3 min-h-[1.5rem] text-center text-[0.8125rem] leading-snug"
+                aria-live="polite"
+                role={state === 'error' ? 'alert' : undefined}
+              >
+                {state === 'error' && (
+                  <span className="inline-flex items-center gap-1.5 font-medium text-hinomaru">
+                    <AlertCircle
+                      className="h-4 w-4 shrink-0"
+                      strokeWidth={2}
+                      aria-hidden
+                    />
+                    {t('newsletter.unsubscribe.error')}{' '}
+                    <span className="font-normal text-hinomaru/85">
+                      {t('newsletter.unsubscribe.tryAgain')}
+                    </span>
+                  </span>
+                )}
+                {state === 'missing-token' && (
+                  <span className="text-sumi-soft">
+                    {t('newsletter.unsubscribe.missingToken')}
+                  </span>
+                )}
+              </div>
               <button
                 type="button"
                 onClick={onConfirm}
-                disabled={!hasToken || submitting}
-                className="inline-flex items-center gap-2 rounded-full bg-sumi px-5 py-2.5 text-sm font-medium text-washi transition-colors duration-[220ms] hover:bg-sumi/90 disabled:cursor-not-allowed disabled:opacity-50"
+                disabled={!hasToken || state === 'submitting'}
+                className="group inline-flex h-11 w-full items-center justify-center gap-2 rounded-md bg-sumi px-4 text-[0.875rem] font-medium text-washi transition-colors duration-[220ms] hover:bg-sumi/90 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {submitting
+                <UserMinus
+                  className="h-4 w-4 transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-x-0.5"
+                  strokeWidth={1.8}
+                  aria-hidden
+                />
+                {state === 'submitting'
                   ? t('newsletter.unsubscribe.submitting')
                   : t('newsletter.unsubscribe.cta')}
               </button>
             </Reveal>
-            {error && (
-              <p
-                className="mt-4 text-sm text-hinomaru"
-                role="alert"
-                aria-live="polite"
-              >
-                {t('newsletter.unsubscribe.error')}
-              </p>
-            )}
-            {!hasToken && (
-              <Reveal
-                as="p"
-                delay={360}
-                className="mt-4 text-sm text-sumi-soft"
-              >
-                {t('newsletter.unsubscribe.missingToken')}
-              </Reveal>
-            )}
           </div>
         </section>
       </main>

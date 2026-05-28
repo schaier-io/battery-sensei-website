@@ -1,10 +1,10 @@
-import { ConfirmEmail } from '../ConfirmEmail'
+import { ConfirmEmail } from '../ConfirmEmail.js'
 
 export default function Preview() {
   return (
     <ConfirmEmail
       confirmUrl="https://battery-sensei.app/api/newsletter/confirm?token=demo"
-      locale="ja"
+      locale="fr"
       siteUrl="https://battery-sensei.app"
     />
   )

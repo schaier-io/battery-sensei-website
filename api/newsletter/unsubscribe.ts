@@ -19,11 +19,29 @@
  * silently disable a user who re-subscribed in between.
  *
  * We always answer 200 / a redirect on POST — never leak membership.
+ *
+ * Vercel Function note
+ * --------------------
+ * Lives at root `api/newsletter/unsubscribe.ts` so Vercel deploys it.
+ * All relative imports carry `.js` because the runtime is Node ESM.
  */
-import { createFileRoute } from '@tanstack/react-router'
-import { db } from '#/lib/db'
-import { verifyToken } from '#/lib/newsletter-token'
-import { audiences, getResendClient, siteUrl } from '#/lib/resend'
+import { z } from 'zod'
+import { db } from '../../lib/db.js'
+import { verifyToken } from '../../lib/newsletter-token.js'
+import {
+  audiences,
+  getResendClient,
+  siteUrl,
+} from '../../lib/resend.js'
+
+// Token shape gate — `<b64url>.<b64url>`. Defends against pathological
+// query strings being shoved into the verifier. The HMAC verify is the
+// real check; this just keeps obviously-malformed input cheap to reject.
+const TokenSchema = z
+  .string()
+  .min(20)
+  .max(2048)
+  .regex(/^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/, 'malformed-token')
 
 async function pushUnsubToResend(email: string): Promise<void> {
   const resend = getResendClient()
@@ -65,23 +83,34 @@ function redirectTo(path: string): Response {
   })
 }
 
-async function handleGet(request: Request): Promise<Response> {
+export async function GET(request: Request): Promise<Response> {
   // Hand the token straight to the confirm page. We intentionally do
-  // NOT validate here — that page (and the POST handler) will do it.
+  // NOT verify here — that page (and the POST handler) will do it.
   // Doing nothing on GET means mail-client link prefetch can't trigger
   // an unsubscribe. The page renders the same "invalid link" message
   // when the token is bad, so we still leak nothing.
   const url = new URL(request.url)
-  const token = url.searchParams.get('token') ?? ''
-  const qs = token ? `?token=${encodeURIComponent(token)}` : ''
+  const raw = url.searchParams.get('token') ?? ''
+  const parsed = TokenSchema.safeParse(raw)
+  // On malformed shape, redirect without a token — the page renders a
+  // missing-token state instead of trying to POST garbage.
+  const qs = parsed.success
+    ? `?token=${encodeURIComponent(parsed.data)}`
+    : ''
   return redirectTo(`/newsletter/unsubscribe${qs}`)
 }
 
-async function handlePost(request: Request): Promise<Response> {
+export async function POST(request: Request): Promise<Response> {
   const url = new URL(request.url)
-  const token = url.searchParams.get('token') ?? ''
-  const verified = verifyToken(token)
+  const raw = url.searchParams.get('token') ?? ''
+  const parsed = TokenSchema.safeParse(raw)
+  if (!parsed.success) {
+    // Malformed shape — answer 200 anyway so probes can't distinguish
+    // "wrong shape" from "wrong signature" from "wrong epoch".
+    return new Response(null, { status: 200 })
+  }
 
+  const verified = verifyToken(parsed.data)
   // Always return 200 on POST — never leak membership state to an
   // inbox-provider one-click probe or a scraper.
   if (!verified || verified.action !== 'unsubscribe') {
@@ -101,12 +130,3 @@ async function handlePost(request: Request): Promise<Response> {
   await unsubscribe(verified.email)
   return new Response(null, { status: 200 })
 }
-
-export const Route = createFileRoute('/api/newsletter/unsubscribe')({
-  server: {
-    handlers: {
-      GET: ({ request }) => handleGet(request),
-      POST: ({ request }) => handlePost(request),
-    },
-  },
-})

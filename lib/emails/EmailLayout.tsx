@@ -28,7 +28,7 @@ import {
   Text,
 } from '@react-email/components'
 import type { ReactNode } from 'react'
-import { fontStack, jpStack, palette, serifStack } from './theme'
+import { fontStack, jpStack, palette, serifStack } from './theme.js'
 
 type Props = {
   preview: string

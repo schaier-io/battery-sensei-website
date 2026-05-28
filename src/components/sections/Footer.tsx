@@ -4,8 +4,48 @@ import { LanguageSwitcher } from '#/components/LanguageSwitcher'
 import { CurrencySwitcher } from '#/components/CurrencySwitcher'
 import { CUSTOMER_PORTAL_URL } from '#/lib/polar'
 
+// Build-time injected ISO date of the latest meaningful commit
+// (vite.config.ts → `lastUpdated()`). Falls back to today if git is
+// unavailable (sandbox builds). This replaces the formerly hand-edited
+// "Last updated 28 May 2026" string in the i18n locales — the date now
+// updates automatically on every deploy that touches user-facing files.
+declare const __LAST_UPDATED__: string
+const LAST_UPDATED_ISO: string =
+  typeof __LAST_UPDATED__ !== 'undefined'
+    ? __LAST_UPDATED__
+    : new Date().toISOString().slice(0, 10)
+
+// Map i18n language codes to Intl locale tags. Keeps the date format
+// idiomatic in each locale ("28 May 2026" / "28. Mai 2026" / "2026年5月28日")
+// without baking the date into the translation string.
+const INTL_LOCALES: Record<string, string> = {
+  en: 'en-GB',
+  de: 'de-DE',
+  es: 'es-ES',
+  fr: 'fr-FR',
+  ja: 'ja-JP',
+}
+
+function formatLastUpdated(iso: string, lang: string): string {
+  // YYYY-MM-DD → local-format day month year. Parse as UTC noon to
+  // dodge timezone day-boundary skew (no DST math needed at noon).
+  const d = new Date(`${iso}T12:00:00Z`)
+  if (Number.isNaN(d.getTime())) return iso
+  const tag = INTL_LOCALES[lang.split('-')[0]] ?? 'en-GB'
+  try {
+    return new Intl.DateTimeFormat(tag, {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }).format(d)
+  } catch {
+    return iso
+  }
+}
+
 export function Footer() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const formattedDate = formatLastUpdated(LAST_UPDATED_ISO, i18n.language)
   return (
     <footer className="relative border-t border-[var(--line)] py-10 sm:py-12 lg:py-14">
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-5 px-6 text-center sm:gap-6">
@@ -120,7 +160,9 @@ export function Footer() {
         <p className="text-[0.7rem] tracking-[0.06em] text-nezumi tabular-nums">
           {t('footer.copyright', { year: new Date().getFullYear() })}
           <span className="mx-2 text-nezumi/60" aria-hidden>·</span>
-          <time dateTime="2026-05-28">{t('footer.lastUpdated')}</time>
+          <time dateTime={LAST_UPDATED_ISO}>
+            {t('footer.lastUpdated', { date: formattedDate })}
+          </time>
         </p>
       </div>
     </footer>

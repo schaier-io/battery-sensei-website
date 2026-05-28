@@ -406,6 +406,14 @@
     "backToCompare": "Zurück zum Vergleich"
   },
   "newsletter": {
+    "confirm": {
+      "heading": "Anmeldung bestätigen.",
+      "body": "Ein letzter Klick und deine Adresse landet auf der Release-Liste. Wir bestätigen nichts automatisch — so passiert nichts, nur weil ein Postfach den Link gescannt hat.",
+      "cta": "Anmeldung bestätigen",
+      "submitting": "Wird bestätigt…",
+      "error": "Etwas ist schiefgelaufen. Versuch es gleich nochmal, oder schreib an info@battery-sensei.app.",
+      "missingToken": "Diesem Link fehlt das Token. Öffne den Bestätigungslink direkt aus der E-Mail."
+    },
     "confirmed": {
       "success": {
         "heading": "Du bist dabei. Willkommen.",
@@ -413,26 +421,40 @@
       },
       "invalid": {
         "heading": "Dieser Link ist abgelaufen.",
-        "body": "Bestätigungslinks sind 48 Stunden gültig. Melde dich noch einmal auf der Startseite an und wir schicken dir einen frischen."
+        "body": "Bestätigungslinks sind 48 Stunden gültig. Gib unten deine E-Mail an und wir schicken dir einen frischen.",
+        "emailLabel": "E-Mail-Adresse",
+        "emailPlaceholder": "du@beispiel.de",
+        "resendCta": "Neuen Link senden",
+        "submitting": "Wird gesendet…",
+        "resentSuccess": "Erledigt — schau gleich in deinen Posteingang.",
+        "resendError": "Senden hat nicht geklappt.",
+        "invalidEmail": "Das sieht nicht wie eine gültige E-Mail aus.",
+        "tryAgain": "Bitte versuch es erneut."
       },
       "error": {
         "heading": "Da ist etwas schiefgelaufen.",
         "body": "Wir konnten die Bestätigung nicht abschließen. Versuche den Link erneut oder schreib uns an info@battery-sensei.app — wir kümmern uns persönlich darum."
       },
-      "cta": "Zurück zur Startseite"
+      "cta": "Zurück zur Startseite",
+      "welcomeFailed": {
+        "cta": "Zum Download",
+        "note": "Die Willkommens-E-Mail konnten wir gerade nicht zustellen — hier ist der Download direkt. Du bist trotzdem angemeldet; die nächste Release-Mail kommt wie gewohnt."
+      }
     },
     "unsubscribe": {
       "heading": "Vom Newsletter abmelden?",
       "body": "Ein Klick und wir schreiben dir nicht mehr. Du kannst dich jederzeit wieder über die Startseite anmelden.",
       "cta": "Abmelden",
       "submitting": "Einen Moment…",
-      "error": "Etwas ist schiefgelaufen. Versuch es gleich nochmal, oder antworte einfach auf eine Newsletter-Mail.",
+      "error": "Abmelden hat nicht geklappt.",
+      "tryAgain": "Bitte versuch es erneut.",
       "missingToken": "Diesem Link fehlt das Token. Öffne den Abmelde-Link direkt aus der E-Mail."
     },
     "unsubscribed": {
       "heading": "Du bist von der Liste. Ganz leise.",
       "body": "Wir schreiben dir nicht mehr. Falls du es dir anders überlegst, das Anmeldeformular wartet auf der Startseite.",
-      "cta": "Zurück zur Startseite"
+      "cta": "Zurück zur Startseite",
+      "subscribeAgain": "Wieder anmelden"
     }
   },
   "featurePages": {
@@ -804,7 +826,7 @@
     "pricing": "Preise",
     "managePurchase": "Kauf verwalten",
     "copyright": "© {{year}} · Battery Sensei",
-    "lastUpdated": "Zuletzt aktualisiert am 28. Mai 2026"
+    "lastUpdated": "Zuletzt aktualisiert am {{date}}"
   },
   "checkout": {
     "kicker": "Kasse · 会計",

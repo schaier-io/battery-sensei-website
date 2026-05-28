@@ -8,7 +8,9 @@
  */
 
 import { PrismaPg } from '@prisma/adapter-pg'
-import { PrismaClient } from './generated/prisma/client'
+// Explicit `.js` — Vercel ESM runtime (`"type":"module"`) resolves
+// relative imports strictly without extension probing.
+import { PrismaClient } from './generated/prisma/client.js'
 
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient }
 
@@ -24,3 +26,9 @@ export const prisma = globalForPrisma.prisma ?? createPrismaClient()
 if (process.env.NODE_ENV !== 'production') {
   globalForPrisma.prisma = prisma
 }
+
+// Alias — newsletter modules + the new double-opt-in free-signup
+// import `db`; the older `api/contact.ts` keeps using the `prisma`
+// name. Same underlying singleton either way; both exports share the
+// connection pool so we never create a second client by mistake.
+export const db = prisma
