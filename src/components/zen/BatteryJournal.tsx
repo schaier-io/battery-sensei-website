@@ -6,7 +6,7 @@ import { useCountUp } from '#/lib/use-count-up'
 
 /**
  * A "journal page" — Sensei's personal history of one MacBook's battery.
- * Multiple entries across months, capacity sparkline, gentle stats.
+ * Multiple entries across months, charge sparkline, gentle stats.
  * Replaces the single Rescue Receipt to reframe Saga as personal-history,
  * not a single shareable card.
  */
@@ -37,14 +37,14 @@ export function BatteryJournal({ className = '' }: { className?: string }) {
         <Stat icon={HeartPulse} label="Capacity" to={92} suffix="%" />
       </div>
 
-      {/* Capacity timeline */}
+      {/* Battery charge timeline */}
       <div className="-mx-1 mt-1">
         <p className="text-[9px] uppercase tracking-wider text-nezumi mb-1 px-1">
-          Capacity timeline
+          Battery charge timeline
         </p>
         <div className="text-sumi">
           <Sparkline
-            values={[100, 99.4, 98.8, 98.0, 97.2, 96.4, 95.6, 94.7, 93.9, 93.2, 92.6, 92.3]}
+            values={[88, 84, 79, 74, 70, 67, 64, 66, 71, 76, 81, 85]}
             height={36}
           />
         </div>
@@ -53,7 +53,7 @@ export function BatteryJournal({ className = '' }: { className?: string }) {
       {/* Recent entries */}
       <ul className="mt-1 space-y-1.5 text-[11px] text-sumi-soft">
         <Entry date="Mar 04" body="Rescued at 12% — plugged in just in time." mark="救" />
-        <Entry date="Feb 18" body="Reached 200 cycles. Aging on schedule." />
+        <Entry date="Feb 18" body="Held a steady 78-82% through deep-work blocks." />
         <Entry date="Jan 30" body="Personal best: 11h 23m on a single charge." mark="星" />
       </ul>
 

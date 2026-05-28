@@ -274,14 +274,14 @@ export function FAQ() {
   }, [])
 
   return (
-    <section id="faq" className="zen-section mx-auto max-w-3xl px-6">
+    <section id="faq" className="zen-section mx-auto max-w-5xl px-6">
       <div className="mb-12 flex flex-col items-center text-center">
         <Hanko kanji="問" className="mb-5" />
         <Reveal as="p" delay={120} className="kicker-row mb-4">{t('faq.kicker')}</Reveal>
         <Reveal
           as="h2"
           delay={200}
-          className="section-heading text-sumi"
+          className="section-heading text-sumi mb-2"
         >
           {t('faq.heading')}
         </Reveal>

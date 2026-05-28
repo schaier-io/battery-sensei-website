@@ -680,6 +680,20 @@ body::after {
       0 18px 40px rgba(28, 26, 23, 0.10);
   }
 
+  /* When a .paper-card lives inside a <TiltCard>, the wrapper
+     already provides the hover lift via motion physics (scale +
+     tilt). The legacy CSS translateY here would fight that motion
+     transform — moving the card 3px out from under the cursor,
+     triggering mouseleave, then the spring overshoots back, the
+     :hover ends, the card drops, the cursor finds it again, and the
+     loop flickers. At extreme overshoot angles the card can briefly
+     tilt past 90° and appear to "disappear." Letting TiltCard own
+     the entire hover transform breaks the loop; the box-shadow +
+     border-color upgrades still apply. */
+  .tilt-card .paper-card:hover {
+    transform: none;
+  }
+
   .paper-card:focus-within {
     border-color: var(--line-strong);
   }
@@ -844,6 +858,38 @@ body::after {
 }
 @media (prefers-reduced-motion: reduce) {
   .animate-gentle-pulse { animation: none; opacity: 1; }
+}
+
+/* Chevron nudge — small downward tap on hover, hinting "scroll down".
+   Uses translate only so it composes with the parent circle's hover
+   lift without fighting the idle opacity pulse on the same element. */
+@keyframes chevron-nudge {
+  0%   { transform: translateY(0); }
+  40%  { transform: translateY(2px); }
+  70%  { transform: translateY(-1px); }
+  100% { transform: translateY(0); }
+}
+.group:hover .group-hover\:animate-chevron-nudge {
+  animation: chevron-nudge 620ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .group:hover .group-hover\:animate-chevron-nudge { animation: none; }
+}
+
+/* Comparison-table row reveal — used when the "Show all features"
+   toggle expands extra rows. Each row fades + slides down a few px
+   with a per-row delay set inline via --compare-row-delay, so the
+   reveal cascades top→down instead of popping all at once. */
+@keyframes compare-row-in {
+  0%   { opacity: 0; transform: translateY(-6px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.compare-row-extra {
+  animation: compare-row-in 360ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation-delay: var(--compare-row-delay, 0ms);
+}
+@media (prefers-reduced-motion: reduce) {
+  .compare-row-extra { animation: none; }
 }
 
 /* Language dropdown — open/close + per-item stagger.

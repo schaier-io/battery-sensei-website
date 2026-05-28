@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import {
-  ArrowRight,
+  ArrowUpRight,
   AtSign,
   Bug,
   ListChecks,
@@ -10,6 +10,7 @@ import {
   Lightbulb,
   Sparkles,
 } from 'lucide-react'
+import { Link } from '@tanstack/react-router'
 import { Trans, useTranslation } from 'react-i18next'
 import { GithubMark } from '#/components/icons/GithubMark'
 import { Hanko } from '#/components/zen/Hanko'
@@ -120,9 +121,9 @@ export function Contact() {
                       <label
                         key={value}
                         className={[
-                          'group relative cursor-pointer rounded-md border px-3 py-2.5 text-left transition-colors duration-200',
+                          'group relative cursor-pointer rounded-md border px-3 py-2.5 text-left transition-[border-color,background-color,box-shadow,transform] duration-200',
                           active
-                            ? 'border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_55%,#fff)]'
+                            ? 'border-hinomaru/40 bg-[color-mix(in_oklab,var(--washi)_48%,#fff)] shadow-[inset_2px_0_0_var(--hinomaru),0_1px_0_rgba(255,255,255,0.5)]'
                             : 'border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_72%,#fff)] hover:border-[var(--line-strong)]',
                         ].join(' ')}
                       >
@@ -134,7 +135,7 @@ export function Contact() {
                           onChange={() => setTopic(value)}
                           className="sr-only"
                         />
-                        <span className="display-title block text-[0.9375rem] font-medium text-sumi leading-snug">
+                        <span className={['display-title block text-[0.9375rem] font-medium leading-snug', active ? 'text-sumi' : 'text-sumi'].join(' ')}>
                           {t(`contact.topics.${value}.label`)}
                         </span>
                         <span className="mt-0.5 block text-[0.75rem] leading-snug text-nezumi">
@@ -143,10 +144,14 @@ export function Contact() {
                         <span
                           aria-hidden
                           className={[
-                            'absolute right-2.5 top-2.5 h-1.5 w-1.5 rounded-full transition-opacity duration-200',
-                            active ? 'bg-hinomaru opacity-100' : 'opacity-0',
+                            'absolute right-2.5 top-2.5 grid h-3.5 w-3.5 place-items-center rounded-full transition-[opacity,transform,background-color] duration-200',
+                            active
+                              ? 'bg-hinomaru/16 text-hinomaru opacity-100 scale-100'
+                              : 'opacity-0 scale-90',
                           ].join(' ')}
-                        />
+                        >
+                          <span className="h-1.5 w-1.5 rounded-full bg-current" />
+                        </span>
                       </label>
                     )
                   })}
@@ -351,28 +356,16 @@ export function Contact() {
                   >
                     ·
                   </span>
-                  {/* "Find your thread →" — arrow lives in a 16px slot
-                      with overflow-hidden. At rest the arrow sits flush
-                      left; on group hover it translates a full slot-
-                      width right (16px) and a second arrow eases in
-                      from -100% to 0. Two ArrowRights crossing through
-                      the slot means the eye reads "advance / next",
-                      not a single glyph wiggling in place. */}
+                  {/* "Find your thread ↗" — use an open-in-new-page cue.
+                      Nudge up-right on hover so the direction is clear
+                      without heavy motion. */}
                   <span className="inline-flex items-center gap-1.5 text-[0.8125rem] font-medium text-sumi transition-colors duration-[220ms] group-hover:text-hinomaru">
                     {t('contact.github.cta')}
-                    <span
+                    <ArrowUpRight
                       aria-hidden
-                      className="relative inline-block h-4 w-4 overflow-hidden align-middle"
-                    >
-                      <ArrowRight
-                        className="absolute inset-0 h-4 w-4 transition-transform duration-[360ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:translate-x-4"
-                        strokeWidth={1.8}
-                      />
-                      <ArrowRight
-                        className="absolute inset-0 h-4 w-4 -translate-x-4 transition-transform duration-[360ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:translate-x-0"
-                        strokeWidth={1.8}
-                      />
-                    </span>
+                      className="h-4 w-4 transition-transform duration-[300ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                      strokeWidth={1.9}
+                    />
                   </span>
                 </div>
               </a>
@@ -408,7 +401,11 @@ export function Contact() {
                 </p>
                 <span className="mt-1 inline-flex items-center gap-1.5 text-[0.8125rem] font-medium text-sumi group-hover:text-kin transition-colors break-all">
                   {EMAIL}
-                  <span aria-hidden className="transition-transform duration-300 group-hover:translate-x-0.5">→</span>
+                  <ArrowUpRight
+                    aria-hidden
+                    className="h-4 w-4 shrink-0 transition-transform duration-[300ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                    strokeWidth={1.9}
+                  />
                 </span>
               </a>
             </Reveal>
@@ -463,6 +460,22 @@ export function Contact() {
                       {t('contact.before.refundLabel')}
                     </span>
                     <span>{t('contact.before.refundHint')}</span>
+                  </li>
+                  <li className="flex gap-2.5">
+                    <span className="display-title shrink-0 text-[10px] font-semibold uppercase tracking-[0.18em] text-nezumi pt-[3px]">
+                      {t('contact.before.journalLabel')}
+                    </span>
+                    <span>
+                      <Trans
+                        i18nKey="contact.before.journalHint"
+                        components={[
+                          <Link
+                            to="/blog"
+                            className="font-medium text-sumi underline decoration-hinomaru/40 decoration-2 underline-offset-4 hover:decoration-hinomaru transition-colors"
+                          />,
+                        ]}
+                      />
+                    </span>
                   </li>
                 </ul>
               </aside>

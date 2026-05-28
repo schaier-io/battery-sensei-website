@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Check, Minus, Info, ArrowRight, ArrowUpRight, ChevronDown, Play } from 'lucide-react'
+import { Check, Minus, Info, ArrowUpRight, ChevronDown, Play } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { Hanko } from '#/components/zen/Hanko'
@@ -47,17 +47,27 @@ type FeatureKey = keyof typeof FEATURE_PATHS
  * structural choice — the user picks how much of the table to surface
  * up front, not what to call the cut row.
  *
- * Why this row: "Travel prep mode" is the last of the
+ * Why this row: "Energy use per app" is the last of the
  * differentiator-light table rows everyone-mostly-has. Past it the
  * table starts showing Sensei-only deltas (custom thresholds, alert
  * presets, meeting guard, battery journal), which read as
  * "what makes Sensei special" once revealed.
  */
-const CUTOFF_ROW_KEY = 'travel-mode'
+const CUTOFF_ROW_KEY = 'energy-usage'
+
+function swapRowsByKey(rows: Row[], firstKey: string, secondKey: string): Row[] {
+  const next = [...rows]
+  const firstIdx = next.findIndex((row) => row.key === firstKey)
+  const secondIdx = next.findIndex((row) => row.key === secondKey)
+  if (firstIdx === -1 || secondIdx === -1) return next
+  ;[next[firstIdx], next[secondIdx]] = [next[secondIdx], next[firstIdx]]
+  return next
+}
 
 export function Compare() {
   const { t } = useTranslation()
-  const rows = t('compare.rows', { returnObjects: true }) as Row[]
+  const rowsBase = t('compare.rows', { returnObjects: true }) as Row[]
+  const rows = swapRowsByKey(rowsBase, 'energy-usage', 'travel-mode')
   const partialLabel = t('compare.labels.partial')
   const moreInfoLabel = t('compare.labels.moreInfo')
   const openFeatureLabel = t('compare.labels.openFeature')
@@ -119,22 +129,17 @@ export function Compare() {
               />
             </span>
             {t('compare.videoCta')}
-            {/* Internal route (`/walkthrough`), so the arrow points
-                forward, not outward. ArrowUpRight was the wrong cue —
-                it reads as "external link" and visitors expect a new
-                tab. ArrowRight slides 2px on hover, matching the
-                other in-app forward affordances on the site. */}
-            <ArrowRight
-              className="h-3.5 w-3.5 text-nezumi transition-[color,transform] duration-[280ms] group-hover:translate-x-0.5 group-hover:text-sumi"
-              strokeWidth={2}
-              aria-hidden
-            />
           </Link>
         </Reveal>
       </div>
 
-      <Reveal delay={400}>
-        <div className="overflow-x-auto rounded-xl border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_92%,#fff)] shadow-[0_1px_0_rgba(255,255,255,0.45)_inset,0_18px_40px_-22px_rgba(28,26,23,0.18)]">
+      <Reveal delay={400} className="relative">
+        {/* `md:overflow-visible` lets the Info tooltip escape the
+            table wrapper. Without it `overflow-x-auto` forces
+            overflow-y to `auto` per spec and the tooltip gets clipped
+            above the first row. The min-w-[720px] table fits within
+            max-w-6xl past md, so we don't need scroll there anyway. */}
+        <div className="overflow-x-auto md:overflow-visible rounded-xl border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_92%,#fff)] shadow-[0_1px_0_rgba(255,255,255,0.45)_inset,0_18px_40px_-22px_rgba(28,26,23,0.18)]">
           <table className="w-full min-w-[720px] text-left text-sm">
             <thead>
               <tr className="meta-label border-b border-[var(--line)] text-sumi-soft">
@@ -164,8 +169,15 @@ export function Compare() {
               </tr>
             </thead>
             <tbody className="divide-y divide-[var(--line)]">
-              {visibleRows.map((r) => (
-                <tr key={r.label} className="align-middle group/row">
+              {visibleRows.map((r, i) => {
+                const isExtra = i > cutoffIdx
+                const extraIdx = i - cutoffIdx - 1
+                return (
+                <tr
+                  key={r.label}
+                  className={`align-middle group/row ${isExtra ? 'compare-row-extra' : ''}`}
+                  style={isExtra ? ({ ['--compare-row-delay' as string]: `${extraIdx * 55}ms` }) : undefined}
+                >
                   <td className="px-5 py-3.5 text-sumi leading-[1.5]">
                     <FeatureLabel
                       label={r.label}
@@ -184,43 +196,46 @@ export function Compare() {
                     />
                   ))}
                 </tr>
-              ))}
+                )
+              })}
             </tbody>
           </table>
         </div>
-      </Reveal>
 
-      {/* Show-all toggle — calm secondary chip. Mirrors the
-          walkthrough pill's outlined washi base + chevron motion, but
-          uses a quiet sumi tint instead of hinomaru so it doesn't
-          compete with the play CTA above the table. Only renders when
-          there's actually more to reveal. */}
-      {hasExtras && (
-        <Reveal delay={460} className="mt-6 flex justify-center">
-          <button
-            type="button"
-            onClick={() => setExpanded((e) => !e)}
-            aria-expanded={expanded}
-            className="group inline-flex items-center gap-2 rounded-full border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_55%,#fff)] px-4 py-1.5 text-[13px] font-medium text-sumi-soft transition-[background-color,transform,box-shadow,color] duration-[260ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-px hover:bg-[color-mix(in_oklab,var(--washi)_35%,#fff)] hover:text-sumi hover:shadow-[0_6px_18px_-10px_rgba(28,26,23,0.30)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
+        {/* Show-all toggle — anchored on the table's bottom border so
+            the chip visually "breaks" the line, signalling that more
+            rows live beneath it. Washi backdrop (matched to the page,
+            not the table) eats the border behind the chip, producing
+            the cut-line effect. Hidden when there's nothing more. */}
+        {hasExtras && (
+          <div
+            className="pointer-events-none absolute inset-x-0 bottom-0 flex translate-y-1/2 justify-center"
           >
-            {expanded
-              ? t('compare.showFewer')
-              : t('compare.showAll', { count: extraCount })}
-            <ChevronDown
-              className={`h-3.5 w-3.5 text-nezumi transition-transform duration-[300ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] group-hover:text-sumi ${
-                expanded ? 'rotate-180' : ''
-              }`}
-              strokeWidth={2}
-              aria-hidden
-            />
-          </button>
-        </Reveal>
-      )}
+            <button
+              type="button"
+              onClick={() => setExpanded((e) => !e)}
+              aria-expanded={expanded}
+              className="pointer-events-auto group inline-flex items-center gap-2 rounded-full border border-[var(--line-strong)] bg-[var(--washi)] px-4 py-1.5 text-[13px] font-medium text-sumi-soft transition-[background-color,transform,box-shadow,color] duration-[260ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-px hover:bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] hover:text-sumi hover:shadow-[0_6px_18px_-10px_rgba(28,26,23,0.30)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
+            >
+              {expanded
+                ? t('compare.showFewer')
+                : t('compare.showAll', { count: extraCount })}
+              <ChevronDown
+                className={`h-3.5 w-3.5 text-nezumi transition-transform duration-[300ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] group-hover:text-sumi ${
+                  expanded ? 'rotate-180' : ''
+                }`}
+                strokeWidth={2}
+                aria-hidden
+              />
+            </button>
+          </div>
+        )}
+      </Reveal>
 
       <Reveal
         as="p"
         delay={500}
-        className="mt-6 max-w-2xl mx-auto text-center text-[12px] tracking-[0.06em] text-nezumi leading-relaxed"
+        className={`${hasExtras ? 'mt-10' : 'mt-6'} max-w-2xl mx-auto text-center text-[12px] tracking-[0.06em] text-nezumi leading-relaxed`}
       >
         {t('compare.footnote')}
       </Reveal>
@@ -245,7 +260,7 @@ function FeatureLabel({
   const path = featureKey ? FEATURE_PATHS[featureKey] : undefined
   const mobileDescId = `compare-desc-${label.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`
   const labelNode = (
-    <span className="inline-flex items-center gap-1.5">
+    <span className="inline-flex items-center gap-1.5 transition-transform duration-[280ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover/row:translate-x-0.5 group-hover/row:-translate-y-0.5">
       {label}
       {path ? (
         <ArrowUpRight
@@ -259,7 +274,7 @@ function FeatureLabel({
   const labelEl = path ? (
     <Link
       to={path}
-      className="inline-flex items-center text-sumi underline-offset-[6px] decoration-hinomaru/30 hover:underline hover:text-hinomaru transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)]"
+      className="inline-flex items-center text-sumi underline-offset-[6px] decoration-hinomaru/30 transition-[color,text-decoration-color,transform] duration-[280ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:underline hover:text-hinomaru"
       aria-label={`${label} — ${openFeatureLabel}`}
     >
       {labelNode}
@@ -272,12 +287,28 @@ function FeatureLabel({
       <span className="inline-flex items-center gap-2">
         {labelEl}
         <span
-          title={desc}
           aria-label={`${moreInfoLabel}: ${desc}`}
           tabIndex={0}
-          className="hidden md:inline-flex h-4 w-4 cursor-help items-center justify-center rounded-full text-nezumi/55 transition-colors duration-[220ms] hover:text-sumi-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/30 focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--washi)]"
+          className="group/info relative hidden md:inline-flex h-4 w-4 cursor-help items-center justify-center rounded-full text-nezumi/55 transition-colors duration-[220ms] hover:text-sumi focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/30 focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--washi)]"
         >
           <Info className="h-3.5 w-3.5" strokeWidth={1.8} aria-hidden />
+          {/* Real tooltip — native `title=` was effectively invisible
+              (slow OS delay, no styling, eaten by table overflow). This
+              floats above the icon, animates in, and stays in flow so
+              it doesn't get clipped by the table's overflow-x-auto. */}
+          {/* Anchor the tooltip's LEFT edge to the icon (not center)
+              so it always extends rightward — first-column icons
+              would otherwise overflow the page on narrow widths. */}
+          <span
+            role="tooltip"
+            className="pointer-events-none absolute bottom-full left-0 z-20 mb-2 w-64 -translate-x-1 translate-y-1 rounded-md border border-[var(--line-strong)] bg-sumi px-3 py-2 text-left text-[12px] font-normal leading-snug text-[var(--washi)] shadow-[0_8px_24px_-10px_rgba(28,26,23,0.45)] opacity-0 transition-[opacity,transform] duration-[180ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover/info:translate-y-0 group-hover/info:opacity-100 group-focus-visible/info:translate-y-0 group-focus-visible/info:opacity-100"
+          >
+            {desc}
+            <span
+              aria-hidden
+              className="absolute left-3 top-full -translate-y-px h-2 w-2 rotate-45 bg-sumi border-r border-b border-[var(--line-strong)]"
+            />
+          </span>
         </span>
         <button
           type="button"

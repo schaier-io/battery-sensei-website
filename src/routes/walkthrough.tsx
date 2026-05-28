@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { ArrowLeft, PlayCircle, Mail } from 'lucide-react'
+import { ArrowLeft, PlayCircle, Leaf, Bell } from 'lucide-react'
+import { useState, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
+import i18n from 'i18next'
 import { Hanko } from '#/components/zen/Hanko'
 import { Reveal } from '#/components/zen/Reveal'
 import { Nav } from '#/components/sections/Nav'
@@ -11,8 +13,6 @@ const PATH = '/walkthrough'
 const PAGE_TITLE = 'Walkthrough — Battery Sensei'
 const PAGE_DESC =
   '60-second walkthrough of Battery Sensei in motion, side by side with AlDente, BatFi, coconutBattery, iStat Menus, and the built-in macOS Charge Limit. Video coming soon.'
-const EMAIL = 'info@battery-sensei.app'
-
 export const Route = createFileRoute('/walkthrough')({
   head: () => ({
     meta: [
@@ -37,7 +37,7 @@ function WalkthroughPage() {
     <>
       <Nav />
       <main>
-        <section className="zen-section mx-auto max-w-3xl px-5 sm:px-6">
+        <section className="zen-section mx-auto max-w-3xl !pb-8 px-5 sm:px-6">
           <Reveal as="p" delay={80} className="mb-6">
             <Link
               to="/"
@@ -56,24 +56,39 @@ function WalkthroughPage() {
             <Reveal
               as="h1"
               delay={220}
-              className="display-title text-4xl font-semibold leading-[1.04] tracking-[-0.018em] text-sumi md:text-[3.25rem]"
+              className="display-title self-stretch text-4xl font-semibold leading-[1.04] tracking-[-0.018em] text-sumi md:text-[3.25rem]"
             >
               {t('walkthrough.heading')}
               <span className="block italic text-sumi-soft font-normal">
                 {t('walkthrough.headingItalic')}
               </span>
             </Reveal>
-            <Reveal
-              as="p"
-              delay={320}
-              className="mt-6 max-w-2xl text-base leading-relaxed text-sumi-soft md:text-[1.0625rem]"
-            >
-              {t('walkthrough.body')}
-            </Reveal>
+            <div className="mt-6 flex w-full flex-col gap-4">
+              <Reveal
+                as="p"
+                delay={320}
+                className="max-w-2xl text-base leading-relaxed text-sumi-soft md:flex-1 md:min-w-0 md:text-[1.0625rem]"
+              >
+                {t('walkthrough.body')}
+              </Reveal>
+              <Reveal delay={360} className="self-start">
+                <Link
+                  to="/blog"
+                  className="group inline-flex h-10 items-center gap-2.5 whitespace-nowrap rounded-md border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_64%,#fff)] px-4 text-[0.85rem] font-medium text-sumi transition-[transform,background-color,border-color,box-shadow] duration-[300ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-px hover:border-hinomaru/35 hover:bg-[color-mix(in_oklab,var(--washi)_48%,#fff)] hover:shadow-[0_10px_20px_-16px_rgba(28,26,23,0.45)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
+                >
+                  <Leaf
+                    className="h-4 w-4 text-hinomaru transition-transform duration-[320ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5 group-hover:rotate-6"
+                    strokeWidth={1.8}
+                    aria-hidden
+                  />
+                  Check out the Journal
+                </Link>
+              </Reveal>
+            </div>
           </div>
         </section>
 
-        <section className="mx-auto max-w-3xl px-5 pb-2 pt-10 sm:px-6 md:pt-14">
+        <section className="mx-auto max-w-3xl px-5 pb-2 pt-6 sm:px-6 md:pt-8">
           <Reveal delay={420}>
             <VideoPlaceholder
               badge={t('walkthrough.videoBadge')}
@@ -82,32 +97,23 @@ function WalkthroughPage() {
           </Reveal>
         </section>
 
-        <section className="zen-section mx-auto max-w-3xl px-5 pt-6 sm:px-6">
+        <section className="zen-section mx-auto max-w-3xl !pt-6 !pb-12 px-5 sm:px-6">
           <Reveal delay={520}>
-            <div className="paper-card relative overflow-hidden p-6 md:p-7">
+            <div className="paper-card relative overflow-hidden p-6 pt-5 pb-4 md:p-7 md:pt-6 md:pb-5">
               <span
                 aria-hidden
                 className="pointer-events-none absolute -left-12 -bottom-16 h-40 w-40 rounded-full bg-kin/[0.06] blur-3xl"
               />
-              <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <div className="max-w-md">
-                  <p className="display-title mb-1.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-sumi-soft">
+              <div className="relative flex flex-col gap-4 md:gap-5">
+                <div className="max-w-md space-y-1.5">
+                  <p className="display-title text-[11px] font-semibold uppercase tracking-[0.22em] text-sumi-soft">
                     {t('walkthrough.notifyHeading')}
                   </p>
                   <p className="text-[14px] leading-[1.55] text-sumi-soft">
                     {t('walkthrough.notifyBody')}
                   </p>
                 </div>
-                <a
-                  href={`mailto:${EMAIL}?subject=Walkthrough%20notify%20me`}
-                  className="btn-sumi group inline-flex h-11 items-center gap-2 self-start rounded-md px-5 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
-                >
-                  <Mail
-                    className="h-4 w-4 transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5"
-                    strokeWidth={1.8}
-                  />
-                  {t('walkthrough.notifyCta')}
-                </a>
+                <WalkthroughNotifyForm />
               </div>
             </div>
           </Reveal>
@@ -115,6 +121,88 @@ function WalkthroughPage() {
       </main>
       <Footer />
     </>
+  )
+}
+
+function WalkthroughNotifyForm() {
+  const { t } = useTranslation()
+  const [email, setEmail] = useState('')
+  const [status, setStatus] = useState<'idle' | 'sending' | 'error' | 'success'>('idle')
+  const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    if (!isValid || status === 'sending') {
+      if (!isValid) setStatus('error')
+      return
+    }
+    setStatus('sending')
+    try {
+      await fetch('/api/free-signup', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          email: email.trim(),
+          locale: i18n.language,
+          source: 'walkthrough-notify',
+        }),
+        keepalive: true,
+      })
+    } catch {
+      // Best-effort only: don't block success state on transport failures.
+    }
+    setStatus('success')
+  }
+
+  return (
+    <form onSubmit={handleSubmit} noValidate className="w-full max-w-xl">
+      <label htmlFor="walkthrough-notify-email" className="sr-only">
+        {t('walkthrough.notifyForm.label')}
+      </label>
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-2">
+        <input
+          id="walkthrough-notify-email"
+          type="email"
+          required
+          autoComplete="email"
+          inputMode="email"
+          value={email}
+          onChange={(event) => {
+            setEmail(event.target.value)
+            if (status === 'error' || status === 'success') setStatus('idle')
+          }}
+          placeholder={t('walkthrough.notifyForm.placeholder')}
+          className="block h-11 w-full min-w-0 rounded-md border border-[color-mix(in_oklab,var(--sumi)_16%,transparent)] bg-[color-mix(in_oklab,var(--washi)_72%,#fff)] px-3 text-[0.875rem] text-sumi placeholder:text-nezumi/70 focus:outline-none focus:ring-2 focus:ring-sumi/25 sm:flex-1 sm:min-w-[17rem]"
+          aria-invalid={status === 'error'}
+        />
+        <button
+          type="submit"
+          disabled={status === 'sending'}
+          className="btn-sumi group inline-flex h-11 min-w-[8.75rem] whitespace-nowrap items-center justify-center gap-2 rounded-md px-4 text-sm font-medium sm:shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)] disabled:opacity-70"
+        >
+          <Bell
+            className="h-4 w-4 transition-transform duration-[280ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5"
+            strokeWidth={1.8}
+            aria-hidden
+          />
+          {status === 'sending'
+            ? t('walkthrough.notifyForm.sending')
+            : t('walkthrough.notifyForm.cta')}
+        </button>
+      </div>
+      <div className="mt-1.5 h-5">
+        {status === 'error' && (
+          <p role="alert" className="text-[0.75rem] text-hinomaru">
+            {t('walkthrough.notifyForm.errorInvalid')}
+          </p>
+        )}
+        {status === 'success' && (
+          <p className="text-[0.75rem] text-matcha animate-in fade-in duration-300 motion-reduce:animate-none">
+            {t('walkthrough.notifyForm.success')}
+          </p>
+        )}
+      </div>
+    </form>
   )
 }
 

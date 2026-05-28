@@ -126,9 +126,30 @@ function KanjiRail({
 
 export function Hero() {
   const progress = useScrollProgress(0.12)
+  const [hasStartedScroll, setHasStartedScroll] = useState(false)
   const lifetime = useLifetimePrice()
   const price = lifetime.discounted
   const { t } = useTranslation()
+
+  useEffect(() => {
+    let rafId = 0
+    const updateHasStartedScroll = () => {
+      setHasStartedScroll((prev) => prev || window.scrollY > 24)
+    }
+    const onScroll = () => {
+      if (rafId !== 0) return
+      rafId = window.requestAnimationFrame(() => {
+        rafId = 0
+        updateHasStartedScroll()
+      })
+    }
+    updateHasStartedScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      if (rafId !== 0) window.cancelAnimationFrame(rafId)
+    }
+  }, [])
 
   return (
     <section
@@ -150,7 +171,7 @@ export function Hero() {
         chars={RYOKU_CHARS}
         progress={progress}
         baseColor="rgba(138,132,124,0.65)"
-        className="vertical-jp drift pointer-events-none absolute right-[max(1.25rem,calc(50%-32rem))] top-1/2 -translate-y-1/2 text-[0.95rem] lg:text-[1.05rem] leading-loose hidden md:block"
+        className="vertical-jp drift pointer-events-none absolute right-[max(1.25rem,calc(50%-32rem))] top-1/2 -translate-y-1/2 font-jp text-[2rem] lg:text-[2.4rem] leading-tight tracking-[0.02em] hidden md:block"
       />
 
       <ScrollCue />
@@ -190,27 +211,20 @@ export function Hero() {
             className="group inline-flex h-11 items-center gap-2.5 rounded-md pl-4 pr-2 text-sm text-sumi-soft hover:text-sumi transition-colors duration-[280ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
           >
             {t('hero.readMore')}
-            {/* Circle wrapper carries the hover lift / glow. The
-                inner chevron breathes via OPACITY only (no transform)
-                so the parent's translate-y doesn't double-bob with
-                the icon. Earlier rev used `animate-gentle-bob` here,
-                which moved the chevron downward inside an already-
-                lifting circle — net effect was a chevron that looked
-                like it was trying to escape its container. */}
             <span
               className="relative inline-flex h-7 w-7 items-center justify-center rounded-full border border-sumi/15 bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] transition-[transform,background-color,border-color,box-shadow] duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:translate-y-0.5 group-hover:border-sumi/35 group-hover:bg-[color-mix(in_oklab,var(--washi)_45%,#fff)] group-hover:shadow-[0_4px_12px_-6px_rgba(28,26,23,0.25)]"
               aria-hidden
             >
               <ChevronDown
-                className="h-3.5 w-3.5 animate-gentle-pulse text-sumi-soft group-hover:text-sumi group-hover:opacity-100"
+                className={`h-3.5 w-3.5 text-sumi-soft transition-colors group-hover:text-sumi ${
+                  hasStartedScroll
+                    ? ''
+                    : 'animate-gentle-bob motion-reduce:animate-none'
+                }`}
                 strokeWidth={2}
               />
             </span>
           </a>
-        </Reveal>
-
-        <Reveal as="p" delay={560} className="spec-strip mt-7">
-          {t('hero.specStrip', { trial: TRIAL_DAYS, price: price.formatted })}
         </Reveal>
 
         <Reveal

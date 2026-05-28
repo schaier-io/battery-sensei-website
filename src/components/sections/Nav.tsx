@@ -133,7 +133,7 @@ export function Nav() {
       // the soft drop shadow so the bar reads as a separate plane.
       className="sticky top-0 z-40 w-full border-b border-transparent bg-[color-mix(in_oklab,var(--washi)_96%,#fff)] backdrop-blur-md transition-[background-color,border-color,box-shadow,height] duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] data-[scrolled=true]:border-[var(--line-strong)] data-[scrolled=true]:shadow-[0_1px_0_rgba(28,26,23,0.04),0_8px_24px_-12px_rgba(28,26,23,0.18)] md:bg-[color-mix(in_oklab,var(--washi)_78%,transparent)] md:data-[scrolled=true]:bg-[color-mix(in_oklab,var(--washi)_88%,transparent)]"
     >
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-5 sm:h-20 sm:px-8 md:gap-5 lg:gap-6 lg:px-10">
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-start gap-3 px-5 sm:h-20 sm:px-8 md:gap-5 lg:gap-6 lg:px-10">
         {/* Anchor href "/" (not "#") so the browser back button + history
             entries behave correctly. Clicking the wordmark on a deep
             page returns to home; on home itself it's a no-op scroll. */}
@@ -170,7 +170,7 @@ export function Nav() {
           </span>
         </a>
 
-        <nav className="hidden items-center gap-6 md:flex lg:gap-8" aria-label={t('nav.ariaPrimary')}>
+        <nav className="hidden items-center gap-6 md:ml-2 md:flex lg:ml-3 lg:gap-8" aria-label={t('nav.ariaPrimary')}>
           {DESKTOP_SECTIONS.map((id) => (
             <a
               key={id}
@@ -183,15 +183,15 @@ export function Nav() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="ml-auto flex items-center gap-2">
           {/* Quiet support affordance — signals "humans answer here" without
-              competing with the primary nav. Visible only at lg+ where
-              the bar has room; below lg the same link is in the footer
+              competing with the primary nav. Visible only at xl+ where
+              the bar has room; below xl the same link is in the footer
               and the mobile drawer. */}
           <a
             href={sectionHref('contact', pathname)}
             aria-label={t('nav.supportAria')}
-            className="nav-support hidden lg:inline-flex items-center gap-2 h-9 px-3 rounded-md text-sm text-sumi-soft hover:text-hinomaru transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40"
+            className="nav-support hidden xl:inline-flex items-center gap-2 h-9 px-3 rounded-md text-sm text-sumi-soft hover:text-hinomaru transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40"
           >
             <MessageCircle className="h-4 w-4" strokeWidth={1.7} aria-hidden />
             <span>{t('nav.support')}</span>

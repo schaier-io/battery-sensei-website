@@ -133,7 +133,7 @@ export function Pricing() {
         <Reveal delay={120} className="h-full">
           <article
             aria-labelledby="pricing-tier-free"
-            className="paper-card flex h-full flex-col p-7 md:p-8"
+            className="paper-card flex h-full flex-col px-7 pt-7 pb-5 md:px-8 md:pt-8 md:pb-6"
           >
             <div className="flex items-center gap-3">
               {/* `id` on the tier label gives the surrounding <article> an
@@ -147,19 +147,32 @@ export function Pricing() {
                 {t('pricing.free.tier')}
               </h3>
             </div>
+            {/* "Free" instead of "$0 / forever". Zero-price effect:
+                a word triggers an irrational positive response that a
+                number doesn't, and "$0" reads as a transaction with
+                no payment rather than the absence of one. Same type
+                scale as the paid tiers' price so the visual ladder
+                still reads cleanly side-by-side. */}
             <div className="mt-2 flex items-baseline gap-2">
-              <PriceDisplay
-                entry={{ amount: 0, currency: yearly.currency, locale: yearly.locale }}
-                className="display-title inline-flex items-baseline text-[2.25rem] md:text-[2.625rem] font-medium text-sumi leading-none"
-              />
-              <span className="text-[1rem] text-sumi-soft tracking-normal">
-                {t('pricing.free.period')}
+              <span className="display-title inline-flex items-baseline text-[2.25rem] md:text-[2.625rem] font-medium text-sumi leading-none">
+                {t('pricing.free.priceWord')}
               </span>
             </div>
             <p className="mt-3 text-[0.9375rem] leading-snug text-sumi-soft max-w-md">
               {t('pricing.free.blurb')}
-              <span className="block mt-1 text-sumi">
-                {t('pricing.free.blurbBonus', { trial: TRIAL_DAYS })}
+              <span className="mt-1.5 block text-[0.82rem] uppercase tracking-[0.12em] text-sumi-soft/80">
+                <span className="font-jp normal-case tracking-normal text-hinomaru/80">日 {TRIAL_DAYS}</span>{' '}
+                {t('pricing.free.trialEnd', { day: TRIAL_DAYS })}
+              </span>
+              <span className="mt-1 block text-sumi">
+                <Trans
+                  i18nKey="pricing.free.trialChoice"
+                  values={{ price: lifetime.discounted.formatted }}
+                  components={[
+                    <span className="font-medium text-sumi" />,
+                    <span className="font-medium text-sumi" />,
+                  ]}
+                />
               </span>
             </p>
 
@@ -193,23 +206,7 @@ export function Pricing() {
                 mt-auto wrapper so the whole conversion block pins to the
                 bottom of the card. Avoids the floating-whitespace look
                 between feature list and CTA. */}
-            <div className="mt-auto pt-8">
-              <div className="rounded-md border border-dashed border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-4 py-3.5">
-                <p className="meta-label flex items-center gap-2 text-sumi-soft">
-                  <span className="font-jp normal-case tracking-normal text-hinomaru/80">日 {TRIAL_DAYS}</span>
-                  {t('pricing.free.trialEnd', { day: TRIAL_DAYS })}
-                </p>
-                <p className="mt-2 text-[0.875rem] leading-snug text-sumi-soft">
-                  <Trans
-                    i18nKey="pricing.free.trialChoice"
-                    values={{ price: lifetime.discounted.formatted }}
-                    components={[
-                      <span className="font-medium text-sumi" />,
-                      <span className="font-medium text-sumi" />,
-                    ]}
-                  />
-                </p>
-              </div>
+            <div className="mt-auto pt-6">
               <FreeDownloadForm />
             </div>
           </article>
@@ -219,7 +216,7 @@ export function Pricing() {
         <Reveal delay={220} className="h-full">
           <article
             aria-labelledby="pricing-tier-lifetime"
-            className="paper-card flex h-full flex-col p-7 md:p-8 ring-1 ring-hinomaru/20"
+            className="paper-card flex h-full flex-col px-7 pt-7 pb-5 md:px-8 md:pt-8 md:pb-6 ring-1 ring-hinomaru/20"
           >
             <div className="flex items-center gap-3">
               <h3
@@ -288,10 +285,6 @@ export function Pricing() {
                 <LimitedRedeemBar fullPriceFormatted={lifetime.original.formatted} />
               </>
             )}
-            <p className="mt-3 text-[0.9375rem] leading-snug text-sumi-soft max-w-md">
-              {t('pricing.lifetime.blurb', { lifetimeScope })}
-            </p>
-
             <div aria-hidden className="mt-7 h-px w-full bg-[var(--line)]" />
 
             <p className="meta-label mt-6 font-jp text-hinomaru/80">
@@ -338,7 +331,7 @@ export function Pricing() {
               <Link
                 to="/checkout"
                 search={{ tier: 'lifetime', cur: undefined }}
-                className="btn-sumi group mt-3 mb-9 inline-flex h-11 w-full items-center justify-center gap-2 rounded-md px-6 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
+                className="btn-sumi group mt-2 mb-9 inline-flex h-11 w-full items-center justify-center gap-2 rounded-md px-6 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
               >
                 <Sparkles className="h-4 w-4" strokeWidth={1.8} />
                 {t('pricing.lifetime.ctaLabel')}
@@ -351,7 +344,7 @@ export function Pricing() {
         <Reveal delay={320} className="h-full">
           <article
             aria-labelledby="pricing-tier-support"
-            className="paper-card flex h-full flex-col p-7 md:p-8"
+            className="paper-card flex h-full flex-col px-7 pt-7 pb-5 md:px-8 md:pt-8 md:pb-6"
           >
             <div className="flex flex-wrap items-center gap-2">
               <h3
@@ -360,9 +353,6 @@ export function Pricing() {
               >
                 {t('pricing.support.tier')}
               </h3>
-              <span className="meta-label inline-flex items-center gap-1 rounded-full bg-sumi/5 px-2 py-0.5 text-sumi-soft">
-                {t('pricing.support.badge')}
-              </span>
             </div>
             {/* Live region wraps the full price line — see the parallel
                 comment on the Lifetime card above. */}
@@ -397,8 +387,13 @@ export function Pricing() {
                       <Icon className="h-3.5 w-3.5" strokeWidth={1.8} aria-hidden />
                     </span>
                     <span className="min-w-0">
-                      <span className="block text-[0.9375rem] font-medium text-sumi leading-tight">
-                        {title}
+                      <span className="flex flex-wrap items-center gap-2 text-[0.9375rem] font-medium text-sumi leading-tight">
+                        <span>{title}</span>
+                        {idx === 3 && (
+                          <span className="ml-1 inline-flex rotate-3 items-center rounded-full border border-hinomaru/35 bg-[color-mix(in_oklab,var(--hinomaru)_12%,#fff)] px-1.5 py-0.5 text-[0.625rem] font-semibold uppercase tracking-[0.12em] text-hinomaru">
+                            {t('pricing.support.anytimeTag', { defaultValue: 'Anytime' })}
+                          </span>
+                        )}
                       </span>
                       {body && (
                         <span className="mt-0.5 block text-[0.875rem] leading-snug text-sumi-soft">
@@ -428,9 +423,12 @@ export function Pricing() {
               <Link
                 to="/checkout"
                 search={{ tier: 'support', cur: undefined }}
-                className="btn-sumi-soft group mt-3 mb-9 inline-flex h-11 w-full items-center justify-center gap-2 rounded-md border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-6 text-sm font-medium text-sumi transition-colors duration-200 hover:bg-[color-mix(in_oklab,var(--washi)_40%,#fff)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
+                className="btn-sumi-soft group mt-2 mb-9 inline-flex h-11 w-full items-center justify-center gap-2 rounded-md border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-6 text-sm font-medium text-sumi transition-colors duration-200 hover:bg-[color-mix(in_oklab,var(--washi)_40%,#fff)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
               >
-                <Heart className="h-4 w-4 text-hinomaru" strokeWidth={1.8} />
+                <Heart
+                  className="h-4 w-4 text-hinomaru fill-transparent transition-[fill,transform] duration-[460ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:fill-current group-hover:scale-110"
+                  strokeWidth={1.8}
+                />
                 {t('pricing.support.ctaLabel')}
               </Link>
             </div>
@@ -620,10 +618,10 @@ function FreeDownloadForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mt-5" noValidate>
+    <form onSubmit={handleSubmit} className="mt-4" noValidate>
       <label
         htmlFor="free-download-email"
-        className="meta-label block text-center text-sumi-soft"
+        className="block text-center text-[0.74rem] font-medium uppercase tracking-[0.14em] text-sumi-soft/85"
       >
         {t('pricing.free.email.label')}
       </label>
@@ -648,13 +646,13 @@ function FreeDownloadForm() {
           if (status === 'error') setStatus('idle')
         }}
         placeholder={t('pricing.free.email.placeholder')}
-        className="mt-2 block h-11 w-full min-w-0 rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_55%,#fff)] px-3 text-[0.875rem] text-sumi placeholder:text-nezumi/70 focus:outline-none focus:ring-2 focus:ring-sumi/30"
+        className="mt-2 block h-11 w-full min-w-0 rounded-md border border-[color-mix(in_oklab,var(--sumi)_16%,transparent)] bg-[color-mix(in_oklab,var(--washi)_72%,#fff)] px-3 text-[0.875rem] text-sumi placeholder:text-nezumi/70 focus:outline-none focus:ring-2 focus:ring-sumi/25"
       />
       {/* Footnote sits directly under the input so the "what you're
           signing up for" disclosure is read BEFORE the visitor commits
           to the click — reciprocity is clearest when the ask is named
           before the button label, not after. */}
-      <p className="mt-2 text-center text-[0.75rem] leading-[1.5] text-sumi-soft">
+      <p className="mt-2 text-center text-[0.73rem] leading-[1.55] text-sumi-soft/90">
         {t('pricing.free.email.footnote')}
       </p>
       <button
@@ -667,7 +665,7 @@ function FreeDownloadForm() {
         // on it from a Download link click — sits ~1.25rem above the
         // bottom edge instead of glued to it.
         style={{ scrollMarginBottom: '1.25rem' }}
-        className="btn-sumi group mt-2 inline-flex h-11 w-full items-center justify-center gap-2 rounded-md px-5 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)] disabled:opacity-70"
+        className="btn-sumi group mt-3 inline-flex h-11 w-full items-center justify-center gap-2 rounded-md px-5 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)] disabled:opacity-70"
       >
         <Download
           className="h-4 w-4 transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5"
@@ -690,13 +688,13 @@ function FreeDownloadForm() {
           self-determination beats "captured" lead-gen, and we don't want
           visitors to feel the email is a hard paywall. Underline always
           visible so it reads as an actionable second path, not legalese. */}
-      <p className="mt-2 text-center">
+      <p className="mt-3 text-center">
         <MacOnlyConfirm onConfirm={startDownload}>
           {({ onClick }) => (
             <a
               href="/download/latest"
               onClick={onClick}
-              className="text-[0.75rem] font-semibold text-sumi underline decoration-[var(--line-strong)] underline-offset-[5px] transition-colors duration-[220ms] hover:text-sumi hover:decoration-sumi"
+              className="text-[0.8rem] font-medium text-sumi/90 underline decoration-[var(--line-strong)] underline-offset-[5px] transition-colors duration-[220ms] hover:text-sumi hover:decoration-sumi"
             >
               {t('pricing.free.email.skip')}
             </a>

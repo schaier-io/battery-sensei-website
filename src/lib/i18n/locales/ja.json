@@ -6,7 +6,6 @@
     "autoDetect": "自動検出",
     "languageName": {},
     "download": "ダウンロード",
-    "downloadFree": "無料でダウンロード",
     "downloadMac": "macOS版をダウンロード",
     "recommended": "おすすめ",
     "learnMore": "詳しく見る"
@@ -45,13 +44,12 @@
     }
   },
   "hero": {
-    "kicker": "macOS · {{trial}}日間無料 · {{price}}一度きり",
+    "kicker": "macOS · 無料 · Premium {{price}}買い切り",
     "title": "静かな力を、",
     "titleItalic": "あなたのMacBookに。",
     "jp": "静かに、電池に寄り添う。",
     "body": "MacBookの電池は、充電のたびに静かに消耗していきます。先生はその様子をそっと見守り、突然のシャットダウンを未然に防ぎ、充電上限を保って電池を長持ちさせ、年月の歩みをやさしい言葉で記録します。",
     "readMore": "もっと読む",
-    "specStrip": "{{trial}}日間無料。カード不要、アカウント不要。その後は{{price}}を一度だけ、それきりです。",
     "menuCaption": "メニューバーに住み、必要なときだけ声をかけます。"
   },
   "categories": {
@@ -136,7 +134,7 @@
         "title": "あなたのバッテリーの歩み、一本の線で",
         "body": "充電のたびに描かれる、静かな一本の線。",
         "timeStart": "2時間前",
-        "lifetime": "寿命 · 92%"
+        "lifetime": "バッテリー 92%"
       },
       "cycles": {
         "title": "サイクル数を、文脈とともに",
@@ -174,11 +172,17 @@
         "kicker": "保管場所 · 24h",
         "localTag": "100% ローカル",
         "thisMac": "このMac",
+        "staysHeader": "このMacから出ない",
         "rows": {
           "history": "バッテリー履歴",
           "cycles": "サイクル台帳",
           "drain": "アプリ別ドレイン",
           "calendar": "カレンダー (Meeting Guard)"
+        },
+        "zeros": {
+          "uploads": "送信",
+          "accounts": "アカウント",
+          "trackers": "トラッカー"
         }
       }
     }
@@ -194,7 +198,7 @@
       "moreInfo": "詳細",
       "openFeature": "機能を開く"
     },
-    "showAll": "すべての機能を表示（あと{{count}}件）",
+    "showAll": "すべての機能を表示",
     "showFewer": "閉じる",
     "headers": {
       "feature": "機能",
@@ -399,9 +403,18 @@
     "body": "Battery Senseiが動いている様子を短くご紹介します — AlDente、BatFi、coconutBattery、iStat Menus、そしてmacOSの充電上限機能との並べた比較も。映像は制作中、完成し次第ここで公開します。",
     "videoBadge": "近日公開",
     "videoCaption": "推定再生時間 · 60秒 · 1080p",
-    "notifyHeading": "公開時にお知らせをご希望ですか?",
-    "notifyBody": "メールは1通だけ — ウォークスルーが公開された日にお送りします。",
+    "notifyHeading": "公開されたら知らせてください。",
+    "notifyBody": "公開時に短いメールを1通、必要なときだけ開発者からの近況をお送りします。スパムはありません。",
     "notifyCta": "知らせてもらう",
+    "notifyForm": {
+      "label": "ウォークスルー通知用メール",
+      "placeholder": "you@example.com",
+      "cta": "知らせてもらう",
+      "sending": "送信中…",
+      "idle": "開発者本人から直接お届けします。",
+      "success": "登録しました。開発者からの更新を1通お送りします。",
+      "errorInvalid": "メールアドレスの形式が正しくありません。"
+    },
     "backToCompare": "比較に戻る"
   },
   "featurePages": {
@@ -461,10 +474,11 @@
     "kicker": "値段 · Pricing",
     "heading": "先生を使う、3つの道。",
     "headingItalic": "Lifetimeを一度きり、または毎年の応援。",
-    "intro": "まずは無料で{{trial}}日間のPremiumお試し。その後はLifetimeを解放({{lifetimeScope}}、{{lifetime}}、先着500名のみ) — または年間パトロンとして({{yearlyScope}}) {{support}}/年で開発を支えてください。",
+    "intro": "まずは無料プランから — ずっとあなたのものです。もっと必要なら、Premiumを{{trial}}日間無料でお試し。Lifetimeで永久に手に入れるか、年間パトロンとして柔軟に応援してください。",
     "free": {
       "tier": "基本 · Free",
       "period": "ずっと",
+      "priceWord": "無料",
       "blurb": "ずっとあなたのもの。カード不要、アカウント不要。",
       "blurbBonus": "さらに{{trial}}日間、すべてのPremium機能が無料。",
       "email": {
@@ -505,7 +519,6 @@
     "lifetime": {
       "tier": "永遠 · Lifetime",
       "period": "一度きり、ずっと",
-      "blurb": "試用期間をスキップ。今すぐすべてを解放 — {{lifetimeScope}}。未来のすべてのPremium機能まで含まれます。",
       "originalLabel": "元の価格",
       "discountNote": "期間限定オファー · コード ZENMODE",
       "redeem": {
@@ -740,7 +753,9 @@
       "title": "書く前に",
       "faqHint": "ほとんどのご質問はすでにお答えしています、<0>まずはご覧ください</0>。",
       "refundLabel": "返金",
-      "refundHint": "注文ID（Polarからの購入確認メールに記載）を添えていただくと、やり取りなしで対応できます。"
+      "refundHint": "Polarからの購入確認メールにある注文IDを添えてください — それだけで対応できます。",
+      "journalLabel": "Journal",
+      "journalHint": "より詳しいヒントは、<0>Journalを見る</0>でバッテリーガイドと更新情報をご覧ください。"
     }
   },
   "download": {
@@ -768,7 +783,6 @@
     "tagline": "MacBookユーザーから、MacBookユーザーへ。",
     "ariaPrefs": "お問い合わせと設定",
     "ariaFooter": "フッター",
-    "contact": "連絡",
     "reportIssue": "問題を報告",
     "releases": "リリース",
     "pricing": "値段",

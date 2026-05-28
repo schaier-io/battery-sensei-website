@@ -58,7 +58,7 @@ function MenuBarGlanceMockup() {
         <Wifi className="h-2.5 w-2.5" strokeWidth={1.8} aria-hidden />
         <Search className="h-2.5 w-2.5" strokeWidth={1.8} aria-hidden />
         <span className="tabular-nums font-medium text-[10px]">13:42</span>
-        <MenuBarBatteryBadge percent={84} charging />
+        <MenuBarBatteryBadge percent={84} />
       </div>
 
       <div className="ml-auto mt-1 w-[244px] overflow-hidden rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,#fff)] shadow-[0_1px_0_rgba(255,255,255,0.5)_inset,0_14px_30px_-14px_rgba(28,26,23,0.30),0_4px_10px_-6px_rgba(28,26,23,0.18)]">
@@ -81,27 +81,33 @@ function MenuBarGlanceMockup() {
               {t('features.glance.timeLeft')}
             </p>
           </div>
+          <span className="ml-auto rounded-md bg-hinomaru px-2 py-1 text-[9px] font-semibold uppercase tracking-[0.12em] text-[#fff8eb]">
+            29.7 W
+          </span>
         </div>
 
         <MenuSep />
 
-        <MenuRow
-          icon={<Zap className="h-3 w-3 text-hinomaru" strokeWidth={2} />}
-          label={t('features.glance.chargingTo')}
-          value="29.7 W"
-        />
-        <MenuRow label={t('features.glance.source')} value={t('features.glance.powerAdapter')} />
-        <MenuRow label={t('features.glance.cycles')} value="217" />
+        <div className="grid grid-cols-2 gap-x-3 gap-y-2 px-3 py-2 text-[10px]">
+          <div className="rounded-sm bg-[color-mix(in_oklab,var(--washi)_82%,#fff)] px-2 py-1">
+            <p className="uppercase tracking-[0.14em] text-nezumi">{t('features.glance.source')}</p>
+            <p className="mt-0.5 truncate font-medium text-sumi">{t('features.glance.powerAdapter')}</p>
+          </div>
+          <div className="rounded-sm bg-[color-mix(in_oklab,var(--washi)_82%,#fff)] px-2 py-1">
+            <p className="uppercase tracking-[0.14em] text-nezumi">{t('features.glance.cycles')}</p>
+            <p className="mt-0.5 font-medium tabular-nums text-sumi">217</p>
+          </div>
+        </div>
 
         <MenuSep />
 
-        <div className="flex items-center justify-between gap-2 px-3 py-1.5 text-[11px] text-sumi">
-          <span className="flex items-center gap-1.5">
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-hinomaru" />
-            {t('features.glance.chargeLimitOn')}
+        <div className="flex items-center justify-between gap-2 px-3 py-1.5 text-[10px] text-sumi">
+          <span className="flex items-center gap-1.5 truncate">
+            <Zap className="h-3 w-3 shrink-0 text-hinomaru" strokeWidth={2} aria-hidden />
+            <span className="truncate">{t('features.glance.chargingTo')}</span>
           </span>
-          <span className="rounded-sm bg-sumi px-1.5 py-0.5 text-[9px] font-semibold tracking-wider text-washi">
-            {t('features.glance.on')}
+          <span className="rounded-sm bg-sumi px-1.5 py-0.5 text-[9px] font-semibold tracking-wider text-washi shrink-0">
+            {t('features.glance.on')} · 80%
           </span>
         </div>
       </div>
@@ -135,28 +141,20 @@ function ChargeLimitMockup() {
         role="presentation"
         aria-hidden
       >
-        {/* Solid fill to the cap. */}
+        {/* Travel-mode stripe texture sits fully in the background.
+            The solid fill overlays it up to 80%, so the stripe region
+            appears only in the tail without a hard left marker line. */}
         <div
-          className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-sumi to-[color-mix(in_oklab,var(--sumi)_72%,transparent)]"
-          style={{ width: '80%' }}
-        />
-        {/* Dashed Travel-Mode region above the cap. */}
-        <div
-          className="absolute inset-y-0 right-0"
+          className="absolute inset-0"
           style={{
-            width: '20%',
             background:
-              'repeating-linear-gradient(135deg, color-mix(in oklab, var(--kin) 60%, transparent) 0 2px, transparent 2px 5px)',
+              'repeating-linear-gradient(135deg, color-mix(in oklab, var(--hinomaru) 72%, var(--washi)) 0 2px, color-mix(in oklab, var(--hinomaru) 10%, transparent) 2px 5px)',
           }}
         />
-        {/* Cap marker (vertical hairline + dot). */}
-        <span
-          className="absolute top-[-3px] bottom-[-3px] w-px bg-hinomaru"
-          style={{ left: '80%' }}
-        />
-        <span
-          className="absolute h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-hinomaru"
-          style={{ left: '80%', top: 'calc(50% - 3px)' }}
+        {/* Solid fill to the cap. */}
+        <div
+          className="absolute inset-y-0 left-0 rounded-l-full bg-gradient-to-r from-sumi to-[color-mix(in_oklab,var(--sumi)_72%,transparent)]"
+          style={{ width: '80%' }}
         />
       </div>
       {/* 0 / 80 / 100 ticks. Each label is absolutely positioned so
@@ -246,43 +244,20 @@ function MeetingGuardMockup() {
   )
 }
 
-function MenuRow({
-  icon,
-  label,
-  value,
-}: {
-  icon?: React.ReactNode
-  label: string
-  value: string
-}) {
-  return (
-    <div className="flex items-center justify-between gap-2 px-3 py-1.5 text-[11px] text-sumi">
-      <span className="flex items-center gap-1.5 min-w-0">
-        {icon}
-        <span className="truncate">{label}</span>
-      </span>
-      <span className="tabular-nums text-sumi-soft">{value}</span>
-    </div>
-  )
-}
-
 function MenuSep() {
   return <span aria-hidden className="block h-px w-full bg-[var(--line)]" />
 }
 
 function MenuBarBatteryBadge({
   percent,
-  charging = false,
 }: {
   percent: number
-  charging?: boolean
 }) {
   return (
     <span
       className="relative inline-flex items-center gap-0.5 rounded-sm px-1 py-0.5 bg-white/10 ring-1 ring-white/25"
       aria-hidden
     >
-      {charging && <Zap className="h-2.5 w-2.5 text-hinomaru" strokeWidth={2.2} />}
       <svg viewBox="0 0 24 12" width="20" height="10">
         <rect
           x="0.5"

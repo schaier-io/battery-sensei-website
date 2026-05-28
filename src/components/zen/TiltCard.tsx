@@ -12,6 +12,8 @@ interface TiltCardProps {
 }
 
 const spring: SpringOptions = { damping: 30, stiffness: 100, mass: 2 }
+const interactiveSelector =
+  'button, a, input, select, textarea, [role="button"], [role="tab"], [data-tilt-interactive]'
 
 /**
  * Content-tilt wrapper. Same motion physics as React Bits Pro `TiltedCard`,
@@ -29,9 +31,23 @@ export function TiltCard({
   const rotateY = useSpring(useMotionValue(0), spring)
   const scale = useSpring(1, spring)
 
-  function handleMove(e: React.MouseEvent<HTMLDivElement>) {
+  function resetTilt() {
+    rotateX.set(0)
+    rotateY.set(0)
+  }
+
+  function shouldSuspendTilt(target: EventTarget | null): boolean {
+    if (!(target instanceof HTMLElement)) return false
+    return target.closest(interactiveSelector) !== null
+  }
+
+  function handleMove(e: React.PointerEvent<HTMLDivElement>) {
     const el = ref.current
     if (!el) return
+    if (e.pointerType === 'touch' || shouldSuspendTilt(e.target)) {
+      resetTilt()
+      return
+    }
     const rect = el.getBoundingClientRect()
     const offsetX = e.clientX - rect.left - rect.width / 2
     const offsetY = e.clientY - rect.top - rect.height / 2
@@ -39,13 +55,16 @@ export function TiltCard({
     rotateY.set((offsetX / (rect.width / 2)) * rotateAmplitude)
   }
 
-  function handleEnter() {
+  function handleEnter(e: React.PointerEvent<HTMLDivElement>) {
+    if (e.pointerType === 'touch' || shouldSuspendTilt(e.target)) {
+      scale.set(1)
+      return
+    }
     scale.set(scaleOnHover)
   }
 
   function handleLeave() {
-    rotateX.set(0)
-    rotateY.set(0)
+    resetTilt()
     scale.set(1)
   }
 
@@ -58,11 +77,11 @@ export function TiltCard({
       // forwards that height. Without `h-full` here, the inner `motion.div`
       // and the child `paper-card` collapse to their intrinsic content size
       // and the cards end up uneven.
-      className={`h-full [transform-style:preserve-3d] ${className}`}
+      className={`tilt-card h-full [transform-style:preserve-3d] ${className}`}
       style={{ perspective: `${perspective}px` }}
-      onMouseMove={handleMove}
-      onMouseEnter={handleEnter}
-      onMouseLeave={handleLeave}
+      onPointerMove={handleMove}
+      onPointerEnter={handleEnter}
+      onPointerLeave={handleLeave}
     >
       <motion.div
         className="h-full w-full [transform-style:preserve-3d] will-change-transform"

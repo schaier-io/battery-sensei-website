@@ -6,7 +6,6 @@
     "autoDetect": "Détection automatique",
     "languageName": {},
     "download": "Télécharger",
-    "downloadFree": "Télécharger gratuitement",
     "downloadMac": "Télécharger pour macOS",
     "recommended": "Recommandé",
     "learnMore": "En savoir plus"
@@ -45,13 +44,12 @@
     }
   },
   "hero": {
-    "kicker": "macOS · {{trial}} jours gratuits · {{price}} une fois",
+    "kicker": "macOS · Gratuit · Premium {{price}} une fois",
     "title": "Énergie silencieuse",
     "titleItalic": "pour votre MacBook.",
     "jp": "静かに、電池に寄り添う。",
     "body": "La batterie de votre MacBook s'use discrètement à chaque charge. Sensei s'en occupe pour vous : prévient avant une coupure surprise, maintient votre limite de charge pour que la batterie dure plus longtemps, et tient un journal clair au fil des années.",
     "readMore": "En savoir plus",
-    "specStrip": "{{trial}} jours gratuits. Sans carte, sans compte. Puis {{price}} une seule fois, plus jamais.",
     "menuCaption": "Vit dans votre barre des menus. Ne parle que quand c'est important."
   },
   "categories": {
@@ -136,7 +134,7 @@
         "title": "Ton historique de batterie, en courbe",
         "body": "Une ligne calme, tracée à chaque charge.",
         "timeStart": "il y a 2 h",
-        "lifetime": "Durée de vie · 92 %"
+        "lifetime": "Batterie 92 %"
       },
       "cycles": {
         "title": "Nombre de cycles, en contexte",
@@ -174,11 +172,17 @@
         "kicker": "Où ça vit · 24h",
         "localTag": "100% local",
         "thisMac": "ce Mac",
+        "staysHeader": "Reste sur ton Mac",
         "rows": {
           "history": "Historique de batterie",
           "cycles": "Registre des cycles",
           "drain": "Conso par app",
           "calendar": "Calendrier (Meeting Guard)"
+        },
+        "zeros": {
+          "uploads": "envois",
+          "accounts": "comptes",
+          "trackers": "traceurs"
         }
       }
     }
@@ -194,7 +198,7 @@
       "moreInfo": "Plus d'infos",
       "openFeature": "Ouvrir la fonctionnalité"
     },
-    "showAll": "Voir toutes les fonctions ({{count}} de plus)",
+    "showAll": "Voir toutes les fonctions",
     "showFewer": "Voir moins",
     "headers": {
       "feature": "Fonctionnalité",
@@ -399,9 +403,18 @@
     "body": "Une courte présentation de Battery Sensei en mouvement — et comment il se compare à AlDente, BatFi, coconutBattery, iStat Menus et la Limite de charge de macOS. Le film est en production ; cette page accueillera la vidéo dès qu'elle sera prête.",
     "videoBadge": "Vidéo bientôt disponible",
     "videoCaption": "Durée estimée · 60 s · 1080p",
-    "notifyHeading": "Tu veux être prévenu quand elle sort ?",
-    "notifyBody": "On n'enverra qu'un seul e-mail — le jour de la mise en ligne.",
+    "notifyHeading": "Préviens-moi quand c'est en ligne.",
+    "notifyBody": "Un court e-mail quand la vidéo est en ligne, plus quelques nouvelles du développeur. Pas de spam.",
     "notifyCta": "Préviens-moi",
+    "notifyForm": {
+      "label": "E-mail pour alerte de la presentation",
+      "placeholder": "toi@exemple.fr",
+      "cta": "Previens-moi",
+      "sending": "Envoi…",
+      "idle": "Tu recevras un message direct du développeur.",
+      "success": "C'est noté. Tu recevras une mise à jour du développeur par e-mail.",
+      "errorInvalid": "Cet e-mail ne semble pas valide."
+    },
     "backToCompare": "Retour à la comparaison"
   },
   "featurePages": {
@@ -461,10 +474,11 @@
     "kicker": "Tarifs · 値段",
     "heading": "Trois façons d'utiliser Sensei.",
     "headingItalic": "Lifetime une fois, ou soutien annuel.",
-    "intro": "Commencez gratuitement avec {{trial}} jours d'essai Premium. Ensuite, débloquez Lifetime ({{lifetimeScope}}, {{lifetime}}, 500 premiers seulement) — ou soutenez en Mécène annuel ({{yearlyScope}}) à {{support}}/an.",
+    "intro": "Commencez avec l'offre Free — elle est à toi pour toujours. Besoin de plus ? Essaie Premium gratuitement pendant {{trial}} jours ; garde-le avec Lifetime, ou reste souple en Mécène annuel.",
     "free": {
       "tier": "基本 · Free",
       "period": "pour toujours",
+      "priceWord": "Gratuit",
       "blurb": "À toi pour toujours. Pas de carte, pas de compte.",
       "blurbBonus": "Plus chaque fonctionnalité Premium, gratuite pendant {{trial}} jours.",
       "email": {
@@ -505,7 +519,6 @@
     "lifetime": {
       "tier": "永遠 · Lifetime",
       "period": "une fois, pour toujours",
-      "blurb": "Sautez l'essai. Débloquez tout immédiatement — {{lifetimeScope}}, y compris toutes les futures fonctionnalités Premium.",
       "originalLabel": "avant",
       "discountNote": "Offre limitée dans le temps · code ZENMODE",
       "redeem": {
@@ -740,7 +753,9 @@
       "title": "Avant d'écrire",
       "faqHint": "La plupart des questions y trouvent déjà leur réponse, <0>jetez-y un œil d'abord</0>.",
       "refundLabel": "Remboursement",
-      "refundHint": "Mentionnez votre numéro de commande (Polar l'envoie par e-mail à l'achat) pour qu'on règle ça sans aller-retour."
+      "refundHint": "Joignez le numéro de commande de votre e-mail Polar — c'est tout ce qu'il nous faut.",
+      "journalLabel": "Journal",
+      "journalHint": "Envie d'aller plus loin ? <0>Consultez le Journal</0> pour des guides batterie et les nouveautés."
     }
   },
   "download": {
@@ -768,7 +783,6 @@
     "tagline": "D'un propriétaire de MacBook à un autre.",
     "ariaPrefs": "Contact et préférences",
     "ariaFooter": "Pied de page",
-    "contact": "Contact",
     "reportIssue": "Signaler un problème",
     "releases": "Versions",
     "pricing": "Tarifs",

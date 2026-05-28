@@ -72,7 +72,7 @@ export function MenuBarMockup({ className = '' }: { className?: string }) {
         // Desktop "wallpaper" — soft warm washi wash with a high light source
         // for depth, like late-afternoon paper.
         background:
-          'radial-gradient(140% 90% at 30% 8%, #f7f0e4 0%, #ebdec8 55%, #c8b394 100%)',
+          'radial-gradient(140% 90% at 30% 8%, #f8f2e8 0%, #efe3cf 56%, #d8c5ab 100%)',
       }}
     >
       {/* macOS menu bar — translucent dark over the wallpaper */}
@@ -167,10 +167,9 @@ function AlertCard({ percent, revealed }: { percent: number; revealed: boolean }
         <div
           className="relative grid h-[58px] w-[58px] place-items-center rounded-full"
           style={{
-            background:
-              'radial-gradient(circle at 50% 42%, #fbe3e0 0%, #f7d0cd 60%, #f1c1be 100%)',
+            background: '#f6d6d6',
             boxShadow:
-              'inset 0 1px 0 rgba(255,255,255,0.7), inset 0 -8px 14px -10px color-mix(in oklab, var(--hinomaru) 22%, transparent), 0 0 0 1px color-mix(in oklab, var(--hinomaru) 14%, transparent), 0 6px 18px -10px color-mix(in oklab, var(--hinomaru) 45%, transparent)',
+              '0 0 0 1px color-mix(in oklab, var(--hinomaru) 16%, transparent)',
           }}
         >
           <SmallBatteryGlyph fraction={percent / 100} />
@@ -202,8 +201,11 @@ function AlertCard({ percent, revealed }: { percent: number; revealed: boolean }
       </p>
 
       <div className="mt-3 flex items-center justify-between gap-2">
-        <div className="flex items-center gap-1 rounded-lg border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,#fff)] p-0.5 shadow-[0_1px_0_rgba(255,255,255,0.45)_inset]">
-          <span className="px-1 text-sumi-soft" aria-hidden>
+        <div className="group/snooze flex items-center gap-1 rounded-lg border border-[var(--line)] bg-white p-0.5 shadow-[0_1px_0_rgba(255,255,255,0.45)_inset] transition-[transform,box-shadow,border-color] duration-[240ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-px hover:border-[var(--line-strong)] hover:shadow-[0_1px_0_rgba(255,255,255,0.58)_inset,0_6px_14px_-10px_rgba(28,26,23,0.45)]">
+          <span
+            className="px-1 text-sumi-soft transition-transform duration-[260ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover/snooze:-rotate-12 group-hover/snooze:scale-110"
+            aria-hidden
+          >
             <MoonStar className="h-3 w-3" strokeWidth={1.8} />
           </span>
           <span
@@ -212,7 +214,7 @@ function AlertCard({ percent, revealed }: { percent: number; revealed: boolean }
           >
             <Minus className="h-3 w-3" strokeWidth={2} />
           </span>
-          <span className="rounded-md bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-2 py-0.5 text-[10px] font-semibold text-sumi shadow-[0_1px_0_rgba(255,255,255,0.6)_inset]">
+          <span className="rounded-md bg-white px-2 py-0.5 text-[10px] font-semibold text-sumi shadow-[0_1px_0_rgba(255,255,255,0.6)_inset] transition-[transform,box-shadow,background-color] duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover/snooze:-translate-y-px group-hover/snooze:bg-[color-mix(in_oklab,#fff_90%,var(--washi-soft))] group-hover/snooze:shadow-[0_1px_0_rgba(255,255,255,0.72)_inset,0_4px_10px_-8px_rgba(28,26,23,0.45)]">
             <span className="text-sumi-soft">Snooze </span>
             <span className="tabular-nums">5 min</span>
           </span>
@@ -224,7 +226,7 @@ function AlertCard({ percent, revealed }: { percent: number; revealed: boolean }
           </span>
         </div>
         <span
-          className="inline-flex items-center gap-1.5 rounded-lg bg-hinomaru px-2.5 py-1.5 text-[11px] font-semibold text-[#fff8eb] shadow-[0_1px_0_rgba(255,255,255,0.18)_inset,0_2px_4px_rgba(188,0,45,0.22)]"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-hinomaru px-2.5 py-1.5 text-[11px] font-semibold text-[#fff8eb] shadow-[0_1px_0_rgba(255,255,255,0.18)_inset,0_2px_4px_rgba(188,0,45,0.22)] transition-[transform,box-shadow,filter] duration-[240ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-px hover:brightness-105 hover:shadow-[0_1px_0_rgba(255,255,255,0.2)_inset,0_8px_18px_-10px_rgba(188,0,45,0.65)]"
         >
           Dismiss
           <kbd className="rounded bg-[color-mix(in_oklab,#fff8eb_24%,transparent)] px-1 py-0.5 text-[9px] font-medium tracking-wider text-[#fff8eb] ring-1 ring-inset ring-[#fff8eb]/30">
