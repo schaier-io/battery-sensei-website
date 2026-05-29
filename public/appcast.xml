@@ -352,6 +352,32 @@
         length="20638431"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.3.0</title>
+      <pubDate>Fri, 29 May 2026 09:00:19 +0000</pubDate>
+      <sparkle:version>53</sparkle:version>
+      <sparkle:shortVersionString>1.3.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.3.0</h1>
+<p>Battery Sensei now reads naturally in every language.</p>
+<p>The headline this release is a top-to-bottom rework of the app&#x27;s wording across English, German, Spanish, French, and Japanese. Real native phrasing for each one, not literal translation, with the calm Sensei voice carried through. Setup, warnings, battery care, the Sensei Saga, and licensing all read like a person wrote them.</p>
+<p>Also in 1.3.0:</p>
+<ul>
+<li>Counts and plurals now follow each language&#x27;s own rules</li>
+<li>More reliable meeting battery guard: it recovers calendar access on launch if the system permission was reset</li>
+</ul>
+<p>Warnings and charging behave exactly as before. Same Sensei, clearer words.</p>
+<p>Marketing 1.2.11 → 1.3.0, build 52 → 53.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.3.0/Battery-Sensei.pkg"
+        sparkle:edSignature="1pUL/H2wWl1mNzO01Ua6BLYfKlS+aw4hvtJAO2Qgt70KJVa8RUAFdBughHY3LtNhzAX/ybPElK3a4AYP/nPMCg=="
+        length="20645259"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
