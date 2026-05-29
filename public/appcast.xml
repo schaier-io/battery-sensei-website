@@ -311,6 +311,27 @@
         length="20638373"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.2.10</title>
+      <pubDate>Fri, 29 May 2026 04:49:33 +0000</pubDate>
+      <sparkle:version>51</sparkle:version>
+      <sparkle:shortVersionString>1.2.10</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.2.10</h1>
+<p>Faster auto-update propagation.</p>
+<p>Sparkle&#x27;s scheduled background check now runs every 7 hours instead of the 24-hour default. With the appcast already served from a CDN edge, the bandwidth cost of three checks a day per client is negligible; the win is that fixes and small improvements reach users within the same day instead of waiting up to a full 24-hour cycle.</p>
+<p>Manual checks via Settings → &quot;Check for updates now&quot; still work the same way. Users who disable automatic checks see no behavioural change.</p>
+<p>Marketing 1.2.9 → 1.2.10, build 50 → 51.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.2.10/Battery-Sensei.pkg"
+        sparkle:edSignature="2wnN1boM4EWcMZWQXA1/CfOv2bMyvTi/9PjRd7GVshAJGB586994OuKFVst1NxQw94nv+NMReD08u6GaUTueDg=="
+        length="20638414"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
