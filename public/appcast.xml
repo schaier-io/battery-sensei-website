@@ -290,6 +290,28 @@
         length="20625635"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.2.9</title>
+      <pubDate>Fri, 29 May 2026 04:29:50 +0000</pubDate>
+      <sparkle:version>50</sparkle:version>
+      <sparkle:shortVersionString>1.2.9</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.2.9</h1>
+<p>Calendar permission survives updates, and the coverage hint actually hovers.</p>
+<p>The Calendar Battery Guard no longer asks for permission from scratch after a version update. When macOS resets the calendar TCC entry between versions — which it does in certain code-signing edge cases regardless of the app — the guard now detects the mismatch (was previously granted, current status reports notDetermined, guard still enabled) and re-requests automatically after launch settles. One system prompt appears, you click Allow, the guard is back. No more &quot;off, on, oh I have to grant again&quot; dance after every update.</p>
+<p>Three guards layered to make sure prompts only fire when TCC genuinely doesn&#x27;t know: <code>requestAccess()</code> re-reads the live authorization status at entry and short-circuits without calling EventKit at all if access is already granted. The init backfills the sticky &quot;previously granted&quot; flag for anyone whose grant predated this release. The auto re-prompt path itself re-checks status right before firing, so a grant during the 1-second settle window cancels the prompt instead of duplicating it.</p>
+<p>The Top Power-Hungry Apps info-circle next to the 24-hour and 7-day subtitle finally responds to hover. The <code>.help()</code> tooltip on a bare SwiftUI Image doesn&#x27;t always activate — the view isn&#x27;t in the responder chain so macOS often doesn&#x27;t deliver hover events. The badge is now a plain Button with a 4pt padded hit target, pointing-hand cursor on hover, a brighten on the glyph itself, and a click-to-open popover for trackpad-tap users who don&#x27;t wait for tooltip dwell.</p>
+<p>Marketing 1.2.8 → 1.2.9, build 49 → 50.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.2.9/Battery-Sensei.pkg"
+        sparkle:edSignature="0+AAC93pDq5KqHpgZSXl578e2koHbNSGFPy/vk8jN/OwP6AAS5uFliXVdvJhKFHhu59PE0toPgBlAu0bPhb7AQ=="
+        length="20638373"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
