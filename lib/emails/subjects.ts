@@ -6,7 +6,7 @@
 export function confirmSubject(locale: string): string {
   switch (locale) {
     case 'de':
-      return 'Bitte bestätige deine E-Mail — Battery Sensei'
+      return 'Bitte bestätige deine E-Mail-Adresse — Battery Sensei'
     case 'es':
       return 'Confirma tu correo — Battery Sensei'
     case 'fr':
@@ -23,9 +23,9 @@ export function welcomeSubject(locale: string): string {
     case 'de':
       return 'Willkommen bei Battery Sensei'
     case 'es':
-      return 'Bienvenido a Battery Sensei'
+      return 'Te damos la bienvenida a Battery Sensei'
     case 'fr':
-      return 'Bienvenue chez Battery Sensei'
+      return 'Votre téléchargement Battery Sensei'
     case 'ja':
       return 'Battery Sensei へようこそ'
     default:

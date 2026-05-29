@@ -38,28 +38,49 @@ export function siteUrl(): string {
   return u.replace(/\/+$/, '')
 }
 
+const DEFAULT_ALLOWED_ORIGINS = [
+  'https://battery-sensei.app',
+  'https://www.battery-sensei.app',
+] as const
+
+function normaliseOrigin(value: string): string | null {
+  const trimmed = value.trim()
+  if (!trimmed) return null
+  const withScheme = trimmed.startsWith('http') ? trimmed : `https://${trimmed}`
+  try {
+    return new URL(withScheme).origin
+  } catch {
+    return null
+  }
+}
+
 /**
  * Origins the CSRF gate is willing to accept on state-changing POSTs
- * (free-signup, confirm). Always includes the canonical site URL; on
- * Vercel preview/branch deployments we also accept the auto-set
- * `VERCEL_URL` and `VERCEL_BRANCH_URL` so PR previews can exercise the
- * full signup flow without re-configuring `PUBLIC_SITE_URL` per env.
+ * (free-signup, confirm). Always includes both production brand domains
+ * plus the canonical site URL; on Vercel preview/branch deployments we
+ * also accept the auto-set `VERCEL_URL` and `VERCEL_BRANCH_URL` so PR
+ * previews can exercise the full signup flow without re-configuring
+ * `PUBLIC_SITE_URL` per env.
  *
- * Vercel guarantees those env vars only on its build/runtime — locally
- * they're undefined and the canonical URL is the only entry. The
- * unsubscribe POST deliberately does NOT consult this set; it must
- * accept any-origin POSTs to honor RFC 8058 inbox-side one-click.
+ * The production site can be reached on apex or www. Keeping both here
+ * matches the checkout/contact endpoints and prevents a www page from
+ * rejecting its own same-site signup POST as `bad-origin`.
  */
 export function allowedOrigins(): Set<string> {
-  const origins = new Set<string>([siteUrl()])
+  const origins = new Set<string>()
+  for (const value of DEFAULT_ALLOWED_ORIGINS) {
+    const origin = normaliseOrigin(value)
+    if (origin) origins.add(origin)
+  }
+  const canonicalOrigin = normaliseOrigin(siteUrl())
+  if (canonicalOrigin) origins.add(canonicalOrigin)
+
   for (const key of ['VERCEL_URL', 'VERCEL_BRANCH_URL'] as const) {
     const value = process.env[key]
     if (!value) continue
-    // Vercel sets these as bare hostnames (no scheme). Prepend https.
-    const normalised = value.startsWith('http')
-      ? value.replace(/\/+$/, '')
-      : `https://${value.replace(/\/+$/, '')}`
-    origins.add(normalised)
+    // Vercel sets these as bare hostnames (no scheme).
+    const origin = normaliseOrigin(value)
+    if (origin) origins.add(origin)
   }
   return origins
 }

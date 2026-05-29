@@ -1,8 +1,8 @@
-import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
+import { HeadContent, Scripts, createRootRoute, useRouterState } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import { Analytics } from '@vercel/analytics/react'
-import { SpeedInsights } from '@vercel/speed-insights/react'
+import { SpeedInsights, computeRoute } from '@vercel/speed-insights/react'
 
 import appCss from '../styles.css?url'
 // Preload the fonts the above-fold render relies on. Imported as URLs so Vite
@@ -368,7 +368,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <Analytics />
         {/* Vercel Speed Insights — Core Web Vitals from real visits.
             Cookieless, sampled, no PII. No-op outside production. */}
-        <SpeedInsights />
+        <VercelSpeedInsights />
         {/* No DEV guard — `@tanstack/devtools-vite` strips this entire
             element (and its imports) from production builds automatically.
             Wrapping it in `import.meta.env.DEV && (...)` breaks the plugin's
@@ -387,4 +387,18 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </body>
     </html>
   )
+}
+
+function VercelSpeedInsights() {
+  const route = useRouterState({
+    select: (state) => {
+      const match = state.matches[state.matches.length - 1]
+      return computeRoute(
+        state.location.pathname,
+        (match?.params ?? null) as Record<string, string | string[]> | null,
+      )
+    },
+  })
+
+  return <SpeedInsights route={route} />
 }

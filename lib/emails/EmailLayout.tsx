@@ -43,33 +43,33 @@ type Props = {
 const COPY = {
   en: {
     why: 'A quiet note from Battery Sensei · battery-sensei.app',
-    ignore: 'Didn\'t sign up? You can let this drift past — nothing is saved until you confirm.',
+    ignore: 'Didn\'t sign up? You can ignore this email. Nothing is saved until you confirm.',
     unsub: 'Unsubscribe',
     tagline: 'Calm energy for your Mac.',
   },
   de: {
-    why: 'Eine leise Nachricht von Battery Sensei · battery-sensei.app',
-    ignore: 'Nicht angemeldet? Lass die E-Mail einfach vorbeiziehen — ohne deine Bestätigung wird nichts gespeichert.',
+    why: 'Eine kurze Nachricht von Battery Sensei · battery-sensei.app',
+    ignore: 'Nicht angemeldet? Ignoriere diese E-Mail einfach. Ohne deine Bestätigung wird nichts gespeichert.',
     unsub: 'Abmelden',
-    tagline: 'Ruhige Energie für deinen Mac.',
+    tagline: 'Mehr Ruhe für deinen Mac-Akku.',
   },
   es: {
-    why: 'Una nota tranquila de Battery Sensei · battery-sensei.app',
-    ignore: '¿No te registraste? Déjalo pasar — nada se guarda hasta que confirmes.',
+    why: 'Un mensaje tranquilo de Battery Sensei · battery-sensei.app',
+    ignore: '¿No te registraste? Ignora este correo. No guardamos nada hasta que confirmes.',
     unsub: 'Cancelar suscripción',
-    tagline: 'Energía serena para tu Mac.',
+    tagline: 'Batería en calma para tu Mac.',
   },
   fr: {
     why: 'Un mot discret de Battery Sensei · battery-sensei.app',
-    ignore: 'Pas inscrit·e ? Laissez ce message passer — rien n\'est enregistré tant que vous ne confirmez pas.',
+    ignore: 'Vous n\'avez rien demandé ? Ignorez ce message : rien n\'est enregistré tant que vous ne confirmez pas.',
     unsub: 'Se désabonner',
-    tagline: 'Une énergie sereine pour votre Mac.',
+    tagline: 'Moins de stress pour la batterie de votre Mac.',
   },
   ja: {
-    why: 'Battery Sensei より、静かなお知らせ · battery-sensei.app',
-    ignore: 'ご登録のお心当たりがなければ、そっと閉じてください。ご確認いただくまで、何も保存されません。',
+    why: 'Battery Senseiより、静かなお知らせ · battery-sensei.app',
+    ignore: 'ご登録のお心当たりがなければ、このメールは無視してください。ご確認いただくまで、何も保存されません。',
     unsub: '配信停止',
-    tagline: 'Mac に、静かなエネルギーを。',
+    tagline: 'Macのバッテリーに、静かな安心を。',
   },
 } as const
 

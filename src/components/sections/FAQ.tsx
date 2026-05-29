@@ -57,16 +57,16 @@ export const FAQ_ITEMS: ReadonlyArray<FaqItem> = [
   {
     q: 'Which Macs are supported?',
     a: [
-      '**macOS 13 Ventura or later.** Sonoma, Sequoia, and whatever ships next.',
-      'Every Apple Silicon Mac. Intel MacBooks too.',
+      '**macOS 13 Ventura or later.**',
+      'Apple Silicon and Intel MacBooks.',
     ],
   },
   {
     q: 'How much does Battery Sensei cost?',
     a: [
-      `**$3.99 once, lifetime license.** ${LICENSE_SCOPE_LIFETIME} No subscription.`,
-      'Free for 5 days first. No card, no account.',
-      'When the trial ends, Sensei asks once at launch. Skip the purchase and the core stays free forever: charge limit, Travel Mode, smart alerts, 24-hour history, per-app drain, live menu-bar watts.',
+      `**One-time $3.99 for a lifetime license.** ${LICENSE_SCOPE_LIFETIME} No subscription.`,
+      'Start free for 5 days. No card, no account.',
+      'When the trial ends, Sensei asks once at launch. Skip the purchase and the free essentials keep working: charge limit, Travel Mode, smart alerts, 24-hour history, per-app drain, live menu-bar watts.',
       'Premium adds Meeting Battery Guard, unlimited history, and custom warning rules. Checkout shows your local currency.',
     ],
   },
@@ -74,7 +74,7 @@ export const FAQ_ITEMS: ReadonlyArray<FaqItem> = [
     q: 'How does the license key work?',
     a: [
       'After checkout, your key arrives by email.',
-      'Open Sensei → Settings → Premium and paste it in. Activates against Polar, stores locally.',
+      'Open Sensei → Settings → Premium and paste it in. It activates through Polar and stores the license locally.',
       `**No account. No login.** ${LICENSE_SCOPE_LIFETIME} ${LICENSE_SCOPE_YEARLY}`,
     ],
   },
@@ -90,8 +90,8 @@ export const FAQ_ITEMS: ReadonlyArray<FaqItem> = [
     q: 'How does the charge limit work?',
     a: [
       'Sensei stops the charge at the level you pick. Default is **80%**: cooler battery, longer life.',
-      'Travel Mode is one click. Sensei tops up to 100% **at full speed**, with no macOS slow-down on the last 20%.',
-      'Returns to your limit when you are home.',
+      'Travel Mode is one click. Sensei tops up to 100% **at full speed**, with no macOS slowdown on the last 20%.',
+      'Your normal limit returns the next morning at 9 AM.',
     ],
   },
   {
@@ -104,7 +104,7 @@ export const FAQ_ITEMS: ReadonlyArray<FaqItem> = [
   {
     q: 'How is Battery Sensei different from the macOS battery menu?',
     a: [
-      'macOS shows you a percentage. **Sensei reads the rest.**',
+      'macOS shows a percentage. **Sensei watches what that percentage means.**',
       'Smart low-battery alerts at thresholds you choose. A charge limit with Travel Mode. Live charging watts. Cycle and capacity over time.',
       'Plus a calm, plain-English history of how your battery is aging.',
     ],
@@ -119,8 +119,8 @@ export const FAQ_ITEMS: ReadonlyArray<FaqItem> = [
   {
     q: 'Is Battery Sensei an AlDente alternative?',
     a: [
-      "**Yes.** Sensei covers AlDente's charge limit in every tier, plus smart warnings and a battery history.",
-      'Ships as one notarized .pkg installer. Premium adds Meeting Battery Guard, unlimited history, and custom warning rules. One payment, lifetime.',
+      '**Yes.** If you want charge limits plus smart warnings and battery history, Sensei is an AlDente alternative.',
+      'Ships as one notarized .pkg installer. Premium adds Meeting Battery Guard, unlimited history, and custom warning rules. With Lifetime, one payment unlocks Premium for good.',
       'Side-by-side comparison lives in the Compare section above.',
     ],
   },
@@ -135,8 +135,8 @@ export const FAQ_ITEMS: ReadonlyArray<FaqItem> = [
     q: 'How does Meeting Battery Guard work?',
     a: [
       'Opt-in Premium feature. Sensei reads your calendar locally and predicts which meetings your battery might not survive.',
-      'When a meeting is at risk, you get up to four nudges: **30, 15, and 5 minutes before** start, plus one at the start time.',
-      'Each nudge names the exact minute the laptop is predicted to die ("dies 17 min into standup") and the plug-in time that clears it ("22 min on the charger and you\'re through").',
+      'When a meeting is at risk, you get up to four nudges: **30, 15, 5, and 1 minute before** start.',
+      'Each nudge names the exact minute the laptop is predicted to die ("dies 17 min into standup") and the plug-in time that fixes it ("22 min on the charger and it lasts through the meeting").',
       'Event titles never leave your Mac. Sensei reads the calendar locally via EventKit. If the risk passes, pending reminders cancel silently.',
     ],
   },

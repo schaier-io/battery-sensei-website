@@ -312,7 +312,7 @@ function CheckoutPage() {
               </p>
               <p className="mt-2 text-[0.875rem] leading-snug text-sumi-soft">
                 <Trans
-                  i18nKey="pricing.lifetime.activationBody"
+                  i18nKey={`checkout.activationBody.${tier}`}
                   values={{
                     lifetimeScope,
                     yearlyScope,

@@ -263,7 +263,7 @@ export function Hero() {
 
         <Reveal
           delay={640}
-          className="relative mx-auto mt-14 w-full max-w-[480px]"
+          className="relative mx-auto mt-[4.4375rem] w-full max-w-[480px]"
         >
           <MenuBarMockup className="rotate-[-1.2deg] transition-transform duration-[520ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:rotate-0 hover:-translate-y-1" />
           <p className="spec-strip mt-4 text-center">

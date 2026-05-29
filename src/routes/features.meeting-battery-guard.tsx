@@ -7,7 +7,7 @@ const SITE_URL = 'https://www.battery-sensei.app'
 const PATH = '/features/meeting-battery-guard'
 const PAGE_TITLE = 'Meeting Battery Guard — Battery Sensei'
 const PAGE_DESC =
-  'Calendar-aware battery warning. Sensei predicts whether your battery will survive each meeting and warns at 30/15/5/1 minutes — all on-device.'
+  'Calendar-aware battery warning. Sensei predicts whether your battery will survive each meeting and warns 30, 15, 5, and 1 minute before, all on-device.'
 
 const faqLd = {
   '@context': 'https://schema.org',
@@ -68,7 +68,7 @@ function MeetingMockup() {
         </p>
         <div className="mt-3 inline-flex items-center gap-1.5 rounded-md bg-sumi/90 px-2.5 py-1.5 text-[11px] text-washi">
           <Zap className="h-3 w-3" strokeWidth={2} />
-          22 min on the charger and you're clear through.
+          22 min on the charger and it lasts through the meeting.
         </div>
       </div>
       {/* Timeline */}

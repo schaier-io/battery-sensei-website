@@ -25,7 +25,7 @@ export type GlossaryTerm = {
   /** Authoritative sources cited in the body. Renders as the "Sources"
    * footer, with rel="noreferrer" on externals. */
   sources?: TermLink[]
-  /** Optional broader category — currently informational, not surfaced. */
+  /** Optional broader category: currently informational, not surfaced. */
   category?: 'health' | 'charging' | 'thermal' | 'app-feature'
 }
 
@@ -68,7 +68,7 @@ export const GLOSSARY_TERMS: ReadonlyArray<GlossaryTerm> = [
     slug: 'cycle-count',
     title: 'Cycle count',
     shortDef:
-      'One battery cycle equals one full equivalent discharge of your MacBook’s battery. Discharging from 100% to 50%, then charging back, then discharging to 50% again counts as one cycle — not two.',
+      'One battery cycle equals one full equivalent discharge of your MacBook’s battery. Discharging from 100% to 50%, then charging back, then discharging to 50% again counts as one cycle, not two.',
     category: 'health',
     body: () => (
       <>
@@ -83,14 +83,14 @@ export const GLOSSARY_TERMS: ReadonlyArray<GlossaryTerm> = [
           <>
             Modern MacBooks (Apple Silicon, plus most 2018+ Intel models) are rated for{' '}
             <strong>1,000 cycles</strong> before capacity is expected to drop below 80%
-            of design. Older models were lower — see{' '}
+            of design. Older models were lower; see{' '}
             <G slug="cycle-count-threshold">cycle-count threshold</G> for the per-model
             list.
           </>,
         )}
         {para(
           <>
-            One subtlety: the cycle count itself doesn’t damage the battery — it’s a
+            One subtlety: the cycle count itself doesn’t damage the battery. It’s a
             measurement, not a cause. What actually ages cells is{' '}
             <em>time at high voltage</em> and <em>heat</em>, not the counter ticking up.
             That’s why a charge limit (Sensei or macOS Sequoia’s built-in) extends
@@ -116,7 +116,7 @@ export const GLOSSARY_TERMS: ReadonlyArray<GlossaryTerm> = [
     sources: [
       {
         href: 'https://support.apple.com/en-us/102888',
-        label: 'Apple Support — Determine battery cycle count for Mac laptops',
+        label: 'Apple Support: Determine battery cycle count for Mac laptops',
       },
     ],
   },
@@ -133,13 +133,13 @@ export const GLOSSARY_TERMS: ReadonlyArray<GlossaryTerm> = [
             Battery health is easy to confuse with <strong>state of charge</strong>,
             which is how full the battery is <em>right now</em>. Health is the ceiling;
             charge is the level. A perfectly healthy battery can be at 12%, and a
-            heavily worn one can be at 100% — they’re measuring different things.
+            heavily worn one can be at 100%. They’re measuring different things.
           </>,
         )}
         {para(
           <>
             Health drops gradually. A typical curve looks roughly like 95% at 200
-            cycles, 88% at 500, and 80% at 1,000 — the design target. Heat and time
+            cycles, 88% at 500, and 80% at 1,000 (the design target). Heat and time
             spent at high charge push the curve down faster.
           </>,
         )}
@@ -148,8 +148,8 @@ export const GLOSSARY_TERMS: ReadonlyArray<GlossaryTerm> = [
             macOS surfaces two values in Settings → Battery → Battery Health:{' '}
             <strong>Maximum Capacity</strong> (the percentage) and{' '}
             <strong>Condition</strong> (Normal or Service Recommended). Apple replaces
-            the battery at no charge if it’s below 80% during a valid AppleCare plan —
-            see <ApplePage id="108376" label="Apple’s service notes" />. Below 80%
+            the battery at no charge if it’s below 80% during a valid AppleCare plan.
+            See <ApplePage id="108376" label="Apple’s service notes" />. Below 80%
             doesn’t mean the battery is broken; it just means it holds less of what it
             used to.
           </>,
@@ -165,11 +165,11 @@ export const GLOSSARY_TERMS: ReadonlyArray<GlossaryTerm> = [
     sources: [
       {
         href: 'https://support.apple.com/en-us/108376',
-        label: 'Apple Support — If you see battery “Service Recommended” on your Mac',
+        label: 'Apple Support: If you see battery “Service Recommended” on your Mac',
       },
       {
         href: 'https://support.apple.com/en-us/102589',
-        label: 'Apple Support — About battery health management in Mac notebooks',
+        label: 'Apple Support: About battery health management in Mac notebooks',
       },
     ],
   },
@@ -190,7 +190,7 @@ export const GLOSSARY_TERMS: ReadonlyArray<GlossaryTerm> = [
         {para(
           <>
             Knowing both design and current capacity gives you Battery Health by simple
-            division — <code>current ÷ design × 100</code>. macOS hides design capacity
+            division: <code>current ÷ design × 100</code>. macOS hides design capacity
             from the user; third-party tools, including Battery Sensei, surface it
             alongside the live percentage.
           </>,
@@ -199,7 +199,7 @@ export const GLOSSARY_TERMS: ReadonlyArray<GlossaryTerm> = [
           <>
             <strong>Why it matters when buying used:</strong> a Mac advertised at
             “95% capacity” after a third-party battery swap may have a{' '}
-            <em>smaller</em> replacement cell — 95% of a reduced design capacity hides
+            <em>smaller</em> replacement cell. 95% of a reduced design capacity hides
             the real wear. Always check design capacity alongside the percentage.
           </>,
         )}
@@ -214,7 +214,7 @@ export const GLOSSARY_TERMS: ReadonlyArray<GlossaryTerm> = [
     slug: 'optimized-battery-charging',
     title: 'Optimized Battery Charging',
     shortDef:
-      'Optimized Battery Charging (OBC) is Apple’s on-device feature that uses machine learning to delay charging your MacBook past 80% until it predicts you’ll need a full charge — usually just before you unplug.',
+      'Optimized Battery Charging (OBC) is Apple’s on-device feature that uses machine learning to delay charging your MacBook past 80% until it predicts you’ll need a full charge, usually just before you unplug.',
     category: 'charging',
     body: () => (
       <>
@@ -222,7 +222,7 @@ export const GLOSSARY_TERMS: ReadonlyArray<GlossaryTerm> = [
           <>
             OBC is available on Apple Silicon Macs and Intel Macs with the T2 chip
             (2018 or later). It needs roughly <strong>14 days</strong> of routine
-            usage data before it starts deferring charge past 80% — most users assume
+            usage data before it starts deferring charge past 80%. Most users assume
             it’s broken in week one, but it’s simply learning.
           </>,
         )}
@@ -256,7 +256,7 @@ export const GLOSSARY_TERMS: ReadonlyArray<GlossaryTerm> = [
     sources: [
       {
         href: 'https://support.apple.com/en-us/102338',
-        label: 'Apple Support — About Optimized Battery Charging and Charge Limit on Mac',
+        label: 'Apple Support: About Optimized Battery Charging and Charge Limit on Mac',
       },
     ],
   },
@@ -270,8 +270,8 @@ export const GLOSSARY_TERMS: ReadonlyArray<GlossaryTerm> = [
       <>
         {para(
           <>
-            Travel Mode exists because the typical pre-flight ritual — “I’ll just
-            leave it plugged in tonight to top up” — usually turns into a week or two
+            Travel Mode exists because the typical pre-flight ritual (“I’ll just
+            leave it plugged in tonight to top up”) usually turns into a week or two
             of the laptop sitting at 100% before someone remembers to undo the cap.
             That’s exactly the condition that ages lithium-ion cells fastest.
           </>,
@@ -287,7 +287,7 @@ export const GLOSSARY_TERMS: ReadonlyArray<GlossaryTerm> = [
         {para(
           <>
             The 9 AM auto-reset is local time, fired by{' '}
-            <code>nextTravelResetDate</code> in the app — not by detecting that you’re
+            <code>nextTravelResetDate</code> in the app, not by detecting that you’re
             home, which is unreliable. That means even if you forget to undo it, the
             cap comes back automatically. See{' '}
             <G slug="optimized-battery-charging">Optimized Battery Charging</G> for
@@ -307,15 +307,15 @@ export const GLOSSARY_TERMS: ReadonlyArray<GlossaryTerm> = [
     slug: 'thermal-throttling',
     title: 'Thermal throttling',
     shortDef:
-      'Thermal throttling is what happens when your MacBook’s chip slows itself down because it’s too hot. The CPU drops below its rated clock speed to avoid damage — and the same heat also pauses battery charging.',
+      'Thermal throttling is what happens when your MacBook’s chip slows itself down because it’s too hot. The CPU drops below its rated clock speed to avoid damage, and the same heat also pauses battery charging.',
     category: 'thermal',
     body: () => (
       <>
         {para(
           <>
             macOS triggers throttling around <strong>100°C</strong> internal silicon
-            temp. When charging pauses for heat — separate from throttling, but
-            usually caused by the same condition — the menu bar can read “Not
+            temp. When charging pauses for heat (separate from throttling, but
+            usually caused by the same condition), the menu bar can read “Not
             Charging” even with the adapter plugged in. The system isn’t broken; it’s
             protecting the cells.
           </>,
@@ -333,7 +333,7 @@ export const GLOSSARY_TERMS: ReadonlyArray<GlossaryTerm> = [
           <>
             Common causes: dust-clogged vents, sustained 100% CPU load, sun on the
             lid, hot ambient temperature, or a video call that won’t release the GPU.
-            Sensei surfaces the live thermal state next to the watts readout — when
+            Sensei surfaces the live thermal state next to the watts readout. When
             charge holds steady while plugged in, that’s usually why.
           </>,
         )}
@@ -348,7 +348,7 @@ export const GLOSSARY_TERMS: ReadonlyArray<GlossaryTerm> = [
     sources: [
       {
         href: 'https://support.apple.com/en-us/102589',
-        label: 'Apple Support — About battery health management in Mac notebooks',
+        label: 'Apple Support: About battery health management in Mac notebooks',
       },
     ],
   },
@@ -371,7 +371,7 @@ export const GLOSSARY_TERMS: ReadonlyArray<GlossaryTerm> = [
         {para(
           <>
             macOS tallies fractional cycles in battery firmware, so you never see the
-            decimals — the headline <G slug="cycle-count">cycle count</G> rounds when
+            decimals. The headline <G slug="cycle-count">cycle count</G> rounds when
             it ticks over to the next integer.
           </>,
         )}
@@ -395,7 +395,7 @@ export const GLOSSARY_TERMS: ReadonlyArray<GlossaryTerm> = [
     slug: 'calibration',
     title: 'Battery calibration',
     shortDef:
-      'Battery calibration is the process of re-aligning your MacBook’s charge gauge with the battery’s actual capacity. Modern Apple Silicon MacBooks calibrate automatically — manual calibration is unnecessary and can shorten lifespan.',
+      'Battery calibration is the process of re-aligning your MacBook’s charge gauge with the battery’s actual capacity. Modern Apple Silicon MacBooks calibrate automatically. Manual calibration is unnecessary and can shorten lifespan.',
     category: 'health',
     body: () => (
       <>
@@ -433,7 +433,7 @@ export const GLOSSARY_TERMS: ReadonlyArray<GlossaryTerm> = [
     sources: [
       {
         href: 'https://support.apple.com/en-us/102589',
-        label: 'Apple Support — About battery health management in Mac notebooks',
+        label: 'Apple Support: About battery health management in Mac notebooks',
       },
     ],
   },
@@ -455,8 +455,8 @@ export const GLOSSARY_TERMS: ReadonlyArray<GlossaryTerm> = [
         )}
         {para(
           <>
-            Sequoia 15.1 added a third use case for Low Power Mode — reducing fan
-            noise during quiet work — and surfaced it in Control Center. The trade-off
+            Sequoia 15.1 added a third use case for Low Power Mode (reducing fan
+            noise during quiet work) and surfaced it in Control Center. The trade-off
             stays the same: longer runtime, a slight latency cost on app launch, a
             dimmer screen.
           </>,
@@ -481,7 +481,7 @@ export const GLOSSARY_TERMS: ReadonlyArray<GlossaryTerm> = [
     sources: [
       {
         href: 'https://support.apple.com/en-us/101613',
-        label: 'Apple Support — About Power Modes on your Mac',
+        label: 'Apple Support: About Power Modes on your Mac',
       },
     ],
   },
@@ -489,7 +489,7 @@ export const GLOSSARY_TERMS: ReadonlyArray<GlossaryTerm> = [
     slug: 'cycle-count-threshold',
     title: 'Cycle-count threshold',
     shortDef:
-      'The cycle-count threshold is the number of charge cycles your specific MacBook is rated for before capacity is expected to fall below 80%. Modern MacBooks — Apple Silicon and 2018+ Intel — are rated for 1,000 cycles.',
+      'The cycle-count threshold is the number of charge cycles your specific MacBook is rated for before capacity is expected to fall below 80%. Modern MacBooks (Apple Silicon and 2018+ Intel) are rated for 1,000 cycles.',
     category: 'health',
     body: () => (
       <>
@@ -501,10 +501,10 @@ export const GLOSSARY_TERMS: ReadonlyArray<GlossaryTerm> = [
         )}
         {para(
           <>
-            <strong>Apple Silicon (M1–M4):</strong> 1,000 cycles across the entire
+            <strong>Apple Silicon (M1-M4):</strong> 1,000 cycles across the entire
             lineup.{' '}
-            <strong>Intel 2018–2019:</strong> 1,000.{' '}
-            <strong>Intel 2010–2017:</strong> 1,000 for most, with 500-cycle outliers
+            <strong>Intel 2018-2019:</strong> 1,000.{' '}
+            <strong>Intel 2010-2017:</strong> 1,000 for most, with 500-cycle outliers
             (some MacBook Air 13" Mid 2010 and Late 2017 units).{' '}
             <strong>Pre-2010:</strong> 300 cycles.
           </>,
@@ -527,7 +527,7 @@ export const GLOSSARY_TERMS: ReadonlyArray<GlossaryTerm> = [
     sources: [
       {
         href: 'https://support.apple.com/en-us/102888',
-        label: 'Apple Support — Determine battery cycle count for Mac laptops',
+        label: 'Apple Support: Determine battery cycle count for Mac laptops',
       },
     ],
   },
@@ -535,7 +535,7 @@ export const GLOSSARY_TERMS: ReadonlyArray<GlossaryTerm> = [
     slug: 'trickle-charging',
     title: 'Trickle charging',
     shortDef:
-      'Trickle charging is feeding a small continuous current to a fully charged battery to compensate for self-discharge. Modern MacBooks don’t trickle-charge — once the cell is full, charging stops, and resumes only when capacity drops several percent.',
+      'Trickle charging is feeding a small continuous current to a fully charged battery to compensate for self-discharge. Modern MacBooks don’t trickle-charge. Once the cell is full, charging stops, and resumes only when capacity drops several percent.',
     category: 'charging',
     body: () => (
       <>
@@ -550,10 +550,10 @@ export const GLOSSARY_TERMS: ReadonlyArray<GlossaryTerm> = [
         {para(
           <>
             That waiting window is why a plugged-in MacBook routinely shows{' '}
-            <strong>“Not Charging”</strong> at 96–100% even with the adapter
+            <strong>“Not Charging”</strong> at 96-100% even with the adapter
             connected. The behavior is intentional. It’s also why{' '}
             <G slug="optimized-battery-charging">Optimized Battery Charging</G> can
-            extend the window deliberately — once you’re near full, the system is
+            extend the window deliberately. Once you’re near full, the system is
             already holding by default.
           </>,
         )}
@@ -574,7 +574,7 @@ export const GLOSSARY_TERMS: ReadonlyArray<GlossaryTerm> = [
       <>
         {para(
           <>
-            macOS doesn’t surface this number natively — only the abstracted “time
+            macOS doesn’t surface this number natively, only the abstracted “time
             until full” or “time on battery” estimate. Sensei reads the wattage
             directly via IOKit and shows it live in the menu bar.
           </>,
@@ -588,14 +588,14 @@ export const GLOSSARY_TERMS: ReadonlyArray<GlossaryTerm> = [
           <>
             <strong>Diagnosing an underpowered adapter.</strong> If the laptop pulls
             more than the adapter supplies under load, the balance is zero or
-            negative — and the battery drains while plugged in. Watts in / out makes
+            negative, and the battery drains while plugged in. Watts in / out makes
             this visible in seconds.{' '}
             <strong>Spotting a hung app.</strong> When watts-out spikes with no
-            obvious cause, an app is doing background work it shouldn’t be — pair
+            obvious cause, an app is doing background work it shouldn’t be. Pair
             with <F to="/features/energy-usage">energy usage</F> to identify the
             culprit.{' '}
             <strong>Validating charging speed.</strong> MacBook Pro 14" typically
-            charges at 60–96W; lower numbers point to a weak adapter, a cheap cable,
+            charges at 60-96W; lower numbers point to a weak adapter, a cheap cable,
             or a thermally throttled charge port.
           </>,
         )}

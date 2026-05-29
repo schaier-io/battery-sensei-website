@@ -98,24 +98,24 @@ const LAYOUT_COPY: Record<
     tagline: 'Calm energy for your Mac.',
   },
   de: {
-    why: 'Eine leise Nachricht von Battery Sensei · battery-sensei.app',
+    why: 'Eine kurze Nachricht von Battery Sensei · battery-sensei.app',
     unsub: 'Abmelden',
-    tagline: 'Ruhige Energie für deinen Mac.',
+    tagline: 'Mehr Ruhe für deinen Mac-Akku.',
   },
   es: {
-    why: 'Una nota tranquila de Battery Sensei · battery-sensei.app',
+    why: 'Un mensaje tranquilo de Battery Sensei · battery-sensei.app',
     unsub: 'Cancelar suscripción',
-    tagline: 'Energía serena para tu Mac.',
+    tagline: 'Batería en calma para tu Mac.',
   },
   fr: {
     why: 'Un mot discret de Battery Sensei · battery-sensei.app',
     unsub: 'Se désabonner',
-    tagline: 'Une énergie sereine pour votre Mac.',
+    tagline: 'Moins de stress pour la batterie de votre Mac.',
   },
   ja: {
-    why: 'Battery Sensei より、静かなお知らせ · battery-sensei.app',
+    why: 'Battery Senseiより、静かなお知らせ · battery-sensei.app',
     unsub: '配信停止',
-    tagline: 'Mac に、静かなエネルギーを。',
+    tagline: 'Macのバッテリーに、静かな安心を。',
   },
 }
 
@@ -145,7 +145,7 @@ const WELCOME_COPY: Record<
     cta: 'Download Battery Sensei',
     expectKicker: 'What to expect',
     expectBody:
-      "Roughly one email per release — never more than once a month. Tips, changelogs, and the occasional behind-the-scenes note. No tracking pixels. No promotions for other people's products.",
+      "Roughly one email per release, never more than once a month. Tips, changelogs, and the occasional behind-the-scenes note. No tracking pixels. No promotions for other people's products.",
     sign: 'With care,',
     signature: 'The Battery Sensei team',
   },
@@ -155,26 +155,26 @@ const WELCOME_COPY: Record<
     kanji: '歓迎',
     headingPre: 'Du bist dabei.',
     headingItalic: 'Hier ist der Download.',
-    body: 'Battery Sensei ist eine kleine, leise Mac-App. Sie achtet auf deinen Akku, damit du es nicht tun musst — und meldet sich nur, wenn es wirklich zählt.',
+    body: 'Battery Sensei ist eine kleine, unaufdringliche Mac-App. Sie behält deinen Akku im Blick, damit du es nicht musst, und meldet sich nur, wenn es wirklich wichtig ist.',
     cta: 'Battery Sensei herunterladen',
     expectKicker: 'Was dich erwartet',
     expectBody:
-      'Etwa eine E-Mail pro Release — höchstens einmal im Monat. Tipps, Changelogs und gelegentlich ein Blick hinter die Kulissen. Keine Tracking-Pixel. Keine Werbung für andere Produkte.',
-    sign: 'Mit Sorgfalt,',
-    signature: 'Das Battery Sensei Team',
+      'Etwa eine E-Mail pro neuer Version, höchstens einmal im Monat. Tipps, Änderungen und gelegentlich ein Blick hinter die Kulissen. Keine Tracking-Pixel. Keine Werbung für fremde Produkte.',
+    sign: 'Viele Grüße,',
+    signature: 'Das Battery-Sensei-Team',
   },
   es: {
-    preview: 'Bienvenido. Aquí está tu descarga.',
-    kicker: 'Bienvenido',
+    preview: 'Te damos la bienvenida. Aquí está tu descarga.',
+    kicker: 'Hola',
     kanji: '歓迎',
     headingPre: 'Estás dentro.',
     headingItalic: 'Aquí está la descarga.',
-    body: 'Battery Sensei es una app pequeña y silenciosa para Mac. Cuida tu batería para que tú no tengas que hacerlo, y solo habla cuando importa de verdad.',
+    body: 'Battery Sensei es una app pequeña y discreta para Mac. Cuida tu batería para que tú no tengas que hacerlo y solo avisa cuando importa de verdad.',
     cta: 'Descargar Battery Sensei',
     expectKicker: 'Qué esperar',
     expectBody:
-      'Aproximadamente un correo por lanzamiento — nunca más de una vez al mes. Consejos, changelogs y alguna nota entre bambalinas. Sin píxeles de seguimiento. Sin promociones de otros productos.',
-    sign: 'Con cuidado,',
+      'Aproximadamente un correo por lanzamiento, nunca más de una vez al mes. Consejos, notas de cambios y alguna mirada entre bambalinas. Sin píxeles de seguimiento. Sin promociones de otros productos.',
+    sign: 'Con mimo,',
     signature: 'El equipo de Battery Sensei',
   },
   fr: {
@@ -183,12 +183,12 @@ const WELCOME_COPY: Record<
     kanji: '歓迎',
     headingPre: 'Vous y êtes.',
     headingItalic: 'Voici le téléchargement.',
-    body: 'Battery Sensei est une petite app Mac, discrète. Elle veille sur votre batterie à votre place, et ne se manifeste que lorsque c’est vraiment utile.',
+    body: 'Battery Sensei est une petite app Mac discrète. Elle veille sur votre batterie à votre place et ne se manifeste que lorsque c’est vraiment utile.',
     cta: 'Télécharger Battery Sensei',
     expectKicker: 'À quoi vous attendre',
     expectBody:
-      'Environ un email par release — jamais plus d’une fois par mois. Astuces, changelogs et parfois une note en coulisses. Pas de pixel de suivi. Pas de promo pour des produits tiers.',
-    sign: 'Avec soin,',
+      'Environ un e-mail par nouvelle version, jamais plus d’une fois par mois. Des conseils, les nouveautés, parfois un mot sur les coulisses. Pas de pixel de suivi. Pas de promo pour des produits tiers.',
+    sign: 'Avec attention,',
     signature: 'L’équipe Battery Sensei',
   },
   ja: {
@@ -197,7 +197,7 @@ const WELCOME_COPY: Record<
     kanji: '歓迎',
     headingPre: 'ご登録ありがとうございます。',
     headingItalic: 'ダウンロードはこちらから。',
-    body: 'Battery Sensei は、小さく静かな Mac アプリです。あなたに代わってバッテリーを見守り、本当に必要なときだけそっとお知らせします。',
+    body: 'Battery Senseiは、小さく静かなMacアプリです。あなたに代わってバッテリーを見守り、本当に必要なときだけそっとお知らせします。',
     cta: 'Battery Sensei をダウンロード',
     expectKicker: '今後の配信について',
     expectBody:
@@ -469,9 +469,9 @@ export async function POST(request: Request): Promise<Response> {
   // page from triggering the POST on the user's behalf if they happen
   // to have copy/pasted the URL into a chat that auto-fetches.
   //
-  // `isAllowedOrigin` includes Vercel preview/branch URLs (VERCEL_URL,
-  // VERCEL_BRANCH_URL) so PR previews can exercise the flow without
-  // configuring PUBLIC_SITE_URL per env.
+  // `isAllowedOrigin` includes both production brand domains plus Vercel
+  // preview/branch URLs (VERCEL_URL, VERCEL_BRANCH_URL) so PR previews
+  // can exercise the flow without configuring PUBLIC_SITE_URL per env.
   //
   // The unsubscribe POST deliberately omits this check so Gmail/Yahoo
   // inbox-side one-click probes (RFC 8058) succeed. Confirm has no

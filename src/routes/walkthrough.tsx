@@ -164,8 +164,9 @@ function WalkthroughNotifyForm() {
       return
     }
     setStatus('sending')
+    let ok = false
     try {
-      await fetch('/api/free-signup', {
+      const res = await fetch('/api/free-signup', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({
@@ -175,10 +176,11 @@ function WalkthroughNotifyForm() {
         }),
         keepalive: true,
       })
+      ok = res.ok
     } catch {
-      // Best-effort only: don't block success state on transport failures.
+      // Keep the visitor on the form and show the existing error line.
     }
-    setStatus('success')
+    setStatus(ok ? 'success' : 'error')
   }
 
   return (

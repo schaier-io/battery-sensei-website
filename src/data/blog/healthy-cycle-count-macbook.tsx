@@ -62,10 +62,10 @@ export const post: BlogPost = {
           capacity at that mark.
         </li>
         <li>
-          <strong>2018–2019 Intel MacBooks (T2 chip): 1,000 cycles.</strong>
+          <strong>2018-2019 Intel MacBooks (T2 chip): 1,000 cycles.</strong>
         </li>
         <li>
-          <strong>2010–2017 Intel MacBooks: 1,000 for most.</strong> The
+          <strong>2010-2017 Intel MacBooks: 1,000 for most.</strong> The
           notable exceptions are a few MacBook Air units (13" Mid 2010 and
           Late 2017) rated at 500.
         </li>
@@ -88,24 +88,24 @@ export const post: BlogPost = {
       <P>
         The honest expected-cycles number depends on how much you actually use
         the laptop, but a workable rule of thumb is{' '}
-        <strong>30–40 cycles per month of regular use</strong>. Plug that into
+        <strong>30-40 cycles per month of regular use</strong>. Plug that into
         the calendar:
       </P>
       <UL>
         <li>
-          <strong>12 months in:</strong> roughly 350–450 cycles is normal.{' '}
-          <G slug="battery-health">Battery health</G> usually around 92–97%.
+          <strong>12 months in:</strong> roughly 350-450 cycles is normal.{' '}
+          <G slug="battery-health">Battery health</G> usually around 92-97%.
         </li>
         <li>
-          <strong>24 months in:</strong> 700–900 cycles. Capacity around
-          88–93%. If you’re a heavy user, this is also where you’ll first see
+          <strong>24 months in:</strong> 700-900 cycles. Capacity around
+          88-93%. If you’re a heavy user, this is also where you’ll first see
           the “Maximum Capacity” number start to wobble down by a noticeable
           step year-over-year.
         </li>
         <li>
-          <strong>36 months in:</strong> 1,000–1,300 cycles. Many MacBooks
+          <strong>36 months in:</strong> 1,000-1,300 cycles. Many MacBooks
           quietly cross the rated limit here. Capacity should be in the
-          80–88% range; if it’s dropped below 80%, macOS will show{' '}
+          80-88% range; if it’s dropped below 80%, macOS will show{' '}
           <strong>Service Recommended</strong>.
         </li>
         <li>
@@ -179,7 +179,7 @@ export const post: BlogPost = {
         If you bought AppleCare and the Mac is still under coverage,{' '}
         <Apple id="108376">Apple replaces the battery at no charge</Apple>{' '}
         when it’s below 80% of original capacity. After AppleCare, the
-        Apple-quoted price is in the $129–$199 range depending on model.
+        Apple-quoted price is in the $129-$199 range depending on model.
       </P>
 
       <H2>Slowing the count without sabotaging your day</H2>
@@ -190,7 +190,7 @@ export const post: BlogPost = {
         math comes out to the same 0.7 cycles. What a charge limit changes is{' '}
         <em>voltage stress per cycle</em>, which keeps capacity above the
         Service Recommended threshold for more cycles total. The cycle
-        counter still ticks up — but the {' '}
+        counter still ticks up, but the {' '}
         <G slug="battery-health">battery health</G> percentage drops more
         slowly.
       </P>
@@ -198,7 +198,7 @@ export const post: BlogPost = {
         Concretely: pair an 80% daily cap with{' '}
         <A to="/features/travel-mode">Travel Mode</A> for the rare day you
         actually need 100% of the battery. The combination tends to push the
-        Service Recommended notice out by 12–18 months on a typical MacBook,
+        Service Recommended notice out by 12-18 months on a typical MacBook,
         which is the only number that matters in the end.
       </P>
       <P>
@@ -206,7 +206,7 @@ export const post: BlogPost = {
         <A to="/blog/should-i-keep-macbook-plugged-in">
           should I keep my MacBook plugged in?
         </A>{' '}
-        And for the related — and routinely misunderstood — feature Apple
+        And for the related (and routinely misunderstood) feature Apple
         ships,{' '}
         <A to="/blog/optimized-battery-charging-explained">
           Optimized Battery Charging, explained
@@ -219,7 +219,7 @@ export const post: BlogPost = {
     {
       q: 'Is 500 cycles a lot for a 2-year-old MacBook?',
       a:
-        'No, it’s slightly above the typical average and entirely normal. If your battery health is also healthy (88–94% range), you’re in the middle of the curve. The cycle counter rises with use; what matters is whether the capacity is dropping at a reasonable rate.',
+        'No, it’s slightly above the typical average and entirely normal. If your battery health is also healthy (88-94% range), you’re in the middle of the curve. The cycle counter rises with use; what matters is whether the capacity is dropping at a reasonable rate.',
     },
     {
       q: 'Why is my cycle count and my capacity moving at different speeds?',
@@ -237,9 +237,9 @@ export const post: BlogPost = {
         'Practically no. Sleep draws so little power that the cumulative discharge over an entire weekend of sleep is a tiny fraction of one cycle. Standby mode on Apple Silicon is especially miserly.',
     },
     {
-      q: 'My Mac says "Service Recommended" — is it dangerous to keep using it?',
+      q: 'My Mac says "Service Recommended". Is it dangerous to keep using it?',
       a:
-        'No. "Service Recommended" means capacity is below the design target, not that the cell is unsafe. The exception is visible swelling or rapid voltage collapse under load — those warrant immediate replacement.',
+        'No. "Service Recommended" means capacity is below the design target, not that the cell is unsafe. The exception is visible swelling or rapid voltage collapse under load: those warrant immediate replacement.',
     },
   ],
 }
