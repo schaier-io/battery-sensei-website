@@ -2,6 +2,10 @@ import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 
 import en from './locales/en.json'
+import de from './locales/de.json'
+import es from './locales/es.json'
+import fr from './locales/fr.json'
+import ja from './locales/ja.json'
 
 export const SUPPORTED_LOCALES = ['en', 'de', 'es', 'fr', 'ja'] as const
 export type Locale = (typeof SUPPORTED_LOCALES)[number]
@@ -27,14 +31,33 @@ export const OG_LOCALE: Record<Locale, string> = {
   ja: 'ja_JP',
 }
 
+// Initial language. On the client, read it from the URL path so a prerendered
+// /de page hydrates as German with no mismatch — the locale bundles are all
+// included below, so this lookup is synchronous. On the server it is the
+// default; the root route's beforeLoad sets the language per prerender/request.
+function initialLocale(): Locale {
+  if (typeof window === 'undefined') return DEFAULT_LOCALE
+  const seg = window.location.pathname.split('/').filter(Boolean)[0]?.toLowerCase()
+  return seg && seg !== 'en' && (SUPPORTED_LOCALES as readonly string[]).includes(seg)
+    ? (seg as Locale)
+    : DEFAULT_LOCALE
+}
+
 if (!i18n.isInitialized) {
   i18n
     .use(initReactI18next)
     .init({
-      // Only `en` is bundled up-front. Other locales are loaded on demand by
-      // `loadLocale` so visitors pay only for the language they actually read.
-      resources: { en: { translation: en } },
-      lng: DEFAULT_LOCALE,
+      // All locales are bundled so prerendered localized pages (/de, /es, ...)
+      // hydrate in their language synchronously. loadLocale therefore resolves
+      // immediately; it stays for the language switcher's prefetch API.
+      resources: {
+        en: { translation: en },
+        de: { translation: de },
+        es: { translation: es },
+        fr: { translation: fr },
+        ja: { translation: ja },
+      },
+      lng: initialLocale(),
       fallbackLng: DEFAULT_LOCALE,
       supportedLngs: SUPPORTED_LOCALES as unknown as string[],
       interpolation: { escapeValue: false },
@@ -70,9 +93,21 @@ export function isLocale(value: string | null | undefined): value is Locale {
   return !!value && (SUPPORTED_LOCALES as readonly string[]).includes(value)
 }
 
-// Cookie + browser detection. Safe to call on server (returns DEFAULT_LOCALE).
+// Locale encoded in the URL path: /de, /es, /fr, /ja. English has no prefix
+// (it lives at the root), so "/" and unprefixed paths resolve to the default.
+export function localeFromPath(pathname: string): Locale | null {
+  const seg = pathname.split('/').filter(Boolean)[0]?.toLowerCase()
+  return seg && seg !== 'en' && isLocale(seg) ? seg : null
+}
+
+// URL path → cookie → browser. Safe to call on server (returns DEFAULT_LOCALE).
 export function detectClientLocale(): Locale {
   if (typeof document === 'undefined') return DEFAULT_LOCALE
+
+  // URL path wins: a shared or crawled /de URL renders German and its client
+  // hydration matches the prerendered HTML instead of fighting the cookie.
+  const fromPath = localeFromPath(window.location.pathname)
+  if (fromPath) return fromPath
 
   const cookieMatch = document.cookie.match(
     new RegExp(`(?:^|; )${LOCALE_COOKIE}=([^;]+)`),

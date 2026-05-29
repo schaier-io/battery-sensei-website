@@ -1012,6 +1012,38 @@ body::after {
   }
 }
 
+/* Limited-redeem scarcity bar — one light sheen sweeps the bar roughly
+   every 7s, then rests. Replaces the old blinking live-dot. The parent
+   track is `relative overflow-hidden rounded-full`, so this is clipped
+   to the pill. */
+@keyframes redeem-bar-shimmer {
+  0%   { transform: translateX(-120%) skewX(-12deg); opacity: 0; }
+  4%   { opacity: 1; }
+  15%  { transform: translateX(330%) skewX(-12deg); opacity: 0; }
+  100% { transform: translateX(330%) skewX(-12deg); opacity: 0; }
+}
+.redeem-bar-shimmer {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 38%;
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0) 30%,
+    rgba(255, 255, 255, 0.95) 50%,
+    rgba(255, 255, 255, 0) 70%,
+    transparent 100%
+  );
+  animation: redeem-bar-shimmer 7s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+@media (prefers-reduced-motion: reduce) {
+  .redeem-bar-shimmer { animation: none; opacity: 0; }
+}
+
 /* Chevron nudge — small downward tap on hover, hinting "scroll down".
    Uses translate only so it composes with the parent circle's hover
    lift without fighting the idle opacity pulse on the same element. */

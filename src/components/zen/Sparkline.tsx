@@ -9,6 +9,15 @@ type SparklineProps = {
   fill?: boolean
   /** Highlight the latest point with a hinomaru dot */
   markLatest?: boolean
+  /**
+   * Fixed Y-axis domain. When omitted, the line auto-scales to its own
+   * min/max. Pass a shared domain across several Sparklines (e.g. the
+   * range of a master series) so they render on one consistent scale —
+   * required when one series is a slice of another and the overlap must
+   * line up.
+   */
+  min?: number
+  max?: number
 }
 
 /**
@@ -23,6 +32,8 @@ export function Sparkline({
   height = 56,
   fill = true,
   markLatest = true,
+  min: minProp,
+  max: maxProp,
 }: SparklineProps) {
   const id = useId().replace(/[:]/g, '')
   // Draw-in: line gets painted left → right via stroke-dashoffset on
@@ -61,8 +72,8 @@ export function Sparkline({
   const h = height
   const padX = 4
   const padY = 6
-  const min = Math.min(...values)
-  const max = Math.max(...values)
+  const min = minProp ?? Math.min(...values)
+  const max = maxProp ?? Math.max(...values)
   const range = Math.max(1, max - min)
   const dx = (w - padX * 2) / Math.max(1, values.length - 1)
 
@@ -72,7 +83,10 @@ export function Sparkline({
     return [x, y] as const
   })
 
-  const linePath = catmullRomPath(points)
+  // Clamp the smoothing to the drawable band so curve handles can't
+  // overshoot past the data — e.g. bulge above 100% as the line eases
+  // into the flat full-charge plateau.
+  const linePath = catmullRomPath(points, padY, h - padY)
   const areaPath = `${linePath} L ${points.at(-1)?.[0]} ${h - padY} L ${points[0][0]} ${h - padY} Z`
 
   const last = points.at(-1)
@@ -147,11 +161,26 @@ export function Sparkline({
   )
 }
 
-/** Centripetal Catmull-Rom-ish smoothing — matches ChargeChart. */
-function catmullRomPath(pts: ReadonlyArray<readonly [number, number]>): string {
+/**
+ * Centripetal Catmull-Rom-ish smoothing — matches ChargeChart.
+ *
+ * Control-handle Y is clamped to [yMin, yMax] (the chart's drawable
+ * band). A cubic Bézier stays within the convex hull of its control
+ * points and the endpoints are in-range data points, so clamping the
+ * handles guarantees the smoothed curve never overshoots the band —
+ * e.g. it can't bulge above 100% where the line eases into a flat
+ * full-charge plateau. Bounds default to ±∞ (no clamp) for callers
+ * that don't pass them.
+ */
+function catmullRomPath(
+  pts: ReadonlyArray<readonly [number, number]>,
+  yMin = -Infinity,
+  yMax = Infinity,
+): string {
   if (pts.length === 0) return ''
   if (pts.length === 1) return `M ${pts[0][0]} ${pts[0][1]}`
   const tension = 0.22
+  const clampY = (y: number): number => Math.max(yMin, Math.min(yMax, y))
   const segs: string[] = [`M ${pts[0][0]} ${pts[0][1]}`]
   for (let i = 0; i < pts.length - 1; i++) {
     const p0 = pts[i - 1] ?? pts[i]
@@ -159,9 +188,9 @@ function catmullRomPath(pts: ReadonlyArray<readonly [number, number]>): string {
     const p2 = pts[i + 1]
     const p3 = pts[i + 2] ?? pts[i + 1]
     const c1x = p1[0] + (p2[0] - p0[0]) * tension
-    const c1y = p1[1] + (p2[1] - p0[1]) * tension
+    const c1y = clampY(p1[1] + (p2[1] - p0[1]) * tension)
     const c2x = p2[0] - (p3[0] - p1[0]) * tension
-    const c2y = p2[1] - (p3[1] - p1[1]) * tension
+    const c2y = clampY(p2[1] - (p3[1] - p1[1]) * tension)
     segs.push(`C ${c1x} ${c1y}, ${c2x} ${c2y}, ${p2[0]} ${p2[1]}`)
   }
   return segs.join(' ')

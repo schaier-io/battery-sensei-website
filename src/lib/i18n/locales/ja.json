@@ -1,4 +1,8 @@
 {
+  "seo": {
+    "title": "MacBookのバッテリー管理 · Battery Sensei",
+    "description": "MacBookのバッテリーを守るmacOSメニューバーアプリ。かしこい警告、充電制限、おでかけモード、サイクル管理。無料で試して、あとは一度きりの支払い。ネイティブで完全ローカル動作。"
+  },
   "common": {
     "language": "言語",
     "currency": "通貨",
@@ -26,7 +30,7 @@
       "dismiss": "閉じる"
     },
     "batteryJournal": {
-      "ariaLabel": "Battery Senseiのバッテリー履歴",
+      "ariaLabel": "Battery Senseiの個人バッテリー履歴",
       "since": "{{date}}から",
       "sinceDate": "2024年1月30日",
       "days": "日",

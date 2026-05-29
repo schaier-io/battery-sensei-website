@@ -34,6 +34,15 @@ const config = defineConfig({
     devtools(),
     tailwindcss(),
     tanstackStart({
+      // Localized home pages live at /de /es /fr /ja (the $lang route). The link
+      // crawler can't discover them — the language switcher uses buttons, not
+      // <a href> — so register them explicitly for prerendering.
+      pages: [
+        { path: '/de', prerender: { enabled: true } },
+        { path: '/es', prerender: { enabled: true } },
+        { path: '/fr', prerender: { enabled: true } },
+        { path: '/ja', prerender: { enabled: true } },
+      ],
       prerender: {
         enabled: true,
         autoSubfolderIndex: true,

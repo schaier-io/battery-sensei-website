@@ -1,4 +1,8 @@
 {
+  "seo": {
+    "title": "MacBook Akku: Zustand, Ladelimit & Warnungen · Battery Sensei",
+    "description": "macOS-Menüleisten-App für die Akkugesundheit Ihres MacBook: intelligente Warnungen, Ladelimit, Reisemodus, Ladezyklen. Gratis testen, dann einmalig. Nativ, läuft komplett lokal."
+  },
   "common": {
     "language": "Sprache",
     "currency": "Währung",
@@ -32,7 +36,7 @@
       "days": "Tage",
       "cycles": "Zyklen",
       "capacity": "Kapazität",
-      "timelineLabel": "Verlauf der Akkuladung",
+      "timelineLabel": "Verlauf der Akkuladung über die Zeit",
       "footerTagline": "Ruhig im Blick.",
       "entries": {
         "0": { "date": "4. Mär", "body": "Bei 12 % gerettet. Gerade noch rechtzeitig eingesteckt." },
@@ -41,7 +45,7 @@
       }
     },
     "rescueReceipt": {
-      "ariaLabel": "Rettungsbeleg: Sensei hat rechtzeitig eingegriffen",
+      "ariaLabel": "Rettungsmoment: Sensei hat rechtzeitig eingegriffen",
       "timestamp": "14:32 · 4. Mär",
       "headline": "Einsatz",
       "headlineItalic": "erfolgreich.",
@@ -215,7 +219,7 @@
           "history": "Akkuverlauf",
           "cycles": "Zyklenübersicht",
           "drain": "Verbrauch pro App",
-          "calendar": "Kalender (Akkuwächter fürs Meeting)"
+          "calendar": "Kalender (Meetingwächter)"
         }
       }
     }
@@ -359,7 +363,7 @@
       },
       {
         "label": "Akkuverlauf (Sensei Saga)",
-        "desc": "Ladeverlauf (24h / 3d / 7d), Kacheln zum Akkuzustand, wöchentliche und monatliche Rückblicke sowie Rettungsbelege, wenn Sie gerade noch rechtzeitig einstecken.",
+        "desc": "Ladeverlauf (24h / 3d / 7d), Kacheln zum Akkuzustand, wöchentliche und monatliche Rückblicke sowie Rettungsmomente, wenn Sie gerade noch rechtzeitig einstecken.",
         "key": "battery-journal",
         "sensei": "yes",
         "aldente": "no",
@@ -369,7 +373,7 @@
         "macos": "no"
       },
       {
-        "label": "Akkuwächter fürs Meeting",
+        "label": "Meetingwächter",
         "desc": "Prüft die nächsten 4 Stunden an Terminen direkt auf dem Gerät. Kritisch: Warnung 30/15/5/1 Min. vorher. Katastrophal: sofortige Warnung.",
         "key": "meeting-battery-guard",
         "sensei": "yes",
@@ -532,13 +536,13 @@
       "kicker": "Funktion · 個人史",
       "heading": "MacBook-Akkuverlauf.",
       "headingItalic": "Zyklen, Ladungen, Rettungen, alles im Kontext.",
-      "body": "Saga ist der Langzeitblick auf das Leben Ihres Akkus. Ein Diagramm für den Ladeverlauf, umschaltbar zwischen 24 h / 3 d / 7 d, ein Bereich zum Akkuzustand (Kapazität, Zyklen, Temperatur, Zustand), die stromhungrigsten Apps der letzten Stunde, des letzten Tages und der letzten Woche sowie wöchentliche und monatliche Rückblicke im Wrapped-Stil. Wenn Sie den Akku rechtzeitig retten, also innerhalb von 30 Minuten nach einer kritischen Warnung anschließen, erstellt Sensei einen Rettungsbeleg: eine kleine Karte, die den Moment festhält.",
+      "body": "Saga ist der Langzeitblick auf das Leben Ihres Akkus. Ein Diagramm für den Ladeverlauf, umschaltbar zwischen 24 h / 3 d / 7 d, ein Bereich zum Akkuzustand (Kapazität, Zyklen, Temperatur, Zustand), die stromhungrigsten Apps der letzten Stunde, des letzten Tages und der letzten Woche sowie wöchentliche und monatliche Rückblicke im Wrapped-Stil. Wenn Sie den Akku rechtzeitig retten, also innerhalb von 30 Minuten nach einer kritischen Warnung anschließen, erstellt Sensei einen Rettungsmoment: eine kleine Karte, die den Moment festhält.",
       "mockupCaption": "Lebenslange Statistiken, Ladeverlauf, Rückblicke im Wrapped-Stil. Alles auf der Saga-Seite.",
       "why": "Akkuzahlen ohne Kontext bleiben bloße Zahlen. „92 % Kapazität“ sagt allein wenig. Saga gibt derselben Zahl eine Geschichte: wie sie vor einer Woche aussah, welche Apps am meisten Akkulaufzeit gekostet haben und an welchem Tag es fast knapp geworden wäre."
     },
     "meeting-battery-guard": {
       "kicker": "Premium · 会議",
-      "heading": "Akkuwächter fürs Meeting.",
+      "heading": "Meetingwächter.",
       "headingItalic": "Wissen, bevor der Akku zum Problem wird.",
       "body": "Eine Premium-Funktion, im kostenlosen Test enthalten und danach Teil der Lifetime-Freischaltung. Wenn Sie sie aktivieren, liest Sensei die nächsten 4 Stunden Ihrer Kalender-Einträge lokal auf dem Gerät (EventKit). Er gleicht jedes Meeting mit Ihrem aktuellen Akkustand ab (Comfortable, Tight, Critical oder Catastrophic) und meldet sich nur, wenn es sinnvoll ist. Critical: 30 / 15 / 5 / 1 Min. vorher, jeweils mit der genauen Minute, in der der Laptop ausgehen würde, und der Lösung („22 Min. am Ladegerät, dann reicht es fürs Meeting“). Catastrophic: sofort. Tight: ein einzelner Hinweis 30 Min. vorher. Comfortable: keine Meldung. Wenn Sie früh genug anschließen, verschwinden ausstehende Warnungen von selbst. Termintitel bleiben in Benachrichtigungen standardmäßig lesbar; ein Schalter macht sie unkenntlich.",
       "mockupCaption": "4-Stunden-Vorschau. Meldet sich nur, wenn es sinnvoll ist.",
@@ -565,7 +569,7 @@
       "email": {
         "label": "E-Mail für Release-Hinweise",
         "placeholder": "name@beispiel.de",
-        "cta": "Download holen",
+        "cta": "Herunterladen",
         "skip": "oder ohne E-Mail herunterladen",
         "footnote": "Eine E-Mail bei neuen Versionen. Mit einem Klick abmelden.",
         "errorInvalid": "Das sieht nicht nach einer E-Mail aus.",
@@ -587,7 +591,7 @@
         },
         {
           "title": "24-Stunden-Akkuverlauf",
-          "body": "Ladeverlauf, Kacheln zum Akkuzustand, Rettungsbelege und Verbrauch pro App in der letzten Stunde. Alles lokal."
+          "body": "Ladeverlauf, Kacheln zum Akkuzustand, Rettungsmomente und Verbrauch pro App in der letzten Stunde. Alles lokal."
         },
         {
           "title": "Menüleiste: Ladung + Watt live",
@@ -625,7 +629,7 @@
           "body": "Alles aus dem Free-Tarif, dazu jede Premium-Funktion jetzt und in Zukunft. Eine Zahlung, dauerhaft freigeschaltet."
         },
         {
-          "title": "Akkuwächter fürs Meeting",
+          "title": "Meetingwächter",
           "body": "Sensei prüft kommende Meetings lokal auf dem Gerät und warnt früh, wenn das Akkurisiko hoch ist."
         },
         {
@@ -648,7 +652,7 @@
       "items": [
         {
           "title": "Das volle Premium-Paket",
-          "body": "Dasselbe Premium-Paket wie Lifetime: Akkuwächter fürs Meeting, unbegrenzter Verlauf und eigene Warnregeln."
+          "body": "Dasselbe Premium-Paket wie Lifetime: Meetingwächter, unbegrenzter Verlauf und eigene Warnregeln."
         },
         {
           "title": "Sie finanzieren das nächste Release",
@@ -683,7 +687,7 @@
           "**{{price}} einmalig für eine Lifetime-Lizenz.** {{lifetimeScope}} Kein Abo.",
           "Starten Sie mit {{trial}} kostenlosen Tagen. Keine Karte, kein Konto.",
           "Wenn die Testphase endet, fragt Sensei einmal beim Start. Entscheiden Sie sich gegen den Kauf, bleiben die kostenlosen Grundfunktionen aktiv: Ladelimit, Reisemodus, intelligente Warnungen, 24-Stunden-Verlauf, Verbrauch pro App, Live-Ladeleistung in der Menüleiste.",
-          "Premium ergänzt den Akkuwächter fürs Meeting, unbegrenzten Verlauf und eigene Warnregeln. Im Checkout sehen Sie Ihre lokale Währung."
+          "Premium ergänzt den Meetingwächter, unbegrenzten Verlauf und eigene Warnregeln. Im Checkout sehen Sie Ihre lokale Währung."
         ]
       },
       {
@@ -736,7 +740,7 @@
         "q": "Ist Battery Sensei eine AlDente-Alternative?",
         "a": [
           "**Ja.** Wenn Sie Ladelimits plus intelligente Warnungen und Akkuverlauf möchten, ist Sensei eine AlDente-Alternative.",
-          "Geliefert wird ein notarisiertes .pkg-Installationspaket. Premium ergänzt den Akkuwächter fürs Meeting, unbegrenzte Historie und eigene Warnregeln. Mit Lifetime zahlen Sie einmal und nutzen Premium dauerhaft.",
+          "Geliefert wird ein notarisiertes .pkg-Installationspaket. Premium ergänzt den Meetingwächter, unbegrenzte Historie und eigene Warnregeln. Mit Lifetime zahlen Sie einmal und nutzen Premium dauerhaft.",
           "Der direkte Vergleich steht weiter oben."
         ]
       },
@@ -748,7 +752,7 @@
         ]
       },
       {
-        "q": "Wie funktioniert der Akkuwächter fürs Meeting?",
+        "q": "Wie funktioniert der Meetingwächter?",
         "a": [
           "Premium-Funktion, freiwillig aktivierbar. Sensei liest Ihren Kalender lokal und sagt voraus, ob Ihr Akku die nächsten Meetings durchhält.",
           "Wenn ein Meeting gefährdet ist, erhalten Sie bis zu vier Hinweise: **30, 15, 5 und 1 Minute vorher**.",
@@ -896,7 +900,7 @@
     },
     "summaryLines": {
       "lifetime": [
-        "Akkuwächter fürs Meeting: Warnungen vor wichtigen Meetings",
+        "Meetingwächter: Warnungen vor wichtigen Meetings",
         "Unbegrenzter Saga-Verlauf: jeder Zyklus auf bis zu 3 Macs",
         "Eigene Warnregeln: hinzufügen, entfernen, Schwellenwerte bearbeiten",
         "Lifetime-Updates, kein Abo"
@@ -968,7 +972,7 @@
           "analyticsName": "Cookielose Analytics",
           "analyticsBody": "anonymisierte Seitenaufrufe und Core Web Vitals über Vercel Analytics und Vercel Speed Insights. Keine Cookies, keine seitenübergreifenden Kennungen; IP-Adressen werden am Edge einmalig gehasht, bevor sie gespeichert werden.",
           "signupName": "Daten aus der Newsletter-Anmeldung",
-          "signupBody": "Nur wenn Sie das „Download holen“-Formular absenden: die eingetragene E-Mail-Adresse, die Sprache der Seite, Ihre IP und der User-Agent (zur Missbrauchsprüfung) sowie ein Zeitstempel.",
+          "signupBody": "Nur wenn Sie das „Herunterladen“-Formular absenden: die eingetragene E-Mail-Adresse, die Sprache der Seite, Ihre IP und der User-Agent (zur Missbrauchsprüfung) sowie ein Zeitstempel.",
           "contactName": "Daten aus dem Kontaktformular",
           "contactBody": "Nur wenn Sie uns über das Kontaktformular schreiben: Name, E-Mail, Betreff und Nachrichtentext sowie IP / User-Agent / Referrer-Origin zum Spam-Schutz.",
           "checkoutName": "Daten aus dem Checkout",

@@ -1,4 +1,8 @@
 {
+  "seo": {
+    "title": "MacBook Battery Health, Limits & Alerts · Battery Sensei",
+    "description": "macOS menu-bar app for MacBook battery health: smart low-battery alerts, charge limit, Travel Mode, cycle and capacity tracking. Free trial, then one payment. Native, runs on your Mac."
+  },
   "common": {
     "language": "Language",
     "languageName": {},

@@ -508,7 +508,7 @@ export function Pricing() {
  */
 function LimitedRedeemBar({ fullPriceFormatted }: { fullPriceFormatted: string }) {
   const { t } = useTranslation()
-  const { max, remaining, live } = useDiscountAvailability()
+  const { max, remaining } = useDiscountAvailability()
   if (max <= 0) return null
   // Fill = `remaining`, not `used`. Starts at 100% on day one with
   // the full 500 codes available; shrinks as buyers claim. The
@@ -544,20 +544,15 @@ function LimitedRedeemBar({ fullPriceFormatted }: { fullPriceFormatted: string }
             />
           </span>
         )}
-        {!soldOut && live && (
-          <span
-            aria-hidden
-            className="relative inline-flex h-1.5 w-1.5 shrink-0 rounded-full bg-matcha"
-          >
-            <span className="absolute inset-0 -m-0.5 animate-ping rounded-full bg-matcha/60" />
-          </span>
-        )}
       </div>
-      <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-[var(--line)]">
+      <div className="relative mt-2 h-1.5 w-full overflow-hidden rounded-full bg-[var(--line)]">
         <div
           className={`h-full ${accentClass} transition-[width] duration-700 ease-out`}
           style={{ width: `${pct}%` }}
         />
+        {/* Quiet sheen that sweeps the bar every ~7s — replaces the old
+            blinking live-dot. Only while the offer is still open. */}
+        {!soldOut && <span aria-hidden className="redeem-bar-shimmer" />}
       </div>
       {soldOut && (
         <p className="mt-1.5 text-[0.75rem] text-sumi-soft">

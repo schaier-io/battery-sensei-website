@@ -105,131 +105,108 @@ type AgingRange = '24h' | '3d' | '7d'
 
 const clamp01To100 = (value: number): number => Math.max(0, Math.min(100, value))
 
-function shape24hSeries(values: number[]): number[] {
-  if (values.length === 0) return values
+// ── Battery history signal ─────────────────────────────────────────
+// One generated curve, shown over three time frames. 24h, 3d and 7d
+// are literal trailing slices of a single master series — the 24h view
+// IS the last day of the 3d view, which IS the last three days of the
+// 7d view. Same points, same vertical scale, so the shared right-hand
+// region is pixel-identical across ranges: switching tab just slides
+// more history in from the left while "now" stays put on the right.
 
-  const floor = 14
-  const ramped = values.map((value, index) => value + index * 1.15)
-  const first = ramped[0]
-  const last = ramped[ramped.length - 1]
-  const targetRise = 14
-  const additionalRise = Math.max(0, targetRise - (last - first))
-  const withTrend = additionalRise > 0
-    ? ramped.map((value, index) => {
-      const t = ramped.length > 1 ? index / (ramped.length - 1) : 0
-      // Front-load a little, then accelerate late to keep the line
-      // organic while making the upward glance more obvious.
-      const eased = 0.2 * t + 0.8 * (t ** 1.35)
-      return value + additionalRise * eased
-    })
-    : ramped
-  return withTrend.map((value) => clamp01To100(Number(Math.max(floor, value).toFixed(1))))
+// One ~24h "charged to full and held" plateau, pinned flat at 100%,
+// centred ~4 days back (a 7-day-view feature). A raised-cosine mask
+// gives it a dead-flat day with smooth ramps in/out.
+const FULL_CHARGE = { center: 96, flatHalf: 12, ramp: 12 }
+
+/** 0→1 weight for the full-charge hold: 1 across the flat day, cosine
+ *  ramps on each side, 0 elsewhere. */
+function fullChargeHold(hoursAgo: number): number {
+  const d = Math.abs(hoursAgo - FULL_CHARGE.center)
+  if (d <= FULL_CHARGE.flatHalf) return 1
+  if (d <= FULL_CHARGE.flatHalf + FULL_CHARGE.ramp) {
+    return 0.5 * (1 + Math.cos(((d - FULL_CHARGE.flatHalf) / FULL_CHARGE.ramp) * Math.PI))
+  }
+  return 0
 }
 
-function shape7dSeries(values: number[]): number[] {
-  if (values.length === 0) return values
-  const next = [...values]
+const lerp = (a: number, b: number, t: number): number => a + (b - a) * t
 
-  // Keep one long "charged and stable" window in 7d.
-  const start = Math.max(1, Math.floor(next.length * 0.58))
-  const end = Math.min(next.length - 2, start + 4)
-  const plateauBase = Math.max(78, next[start])
-
-  for (let i = start; i <= end; i += 1) {
-    const drift = (i - start) * 0.8
-    next[i] = clamp01To100(Number((plateauBase - drift).toFixed(1)))
-  }
-
-  // Blend edges so plateau reads as held, not hard-cut.
-  if (start - 1 >= 0) next[start - 1] = clamp01To100(Number((((next[start - 1] * 0.45) + (next[start] * 0.55))).toFixed(1)))
-  if (end + 1 < next.length) next[end + 1] = clamp01To100(Number((((next[end + 1] * 0.4) + (next[end] * 0.6))).toFixed(1)))
-
-  return next
+/**
+ * Asymmetric triangle in [-1, 1]: rises (charge) over `up` of the cycle,
+ * falls (discharge) over the rest. Smaller `up` ⇒ a steep charge + gentle
+ * discharge; larger `up` ⇒ the reverse. The straight ramps are what give
+ * the line its "real telemetry" look once blended into the daily rhythm.
+ */
+function rampWave(phase01: number, up: number): number {
+  const p = phase01 - Math.floor(phase01)
+  const u = Math.min(0.82, Math.max(0.18, up))
+  return p < u ? -1 + 2 * (p / u) : 1 - 2 * ((p - u) / (1 - u))
 }
 
-function buildLayeredSeries(
-  length: number,
-  cfg: {
-    base: number
-    primaryAmp: number
-    secondaryAmp: number
-    tertiaryAmp: number
-    primaryCycles: number
-    secondaryCycles: number
-    tertiaryCycles: number
-    phaseOffset: number
-    dips: number[]
-    peaks: number[]
-    wobbleAmp: number
-  },
-): number[] {
-  const points = Array.from({ length }, (_, i) => {
-    const t = length > 1 ? i / (length - 1) : 0
-    const layeredWave =
-      cfg.base +
-      Math.sin((t * Math.PI * 2 * cfg.primaryCycles) + cfg.phaseOffset) * cfg.primaryAmp +
-      Math.sin((t * Math.PI * 2 * cfg.secondaryCycles) - cfg.phaseOffset * 0.6) * cfg.secondaryAmp +
-      Math.sin((t * Math.PI * 2 * cfg.tertiaryCycles) + cfg.phaseOffset * 1.7) * cfg.tertiaryAmp
-    const wobble = Math.sin((t * Math.PI * 2 * (cfg.secondaryCycles + 2.1)) + i * 0.41) * cfg.wobbleAmp
-    return layeredWave + wobble
-  })
-
-  for (const idx of cfg.dips) {
-    if (idx >= 0 && idx < points.length) points[idx] = 2 + (idx % 3) * 2
-  }
-  for (const idx of cfg.peaks) {
-    if (idx >= 0 && idx < points.length) points[idx] = 96 - (idx % 2) * 2
-  }
-
-  // Keep broad trend neutral by re-centering mean after local events.
-  const mean = points.reduce((sum, v) => sum + v, 0) / points.length
-  const centered = points.map((v) => v - mean + cfg.base)
-  return centered.map((v) => clamp01To100(Number(v.toFixed(1))))
+/**
+ * Battery percentage `hoursAgo` in the past (0 = now). One pure,
+ * deterministic generator (no Date/random) feeds every range, so the
+ * series stay identical across SSR + hydration and the three tabs are
+ * guaranteed to be the same curve at different zoom levels.
+ *
+ * Two layers. The organic curve — a daily charge/discharge rhythm
+ * ("Tagesrhythmus") plus slower, incommensurate sines (incl. a
+ * very-low-frequency swell) that make each day crest and dip differently
+ * ("ungewöhnliche Einbrüche"). The daily term is a sine blended toward a
+ * skewed triangle, so the line runs in fairly straight ramps; the skew
+ * drifts over a few days, so some days charge steeply and discharge
+ * gently while others do the reverse — a mix of steep and shallow
+ * slopes. Amplitudes budget to under 100% so this layer never clamps.
+ * Over it, one full-charge hold blends to exactly 100% for ~a day. The
+ * daily phase keeps the most recent stretch on an upswing, so "now"
+ * trends upward.
+ */
+function batteryAt(hoursAgo: number): number {
+  const h = hoursAgo
+  const dayPhase = (h / 24) * Math.PI * 2 + 2.3
+  // Skew drifts over ~3.4 days → varies charge vs. discharge steepness.
+  const skew = 0.5 + 0.3 * Math.sin((h / 82) * Math.PI * 2 + 0.6)
+  // 70% straight ramp, 30% sine (the ramp's peak is realigned to the
+  // sine's so the blend stays phase-coherent as the skew drifts).
+  const daily = lerp(
+    Math.sin(dayPhase),
+    rampWave(dayPhase / (Math.PI * 2) - 0.25 + skew, skew),
+    0.7,
+  )
+  const rhythm =
+    41 +
+    daily * 25.7 +                                  // dominant daily rhythm, rising into "now"
+    Math.sin((h / 12) * Math.PI * 1.7 - 3.4) * 0.22 +  // 12h texture — morning + evening use
+    Math.sin((h / 19) * Math.PI * 2 + 1.0) * 6.3 +  // slow multi-day swell
+    Math.sin((h / 20) * Math.PI * 1.2 + 2.0) * 2.9   // ~1.7d beat — day-to-day irregularity
+  // Lay the full-charge hold over the rhythm: blend to exactly 100%
+  // across the ~1-day window (this also flattens the ripple there, so
+  // the hold reads as a clean line rather than a clamped sawtooth).
+  const hold = fullChargeHold(h)
+  const value = rhythm * (1 - hold) + 92 * hold
+  // Clamp to a real battery range — never below 0% or above 100%.
+  return clamp01To100(Number(value.toFixed(1)))
 }
+
+// Master recording: 7 days at one sample per 2h, oldest (left) →
+// newest (right). The shorter ranges are exact trailing slices of it.
+const AGING_HOURS_PER_POINT = 2
+const masterAgingSeries: number[] = Array.from(
+  { length: 168 / AGING_HOURS_PER_POINT + 1 },
+  (_, i) => batteryAt(168 - i * AGING_HOURS_PER_POINT),
+)
 
 const agingSeriesByRange: Record<AgingRange, number[]> = {
-  // Simple + coherent: one dominant rhythm, minor wobble.
-  '24h': shape24hSeries(buildLayeredSeries(12, {
-    base: 56,
-    primaryAmp: 9,
-    secondaryAmp: 2.4,
-    tertiaryAmp: 1.2,
-    primaryCycles: 1.05,
-    secondaryCycles: 2.0,
-    tertiaryCycles: 3.2,
-    phaseOffset: 0.32,
-    dips: [],
-    peaks: [2],
-    wobbleAmp: 0.8,
-  })),
-  // Richer composite wave with mixed amplitudes + occasional extremes.
-  '3d': buildLayeredSeries(18, {
-    base: 56,
-    primaryAmp: 16,
-    secondaryAmp: 10,
-    tertiaryAmp: 6,
-    primaryCycles: 1.8,
-    secondaryCycles: 4.2,
-    tertiaryCycles: 7.1,
-    phaseOffset: 0.85,
-    dips: [5, 13],
-    peaks: [2, 10, 16],
-    wobbleAmp: 2.4,
-  }),
-  // Most complex window: layered frequencies, irregular cadence, rare extremes.
-  '7d': shape7dSeries(buildLayeredSeries(29, {
-    base: 57,
-    primaryAmp: 18,
-    secondaryAmp: 12,
-    tertiaryAmp: 7,
-    primaryCycles: 2.2,
-    secondaryCycles: 5.6,
-    tertiaryCycles: 9.3,
-    phaseOffset: 1.1,
-    dips: [4, 11, 21, 27],
-    peaks: [1, 8, 24],
-    wobbleAmp: 2.8,
-  })),
+  '24h': masterAgingSeries.slice(-(24 / AGING_HOURS_PER_POINT + 1)), // last 13 pts
+  '3d': masterAgingSeries.slice(-(72 / AGING_HOURS_PER_POINT + 1)),  // last 37 pts
+  '7d': masterAgingSeries,                                           // all 85 pts
+}
+
+// Shared Y domain so the overlapping right-hand region renders at the
+// same height in every range — the visual proof that it's one curve.
+const agingDomain = {
+  min: Math.min(...masterAgingSeries),
+  max: Math.max(...masterAgingSeries),
 }
 
 const agingRangeHoursAgo: Record<AgingRange, number> = {
@@ -696,6 +673,8 @@ export function Health() {
                     <Sparkline
                       key={agingRange}
                       values={agingSeriesByRange[agingRange]}
+                      min={agingDomain.min}
+                      max={agingDomain.max}
                       height={124}
                     />
                   </div>

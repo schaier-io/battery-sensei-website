@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Check, ChevronDown } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { useNavigate, useRouterState } from '@tanstack/react-router'
 import { SUPPORTED_LOCALES, loadLocale, type Locale } from '#/lib/i18n'
 import { useLocaleSwitcher } from '#/lib/i18n/I18nProvider'
 
@@ -54,6 +55,13 @@ export function LanguageSwitcher({
 }) {
   const { t } = useTranslation()
   const { current, setLocale } = useLocaleSwitcher()
+  const navigate = useNavigate()
+  const pathname = useRouterState({ select: (s) => s.location.pathname })
+  // Home variants ("/", "/de", "/es", "/fr", "/ja") have localized URLs;
+  // every other page is English-only.
+  const onHome =
+    pathname === '/' ||
+    SUPPORTED_LOCALES.some((l) => l !== 'en' && pathname === `/${l}`)
   // `open` is the logical state; `mounted` keeps the panel in the DOM long
   // enough to run the exit animation before unmount. `state` drives CSS.
   const [open, setOpen] = useState(false)
@@ -131,6 +139,13 @@ export function LanguageSwitcher({
     void setLocale(loc).finally(() => {
       setPending(null)
       setOpen(false)
+      // On a home page, reflect the language in the URL so it matches the
+      // prerendered localized page and is shareable. Subpages are English-only,
+      // so there we only swap client-side (cookie + i18n) without navigating.
+      if (onHome) {
+        if (loc === 'en') navigate({ to: '/' })
+        else navigate({ to: '/$lang', params: { lang: loc } })
+      }
     })
   }
 

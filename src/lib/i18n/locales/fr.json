@@ -1,4 +1,8 @@
 {
+  "seo": {
+    "title": "Santé de la batterie MacBook · Battery Sensei",
+    "description": "App de barre des menus pour la batterie MacBook : alertes, limite de charge, Mode voyage, cycles. Essai gratuit puis paiement unique. Native et entièrement locale."
+  },
   "common": {
     "language": "Langue",
     "currency": "Devise",
@@ -32,7 +36,7 @@
       "days": "Jours",
       "cycles": "Cycles",
       "capacity": "Capacité",
-      "timelineLabel": "Chronologie de charge de la batterie",
+      "timelineLabel": "Chronologie de l'historique de charge",
       "footerTagline": "Veille discrètement.",
       "entries": {
         "0": { "date": "4 mars", "body": "Sauvée à 12 %. Branchée juste à temps." },

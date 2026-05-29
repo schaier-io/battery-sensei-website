@@ -32,6 +32,7 @@ const criticalFontCss = `
 `
 import { FAQ_ITEMS } from '#/components/sections/FAQ'
 import { I18nProvider } from '#/lib/i18n/I18nProvider'
+import i18n, { DEFAULT_LOCALE, HTML_LANG, isLocale, loadLocale, localeFromPath } from '#/lib/i18n'
 import { RouteErrorBoundary, RouteNotFound } from '#/components/CatchBoundary'
 
 const SITE_URL = 'https://www.battery-sensei.app'
@@ -233,6 +234,16 @@ const webPageLd = {
 }
 
 export const Route = createRootRoute({
+  // Locale is encoded in the URL path (/de, /es, /fr, /ja); English lives at the
+  // root. Resolve it here so SSR/prerender renders <html lang> and the body in
+  // the right language for every page (English for non-localized subpages), and
+  // so client navigations between language URLs switch the active locale too.
+  beforeLoad: async ({ location }) => {
+    const locale = localeFromPath(location.pathname) ?? DEFAULT_LOCALE
+    await loadLocale(locale)
+    if (i18n.language !== locale) await i18n.changeLanguage(locale)
+    return { locale }
+  },
   head: () => ({
     meta: [
       { charSet: 'utf-8' },
@@ -263,7 +274,7 @@ export const Route = createRootRoute({
       { property: 'og:image:type', content: 'image/png' },
       { property: 'og:image:width', content: '1200' },
       { property: 'og:image:height', content: '630' },
-      { property: 'og:image:alt', content: 'Battery Sensei — quiet power for your MacBook' },
+      { property: 'og:image:alt', content: 'Battery Sensei: quiet battery care for your MacBook' },
       { property: 'og:locale', content: 'en_US' },
       // No og:locale:alternate declared: site translations share one URL with
       // `lang="en"` SSR. Advertising alternates that resolve to the same page
@@ -273,10 +284,12 @@ export const Route = createRootRoute({
       { name: 'twitter:title', content: TITLE },
       { name: 'twitter:description', content: DESCRIPTION },
       { name: 'twitter:image', content: `${SITE_URL}/share-card.png` },
-      { name: 'twitter:image:alt', content: 'Battery Sensei — quiet power for your MacBook' },
+      { name: 'twitter:image:alt', content: 'Battery Sensei: quiet battery care for your MacBook' },
     ],
     links: [
-      { rel: 'canonical', href: SITE_URL },
+      // Canonical is set per-route (index = "/", $lang = "/<locale>"); other
+      // pages self-canonicalize to their own URL. A single site-wide canonical
+      // here would wrongly point every subpage at the homepage.
       { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' },
       { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32.png' },
       { rel: 'icon', type: 'image/png', sizes: '64x64', href: '/favicon.png' },
@@ -353,7 +366,7 @@ export const Route = createRootRoute({
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang={HTML_LANG[isLocale(i18n.language) ? i18n.language : DEFAULT_LOCALE]}>
       <head>
         <HeadContent />
         {/* Inline @font-face for above-fold weights. Parsed during HTML load,

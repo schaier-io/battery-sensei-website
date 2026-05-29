@@ -13,6 +13,7 @@ import { Route as WalkthroughRouteImport } from './routes/walkthrough'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as LegalRouteImport } from './routes/legal'
 import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as LangRouteImport } from './routes/$lang'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as GlossaryIndexRouteImport } from './routes/glossary/index'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
@@ -50,6 +51,11 @@ const LegalRoute = LegalRouteImport.update({
 const CheckoutRoute = CheckoutRouteImport.update({
   id: '/checkout',
   path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LangRoute = LangRouteImport.update({
+  id: '/$lang',
+  path: '/$lang',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -147,6 +153,7 @@ const ApiCheckoutIdRoute = ApiCheckoutIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/$lang': typeof LangRoute
   '/checkout': typeof CheckoutRoute
   '/legal': typeof LegalRoute
   '/privacy': typeof PrivacyRoute
@@ -171,6 +178,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/$lang': typeof LangRoute
   '/checkout': typeof CheckoutRoute
   '/legal': typeof LegalRoute
   '/privacy': typeof PrivacyRoute
@@ -196,6 +204,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/$lang': typeof LangRoute
   '/checkout': typeof CheckoutRoute
   '/legal': typeof LegalRoute
   '/privacy': typeof PrivacyRoute
@@ -222,6 +231,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/$lang'
     | '/checkout'
     | '/legal'
     | '/privacy'
@@ -246,6 +256,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/$lang'
     | '/checkout'
     | '/legal'
     | '/privacy'
@@ -270,6 +281,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/$lang'
     | '/checkout'
     | '/legal'
     | '/privacy'
@@ -295,6 +307,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  LangRoute: typeof LangRoute
   CheckoutRoute: typeof CheckoutRoute
   LegalRoute: typeof LegalRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -346,6 +359,13 @@ declare module '@tanstack/react-router' {
       path: '/checkout'
       fullPath: '/checkout'
       preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$lang': {
+      id: '/$lang'
+      path: '/$lang'
+      fullPath: '/$lang'
+      preLoaderRoute: typeof LangRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -479,6 +499,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  LangRoute: LangRoute,
   CheckoutRoute: CheckoutRoute,
   LegalRoute: LegalRoute,
   PrivacyRoute: PrivacyRoute,

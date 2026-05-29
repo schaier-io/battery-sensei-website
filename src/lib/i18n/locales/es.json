@@ -1,4 +1,8 @@
 {
+  "seo": {
+    "title": "Salud de la batería del MacBook · Battery Sensei",
+    "description": "App de barra de menús para la salud de la batería del MacBook: alertas, límite de carga, Modo viaje, ciclos. Prueba gratis y luego un pago único. Nativa y totalmente local."
+  },
   "common": {
     "language": "Idioma",
     "currency": "Moneda",
@@ -100,7 +104,7 @@
       "chargeLimit": "Límite de carga al 80%",
       "travelMode": "Modo viaje",
       "cycle": "Recuento de ciclos y capacidad",
-      "watts": "Vatios en tiempo real",
+      "watts": "Vatios de carga en tiempo real",
       "history": "Historial de la batería",
       "aldenteAlt": "Alternativa a AlDente"
     }
