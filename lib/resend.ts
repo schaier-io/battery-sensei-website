@@ -30,6 +30,56 @@ export function siteUrl(): string {
   return u.replace(/\/+$/, '')
 }
 
+/**
+ * Origins the CSRF gate is willing to accept on state-changing POSTs
+ * (free-signup, confirm). Always includes the canonical site URL; on
+ * Vercel preview/branch deployments we also accept the auto-set
+ * `VERCEL_URL` and `VERCEL_BRANCH_URL` so PR previews can exercise the
+ * full signup flow without re-configuring `PUBLIC_SITE_URL` per env.
+ *
+ * Vercel guarantees those env vars only on its build/runtime — locally
+ * they're undefined and the canonical URL is the only entry. The
+ * unsubscribe POST deliberately does NOT consult this set; it must
+ * accept any-origin POSTs to honor RFC 8058 inbox-side one-click.
+ */
+export function allowedOrigins(): Set<string> {
+  const origins = new Set<string>([siteUrl()])
+  for (const key of ['VERCEL_URL', 'VERCEL_BRANCH_URL'] as const) {
+    const value = process.env[key]
+    if (!value) continue
+    // Vercel sets these as bare hostnames (no scheme). Prepend https.
+    const normalised = value.startsWith('http')
+      ? value.replace(/\/+$/, '')
+      : `https://${value.replace(/\/+$/, '')}`
+    origins.add(normalised)
+  }
+  return origins
+}
+
+/**
+ * Same-origin gate for state-changing POSTs. Browsers always send
+ * `Origin` on cross-origin fetch + on same-origin POSTs initiated from
+ * `fetch()`; the `Referer` fallback covers the rare browser/extension
+ * scenario where `Origin` is stripped (e.g. some privacy add-ons).
+ *
+ * Returns false on missing headers — server-tool POSTs (curl, Postman)
+ * and cross-origin pages both fail the gate.
+ */
+export function isAllowedOrigin(request: Request): boolean {
+  const allowed = allowedOrigins()
+  const origin = request.headers.get('origin')
+  if (origin) return allowed.has(origin)
+  const referer = request.headers.get('referer')
+  if (referer) {
+    try {
+      return allowed.has(new URL(referer).origin)
+    } catch {
+      return false
+    }
+  }
+  return false
+}
+
 export function resendFrom(): string {
   return (
     process.env.NEWSLETTER_FROM ??

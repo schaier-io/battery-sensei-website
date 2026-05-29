@@ -138,7 +138,11 @@ function ConfirmPage() {
             <Reveal as="div" delay={300} className="mt-10 w-full max-w-sm">
               {/* Status banner above the button. Fixed-height slot so
                   the layout doesn't jump when the message swaps. */}
-              <div className="mb-3 min-h-[1.25rem] text-center" aria-live="polite">
+              <div
+                className="mb-3 min-h-[1.25rem] text-center"
+                aria-live="polite"
+                role={state === 'error' ? 'alert' : undefined}
+              >
                 {state === 'error' && (
                   <p className="text-[0.8125rem] font-medium text-hinomaru">
                     {t('newsletter.confirm.error')}

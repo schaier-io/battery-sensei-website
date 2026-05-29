@@ -42,6 +42,7 @@ import {
 } from '../../lib/newsletter-token.js'
 import {
   getResendClient,
+  isAllowedOrigin,
   launchesAudienceId,
   normalizeLocale,
   releasesAudienceId,
@@ -88,33 +89,6 @@ function hostname(): string {
   } catch {
     return 'battery-sensei.app'
   }
-}
-
-/**
- * Same-origin gate for the confirm POST. The visitor's confirm token
- * is secret (it's only ever in the inbox), but defense-in-depth: a
- * confused-deputy on another site can NOT trigger a confirm by simply
- * having the user load a malicious page. Mirrors the free-signup CSRF
- * check exactly.
- *
- * NOTE: the unsubscribe POST deliberately omits this check so Gmail /
- * Yahoo inbox-side one-click probes (RFC 8058) succeed. Confirm has no
- * such RFC contract — it always runs in-browser after the user lands
- * on /newsletter/confirm.
- */
-function isAllowedOrigin(request: Request): boolean {
-  const expected = siteUrl()
-  const origin = request.headers.get('origin')
-  if (origin) return origin === expected
-  const referer = request.headers.get('referer')
-  if (referer) {
-    try {
-      return new URL(referer).origin === expected
-    } catch {
-      return false
-    }
-  }
-  return false
 }
 
 /**
@@ -186,6 +160,15 @@ export async function POST(request: Request): Promise<Response> {
   // only to the verified inbox), a same-origin check stops a cross-site
   // page from triggering the POST on the user's behalf if they happen
   // to have copy/pasted the URL into a chat that auto-fetches.
+  //
+  // `isAllowedOrigin` includes Vercel preview/branch URLs (VERCEL_URL,
+  // VERCEL_BRANCH_URL) so PR previews can exercise the flow without
+  // configuring PUBLIC_SITE_URL per env.
+  //
+  // The unsubscribe POST deliberately omits this check so Gmail/Yahoo
+  // inbox-side one-click probes (RFC 8058) succeed. Confirm has no
+  // such RFC contract — it always runs in-browser after the user lands
+  // on /newsletter/confirm.
   if (!isAllowedOrigin(request)) {
     return json({ ok: false, error: 'bad-origin' }, { status: 403 })
   }

@@ -6,8 +6,13 @@
 // was normalised. Rate limiting is a count aggregate over this same table.
 
 generator client {
-  provider = "prisma-client"
-  output   = "../lib/generated/prisma"
+  provider            = "prisma-client"
+  output              = "../lib/generated/prisma"
+  // Emit `.js` in generated import paths so that after Vite/Vercel
+  // transpiles the generated `.ts` files to `.js`, the imports still
+  // resolve at runtime. TS resolves `./enums.js` → `./enums.ts` at
+  // build time via `moduleResolution: "bundler"`.
+  importFileExtension = "js"
 }
 
 datasource db {

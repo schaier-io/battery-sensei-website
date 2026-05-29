@@ -12,7 +12,7 @@ import { PrismaPg } from '@prisma/adapter-pg'
 // Generated client lives at <repo>/lib/generated/prisma (see schema.prisma
 // `output`). It's git-ignored and produced by `prisma generate` (postinstall
 // + build).
-import { PrismaClient } from '../../lib/generated/prisma/client.ts'
+import { PrismaClient } from '../../lib/generated/prisma/client.js'
 
 declare global {
   // eslint-disable-next-line no-var

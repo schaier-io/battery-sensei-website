@@ -38,6 +38,7 @@ import { confirmSubject } from '../lib/emails/subjects.js'
 import { createToken } from '../lib/newsletter-token.js'
 import {
   getResendClient,
+  isAllowedOrigin,
   releasesAudienceId,
   resendFrom,
   resendReplyTo,
@@ -173,23 +174,6 @@ async function rateLimited(ip: string | null): Promise<boolean> {
     console.error('[newsletter] rate limit query failed', err)
     return false
   }
-}
-
-function isAllowedOrigin(request: Request): boolean {
-  const expected = siteUrl()
-  const origin = request.headers.get('origin')
-  if (origin) return origin === expected
-  const referer = request.headers.get('referer')
-  if (referer) {
-    try {
-      return new URL(referer).origin === expected
-    } catch {
-      return false
-    }
-  }
-  // No Origin/Referer at all is suspicious for a JSON POST — modern
-  // browsers send Origin on same-origin fetch. Treat as cross-origin.
-  return false
 }
 
 function hostname(): string {
