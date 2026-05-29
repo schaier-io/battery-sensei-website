@@ -3,7 +3,7 @@ import type { BlogPost } from './types'
 
 export const post: BlogPost = {
   slug: 'optimized-battery-charging-explained',
-  title: 'Optimized Battery Charging on Mac, explained — and where it falls short',
+  title: 'Optimized Battery Charging on Mac, explained, and where it falls short',
   description:
     "Apple's OBC uses on-device ML to delay charging past 80%. Here's how it actually works, where it falls short, and what to do about the gaps.",
   publishedAt: '2026-05-28',
@@ -16,7 +16,7 @@ export const post: BlogPost = {
         battery-saving feature on every Mac with a T2 chip or Apple Silicon.
         It’s on by default. It uses on-device machine learning to delay
         charging past 80% when it predicts your Mac will stay plugged in for a
-        while. It works — sometimes — and it’s invisible enough that most
+        while. It works, sometimes. It’s also invisible enough that most
         people never realize when it kicks in. This is the longer guide: how
         OBC actually works, the situations where it doesn’t, and what to do
         about the gaps.
@@ -27,8 +27,8 @@ export const post: BlogPost = {
         When you plug in a MacBook with OBC enabled, the system charges fast
         to 80%, then{' '}
         <strong>holds</strong>. If the on-device ML model has learned that
-        you’re likely to leave the laptop plugged in for a while — overnight,
-        say — it delays the final 20% of charge until shortly before it
+        you’re likely to leave the laptop plugged in for a while (overnight,
+        say), it delays the final 20% of charge until shortly before it
         predicts you’ll need it. The hold reduces the time the battery spends
         at high voltage, which is the single biggest contributor to
         accelerated chemical aging.
@@ -40,7 +40,7 @@ export const post: BlogPost = {
       <H2>How OBC actually works</H2>
       <P>
         Apple’s implementation has three moving parts. None of them are
-        documented in detail — the source isn’t public — but the behavior is
+        documented in detail (the source isn’t public), but the behavior is
         consistent and{' '}
         <Apple id="102338">
           Apple’s own support page describes the high-level mechanism
@@ -64,14 +64,14 @@ export const post: BlogPost = {
           <strong>Visible state.</strong> When OBC is holding, the battery
           icon shows{' '}
           <strong>“Charging On Hold”</strong> with a small Apple Intelligence
-          mark in newer macOS versions. The override is one click —{' '}
+          mark in newer macOS versions. The override is one click:{' '}
           <strong>“Charge to Full Now.”</strong>
         </li>
       </OL>
       <P>
         The ML model is per-Mac and stays local; Apple is explicit that
         nothing leaves the device. That means it doesn’t carry over to a new
-        MacBook — you wait out the 14 days again — and a serious schedule
+        MacBook (you wait out the 14 days again), and a serious schedule
         change resets it, slowly.
       </P>
 
@@ -112,7 +112,7 @@ export const post: BlogPost = {
         <li>
           <strong>It demands a predictable routine.</strong> If your sleep,
           work, or travel schedule varies week-to-week, the model averages
-          your behavior and ends up being cautious — usually defaulting to
+          your behavior and ends up being cautious. It usually defaults to
           charging straight through to 100% because it can’t predict what
           you’ll do next.
         </li>
@@ -134,7 +134,7 @@ export const post: BlogPost = {
         </li>
       </UL>
       <P>
-        None of these are deal-breakers — they’re honest design trade-offs.
+        None of these are deal-breakers. They’re honest design trade-offs.
         OBC trades manual control for invisibility. That’s good for most
         people most of the time, and bad for everyone occasionally.
       </P>
@@ -153,8 +153,8 @@ export const post: BlogPost = {
         week.
       </P>
       <P>
-        If you live by per-tier alert thresholds — “warn me at 22% with a 14
-        second dismiss, alert at 6% until I acknowledge it” — Sensei’s{' '}
+        If you live by per-tier alert thresholds (“warn me at 22% with a 14
+        second dismiss, alert at 6% until I acknowledge it”), Sensei’s{' '}
         <A to="/features/custom-thresholds">custom thresholds</A> let you set
         them. macOS gives you a single 10% warning by default, which arrives
         well after the moment you actually wanted to know.
@@ -177,8 +177,8 @@ export const post: BlogPost = {
           cap is. Toggle it off, or raise the cap.
         </li>
         <li>
-          <strong>Thermal pause.</strong> If your MacBook is hot — running
-          sustained CPU, sitting in the sun, on a soft surface — the charge
+          <strong>Thermal pause.</strong> If your MacBook is hot (running
+          sustained CPU, sitting in the sun, on a soft surface), the charge
           controller stops charging until the cell cools. The menu bar can
           show “Not Charging” with the adapter plugged in. See{' '}
           <G slug="thermal-throttling">thermal throttling</G> for what to
@@ -195,7 +195,7 @@ export const post: BlogPost = {
       <H2>Should you turn OBC off?</H2>
       <P>
         Almost certainly no. Two reasons. First, the worst OBC can do is
-        charge your Mac the way it would have charged with OBC off — there’s
+        charge your Mac the way it would have charged with OBC off. There’s
         no failure mode where it makes things worse. Second, even when it’s
         not actively deferring, having it on means a learning model is in
         place for the day it{' '}
@@ -219,17 +219,17 @@ export const post: BlogPost = {
     {
       q: 'Does OBC work if my schedule changes a lot?',
       a:
-        'Partially. The ML model retrains slowly, so a single off-day doesn’t hurt — but several weeks of irregular use will keep OBC cautious and you won’t see it activate often. A manual Charge Limit is better for unpredictable schedules.',
+        'Partially. The ML model retrains slowly, so a single off-day doesn’t hurt. But several weeks of irregular use will keep OBC cautious and you won’t see it activate often. A manual Charge Limit is better for unpredictable schedules.',
     },
     {
       q: 'Should I turn off Optimized Battery Charging?',
       a:
-        'No. There’s no scenario where leaving OBC on is actively worse than turning it off. If you want the visible manual cap that OBC lacks, set Charge Limit in macOS Sequoia (or a third-party tool) on top of OBC — they compose.',
+        'No. There’s no scenario where leaving OBC on is actively worse than turning it off. If you want the visible manual cap that OBC lacks, set Charge Limit in macOS Sequoia (or a third-party tool) on top of OBC. They compose.',
     },
     {
       q: 'Does Optimized Battery Charging work on Intel MacBooks?',
       a:
-        'Yes, on any Mac with the T2 chip — that’s every 2018-or-later Intel MacBook. Pre-T2 Intel Macs don’t support OBC.',
+        'Yes, on any Mac with the T2 chip. That’s every 2018-or-later Intel MacBook. Pre-T2 Intel Macs don’t support OBC.',
     },
     {
       q: 'Why is OBC not working on my new Mac?',

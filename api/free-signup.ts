@@ -15,8 +15,9 @@
  *   4. Upsert NewsletterSignup. On re-signup after a prior unsub we
  *      bump `tokenEpoch` so the dormant unsubscribe link from the
  *      previous subscription stops working.
- *   5. Mirror to Resend RELEASES audience as `unsubscribed: true`
- *      (pending). Resend dedupes by email so this is idempotent.
+ *   5. Create the Resend contact (account-level) attached to BOTH signup
+ *      segments as `unsubscribed: true` (pending). Resend dedupes by
+ *      email so this is idempotent.
  *   6. Send the locale-matched confirmation email with an HMAC-signed
  *      link bound to the row's current tokenEpoch.
  *
@@ -36,9 +37,9 @@ import { createToken } from '../lib/newsletter-token.js'
 import {
   getResendClient,
   isAllowedOrigin,
-  releasesAudienceId,
   resendFrom,
   resendReplyTo,
+  signupSegments,
   siteUrl,
   SUPPORTED_LOCALES,
 } from '../lib/resend.js'
@@ -528,9 +529,11 @@ export async function POST(request: Request): Promise<Response> {
     return json({ ok: true })
   }
 
-  const releasesId = releasesAudienceId()
-  if (!releasesId) {
-    console.error('[newsletter] RESEND_AUDIENCE_RELEASES is not set')
+  const segments = signupSegments()
+  if (segments.length === 0) {
+    console.error(
+      '[newsletter] no signup segments configured (set RESEND_SEGMENT_RELEASES / RESEND_SEGMENT_UI_NOTIFY)',
+    )
     return json({ ok: false, error: 'misconfigured' }, { status: 500 })
   }
 
@@ -591,18 +594,23 @@ export async function POST(request: Request): Promise<Response> {
 
   const resend = getResendClient()
 
-  // Pending state lives only in the RELEASES audience. We add to
-  // LAUNCHES at confirm-time so that audience never holds unverified
-  // contacts.
+  // Create the account-level contact and attach it to BOTH signup
+  // segments in one call (Segments replaced Audiences in Resend). Pending
+  // (`unsubscribed: true`) until the double-opt-in confirm flips it; the
+  // `unsubscribed` flag is a contact-level property, so it gates delivery
+  // across every segment at once. Resend dedupes by email, so a repeat
+  // signup is an idempotent no-op.
   try {
     const created = await resend.contacts.create({
-      audienceId: releasesId,
       email,
       unsubscribed: true,
       firstName: `src:${source}|lang:${locale}`,
+      segments,
     })
     const contactId = (created as { data?: { id?: string } } | undefined)
       ?.data?.id
+    // One account-level contact id now (no per-audience ids). Reuse the
+    // existing `releasesContactId` column as its canonical home.
     if (contactId && contactId !== row.releasesContactId) {
       await db.newsletterSignup
         .update({
@@ -612,8 +620,6 @@ export async function POST(request: Request): Promise<Response> {
         .catch(() => {})
     }
   } catch (err) {
-    // Resend treats existing email as no-op here, so the only failures
-    // worth logging are real ones (network, auth).
     console.error('[newsletter] contacts.create failed', err)
   }
 

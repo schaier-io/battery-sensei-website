@@ -40,11 +40,10 @@ import {
 import {
   getResendClient,
   isAllowedOrigin,
-  launchesAudienceId,
   normalizeLocale,
-  releasesAudienceId,
   resendFrom,
   resendReplyTo,
+  signupSegments,
   siteUrl,
 } from '../../lib/resend.js'
 
@@ -546,61 +545,32 @@ export async function POST(request: Request): Promise<Response> {
 
   const resend = getResendClient()
 
-  // Flip releases → subscribed.
-  const releasesId = releasesAudienceId()
-  if (releasesId) {
-    try {
-      await resend.contacts.update({
-        audienceId: releasesId,
-        email,
-        unsubscribed: false,
-      })
-    } catch {
-      // Contact missing — recreate already-subscribed.
-      try {
-        const created = await resend.contacts.create({
-          audienceId: releasesId,
-          email,
-          unsubscribed: false,
-          firstName: `src:confirm-recovery|lang:${locale}`,
-        })
-        const id = (created as { data?: { id?: string } } | undefined)?.data
-          ?.id
-        if (id && id !== confirmed.releasesContactId) {
-          await db.newsletterSignup
-            .update({
-              where: { email },
-              data: { releasesContactId: id },
-            })
-            .catch(() => {})
-        }
-      } catch (err) {
-        console.error('[newsletter] releases recovery failed', err)
-      }
-    }
-  }
-
-  // Add to launches (cross-app announcements). Best-effort.
-  const launchesId = launchesAudienceId()
-  if (launchesId) {
+  // Flip the contact to subscribed. `unsubscribed` is an account-level
+  // property, so this single update opts them in across every segment
+  // they were attached to at signup — no per-audience walk needed.
+  try {
+    await resend.contacts.update({ email, unsubscribed: false })
+  } catch {
+    // Contact missing (e.g. the signup-time create failed). Recreate it
+    // already-subscribed, attached to both signup segments.
     try {
       const created = await resend.contacts.create({
-        audienceId: launchesId,
         email,
         unsubscribed: false,
-        firstName: `src:confirm|lang:${locale}`,
+        firstName: `src:confirm-recovery|lang:${locale}`,
+        segments: signupSegments(),
       })
       const id = (created as { data?: { id?: string } } | undefined)?.data?.id
-      if (id && id !== confirmed.launchesContactId) {
+      if (id && id !== confirmed.releasesContactId) {
         await db.newsletterSignup
           .update({
             where: { email },
-            data: { launchesContactId: id },
+            data: { releasesContactId: id },
           })
           .catch(() => {})
       }
     } catch (err) {
-      console.error('[newsletter] launches add failed', err)
+      console.error('[newsletter] confirm subscribe recovery failed', err)
     }
   }
 

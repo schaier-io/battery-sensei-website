@@ -28,11 +28,7 @@
 import { z } from 'zod'
 import { db } from '../../lib/db.js'
 import { verifyToken } from '../../lib/newsletter-token.js'
-import {
-  audiences,
-  getResendClient,
-  siteUrl,
-} from '../../lib/resend.js'
+import { getResendClient, siteUrl } from '../../lib/resend.js'
 
 // Token shape gate — `<b64url>.<b64url>`. Defends against pathological
 // query strings being shoved into the verifier. The HMAC verify is the
@@ -45,16 +41,12 @@ const TokenSchema = z
 
 async function pushUnsubToResend(email: string): Promise<void> {
   const resend = getResendClient()
-  for (const a of audiences()) {
-    try {
-      await resend.contacts.update({
-        audienceId: a.id,
-        email,
-        unsubscribed: true,
-      })
-    } catch {
-      // Not in this audience — ignore.
-    }
+  // `unsubscribed` is an account-level contact property, so one update
+  // by email opts the contact out of every segment at once.
+  try {
+    await resend.contacts.update({ email, unsubscribed: true })
+  } catch (err) {
+    console.error('[newsletter] resend unsubscribe failed', err)
   }
 }
 

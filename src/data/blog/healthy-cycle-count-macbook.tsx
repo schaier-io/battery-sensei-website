@@ -5,7 +5,7 @@ export const post: BlogPost = {
   slug: 'healthy-cycle-count-macbook',
   title: "MacBook battery cycle count: what's healthy at every age",
   description:
-    'Modern MacBooks are rated for 1,000 cycles. Here is what normal looks like at one year, two years, and four years — and when "Service Recommended" actually means it.',
+    'Modern MacBooks are rated for 1,000 cycles. Here is what normal looks like at one year, two years, and four years, plus when "Service Recommended" actually means it.',
   publishedAt: '2026-05-28',
   readingMinutes: 9,
   tags: ['cycle count', 'battery health', 'macOS', 'MacBook'],
@@ -16,8 +16,8 @@ export const post: BlogPost = {
         and saw a number. Now you’re wondering if that number is good, bad, or
         somewhere in the middle. The honest answer is{' '}
         <strong>it depends on the age of the Mac, and on the capacity
-        number sitting right next to it</strong>{' '}
-        — cycle count in isolation tells you very little. This guide walks
+        number sitting right next to it</strong>.{' '}
+        Cycle count in isolation tells you very little. This guide walks
         through what one cycle actually is, what your specific MacBook is
         rated for, and what counts as normal at twelve months, two years, and
         four years of use.
@@ -29,8 +29,8 @@ export const post: BlogPost = {
         <G slug="cycle-count">battery cycle</G> equals one full equivalent
         discharge of your battery’s usable capacity. The keyword is{' '}
         <em>equivalent</em>: a cycle is cumulative, not event-based. Using 50%
-        of capacity twice — say, draining to 50% on Monday, charging back up,
-        then draining to 50% again on Tuesday — counts as one cycle, not two.
+        of capacity twice (say, draining to 50% on Monday, charging back up,
+        then draining to 50% again on Tuesday) counts as one cycle, not two.
         Apple’s firmware tracks this in fractional increments and rounds when
         it ticks over an integer.
       </P>
@@ -80,8 +80,8 @@ export const post: BlogPost = {
           Apple’s “Determine battery cycle count for Mac laptops” page
         </Apple>
         . Hitting the limit doesn’t kill the Mac; it’s an engineering target,
-        not a death date. Many cells comfortably keep going past 1,000 cycles
-        — they just sit at lower maximum capacity.
+        not a death date. Many cells comfortably keep going past 1,000 cycles.
+        They just sit at lower maximum capacity.
       </P>
 
       <H2>What “normal” looks like at your age</H2>
@@ -123,8 +123,8 @@ export const post: BlogPost = {
         has been stewed at 100% on a hot desk for years. Cells age{' '}
         <em>chemically</em> even when they’re not being cycled, and a cell
         stored hot at full charge loses capacity faster than one cycled
-        regularly in cooler conditions. The fix isn’t to “use it more” —
-        it’s to set a charge limit so future months don’t compound the
+        regularly in cooler conditions. The fix isn’t to “use it more.”
+        It’s to set a charge limit so future months don’t compound the
         damage.
       </P>
 
@@ -144,7 +144,7 @@ export const post: BlogPost = {
           system_profiler SPPowerDataType | grep "Cycle Count"
         </code>
         . Sensei surfaces the same number live in the menu bar so you don’t
-        have to dig — and pairs it with a{' '}
+        have to dig, and pairs it with a{' '}
         <A to="/features/battery-journal">history view</A> so you can see how
         fast it’s climbing.
       </P>

@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { ArrowLeft, PlayCircle, Leaf, Bell } from 'lucide-react'
+import { ArrowLeft, PlayCircle, Leaf, Bell, Check } from 'lucide-react'
 import { useState, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import i18n from 'i18next'
@@ -99,17 +99,44 @@ function WalkthroughPage() {
 
         <section className="zen-section mx-auto max-w-3xl !pt-6 !pb-12 px-5 sm:px-6">
           <Reveal delay={520}>
-            <div className="paper-card relative overflow-hidden p-6 pt-5 pb-4 md:p-7 md:pt-6 md:pb-5">
+            <div className="paper-card relative overflow-hidden p-7 md:p-9">
+              {/* Ambient hinomaru + kin washes and a faint washi grain — the
+                  same atmosphere as the video plate above, so the notify card
+                  reads as part of one continuous surface rather than a bolt-on. */}
               <span
                 aria-hidden
-                className="pointer-events-none absolute -left-12 -bottom-16 h-40 w-40 rounded-full bg-kin/[0.06] blur-3xl"
+                className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-hinomaru/[0.06] blur-3xl"
               />
-              <div className="relative flex flex-col gap-4 md:gap-5">
-                <div className="max-w-md space-y-1.5">
-                  <p className="display-title text-[11px] font-semibold uppercase tracking-[0.22em] text-sumi-soft">
-                    {t('walkthrough.notifyHeading')}
+              <span
+                aria-hidden
+                className="pointer-events-none absolute -left-16 -bottom-20 h-56 w-56 rounded-full bg-kin/[0.05] blur-3xl"
+              />
+              <span
+                aria-hidden
+                className="pointer-events-none absolute inset-0 opacity-[0.5]"
+                style={{
+                  backgroundImage:
+                    'repeating-linear-gradient(0deg, transparent 0 23px, rgba(28,26,23,0.035) 23px 24px)',
+                }}
+              />
+              {/* Brushed bell seal — lifts and reddens on card hover via .kanji-accent. */}
+              <span
+                aria-hidden
+                className="kanji-accent pointer-events-none absolute right-5 top-5 select-none font-jp text-[2.75rem] leading-none text-sumi/[0.08] md:right-7 md:top-7 md:text-[3.25rem]"
+              >
+                鈴
+              </span>
+
+              <div className="relative flex flex-col gap-5 md:gap-6">
+                <div className="max-w-md">
+                  <p className="mb-3 inline-flex items-center gap-2.5 text-[11px] font-medium uppercase tracking-[0.24em] text-hinomaru/85">
+                    <Bell className="h-3.5 w-3.5" strokeWidth={1.8} aria-hidden />
+                    <span className="font-jp tracking-[0.2em] text-hinomaru/75">通知</span>
                   </p>
-                  <p className="text-[14px] leading-[1.55] text-sumi-soft">
+                  <h2 className="display-title text-[1.5rem] leading-[1.16] tracking-[-0.015em] text-sumi md:text-[1.75rem]">
+                    {t('walkthrough.notifyHeading')}
+                  </h2>
+                  <p className="mt-3 text-[0.9375rem] leading-[1.6] text-sumi-soft">
                     {t('walkthrough.notifyBody')}
                   </p>
                 </div>
@@ -159,7 +186,9 @@ function WalkthroughNotifyForm() {
       <label htmlFor="walkthrough-notify-email" className="sr-only">
         {t('walkthrough.notifyForm.label')}
       </label>
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-2">
+      {/* Standard field + button, matching the pricing free-card input
+          (same border / washi fill / focus ring); stacks on mobile. */}
+      <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:gap-2.5">
         <input
           id="walkthrough-notify-email"
           type="email"
@@ -172,13 +201,13 @@ function WalkthroughNotifyForm() {
             if (status === 'error' || status === 'success') setStatus('idle')
           }}
           placeholder={t('walkthrough.notifyForm.placeholder')}
-          className="block h-11 w-full min-w-0 rounded-md border border-[color-mix(in_oklab,var(--sumi)_16%,transparent)] bg-[color-mix(in_oklab,var(--washi)_72%,#fff)] px-3 text-[0.875rem] text-sumi placeholder:text-nezumi/70 focus:outline-none focus:ring-2 focus:ring-sumi/25 sm:flex-1 sm:min-w-[17rem]"
+          className="block h-11 w-full min-w-0 rounded-md border border-[color-mix(in_oklab,var(--sumi)_16%,transparent)] bg-[color-mix(in_oklab,var(--washi)_72%,#fff)] px-3 text-[0.875rem] text-sumi placeholder:text-nezumi/70 focus:outline-none focus:ring-2 focus:ring-sumi/25 sm:min-w-[16rem] sm:flex-1"
           aria-invalid={status === 'error'}
         />
         <button
           type="submit"
           disabled={status === 'sending'}
-          className="btn-sumi group inline-flex h-11 min-w-[8.75rem] whitespace-nowrap items-center justify-center gap-2 rounded-md px-4 text-sm font-medium sm:shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)] disabled:opacity-70"
+          className="btn-sumi group inline-flex h-11 min-w-[8.75rem] whitespace-nowrap items-center justify-center gap-2 rounded-md px-4 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)] disabled:opacity-70 sm:shrink-0"
         >
           <Bell
             className="h-4 w-4 transition-transform duration-[280ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5"
@@ -190,14 +219,15 @@ function WalkthroughNotifyForm() {
             : t('walkthrough.notifyForm.cta')}
         </button>
       </div>
-      <div className="mt-1.5 h-5">
+      <div className="mt-2 h-5">
         {status === 'error' && (
           <p role="alert" className="text-[0.75rem] text-hinomaru">
             {t('walkthrough.notifyForm.errorInvalid')}
           </p>
         )}
         {status === 'success' && (
-          <p className="text-[0.75rem] text-matcha animate-in fade-in duration-300 motion-reduce:animate-none">
+          <p className="inline-flex items-center gap-1.5 text-[0.75rem] text-matcha animate-in fade-in duration-300 motion-reduce:animate-none">
+            <Check className="h-3.5 w-3.5" strokeWidth={2} aria-hidden />
             {t('walkthrough.notifyForm.success')}
           </p>
         )}

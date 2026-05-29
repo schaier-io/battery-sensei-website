@@ -18,7 +18,7 @@ export type BlogPost = {
   /** Reading time hint (minutes). Computed by hand from the outline; we don't
    * surface this on the page but it's used in Schema.org `timeRequired`. */
   readingMinutes: number
-  /** Long-form body — the heart of the post. */
+  /** Long-form body. The heart of the post. */
   body: () => ReactNode
   /** Inline FAQ block (renders + serializes to Schema.org FAQPage). */
   faqs?: FaqEntry[]

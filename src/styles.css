@@ -946,6 +946,7 @@ body::after {
   display: flex;
   min-height: var(--pricing-footer-post);
   align-items: flex-start;
+  justify-content: center;
 }
 
 /* Pricing support tier — static kin gold + sweeping sheen over the glyph. */

@@ -15,6 +15,7 @@ import {
   ScrollText,
   Activity,
   Laptop,
+  Check,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
@@ -588,7 +589,12 @@ function LimitedRedeemBar({ fullPriceFormatted }: { fullPriceFormatted: string }
 function FreeDownloadForm() {
   const { t } = useTranslation()
   const [email, setEmail] = useState('')
-  const [status, setStatus] = useState<'idle' | 'sending' | 'error'>('idle')
+  // 'invalid' = bad email (client). 'success'/'error' = signup POST
+  // outcome, surfaced after we fire the download so the visitor gets a
+  // clear "check your inbox" / "didn't go through" confirmation.
+  const [status, setStatus] = useState<
+    'idle' | 'sending' | 'invalid' | 'success' | 'error'
+  >('idle')
   const [macConfirmOpen, setMacConfirmOpen] = useState(false)
   const inputRef = useRef<HTMLInputElement | null>(null)
   const buttonRef = useRef<HTMLButtonElement | null>(null)
@@ -634,14 +640,17 @@ function FreeDownloadForm() {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     if (!isValid || status === 'sending') {
-      if (!isValid) setStatus('error')
+      if (!isValid) setStatus('invalid')
       return
     }
     setStatus('sending')
-    // Best-effort signup. Failures are silent — the visitor still
-    // gets the download. Logging happens server-side.
+    // Best-effort signup — a failure never blocks the download. We DO
+    // surface the outcome though: the visitor stays on the page (the
+    // download/dialog doesn't unload it), so a "check your inbox" /
+    // "didn't go through" line is worth showing.
+    let ok = false
     try {
-      await fetch('/api/free-signup', {
+      const res = await fetch('/api/free-signup', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({
@@ -651,12 +660,11 @@ function FreeDownloadForm() {
         }),
         keepalive: true,
       })
+      ok = res.ok
     } catch {
       // intentional: don't block download on network/api failure
     }
-    // Reset the button state — otherwise it stays at "Sending…" forever
-    // since the visitor stays on this page after the download/dialog opens.
-    setStatus('idle')
+    setStatus(ok ? 'success' : 'error')
     // Platform check happens after the API ping so the email-capture
     // signup still lands even if the visitor cancels the download
     // (someone researching on Windows for a Mac at home is still a
@@ -671,7 +679,11 @@ function FreeDownloadForm() {
 
   return (
     <>
-      <form onSubmit={handleSubmit} noValidate>
+      {/* The form is the Free card's bottom-anchored flex child. It wraps
+          PricingCardFooter, whose own `margin-top:auto` can't fire inside a
+          block <form>, so the form carries `mt-auto` instead — this lines the
+          "Get download" CTA up with "Get Lifetime" / "Become a patron". */}
+      <form onSubmit={handleSubmit} noValidate className="mt-auto">
         <PricingCardFooter
           pre={
             <>
@@ -691,17 +703,30 @@ function FreeDownloadForm() {
                 value={email}
                 onChange={(e) => {
                   setEmail(e.target.value)
-                  if (status === 'error') setStatus('idle')
+                  if (status !== 'idle' && status !== 'sending') setStatus('idle')
                 }}
                 placeholder={t('pricing.free.email.placeholder')}
+                aria-invalid={status === 'invalid'}
                 className="mt-2 block h-11 w-full min-w-0 rounded-md border border-[color-mix(in_oklab,var(--sumi)_16%,transparent)] bg-[color-mix(in_oklab,var(--washi)_72%,#fff)] px-3 text-[0.875rem] text-sumi placeholder:text-nezumi/70 focus:outline-none focus:ring-2 focus:ring-sumi/25"
               />
-              <p className="mt-2 text-[0.73rem] leading-[1.55] text-sumi-soft/90">
-                {t('pricing.free.email.footnote')}
-              </p>
-              {status === 'error' && (
-                <p role="alert" className="mt-1.5 text-[0.75rem] text-hinomaru">
+              {/* One line occupies this slot in every state, so the fixed
+                  footer height never shifts: footnote → invalid/success/error. */}
+              {status === 'success' ? (
+                <p className="mt-2 inline-flex items-start gap-1.5 text-[0.73rem] leading-[1.55] text-matcha">
+                  <Check className="mt-[2px] h-3 w-3 shrink-0" strokeWidth={2.25} aria-hidden />
+                  {t('pricing.free.email.success')}
+                </p>
+              ) : status === 'error' ? (
+                <p role="alert" className="mt-2 text-[0.73rem] leading-[1.55] text-hinomaru">
+                  {t('pricing.free.email.error')}
+                </p>
+              ) : status === 'invalid' ? (
+                <p role="alert" className="mt-2 text-[0.73rem] leading-[1.55] text-hinomaru">
                   {t('pricing.free.email.errorInvalid')}
+                </p>
+              ) : (
+                <p className="mt-2 text-[0.73rem] leading-[1.55] text-sumi-soft/90">
+                  {t('pricing.free.email.footnote')}
                 </p>
               )}
             </>

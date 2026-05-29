@@ -1,13 +1,21 @@
 /**
  * Server-only Resend client + helpers.
  *
- * Audience model (matches .env.example):
- *   - RESEND_AUDIENCE_RELEASES — Battery Sensei build alerts. Contact
- *     is created here as `unsubscribed: true` at signup and flipped to
- *     subscribed on confirm.
- *   - RESEND_AUDIENCE_LAUNCHES — cross-app announcements ("new app from
- *     the same maker"). Contact is added here only on confirm, so the
- *     pending double-opt-in state is never visible in the launches list.
+ * Segment model (matches .env.example):
+ *   Resend replaced Audiences with Segments — contacts now live at the
+ *   account level and are grouped by segment. A signup is created ONCE
+ *   (`contacts.create`) and attached to every configured segment via the
+ *   `segments` field. The `unsubscribed` flag is a contact-level property,
+ *   so it gates delivery across all segments at once.
+ *     - RESEND_SEGMENT_RELEASES  — "heads-up on new versions" build alerts.
+ *     - RESEND_SEGMENT_UI_NOTIFY — "UI notify" updates.
+ *   Both segments receive EVERY signup, regardless of entry surface. The
+ *   contact starts `unsubscribed: true` (pending) and is flipped to
+ *   subscribed on double-opt-in confirm.
+ *
+ * The legacy `audienceId` create path is intentionally NOT used: a
+ * freshly-created segment has no legacy "audience" record, so the old
+ * `POST /audiences/{id}/contacts` 404s for it (and was silently swallowed).
  *
  * Locale is carried in the contact's `firstName` field (`lang:xx`) since
  * Resend has no custom-fields API yet. Send-time we use the locale from
@@ -98,26 +106,25 @@ export function getResendClient(): Resend {
   return new Resend(key)
 }
 
-export function releasesAudienceId(): string | null {
-  return process.env.RESEND_AUDIENCE_RELEASES || null
-}
-
-export function launchesAudienceId(): string | null {
-  return process.env.RESEND_AUDIENCE_LAUNCHES || null
-}
-
 /**
- * All configured audiences that newsletter operations should walk
- * (subscribe / unsubscribe / update). Releases first by convention —
- * locale is resolved from the signed token, not from Resend.
+ * Resend Segment ids a new signup is enrolled in, shaped for the
+ * `contacts.create({ segments })` payload. Both configured segments
+ * receive EVERY signup regardless of which surface it came from
+ * (pricing free card, walkthrough notify, …).
+ *
+ * Empty/unset ids are filtered out rather than throwing, so a partially
+ * configured env still subscribes to whatever IS set. Returns an empty
+ * array only when neither is configured — callers treat that as a
+ * misconfiguration.
  */
-export function audiences(): Array<{ kind: 'releases' | 'launches'; id: string }> {
-  const out: Array<{ kind: 'releases' | 'launches'; id: string }> = []
-  const r = releasesAudienceId()
-  const l = launchesAudienceId()
-  if (r) out.push({ kind: 'releases', id: r })
-  if (l) out.push({ kind: 'launches', id: l })
-  return out
+export function signupSegments(): Array<{ id: string }> {
+  return [
+    process.env.RESEND_SEGMENT_RELEASES,
+    process.env.RESEND_SEGMENT_UI_NOTIFY,
+  ]
+    .map((id) => id?.trim())
+    .filter((id): id is string => Boolean(id))
+    .map((id) => ({ id }))
 }
 
 export function normalizeLocale(input: unknown): SupportedLocale {
