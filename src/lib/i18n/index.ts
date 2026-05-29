@@ -100,6 +100,12 @@ export function localeFromPath(pathname: string): Locale | null {
   return seg && seg !== 'en' && isLocale(seg) ? seg : null
 }
 
+// Home-page path for a locale: "/" for English, "/de" (etc.) otherwise. Use
+// for every "back to homepage" / logo link so the language survives the hop.
+export function localeHomePath(locale: string | null | undefined): string {
+  return isLocale(locale) && locale !== 'en' ? `/${locale}` : '/'
+}
+
 // URL path → cookie → browser. Safe to call on server (returns DEFAULT_LOCALE).
 export function detectClientLocale(): Locale {
   if (typeof document === 'undefined') return DEFAULT_LOCALE

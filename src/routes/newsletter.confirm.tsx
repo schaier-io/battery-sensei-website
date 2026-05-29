@@ -24,7 +24,8 @@
  * A manual button remains as a fallback for the automation case and for
  * retry after an error.
  */
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { HomeLink } from '#/components/HomeLink'
 import { ArrowLeft, Check } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -171,8 +172,7 @@ function ConfirmPage() {
       <Nav />
       <main>
         <section className="zen-section mx-auto max-w-3xl px-5 sm:px-6">
-          <Link
-            to="/"
+          <HomeLink
             className="group zen-link-lift mb-6 inline-flex items-center gap-1.5 text-[0.8125rem] text-sumi-soft hover:text-sumi"
           >
             <ArrowLeft
@@ -181,7 +181,7 @@ function ConfirmPage() {
               aria-hidden
             />
             {t('thanks.backToHome')}
-          </Link>
+          </HomeLink>
 
           <div className="flex flex-col items-center text-center">
             {showSpinner ? (

@@ -6,6 +6,7 @@ import i18n, {
   detectClientLocale,
   isLocale,
   loadLocale,
+  localeFromPath,
   persistLocale,
   type Locale,
 } from './index'
@@ -20,11 +21,14 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const detected = detectClientLocale()
-    // Sticky: if a transactional link carried ?locale, remember it so the
-    // rest of the session (e.g. clicking "Back to homepage") stays in that
-    // language rather than snapping back to the cookie/browser default.
+    // Sticky: when the language comes from the URL — a localized /de page or a
+    // transactional ?locale link — remember it so the rest of the session
+    // (bare "/" subpage links, reloads) stays in that language instead of
+    // snapping back to the browser default.
+    const fromPath = localeFromPath(window.location.pathname)
     const queryLocale = new URLSearchParams(window.location.search).get('locale')
-    if (isLocale(queryLocale)) persistLocale(queryLocale)
+    const sticky = fromPath ?? (isLocale(queryLocale) ? queryLocale : null)
+    if (sticky) persistLocale(sticky)
     if (detected === i18n.language) {
       setReady(true)
       return

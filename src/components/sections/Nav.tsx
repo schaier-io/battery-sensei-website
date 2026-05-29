@@ -3,7 +3,7 @@ import { Download, MessageCircle, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useRouterState } from '@tanstack/react-router'
 import { LanguageSwitcher } from '#/components/LanguageSwitcher'
-import { SUPPORTED_LOCALES } from '#/lib/i18n'
+import { SUPPORTED_LOCALES, localeHomePath } from '#/lib/i18n'
 
 /**
  * Build a section anchor href that works from every route.
@@ -154,7 +154,7 @@ export function Nav() {
             entries behave correctly. Clicking the wordmark on a deep
             page returns to home; on home itself it's a no-op scroll. */}
         <a
-          href="/"
+          href={localeHomePath(i18n.language)}
           className="group flex items-center gap-3 leading-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 rounded-md"
           aria-label={t('nav.ariaHome')}
         >

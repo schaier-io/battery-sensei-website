@@ -1,4 +1,5 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
+import { HomeLink } from '#/components/HomeLink'
 import {
   ArrowLeft,
   Download,
@@ -351,13 +352,9 @@ function CheckoutPage() {
                         one-click "Request a refund" mailto sits. Same
                         underline cue we use across legal-link anchors so
                         it reads as a click target, not just decoration. */}
-                    <Link
-                      to="/"
-                      hash="faq-refund"
-                      className="zen-link"
-                    >
+                    <HomeLink hash="faq-refund" className="zen-link">
                       {t('checkout.refundNote')}
-                    </Link>
+                    </HomeLink>
                   </li>
                   <li className="inline-flex items-center gap-1.5">
                     <KeyRound className="h-3 w-3 shrink-0" strokeWidth={1.8} aria-hidden />
@@ -520,8 +517,7 @@ function CheckoutPage() {
  */
 function BackToHomeLink({ label, className = '' }: { label: string; className?: string }) {
   return (
-    <Link
-      to="/"
+    <HomeLink
       className={`group zen-link-lift inline-flex items-center gap-1.5 text-[0.8125rem] text-sumi-soft hover:text-sumi ${className}`}
     >
       <ArrowLeft
@@ -530,7 +526,7 @@ function BackToHomeLink({ label, className = '' }: { label: string; className?: 
         aria-hidden
       />
       {label}
-    </Link>
+    </HomeLink>
   )
 }
 

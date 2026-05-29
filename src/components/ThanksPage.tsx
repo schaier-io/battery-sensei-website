@@ -1,4 +1,5 @@
-import { Link, useSearch } from '@tanstack/react-router'
+import { useSearch } from '@tanstack/react-router'
+import { HomeLink } from '#/components/HomeLink'
 import { track } from '@vercel/analytics'
 import { ArrowLeft } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
@@ -113,8 +114,7 @@ export function ThanksPage({ tier, kanji }: { tier: Tier; kanji: string }) {
           {/* Top-left back-to-home anchor — quiet escape hatch above
               the celebratory hero. Single placement per subpage
               (the bottom-of-page duplicate was removed). */}
-          <Link
-            to="/"
+          <HomeLink
             className="group zen-link-lift mb-6 inline-flex items-center gap-1.5 text-[0.8125rem] text-sumi-soft hover:text-sumi"
           >
             <ArrowLeft
@@ -123,7 +123,7 @@ export function ThanksPage({ tier, kanji }: { tier: Tier; kanji: string }) {
               aria-hidden
             />
             {t('thanks.backToHome')}
-          </Link>
+          </HomeLink>
           <div className="flex flex-col items-center text-center">
             <Hanko kanji={kanji} className="mb-6" />
             <Reveal as="p" delay={120} className="kicker-row mb-4">

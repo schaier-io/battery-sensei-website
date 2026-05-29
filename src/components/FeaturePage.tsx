@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { Link } from '@tanstack/react-router'
+import { HomeLink } from '#/components/HomeLink'
 import { ArrowLeft, Download } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Hanko } from '#/components/zen/Hanko'
@@ -41,13 +41,12 @@ export function FeaturePage({ slug, kanji, mockup, extended, faqs }: Props) {
       <main>
         <section className="zen-section mx-auto max-w-3xl px-5 sm:px-6">
           <Reveal as="p" delay={80} className="mb-6">
-            <Link
-              to="/"
+            <HomeLink
               className="inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.22em] text-sumi-soft transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:text-sumi"
             >
               <ArrowLeft className="h-3.5 w-3.5" strokeWidth={1.6} />
               {t('featurePages.backLink')}
-            </Link>
+            </HomeLink>
           </Reveal>
 
           <div className="flex flex-col items-start">

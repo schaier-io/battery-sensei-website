@@ -234,13 +234,13 @@ function emailShell({
   // viewBox sized to the email column's aspect (~512×12) so the stroke
   // scales to the full width instead of being meet-centered mid-column.
   const brushSvg =
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 12" width="512" height="12">` +
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 12" width="512" height="12" preserveAspectRatio="none">` +
     `<path d="M4 7.5 C 96 3, 188 9, 280 5.5 C 372 2.5, 452 6.5, 500 6" fill="none" stroke="${PALETTE.sumi}" stroke-width="2.2" stroke-linecap="round" opacity="0.85"/>` +
     `<circle cx="500" cy="6" r="1.9" fill="${PALETTE.sumi}" opacity="0.85"/>` +
     `</svg>`
   const brushSrc = `data:image/svg+xml;utf8,${encodeURIComponent(brushSvg)}`
 
-  const footerNoteHtml = `<p style="margin:8px 0 0;font-family:${FONT_STACK};font-size:11px;line-height:18px;letter-spacing:0.04em;color:${PALETTE.nezumi};font-style:italic;">${escapeHtml(ignoreNote)}</p>`
+  const footerNoteHtml = `<p style="margin:8px 0 0;font-family:${FONT_STACK};font-size:12px;line-height:20px;letter-spacing:0.04em;color:${PALETTE.nezumi};font-style:italic;">${escapeHtml(ignoreNote)}</p>`
 
   return `<!doctype html>
 <html lang="${escapeHtml(locale)}">
@@ -264,14 +264,14 @@ function emailShell({
 <div style="display:none!important;visibility:hidden;opacity:0;color:transparent;height:0;width:0;overflow:hidden;mso-hide:all;">${safePre}</div>
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:transparent;">
 <tr><td align="center">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background-color:${PALETTE.washi};border-radius:2px;box-shadow:inset 0 0 0 1px ${PALETTE.line},inset 0 0 0 8px ${PALETTE.washi},inset 0 0 0 9px rgba(28,26,23,0.06),0 1px 0 rgba(28,26,23,0.05),0 24px 48px -20px rgba(28,26,23,0.18);overflow:hidden;">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;table-layout:fixed;background-color:${PALETTE.washi};border-radius:2px;box-shadow:inset 0 0 0 1px ${PALETTE.line},inset 0 0 0 8px ${PALETTE.washi},inset 0 0 0 9px rgba(28,26,23,0.06),0 1px 0 rgba(28,26,23,0.05),0 24px 48px -20px rgba(28,26,23,0.18);overflow:hidden;">
 <tr><td class="bs-pad bs-pad-top" style="padding:36px 44px 0;">
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
 <tr>
 <td style="vertical-align:middle;width:52px;"><img src="${safeIcon}" alt="" width="44" height="44" style="display:block;" /></td>
 <td style="vertical-align:middle;padding-left:14px;">
 <p style="margin:0;font-family:${SERIF_STACK};font-size:20px;font-weight:500;letter-spacing:-0.012em;color:${PALETTE.sumi};line-height:1.1;">Battery Sensei</p>
-<p style="margin:3px 0 0;font-family:${FONT_STACK};font-size:11px;text-transform:uppercase;letter-spacing:0.22em;color:${PALETTE.nezumi};">${safeTagline}</p>
+<p style="margin:3px 0 0;font-family:${FONT_STACK};font-size:12px;text-transform:uppercase;letter-spacing:0.22em;color:${PALETTE.nezumi};">${safeTagline}</p>
 </td>
 </tr>
 </table>
@@ -281,7 +281,7 @@ function emailShell({
 </td></tr>
 <tr><td class="bs-pad" style="padding:24px 44px 36px;">${bodyHtml}</td></tr>
 <tr><td class="bs-pad" style="padding:24px 44px 36px;border-top:1px solid ${PALETTE.line};background-color:rgba(226, 214, 189, 0.35);">
-<p style="margin:0;font-family:${FONT_STACK};font-size:11px;line-height:18px;letter-spacing:0.04em;color:${PALETTE.sumiSoft};">${safeWhy} <span style="color:${PALETTE.nezumi};padding:0 6px;">·</span> <a href="https://battery-sensei.app" style="color:${PALETTE.sumi};text-decoration:underline;text-underline-offset:2px;">battery-sensei.app</a></p>
+<p style="margin:0;font-family:${FONT_STACK};font-size:12px;line-height:20px;letter-spacing:0.04em;color:${PALETTE.sumiSoft};">${safeWhy} <span style="color:${PALETTE.nezumi};padding:0 6px;">·</span> <a href="https://battery-sensei.app" style="color:${PALETTE.sumi};text-decoration:underline;text-underline-offset:2px;">battery-sensei.app</a></p>
 ${footerNoteHtml}
 </td></tr>
 </table>
@@ -315,7 +315,7 @@ function confirmEmailHtml({
   const safeUrl = escapeHtml(confirmUrl)
 
   const body =
-    `<p style="margin:0 0 18px;font-family:${FONT_STACK};font-size:11px;text-transform:uppercase;letter-spacing:0.26em;color:${PALETTE.hinomaru};">` +
+    `<p style="margin:0 0 18px;font-family:${FONT_STACK};font-size:12px;text-transform:uppercase;letter-spacing:0.26em;color:${PALETTE.hinomaru};">` +
     `${escapeHtml(c.kicker)}` +
     `<span style="color:${PALETTE.nezumi};margin:0 8px;">·</span>` +
     `<span style="font-family:${JP_STACK};letter-spacing:0.18em;">${escapeHtml(c.kanji)}</span>` +
@@ -324,22 +324,22 @@ function confirmEmailHtml({
     `${escapeHtml(c.headingPre)}` +
     `<span style="display:block;font-style:italic;font-weight:500;color:${PALETTE.sumiSoft};">${escapeHtml(c.headingItalic)}</span>` +
     `</p>` +
-    `<p style="margin:0 0 30px;font-family:${FONT_STACK};font-size:16px;line-height:28px;color:${PALETTE.sumiSoft};max-width:460px;">${escapeHtml(c.body)}</p>` +
+    `<p style="margin:0 0 30px;font-family:${FONT_STACK};font-size:17px;line-height:29px;color:${PALETTE.sumiSoft};max-width:460px;">${escapeHtml(c.body)}</p>` +
     `<div style="margin:0 0 26px;">` +
     `<a href="${safeUrl}" class="bs-cta" style="background-color:${PALETTE.sumi};color:${PALETTE.washi};padding:16px 30px 17px;border-radius:6px;font-family:${SERIF_STACK};font-size:16px;font-weight:600;letter-spacing:0.01em;text-decoration:none;display:inline-block;box-shadow:0 1px 0 rgba(28,26,23,0.3), 0 8px 18px -10px rgba(28,26,23,0.5);">` +
     `<span style="display:inline-block;font-family:${FONT_STACK};font-size:14px;margin-right:10px;opacity:0.9;">✓</span>` +
     `${escapeHtml(c.cta)}` +
     `</a>` +
     `</div>` +
-    `<p style="margin:0 0 8px;font-family:${FONT_STACK};font-size:12px;letter-spacing:0.04em;color:${PALETTE.nezumi};">${escapeHtml(c.fallback)}</p>` +
-    `<div style="margin:0 0 30px;padding:12px 14px;background-color:rgba(226,214,189,0.35);border:1px solid ${PALETTE.line};border-radius:6px;">` +
-    `<a href="${safeUrl}" style="color:${PALETTE.sumiSoft};font-family:${FONT_STACK};font-size:12px;line-height:18px;word-break:break-all;text-decoration:none;">${safeUrl}</a>` +
+    `<p style="margin:0 0 8px;font-family:${FONT_STACK};font-size:13px;letter-spacing:0.04em;color:${PALETTE.nezumi};">${escapeHtml(c.fallback)}</p>` +
+    `<div style="margin:0 0 30px;padding:12px 14px;max-width:100%;background-color:rgba(226,214,189,0.35);border:1px solid ${PALETTE.line};border-radius:6px;">` +
+    `<a href="${safeUrl}" style="display:block;color:${PALETTE.sumiSoft};font-family:${FONT_STACK};font-size:13px;line-height:20px;word-break:break-all;overflow-wrap:anywhere;text-decoration:none;">${safeUrl}</a>` +
     `</div>` +
-    `<p style="margin:0 0 30px;font-family:${FONT_STACK};font-style:italic;font-size:12px;color:${PALETTE.nezumi};">${escapeHtml(c.expiry)}</p>` +
+    `<p style="margin:0 0 30px;font-family:${FONT_STACK};font-style:italic;font-size:13px;color:${PALETTE.nezumi};">${escapeHtml(c.expiry)}</p>` +
     `<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;">` +
     `<tr>` +
     `<td style="vertical-align:middle;">` +
-    `<p style="margin:0;font-family:${SERIF_STACK};font-style:italic;font-size:14px;color:${PALETTE.sumiSoft};line-height:1.4;">` +
+    `<p style="margin:0;font-family:${SERIF_STACK};font-style:italic;font-size:15px;color:${PALETTE.sumiSoft};line-height:1.4;">` +
     `${escapeHtml(c.sign)}<br/>` +
     `<span style="color:${PALETTE.sumi};font-style:normal;">${escapeHtml(c.signature)}</span>` +
     `</p>` +

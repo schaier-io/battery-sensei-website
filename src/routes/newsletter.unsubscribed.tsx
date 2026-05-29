@@ -11,7 +11,8 @@
  * "Subscribe again" CTA back to the homepage signup so visitors who
  * change their mind don't have to dig for the form.
  */
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
+import { HomeLink } from '#/components/HomeLink'
 import { ArrowLeft, Mail } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Nav } from '#/components/sections/Nav'
@@ -44,8 +45,7 @@ function UnsubscribedPage() {
       <Nav />
       <main>
         <section className="zen-section mx-auto max-w-3xl px-5 sm:px-6">
-          <Link
-            to="/"
+          <HomeLink
             className="group zen-link-lift mb-6 inline-flex items-center gap-1.5 text-[0.8125rem] text-sumi-soft hover:text-sumi"
           >
             <ArrowLeft
@@ -54,7 +54,7 @@ function UnsubscribedPage() {
               aria-hidden
             />
             {t('thanks.backToHome')}
-          </Link>
+          </HomeLink>
           <div className="flex flex-col items-center text-center">
             {/* 静 = "quiet / stillness" — matches the "off the list,
                 quietly" tone of the copy. */}
@@ -80,8 +80,7 @@ function UnsubscribedPage() {
                 family of buttons so the visual language is consistent
                 across opt-in surfaces. */}
             <Reveal as="div" delay={300} className="mt-10">
-              <Link
-                to="/"
+              <HomeLink
                 hash="free-download-email"
                 className="group inline-flex h-11 items-center justify-center gap-2 rounded-md bg-sumi px-5 text-[0.875rem] font-medium text-washi transition-colors duration-[220ms] hover:bg-sumi/90"
               >
@@ -91,7 +90,7 @@ function UnsubscribedPage() {
                   aria-hidden
                 />
                 {t('newsletter.unsubscribed.subscribeAgain')}
-              </Link>
+              </HomeLink>
             </Reveal>
           </div>
         </section>

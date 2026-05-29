@@ -15,7 +15,8 @@
  * Status banner above the button sits in a fixed-height slot so the
  * layout doesn't jump between idle / submitting / error states.
  */
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { HomeLink } from '#/components/HomeLink'
 import { AlertCircle, ArrowLeft, UserMinus } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -82,8 +83,7 @@ function UnsubscribePage() {
       <Nav />
       <main>
         <section className="zen-section mx-auto max-w-3xl px-5 sm:px-6">
-          <Link
-            to="/"
+          <HomeLink
             className="group zen-link-lift mb-6 inline-flex items-center gap-1.5 text-[0.8125rem] text-sumi-soft hover:text-sumi"
           >
             <ArrowLeft
@@ -92,7 +92,7 @@ function UnsubscribePage() {
               aria-hidden
             />
             {t('thanks.backToHome')}
-          </Link>
+          </HomeLink>
           <div className="flex flex-col items-center text-center">
             {/* 別 = "parting / farewell" for the pre-click confirm. */}
             <Hanko kanji="別" className="mb-6" />

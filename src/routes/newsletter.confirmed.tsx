@@ -11,7 +11,8 @@
  * /thanks/lifetime and /thanks/support — centered hero with hanko,
  * back-to-home anchor at top-left, max-w-3xl section.
  */
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
+import { HomeLink } from '#/components/HomeLink'
 import { AlertCircle, ArrowLeft, CheckCircle2, Download, Send } from 'lucide-react'
 import { useState, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -81,8 +82,7 @@ function ConfirmedPage() {
       <Nav />
       <main>
         <section className="zen-section mx-auto max-w-3xl px-5 sm:px-6">
-          <Link
-            to="/"
+          <HomeLink
             className="group zen-link-lift mb-6 inline-flex items-center gap-1.5 text-[0.8125rem] text-sumi-soft hover:text-sumi"
           >
             <ArrowLeft
@@ -91,7 +91,7 @@ function ConfirmedPage() {
               aria-hidden
             />
             {t('thanks.backToHome')}
-          </Link>
+          </HomeLink>
           <div className="flex flex-col items-center text-center">
             <Hanko kanji={kanji} className="mb-6" />
             <Reveal

@@ -169,6 +169,9 @@ export function EmailLayout({
             // on phones). max-width still caps it on desktop.
             width: '100%',
             maxWidth: '600px',
+            // table-layout:fixed so a long fallback URL can't widen the email
+            // past the viewport — it wraps (break-all) instead of overflowing.
+            tableLayout: 'fixed',
             margin: '0 auto',
             backgroundColor: palette.washi,
             borderRadius: '2px',
@@ -231,7 +234,7 @@ export function EmailLayout({
                       style={{
                         margin: '3px 0 0',
                         fontFamily: fontStack,
-                        fontSize: '11px',
+                        fontSize: '12px',
                         textTransform: 'uppercase',
                         letterSpacing: '0.22em',
                         color: palette.nezumi,
@@ -278,8 +281,8 @@ export function EmailLayout({
               style={{
                 margin: 0,
                 fontFamily: fontStack,
-                fontSize: '11px',
-                lineHeight: '18px',
+                fontSize: '12px',
+                lineHeight: '20px',
                 letterSpacing: '0.04em',
                 color: palette.sumiSoft,
               }}
@@ -324,8 +327,8 @@ export function EmailLayout({
                 style={{
                   margin: '8px 0 0',
                   fontFamily: fontStack,
-                  fontSize: '11px',
-                  lineHeight: '18px',
+                  fontSize: '12px',
+                  lineHeight: '20px',
                   letterSpacing: '0.04em',
                   color: palette.nezumi,
                   fontStyle: 'italic',
@@ -371,7 +374,7 @@ function brushSvg(color: string): string {
   // A single hand-drawn horizontal brush stroke. The viewBox is sized to
   // the email column's aspect (~512×12) so it scales to the full column
   // width — the old 120×10 box was meet-centered and floated mid-column.
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 12" width="512" height="12"><path d="M4 7.5 C 96 3, 188 9, 280 5.5 C 372 2.5, 452 6.5, 500 6" fill="none" stroke="${color}" stroke-width="2.2" stroke-linecap="round" opacity="0.85"/><circle cx="500" cy="6" r="1.9" fill="${color}" opacity="0.85"/></svg>`
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 12" width="512" height="12" preserveAspectRatio="none"><path d="M4 7.5 C 96 3, 188 9, 280 5.5 C 372 2.5, 452 6.5, 500 6" fill="none" stroke="${color}" stroke-width="2.2" stroke-linecap="round" opacity="0.85"/><circle cx="500" cy="6" r="1.9" fill="${color}" opacity="0.85"/></svg>`
 }
 
 /**

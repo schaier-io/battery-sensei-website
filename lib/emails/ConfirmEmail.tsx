@@ -104,7 +104,7 @@ export function ConfirmEmail({
         style={{
           margin: '0 0 18px',
           fontFamily: fontStack,
-          fontSize: '11px',
+          fontSize: '12px',
           textTransform: 'uppercase',
           letterSpacing: '0.26em',
           color: palette.hinomaru,
@@ -149,8 +149,8 @@ export function ConfirmEmail({
         style={{
           margin: '0 0 30px',
           fontFamily: fontStack,
-          fontSize: '16px',
-          lineHeight: '28px',
+          fontSize: '17px',
+          lineHeight: '29px',
           color: palette.sumiSoft,
           fontFeatureSettings: '"kern", "liga", "calt"',
           maxWidth: '460px',
@@ -200,7 +200,7 @@ export function ConfirmEmail({
         style={{
           margin: '0 0 8px',
           fontFamily: fontStack,
-          fontSize: '12px',
+          fontSize: '13px',
           letterSpacing: '0.04em',
           color: palette.nezumi,
         }}
@@ -219,11 +219,13 @@ export function ConfirmEmail({
         <Link
           href={confirmUrl}
           style={{
+            display: 'block',
             color: palette.sumiSoft,
             fontFamily: fontStack,
-            fontSize: '12px',
-            lineHeight: '18px',
+            fontSize: '13px',
+            lineHeight: '20px',
             wordBreak: 'break-all',
+            overflowWrap: 'anywhere',
             textDecoration: 'none',
           }}
         >
@@ -237,7 +239,7 @@ export function ConfirmEmail({
           margin: '0 0 30px',
           fontFamily: fontStack,
           fontStyle: 'italic',
-          fontSize: '12px',
+          fontSize: '13px',
           color: palette.nezumi,
         }}
       >
@@ -259,7 +261,7 @@ export function ConfirmEmail({
                   margin: 0,
                   fontFamily: serifStack,
                   fontStyle: 'italic',
-                  fontSize: '14px',
+                  fontSize: '15px',
                   color: palette.sumiSoft,
                   lineHeight: 1.4,
                 }}
