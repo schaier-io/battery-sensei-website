@@ -8,6 +8,49 @@
     "recommended": "Recomendado",
     "learnMore": "Saber más"
   },
+  "mockups": {
+    "menuBar": {
+      "lowBattery": "Batería baja",
+      "timeLeft": "Quedan unos <0>{{time}}</0> a este ritmo.",
+      "snooze": "Posponer",
+      "snoozeStep": "5 min",
+      "dismiss": "Cerrar"
+    },
+    "warningOverlay": {
+      "lowBattery": "Batería baja",
+      "statusLine": "La batería está al {{percent}}%.",
+      "snooze": "Posponer",
+      "snoozeStep": "5 min",
+      "snoozeDecrease": "Reducir el aplazamiento",
+      "snoozeIncrease": "Aumentar el aplazamiento",
+      "dismiss": "Cerrar"
+    },
+    "batteryJournal": {
+      "ariaLabel": "Battery Sensei — historial personal",
+      "since": "Desde el {{date}}",
+      "sinceDate": "30 ene 2024",
+      "days": "Días",
+      "cycles": "Ciclos",
+      "capacity": "Capacidad",
+      "timelineLabel": "Línea de carga de la batería",
+      "footerTagline": "Vigila en silencio.",
+      "entries": {
+        "0": { "date": "4 mar", "body": "Rescatada al 12% — enchufada justo a tiempo." },
+        "1": { "date": "18 feb", "body": "Mantuvo un 78-82% estable durante bloques de trabajo profundo." },
+        "2": { "date": "30 ene", "body": "Récord personal: 11h 23m con una sola carga." }
+      }
+    },
+    "rescueReceipt": {
+      "ariaLabel": "Recibo de rescate — intervención de Sensei exitosa",
+      "timestamp": "14:32 · 4 mar",
+      "headline": "Intervención",
+      "headlineItalic": "exitosa.",
+      "lowestReached": "Mínimo alcanzado",
+      "rescuePath": "12% → 87%  ·  28 min",
+      "quote": "En silencio, junto a tu batería.",
+      "footerTagline": "Batería salvada."
+    }
+  },
   "macOnly": {
     "kicker": "Solo macOS",
     "title": "Battery Sensei es solo para macOS.",

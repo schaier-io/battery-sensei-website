@@ -8,6 +8,49 @@
     "recommended": "Recommended",
     "learnMore": "Learn more"
   },
+  "mockups": {
+    "menuBar": {
+      "lowBattery": "Low battery",
+      "timeLeft": "About <0>{{time}}</0> left at this rate.",
+      "snooze": "Snooze",
+      "snoozeStep": "5 min",
+      "dismiss": "Dismiss"
+    },
+    "warningOverlay": {
+      "lowBattery": "Low battery",
+      "statusLine": "Battery is now at {{percent}}%.",
+      "snooze": "Snooze",
+      "snoozeStep": "5 min",
+      "snoozeDecrease": "Decrease snooze",
+      "snoozeIncrease": "Increase snooze",
+      "dismiss": "Dismiss"
+    },
+    "batteryJournal": {
+      "ariaLabel": "Battery Sensei — personal history",
+      "since": "Since {{date}}",
+      "sinceDate": "30 Jan 2024",
+      "days": "Days",
+      "cycles": "Cycles",
+      "capacity": "Capacity",
+      "timelineLabel": "Battery charge timeline",
+      "footerTagline": "Quietly watching.",
+      "entries": {
+        "0": { "date": "Mar 04", "body": "Rescued at 12% — plugged in just in time." },
+        "1": { "date": "Feb 18", "body": "Held a steady 78-82% through deep-work blocks." },
+        "2": { "date": "Jan 30", "body": "Personal best: 11h 23m on a single charge." }
+      }
+    },
+    "rescueReceipt": {
+      "ariaLabel": "Rescue Receipt — Sensei intervention successful",
+      "timestamp": "14:32 · Mar 4",
+      "headline": "Intervention",
+      "headlineItalic": "successful.",
+      "lowestReached": "Lowest reached",
+      "rescuePath": "12% → 87%  ·  28 min",
+      "quote": "Quietly, beside your battery.",
+      "footerTagline": "Battery saved."
+    }
+  },
   "macOnly": {
     "kicker": "macOS only",
     "title": "Battery Sensei is macOS only.",

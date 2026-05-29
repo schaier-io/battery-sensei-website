@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { Calendar, RefreshCcw, HeartPulse } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { Sparkline } from '#/components/zen/Sparkline'
 import { useCountUp } from '#/lib/use-count-up'
 
@@ -11,6 +12,7 @@ import { useCountUp } from '#/lib/use-count-up'
  * not a single shareable card.
  */
 export function BatteryJournal({ className = '' }: { className?: string }) {
+  const { t } = useTranslation()
   return (
     <div
       className={`relative flex flex-col gap-3 rounded-md bg-[color-mix(in_oklab,var(--washi)_85%,white)] p-5 shadow-[0_18px_50px_-20px_rgba(28,26,23,0.45)] ${className}`}
@@ -18,7 +20,7 @@ export function BatteryJournal({ className = '' }: { className?: string }) {
         backgroundImage:
           'repeating-linear-gradient(0deg, transparent 0 23px, rgba(28,26,23,0.05) 23px 24px)',
       }}
-      aria-label="Battery Sensei — personal history"
+      aria-label={t('mockups.batteryJournal.ariaLabel')}
     >
       {/* Header */}
       <div className="flex items-baseline justify-between border-b border-dashed border-[var(--line-strong)] pb-2">
@@ -26,21 +28,21 @@ export function BatteryJournal({ className = '' }: { className?: string }) {
           個 人 史
         </span>
         <span className="text-[9px] tracking-wider text-nezumi">
-          Since 30 Jan 2024
+          {t('mockups.batteryJournal.since', { date: t('mockups.batteryJournal.sinceDate') })}
         </span>
       </div>
 
       {/* Lifetime stats row */}
       <div className="grid grid-cols-3 gap-2 -mx-1">
-        <Stat icon={Calendar} label="Days" to={247} />
-        <Stat icon={RefreshCcw} label="Cycles" to={217} />
-        <Stat icon={HeartPulse} label="Capacity" to={92} suffix="%" />
+        <Stat icon={Calendar} label={t('mockups.batteryJournal.days')} to={247} />
+        <Stat icon={RefreshCcw} label={t('mockups.batteryJournal.cycles')} to={217} />
+        <Stat icon={HeartPulse} label={t('mockups.batteryJournal.capacity')} to={92} suffix="%" />
       </div>
 
       {/* Battery charge timeline */}
       <div className="-mx-1 mt-1">
         <p className="text-[9px] uppercase tracking-wider text-nezumi mb-1 px-1">
-          Battery charge timeline
+          {t('mockups.batteryJournal.timelineLabel')}
         </p>
         <div className="text-sumi">
           <Sparkline
@@ -52,9 +54,20 @@ export function BatteryJournal({ className = '' }: { className?: string }) {
 
       {/* Recent entries */}
       <ul className="mt-1 space-y-1.5 text-[11px] text-sumi-soft">
-        <Entry date="Mar 04" body="Rescued at 12% — plugged in just in time." mark="救" />
-        <Entry date="Feb 18" body="Held a steady 78-82% through deep-work blocks." />
-        <Entry date="Jan 30" body="Personal best: 11h 23m on a single charge." mark="星" />
+        <Entry
+          date={t('mockups.batteryJournal.entries.0.date')}
+          body={t('mockups.batteryJournal.entries.0.body')}
+          mark="救"
+        />
+        <Entry
+          date={t('mockups.batteryJournal.entries.1.date')}
+          body={t('mockups.batteryJournal.entries.1.body')}
+        />
+        <Entry
+          date={t('mockups.batteryJournal.entries.2.date')}
+          body={t('mockups.batteryJournal.entries.2.body')}
+          mark="星"
+        />
       </ul>
 
       {/* Footer */}
@@ -64,7 +77,7 @@ export function BatteryJournal({ className = '' }: { className?: string }) {
             Sensei
           </span>
           <span className="display-title text-xs font-semibold text-sumi">
-            Quietly watching.
+            {t('mockups.batteryJournal.footerTagline')}
           </span>
         </div>
         <span

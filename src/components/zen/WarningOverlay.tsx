@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { MoonStar, Minus, Plus } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 /**
  * Web mockup of the macOS app's WarningOverlay (Surfaces/WarningOverlayManager.swift).
@@ -9,15 +10,17 @@ import { MoonStar, Minus, Plus } from 'lucide-react'
 export function WarningOverlay({
   className = '',
   percent = 15,
-  title = 'Low battery',
+  title,
 }: {
   className?: string
   /** Current battery percentage shown — also drives the drain bar */
   percent?: number
   title?: string
 }) {
+  const { t } = useTranslation()
   const ref = useRef<HTMLDivElement>(null)
   const [revealed, setRevealed] = useState(false)
+  const resolvedTitle = title ?? t('mockups.warningOverlay.lowBattery')
 
   useEffect(() => {
     const el = ref.current
@@ -83,7 +86,7 @@ export function WarningOverlay({
       </div>
 
       <p className="display-title text-[1.625rem] font-semibold leading-tight tracking-[-0.01em] text-sumi">
-        {title}
+        {resolvedTitle}
       </p>
 
       {/* Drain visualization — capsule track + hinomaru fill, eased on reveal */}
@@ -99,7 +102,7 @@ export function WarningOverlay({
       </p>
 
       <p className="mx-auto mt-4 text-sm font-medium leading-relaxed text-sumi-soft">
-        Battery is now at {percent}%.
+        {t('mockups.warningOverlay.statusLine', { percent })}
       </p>
 
       {/* Action row */}
@@ -108,17 +111,17 @@ export function WarningOverlay({
           <span className="px-1.5 text-sumi-soft" aria-hidden>
             <MoonStar className="h-3.5 w-3.5" strokeWidth={1.8} />
           </span>
-          <StepButton label="Decrease snooze">
+          <StepButton label={t('mockups.warningOverlay.snoozeDecrease')}>
             <Minus className="h-3.5 w-3.5" strokeWidth={2} />
           </StepButton>
           <button
             type="button"
             className="flex items-center gap-2 whitespace-nowrap rounded-lg bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-3 py-1.5 text-[13px] font-semibold text-sumi shadow-[0_1px_2px_rgba(28,26,23,0.06),0_1px_0_rgba(255,255,255,0.6)_inset] transition-transform duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/30"
           >
-            <span className="text-sumi-soft">Snooze</span>
-            <span className="tabular-nums text-sumi">5 min</span>
+            <span className="text-sumi-soft">{t('mockups.warningOverlay.snooze')}</span>
+            <span className="tabular-nums text-sumi">{t('mockups.warningOverlay.snoozeStep')}</span>
           </button>
-          <StepButton label="Increase snooze">
+          <StepButton label={t('mockups.warningOverlay.snoozeIncrease')}>
             <Plus className="h-3.5 w-3.5" strokeWidth={2} />
           </StepButton>
         </div>
@@ -127,7 +130,7 @@ export function WarningOverlay({
           type="button"
           className="group/dismiss inline-flex items-center gap-2 rounded-xl bg-hinomaru px-4 py-2.5 text-sm font-semibold text-[#fff8eb] shadow-[0_1px_0_rgba(255,255,255,0.18)_inset,0_2px_4px_rgba(188,0,45,0.22),0_10px_22px_-10px_rgba(188,0,45,0.55)] transition-transform duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-hinomaru/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
         >
-          Dismiss
+          {t('mockups.warningOverlay.dismiss')}
           <kbd className="rounded-md bg-[color-mix(in_oklab,#fff8eb_24%,transparent)] px-1.5 py-0.5 text-[10px] font-medium tracking-wider text-[#fff8eb]/95 ring-1 ring-inset ring-[#fff8eb]/30">
             Esc
           </kbd>

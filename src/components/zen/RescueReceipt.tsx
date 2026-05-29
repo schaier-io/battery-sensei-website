@@ -1,9 +1,12 @@
+import { useTranslation } from 'react-i18next'
+
 /**
  * Mock "Rescue Receipt" — the shareable card Sensei produces after a
  * critical-low intervention succeeds. Pure SVG/HTML, no external assets.
  * Sits inside the kakejiku FrameBorder in the Saga section.
  */
 export function RescueReceipt({ className = '' }: { className?: string }) {
+  const { t } = useTranslation()
   return (
     <div
       className={`relative flex flex-col gap-3 rounded-md bg-[color-mix(in_oklab,var(--washi)_85%,white)] p-5 shadow-[0_18px_50px_-20px_rgba(28,26,23,0.45)] ${className}`}
@@ -13,7 +16,7 @@ export function RescueReceipt({ className = '' }: { className?: string }) {
         clipPath:
           'polygon(0 6px, 4px 0, 12px 4px, 20px 0, 28px 4px, 36px 0, 100% 0, 100% 100%, 36px 100%, 28px calc(100% - 4px), 20px 100%, 12px calc(100% - 4px), 4px 100%, 0 calc(100% - 6px))',
       }}
-      aria-label="Rescue Receipt — Sensei intervention successful"
+      aria-label={t('mockups.rescueReceipt.ariaLabel')}
     >
       {/* Header */}
       <div className="flex items-baseline justify-between">
@@ -21,16 +24,16 @@ export function RescueReceipt({ className = '' }: { className?: string }) {
           物 語 · #014
         </span>
         <span className="text-[10px] tracking-wider text-nezumi">
-          14:32 · Mar 4
+          {t('mockups.rescueReceipt.timestamp')}
         </span>
       </div>
 
       {/* Headline */}
       <div>
         <h3 className="display-title text-[1.05rem] font-semibold leading-tight text-sumi">
-          Intervention
+          {t('mockups.rescueReceipt.headline')}
           <span className="block italic text-sumi-soft font-normal">
-            successful.
+            {t('mockups.rescueReceipt.headlineItalic')}
           </span>
         </h3>
       </div>
@@ -42,7 +45,7 @@ export function RescueReceipt({ className = '' }: { className?: string }) {
             12<span className="text-sumi-soft text-xl">%</span>
           </p>
           <p className="mt-1 text-[10px] uppercase tracking-wider text-nezumi">
-            Lowest reached
+            {t('mockups.rescueReceipt.lowestReached')}
           </p>
         </div>
         <div className="flex-1">
@@ -63,14 +66,14 @@ export function RescueReceipt({ className = '' }: { className?: string }) {
             <circle cx="42" cy="22" r="2" fill="var(--hinomaru)" />
           </svg>
           <p className="mt-1 text-right text-[9px] tracking-wider text-nezumi">
-            12% → 87%  ·  28 min
+            {t('mockups.rescueReceipt.rescuePath')}
           </p>
         </div>
       </div>
 
       {/* Quote line */}
       <p className="font-jp text-[11px] leading-snug text-sumi-soft">
-        静かに、電池に寄り添う。
+        {t('mockups.rescueReceipt.quote')}
       </p>
 
       {/* Footer with hanko */}
@@ -80,7 +83,7 @@ export function RescueReceipt({ className = '' }: { className?: string }) {
             Sensei
           </span>
           <span className="display-title text-xs font-semibold text-sumi">
-            Battery saved.
+            {t('mockups.rescueReceipt.footerTagline')}
           </span>
         </div>
         {/* mini hanko */}

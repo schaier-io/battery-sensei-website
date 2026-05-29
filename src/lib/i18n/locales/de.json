@@ -8,6 +8,49 @@
     "recommended": "Empfohlen",
     "learnMore": "Mehr erfahren"
   },
+  "mockups": {
+    "menuBar": {
+      "lowBattery": "Akku schwach",
+      "timeLeft": "Noch etwa <0>{{time}}</0> bei diesem Verbrauch.",
+      "snooze": "Schlummern",
+      "snoozeStep": "5 Min",
+      "dismiss": "Schließen"
+    },
+    "warningOverlay": {
+      "lowBattery": "Akku schwach",
+      "statusLine": "Akku ist jetzt bei {{percent}}%.",
+      "snooze": "Schlummern",
+      "snoozeStep": "5 Min",
+      "snoozeDecrease": "Schlummerzeit verringern",
+      "snoozeIncrease": "Schlummerzeit erhöhen",
+      "dismiss": "Schließen"
+    },
+    "batteryJournal": {
+      "ariaLabel": "Battery Sensei — persönliche Historie",
+      "since": "Seit {{date}}",
+      "sinceDate": "30. Jan. 2024",
+      "days": "Tage",
+      "cycles": "Zyklen",
+      "capacity": "Kapazität",
+      "timelineLabel": "Akku-Verlauf",
+      "footerTagline": "Wacht still über deinen Akku.",
+      "entries": {
+        "0": { "date": "4. Mär", "body": "Bei 12% gerettet — gerade noch rechtzeitig eingesteckt." },
+        "1": { "date": "18. Feb", "body": "Konstant 78–82% durch tiefe Arbeitsblöcke gehalten." },
+        "2": { "date": "30. Jan", "body": "Persönlicher Rekord: 11h 23m mit einer Ladung." }
+      }
+    },
+    "rescueReceipt": {
+      "ariaLabel": "Rettungsbeleg — Sensei-Intervention erfolgreich",
+      "timestamp": "14:32 · 4. Mär",
+      "headline": "Intervention",
+      "headlineItalic": "erfolgreich.",
+      "lowestReached": "Niedrigster Stand",
+      "rescuePath": "12% → 87%  ·  28 Min",
+      "quote": "Leise, ganz nah am Akku.",
+      "footerTagline": "Akku gerettet."
+    }
+  },
   "macOnly": {
     "kicker": "Nur für macOS",
     "title": "Battery Sensei ist nur für macOS.",

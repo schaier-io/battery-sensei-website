@@ -8,6 +8,49 @@
     "recommended": "おすすめ",
     "learnMore": "詳しく見る"
   },
+  "mockups": {
+    "menuBar": {
+      "lowBattery": "電池残量低下",
+      "timeLeft": "このペースで残り約<0>{{time}}</0>。",
+      "snooze": "スヌーズ",
+      "snoozeStep": "5分",
+      "dismiss": "閉じる"
+    },
+    "warningOverlay": {
+      "lowBattery": "電池残量低下",
+      "statusLine": "現在の電池残量は{{percent}}%です。",
+      "snooze": "スヌーズ",
+      "snoozeStep": "5分",
+      "snoozeDecrease": "スヌーズを短く",
+      "snoozeIncrease": "スヌーズを長く",
+      "dismiss": "閉じる"
+    },
+    "batteryJournal": {
+      "ariaLabel": "Battery Sensei — 個人の歩み",
+      "since": "{{date}}より",
+      "sinceDate": "2024年1月30日",
+      "days": "日数",
+      "cycles": "サイクル",
+      "capacity": "容量",
+      "timelineLabel": "充電の歩み",
+      "footerTagline": "静かに見守る。",
+      "entries": {
+        "0": { "date": "3月4日", "body": "12%で救出 — ぎりぎりで電源に。" },
+        "1": { "date": "2月18日", "body": "集中作業の間、78〜82%を静かに維持。" },
+        "2": { "date": "1月30日", "body": "自己最長:1回の充電で11時間23分。" }
+      }
+    },
+    "rescueReceipt": {
+      "ariaLabel": "救出の記録 — Senseiの介入が成功",
+      "timestamp": "2024年3月4日 14時32分",
+      "headline": "介入",
+      "headlineItalic": "成功。",
+      "lowestReached": "最低到達点",
+      "rescuePath": "12% → 87%  ·  28分",
+      "quote": "静かに、電池に寄り添う。",
+      "footerTagline": "電池、救われました。"
+    }
+  },
   "macOnly": {
     "kicker": "macOS専用",
     "title": "Battery SenseiはmacOS専用です。",
