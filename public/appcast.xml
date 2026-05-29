@@ -331,6 +331,28 @@
         length="20638414"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.2.11</title>
+      <pubDate>Fri, 29 May 2026 05:44:09 +0000</pubDate>
+      <sparkle:version>52</sparkle:version>
+      <sparkle:shortVersionString>1.2.11</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.2.11</h1>
+<p>Cleaner, more natural wording in every language.</p>
+<p>A full copy pass across English, German, Spanish, French, and Japanese. Each language was edited for native phrasing instead of literal translation, while the calm Sensei voice stays exactly the same. Setup, warnings, the Sensei Saga, and the licensing flow now read more like a person wrote them and less like a machine.</p>
+<p>Along the way: brand terms stay consistent from screen to screen, a few clumsy phrasings and stray dashes are gone, and the Japanese share moments lean into the power-up theme.</p>
+<p>No behaviour changes. Same features, clearer words.</p>
+<p>Marketing 1.2.10 → 1.2.11, build 51 → 52.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.2.11/Battery-Sensei.pkg"
+        sparkle:edSignature="NIDBfWF8Vem+n1Go3Y26wisVpgZJH3tfFCUb9alYsB6JVknq7VyY/x+ptNqB0+eTX24m7EM3rp+y1lb5h/xJBQ=="
+        length="20638431"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
