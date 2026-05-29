@@ -109,6 +109,13 @@ export function detectClientLocale(): Locale {
   const fromPath = localeFromPath(window.location.pathname)
   if (fromPath) return fromPath
 
+  // Explicit ?locale beats cookie/browser. Transactional links (the
+  // confirm/unsubscribe landing pages) and the subpage language switcher
+  // pass it, so someone opening a German signup email on a fresh device
+  // still lands in German.
+  const fromQuery = new URLSearchParams(window.location.search).get('locale')
+  if (isLocale(fromQuery)) return fromQuery
+
   const cookieMatch = document.cookie.match(
     new RegExp(`(?:^|; )${LOCALE_COOKIE}=([^;]+)`),
   )

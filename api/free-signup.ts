@@ -71,10 +71,14 @@ const PALETTE = {
   line: 'rgba(28, 26, 23, 0.14)',
 } as const
 
+// Email clients almost never load web fonts, so the fallbacks carry the look.
+// Each stack degrades to fonts that ship on macOS, Windows, Android and iOS so
+// the mail never lands on an ugly default. The JP stack ends in sans-serif
+// (not serif) so kanji stay clean on clients without a Japanese serif.
 const FONT_STACK =
-  `"Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif`
-const SERIF_STACK = `"Spectral", Georgia, "Times New Roman", serif`
-const JP_STACK = `"Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif`
+  `"Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif`
+const SERIF_STACK = `"Spectral", Georgia, Cambria, "Times New Roman", serif`
+const JP_STACK = `"Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", "Yu Gothic", Meiryo, sans-serif`
 
 function escapeHtml(s: string): string {
   return s.replace(/[&<>"']/g, (c) =>
@@ -86,31 +90,31 @@ type Locale = 'en' | 'de' | 'es' | 'fr' | 'ja'
 
 const LAYOUT_COPY: Record<Locale, { why: string; ignore: string; tagline: string }> = {
   en: {
-    why: 'A quiet note from Battery Sensei · battery-sensei.app',
+    why: 'A quiet note from Battery Sensei',
     ignore:
       "Didn't sign up? You can ignore this email. Nothing is saved until you confirm.",
     tagline: 'Calm energy for your Mac.',
   },
   de: {
-    why: 'Eine kurze Nachricht von Battery Sensei · battery-sensei.app',
+    why: 'Eine kurze Nachricht von Battery Sensei',
     ignore:
-      'Nicht angemeldet? Ignoriere diese E-Mail einfach. Ohne deine Bestätigung wird nichts gespeichert.',
-    tagline: 'Mehr Ruhe für deinen Mac-Akku.',
+      'Nicht angemeldet? Ignorieren Sie diese E-Mail einfach. Ohne Ihre Bestätigung wird nichts gespeichert.',
+    tagline: 'Mehr Ruhe für Ihren Mac-Akku.',
   },
   es: {
-    why: 'Un mensaje tranquilo de Battery Sensei · battery-sensei.app',
+    why: 'Un mensaje tranquilo de Battery Sensei',
     ignore:
       '¿No te registraste? Ignora este correo. No guardamos nada hasta que confirmes.',
     tagline: 'Batería en calma para tu Mac.',
   },
   fr: {
-    why: 'Un mot discret de Battery Sensei · battery-sensei.app',
+    why: 'Un mot discret de Battery Sensei',
     ignore:
       'Vous n’avez rien demandé ? Ignorez ce message : rien n’est enregistré tant que vous ne confirmez pas.',
     tagline: 'Moins de stress pour la batterie de votre Mac.',
   },
   ja: {
-    why: 'Battery Senseiより、静かなお知らせ · battery-sensei.app',
+    why: 'Battery Senseiより、静かなお知らせ',
     ignore:
       'ご登録のお心当たりがなければ、このメールは無視してください。ご確認いただくまで、何も保存されません。',
     tagline: 'Macのバッテリーに、静かな安心を。',
@@ -152,9 +156,9 @@ const CONFIRM_COPY: Record<
     kanji: '確認',
     headingPre: 'Ein kurzer Klick',
     headingItalic: 'und wir legen los.',
-    body: 'Bestätige unten deine E-Mail-Adresse. Wir schreiben selten und nur dann, wenn es deinem Mac-Akku wirklich hilft.',
+    body: 'Bestätigen Sie unten Ihre E-Mail-Adresse. Wir schreiben selten und nur dann, wenn es Ihrem Mac-Akku wirklich hilft.',
     cta: 'E-Mail bestätigen',
-    fallback: 'Funktioniert der Button nicht? Kopiere diesen Link:',
+    fallback: 'Funktioniert der Button nicht? Kopieren Sie diesen Link:',
     expiry: 'Dieser Link ist 48 Stunden gültig.',
     sign: 'Viele Grüße,',
     signature: 'Das Battery-Sensei-Team',
@@ -227,10 +231,12 @@ function emailShell({
   const safeTagline = escapeHtml(layout.tagline)
   const safeIcon = `${escapeHtml(siteOrigin)}/app-icon-256.png`
 
+  // viewBox sized to the email column's aspect (~512×12) so the stroke
+  // scales to the full width instead of being meet-centered mid-column.
   const brushSvg =
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 10" width="120" height="10">` +
-    `<path d="M2 6 C 22 2, 60 8, 96 4 L 118 5" fill="none" stroke="${PALETTE.sumi}" stroke-width="2" stroke-linecap="round" opacity="0.85"/>` +
-    `<circle cx="118" cy="5" r="1.6" fill="${PALETTE.sumi}" opacity="0.85"/>` +
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 12" width="512" height="12">` +
+    `<path d="M4 7.5 C 96 3, 188 9, 280 5.5 C 372 2.5, 452 6.5, 500 6" fill="none" stroke="${PALETTE.sumi}" stroke-width="2.2" stroke-linecap="round" opacity="0.85"/>` +
+    `<circle cx="500" cy="6" r="1.9" fill="${PALETTE.sumi}" opacity="0.85"/>` +
     `</svg>`
   const brushSrc = `data:image/svg+xml;utf8,${encodeURIComponent(brushSvg)}`
 
@@ -249,7 +255,7 @@ function emailShell({
   .bs-pad { padding-left: 22px !important; padding-right: 22px !important; }
   .bs-pad-top { padding-top: 26px !important; }
   .bs-display { font-size: 30px !important; line-height: 36px !important; }
-  .bs-brush { width: 100% !important; max-width: 260px !important; }
+  .bs-brush { width: 100% !important; max-width: 100% !important; }
   .bs-cta { display: block !important; width: 100% !important; box-sizing: border-box !important; text-align: center !important; }
 }
 </style>
@@ -270,16 +276,16 @@ function emailShell({
 </tr>
 </table>
 <div style="padding:28px 0 0;">
-<img src="${brushSrc}" alt="" class="bs-brush" width="380" height="12" style="display:block;width:100%;max-width:380px;" />
+<img src="${brushSrc}" alt="" class="bs-brush" width="512" height="12" style="display:block;width:100%;max-width:100%;" />
 </div>
 </td></tr>
 <tr><td class="bs-pad" style="padding:24px 44px 36px;">${bodyHtml}</td></tr>
 <tr><td class="bs-pad" style="padding:24px 44px 36px;border-top:1px solid ${PALETTE.line};background-color:rgba(226, 214, 189, 0.35);">
-<p style="margin:0;font-family:${FONT_STACK};font-size:11px;line-height:18px;letter-spacing:0.04em;color:${PALETTE.sumiSoft};">${safeWhy}</p>
+<p style="margin:0;font-family:${FONT_STACK};font-size:11px;line-height:18px;letter-spacing:0.04em;color:${PALETTE.sumiSoft};">${safeWhy} <span style="color:${PALETTE.nezumi};padding:0 6px;">·</span> <a href="https://battery-sensei.app" style="color:${PALETTE.sumi};text-decoration:underline;text-underline-offset:2px;">battery-sensei.app</a></p>
 ${footerNoteHtml}
 </td></tr>
 </table>
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:20px auto 0;width:600px;max-width:100%;">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:20px auto 0;width:100%;max-width:600px;">
 <tr><td style="text-align:center;">
 <p style="margin:0;font-family:${JP_STACK};font-size:11px;letter-spacing:0.3em;color:rgba(28,26,23,0.35);">電 池 仙 人</p>
 </td></tr>
@@ -320,15 +326,15 @@ function confirmEmailHtml({
     `</p>` +
     `<p style="margin:0 0 30px;font-family:${FONT_STACK};font-size:16px;line-height:28px;color:${PALETTE.sumiSoft};max-width:460px;">${escapeHtml(c.body)}</p>` +
     `<div style="margin:0 0 26px;">` +
-    `<a href="${safeUrl}" class="bs-cta" style="background-color:${PALETTE.sumi};color:${PALETTE.washi};padding:16px 30px 17px;border-radius:3px;font-family:${SERIF_STACK};font-size:17px;font-weight:500;letter-spacing:-0.005em;text-decoration:none;display:inline-block;box-shadow:0 1px 0 rgba(28,26,23,0.3), 0 8px 18px -10px rgba(28,26,23,0.5);">` +
+    `<a href="${safeUrl}" class="bs-cta" style="background-color:${PALETTE.sumi};color:${PALETTE.washi};padding:16px 30px 17px;border-radius:6px;font-family:${SERIF_STACK};font-size:16px;font-weight:600;letter-spacing:0.01em;text-decoration:none;display:inline-block;box-shadow:0 1px 0 rgba(28,26,23,0.3), 0 8px 18px -10px rgba(28,26,23,0.5);">` +
     `<span style="display:inline-block;font-family:${FONT_STACK};font-size:14px;margin-right:10px;opacity:0.9;">✓</span>` +
     `${escapeHtml(c.cta)}` +
     `</a>` +
     `</div>` +
-    `<p style="margin:0 0 6px;font-family:${FONT_STACK};font-size:12px;letter-spacing:0.04em;color:${PALETTE.nezumi};">${escapeHtml(c.fallback)}</p>` +
-    `<p style="margin:0 0 30px;font-family:${FONT_STACK};font-size:12px;word-break:break-all;">` +
-    `<a href="${safeUrl}" style="color:${PALETTE.sumiSoft};text-decoration:underline;text-underline-offset:2px;">${safeUrl}</a>` +
-    `</p>` +
+    `<p style="margin:0 0 8px;font-family:${FONT_STACK};font-size:12px;letter-spacing:0.04em;color:${PALETTE.nezumi};">${escapeHtml(c.fallback)}</p>` +
+    `<div style="margin:0 0 30px;padding:12px 14px;background-color:rgba(226,214,189,0.35);border:1px solid ${PALETTE.line};border-radius:6px;">` +
+    `<a href="${safeUrl}" style="color:${PALETTE.sumiSoft};font-family:${FONT_STACK};font-size:12px;line-height:18px;word-break:break-all;text-decoration:none;">${safeUrl}</a>` +
+    `</div>` +
     `<p style="margin:0 0 30px;font-family:${FONT_STACK};font-style:italic;font-size:12px;color:${PALETTE.nezumi};">${escapeHtml(c.expiry)}</p>` +
     `<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;">` +
     `<tr>` +

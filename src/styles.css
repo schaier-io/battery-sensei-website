@@ -816,6 +816,36 @@ body::after {
   to   { opacity: 1; }
 }
 
+/* ── Ensō spinner — a calm looping brush ring for in-progress moments.
+   The arc rotates at a steady, unhurried pace while the whole mark
+   breathes in opacity, so it reads as a sumi sweep rather than a
+   mechanical throbber. */
+.enso-spinner {
+  display: inline-flex;
+  line-height: 0;
+}
+.enso-spinner svg {
+  animation: enso-spinner-breathe 3200ms cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+.enso-spinner-rot {
+  transform-box: view-box;
+  transform-origin: 24px 24px;
+  animation: enso-spinner-rotate 1300ms linear infinite;
+}
+@keyframes enso-spinner-rotate {
+  to { transform: rotate(360deg); }
+}
+@keyframes enso-spinner-breathe {
+  0%, 100% { opacity: 0.78; }
+  50%      { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .enso-spinner-rot { animation: none; }
+  .enso-spinner svg {
+    animation: enso-spinner-breathe 2600ms cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  }
+}
+
 /* Text-selection contrast — washi (cream) backgrounds clash with the
    browser default light-blue selection on most platforms, washing out
    the selected text. The default rule uses a hinomaru wash + sumi

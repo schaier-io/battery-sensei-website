@@ -36,9 +36,9 @@ const COPY = {
     kanji: '確認',
     headingPre: 'Ein kurzer Klick',
     headingItalic: 'und wir legen los.',
-    body: 'Bestätige unten deine E-Mail-Adresse. Wir schreiben selten und nur dann, wenn es deinem Mac-Akku wirklich hilft.',
+    body: 'Bestätigen Sie unten Ihre E-Mail-Adresse. Wir schreiben selten und nur dann, wenn es Ihrem Mac-Akku wirklich hilft.',
     cta: 'E-Mail bestätigen',
-    fallback: 'Funktioniert der Button nicht? Kopiere diesen Link:',
+    fallback: 'Funktioniert der Button nicht? Kopieren Sie diesen Link:',
     expiry: 'Dieser Link ist 48 Stunden gültig.',
     sign: 'Viele Grüße,',
     signature: 'Das Battery-Sensei-Team',
@@ -167,12 +167,12 @@ export function ConfirmEmail({
           style={{
             backgroundColor: palette.sumi,
             color: palette.washi,
-            padding: '16px 30px 17px',
-            borderRadius: '3px',
+            padding: '15px 30px',
+            borderRadius: '6px',
             fontFamily: serifStack,
-            fontSize: '17px',
-            fontWeight: 500,
-            letterSpacing: '-0.005em',
+            fontSize: '16px',
+            fontWeight: 600,
+            letterSpacing: '0.01em',
             textDecoration: 'none',
             display: 'inline-block',
             boxShadow:
@@ -198,7 +198,7 @@ export function ConfirmEmail({
       {/* Fallback link */}
       <Text
         style={{
-          margin: '0 0 6px',
+          margin: '0 0 8px',
           fontFamily: fontStack,
           fontSize: '12px',
           letterSpacing: '0.04em',
@@ -207,25 +207,29 @@ export function ConfirmEmail({
       >
         {l.fallback}
       </Text>
-      <Text
+      <Section
         style={{
           margin: '0 0 30px',
-          fontFamily: fontStack,
-          fontSize: '12px',
-          wordBreak: 'break-all',
+          padding: '12px 14px',
+          backgroundColor: palette.washiSoft,
+          border: `1px solid ${palette.line}`,
+          borderRadius: '6px',
         }}
       >
         <Link
           href={confirmUrl}
           style={{
             color: palette.sumiSoft,
-            textDecoration: 'underline',
-            textUnderlineOffset: '2px',
+            fontFamily: fontStack,
+            fontSize: '12px',
+            lineHeight: '18px',
+            wordBreak: 'break-all',
+            textDecoration: 'none',
           }}
         >
           {confirmUrl}
         </Link>
-      </Text>
+      </Section>
 
       {/* Meta */}
       <Text

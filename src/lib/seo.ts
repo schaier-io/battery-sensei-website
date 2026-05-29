@@ -13,11 +13,12 @@ export function localeUrl(locale: Locale): string {
  * cluster is internally consistent for Google.
  */
 export function alternateLinks() {
-  const links = SUPPORTED_LOCALES.map((l) => ({
-    rel: 'alternate',
-    hrefLang: l,
-    href: localeUrl(l),
-  }))
+  const links: Array<{ rel: string; hrefLang: string; href: string }> =
+    SUPPORTED_LOCALES.map((l) => ({
+      rel: 'alternate',
+      hrefLang: l as string,
+      href: localeUrl(l),
+    }))
   links.push({ rel: 'alternate', hrefLang: 'x-default', href: localeUrl('en') })
   return links
 }

@@ -2,11 +2,10 @@
  * Landing page shown after the user clicks the double-opt-in link.
  *
  * Status variants:
- *   - default        → "You're confirmed" success
- *   - welcome-failed → same success copy; only the welcome mail failed
- *   - invalid        → token bad/expired; inline resend form (pre-filled
- *                      with the email decoded from the expired token)
- *   - error          → upstream failed (offer to contact support)
+ *   - default → "You're confirmed" success, with a direct download button
+ *   - invalid → token bad/expired; inline resend form (pre-filled with the
+ *               email decoded from the expired token)
+ *   - error   → upstream failed (offer to contact support)
  *
  * Layout follows the post-action "moment" pattern established by
  * /thanks/lifetime and /thanks/support — centered hero with hanko,
@@ -22,7 +21,7 @@ import { Hanko } from '#/components/zen/Hanko'
 import { Reveal } from '#/components/zen/Reveal'
 
 type Search = {
-  status?: 'invalid' | 'error' | 'welcome-failed'
+  status?: 'invalid' | 'error'
   locale?: string
   email?: string
 }
@@ -30,9 +29,7 @@ type Search = {
 export const Route = createFileRoute('/newsletter/confirmed')({
   validateSearch: (s: Record<string, unknown>): Search => ({
     status:
-      s.status === 'invalid' ||
-      s.status === 'error' ||
-      s.status === 'welcome-failed'
+      s.status === 'invalid' || s.status === 'error'
         ? (s.status as Search['status'])
         : undefined,
     locale: typeof s.locale === 'string' ? s.locale : undefined,
@@ -119,16 +116,13 @@ function ConfirmedPage() {
                 />
               </Reveal>
             )}
-            {/* Welcome mail bounced (Resend transient). Confirmation
-                itself succeeded — the user IS subscribed — but their
-                download link didn't arrive in the welcome message. Surface
-                a direct download anchor so they aren't stuck waiting for
-                an email that's already failed. */}
-            {status === 'welcome-failed' && (
+            {/* Direct download. The user just confirmed, so skip the email
+                form and link straight to the .pkg (/download/latest → latest
+                GitHub release, via vercel.json). */}
+            {!isError && (
               <Reveal as="div" delay={300} className="mt-8">
-                <Link
-                  to="/"
-                  hash="download"
+                <a
+                  href="/download/latest"
                   className="group inline-flex h-11 items-center justify-center gap-2 rounded-md bg-sumi px-5 text-[0.875rem] font-medium text-washi transition-colors duration-[220ms] hover:bg-sumi/90"
                 >
                   <Download
@@ -136,11 +130,8 @@ function ConfirmedPage() {
                     strokeWidth={1.8}
                     aria-hidden
                   />
-                  {t('newsletter.confirmed.welcomeFailed.cta')}
-                </Link>
-                <p className="mt-3 text-[0.8125rem] text-sumi-soft">
-                  {t('newsletter.confirmed.welcomeFailed.note')}
-                </p>
+                  {t('common.downloadMac')}
+                </a>
               </Reveal>
             )}
           </div>

@@ -110,11 +110,14 @@ export function isAllowedOrigin(request: Request): boolean {
 }
 
 export function resendFrom(): string {
-  return (
-    process.env.NEWSLETTER_FROM ??
-    process.env.RESEND_FROM ??
-    'Battery Sensei <hello@battery-sensei.app>'
-  )
+  const configured = process.env.NEWSLETTER_FROM ?? process.env.RESEND_FROM
+  if (!configured) return 'Battery Sensei <hello@battery-sensei.app>'
+  // Guarantee a friendly display name in the inbox. If the env var is a bare
+  // address ("hello@battery-sensei.app"), wrap it so the From reads
+  // "Battery Sensei" rather than the raw email.
+  return configured.includes('<')
+    ? configured
+    : `Battery Sensei <${configured.trim()}>`
 }
 
 export function resendReplyTo(): string | undefined {

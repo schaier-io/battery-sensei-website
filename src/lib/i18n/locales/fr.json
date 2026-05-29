@@ -455,8 +455,9 @@
   "newsletter": {
     "confirm": {
       "heading": "Confirmez votre inscription.",
-      "body": "Un dernier clic et votre adresse rejoint la liste des nouvelles versions. Nous ne confirmons rien automatiquement : cela évite qu'un aperçu automatique de votre boîte mail valide l'inscription à votre place.",
+      "body": "Touchez ci-dessous pour ajouter votre adresse à la liste des nouvelles versions.",
       "cta": "Confirmer l'inscription",
+      "confirming": "Confirmation de votre inscription. Un instant de calme…",
       "submitting": "Confirmation…",
       "error": "Quelque chose s'est mal passé. Réessayez dans un instant, ou écrivez à info@battery-sensei.app.",
       "missingToken": "Ce lien n'a pas de jeton. Ouvrez le lien de confirmation directement depuis l'e-mail."
@@ -482,11 +483,7 @@
         "heading": "Quelque chose s'est mal passé.",
         "body": "Nous n'avons pas pu finaliser votre confirmation. Essayez le lien à nouveau, ou écrivez-nous à info@battery-sensei.app et nous réglerons cela manuellement."
       },
-      "cta": "Retour à l'accueil",
-      "welcomeFailed": {
-        "cta": "Lancer le téléchargement",
-        "note": "L'e-mail de bienvenue n'a pas pu partir tout de suite, voici donc le téléchargement direct. Vous êtes bien inscrit ; la prochaine annonce de version arrivera normalement."
-      }
+      "cta": "Retour à l'accueil"
     },
     "unsubscribe": {
       "heading": "Se désabonner de la liste ?",

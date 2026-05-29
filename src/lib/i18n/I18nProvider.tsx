@@ -6,6 +6,7 @@ import i18n, {
   detectClientLocale,
   isLocale,
   loadLocale,
+  persistLocale,
   type Locale,
 } from './index'
 
@@ -19,6 +20,11 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const detected = detectClientLocale()
+    // Sticky: if a transactional link carried ?locale, remember it so the
+    // rest of the session (e.g. clicking "Back to homepage") stays in that
+    // language rather than snapping back to the cookie/browser default.
+    const queryLocale = new URLSearchParams(window.location.search).get('locale')
+    if (isLocale(queryLocale)) persistLocale(queryLocale)
     if (detected === i18n.language) {
       setReady(true)
       return

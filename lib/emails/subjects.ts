@@ -1,34 +1,19 @@
 /**
- * Locale-matched subject lines for the newsletter transactional mails.
- * Pulled out of the route handlers to keep the i18n strings co-located
- * with the rest of the email module.
+ * Locale-matched subject line for the confirm (double opt-in) email. The
+ * sender already shows as "Battery Sensei", so the subject stays short and
+ * brand-suffix-free.
  */
 export function confirmSubject(locale: string): string {
   switch (locale) {
     case 'de':
-      return 'Bitte bestätige deine E-Mail-Adresse — Battery Sensei'
+      return 'Bitte bestätigen Sie Ihre E-Mail-Adresse'
     case 'es':
-      return 'Confirma tu correo — Battery Sensei'
+      return 'Confirma tu correo electrónico'
     case 'fr':
-      return 'Confirmez votre adresse — Battery Sensei'
+      return 'Confirmez votre adresse e-mail'
     case 'ja':
-      return 'メールアドレスのご確認 — Battery Sensei'
+      return 'メールアドレスのご確認'
     default:
-      return 'Confirm your email — Battery Sensei'
-  }
-}
-
-export function welcomeSubject(locale: string): string {
-  switch (locale) {
-    case 'de':
-      return 'Willkommen bei Battery Sensei'
-    case 'es':
-      return 'Te damos la bienvenida a Battery Sensei'
-    case 'fr':
-      return 'Votre téléchargement Battery Sensei'
-    case 'ja':
-      return 'Battery Sensei へようこそ'
-    default:
-      return 'Welcome to Battery Sensei'
+      return 'Confirm your email address'
   }
 }

@@ -455,8 +455,9 @@
   "newsletter": {
     "confirm": {
       "heading": "Confirm your subscription.",
-      "body": "One last click to add your address to the release-alert list. We don't auto-confirm. That way nothing happens just because an inbox preview crawled the link.",
+      "body": "Tap below to add your address to the release-alert list.",
       "cta": "Confirm subscription",
+      "confirming": "Confirming your subscription. One quiet moment…",
       "submitting": "Confirming…",
       "error": "Something went wrong. Try again in a moment, or write to info@battery-sensei.app.",
       "missingToken": "This link is missing its token. Open the confirm link straight from the email."
@@ -482,11 +483,7 @@
         "heading": "Something went wrong.",
         "body": "We couldn't finish confirming you. Try the link again, or write to info@battery-sensei.app and we'll sort it by hand."
       },
-      "cta": "Back to the homepage",
-      "welcomeFailed": {
-        "cta": "Get the download",
-        "note": "We couldn't send your welcome email just now, so here's the direct download. You're still subscribed. The next release alert will arrive normally."
-      }
+      "cta": "Back to the homepage"
     },
     "unsubscribe": {
       "heading": "Unsubscribe from updates?",

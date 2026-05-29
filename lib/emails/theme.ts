@@ -20,11 +20,14 @@ export const palette = {
   line: 'rgba(28, 26, 23, 0.14)',
 } as const
 
+// Email clients rarely load web fonts, so the fallbacks carry the look across
+// macOS / Windows / Android / iOS. The JP stack ends in sans-serif so kanji
+// stay clean on clients without a Japanese serif installed.
 export const fontStack =
-  '"Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif'
+  '"Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif'
 
 export const serifStack =
-  '"Spectral", Georgia, "Times New Roman", serif'
+  '"Spectral", Georgia, Cambria, "Times New Roman", serif'
 
 export const jpStack =
-  '"Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif'
+  '"Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", "Yu Gothic", Meiryo, sans-serif'

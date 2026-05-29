@@ -455,8 +455,9 @@
   "newsletter": {
     "confirm": {
       "heading": "Anmeldung bestätigen.",
-      "body": "Ein letzter Klick, dann kommt Ihre Adresse auf die Liste für neue Versionen. Wir bestätigen nichts automatisch. So passiert nichts, nur weil ein Postfach den Link gescannt hat.",
+      "body": "Tippen Sie unten, um Ihre Adresse auf die Liste für neue Versionen zu setzen.",
       "cta": "Anmeldung bestätigen",
+      "confirming": "Ihre Anmeldung wird bestätigt. Einen Moment Ruhe…",
       "submitting": "Wird bestätigt…",
       "error": "Etwas ist schiefgelaufen. Versuchen Sie es gleich noch einmal, oder schreiben Sie an info@battery-sensei.app.",
       "missingToken": "Diesem Link fehlt der Bestätigungscode. Öffnen Sie den Bestätigungslink direkt aus der E-Mail."
@@ -482,11 +483,7 @@
         "heading": "Da ist etwas schiefgelaufen.",
         "body": "Wir konnten die Bestätigung nicht abschließen. Versuchen Sie den Link erneut oder schreiben Sie uns an info@battery-sensei.app. Wir kümmern uns persönlich darum."
       },
-      "cta": "Zurück zur Startseite",
-      "welcomeFailed": {
-        "cta": "Zum Download",
-        "note": "Die Willkommens-E-Mail konnten wir gerade nicht zustellen. Hier ist der direkte Download. Sie sind trotzdem angemeldet; die nächste E-Mail zu neuen Versionen kommt wie gewohnt."
-      }
+      "cta": "Zurück zur Startseite"
     },
     "unsubscribe": {
       "heading": "Vom Newsletter abmelden?",

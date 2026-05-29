@@ -239,10 +239,22 @@ export const Route = createRootRoute({
   // the right language for every page (English for non-localized subpages), and
   // so client navigations between language URLs switch the active locale too.
   beforeLoad: async ({ location }) => {
-    const locale = localeFromPath(location.pathname) ?? DEFAULT_LOCALE
-    await loadLocale(locale)
-    if (i18n.language !== locale) await i18n.changeLanguage(locale)
-    return { locale }
+    const fromPath = localeFromPath(location.pathname)
+    if (fromPath) {
+      // Home variant (/de, /es, /fr, /ja): the URL is authoritative.
+      await loadLocale(fromPath)
+      if (i18n.language !== fromPath) await i18n.changeLanguage(fromPath)
+      return { locale: fromPath }
+    }
+    // No locale prefix (/, /checkout, /privacy, …). On the server, render the
+    // English static HTML. On the client, keep the visitor's active language
+    // (cookie-driven via I18nProvider) so a German reader isn't bounced to
+    // English when opening a subpage — and their email-signup locale stays put.
+    if (typeof window === 'undefined') {
+      if (i18n.language !== DEFAULT_LOCALE) await i18n.changeLanguage(DEFAULT_LOCALE)
+      return { locale: DEFAULT_LOCALE }
+    }
+    return { locale: i18n.language }
   },
   head: () => ({
     meta: [

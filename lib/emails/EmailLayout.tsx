@@ -42,31 +42,31 @@ type Props = {
 
 const COPY = {
   en: {
-    why: 'A quiet note from Battery Sensei · battery-sensei.app',
+    why: 'A quiet note from Battery Sensei',
     ignore: 'Didn\'t sign up? You can ignore this email. Nothing is saved until you confirm.',
     unsub: 'Unsubscribe',
     tagline: 'Calm energy for your Mac.',
   },
   de: {
-    why: 'Eine kurze Nachricht von Battery Sensei · battery-sensei.app',
-    ignore: 'Nicht angemeldet? Ignoriere diese E-Mail einfach. Ohne deine Bestätigung wird nichts gespeichert.',
+    why: 'Eine kurze Nachricht von Battery Sensei',
+    ignore: 'Nicht angemeldet? Ignorieren Sie diese E-Mail einfach. Ohne Ihre Bestätigung wird nichts gespeichert.',
     unsub: 'Abmelden',
-    tagline: 'Mehr Ruhe für deinen Mac-Akku.',
+    tagline: 'Mehr Ruhe für Ihren Mac-Akku.',
   },
   es: {
-    why: 'Un mensaje tranquilo de Battery Sensei · battery-sensei.app',
+    why: 'Un mensaje tranquilo de Battery Sensei',
     ignore: '¿No te registraste? Ignora este correo. No guardamos nada hasta que confirmes.',
     unsub: 'Cancelar suscripción',
     tagline: 'Batería en calma para tu Mac.',
   },
   fr: {
-    why: 'Un mot discret de Battery Sensei · battery-sensei.app',
+    why: 'Un mot discret de Battery Sensei',
     ignore: 'Vous n\'avez rien demandé ? Ignorez ce message : rien n\'est enregistré tant que vous ne confirmez pas.',
     unsub: 'Se désabonner',
     tagline: 'Moins de stress pour la batterie de votre Mac.',
   },
   ja: {
-    why: 'Battery Senseiより、静かなお知らせ · battery-sensei.app',
+    why: 'Battery Senseiより、静かなお知らせ',
     ignore: 'ご登録のお心当たりがなければ、このメールは無視してください。ご確認いただくまで、何も保存されません。',
     unsub: '配信停止',
     tagline: 'Macのバッテリーに、静かな安心を。',
@@ -102,7 +102,7 @@ export function EmailLayout({
                 .bs-pad { padding-left: 22px !important; padding-right: 22px !important; }
                 .bs-pad-top { padding-top: 26px !important; }
                 .bs-display { font-size: 30px !important; line-height: 36px !important; }
-                .bs-brush { width: 100% !important; max-width: 260px !important; }
+                .bs-brush { width: 100% !important; max-width: 100% !important; }
                 .bs-cta { display: block !important; width: 100% !important; box-sizing: border-box !important; text-align: center !important; }
               }
             `,
@@ -164,6 +164,10 @@ export function EmailLayout({
       >
         <Container
           style={{
+            // width:100% so the container shrinks to a narrow viewport
+            // instead of sizing to its 600px content max (which overflowed
+            // on phones). max-width still caps it on desktop.
+            width: '100%',
             maxWidth: '600px',
             margin: '0 auto',
             backgroundColor: palette.washi,
@@ -246,9 +250,9 @@ export function EmailLayout({
                 src={`data:image/svg+xml;utf8,${encodeURIComponent(brushSvg(palette.sumi))}`}
                 alt=""
                 className="bs-brush"
-                width="380"
+                width="512"
                 height="12"
-                style={{ display: 'block', width: '100%', maxWidth: '380px' }}
+                style={{ display: 'block', width: '100%', maxWidth: '100%' }}
               />
             </Section>
           </Section>
@@ -281,6 +285,17 @@ export function EmailLayout({
               }}
             >
               {l.why}
+              <span style={{ color: palette.nezumi, padding: '0 6px' }}>·</span>
+              <Link
+                href={siteUrl}
+                style={{
+                  color: palette.sumi,
+                  textDecoration: 'underline',
+                  textUnderlineOffset: '2px',
+                }}
+              >
+                battery-sensei.app
+              </Link>
             </Text>
             {unsubscribeUrl ? (
               <Text
@@ -327,7 +342,7 @@ export function EmailLayout({
           role="presentation"
           cellPadding={0}
           cellSpacing={0}
-          style={{ margin: '20px auto 0', width: '600px', maxWidth: '100%' }}
+          style={{ margin: '20px auto 0', width: '100%', maxWidth: '600px' }}
         >
           <tbody>
             <tr>
@@ -353,8 +368,10 @@ export function EmailLayout({
 }
 
 function brushSvg(color: string): string {
-  // A single, slightly tapered horizontal brush stroke.
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 10" width="120" height="10"><path d="M2 6 C 22 2, 60 8, 96 4 L 118 5" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" opacity="0.85"/><circle cx="118" cy="5" r="1.6" fill="${color}" opacity="0.85"/></svg>`
+  // A single hand-drawn horizontal brush stroke. The viewBox is sized to
+  // the email column's aspect (~512×12) so it scales to the full column
+  // width — the old 120×10 box was meet-centered and floated mid-column.
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 12" width="512" height="12"><path d="M4 7.5 C 96 3, 188 9, 280 5.5 C 372 2.5, 452 6.5, 500 6" fill="none" stroke="${color}" stroke-width="2.2" stroke-linecap="round" opacity="0.85"/><circle cx="500" cy="6" r="1.9" fill="${color}" opacity="0.85"/></svg>`
 }
 
 /**
