@@ -377,6 +377,37 @@
         length="20645259"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.4.0</title>
+      <pubDate>Sat, 30 May 2026 12:04:01 +0000</pubDate>
+      <sparkle:version>54</sparkle:version>
+      <sparkle:shortVersionString>1.4.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.4.0</h1>
+<p>Keep your battery cooler, and see exactly where your power is going.</p>
+<h2>Pause charging when it&#x27;s hot</h2>
+<p>Battery Sensei can now hold charging when the battery runs warm, then resume on its own once it cools. Lithium-ion ages faster when it&#x27;s hot and full, so this takes the edge off the worst case. Pick a threshold — Off, 35°C, 40°C, or 45°C — in Battery Care or during setup. It steps aside automatically for Charge to Full and Travel Mode, and the menu bar shows a thermometer while a pause is active.</p>
+<h2>Live power flow</h2>
+<p>The Sensei Saga tab gains a Power Flow panel: what&#x27;s coming in from the adapter, what your Mac is drawing, and whether the battery is charging or discharging — each with a clear label and direction, so the numbers finally line up with what&#x27;s actually happening.</p>
+<h2>Quit power-hungry apps in place</h2>
+<p>The per-app energy detail now has a Quit button with a tidy progress-then-checkmark animation. If an app won&#x27;t quit gracefully, you&#x27;ll get an in-place Force Quit confirmation.</p>
+<h2>Smaller touches</h2>
+<ul>
+<li>Opening the window keeps you on the tab you last used instead of jumping to Today.</li>
+<li>Running apps show a live green status dot in the energy list.</li>
+</ul>
+<p>Warnings and charge-limit behavior are unchanged.</p>
+<p>Marketing 1.3.0 → 1.4.0, build 53 → 54.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.4.0/Battery-Sensei.pkg"
+        sparkle:edSignature="UbZ8B8uIF0nC5tmmuXBOtpFqdrRDlkmZfix+JWGZ7pgR4SXhpTqW7b2Gg0DHNU3kLuYs/NokV/HlWRVbIDrmDg=="
+        length="20763981"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
