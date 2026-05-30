@@ -979,6 +979,51 @@ body::after {
   justify-content: center;
 }
 
+/* The fixed footer-row heights exist to baseline-align the three CTAs
+   when the cards sit side by side (lg+). Once the grid collapses to a
+   single stacked column (< lg) that alignment is moot, and the reserved
+   `pre`/`post` rows leave dead space — most visible on Lifetime + Yearly,
+   whose `post` slot is an empty spacer, as a fat gap after the button and
+   an over-tall bottom margin. Below lg, let the footer size to content. */
+@media (max-width: 1023.98px) {
+  .pricing-card-footer {
+    grid-template-rows: auto auto auto;
+    min-height: 0;
+  }
+  .pricing-card-footer__pre {
+    padding-top: 0;
+  }
+  .pricing-card-footer__post {
+    min-height: 0;
+  }
+}
+
+/* Categories strip marquee — only mounted (via JS) when the row overflows.
+   The track holds the unit + an identical clone, so a -50% shift lands the
+   clone exactly where the original began: a seamless loop. Pauses while the
+   pointer is over it or a link inside is focused so it can be read/clicked. */
+@keyframes categories-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.categories-marquee-track {
+  animation: categories-marquee 26s linear infinite;
+  will-change: transform;
+}
+.categories-marquee-track:hover,
+.categories-marquee-track:focus-within {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .categories-marquee-track {
+    animation: none;
+  }
+}
+
 /* Pricing support tier — static kin gold + sweeping sheen over the glyph. */
 @keyframes pricing-sparkle-sheen {
   0% {
@@ -1913,4 +1958,116 @@ section[id] {
   body {
     color: var(--sumi);
   }
+}
+
+/* ===================================================================
+   Mobile drawer — icon micro-animations, staggered reveal, exit fade.
+   Panel/scrim backgrounds are set inline (native color-mix) in Nav.tsx
+   because Tailwind arbitrary color-mix classes were not emitting, which
+   left the sheet see-through. The drawer is rendered as a body-level
+   sibling (not inside <header>) so its z-[70] clears the page content —
+   see the rationale comment in Nav.tsx.
+   =================================================================== */
+
+/* Brush hamburger: three sumi strokes spread + tilt on hover/press. */
+.bs-burger line {
+  transition: transform 320ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  transform-origin: center;
+}
+.group:hover .bs-burger line:nth-child(1) { transform: translateY(-0.7px) rotate(-4deg); }
+.group:hover .bs-burger line:nth-child(2) { transform: scaleX(0.8); transform-origin: left center; }
+.group:hover .bs-burger line:nth-child(3) { transform: translateY(0.7px) rotate(4deg); }
+
+/* Close glyph — two brush strokes (BrushClose). Hover gives a small,
+   hand-drawn TILT (not a mechanical quarter-turn); press dips it a hair.
+   The strokes brush themselves IN as the sheet drops, the second a beat
+   behind the first, so the X reads as inked rather than faded. */
+.bs-close {
+  transition: transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  transform-origin: 50% 50%;
+}
+.group:hover .bs-close { transform: rotate(7deg) scale(1.06); }
+.group:active .bs-close { transform: rotate(7deg) scale(0.9); }
+
+.bs-close-a,
+.bs-close-b {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+aside[data-open="true"] .bs-close-a {
+  animation: bs-stroke-in 440ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation-delay: 150ms;
+}
+aside[data-open="true"] .bs-close-b {
+  animation: bs-stroke-in 440ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation-delay: 240ms;
+}
+@keyframes bs-stroke-in {
+  from { stroke-dashoffset: 1; opacity: 0; }
+  55%  { opacity: 1; }
+  to   { stroke-dashoffset: 0; opacity: 1; }
+}
+
+/* Drawer rows: staggered ink-drop reveal, top to bottom. */
+.bs-drawer-item { opacity: 0; transform: translateY(-9px); }
+aside[data-open="true"] .bs-drawer-item {
+  animation: bs-drawer-in 460ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation-delay: calc(var(--i, 0) * 45ms + 150ms);
+}
+@keyframes bs-drawer-in {
+  from { opacity: 0; transform: translateY(-9px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Exit choreography (data-closing="true", set for one beat before unmount).
+   The whole menu fades + lifts, the scrim fades, and the close glyph's two
+   strokes RETRACT toward opposite top corners (un-inking) while the glyph
+   eases down a touch — echoing the sheet lifting away. ID specificity wins
+   over the `aside[data-open] .bs-close-*` brush-in above, so the exit
+   cleanly overrides it. ~300ms matches the JS unmount timer. */
+#mobile-drawer[data-closing="true"] > aside {
+  animation: bs-sheet-out 300ms cubic-bezier(0.4, 0, 1, 1) both;
+}
+#mobile-drawer[data-closing="true"] > button {
+  animation: bs-scrim-out 300ms ease both;
+}
+#mobile-drawer[data-closing="true"] .bs-close {
+  animation: bs-close-lift 300ms cubic-bezier(0.4, 0, 1, 1) both;
+}
+#mobile-drawer[data-closing="true"] .bs-close-a {
+  animation: bs-stroke-out 260ms cubic-bezier(0.4, 0, 1, 1) both;
+}
+#mobile-drawer[data-closing="true"] .bs-close-b {
+  animation: bs-stroke-out 260ms cubic-bezier(0.4, 0, 1, 1) both;
+  animation-delay: 55ms;
+}
+@keyframes bs-sheet-out {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-12px); }
+}
+@keyframes bs-scrim-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+@keyframes bs-stroke-out {
+  from { stroke-dashoffset: 0; opacity: 1; }
+  to   { stroke-dashoffset: 1; opacity: 0; }
+}
+@keyframes bs-close-lift {
+  from { transform: rotate(0deg) scale(1); }
+  to   { transform: rotate(-8deg) scale(0.82); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bs-burger line, .bs-close { transition: none; }
+  aside[data-open="true"] .bs-close-a,
+  aside[data-open="true"] .bs-close-b,
+  aside[data-open="true"] .bs-drawer-item,
+  #mobile-drawer[data-closing="true"] > aside,
+  #mobile-drawer[data-closing="true"] > button,
+  #mobile-drawer[data-closing="true"] .bs-close,
+  #mobile-drawer[data-closing="true"] .bs-close-a,
+  #mobile-drawer[data-closing="true"] .bs-close-b { animation: none; }
+  .bs-close-a, .bs-close-b { stroke-dashoffset: 0; opacity: 1; }
+  .bs-drawer-item { opacity: 1; transform: none; }
 }

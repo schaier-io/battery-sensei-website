@@ -186,8 +186,8 @@
         "body": "« 217 cycles. Normal après 14 mois. » Du contexte, pas seulement un chiffre."
       },
       "heat": {
-        "title": "Charge limitée par la chaleur, expliquée",
-        "body": "Quand macOS met la charge en pause pour refroidir la batterie, Sensei vous dit pourquoi et quoi faire ensuite."
+        "title": "Une charge qui cède à la chaleur",
+        "body": "Quand la batterie dépasse la température que vous choisissez, Sensei met la charge en pause jusqu’à ce qu’elle refroidisse — moins de chaleur par cycle, pour une capacité qui dure plus longtemps."
       },
       "watts": {
         "title": "Watts en direct, entrants et sortants",

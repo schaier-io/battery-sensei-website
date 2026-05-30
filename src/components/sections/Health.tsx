@@ -393,15 +393,25 @@ function AppDrainMockup({ className = '' }: { className?: string }) {
 }
 
 /**
- * Tiny thermal timeline proof for the "Heat throttling" card.
- * Uses three compact metrics + a small load/thermal bar so the
- * panel reads as observable behavior, not decorative chrome.
+ * Charge-pause proof for the "Charging that yields to heat" card.
+ * Mirrors the app's "Pause charging when hot" control: the user picks
+ * a threshold (Off / 35 / 40 / 45°C), and once the battery crosses it
+ * Sensei holds charging until it cools to threshold − 3°C (hysteresis).
+ * Numbers below use the default 40°C limit, hot at 42°C → paused.
  */
 function HeatMockup({ className = '' }: { className?: string }) {
-  const now = 39
-  const peak = 43
-  const threshold = 44
-  const pct = Math.min(100, (now / threshold) * 100)
+  const temp = 42
+  const limit = 40 // chosen threshold (Off / 35 / 40 / 45)
+  const resumeAt = limit - 3 // hysteresis: resume once cooled this far
+  // Map temp onto a fixed 30–48°C scale so the threshold tick and the
+  // "over the line" fill stay proportional regardless of the reading.
+  const scaleMin = 30
+  const scaleMax = 48
+  const toPct = (v: number) =>
+    Math.min(100, Math.max(0, ((v - scaleMin) / (scaleMax - scaleMin)) * 100))
+  const tempPct = toPct(temp)
+  const limitPct = toPct(limit)
+  const over = temp - limit
   return (
     <div
       className={`heat-mockup mt-3 rounded-md bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-3.5 py-3 ${className}`}
@@ -411,21 +421,29 @@ function HeatMockup({ className = '' }: { className?: string }) {
     >
       <div className="flex items-baseline justify-between">
         <span className="text-[9px] font-semibold uppercase tracking-[0.22em] text-nezumi">
-          Thermal now
+          Charge guard
+        </span>
+        <span
+          className="rounded-full px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-hinomaru"
+          style={{
+            boxShadow: '0 0 0 1px color-mix(in oklab, var(--hinomaru) 38%, transparent)',
+          }}
+        >
+          Holding
         </span>
       </div>
-      <div className="mt-2 grid grid-cols-3 gap-2 text-[10px]">
+      <div className="mt-3.5 grid grid-cols-3 gap-2 text-[10px]">
         <div className="min-w-0 rounded-[6px] border border-[var(--line)]/70 px-2 py-1.5">
-          <p className="truncate uppercase tracking-[0.12em] text-nezumi">CPU</p>
-          <p className="mt-0.5 truncate tabular-nums font-semibold text-sumi">{now}C</p>
+          <p className="truncate uppercase tracking-[0.12em] text-nezumi">Battery</p>
+          <p className="mt-0.5 truncate tabular-nums font-semibold text-sumi">{temp}C</p>
         </div>
         <div className="min-w-0 rounded-[6px] border border-[var(--line)]/70 px-2 py-1.5">
-          <p className="truncate uppercase tracking-[0.12em] text-nezumi">Peak</p>
-          <p className="mt-0.5 truncate tabular-nums font-semibold text-sumi">{peak}C</p>
+          <p className="truncate uppercase tracking-[0.12em] text-nezumi">Limit</p>
+          <p className="mt-0.5 truncate tabular-nums font-semibold text-sumi">{limit}C</p>
         </div>
         <div className="min-w-0 rounded-[6px] border border-[var(--line)]/70 px-2 py-1.5">
-          <p className="truncate uppercase tracking-[0.12em] text-nezumi">Throttle</p>
-          <p className="mt-0.5 truncate tabular-nums font-semibold text-sumi">{threshold}C</p>
+          <p className="truncate uppercase tracking-[0.12em] text-nezumi">Charge</p>
+          <p className="mt-0.5 truncate font-semibold text-hinomaru">Paused</p>
         </div>
       </div>
       <div className="mt-2.5">
@@ -433,15 +451,20 @@ function HeatMockup({ className = '' }: { className?: string }) {
           <div
             className="h-full rounded-full"
             style={{
-              width: `${pct}%`,
+              width: `${tempPct}%`,
               background:
-                'linear-gradient(90deg, var(--hinomaru) 0%, color-mix(in oklab, var(--hinomaru) 64%, var(--nezumi)) 100%)',
+                'linear-gradient(90deg, color-mix(in oklab, var(--hinomaru) 64%, var(--nezumi)) 0%, var(--hinomaru) 100%)',
             }}
+          />
+          {/* Threshold tick — where Sensei eases off the charge. */}
+          <span
+            className="absolute top-1/2 h-[7px] w-px -translate-y-1/2 bg-sumi"
+            style={{ left: `${limitPct}%` }}
           />
         </div>
         <div className="mt-1.5 flex items-center justify-between text-[10px] uppercase tracking-[0.12em] text-nezumi">
-          <span>Load window</span>
-          <span className="tabular-nums text-sumi-soft">{pct.toFixed(0)}%</span>
+          <span className="tabular-nums">Resumes at {resumeAt}C</span>
+          <span className="tabular-nums text-hinomaru">+{over}C over</span>
         </div>
       </div>
     </div>
@@ -707,7 +730,7 @@ export function Health() {
                 <p
                   className={`leading-[1.55] text-sumi-soft ${
                     feature ? 'mt-2 text-[1rem]' : 'mt-1.5 text-[0.9375rem]'
-                  }`}
+                  } ${key === 'heat' ? 'mb-3' : ''}`}
                 >
                   {t(`health.cells.${key}.body`)}
                 </p>

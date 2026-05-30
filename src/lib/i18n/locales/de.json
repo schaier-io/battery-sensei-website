@@ -186,8 +186,8 @@
         "body": "„217 Zyklen. Normal für 14 Monate.“ Einordnung statt nur einer Zahl."
       },
       "heat": {
-        "title": "Wenn Hitze das Laden bremst",
-        "body": "Wenn macOS das Laden pausiert, um den Akku zu kühlen, nennt Sensei den Grund und den nächsten Schritt."
+        "title": "Laden, das der Hitze nachgibt",
+        "body": "Übersteigt der Akku deine gewählte Temperatur, pausiert Sensei das Laden, bis er abkühlt – weniger Hitze pro Zyklus, damit deine Kapazität länger hält."
       },
       "watts": {
         "title": "Ladeleistung live: rein wie raus",

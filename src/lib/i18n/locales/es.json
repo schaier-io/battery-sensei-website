@@ -186,8 +186,8 @@
         "body": "«217 ciclos. Normal para 14 meses». Contexto, no solo un número."
       },
       "heat": {
-        "title": "Carga limitada por calor, explicada",
-        "body": "Cuando macOS pausa la carga para enfriar la batería, Sensei te dice por qué y qué hacer después."
+        "title": "Una carga que cede ante el calor",
+        "body": "Cuando la batería supera la temperatura que elijas, Sensei pausa la carga hasta que se enfría: menos calor por ciclo, para que tu capacidad dure más."
       },
       "watts": {
         "title": "Vatios en vivo, entrada y salida",

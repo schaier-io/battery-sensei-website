@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom'
 import { Check, ChevronDown } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useRouterState } from '@tanstack/react-router'
-import { SUPPORTED_LOCALES, loadLocale, type Locale } from '#/lib/i18n'
+import { SUPPORTED_LOCALES, loadLocale, persistLocale, type Locale } from '#/lib/i18n'
 import { useLocaleSwitcher } from '#/lib/i18n/I18nProvider'
 
 // Native endonym shown next to each option — readable in its own script.
@@ -53,7 +53,7 @@ export function LanguageSwitcher({
   /** Dropdown alignment relative to the trigger. */
   align?: 'start' | 'end'
 }) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { current, setLocale } = useLocaleSwitcher()
   const navigate = useNavigate()
   const pathname = useRouterState({ select: (s) => s.location.pathname })
@@ -137,28 +137,65 @@ export function LanguageSwitcher({
   const handlePick = (loc: Locale) => {
     if (loc === current || pending) return
     setPending(loc)
+    setOpen(false)
+
+    // HOME pages have a URL per locale (/, /de, /es, /fr, /ja). REDIRECT to it
+    // rather than swapping i18n in place first — the old code called
+    // `changeLanguage` up front, so the CURRENT page re-rendered into the new
+    // language (a jarring "pop-in") before the URL caught up.
+    //
+    // The whole swap is wrapped in ONE root view transition so the page fades
+    // out and the new-language page fades in (410ms — the `route-fade`
+    // keyframes in styles.css). The language change rides INSIDE that callback,
+    // so it's captured as the transition's "new" state and never painted on the
+    // old URL. Works no matter which language is active when you click:
+    //   - Non-English (/de…): the root `beforeLoad` loads the bundle + switches
+    //     the active locale before the new route paints.
+    //   - English ("/"): `beforeLoad` deliberately keeps the visitor's current
+    //     language on the bare path (so home links don't bounce a German reader
+    //     to English), so here we switch to `en` ourselves.
+    if (onHome) {
+      persistLocale(loc)
+      const run = async () => {
+        if (loc === 'en') {
+          if (i18n.language !== 'en') await i18n.changeLanguage('en')
+          // `viewTransition: false`: we run our own startViewTransition below,
+          // so skip the router's per-nav one to avoid nesting two transitions.
+          await navigate({ to: '/', viewTransition: false })
+        } else {
+          await navigate({ to: '/$lang', params: { lang: loc }, viewTransition: false })
+        }
+        setPending(null)
+      }
+      // Warm the chunk first so the transition's frozen frame is short (the
+      // `beforeLoad` await resolves from cache), then cross-fade.
+      void loadLocale(loc).then(() => {
+        const startVT = (
+          document as Document & {
+            startViewTransition?: (cb: () => void | Promise<void>) => unknown
+          }
+        ).startViewTransition
+        if (startVT) startVT.call(document, run)
+        else void run()
+      })
+      return
+    }
+
+    // Subpages are English-only URLs — there's no localized route to redirect
+    // to, so swap client-side (cookie + i18n). No visible pop-in here since the
+    // page content isn't translated; only the shared chrome re-renders.
     void setLocale(loc).finally(() => {
       setPending(null)
-      setOpen(false)
-      // On a home page, reflect the language in the URL so it matches the
-      // prerendered localized page and is shareable. Subpages are English-only,
-      // so there we only swap client-side (cookie + i18n) without navigating.
-      if (onHome) {
-        // Home page: reflect the language in the URL so it matches the
-        // prerendered localized page and is shareable.
-        if (loc === 'en') navigate({ to: '/' })
-        else navigate({ to: '/$lang', params: { lang: loc } })
-      } else if (search && 'locale' in search) {
-        // Subpage carrying a ?locale (newsletter / thanks flows): keep it in
-        // sync so the URL stops contradicting the translated content — no more
-        // stale ?locale=en lingering after a switch.
+      // Subpage carrying a ?locale (newsletter / thanks flows): keep it in sync
+      // so the URL stops contradicting the translated content — no more stale
+      // ?locale=en lingering after a switch.
+      if (search && 'locale' in search) {
         navigate({
           to: '.',
           search: (prev: Record<string, unknown>) => ({ ...prev, locale: loc }),
           replace: true,
         })
       }
-      // Other subpages carry no locale in the URL; the cookie swap suffices.
     })
   }
 
@@ -190,64 +227,57 @@ export function LanguageSwitcher({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open])
 
-  // Inline variant: render the options as a simple list (used inside the
-  // mobile drawer where a popover would be redundant).
+  // Inline variant (mobile drawer): a single compact row of locale codes.
+  // The full 2×2 grid of native names was eating vertical space and reading
+  // as primary content; here each language is just its short code, with the
+  // native name carried on aria-label/title for assistive tech + tooltip.
   if (variant === 'inline') {
     return (
       <div className={className}>
-        <div className="mb-3 flex items-center gap-3">
-          <LangGlyph className="text-xl" />
-          <span className="display-title text-[11px] font-semibold uppercase tracking-[0.22em] text-sumi-soft">
+        {/* Quiet section label — a small red 言 ("speech/language") + the
+            localized word, set above the compact code row so the picker reads
+            as "Language: EN DE …" without the old full-width header bulk. */}
+        <div className="mb-2 flex items-center gap-1.5">
+          <span aria-hidden className="font-jp text-[12px] leading-none text-hinomaru">
+            言
+          </span>
+          <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-sumi-soft">
             {t('common.language')}
           </span>
-          <span
-            aria-hidden
-            className="h-px flex-1 bg-gradient-to-r from-[var(--line-strong)] via-[var(--line)] to-transparent"
-          />
         </div>
-        <ul className="grid grid-cols-2 gap-2" role="radiogroup" aria-label={t('common.language')}>
+        <div
+          className="flex flex-wrap items-center gap-1.5"
+          role="radiogroup"
+          aria-label={t('common.language')}
+        >
           {SUPPORTED_LOCALES.map((loc) => {
-            const active = loc === current
-            const isPending = pending === loc
-            return (
-              <li key={loc}>
-                <button
-                  type="button"
-                  role="radio"
-                  aria-checked={active}
-                  disabled={isPending}
-                  onClick={() => handlePick(loc)}
-                  onPointerEnter={() => prefetch(loc)}
-                  onFocus={() => prefetch(loc)}
-                  className={[
-                    'group relative flex w-full items-center justify-between gap-3 rounded-md border px-3.5 py-2.5 text-left transition-[colors,transform] duration-200 active:scale-[0.98]',
-                    active
-                      ? 'border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_55%,#fff)]'
-                      : 'border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_72%,#fff)] hover:border-[var(--line-strong)]',
-                  ].join(' ')}
-                >
-                  <span className="flex items-baseline gap-2 min-w-0">
-                    <span className="font-jp text-base leading-none text-hinomaru/80 w-5 text-center">
-                      {SHORT_LABEL[loc]}
-                    </span>
-                    <span className="display-title text-[0.9375rem] font-medium text-sumi truncate">
-                      {NATIVE_NAME[loc]}
-                    </span>
-                  </span>
-                  {active && (
-                    <Check className="h-3.5 w-3.5 shrink-0 text-hinomaru" strokeWidth={2.2} aria-hidden />
-                  )}
-                  {isPending && !active && (
-                    <span
-                      aria-hidden
-                      className="h-3 w-3 shrink-0 rounded-full border border-sumi-soft/40 border-t-sumi animate-spin"
-                    />
-                  )}
-                </button>
-              </li>
-            )
+          const active = loc === current
+          const isPending = pending === loc
+          return (
+            <button
+              key={loc}
+              type="button"
+              role="radio"
+              aria-checked={active}
+              aria-label={NATIVE_NAME[loc]}
+              title={NATIVE_NAME[loc]}
+              disabled={isPending}
+              onClick={() => handlePick(loc)}
+              onPointerEnter={() => prefetch(loc)}
+              onFocus={() => prefetch(loc)}
+              className={[
+                'inline-flex h-8 min-w-[2.5rem] items-center justify-center rounded-md border px-2.5 font-jp text-[12px] tracking-[0.08em] transition-[colors,transform] duration-200 active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40',
+                active
+                  ? 'border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--hinomaru)_10%,transparent)] text-hinomaru'
+                  : 'border-[var(--line)] text-sumi-soft hover:border-[var(--line-strong)] hover:text-sumi',
+                isPending ? 'opacity-60' : '',
+              ].join(' ')}
+            >
+              {SHORT_LABEL[loc]}
+            </button>
+          )
           })}
-        </ul>
+        </div>
       </div>
     )
   }

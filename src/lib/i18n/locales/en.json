@@ -186,8 +186,8 @@
         "body": "\"217 cycles. Normal for 14 months.\" Context, not just a number."
       },
       "heat": {
-        "title": "Heat-limited charging, explained",
-        "body": "When macOS pauses charging to cool the battery, Sensei names the reason and the next step."
+        "title": "Charging that yields to heat",
+        "body": "When the battery passes your chosen temperature, Sensei pauses charging until it cools — less heat each cycle, so your capacity lasts longer."
       },
       "watts": {
         "title": "Live watts in, watts out",

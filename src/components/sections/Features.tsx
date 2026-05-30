@@ -116,7 +116,7 @@ function ChargeLimitMockup() {
             The solid fill overlays it up to 80%, so the stripe region
             appears only in the tail without a hard left marker line. */}
         <div
-          className="absolute inset-0"
+          className="absolute inset-0 z-0"
           style={{
             background:
               'repeating-linear-gradient(135deg, color-mix(in oklab, var(--hinomaru) 72%, var(--washi)) 0 2px, color-mix(in oklab, var(--hinomaru) 10%, transparent) 2px 5px)',
@@ -124,7 +124,7 @@ function ChargeLimitMockup() {
         />
         {/* Solid fill to the cap. */}
         <div
-          className="absolute inset-y-0 left-0 rounded-l-full bg-gradient-to-r from-sumi to-[color-mix(in_oklab,var(--sumi)_72%,transparent)]"
+          className="absolute inset-y-0 left-0 z-10 rounded-l-full bg-gradient-to-r from-sumi to-[color-mix(in_oklab,var(--sumi)_72%,transparent)]"
           style={{ width: '80%' }}
         />
       </div>
@@ -464,7 +464,10 @@ export function Features() {
               className={isOrphan ? 'h-full sm:col-span-2 lg:col-span-1' : 'h-full'}
             >
               <article className="paper-card p-6 h-full flex flex-col">
-                <div className="flex items-start justify-between">
+                {/* Icon + seal grouped on the left (rather than spread to
+                    opposite corners) so the supporting cards read with the
+                    same composed header as the featured alerts card above. */}
+                <div className="flex items-center gap-3.5">
                   <Icon className="h-6 w-6 text-sumi" strokeWidth={1.5} />
                   <span className="kanji-accent font-jp text-2xl text-hinomaru/80 leading-none">
                     {seal}
