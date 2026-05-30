@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { HomeLink } from '#/components/HomeLink'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, Check, X } from 'lucide-react'
 import { Trans, useTranslation } from 'react-i18next'
 import { Hanko } from '#/components/zen/Hanko'
 import { Reveal } from '#/components/zen/Reveal'
@@ -15,7 +15,7 @@ const PAGE_DESC =
 // Last meaningful edit to the legal substance below. Update when you
 // change WHAT is collected / processors / retention — not on cosmetic
 // tweaks. Format matches the schema.org Article spec.
-const LAST_UPDATED = '2026-05-26'
+const LAST_UPDATED = '2026-05-31'
 
 export const Route = createFileRoute('/privacy')({
   head: () => ({
@@ -108,8 +108,20 @@ function PrivacyPage() {
           </div>
         </section>
 
-        {/* Authoritative English body. Keep section anchors (#what, #processors,
-            #rights, #contact) stable so external references stay valid. */}
+        {/* TL;DR callout — the plain-language do / don't summary that mirrors
+            the page title ("What we collect. And what we don't."). Sits above
+            the formal sections so a visitor gets the gist without reading the
+            whole notice; everything here is restated, with legal basis, in the
+            blocks below. */}
+        <section className="zen-section mx-auto max-w-3xl px-5 pt-0 sm:px-6">
+          <Reveal>
+            <Tldr />
+          </Reveal>
+        </section>
+
+        {/* Authoritative English body. Keep section anchors (#app, #github,
+            #what, #processors, #rights, #contact) stable so external
+            references stay valid. */}
         <section className="zen-section mx-auto max-w-3xl px-5 sm:px-6">
           <Reveal>
             <article className="legal-prose space-y-10 text-sumi-soft">
@@ -128,6 +140,49 @@ function PrivacyPage() {
                   <Trans
                     i18nKey="privacy.body.controller.p2"
                     components={[<a className="legal-link" href="mailto:info@battery-sensei.app" />]}
+                  />
+                </p>
+              </Block>
+
+              {/* The app itself. Deliberately placed before the website
+                  sections: the question most visitors actually have is "does
+                  the app on my Mac phone home?" — and the answer is no, beyond
+                  the update check described in p3. */}
+              <Block
+                anchor="app"
+                kicker={t('privacy.body.app.kicker')}
+                heading={t('privacy.body.app.heading')}
+              >
+                <p>{t('privacy.body.app.p1')}</p>
+                <p>{t('privacy.body.app.p2')}</p>
+                <p>{t('privacy.body.app.p3')}</p>
+              </Block>
+
+              {/* GitHub release pages. Split out from the app section on
+                  purpose: downloading the binary (from the site button or the
+                  in-app updater) is a direct connection to GitHub, which sees
+                  the visitor's IP as an independent controller. */}
+              <Block
+                anchor="github"
+                kicker={t('privacy.body.github.kicker')}
+                heading={t('privacy.body.github.heading')}
+              >
+                <p>
+                  <Trans
+                    i18nKey="privacy.body.github.p1"
+                    components={[<a className="legal-link" href="https://github.com/schaier-io/battery-sensei-releases" target="_blank" rel="noreferrer" />]}
+                  />
+                </p>
+                <p>
+                  <Trans
+                    i18nKey="privacy.body.github.p2"
+                    components={[<strong className="text-sumi" />]}
+                  />
+                </p>
+                <p>
+                  <Trans
+                    i18nKey="privacy.body.github.p3"
+                    components={[<a className="legal-link" href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noreferrer" />]}
                   />
                 </p>
               </Block>
@@ -188,7 +243,11 @@ function PrivacyPage() {
                     bodyKey="privacy.body.processors.items.resendBody"
                     inlineComponents={[<a className="legal-link" href="https://resend.com/legal/privacy-policy" target="_blank" rel="noreferrer" />]}
                   />
-                  <DataItem nameKey="privacy.body.processors.items.postgresName" bodyKey="privacy.body.processors.items.postgresBody" />
+                  <DataItem
+                    nameKey="privacy.body.processors.items.postgresName"
+                    bodyKey="privacy.body.processors.items.postgresBody"
+                    inlineComponents={[<a className="legal-link" href="https://www.databricks.com/legal/privacynotice" target="_blank" rel="noreferrer" />]}
+                  />
                 </ul>
               </Block>
 
@@ -258,6 +317,81 @@ function PrivacyPage() {
       </main>
       <Footer />
     </>
+  )
+}
+
+/**
+ * Plain-language TL;DR. Two short columns — what we do, what we don't —
+ * that mirror the page title ("What we collect. And what we don't.").
+ * Pure summary: every line here is restated, with its legal basis, in
+ * the formal sections below, so the box can be skimmed and skipped
+ * without losing anything binding.
+ */
+function Tldr() {
+  const { t } = useTranslation()
+  const keys = ['1', '2', '3', '4'] as const
+  return (
+    <div className="rounded-2xl border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] p-6 sm:p-8">
+      <p className="font-jp text-[11px] tracking-[0.32em] text-hinomaru/85 uppercase">
+        TL;DR · 要約
+      </p>
+      <h2 className="display-title mt-2 text-[1.5rem] font-medium leading-tight text-sumi md:text-[1.75rem]">
+        {t('privacy.tldr.heading')}
+      </h2>
+      <div className="mt-6 grid gap-x-10 gap-y-6 sm:grid-cols-2">
+        <TldrColumn
+          tone="do"
+          label={t('privacy.tldr.doLabel')}
+          items={keys.map((n) => t(`privacy.tldr.do.${n}`))}
+        />
+        <TldrColumn
+          tone="dont"
+          label={t('privacy.tldr.dontLabel')}
+          items={keys.map((n) => t(`privacy.tldr.dont.${n}`))}
+        />
+      </div>
+      <p className="mt-6 border-t border-[var(--line)] pt-4 text-[0.875rem] leading-[1.65] text-nezumi">
+        {t('privacy.tldr.note')}
+      </p>
+    </div>
+  )
+}
+
+/**
+ * One side of the TL;DR. The "do" column gets a matcha check, the "don't"
+ * column a hinomaru cross — the same two-color do/don't language the rest
+ * of the site uses for affirmative vs negative states.
+ */
+function TldrColumn({
+  tone,
+  label,
+  items,
+}: {
+  tone: 'do' | 'dont'
+  label: string
+  items: string[]
+}) {
+  const Icon = tone === 'do' ? Check : X
+  const iconColor = tone === 'do' ? 'text-matcha' : 'text-hinomaru'
+  return (
+    <div>
+      <p className="text-[11px] uppercase tracking-[0.18em] text-nezumi">{label}</p>
+      <ul className="mt-3 space-y-2.5">
+        {items.map((item, i) => (
+          <li
+            key={i}
+            className="flex gap-2.5 text-[0.9375rem] leading-[1.55] text-sumi-soft"
+          >
+            <Icon
+              className={`mt-0.5 h-4 w-4 shrink-0 ${iconColor}`}
+              strokeWidth={2.25}
+              aria-hidden
+            />
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
   )
 }
 

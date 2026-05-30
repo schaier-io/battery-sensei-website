@@ -29,7 +29,7 @@ Privacy: nothing leaves the device. No telemetry, no account, no cloud.
 ## Key features
 
 - Three-level low-battery alerts (Zen / Regular / Senpai presets, or custom)
-- Charge limit (cap at any percent, default 85%) with one-click Travel Mode
+- Charge limit (cap at any percent, default 80%) with one-click Travel Mode
 - Live charge, source, watts in/out, and time-left readout in the menu bar
 - Cycle count and capacity tracking with plain-English context
 - Heat-throttling awareness with explanation of macOS pause behaviour

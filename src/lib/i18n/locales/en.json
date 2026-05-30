@@ -950,6 +950,24 @@
     "intro": "Battery Sensei is a small, indie macOS app. We collect the minimum needed to run the site, take payments, and notify you about new versions, and we tell you exactly what that means in plain language below.",
     "backHome": "Back to homepage",
     "footerLink": "Privacy",
+    "tldr": {
+      "heading": "The short version",
+      "doLabel": "What we do",
+      "dontLabel": "What we don't",
+      "do": {
+        "1": "Run the Mac app entirely on your device. Your battery history and your calendar event titles never leave your Mac.",
+        "2": "Measure website traffic with cookieless, anonymous analytics — aggregate counts only, no tracking cookies.",
+        "3": "Keep only the details you actively hand us: your email if you sign up, your message if you use the contact form, and your purchase (handled by Polar).",
+        "4": "Use a few well-known processors for hosting, payments and email — each one named below with a link to its policy."
+      },
+      "dont": {
+        "1": "Sell, rent or share your data with advertisers — ever.",
+        "2": "Run ad or social-media trackers, embed tracking pixels or sharing widgets, set third-party tracking cookies, or profile you across sites.",
+        "3": "Build profiles about you or make automated decisions that affect you.",
+        "4": "Require an account or a login to use the app."
+      },
+      "note": "There is no cookie banner because we set no tracking cookies. Downloads and in-app updates are served from GitHub, which sees your IP address like any web server. The full detail is below."
+    },
     "body": {
       "controller": {
         "kicker": "一 · Data controller",
@@ -957,17 +975,31 @@
         "p1": "Battery Sensei is operated by <0>Sandro Thabiso Schaier</0>, self-employed individual (živnostník), with business seat at Korunní 2569/108, 101 00 Prague 10, Czech Republic. References to \"we\" / \"us\" on this page mean that operator.",
         "p2": "Contact for any privacy-related question, request, or complaint: <0>info@battery-sensei.app</0>. We try to reply within a working day."
       },
+      "app": {
+        "kicker": "二 · The app",
+        "heading": "What the macOS app does on your Mac",
+        "p1": "Battery Sensei is a native macOS app that runs entirely on your Mac. Reading your battery, your charging, and the next few hours of your calendar all happens on-device — none of it passes through a server we operate.",
+        "p2": "The app contains no telemetry, no analytics SDK, no crash reporter and no cloud account. Your battery history is stored only on your Mac. Calendar event titles are read locally to time your meeting alerts and never leave your device.",
+        "p3": "The only network connection the app makes on its own is an update check: it periodically fetches an update feed (an \"appcast\") from battery-sensei.app to see whether a newer version exists. That request reaches our host the same way any web request does, appears only in short-lived server logs, and carries no account or device identifier. If an update is available, the new version is downloaded from GitHub — see the next section."
+      },
+      "github": {
+        "kicker": "三 · Downloads & updates",
+        "heading": "Downloading the app and its updates",
+        "p1": "We host the app's installer and its release notes in a public GitHub repository (<0>github.com/schaier-io/battery-sensei-releases</0>). When you click \"Download for Mac\", or when the in-app updater installs a new version, your device connects directly to GitHub to fetch the file. No GitHub account is required.",
+        "p2": "Like any web server, GitHub receives your IP address, the file you requested and your browser's user-agent in order to serve the download, and may log that data and set its own cookies if you browse the repository in a browser. For this connection <0>GitHub, Inc.</0> (a Microsoft company) acts as an independent controller under its own privacy statement. We never receive a list of who downloaded the app.",
+        "p3": "GitHub's handling of these requests is governed by the <0>GitHub Privacy Statement</0>. If you open an issue or comment on the repository, whatever you write — and your GitHub username — is shared with GitHub and is publicly visible."
+      },
       "what": {
-        "kicker": "二 · What we collect",
+        "kicker": "四 · What we collect",
         "heading": "The full list, by surface",
-        "intro": "Battery Sensei the macOS app is privacy-first: it runs entirely on your Mac, with no telemetry, no analytics, no cloud account, and no outbound network calls other than the update check. The list below covers only the marketing website at battery-sensei.app and the order flow on it, which does use cookieless analytics, described in detail below.",
+        "intro": "This section is about the marketing website at battery-sensei.app and the order flow on it — the app itself is covered above and collects nothing. On the website we keep data to a minimum:",
         "items": {
           "localeName": "Language preference cookie",
           "localeBody": "a first-party cookie called <0>bs_locale</0>, written only after you change language via the site switcher. Stores your two-letter locale (e.g. <0>de</0>), expires after one year, never shared.",
           "purchaseName": "Purchase-confirmation flag",
           "purchaseBody": "a session-scope sessionStorage entry called <0>bs_purchase_tracked</0> that prevents duplicate conversion events when you refresh the thank-you page. Cleared the moment you close the tab.",
           "analyticsName": "Cookieless analytics",
-          "analyticsBody": "anonymized pageview counters and Core Web Vitals via Vercel Analytics and Vercel Speed Insights. No cookies, no cross-site identifiers; visitor IP addresses are hashed once at the edge before any storage.",
+          "analyticsBody": "anonymized pageview counters and Core Web Vitals via Vercel Analytics and Vercel Speed Insights, plus a single anonymous \"purchase complete\" event on the thank-you page (which plan you bought, and the Polar order reference) so we can count completed checkouts. No cookies, no cross-site identifiers; visitor IP addresses are hashed once at the edge before any storage.",
           "signupName": "Email-signup data",
           "signupBody": "only if you submit the \"get the download\" form: the email address you typed, the locale of the page, your IP and user-agent (for abuse triage), plus a timestamp.",
           "contactName": "Contact-form data",
@@ -979,7 +1011,7 @@
         }
       },
       "why": {
-        "kicker": "三 · Why we collect it",
+        "kicker": "五 · Why we collect it",
         "heading": "Purpose and legal basis",
         "items": {
           "functionalName": "Site functionality",
@@ -987,7 +1019,7 @@
           "orderName": "Operating the order flow",
           "orderBody": "checkout data, license key delivery, refund handling. Legal basis: <0>performance of contract</0> (Art. 6(1)(b) GDPR).",
           "newsletterName": "Release-alert and new-app emails",
-          "newsletterBody": "only the email addresses you explicitly submit through the signup form. Legal basis: <0>consent</0> (Art. 6(1)(a) GDPR), withdrawable at any time via the unsubscribe link in every email, or by writing to <1>info@battery-sensei.app</1>.",
+          "newsletterBody": "only the email addresses you explicitly submit through the signup form, confirmed by double opt-in (we email you a link and add you only once you click it). Legal basis: <0>consent</0> (Art. 6(1)(a) GDPR), withdrawable at any time via the unsubscribe link in every email, or by writing to <1>info@battery-sensei.app</1>.",
           "analyticsName": "Cookieless analytics + server logs",
           "analyticsBody": "a minimum signal of \"the site is up and people are reading it\". Legal basis: <0>legitimate interest</0> (Art. 6(1)(f) GDPR) in operating and improving the service. No profiling, no advertising re-targeting.",
           "abuseName": "Abuse / fraud signals",
@@ -996,7 +1028,7 @@
         "noAutomated": "We do not engage in any automated decision-making or profiling with legal or similarly significant effects on you (Art. 22 GDPR)."
       },
       "processors": {
-        "kicker": "四 · Third-party processors",
+        "kicker": "六 · Third-party processors",
         "heading": "Who stores your data",
         "intro": "We use a small set of processors. Each has its own privacy policy, linked below. No data we hold is sold or shared with advertising networks.",
         "items": {
@@ -1006,26 +1038,26 @@
           "polarBody": "merchant of record for all purchases. Handles payment processing, VAT, refunds, license issuance. Card data is collected directly by Polar; we never see it. Transfers to Polar (US) rely on Standard Contractual Clauses. Policy: <0>polar.sh/legal/privacy</0>.",
           "resendName": "Resend, Inc.",
           "resendBody": "sends release-alert and transactional emails (purchase receipt, key resend, contact-form confirmation). Email addresses you submit through our forms are mirrored to Resend audiences. Transfers to Resend (US) rely on Standard Contractual Clauses; Resend is also self-certified under the EU-US Data Privacy Framework. Policy: <0>resend.com/legal/privacy-policy</0>.",
-          "postgresName": "Postgres database (via Vercel Marketplace)",
-          "postgresBody": "holds the email-signup table, the contact-form table and Polar-issued license records. Provisioned in an EU region (Frankfurt) where the Marketplace provider supports it. Hosted by a Vercel-partner provider; we add their identity here once the production database is wired."
+          "postgresName": "Neon (a Databricks company)",
+          "postgresBody": "serverless PostgreSQL host (Neon, LLC), provisioned through the Vercel Marketplace. Holds the newsletter-signup table and the contact-form table; the database lives in the EU (AWS, Frankfurt / eu-central-1). Your purchase and license records are not stored here — those are held by Polar. Neon, LLC is covered by Databricks' EU-US Data Privacy Framework certification, and any transfers also rely on Standard Contractual Clauses. Policy: <0>databricks.com/legal/privacynotice</0>."
         }
       },
       "retention": {
-        "kicker": "五 · Retention",
+        "kicker": "七 · Retention",
         "heading": "How long we keep what",
         "items": {
           "signupName": "Email-signup records",
-          "signupBody": "kept while you stay subscribed. We retain a hashed marker for ~30 days after you unsubscribe to avoid silently re-adding you if you re-submit the form.",
+          "signupBody": "kept while you stay subscribed. If you unsubscribe, we keep your address on a short suppression record so we honour your opt-out and don't silently re-add you if the form is submitted again; you can ask us to erase it entirely at any time.",
           "contactName": "Contact-form messages",
           "contactBody": "kept up to 24 months from the last reply on the thread, then purged.",
           "purchaseName": "Purchase / fulfillment data",
-          "purchaseBody": "Polar, as merchant of record, retains the underlying tax invoice for the legally required period (typically 10 years under Czech Act No. 563/1991 Coll.). We retain only the license-issuance metadata needed to re-issue or support your key, typically up to 5 years from purchase, after which we anonymize it.",
+          "purchaseBody": "Polar, as merchant of record, retains the underlying tax invoice and license record for the legally required period (typically 10 years under Czech Act No. 563/1991 Coll.). We do not keep a copy of your purchase or license in our own database; when you need support we look it up in Polar by order id.",
           "logsName": "Server logs",
           "logsBody": "rotated by Vercel within 30 days of the request."
         }
       },
       "rights": {
-        "kicker": "六 · Your rights",
+        "kicker": "八 · Your rights",
         "heading": "What you can ask us to do",
         "intro": "Under the GDPR (and the Czech Act No. 110/2019 Coll.) you have the right to:",
         "items": {
@@ -1040,7 +1072,7 @@
         "closing": "To exercise any of these rights, email <0>info@battery-sensei.app</0>. We will reply within one month of receipt and may extend this by up to two further months for complex requests, in which case we will notify you within the first month and explain why. You also have the right to lodge a complaint with the Czech Office for Personal Data Protection (Úřad pro ochranu osobních údajů, <1>uoou.gov.cz</1>) or with the data protection authority in your country of residence."
       },
       "changes": {
-        "kicker": "七 · Changes",
+        "kicker": "九 · Changes",
         "heading": "When this page is updated",
         "p1": "When we change a material practice (a new processor, a different retention window, a new type of data collected), we update the \"last updated\" date at the top of this page. If a change affects your consent (for example, a new newsletter type), we will email you separately and ask before opting you in."
       }

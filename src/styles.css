@@ -320,8 +320,16 @@ main {
 .legal-prose {
   max-width: 65ch;
 }
-.legal-prose p {
-  margin: 0;
+/* Reset the browser's default paragraph margins so the article body's
+   `space-y-*` / `mt-*` utilities own the vertical rhythm. Authored in
+   @layer base on purpose: an UNLAYERED rule here outranks every Tailwind
+   layer (including utilities), which silently collapsed the inter-paragraph
+   spacing on /privacy and /legal. In the base layer the layered utilities
+   win, so `space-y-4` spaces the paragraphs as intended. */
+@layer base {
+  .legal-prose p {
+    margin: 0;
+  }
 }
 .legal-prose code {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;

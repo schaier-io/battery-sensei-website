@@ -950,6 +950,24 @@
     "intro": "Battery Sensei ist eine kleine, unabhängige macOS-App. Wir erheben nur das Nötigste, um die Website zu betreiben, Zahlungen abzuwickeln und Sie über neue Versionen zu informieren. Unten erklären wir Ihnen in klarer Sprache, was das genau bedeutet.",
     "backHome": "Zurück zur Startseite",
     "footerLink": "Datenschutz",
+    "tldr": {
+      "heading": "Kurz gefasst",
+      "doLabel": "Was wir tun",
+      "dontLabel": "Was wir nicht tun",
+      "do": {
+        "1": "Die Mac-App läuft vollständig auf Ihrem Gerät. Ihr Akkuverlauf und die Titel Ihrer Kalendertermine verlassen Ihren Mac nie.",
+        "2": "Wir messen die Website-Zugriffe mit cookielosen, anonymen Analytics – ausschließlich aggregierte Zahlen, keine Tracking-Cookies.",
+        "3": "Wir bewahren nur die Angaben auf, die Sie uns aktiv überlassen: Ihre E-Mail-Adresse, wenn Sie sich anmelden, Ihre Nachricht, wenn Sie das Kontaktformular nutzen, und Ihren Kauf (abgewickelt über Polar).",
+        "4": "Wir nutzen einige bekannte Auftragsverarbeiter für Hosting, Zahlungen und E-Mail – jeder unten namentlich genannt, mit einem Link zu seiner Datenschutzerklärung."
+      },
+      "dont": {
+        "1": "Ihre Daten verkaufen, vermieten oder an Werbetreibende weitergeben – niemals.",
+        "2": "Werbe- oder Social-Media-Tracker einsetzen, Tracking-Pixel oder Share-Buttons einbinden, Tracking-Cookies von Drittanbietern setzen oder Sie seitenübergreifend profilieren.",
+        "3": "Profile über Sie erstellen oder automatisierte Entscheidungen treffen, die Sie betreffen.",
+        "4": "Ein Konto oder einen Login verlangen, um die App zu nutzen."
+      },
+      "note": "Es gibt kein Cookie-Banner, weil wir keine Tracking-Cookies setzen. Downloads und In-App-Updates werden über GitHub bereitgestellt, das Ihre IP-Adresse wie jeder Webserver sieht. Alle Einzelheiten finden Sie unten."
+    },
     "body": {
       "controller": {
         "kicker": "一 · Verantwortlicher",
@@ -957,17 +975,31 @@
         "p1": "Battery Sensei wird betrieben von <0>Sandro Thabiso Schaier</0>, selbstständiger Einzelunternehmer (živnostník), mit Geschäftssitz unter der Anschrift Korunní 2569/108, 101 00 Prag 10, Tschechien. „Wir“ bzw. „uns“ auf dieser Seite meint diesen Betreiber.",
         "p2": "Für Datenschutzfragen, Anträge oder Beschwerden erreichen Sie uns unter <0>info@battery-sensei.app</0>. Wir antworten in der Regel innerhalb eines Werktags."
       },
+      "app": {
+        "kicker": "二 · Die App",
+        "heading": "Was die macOS-App auf Ihrem Mac tut",
+        "p1": "Battery Sensei ist eine native macOS-App, die vollständig auf Ihrem Mac läuft. Das Auslesen Ihres Akkus, Ihres Ladevorgangs und der nächsten Stunden Ihres Kalenders geschieht alles auf dem Gerät – nichts davon läuft über einen von uns betriebenen Server.",
+        "p2": "Die App enthält keine Telemetrie, kein Analytics-SDK, keinen Crash-Reporter und kein Cloud-Konto. Ihr Akkuverlauf wird ausschließlich auf Ihrem Mac gespeichert. Termintitel werden lokal gelesen, um Ihre Meeting-Warnungen zeitlich abzustimmen, und verlassen Ihr Gerät nie.",
+        "p3": "Die einzige Netzwerkverbindung, die die App von sich aus herstellt, ist eine Update-Prüfung: Sie ruft in regelmäßigen Abständen einen Update-Feed (ein „Appcast“) von battery-sensei.app ab, um zu prüfen, ob eine neuere Version vorliegt. Diese Anfrage erreicht unseren Host auf dieselbe Weise wie jede andere Webanfrage, erscheint nur in kurzlebigen Serverprotokollen und enthält keine Konto- oder Gerätekennung. Ist ein Update verfügbar, wird die neue Version von GitHub heruntergeladen – siehe den nächsten Abschnitt."
+      },
+      "github": {
+        "kicker": "三 · Downloads & Updates",
+        "heading": "Die App und ihre Updates herunterladen",
+        "p1": "Wir hosten das Installationsprogramm der App und ihre Versionshinweise in einem öffentlichen GitHub-Repository (<0>github.com/schaier-io/battery-sensei-releases</0>). Wenn Sie auf „Für Mac herunterladen“ klicken oder wenn der In-App-Updater eine neue Version installiert, verbindet sich Ihr Gerät direkt mit GitHub, um die Datei abzurufen. Ein GitHub-Konto ist nicht erforderlich.",
+        "p2": "Wie jeder Webserver erhält GitHub Ihre IP-Adresse, die angeforderte Datei und den User-Agent Ihres Browsers, um den Download bereitzustellen, und kann diese Daten protokollieren sowie eigene Cookies setzen, wenn Sie das Repository in einem Browser besuchen. Für diese Verbindung handelt <0>GitHub, Inc.</0> (ein Microsoft-Unternehmen) als eigenständig Verantwortlicher nach seiner eigenen Datenschutzerklärung. Wir erhalten nie eine Liste derer, die die App heruntergeladen haben.",
+        "p3": "Der Umgang von GitHub mit diesen Anfragen richtet sich nach der <0>Datenschutzerklärung von GitHub</0>. Wenn Sie ein Issue eröffnen oder im Repository kommentieren, werden alles, was Sie schreiben – und Ihr GitHub-Benutzername – an GitHub weitergegeben und sind öffentlich sichtbar."
+      },
       "what": {
-        "kicker": "二 · Was wir erheben",
+        "kicker": "四 · Was wir erheben",
         "heading": "Die vollständige Liste nach Bereichen",
-        "intro": "Die macOS-App Battery Sensei ist datenschutzfreundlich konzipiert: Sie läuft vollständig auf Ihrem Mac, ohne Telemetrie, ohne Analytics, ohne Cloud-Konto und ohne ausgehende Netzwerkverbindungen außer der Update-Prüfung. Die folgende Liste betrifft ausschließlich die Marketing-Website battery-sensei.app und den dortigen Bestellvorgang; dort nutzen wir cookielose Analytics, wie unten ausführlich beschrieben.",
+        "intro": "Dieser Abschnitt betrifft die Marketing-Website unter battery-sensei.app und den dortigen Bestellvorgang – die App selbst ist oben behandelt und erhebt nichts. Auf der Website halten wir die Daten auf ein Minimum:",
         "items": {
           "localeName": "Cookie für die Spracheinstellung",
           "localeBody": "ein First-Party-Cookie namens <0>bs_locale</0>, das nur gesetzt wird, wenn Sie die Sprache über den Sprachumschalter ändern. Es speichert Ihren zweistelligen Sprachcode (z. B. <0>de</0>), läuft nach einem Jahr ab und wird nie weitergegeben.",
           "purchaseName": "Marker für abgeschlossene Käufe",
           "purchaseBody": "ein Eintrag im sessionStorage namens <0>bs_purchase_tracked</0>, der doppelte Conversion-Ereignisse verhindert, wenn Sie die Danke-Seite neu laden. Er wird gelöscht, sobald Sie den Tab schließen.",
           "analyticsName": "Cookielose Analytics",
-          "analyticsBody": "anonymisierte Seitenaufrufe und Core Web Vitals über Vercel Analytics und Vercel Speed Insights. Keine Cookies, keine seitenübergreifenden Kennungen; IP-Adressen werden am Edge einmalig gehasht, bevor sie gespeichert werden.",
+          "analyticsBody": "anonymisierte Seitenaufrufzähler und Core Web Vitals über Vercel Analytics und Vercel Speed Insights sowie ein einzelnes anonymes Ereignis „Kauf abgeschlossen“ auf der Danke-Seite (welchen Tarif Sie gekauft haben und die Polar-Bestellreferenz), damit wir abgeschlossene Käufe zählen können. Keine Cookies, keine seitenübergreifenden Kennungen; IP-Adressen der Besucher werden am Edge einmalig gehasht, bevor sie gespeichert werden.",
           "signupName": "Daten aus der Newsletter-Anmeldung",
           "signupBody": "Nur wenn Sie das „Herunterladen“-Formular absenden: die eingetragene E-Mail-Adresse, die Sprache der Seite, Ihre IP und der User-Agent (zur Missbrauchsprüfung) sowie ein Zeitstempel.",
           "contactName": "Daten aus dem Kontaktformular",
@@ -979,7 +1011,7 @@
         }
       },
       "why": {
-        "kicker": "三 · Warum wir das erheben",
+        "kicker": "五 · Warum wir das erheben",
         "heading": "Zweck und Rechtsgrundlage",
         "items": {
           "functionalName": "Website-Funktionen",
@@ -987,7 +1019,7 @@
           "orderName": "Abwicklung des Bestellvorgangs",
           "orderBody": "Checkout-Daten, Auslieferung des Lizenzschlüssels, Rückerstattungen. Rechtsgrundlage: <0>Vertragserfüllung</0> (Art. 6 Abs. 1 lit. b DSGVO).",
           "newsletterName": "Hinweise zu neuen Versionen und Apps",
-          "newsletterBody": "Ausschließlich die E-Mail-Adressen, die Sie ausdrücklich über das Anmeldeformular eintragen. Rechtsgrundlage: <0>Einwilligung</0> (Art. 6 Abs. 1 lit. a DSGVO), jederzeit widerrufbar über den Abmeldelink in jeder E-Mail oder per Nachricht an <1>info@battery-sensei.app</1>.",
+          "newsletterBody": "Ausschließlich die E-Mail-Adressen, die Sie ausdrücklich über das Anmeldeformular eintragen, bestätigt per Double-Opt-in (wir senden Ihnen einen Link per E-Mail und tragen Sie erst ein, wenn Sie ihn anklicken). Rechtsgrundlage: <0>Einwilligung</0> (Art. 6 Abs. 1 lit. a DSGVO), jederzeit widerrufbar über den Abmeldelink in jeder E-Mail oder per Nachricht an <1>info@battery-sensei.app</1>.",
           "analyticsName": "Cookielose Analytics + Serverprotokolle",
           "analyticsBody": "Ein minimales Signal dafür, dass die Seite läuft und gelesen wird. Rechtsgrundlage: <0>berechtigtes Interesse</0> (Art. 6 Abs. 1 lit. f DSGVO) am Betrieb und an der Verbesserung des Dienstes. Kein Profiling, kein Werbe-Retargeting.",
           "abuseName": "Missbrauchs- und Betrugssignale",
@@ -996,7 +1028,7 @@
         "noAutomated": "Wir setzen keinerlei automatisierte Entscheidungsfindung oder Profiling ein, das Ihnen gegenüber rechtliche Wirkung entfaltet oder Sie ähnlich erheblich beeinträchtigt (Art. 22 DSGVO)."
       },
       "processors": {
-        "kicker": "四 · Auftragsverarbeiter",
+        "kicker": "六 · Auftragsverarbeiter",
         "heading": "Wer Ihre Daten speichert",
         "intro": "Wir setzen eine kleine Auswahl an Auftragsverarbeitern ein. Jeder hat eine eigene Datenschutzerklärung, die unten verlinkt ist. Keine Daten, die bei uns liegen, werden verkauft oder an Werbenetzwerke weitergegeben.",
         "items": {
@@ -1006,26 +1038,26 @@
           "polarBody": "Verkäufer und Zahlungsabwickler für alle Käufe. Übernimmt Zahlungsabwicklung, Umsatzsteuer, Rückerstattungen und Lizenzausgabe. Kartendaten werden ausschließlich von Polar erfasst; wir sehen sie nie. Übermittlungen an Polar (USA) erfolgen auf Grundlage der Standardvertragsklauseln. Datenschutzerklärung: <0>polar.sh/legal/privacy</0>.",
           "resendName": "Resend, Inc.",
           "resendBody": "Versendet Hinweise zu neuen Versionen und transaktionale E-Mails (Kaufbeleg, erneuter Versand des Schlüssels, Kontaktformular-Bestätigung). Die über unsere Formulare übermittelten E-Mail-Adressen werden zu Resend-Audiences gespiegelt. Übermittlungen an Resend (USA) erfolgen auf Grundlage der Standardvertragsklauseln; Resend ist zudem selbstzertifiziert unter dem EU-US Data Privacy Framework. Datenschutzerklärung: <0>resend.com/legal/privacy-policy</0>.",
-          "postgresName": "PostgreSQL-Datenbank (über Vercel-Marketplace)",
-          "postgresBody": "Enthält die Tabelle der Newsletter-Anmeldungen, die Tabelle der Kontaktanfragen und die von Polar ausgegebenen Lizenzdatensätze. Wird in einer EU-Region (Frankfurt) bereitgestellt, sofern der Marketplace-Anbieter dies unterstützt. Gehostet bei einem Vercel-Partneranbieter; dessen Identität ergänzen wir hier, sobald die Produktionsdatenbank eingerichtet ist."
+          "postgresName": "Neon (ein Databricks-Unternehmen)",
+          "postgresBody": "Serverloser PostgreSQL-Host (Neon, LLC), bereitgestellt über den Vercel-Marketplace. Enthält die Tabelle der Newsletter-Anmeldungen und die Tabelle der Kontaktanfragen; die Datenbank liegt in der EU (AWS, Frankfurt / eu-central-1). Ihre Kauf- und Lizenzdatensätze werden hier nicht gespeichert – diese liegen bei Polar. Neon, LLC ist von der EU-US-Data-Privacy-Framework-Zertifizierung von Databricks abgedeckt, und etwaige Übermittlungen stützen sich zusätzlich auf die Standardvertragsklauseln. Datenschutzerklärung: <0>databricks.com/legal/privacynotice</0>."
         }
       },
       "retention": {
-        "kicker": "五 · Speicherdauer",
+        "kicker": "七 · Speicherdauer",
         "heading": "Wie lange wir welche Daten aufbewahren",
         "items": {
           "signupName": "Newsletter-Anmeldungen",
-          "signupBody": "Werden gespeichert, solange Sie abonniert bleiben. Nach einer Abmeldung behalten wir noch etwa 30 Tage einen gehashten Marker, damit Sie nicht stillschweigend wieder hinzugefügt werden, falls Sie das Formular erneut absenden.",
+          "signupBody": "Werden gespeichert, solange Sie abonniert bleiben. Wenn Sie sich abmelden, behalten wir Ihre Adresse in einem kurzen Sperrvermerk, damit wir Ihren Widerspruch beachten und Sie nicht stillschweigend wieder hinzufügen, falls das Formular erneut abgesendet wird; Sie können jederzeit verlangen, dass wir sie vollständig löschen.",
           "contactName": "Nachrichten aus dem Kontaktformular",
           "contactBody": "Werden bis zu 24 Monate nach der letzten Antwort im jeweiligen Vorgang aufbewahrt und anschließend gelöscht.",
           "purchaseName": "Kauf- und Lieferdaten",
-          "purchaseBody": "Polar bewahrt als Verkäufer und Zahlungsabwickler die zugrunde liegende Steuerrechnung für den gesetzlich vorgeschriebenen Zeitraum auf (typischerweise 10 Jahre nach dem tschechischen Gesetz Nr. 563/1991 Slg.). Wir bewahren ausschließlich die zur erneuten Ausstellung bzw. zum Support Ihres Schlüssels erforderlichen Metadaten der Lizenzausgabe auf, in der Regel bis zu 5 Jahre ab Kauf; danach anonymisieren wir sie.",
+          "purchaseBody": "Polar bewahrt als Verkäufer und Zahlungsabwickler die zugrunde liegende Steuerrechnung und den Lizenzdatensatz für den gesetzlich vorgeschriebenen Zeitraum auf (typischerweise 10 Jahre nach dem tschechischen Gesetz Nr. 563/1991 Slg.). Wir bewahren in unserer eigenen Datenbank keine Kopie Ihres Kaufs oder Ihrer Lizenz auf; wenn Sie Support benötigen, sehen wir bei Polar anhand der Bestell-ID nach.",
           "logsName": "Serverprotokolle",
           "logsBody": "Werden von Vercel innerhalb von 30 Tagen rotiert."
         }
       },
       "rights": {
-        "kicker": "六 · Ihre Rechte",
+        "kicker": "八 · Ihre Rechte",
         "heading": "Was Sie von uns verlangen können",
         "intro": "Nach der DSGVO (und dem tschechischen Gesetz Nr. 110/2019 Slg.) können Sie:",
         "items": {
@@ -1040,7 +1072,7 @@
         "closing": "Um eines dieser Rechte auszuüben, schreiben Sie uns an <0>info@battery-sensei.app</0>. Wir antworten innerhalb eines Monats nach Eingang und können diese Frist bei komplexen Anfragen um bis zu zwei weitere Monate verlängern; in diesem Fall informieren wir Sie innerhalb des ersten Monats und erläutern Ihnen die Gründe. Sie haben außerdem das Recht, sich bei der tschechischen Datenschutzbehörde (Úřad pro ochranu osobních údajů, <1>uoou.gov.cz</1>) oder bei der Datenschutzaufsicht Ihres Wohnsitzlandes zu beschweren."
       },
       "changes": {
-        "kicker": "七 · Änderungen",
+        "kicker": "九 · Änderungen",
         "heading": "Wann diese Seite aktualisiert wird",
         "p1": "Wenn sich eine wesentliche Vorgehensweise ändert (ein neuer Auftragsverarbeiter, eine geänderte Speicherdauer, eine neue Art erhobener Daten), aktualisieren wir das Datum „Zuletzt aktualisiert“ oben auf dieser Seite. Wenn eine Änderung Ihre Einwilligung berührt (etwa eine neue Art von Newsletter), informieren wir Sie separat per E-Mail und holen vorher Ihre ausdrückliche Zustimmung ein."
       }
