@@ -318,7 +318,7 @@ export const Route = createRootRoute({
       // link spreader. Sticking to `href` + `type` keeps the preload effective
       // (browser fetches the WebP at 1x DPR) without the false-positive devtool
       // noise; HiDPI DPR will request via the Nav's srcSet on hydration.
-      { rel: 'preload', as: 'image', href: '/logo-64.webp', type: 'image/webp' },
+      { rel: 'preload', as: 'image', href: '/logo-mark.svg', type: 'image/svg+xml' },
       // Fonts are now self-hosted via @fontsource (see styles.css). No
       // preconnect to fonts.googleapis / fonts.gstatic — those origins are
       // never contacted. Removing the render-blocking Google stylesheet was

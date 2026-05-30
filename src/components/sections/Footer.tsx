@@ -55,14 +55,13 @@ export function Footer() {
           <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
             <span className="inline-flex h-11 w-11 items-center justify-center overflow-hidden sm:h-12 sm:w-12">
               <img
-                src="/logo-64.webp"
-                srcSet="/logo-64.webp 1x, /logo-128.webp 2x"
+                src="/logo-mark.svg"
                 width="48"
                 height="48"
                 alt="Battery Sensei logo"
                 decoding="async"
                 loading="lazy"
-                className="h-11 w-11 scale-[1.12] sm:h-12 sm:w-12"
+                className="h-11 w-11 sm:h-12 sm:w-12"
               />
             </span>
             <span className="flex items-baseline gap-2.5 leading-none">

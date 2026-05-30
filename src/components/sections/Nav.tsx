@@ -159,8 +159,7 @@ export function Nav() {
           aria-label={t('nav.ariaHome')}
         >
           <img
-            src="/logo-64.webp"
-            srcSet="/logo-64.webp 1x, /logo-128.webp 2x"
+            src="/logo-mark.svg"
             width="44"
             height="44"
             alt="Battery Sensei logo"
@@ -335,8 +334,7 @@ function MobileDrawer({
         <div className="flex items-center justify-between gap-3 px-5 h-16 border-b border-[var(--line)]">
           <span className="flex items-center gap-2.5 leading-none">
             <img
-              src="/logo-64.webp"
-              srcSet="/logo-64.webp 1x, /logo-128.webp 2x"
+              src="/logo-mark.svg"
               width="36"
               height="36"
               alt="Battery Sensei logo"
