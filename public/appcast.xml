@@ -407,6 +407,35 @@
         length="20763981"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.5.0</title>
+      <pubDate>Sun, 31 May 2026 15:04:29 +0000</pubDate>
+      <sparkle:version>55</sparkle:version>
+      <sparkle:shortVersionString>1.5.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.5.0</h1>
+<p>See what your Mac is actually doing, and trust the per-app power numbers more than ever.</p>
+<h2>Live system load graphs</h2>
+<p>The System load panel now opens into a detail view with live CPU, GPU, and disk I/O graphs over the last minute. CPU and GPU show load as a percentage; disk shows throughput in MB/s. You can see per-core CPU activity, GPU utilization channels, and the hardware behind the numbers — a clear picture of where the work is going moment to moment.</p>
+<h2>More honest per-app power</h2>
+<p>Per-app energy now uses direct process-energy counters when macOS exposes them, and falls back to activity-based estimates only when it can&#x27;t measure a process directly. Each row is labeled <strong>Measured</strong> or <strong>Estimated from activity</strong> so you know which is which, and shows whether an app leans on the performance or efficiency cores.</p>
+<p>A new <strong>Other measured processes</strong> row captures real per-process energy from helpers, agents, and background services that don&#x27;t map to a visible app. <strong>System &amp; hardware</strong> is now the measured whole-Mac power left after subtracting everything Sensei could attribute — not a rough guess.</p>
+<h2>Smaller touches</h2>
+<ul>
+<li>Clearer, shorter help text on the power panels explaining measured vs. estimated.</li>
+</ul>
+<p>Warnings and charge-limit behavior are unchanged.</p>
+<p>Marketing 1.4.0 → 1.5.0, build 54 → 55.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.5.0/Battery-Sensei.pkg"
+        sparkle:edSignature="MFyUfazU/mAJZwqtB9tF3MzbZC1S4mW/Czmm8b1q99ajK+bGKb498TjU6tDM6/bDadI2uFQvtyikfslKZ4eWDw=="
+        length="21162626"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
