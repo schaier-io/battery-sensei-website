@@ -7,7 +7,7 @@ const SITE_URL = 'https://www.battery-sensei.app'
 const PATH = '/features/energy-usage'
 const PAGE_TITLE = 'Top power-hungry apps — Battery Sensei'
 const PAGE_DESC =
-  'See which apps are draining your MacBook battery on the Saga page — 1h / 24h / 7d windows, Activity-Monitor-style impact score, with a search filter.'
+  'See which apps are draining your MacBook battery on the Saga page — live Now / 3h / 5d windows, shown as percent or watts, with a search filter.'
 
 const faqLd = {
   '@context': 'https://schema.org',
@@ -62,7 +62,8 @@ const APPS: Row[] = [
   { name: 'Finder',    impact:   3, level: 'Low' },
 ]
 
-const WINDOWS = ['1 h', '24 h', '7 d'] as const
+const WINDOWS = ['Now', '3 h', '5 d'] as const
+const UNITS = ['%', 'W'] as const
 
 function levelTint(level: Row['level']) {
   switch (level) {
@@ -77,30 +78,52 @@ function EnergyMockup() {
   const max = Math.max(...APPS.map((a) => a.impact))
   return (
     <div className="mx-auto max-w-md" aria-hidden>
-      {/* Header row — title + window tabs + JP accent */}
+      {/* Header row — title + unit toggle + window tabs */}
       <div className="mb-3 flex items-center justify-between gap-3">
         <div className="text-[10px] uppercase tracking-[0.18em] text-sumi-soft">
           Top power-hungry apps
         </div>
-        <div
-          className="flex shrink-0 items-center gap-0.5 rounded-full border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] p-0.5 text-[10px] uppercase tracking-[0.14em]"
-          role="tablist"
-          aria-label="Time window"
-        >
-          {WINDOWS.map((w, i) => (
-            <span
-              key={w}
-              role="tab"
-              aria-selected={i === 1}
-              className={`rounded-full px-2 py-0.5 ${
-                i === 1
-                  ? 'bg-hinomaru/[0.12] text-hinomaru'
-                  : 'text-sumi-soft'
-              }`}
-            >
-              {w}
-            </span>
-          ))}
+        <div className="flex shrink-0 items-center gap-1.5">
+          {/* Unit toggle — % / W, mirrors the app's display-unit switch */}
+          <div
+            className="flex items-center gap-0.5 rounded-full border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] p-0.5 text-[10px] uppercase tracking-[0.14em]"
+            role="tablist"
+            aria-label="Display unit"
+          >
+            {UNITS.map((u, i) => (
+              <span
+                key={u}
+                role="tab"
+                aria-selected={i === 1}
+                className={`rounded-full px-1.5 py-0.5 ${
+                  i === 1 ? 'bg-hinomaru/[0.12] text-hinomaru' : 'text-sumi-soft'
+                }`}
+              >
+                {u}
+              </span>
+            ))}
+          </div>
+          {/* Time window — Now (live) / 3h / 5d */}
+          <div
+            className="flex items-center gap-0.5 rounded-full border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] p-0.5 text-[10px] uppercase tracking-[0.14em]"
+            role="tablist"
+            aria-label="Time window"
+          >
+            {WINDOWS.map((w, i) => (
+              <span
+                key={w}
+                role="tab"
+                aria-selected={i === 0}
+                className={`rounded-full px-2 py-0.5 ${
+                  i === 0
+                    ? 'bg-hinomaru/[0.12] text-hinomaru'
+                    : 'text-sumi-soft'
+                }`}
+              >
+                {w}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -117,6 +140,8 @@ function EnergyMockup() {
         {APPS.map((a) => {
           const pct = (a.impact / max) * 100
           const tint = levelTint(a.level)
+          // Illustrative live draw — mirrors the app's "W" unit mode.
+          const watts = (a.impact / 28).toFixed(1)
           return (
             <li
               key={a.name}
@@ -141,10 +166,10 @@ function EnergyMockup() {
                 />
               </div>
               <span
-                className="text-right text-[10px] uppercase tracking-[0.1em] tabular-nums"
+                className="text-right text-[11px] tabular-nums"
                 style={{ color: tint }}
               >
-                {a.level}
+                ≈ {watts} W
               </span>
             </li>
           )

@@ -11,11 +11,20 @@ export const extended = (
       energy" in the battery menu, except surfaced live and rankable.
     </P>
     <P>
-      Sensei pulls this score every 5 minutes from per-process resource
-      usage — no system extension, no kernel hooks, no privileged
-      operations. The numbers are exactly what Activity Monitor would
-      show if you opened it at the same moment, just gathered
-      continuously so you can see trends.
+      Sensei pulls this score from per-process resource usage — no system
+      extension, no kernel hooks, no privileged operations. The live{' '}
+      <strong>Now</strong> view refreshes about every 10 seconds (smoothed
+      over the last ~30 seconds) while you’re watching it, so the watts you
+      see track what’s happening right now; the 3h and 5d windows lean on a
+      5-minute history. The numbers are exactly what Activity Monitor would
+      show if you opened it at the same moment, just gathered continuously
+      so you can see trends.
+    </P>
+    <P>
+      Each row shows the share of a full battery the app spent, or — one
+      toggle away — an estimate in watts (live draw on <strong>Now</strong>)
+      or watt-hours (energy consumed over the 3h / 5d windows). Same data,
+      the unit that fits the question.
     </P>
 
     <H2>What to look for</H2>
@@ -59,9 +68,9 @@ export const extended = (
 
 export const faqs = [
   {
-    q: 'Why sampled every 5 minutes and not every second?',
+    q: 'How often does it refresh?',
     a:
-      'Activity Monitor’s energy impact metric is a moving average. Sampling per second wouldn’t show different values — it would just spend battery to measure battery. Every 5 minutes is enough resolution to spot trends without the irony.',
+      'The live "Now" view resamples about every 10 seconds — smoothed over the last ~30 seconds — and only while that view is open, so you get a current read without spending battery to measure battery. The 3h and 5d history windows are sampled every 5 minutes; Activity Monitor’s energy impact is already a moving average, so finer history wouldn’t show more, just cost more.',
   },
   {
     q: 'Does this require a system extension or root privileges?',

@@ -23,9 +23,9 @@ export const extended = (
       </li>
       <li>
         <strong>Top power-hungry apps.</strong> The same metric Activity
-        Monitor uses, surfaced over the last 1 hour, 24 hours, or 7 days. A
-        search filter lets you collapse a noisy process tree — type
-        "chrome" and every Chrome helper lines up.
+        Monitor uses, surfaced live right now or over the last 3 hours or 5
+        days — as a percentage or in watts. A search filter lets you collapse
+        a noisy process tree — type "chrome" and every Chrome helper lines up.
       </li>
       <li>
         <strong>Weekly + Monthly Wrapped.</strong> Spotify-Wrapped-style

@@ -210,7 +210,7 @@
         "footerLabel": "{{months}} meses · rango normal"
       },
       "drain": {
-        "kicker": "Última hora · por app",
+        "kicker": "En vivo · por app",
         "unit": "% / h"
       },
       "privacy": {
@@ -319,7 +319,7 @@
       },
       {
         "label": "Consumo por app",
-        "desc": "Las apps que más consumen, en la página Saga: ventanas de 1 h / 24 h / 7 d, puntuación tipo Monitor de Actividad y actualización cada 5 min.",
+        "desc": "Las apps que más consumen, en la página Saga: ventanas Ahora / 3 h / 5 d, en porcentaje o vatios, con la vista en vivo actualizada cada 10 s aproximadamente.",
         "key": "energy-usage",
         "sensei": "yes",
         "aldente": "no",
@@ -533,7 +533,7 @@
       "kicker": "Función · 個人史",
       "heading": "Historial de batería del MacBook.",
       "headingItalic": "Ciclos, cargas, rescates, todo en contexto.",
-      "body": "Saga es la vista a largo plazo de la vida de tu batería. Incluye un gráfico de carga que puedes alternar entre 24 h / 3 d / 7 d, un panel de salud (capacidad, ciclos, temperatura, estado), las apps que más consumen en la última hora / día / semana y resúmenes semanales y mensuales estilo Wrapped. Cuando rescatas la batería a tiempo (la enchufas dentro de los 30 minutos tras una alerta crítica), Sensei crea un Recibo de rescate: una pequeña tarjeta para compartir el salvamento.",
+      "body": "Saga es la vista a largo plazo de la vida de tu batería. Incluye un gráfico de carga que puedes alternar entre 24 h / 3 d / 7 d, un panel de salud (capacidad, ciclos, temperatura, estado), las apps que más consumen ahora mismo o en las últimas 3 horas / 5 días y resúmenes semanales y mensuales estilo Wrapped. Cuando rescatas la batería a tiempo (la enchufas dentro de los 30 minutos tras una alerta crítica), Sensei crea un Recibo de rescate: una pequeña tarjeta para compartir el salvamento.",
       "mockupCaption": "Estadísticas históricas, historial de carga, resúmenes Wrapped. Todo en la página Saga.",
       "why": "Las cifras de batería sin contexto son solo cifras. «92% de capacidad» no te dice nada. Saga le da una historia a esa cifra: cómo estaba hace una semana, qué apps gastaron más y qué día casi la pierdes."
     },
@@ -549,8 +549,8 @@
       "kicker": "Función · 電力",
       "heading": "Consumo de batería por app.",
       "headingItalic": "Detecta qué apps gastan más.",
-      "body": "En la página Saga, Sensei ordena las apps que más energía consumen. Alterna entre la última hora, las últimas 24 horas o los últimos 7 días. Cada app recibe una puntuación de impacto energético al estilo Monitor de Actividad (tiempo de CPU combinado con activaciones en reposo), una etiqueta de impacto (Bajo / Moderado / Alto / Muy alto) y un filtro de búsqueda para encontrar cada proceso auxiliar de Chrome en la lista. Se actualiza cada 5 minutos a partir del uso de recursos por proceso. Sin extensiones del sistema, sin tocar el kernel.",
-      "mockupCaption": "Top apps · 1h / 24h / 7d · con filtro de búsqueda. Actualizado cada 5 min.",
+      "body": "En la página Saga, Sensei ordena las apps que más energía consumen. Alterna entre ahora mismo (en vivo), las últimas 3 horas o 5 días, y cambia cada valor entre el porcentaje de una batería completa y vatios (consumo en vivo) o vatios-hora (a lo largo de una ventana). Cada app recibe una puntuación de impacto energético al estilo Monitor de Actividad (tiempo de CPU combinado con activaciones en reposo), una etiqueta de impacto (Bajo / Moderado / Alto / Muy alto) y un filtro de búsqueda para encontrar cada proceso auxiliar de Chrome en la lista. El historial se muestrea cada 5 minutos; la vista Ahora en vivo se actualiza cada 10 segundos aproximadamente. Sin extensiones del sistema, sin tocar el kernel.",
+      "mockupCaption": "Top apps · Ahora / 3 h / 5 d · en porcentaje o vatios. Vista en vivo actualizada ~10 s.",
       "why": "La pérdida de batería casi nunca es culpa de la batería. Suele ser un proceso auxiliar colgado, una pestaña que no duerme o una videollamada que no libera la GPU. Saber qué app gasta más puede ser la diferencia entre un día de 4 horas y uno de 7."
     }
   },
@@ -588,7 +588,7 @@
         },
         {
           "title": "Historial de batería de 24 h",
-          "body": "Historial de carga, paneles de salud, Recibos de rescate y consumo por app de la última hora. Todo en tu Mac."
+          "body": "Historial de carga, paneles de salud, Recibos de rescate y consumo por app en vivo. Todo en tu Mac."
         },
         {
           "title": "Carga + vatios en vivo en la barra",
@@ -631,7 +631,7 @@
         },
         {
           "title": "Historial de batería ilimitado",
-          "body": "Ventanas de tiempo más largas (3 d, 7 d) y desglose por app en 24 h o 7 d, no solo las últimas 24 horas."
+          "body": "Ventanas de historial de carga más largas (3 d, 7 d) y desglose por app en 3 h o 5 d, no solo la vista Ahora en vivo."
         },
         {
           "title": "Reglas de aviso personalizadas",

@@ -210,7 +210,7 @@
         "footerLabel": "{{months}} months · Normal range"
       },
       "drain": {
-        "kicker": "Last hour · per app",
+        "kicker": "Live · per app",
         "unit": "% / hr"
       },
       "privacy": {
@@ -319,7 +319,7 @@
       },
       {
         "label": "Energy use per app",
-        "desc": "Top power-hungry apps on the Saga page: 1h / 24h / 7d windows, Activity-Monitor-style energy score, refreshed every 5 min.",
+        "desc": "Top power-hungry apps on the Saga page: Now / 3h / 5d windows, shown as percent or watts, with the live view refreshed about every 10 s.",
         "key": "energy-usage",
         "sensei": "yes",
         "aldente": "no",
@@ -533,7 +533,7 @@
       "kicker": "Feature · 個人史",
       "heading": "MacBook battery history.",
       "headingItalic": "Cycles, charges, rescues, all in context.",
-      "body": "Saga is the long view of your battery's life. A charge history chart you can flip between 24 h / 3 d / 7 d, a Battery Health panel (capacity, cycles, temperature, condition), the top power-hungry apps over the last hour / day / week, and Wrapped-style Weekly + Monthly recaps. When you rescue a battery in time (plug in within 30 minutes of a critical warning), Sensei creates a Rescue Receipt: a small, shareable card to mark the save.",
+      "body": "Saga is the long view of your battery's life. A charge history chart you can flip between 24 h / 3 d / 7 d, a Battery Health panel (capacity, cycles, temperature, condition), the top power-hungry apps right now or over the last 3 hours / 5 days, and Wrapped-style Weekly + Monthly recaps. When you rescue a battery in time (plug in within 30 minutes of a critical warning), Sensei creates a Rescue Receipt: a small, shareable card to mark the save.",
       "mockupCaption": "Lifetime stats, charge history, Wrapped recaps. All on the Saga page.",
       "why": "Battery numbers without context are just numbers. \"92% capacity\" tells you nothing. Saga gives the same number a story: what it looked like a week ago, which apps cost it the most, which day you nearly lost it."
     },
@@ -549,8 +549,8 @@
       "kicker": "Feature · 電力",
       "heading": "Per-app battery drain.",
       "headingItalic": "See which apps cost the most.",
-      "body": "On the Saga page, Sensei ranks the top power users. Flip between the last 1 hour, 24 hours, or 7 days. Each app gets an Activity-Monitor-style energy impact score (CPU time blended with idle wake-ups), an impact label (Low / Moderate / High / Very high), and a search filter so you can find every Chrome helper in the list. Sampled every 5 minutes via per-process resource usage. No system extension, no kernel hooks.",
-      "mockupCaption": "Top apps · 1h / 24h / 7d · with search filter. Refreshed every 5 min.",
+      "body": "On the Saga page, Sensei ranks the top power users. Flip between right now (live), the last 3 hours, or 5 days — and toggle each value between percent of a full battery and watts (live draw) or watt-hours (over a window). Each app gets an Activity-Monitor-style energy impact score (CPU time blended with idle wake-ups), an impact label (Low / Moderate / High / Very high), and a search filter so you can find every Chrome helper in the list. History is sampled every 5 minutes; the live Now view refreshes about every 10 seconds. No system extension, no kernel hooks.",
+      "mockupCaption": "Top apps · Now / 3h / 5d · percent or watts. Live view refreshed ~10 s.",
       "why": "Battery loss is almost never the battery's fault. It's a hung helper, a sleepless tab, a video call that won't release the GPU. Knowing which app costs you the most is the difference between a 4-hour day and a 7-hour day."
     }
   },
@@ -588,7 +588,7 @@
         },
         {
           "title": "24-hour battery history",
-          "body": "Charge history, health tiles, Rescue Receipts, and last-hour per-app drain. All local."
+          "body": "Charge history, health tiles, Rescue Receipts, and live per-app drain. All local."
         },
         {
           "title": "Menu-bar live charge + watts",
@@ -631,7 +631,7 @@
         },
         {
           "title": "Unlimited battery history",
-          "body": "Longer timeline windows (3 d, 7 d) and per-app breakdown over 24 h or 7 d, not just the last 24 hours."
+          "body": "Longer charge-history windows (3 d, 7 d) and per-app breakdown over 3 h or 5 d, not just the live Now view."
         },
         {
           "title": "Custom warning rules",

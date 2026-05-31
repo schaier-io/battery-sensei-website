@@ -210,7 +210,7 @@
         "footerLabel": "{{months}} mois · plage normale"
       },
       "drain": {
-        "kicker": "Dernière heure · par app",
+        "kicker": "En direct · par app",
         "unit": "% / h"
       },
       "privacy": {
@@ -319,7 +319,7 @@
       },
       {
         "label": "Apps les plus gourmandes",
-        "desc": "Les apps qui consomment le plus, sur la page Saga : périodes 1 h / 24 h / 7 j, score façon Moniteur d'activité, rafraîchi toutes les 5 min.",
+        "desc": "Les apps qui consomment le plus, sur la page Saga : périodes Maintenant / 3 h / 5 j, en pourcentage ou en watts, avec la vue en direct rafraîchie environ toutes les 10 s.",
         "key": "energy-usage",
         "sensei": "yes",
         "aldente": "no",
@@ -533,7 +533,7 @@
       "kicker": "Fonctionnalité · 個人史",
       "heading": "Historique de la batterie du MacBook.",
       "headingItalic": "Cycles, charges, sauvetages : tout en contexte.",
-      "body": "Saga, c'est la vue au long cours sur la vie de votre batterie. Un graphique d'historique de charge consultable sur 24 h / 3 j / 7 j, un panneau Santé batterie (capacité, cycles, température, état), les apps les plus voraces de la dernière heure / journée / semaine, et des récaps hebdo et mensuelles façon Wrapped. Quand vous sauvez la batterie à temps (en branchant votre Mac dans les 30 minutes suivant une alerte critique), Sensei crée un reçu de sauvetage : une petite carte partageable pour marquer le coup.",
+      "body": "Saga, c'est la vue au long cours sur la vie de votre batterie. Un graphique d'historique de charge consultable sur 24 h / 3 j / 7 j, un panneau Santé batterie (capacité, cycles, température, état), les apps les plus voraces en ce moment ou sur les 3 dernières heures / 5 derniers jours, et des récaps hebdo et mensuelles façon Wrapped. Quand vous sauvez la batterie à temps (en branchant votre Mac dans les 30 minutes suivant une alerte critique), Sensei crée un reçu de sauvetage : une petite carte partageable pour marquer le coup.",
       "mockupCaption": "Statistiques à vie, historique, Wrapped. Tout sur la page Saga.",
       "why": "Des chiffres de batterie sans contexte ne sont que des chiffres. « 92 % de capacité » ne vous dit rien. Saga leur donne une histoire : à quoi ils ressemblaient la semaine dernière, quelles apps ont coûté le plus, quel jour vous avez failli tout perdre."
     },
@@ -549,8 +549,8 @@
       "kicker": "Fonctionnalité · 電力",
       "heading": "Consommation de batterie par app.",
       "headingItalic": "Voyez quelles applis coûtent le plus.",
-      "body": "Sur la page Saga, Sensei classe les plus gros consommateurs. Basculez entre la dernière heure, les dernières 24 heures ou 7 jours. Chaque app reçoit un score d'impact énergétique façon Moniteur d'activité (temps CPU mêlé aux réveils en veille), un libellé d'impact (Faible / Modéré / Élevé / Très élevé) et un filtre de recherche pour retrouver chaque processus auxiliaire de Chrome dans la liste. Les données sont relevées toutes les 5 minutes via l'usage des ressources par processus. Pas d'extension système, pas de hook noyau.",
-      "mockupCaption": "Top apps · 1 h / 24 h / 7 j · avec filtre. Rafraîchi toutes les 5 min.",
+      "body": "Sur la page Saga, Sensei classe les plus gros consommateurs. Basculez entre l'instant présent (en direct), les 3 dernières heures ou 5 jours — et faites passer chaque valeur du pourcentage d'une batterie pleine aux watts (consommation en direct) ou aux watt-heures (sur une période). Chaque app reçoit un score d'impact énergétique façon Moniteur d'activité (temps CPU mêlé aux réveils en veille), un libellé d'impact (Faible / Modéré / Élevé / Très élevé) et un filtre de recherche pour retrouver chaque processus auxiliaire de Chrome dans la liste. L'historique est relevé toutes les 5 minutes ; la vue Maintenant en direct se rafraîchit environ toutes les 10 secondes. Pas d'extension système, pas de hook noyau.",
+      "mockupCaption": "Top apps · Maintenant / 3 h / 5 j · en pourcentage ou en watts. Vue en direct rafraîchie ~10 s.",
       "why": "La perte de batterie n'est presque jamais la faute de la batterie. C'est un processus figé, un onglet qui ne dort pas, une visio qui ne lâche pas le GPU. Savoir quelle app vous coûte le plus, c'est la différence entre une journée de 4 heures et une de 7."
     }
   },
@@ -588,7 +588,7 @@
         },
         {
           "title": "Historique de batterie · 24 h",
-          "body": "Historique de charge, cartes de santé, reçus de sauvetage. Consommation par app · dernière heure. Tout sur votre Mac."
+          "body": "Historique de charge, cartes de santé, reçus de sauvetage. Consommation par app · en direct. Tout sur votre Mac."
         },
         {
           "title": "Charge + watts en direct dans la barre de menus",
@@ -631,7 +631,7 @@
         },
         {
           "title": "Historique batterie illimité",
-          "body": "Des périodes plus longues dans la chronologie principale (3 j, 7 j) et dans la répartition par app (24 h, 7 j) : pas seulement les 24 dernières heures."
+          "body": "Des périodes plus longues dans l'historique de charge (3 j, 7 j) et dans la répartition par app (3 h ou 5 j) : pas seulement la vue Maintenant en direct."
         },
         {
           "title": "Règles d'alerte personnalisées",

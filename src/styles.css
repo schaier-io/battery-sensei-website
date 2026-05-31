@@ -222,36 +222,68 @@ body,
   min-height: 100%;
 }
 
-/* Cross-page route transition. Chrome 111+ / Edge / Safari 18+ snapshot
-   the outgoing and incoming documents and cross-fade between them. The
-   default `auto` behaviour fades with a slight blur for ~400ms — calmer
-   than a hard cut between /, /checkout, /thanks. Falls back to instant
-   navigation in browsers without support (no JS shim needed). */
+/* Cross-page route transition. TanStack Router calls
+   `document.startViewTransition()` on client navigations
+   (`defaultViewTransition: true` in router.tsx). Full reloads use
+   `@view-transition { navigation: auto }`. Old page fades out while
+   the new one fades in on top — washi backdrop on the group stops
+   the white flash when both layers are semi-transparent. Browsers
+   without the API get a motion-based fallback via RouteFade.tsx. */
 @view-transition {
   navigation: auto;
+}
+
+::view-transition-group(root) {
+  background-color: var(--washi);
+  animation-duration: 410ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation-duration: 410ms;
   animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  animation-fill-mode: both;
+  mix-blend-mode: normal;
 }
 
-::view-transition-old(root) { animation-name: route-fade-out; }
-::view-transition-new(root) { animation-name: route-fade-in; }
+::view-transition-old(root) {
+  animation-name: route-fade-out;
+  z-index: 0;
+}
+
+::view-transition-new(root) {
+  animation-name: route-fade-in;
+  animation-delay: 150ms;
+  z-index: 1;
+}
 
 @keyframes route-fade-out {
-  to { opacity: 0; }
+  from { opacity: 1; }
+  to   { opacity: 0; }
 }
 @keyframes route-fade-in {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
 
+/* motion/react fallback shell (RouteFade.tsx) */
+.route-fade-shell {
+  min-height: 100%;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  /* Snap on full reloads — no cross-document fade. */
+  @view-transition {
+    navigation: none;
+  }
+
   ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation: none;
+  ::view-transition-new(root),
+  ::view-transition-group(root) {
+    animation: none !important;
+    animation-duration: 0ms !important;
+    animation-delay: 0ms !important;
   }
 }
 

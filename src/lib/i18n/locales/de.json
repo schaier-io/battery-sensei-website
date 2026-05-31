@@ -210,7 +210,7 @@
         "footerLabel": "{{months}} Monate · Normalbereich"
       },
       "drain": {
-        "kicker": "Letzte Stunde · pro App",
+        "kicker": "Live · pro App",
         "unit": "% / Std"
       },
       "privacy": {
@@ -319,7 +319,7 @@
       },
       {
         "label": "Akkuverbrauch pro App",
-        "desc": "Die stromhungrigsten Apps auf der Saga-Seite: 1h / 24h / 7d, Energie-Score wie in der Aktivitätsanzeige, alle 5 Min. aktualisiert.",
+        "desc": "Die stromhungrigsten Apps auf der Saga-Seite: Zeiträume Jetzt / 3 Std. / 5 T., wahlweise als Prozent oder Watt, mit live aktualisierter Ansicht etwa alle 10 s.",
         "key": "energy-usage",
         "sensei": "yes",
         "aldente": "no",
@@ -533,7 +533,7 @@
       "kicker": "Funktion · 個人史",
       "heading": "MacBook-Akkuverlauf.",
       "headingItalic": "Zyklen, Ladungen, Rettungen, alles im Kontext.",
-      "body": "Saga ist der Langzeitblick auf das Leben Ihres Akkus. Ein Diagramm für den Ladeverlauf, umschaltbar zwischen 24 h / 3 d / 7 d, ein Bereich zum Akkuzustand (Kapazität, Zyklen, Temperatur, Zustand), die stromhungrigsten Apps der letzten Stunde, des letzten Tages und der letzten Woche sowie wöchentliche und monatliche Rückblicke im Wrapped-Stil. Wenn Sie den Akku rechtzeitig retten, also innerhalb von 30 Minuten nach einer kritischen Warnung anschließen, erstellt Sensei einen Rettungsmoment: eine kleine Karte, die den Moment festhält.",
+      "body": "Saga ist der Langzeitblick auf das Leben Ihres Akkus. Ein Diagramm für den Ladeverlauf, umschaltbar zwischen 24 h / 3 d / 7 d, ein Bereich zum Akkuzustand (Kapazität, Zyklen, Temperatur, Zustand), die stromhungrigsten Apps jetzt oder über die letzten 3 Stunden / 5 Tage sowie wöchentliche und monatliche Rückblicke im Wrapped-Stil. Wenn Sie den Akku rechtzeitig retten, also innerhalb von 30 Minuten nach einer kritischen Warnung anschließen, erstellt Sensei einen Rettungsmoment: eine kleine Karte, die den Moment festhält.",
       "mockupCaption": "Lebenslange Statistiken, Ladeverlauf, Rückblicke im Wrapped-Stil. Alles auf der Saga-Seite.",
       "why": "Akkuzahlen ohne Kontext bleiben bloße Zahlen. „92 % Kapazität“ sagt allein wenig. Saga gibt derselben Zahl eine Geschichte: wie sie vor einer Woche aussah, welche Apps am meisten Akkulaufzeit gekostet haben und an welchem Tag es fast knapp geworden wäre."
     },
@@ -549,8 +549,8 @@
       "kicker": "Funktion · 電力",
       "heading": "Akkuverbrauch pro App.",
       "headingItalic": "Sehen Sie, welche Apps am meisten ziehen.",
-      "body": "Auf der Saga-Seite listet Sensei die größten Stromverbraucher. Wechseln Sie zwischen der letzten Stunde, den letzten 24 Stunden oder 7 Tagen. Jede App bekommt einen Energie-Score im Stil der Aktivitätsanzeige (CPU-Zeit, kombiniert mit Aufwachvorgängen im Leerlauf), eine Verbrauchsstufe (Niedrig / Mittel / Hoch / Sehr hoch) und einen Suchfilter, damit Sie jeden Chrome-Hilfsprozess in der Liste finden. Gemessen wird alle 5 Minuten über die prozessbezogene Auslastung. Keine Systemerweiterung, keine Kernel-Hooks.",
-      "mockupCaption": "Top-Apps · 1h / 24h / 7d · mit Suchfilter. Alle 5 Min. aktualisiert.",
+      "body": "Auf der Saga-Seite listet Sensei die größten Stromverbraucher. Wechseln Sie zwischen jetzt (live), den letzten 3 Stunden oder 5 Tagen – und schalten Sie jeden Wert zwischen Prozent einer vollen Ladung und Watt (aktuelle Leistung) oder Wattstunden (über einen Zeitraum) um. Jede App bekommt einen Energie-Score im Stil der Aktivitätsanzeige (CPU-Zeit, kombiniert mit Aufwachvorgängen im Leerlauf), eine Verbrauchsstufe (Niedrig / Mittel / Hoch / Sehr hoch) und einen Suchfilter, damit Sie jeden Chrome-Hilfsprozess in der Liste finden. Der Verlauf wird alle 5 Minuten erfasst; die Live-Ansicht „Jetzt“ aktualisiert sich etwa alle 10 Sekunden. Keine Systemerweiterung, keine Kernel-Hooks.",
+      "mockupCaption": "Top-Apps · Jetzt / 3 Std. / 5 T. · Prozent oder Watt. Live-Ansicht etwa alle 10 s aktualisiert.",
       "why": "Wenn der Akku schnell leer wird, liegt es fast nie am Akku selbst. Meist ist es ein hängender Hilfsprozess, ein Tab, der nicht schlafen will, oder ein Videoanruf, der die GPU nicht freigibt. Zu wissen, welche App am meisten zieht, kann den Unterschied zwischen vier und sieben Stunden Laufzeit ausmachen."
     }
   },
@@ -588,7 +588,7 @@
         },
         {
           "title": "24-Stunden-Akkuverlauf",
-          "body": "Ladeverlauf, Kacheln zum Akkuzustand, Rettungsmomente und Verbrauch pro App in der letzten Stunde. Alles lokal."
+          "body": "Ladeverlauf, Kacheln zum Akkuzustand, Rettungsmomente und Verbrauch pro App in Echtzeit. Alles lokal."
         },
         {
           "title": "Menüleiste: Ladung + Watt live",
@@ -631,7 +631,7 @@
         },
         {
           "title": "Unbegrenzter Akkuverlauf",
-          "body": "Längere Zeiträume in der Zeitleiste (3 Tage, 7 Tage) und App-Aufschlüsselungen über 24 h oder 7 Tage, nicht nur die letzten 24 Stunden."
+          "body": "Längere Zeiträume im Ladeverlauf (3 Tage, 7 Tage) und App-Aufschlüsselungen über 3 Std. oder 5 Tage, nicht nur die Live-Ansicht „Jetzt“."
         },
         {
           "title": "Eigene Warnregeln",

@@ -31,6 +31,7 @@ const criticalFontCss = `
 @font-face{font-family:'Noto Serif JP';font-style:normal;font-weight:900;font-display:swap;src:url(/fonts/noto-serif-jp-900.woff2) format('woff2');}
 `
 import { FAQ_ITEMS } from '#/components/sections/FAQ'
+import { RouteFade } from '#/components/RouteFade'
 import { I18nProvider } from '#/lib/i18n/I18nProvider'
 import i18n, { DEFAULT_LOCALE, HTML_LANG, isLocale, loadLocale, localeFromPath } from '#/lib/i18n'
 import { RouteErrorBoundary, RouteNotFound } from '#/components/CatchBoundary'
@@ -387,7 +388,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <style dangerouslySetInnerHTML={{ __html: criticalFontCss }} />
       </head>
       <body>
-        <I18nProvider>{children}</I18nProvider>
+        <I18nProvider>
+          <RouteFade>{children}</RouteFade>
+        </I18nProvider>
         {/* Vercel Web Analytics — cookieless, no PII, aggregate counts only.
             No-op outside Vercel (dev console logs a notice and does nothing). */}
         <Analytics />

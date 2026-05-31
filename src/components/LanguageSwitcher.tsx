@@ -4,6 +4,7 @@ import { Check, ChevronDown } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useRouterState } from '@tanstack/react-router'
 import { SUPPORTED_LOCALES, loadLocale, persistLocale, type Locale } from '#/lib/i18n'
+import { runViewTransition } from '#/lib/prefers-reduced-motion'
 import { useLocaleSwitcher } from '#/lib/i18n/I18nProvider'
 
 // Native endonym shown next to each option — readable in its own script.
@@ -170,13 +171,7 @@ export function LanguageSwitcher({
       // Warm the chunk first so the transition's frozen frame is short (the
       // `beforeLoad` await resolves from cache), then cross-fade.
       void loadLocale(loc).then(() => {
-        const startVT = (
-          document as Document & {
-            startViewTransition?: (cb: () => void | Promise<void>) => unknown
-          }
-        ).startViewTransition
-        if (startVT) startVT.call(document, run)
-        else void run()
+        runViewTransition(run)
       })
       return
     }

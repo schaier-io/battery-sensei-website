@@ -1,4 +1,5 @@
 import { createRouter as createTanStackRouter } from '@tanstack/react-router'
+import { prefersReducedMotion } from '#/lib/prefers-reduced-motion'
 import { routeTree } from './routeTree.gen'
 
 export function getRouter() {
@@ -8,9 +9,9 @@ export function getRouter() {
     defaultPreload: 'intent',
     defaultPreloadStaleTime: 0,
     // Cross-fade between routes on client navigation (document.startViewTransition).
-    // The fade timing/keyframes live in styles.css (::view-transition-*(root)).
-    // Cross-document loads are handled separately by `@view-transition` in CSS.
-    defaultViewTransition: true,
+    // Timing lives in styles.css. Disabled when prefers-reduced-motion (snap).
+    // RouteFade keeps this in sync if the OS preference changes mid-session.
+    defaultViewTransition: !prefersReducedMotion(),
   })
 
   return router
