@@ -435,6 +435,35 @@
         length="21162626"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.5.1</title>
+      <pubDate>Mon, 01 Jun 2026 16:52:10 +0000</pubDate>
+      <sparkle:version>56</sparkle:version>
+      <sparkle:shortVersionString>1.5.1</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.5.1</h1>
+<p>Memory joins the System load panel, the power-flow readout goes live, and a few rough edges get smoothed.</p>
+<h2>Memory in System load</h2>
+<p>The System load panel now shows <strong>Memory</strong> alongside CPU, GPU, and disk — a live RAM-used percentage with the same one-minute graph. Open it for an expandable breakdown: app, wired, and compressed memory, used vs. total, and swap in use. The CPU, GPU, disk, and memory detail breakdowns are now all collapsible.</p>
+<h2>Live power flow</h2>
+<p>The Power flow panel now refreshes every few seconds instead of only on charger changes, so adapter, system, and battery numbers track what your Mac is doing in real time. The <strong>System</strong> figure always reflects the true system load, and on battery the discharge reading shows the actual system draw.</p>
+<h2>Smaller touches</h2>
+<ul>
+<li>App energy detail: the &quot;Measured · Performance-biased&quot; tag now lives in the detail popover (not the compact rows), and the close button sits at the top-right.</li>
+<li>Meeting Battery Guard re-forecasts immediately when you add, edit, or delete an event in Calendar.app.</li>
+<li>Clearer Travel Mode summary copy.</li>
+</ul>
+<p>Marketing 1.5.0 → 1.5.1, build 55 → 56.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.5.1/Battery-Sensei.pkg"
+        sparkle:edSignature="74dZUH/hZXv6mFWJFaDIGBKqy78ch6/uHFO9KYViVsE/KID6iKCWubH1M2yT5Ti4VTr72LSKMAgaqWPlQbOiDg=="
+        length="21193918"
+        type="application/octet-stream" />
+    </item>
+
 
 
 

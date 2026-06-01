@@ -1,7 +1,7 @@
 {
-  "version": "1.5.0",
-  "publishedAt": "2026-05-31T15:04:29Z",
+  "version": "1.5.1",
+  "publishedAt": "2026-06-01T16:52:10Z",
   "minimumSystemVersion": "13.0",
   "downloadUrl": "/download/latest",
-  "releaseNotesUrl": "https://github.com/schaier-io/battery-sensei-releases/releases/tag/v1.5.0"
+  "releaseNotesUrl": "https://github.com/schaier-io/battery-sensei-releases/releases/tag/v1.5.1"
 }
