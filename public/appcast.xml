@@ -463,6 +463,31 @@
         length="21193918"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.5.2</title>
+      <pubDate>Tue, 02 Jun 2026 13:39:14 +0000</pubDate>
+      <sparkle:version>57</sparkle:version>
+      <sparkle:shortVersionString>1.5.2</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.5.2</h1>
+<p>Clearer per-app power in the live view, plus a tidier window.</p>
+<h2>Power numbers that add up</h2>
+<p>In the live <strong>Now</strong> view, the &quot;Top power-hungry apps&quot; list now always shows the <strong>System &amp; hardware</strong> draw at the top and a <strong>remaining apps</strong> row at the bottom — not just when they happen to be large. Switch to percent and every row (apps, system, remaining) is shown as a share of the whole-Mac draw, so the list adds up to ~100%. The 3h and 5d views still report each app as a share of a full battery.</p>
+<h2>Smaller touches</h2>
+<ul>
+<li>The window now shows only the close button — the zoom and minimize buttons are gone.</li>
+</ul>
+<p>Marketing 1.5.1 → 1.5.2, build 56 → 57.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.5.2/Battery-Sensei.pkg"
+        sparkle:edSignature="sTL+xNyoEnUpLWcXlaCNl0bHd1nETk17Il3xOQgr3V+ja88z7a5TuD8gsgiV2KtTprmetaBEyhZPoh6A8wRiAg=="
+        length="21197195"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
