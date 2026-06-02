@@ -487,6 +487,31 @@
         length="21197195"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.5.3</title>
+      <pubDate>Tue, 02 Jun 2026 13:50:21 +0000</pubDate>
+      <sparkle:version>58</sparkle:version>
+      <sparkle:shortVersionString>1.5.3</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.5.3</h1>
+<p>Polish for the live power list.</p>
+<h2>Smaller touches</h2>
+<ul>
+<li>Fixed the leaderboard bars briefly overflowing when switching between the Now, 3h, and 5d windows.</li>
+<li>The <strong>System &amp; hardware</strong> row no longer draws a bar — just its value.</li>
+<li>The live per-app share now shows one decimal of precision (e.g. 42.3%).</li>
+</ul>
+<p>Marketing 1.5.2 → 1.5.3, build 57 → 58.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.5.3/Battery-Sensei.pkg"
+        sparkle:edSignature="bA0JzPzECzjhs+cRoqd2frZQbL9jgSpNkHykyxu6hs4duBQIInn3mscZYaZATbnthkzt32CrsNVJtNxp4X7NAw=="
+        length="21198321"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
