@@ -511,6 +511,25 @@
         length="21198321"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.5.4</title>
+      <pubDate>Tue, 02 Jun 2026 14:14:34 +0000</pubDate>
+      <sparkle:version>59</sparkle:version>
+      <sparkle:shortVersionString>1.5.4</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.5.4</h1>
+<p>Small polish and refinements under the hood.</p>
+<p>Marketing 1.5.3 → 1.5.4, build 58 → 59.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.5.4/Battery-Sensei.pkg"
+        sparkle:edSignature="4O67jkjQBnA03Q6/O+3vfMgy6GQRmnCl6JF6mYPM0M7pf5HcG9AibMjw3KXsY6wtl6lN2ZjSAL5RCHHCZuhJAQ=="
+        length="21219950"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
