@@ -529,6 +529,37 @@
         length="21219950"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.5.5</title>
+      <pubDate>Tue, 02 Jun 2026 15:12:09 +0000</pubDate>
+      <sparkle:version>60</sparkle:version>
+      <sparkle:shortVersionString>1.5.5</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.5.5</h1>
+<p>A cleaner menu-bar and dropdown, plus a few visual fixes.</p>
+<h2>Menu bar &amp; dropdown</h2>
+<ul>
+<li>The menu-bar icon is calmer — no charging bolt cluttering the battery glyph (the charge-limit leaf and thermal indicator stay).</li>
+<li>The dropdown status line leads with a battery icon and shows whichever of percentage / time the menu-bar icon isn&#x27;t already showing, with the meeting forecast (icon + short word) right after.</li>
+<li>The meeting forecast now lives inline on the status line, on battery only.</li>
+</ul>
+<h2>Smaller touches</h2>
+<ul>
+<li>Pro features are now marked with a badge next to each feature title.</li>
+<li>Tidied the warnings control, app-language picker, and Meeting Battery Guard spacing.</li>
+<li>App language now sits above Theme in General settings.</li>
+</ul>
+<p>Marketing 1.5.4 → 1.5.5, build 59 → 60.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.5.5/Battery-Sensei.pkg"
+        sparkle:edSignature="qLbJUJbVl+z3qVaQmN8NgVqk2+5QT2S9I5DK9wc80SPFIodmmSJykfn4ZMoMLINYi0ngizRmk+UGZJXwC/fDAw=="
+        length="21222341"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
