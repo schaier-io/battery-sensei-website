@@ -31,7 +31,7 @@
 
 ### Premium (active during trial, then unlocked by Lifetime license)
 
-- **Meeting Battery Guard.** Calendar-aware warnings — reads upcoming calendar events on-device and fires up to four warnings (30 / 15 / 5 / 0 minutes before) when the battery won't survive a meeting, with a concrete plug-in remedy ("22 min on the charger and you're clear through")
+- **Meeting Battery Guard.** Calendar-aware warnings — reads upcoming calendar events on-device and fires up to four warnings (30 / 15 / 5 / 1 minute before) when the battery won't survive a meeting, with a concrete plug-in remedy ("22 min on the charger and you're clear through")
 - **Unlimited battery history.** 3-day and 7-day windows on the main timeline; 24-hour and 7-day windows on the per-app breakdown
 - **Custom warning rules.** Add, remove, and edit threshold percentages (free is limited to switching between the three presets)
 - **Lifetime updates** + priority email support
