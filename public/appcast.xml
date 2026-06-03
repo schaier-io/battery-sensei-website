@@ -559,6 +559,35 @@
         length="21222341"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.6.0</title>
+      <pubDate>Wed, 03 Jun 2026 21:53:47 +0000</pubDate>
+      <sparkle:version>61</sparkle:version>
+      <sparkle:shortVersionString>1.6.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.6.0</h1>
+<p>The menu-bar status indicators are back — now optional — on a steadier battery glyph.</p>
+<h2>Menu bar</h2>
+<ul>
+<li>New <strong>Show status indicators</strong> toggle in General settings: show or hide the symbols drawn inside the menu-bar battery — the charging bolt (light blue when plugged in, white while charging), the charge-limit leaf, and the temperature symbol. On by default.</li>
+<li>The battery glyph now holds a steady width as the charge level changes and as indicators appear or disappear, so the menu bar stops shifting around. The reading is a lighter weight and centred, with the indicator tucked to its right.</li>
+</ul>
+<h2>Smaller touches</h2>
+<ul>
+<li>Launching Battery Sensei again while it&#x27;s already running now reopens Settings.</li>
+<li>Smoother app-power sampling and a few stability fixes under the hood.</li>
+</ul>
+<p>Marketing 1.5.5 → 1.6.0, build 60 → 61.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.6.0/Battery-Sensei.pkg"
+        sparkle:edSignature="XHOrYmLHV5Ztd5Xc4jA1UfP/ZNYJXHGiBY75JS7HyItorynfzg5BIhLMmkW7x9C/UtfJsHwVK8jcJD+WNJxlAw=="
+        length="21261481"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
