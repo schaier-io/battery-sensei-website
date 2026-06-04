@@ -587,6 +587,34 @@
         length="21261481"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.6.1</title>
+      <pubDate>Thu, 04 Jun 2026 13:43:38 +0000</pubDate>
+      <sparkle:version>62</sparkle:version>
+      <sparkle:shortVersionString>1.6.1</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.6.1</h1>
+<p>Internal refactoring and a couple of small fixes.</p>
+<h2>Fixes</h2>
+<ul>
+<li>The meeting-alert <strong>Preview</strong> button now always shows the low-battery warning it&#x27;s meant to demonstrate, even when your real next meeting would comfortably survive on the current charge.</li>
+<li>Turning <strong>Show menu bar icon</strong> off now fades the dependent status-indicators row out cleanly before the layout collapses, instead of the row jumping as it disappeared. Turning it back on expands the space first, then fades the row in.</li>
+</ul>
+<h2>Under the hood</h2>
+<ul>
+<li>A large internal refactor: the app&#x27;s central model was split into focused, independently-testable pieces (licensing, warnings, app-power, battery status, charging control, settings, saga), and the biggest source files were broken up. No behaviour change — purely structural, with added unit tests.</li>
+</ul>
+<p>Marketing 1.6.0 → 1.6.1, build 61 → 62.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.6.1/Battery-Sensei.pkg"
+        sparkle:edSignature="9IXCCl/MQkFO0DIh1GFRD42E1/B0zFOHvbNXL97IuAb6kyas13tgQBDDkBdxK6/RD7X3C1WsWJL7lMvGc/+YDw=="
+        length="21303049"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
