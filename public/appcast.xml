@@ -614,6 +614,31 @@
         length="21303049"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.6.2</title>
+      <pubDate>Thu, 04 Jun 2026 15:14:07 +0000</pubDate>
+      <sparkle:version>63</sparkle:version>
+      <sparkle:shortVersionString>1.6.2</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.6.2</h1>
+<p>Menu bar polish and time-remaining fixes.</p>
+<h2>Fixes</h2>
+<ul>
+<li>The menu bar battery icon now keeps a <strong>fixed width</strong> — it no longer subtly resizes or jumps as the battery state changes, and its contents stay centered instead of overflowing the icon.</li>
+<li>When plugged in but <strong>not actively charging</strong> (e.g. held at your charge limit), the menu bar now shows a clear power-plug glyph instead of a hard-to-see lightning bolt.</li>
+<li><strong>Time remaining</strong> menu bar mode is now strictly time-based: it never falls back to a percentage, shows the time until full while charging, holds the last estimate through the brief gaps where macOS reports none, and shows a &quot;⋯&quot; while the estimate is still being calculated instead of going blank.</li>
+</ul>
+<p>Marketing 1.6.1 → 1.6.2, build 62 → 63.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.6.2/Battery-Sensei.pkg"
+        sparkle:edSignature="11CYBzXteHK/wm8uMlC/bIbjlYDrnNSg8Omiqj7BQRKwUtZEE0Wzm67FA5nleoq9tbmpDviBnC73yRnoY7/pDg=="
+        length="21304947"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
