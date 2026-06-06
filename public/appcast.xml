@@ -638,6 +638,31 @@
         length="21304947"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.6.3</title>
+      <pubDate>Sat, 06 Jun 2026 14:46:48 +0000</pubDate>
+      <sparkle:version>64</sparkle:version>
+      <sparkle:shortVersionString>1.6.3</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.6.3</h1>
+<p>Menu bar alignment and rescue receipt polish.</p>
+<h2>Fixes</h2>
+<ul>
+<li>The menu bar battery icon is now slightly narrower for a tidier fit, and its <strong>text sits perfectly centered</strong> — the percentage and time-remaining readouts no longer drift to different heights or sit low in the icon.</li>
+<li>The <strong>Battery Rescue Receipt</strong> now auto-dismisses faster (after 3 seconds), but stays open as long as your pointer is hovering it — so it never vanishes mid-read.</li>
+<li>The receipt&#x27;s <strong>&quot;Esc to close&quot; keycap</strong> is now clearly legible against the receipt background.</li>
+</ul>
+<p>Marketing 1.6.2 → 1.6.3, build 63 → 64.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.6.3/Battery-Sensei.pkg"
+        sparkle:edSignature="ZNMcdW/R1PW8TuqgINJTj/GnYwVdUKZd208oW0Pf5TdDMEuRE38F1VK+pP8xyxrwYjRT9XATlH+YvXTxKjZ0Ag=="
+        length="21306061"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
