@@ -662,6 +662,45 @@
         length="21306061"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.7.0</title>
+      <pubDate>Tue, 09 Jun 2026 17:14:29 +0000</pubDate>
+      <sparkle:version>65</sparkle:version>
+      <sparkle:shortVersionString>1.7.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.7.0</h1>
+<p>Honors: your battery saves and care, turned into a collection — plus a tidier layout.</p>
+<h2>Honors &amp; achievements</h2>
+<ul>
+<li>Every <strong>battery rescue</strong> is now kept as a browsable collection with its own <strong>context-aware story</strong> and an S/A/B/C grade — instead of only ever showing the latest one.</li>
+<li>A new <strong>Honors</strong> collection of ~50 earnable <strong>seals</strong> lives in the Saga tab: rescues, healthy-charging streaks, longevity milestones, charging habits, records, and more — each a collectible seal ranked Bronze → Silver → Gold → Jade → Dragon.</li>
+<li>Earning a seal shows a celebration that <strong>reveals a rotating 3D trophy</strong>, and you can <strong>share</strong> any seal. Locked seals appear as silhouettes with progress, so you can see what&#x27;s next.</li>
+<li><strong>Records &amp; streak band</strong> at a glance: closest call, fastest reflex, busiest day, current healthy streak, and seals earned.</li>
+<li>Celebrations are <strong>never intrusive</strong> — they wait for a calm moment (e.g. right after you plug in) and there&#x27;s a new <strong>&quot;Achievement pop-ups&quot;</strong> switch in General settings to turn them off entirely (seals are still tracked).</li>
+<li>Tracking <strong>starts fresh with this update</strong> — achievements count what happens from here on, not your past history.</li>
+</ul>
+<h2>Layout</h2>
+<ul>
+<li><strong>Today</strong> now shows your live monitoring — <strong>Power flow</strong> (above the quick actions), system load, charge over the last 24 hours, and top power-hungry apps — with the redundant wattage readout removed.</li>
+<li><strong>Saga</strong> leads with a combined <strong>Battery Health</strong> card: the metric tiles are always visible, and the care <strong>recommendations</strong> tuck into an expandable section. Statistics and the Honors collection now share one card.</li>
+<li><strong>Warnings</strong> leads with <strong>Meeting Battery Guard</strong>, decluttered — the set-once notification options (style, dismissal, titles) collapse behind a <strong>Notification settings</strong> disclosure.</li>
+</ul>
+<h2>Fixes &amp; polish</h2>
+<ul>
+<li>Charge-history chart: the hover tooltip now sits in front of the crosshair line instead of behind it.</li>
+<li>Full <strong>German, Spanish, French, and Japanese</strong> translations for everything new.</li>
+</ul>
+<p>Marketing 1.6.3 → 1.7.0, build 64 → 65.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.7.0/Battery-Sensei.pkg"
+        sparkle:edSignature="UewXAoP0H4YG7BsWCpgprKLeeW4uS4FX+7aaivy7GYENJsxavHMVB9m2XsGK/rfkISxvAEHVVzIVzX5id325Aw=="
+        length="21738974"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
