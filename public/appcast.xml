@@ -700,6 +700,33 @@
         length="21756186"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.7.1</title>
+      <pubDate>Tue, 09 Jun 2026 21:14:40 +0000</pubDate>
+      <sparkle:version>66</sparkle:version>
+      <sparkle:shortVersionString>1.7.1</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.7.1</h1>
+<p>A new seal to chase and a calmer Battery Health card.</p>
+<h2>Honors &amp; achievements</h2>
+<ul>
+<li>New <strong>Busy Bee</strong> seal (Jade): rescue your battery <strong>five times in a single day</strong>. The hive never rests.</li>
+</ul>
+<h2>Battery Health</h2>
+<ul>
+<li>The <strong>Temperature</strong> tile has been removed from the Battery Health card — it left three focused tiles: <strong>Capacity</strong>, <strong>Condition</strong>, and <strong>Cycles</strong>. Live temperature still appears on the Today screen.</li>
+</ul>
+<p>Marketing 1.7.0 → 1.7.1, build 65 → 66.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.7.1/Battery-Sensei.pkg"
+        sparkle:edSignature="oW/gf/PzA1OwgVxHb3WiF8ngLbOccUW4jmdsfzzFql2eQjPLoyF0DbYnBzRONBbBCdew33HOXkqNoUJuhWXFAQ=="
+        length="21755753"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
