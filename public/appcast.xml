@@ -749,6 +749,29 @@
         length="21757308"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.7.3</title>
+      <pubDate>Wed, 10 Jun 2026 14:47:12 +0000</pubDate>
+      <sparkle:version>68</sparkle:version>
+      <sparkle:shortVersionString>1.7.3</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.7.3</h1>
+<p>A sharper software-update experience.</p>
+<h2>Fixes &amp; polish</h2>
+<ul>
+<li>The app icon shown in the <strong>software-update window</strong> is now full resolution instead of a low-resolution version. (Because the updater shows the currently-installed app&#x27;s icon, the crisp icon appears when updating from this version onward.)</li>
+</ul>
+<p>Marketing 1.7.2 → 1.7.3, build 67 → 68.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.7.3/Battery-Sensei.pkg"
+        sparkle:edSignature="Ai+JfLIChIf3AhP/ljcH2qPuBtYubJ+swv3JvORA4aRHVziDUmk+eqp0aLpj9Er0wM5RQjfpIGR+Mee++KhxCQ=="
+        length="22271194"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
