@@ -771,6 +771,28 @@
         length="22271194"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.7.4</title>
+      <pubDate>Wed, 10 Jun 2026 17:53:13 +0000</pubDate>
+      <sparkle:version>69</sparkle:version>
+      <sparkle:shortVersionString>1.7.4</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.7.4</h1>
+<h2>Fixes &amp; polish</h2>
+<ul>
+<li>The <strong>Customize warnings</strong> section now carries a <strong>Pro</strong> badge, so it&#x27;s clear at a glance that fine-tuning thresholds, styles, and timing is a Pro feature — consistent with the other Pro surfaces.</li>
+</ul>
+<p>Marketing 1.7.3 → 1.7.4, build 68 → 69.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.7.4/Battery-Sensei.pkg"
+        sparkle:edSignature="oHTiFAK/K30taNPUIlxTWv8mKuFHxjSWom0Ajoez6Gqnvi21GICLxsWldaoT9621FEyT+o7qUBIomKewQIH+Aw=="
+        length="22271647"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
