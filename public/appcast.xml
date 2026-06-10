@@ -836,6 +836,30 @@
         length="22827887"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.8.1</title>
+      <pubDate>Wed, 10 Jun 2026 21:39:55 +0000</pubDate>
+      <sparkle:version>71</sparkle:version>
+      <sparkle:shortVersionString>1.8.1</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.8.1</h1>
+<p>A quick follow-up polishing the new Today hero.</p>
+<h2>Polish</h2>
+<ul>
+<li><strong>Today hero, tidied</strong>: the <strong>Pause warnings</strong> and <strong>Travel Mode</strong> actions now sit at the top, and the live system-load metrics (CPU, GPU, memory, disk) read as one compact, evenly-styled set with tighter labels. The battery-temperature tile was removed to cut clutter — it still drives the heat guard and warnings behind the scenes.</li>
+<li><strong>Honors</strong>: the stat chips (Seals, Closest Call, Fastest Reflex, Healthy Streak) no longer clip their labels on narrower windows.</li>
+</ul>
+<p>Marketing 1.8.0 → 1.8.1, build 70 → 71.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.8.1/Battery-Sensei.pkg"
+        sparkle:edSignature="pxJ+eeokSo1x+/EVc8zgNenQpj1vO7VxSxCesq7kgf9MMWfU2A8SHudbqpgwfgH4+ffnAtiLl5uR9rSRAtSNBw=="
+        length="22791527"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
