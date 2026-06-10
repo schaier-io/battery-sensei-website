@@ -792,6 +792,51 @@
         length="22271647"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.8.0</title>
+      <pubDate>Wed, 10 Jun 2026 21:14:52 +0000</pubDate>
+      <sparkle:version>70</sparkle:version>
+      <sparkle:shortVersionString>1.8.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.8.0</h1>
+<p>A calmer, more focused Today tab — live status up front, the knobs tucked into Settings.</p>
+<h2>Today, simplified</h2>
+<ul>
+<li><strong>Today now leads with live status</strong>: the battery hero now carries temperature <strong>and</strong> live system load (CPU, GPU, memory, disk) together in one place, with the standalone &quot;System load&quot; card removed.</li>
+<li><strong>Pause warnings</strong> and <strong>Travel Mode</strong> are now two compact actions right in the hero, instead of two full-width rows.</li>
+<li>Removed the redundant <strong>&quot;Status / On battery&quot;</strong> tile — the Power Flow panel already shows charging vs. discharging.</li>
+<li>The old <strong>Quick actions</strong> card is gone; its controls moved to Settings (below).</li>
+</ul>
+<h2>Charging controls live in Settings</h2>
+<ul>
+<li><strong>Optimised Battery Charging</strong>, your <strong>daily charge limit</strong>, and the <strong>pause-charging-when-hot</strong> heat guard now sit together in a single <strong>Charging</strong> section in Settings.</li>
+<li>The charge-limit control is clearer: the redundant slider is gone (presets + the −/+ steppers remain), and the recommended cap is now stated plainly as <strong>&quot;85% · Recommended&quot;</strong> instead of a checkmark that looked like a second selection.</li>
+<li>The heat guard collapses behind its own toggle, so it stays out of the way until you turn it on.</li>
+</ul>
+<h2>Honors</h2>
+<ul>
+<li>Fixed the <strong>stat chips</strong> and <strong>seal dates</strong> that could clip (&quot;FASTEST REFL…&quot;, &quot;Earned 10. J…&quot;) and tightened the label spacing so they read cleanly.</li>
+</ul>
+<h2>Fixes &amp; polish</h2>
+<ul>
+<li><strong>Re-running the Setup Wizard</strong> now has a clear close button and responds to <strong>Esc</strong> (the first-run wizard stays a deliberate flow).</li>
+<li><strong>Top power-hungry apps</strong>: the long tail of apps drawing under 0.1% now folds into a single expandable row instead of a wall of &quot;0.0%&quot;.</li>
+<li>The chart and app-list <strong>time-range switchers</strong> now share one consistent, clearly-tappable style.</li>
+<li>The home <strong>Pro</strong> thank-you badge now retires a week after activation; your Pro status still lives in Settings → License.</li>
+<li>Achievement pop-up and seal-detail <strong>buttons are now evenly sized</strong>.</li>
+<li>Added an accessibility label to the charge-limit steppers, and full <strong>German, Spanish, French, and Japanese</strong> translations for everything new.</li>
+</ul>
+<p>Marketing 1.7.4 → 1.8.0, build 69 → 70.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.8.0/Battery-Sensei.pkg"
+        sparkle:edSignature="EVvHIYHm+M0EiQlTreHysibeFnhIz8O9A48aUEYJY+MyWluGqYBuidxuoYlDcju1NZUf0gY4MDB4diHip0KQBQ=="
+        length="22827887"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
