@@ -859,6 +859,30 @@
         length="22791527"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.8.2</title>
+      <pubDate>Sat, 13 Jun 2026 16:14:29 +0000</pubDate>
+      <sparkle:version>72</sparkle:version>
+      <sparkle:shortVersionString>1.8.2</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.8.2</h1>
+<p>Much lighter on the battery.</p>
+<h2>Performance</h2>
+<ul>
+<li>Fixed a significant background energy drain: the app&#x27;s live animations (power-flow dots, the hero-ring shimmer, the wattage bar) kept rendering at full frame rate even while the window was closed, keeping the CPU busy continuously. They now pause whenever the window isn&#x27;t on screen — <strong>idle CPU use with the window closed drops from ~30% to essentially zero.</strong></li>
+<li>The live system-load sampling now runs only while the window is open, instead of every few seconds around the clock.</li>
+</ul>
+<p>Marketing 1.8.1 → 1.8.2, build 71 → 72.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.8.2/Battery-Sensei.pkg"
+        sparkle:edSignature="FrtF9zUqCOvoAxKxmdEszwaZGuT2WxnWz8YiDQ6Bh3Up+uEL4cZrI4Alf5d57kTYdEUZ47yVOxmZCsMz50ADAA=="
+        length="22797377"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
