@@ -882,6 +882,39 @@
         length="22797377"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.8.3</title>
+      <pubDate>Sat, 13 Jun 2026 18:38:05 +0000</pubDate>
+      <sparkle:version>73</sparkle:version>
+      <sparkle:shortVersionString>1.8.3</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.8.3</h1>
+<p>A big battery and performance pass.</p>
+<h2>Performance</h2>
+<ul>
+<li><strong>Major drop in background energy use.</strong> With the window closed, Battery Sensei now does almost nothing — idle CPU goes from roughly a third of a core down to near zero. The live animations, system‑load sampling, and recap recomputation all pause when you&#x27;re not looking, instead of running around the clock.</li>
+<li>Live animations are <strong>lighter (30fps)</strong> while the window is open.</li>
+<li>The app now lets macOS <strong>throttle it while the display is asleep</strong>, and stays fully responsive whenever the screen is on (battery warnings are unaffected while you&#x27;re using your Mac).</li>
+</ul>
+<h2>App Power</h2>
+<ul>
+<li>The per‑app detail chart now plots <strong>real watts</strong> (on Apple silicon) instead of an abstract impact score, so a power‑hungry app&#x27;s curve clearly sits above a light one.</li>
+</ul>
+<h2>Today</h2>
+<ul>
+<li>The live <strong>system‑load strip</strong> now sits above the quick actions.</li>
+</ul>
+<p>Marketing 1.8.2 → 1.8.3, build 72 → 73.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.8.3/Battery-Sensei.pkg"
+        sparkle:edSignature="inU1Bkh//mSBXrVTqOlnHnGsvuxGqKx5ar9w6g1ASNSLbtvrSq22L1XFF58/MGdDX/IGNWL4qCeHOnat0U2CDw=="
+        length="22808887"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
