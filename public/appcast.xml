@@ -942,6 +942,41 @@
         length="22916368"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.8.5</title>
+      <pubDate>Thu, 02 Jul 2026 13:32:54 +0000</pubDate>
+      <sparkle:version>75</sparkle:version>
+      <sparkle:shortVersionString>1.8.5</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.8.5</h1>
+<p>A refinement release: the charge-limit control is simpler, small battery drainers are easier to tell apart, and achievement buttons get a brushed-metal look.</p>
+<h2>Charging</h2>
+<ul>
+<li><strong>The charge-limit control is now a single, clearer row.</strong> The old percentage readout, plus/minus steppers, and the separate &quot;recommended&quot; caption have been folded into one tidy set of preset chips — with the Sensei-recommended cap marked right on its own chip. A short line explains what the cap actually does: charging pauses at your limit and resumes when the level dips below it.</li>
+</ul>
+<h2>App Power</h2>
+<ul>
+<li><strong>Small battery drainers are easier to tell apart.</strong> In the 3-hour and 5-day views, apps that use less than 10% of a charge now show one decimal place, so a light background app reading &quot;≈ 0.4%&quot; no longer rounds to the same &quot;≈ 1%&quot; as something using three times more.</li>
+</ul>
+<h2>Interface</h2>
+<ul>
+<li><strong>Achievement buttons get a flat brushed-metal look.</strong> Done and Share buttons on unlocked achievements now wear a matte metal &quot;plate&quot; finish tinted to the achievement&#x27;s rank, with an angled sheen instead of a glossy 3D pill. Silver buttons were also darkened slightly so their labels stay readable.</li>
+<li><strong>More buttons respond to hover and clicks.</strong> Celebration buttons, the birthday-cake copy and close buttons, the setup-wizard close button, and other controls that previously felt static now give proper press and hover feedback.</li>
+<li><strong>Setup wizard cleanup.</strong> The step markers are flatter and calmer (no more 3D glow), the progress-and-permissions screen reads more concisely, and the permissions explanations are tightened to the essentials.</li>
+<li><strong>Dismissing a warning overlay is snappier.</strong> Closing a warning by hand (Escape or the dismiss button) now fades out quickly instead of using the slow, cinematic fade reserved for the charging celebration.</li>
+<li><strong>Menu-bar hint is simpler.</strong> The pop-up that points at the menu bar dropped a small decorative stamp for a cleaner arrow.</li>
+</ul>
+<p>Marketing 1.8.4 → 1.8.5, build 74 → 75.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.8.5/Battery-Sensei.pkg"
+        sparkle:edSignature="zz12/9m6cVbGbtK9eGT7ImK063vB+iaLsTFj3ozB0rqk1q9knhl4fuVSfPDrpm/MC/e2hQmOTzi9xlJwXZq4AQ=="
+        length="22910236"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
