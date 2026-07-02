@@ -862,6 +862,39 @@
     },
     "specStrip": "macOS 13+ · Apple Silicon e Intel · {{trial}} días gratis, sin tarjeta · pago único de {{price}} · devolución en 14 días."
   },
+  "from": {
+    "kicker": "De parte del Sensei #{{id}} · 縁",
+    "kickerGeneric": "De parte de un Sensei · 縁",
+    "cards": {
+      "default": {
+        "heading": "Has escaneado una tarjeta de batería.",
+        "headingItalic": "Detrás hay un sensei.",
+        "body": "Alguien que conoces deja la batería de su MacBook bajo la mirada tranquila de Battery Sensei — y ha compartido la prueba. Sensei vive en la barra de menús, avisa antes del apagado, mantiene un límite de carga más saludable y escribe un diario de batería en palabras claras. La tuya podría empezar hoy."
+      },
+      "rescue": {
+        "heading": "Ese rescate fue real.",
+        "headingItalic": "Un MacBook, de vuelta del borde.",
+        "body": "La tarjeta que escaneaste es un recibo de rescate: Battery Sensei atrapó un MacBook camino del cero y lo trajo de vuelta antes de que la pantalla se apagara. Vigila en silencio desde la barra de menús y solo habla cuando importa. Tu batería merece el mismo guardián."
+      },
+      "wrapped": {
+        "heading": "Un tramo de vida de batería,",
+        "headingItalic": "resumido y firmado.",
+        "body": "Esa tarjeta es un resumen que Battery Sensei escribe a partir del historial real de carga: ciclos contados, hábitos detectados, capacidad vigilada. Todo se queda en el Mac. Instala Sensei y tu MacBook empieza hoy a escribir su propia historia."
+      },
+      "health": {
+        "heading": "Una batería bien cuidada.",
+        "headingItalic": "El chequeo lo confirma.",
+        "body": "Esa tarjeta es un informe de salud de Battery Sensei: capacidad, ciclos y temperatura, contados en palabras sencillas. Un límite de carga más suave y avisos a tiempo la mantienen así. Dale a tu MacBook el mismo cuidado."
+      },
+      "honors": {
+        "heading": "Un honor ganado en silencio.",
+        "headingItalic": "Con el sello de Sensei.",
+        "body": "Ese sello marca un hito de batería, de los que solo se alcanzan con un cuidado constante y paciente. Battery Sensei acompaña los hábitos, cuenta los ciclos y estampa los honores. Los tuyos te esperan."
+      }
+    },
+    "exploreCta": "Ver qué hace Sensei",
+    "specStrip": "macOS 13+ · Apple Silicon e Intel · {{trial}} días gratis, sin tarjeta · sin cuenta, jamás."
+  },
   "footer": {
     "tagline": "De un dueño de MacBook a otro.",
     "ariaPrefs": "Contacto y preferencias",

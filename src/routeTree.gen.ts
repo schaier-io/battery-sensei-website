@@ -24,6 +24,7 @@ import { Route as NewsletterUnsubscribeRouteImport } from './routes/newsletter.u
 import { Route as NewsletterConfirmedRouteImport } from './routes/newsletter.confirmed'
 import { Route as NewsletterConfirmRouteImport } from './routes/newsletter.confirm'
 import { Route as GlossarySlugRouteImport } from './routes/glossary/$slug'
+import { Route as FromIdRouteImport } from './routes/from.$id'
 import { Route as FeaturesTravelModeRouteImport } from './routes/features.travel-mode'
 import { Route as FeaturesMeetingBatteryGuardRouteImport } from './routes/features.meeting-battery-guard'
 import { Route as FeaturesEnergyUsageRouteImport } from './routes/features.energy-usage'
@@ -108,6 +109,11 @@ const GlossarySlugRoute = GlossarySlugRouteImport.update({
   path: '/glossary/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FromIdRoute = FromIdRouteImport.update({
+  id: '/from/$id',
+  path: '/from/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const FeaturesTravelModeRoute = FeaturesTravelModeRouteImport.update({
   id: '/features/travel-mode',
   path: '/features/travel-mode',
@@ -165,6 +171,7 @@ export interface FileRoutesByFullPath {
   '/features/energy-usage': typeof FeaturesEnergyUsageRoute
   '/features/meeting-battery-guard': typeof FeaturesMeetingBatteryGuardRoute
   '/features/travel-mode': typeof FeaturesTravelModeRoute
+  '/from/$id': typeof FromIdRoute
   '/glossary/$slug': typeof GlossarySlugRoute
   '/newsletter/confirm': typeof NewsletterConfirmRoute
   '/newsletter/confirmed': typeof NewsletterConfirmedRoute
@@ -190,6 +197,7 @@ export interface FileRoutesByTo {
   '/features/energy-usage': typeof FeaturesEnergyUsageRoute
   '/features/meeting-battery-guard': typeof FeaturesMeetingBatteryGuardRoute
   '/features/travel-mode': typeof FeaturesTravelModeRoute
+  '/from/$id': typeof FromIdRoute
   '/glossary/$slug': typeof GlossarySlugRoute
   '/newsletter/confirm': typeof NewsletterConfirmRoute
   '/newsletter/confirmed': typeof NewsletterConfirmedRoute
@@ -216,6 +224,7 @@ export interface FileRoutesById {
   '/features/energy-usage': typeof FeaturesEnergyUsageRoute
   '/features/meeting-battery-guard': typeof FeaturesMeetingBatteryGuardRoute
   '/features/travel-mode': typeof FeaturesTravelModeRoute
+  '/from/$id': typeof FromIdRoute
   '/glossary/$slug': typeof GlossarySlugRoute
   '/newsletter/confirm': typeof NewsletterConfirmRoute
   '/newsletter/confirmed': typeof NewsletterConfirmedRoute
@@ -243,6 +252,7 @@ export interface FileRouteTypes {
     | '/features/energy-usage'
     | '/features/meeting-battery-guard'
     | '/features/travel-mode'
+    | '/from/$id'
     | '/glossary/$slug'
     | '/newsletter/confirm'
     | '/newsletter/confirmed'
@@ -268,6 +278,7 @@ export interface FileRouteTypes {
     | '/features/energy-usage'
     | '/features/meeting-battery-guard'
     | '/features/travel-mode'
+    | '/from/$id'
     | '/glossary/$slug'
     | '/newsletter/confirm'
     | '/newsletter/confirmed'
@@ -293,6 +304,7 @@ export interface FileRouteTypes {
     | '/features/energy-usage'
     | '/features/meeting-battery-guard'
     | '/features/travel-mode'
+    | '/from/$id'
     | '/glossary/$slug'
     | '/newsletter/confirm'
     | '/newsletter/confirmed'
@@ -319,6 +331,7 @@ export interface RootRouteChildren {
   FeaturesEnergyUsageRoute: typeof FeaturesEnergyUsageRoute
   FeaturesMeetingBatteryGuardRoute: typeof FeaturesMeetingBatteryGuardRoute
   FeaturesTravelModeRoute: typeof FeaturesTravelModeRoute
+  FromIdRoute: typeof FromIdRoute
   GlossarySlugRoute: typeof GlossarySlugRoute
   NewsletterConfirmRoute: typeof NewsletterConfirmRoute
   NewsletterConfirmedRoute: typeof NewsletterConfirmedRoute
@@ -438,6 +451,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GlossarySlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/from/$id': {
+      id: '/from/$id'
+      path: '/from/$id'
+      fullPath: '/from/$id'
+      preLoaderRoute: typeof FromIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/features/travel-mode': {
       id: '/features/travel-mode'
       path: '/features/travel-mode'
@@ -511,6 +531,7 @@ const rootRouteChildren: RootRouteChildren = {
   FeaturesEnergyUsageRoute: FeaturesEnergyUsageRoute,
   FeaturesMeetingBatteryGuardRoute: FeaturesMeetingBatteryGuardRoute,
   FeaturesTravelModeRoute: FeaturesTravelModeRoute,
+  FromIdRoute: FromIdRoute,
   GlossarySlugRoute: GlossarySlugRoute,
   NewsletterConfirmRoute: NewsletterConfirmRoute,
   NewsletterConfirmedRoute: NewsletterConfirmedRoute,

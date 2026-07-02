@@ -862,6 +862,39 @@
     },
     "specStrip": "macOS 13+ · Apple Silicon & Intel · {{trial}} Tage kostenlos, keine Karte · einmalig {{price}} · 14 Tage Geld zurück."
   },
+  "from": {
+    "kicker": "Von Sensei #{{id}} · 縁",
+    "kickerGeneric": "Von einem Sensei · 縁",
+    "cards": {
+      "default": {
+        "heading": "Sie haben eine Akku-Karte gescannt.",
+        "headingItalic": "Dahinter steht ein Sensei.",
+        "body": "Jemand, den Sie kennen, lässt den MacBook-Akku still von Battery Sensei im Blick behalten — und hat den Beweis geteilt. Sensei sitzt in der Menüleiste, warnt vor dem Abschalten, hält ein schonenderes Ladelimit und führt ein verständliches Akku-Tagebuch. Ihres könnte heute beginnen."
+      },
+      "rescue": {
+        "heading": "Diese Rettung war echt.",
+        "headingItalic": "Ein MacBook, zurück von der Kante.",
+        "body": "Die gescannte Karte ist eine Rettungsquittung: Battery Sensei hat ein MacBook auf dem Weg Richtung null aufgefangen, bevor der Bildschirm dunkel wurde. Sensei wacht still in der Menüleiste und meldet sich nur, wenn es zählt. Ihr Akku verdient denselben Wächter."
+      },
+      "wrapped": {
+        "heading": "Ein Stück Akku-Leben,",
+        "headingItalic": "zusammengefasst und signiert.",
+        "body": "Diese Karte ist ein Rückblick, den Battery Sensei aus echter Ladehistorie schreibt — Zyklen gezählt, Gewohnheiten bemerkt, Kapazität im Blick. Alles bleibt auf dem Mac. Installieren Sie Sensei, und Ihr MacBook beginnt noch heute seine eigene Geschichte."
+      },
+      "health": {
+        "heading": "Ein Akku in guten Händen.",
+        "headingItalic": "Der Check bestätigt es.",
+        "body": "Diese Karte ist ein Gesundheitsbericht von Battery Sensei: Kapazität, Zyklen und Temperatur, in klaren Worten. Ein schonenderes Ladelimit und rechtzeitige Warnungen halten es so. Gönnen Sie Ihrem MacBook dieselbe Pflege."
+      },
+      "honors": {
+        "heading": "Eine Auszeichnung, still verdient.",
+        "headingItalic": "Mit Senseis Siegel.",
+        "body": "Dieses Siegel steht für einen Akku-Meilenstein — von der Sorte, die nur mit ruhiger, geduldiger Pflege erreicht wird. Battery Sensei begleitet die Gewohnheiten, zählt die Zyklen und vergibt die Auszeichnungen. Ihre warten schon."
+      }
+    },
+    "exploreCta": "Sehen, was Sensei kann",
+    "specStrip": "macOS 13+ · Apple Silicon & Intel · {{trial}} Tage kostenlos, keine Karte · kein Konto. Niemals."
+  },
   "footer": {
     "tagline": "Von einem MacBook-Nutzer für andere.",
     "ariaPrefs": "Kontakt und Einstellungen",

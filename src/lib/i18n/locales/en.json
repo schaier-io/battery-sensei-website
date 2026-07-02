@@ -862,6 +862,39 @@
     },
     "specStrip": "macOS 13+ · Apple Silicon & Intel · {{trial}} days free, no card · one-time {{price}} · 14-day refund."
   },
+  "from": {
+    "kicker": "From Sensei #{{id}} · 縁",
+    "kickerGeneric": "From a fellow Sensei · 縁",
+    "cards": {
+      "default": {
+        "heading": "You scanned a battery card.",
+        "headingItalic": "There's a sensei behind it.",
+        "body": "Someone you know keeps their MacBook's battery under Battery Sensei's quiet watch — and shared the proof. Sensei lives in the menu bar, warns before shutdowns, holds a healthier charge limit, and keeps a plain-English battery diary. Yours could start today."
+      },
+      "rescue": {
+        "heading": "That rescue was real.",
+        "headingItalic": "A MacBook, back from the brink.",
+        "body": "The card you scanned is a rescue receipt: Battery Sensei caught a MacBook on its way to zero and walked it back before the screen went dark. It watches quietly from the menu bar and only speaks up when it matters. Your battery deserves the same guardian."
+      },
+      "wrapped": {
+        "heading": "A stretch of battery life,",
+        "headingItalic": "wrapped and signed.",
+        "body": "That card is a recap Battery Sensei writes from real charge history — cycles counted, habits noticed, capacity watched. All of it stays on the Mac. Install Sensei and your MacBook starts writing its own story today."
+      },
+      "health": {
+        "heading": "A battery, well kept.",
+        "headingItalic": "The checkup agrees.",
+        "body": "That card is a health report from Battery Sensei: capacity, cycles, and temperature, read in plain words. A gentler charge limit and well-timed warnings keep it that way. Give your MacBook the same care."
+      },
+      "honors": {
+        "heading": "An honor, quietly earned.",
+        "headingItalic": "Sealed by Sensei.",
+        "body": "That seal marks a battery milestone — the kind you only reach with steady, patient care. Battery Sensei watches the habits, counts the cycles, and stamps the honors. Yours are waiting."
+      }
+    },
+    "exploreCta": "See what Sensei does",
+    "specStrip": "macOS 13+ · Apple Silicon & Intel · {{trial}} days free, no card · no account, ever."
+  },
   "footer": {
     "tagline": "From one MacBook owner to another.",
     "ariaPrefs": "Contact and preferences",

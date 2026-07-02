@@ -862,6 +862,39 @@
     },
     "specStrip": "macOS 13+ · Apple Silicon & Intel · {{trial}} jours gratuits, sans carte · {{price}} en paiement unique · garantie 14 jours."
   },
+  "from": {
+    "kicker": "De la part du Sensei #{{id}} · 縁",
+    "kickerGeneric": "De la part d'un Sensei · 縁",
+    "cards": {
+      "default": {
+        "heading": "Vous avez scanné une carte batterie.",
+        "headingItalic": "Derrière elle, un sensei.",
+        "body": "Quelqu'un que vous connaissez confie la batterie de son MacBook à la veille discrète de Battery Sensei — et en a partagé la preuve. Sensei vit dans la barre de menus, prévient avant l'extinction, maintient une limite de charge plus saine et tient un journal de batterie en langage clair. La vôtre pourrait commencer aujourd'hui."
+      },
+      "rescue": {
+        "heading": "Ce sauvetage était réel.",
+        "headingItalic": "Un MacBook revenu du bord du gouffre.",
+        "body": "La carte que vous avez scannée est un reçu de sauvetage : Battery Sensei a rattrapé un MacBook en route vers zéro, avant que l'écran ne s'éteigne. Il veille en silence depuis la barre de menus et ne se manifeste que quand cela compte. Votre batterie mérite le même gardien."
+      },
+      "wrapped": {
+        "heading": "Un chapitre de vie de batterie,",
+        "headingItalic": "résumé et signé.",
+        "body": "Cette carte est une rétrospective que Battery Sensei écrit à partir d'un historique de charge réel : cycles comptés, habitudes repérées, capacité suivie. Tout reste sur le Mac. Installez Sensei et votre MacBook commence dès aujourd'hui à écrire sa propre histoire."
+      },
+      "health": {
+        "heading": "Une batterie bien entretenue.",
+        "headingItalic": "Le bilan le confirme.",
+        "body": "Cette carte est un bilan de santé signé Battery Sensei : capacité, cycles et température, en mots simples. Une limite de charge plus douce et des alertes au bon moment la gardent ainsi. Offrez le même soin à votre MacBook."
+      },
+      "honors": {
+        "heading": "Un honneur gagné en silence.",
+        "headingItalic": "Scellé par Sensei.",
+        "body": "Ce sceau marque un jalon de batterie — de ceux que seul un soin régulier et patient permet d'atteindre. Battery Sensei accompagne les habitudes, compte les cycles et appose les honneurs. Les vôtres vous attendent."
+      }
+    },
+    "exploreCta": "Voir ce que fait Sensei",
+    "specStrip": "macOS 13+ · Apple Silicon & Intel · {{trial}} jours gratuits, sans carte · sans compte, jamais."
+  },
   "footer": {
     "tagline": "D'un propriétaire de MacBook à un autre.",
     "ariaPrefs": "Contact et préférences",

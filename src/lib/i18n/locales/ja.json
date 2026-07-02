@@ -862,6 +862,39 @@
     },
     "specStrip": "macOS 13+ · Apple Silicon / Intel対応 · {{trial}}日間無料、カード不要 · {{price}}買い切り · 14日間返金保証。"
   },
+  "from": {
+    "kicker": "Sensei #{{id}} からの一枚 · 縁",
+    "kickerGeneric": "とあるSenseiからの一枚 · 縁",
+    "cards": {
+      "default": {
+        "heading": "スキャンしたのは、バッテリーカード。",
+        "headingItalic": "その向こうに、Senseiがいます。",
+        "body": "あなたの知り合いは、MacBookのバッテリーをBattery Senseiに静かに見守らせています。このカードはその証です。Senseiはメニューバーに常駐し、突然のシャットダウンの前に知らせ、無理のない充電上限を保ち、わかりやすいバッテリー日記をつけます。あなたのMacBookも、今日から始められます。"
+      },
+      "rescue": {
+        "heading": "その救出は、本物です。",
+        "headingItalic": "崖っぷちから戻ったMacBook。",
+        "body": "スキャンしたカードは救出の記録です。Battery Senseiは、残量ゼロへ向かうMacBookを、画面が暗くなる前に静かに引き戻しました。メニューバーから見守り、本当に必要なときだけ知らせます。あなたのバッテリーにも、同じ守り手を。"
+      },
+      "wrapped": {
+        "heading": "バッテリーのひと区切りを、",
+        "headingItalic": "一枚にまとめました。",
+        "body": "そのカードは、実際の充電履歴からBattery Senseiが書き上げた振り返りです。サイクルを数え、習慣に気づき、容量を見守る。すべてMacの中で完結します。Senseiを入れれば、あなたのMacBookも今日から自分の物語を書き始めます。"
+      },
+      "health": {
+        "heading": "よく手入れされたバッテリー。",
+        "headingItalic": "健診の結果がその証です。",
+        "body": "そのカードはBattery Senseiの健康レポートです。容量、サイクル、温度を、わかりやすい言葉で伝えます。無理のない充電上限と、ちょうどよいタイミングの通知が、その状態を保ちます。あなたのMacBookにも同じケアを。"
+      },
+      "honors": {
+        "heading": "静かに積み重ねた、栄誉のしるし。",
+        "headingItalic": "Senseiの印とともに。",
+        "body": "その印は、こつこつと続けたバッテリーケアの節目のしるしです。Battery Senseiが習慣を見守り、サイクルを数え、栄誉を刻みます。あなたの一枚も、ここから始まります。"
+      }
+    },
+    "exploreCta": "Senseiができることを見る",
+    "specStrip": "macOS 13+ · Apple Silicon / Intel対応 · {{trial}}日間無料、カード不要 · アカウント不要。"
+  },
   "footer": {
     "tagline": "ひとりのMacBookユーザーから、もうひとりへ。",
     "ariaPrefs": "お問い合わせと設定",
