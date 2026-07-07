@@ -976,6 +976,34 @@
         length="22910236"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.8.6</title>
+      <pubDate>Tue, 07 Jul 2026 13:19:42 +0000</pubDate>
+      <sparkle:version>76</sparkle:version>
+      <sparkle:shortVersionString>1.8.6</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.8.6</h1>
+<p>A quality release: achievement celebrations now wait for a fitting moment instead of interrupting you, plus a large under-the-hood tidy-up.</p>
+<h2>Achievements</h2>
+<ul>
+<li><strong>Unlock celebrations no longer pop up at bad moments.</strong> A newly-earned seal used to appear after a brief lull in activity — which is exactly when you&#x27;re watching a full-screen video, presenting slides, or on a call. Celebrations now hold back while you&#x27;re in a full-screen app, on camera or mic, in a calendar meeting, or your screen is locked, and instead wait for a natural breather. Plugging in still celebrates a fresh charging or rescue seal right away, unless you&#x27;re mid-presentation or on a call.</li>
+<li><strong>A celebration that never found a good moment stops trying.</strong> If a seal has waited a couple of days without a fitting time to appear, it quietly retires to the Honors gallery with its &quot;new&quot; badge instead of surfacing as stale news.</li>
+</ul>
+<h2>Under the hood</h2>
+<ul>
+<li><strong>Large internal reorganization.</strong> The source tree was regrouped into per-feature folders and several oversized files were split along single responsibilities, with tests moved alongside the logic they cover. No behavior change — this keeps the codebase healthy for future work.</li>
+</ul>
+<p>Marketing 1.8.5 → 1.8.6, build 75 → 76.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.8.6/Battery-Sensei.pkg"
+        sparkle:edSignature="GfnuuqIBJ/gCFPz3Szb5cuuXs28q2mBcQ4ol/j53TFliSjNQ3ZH1nIxFeOQwbV+ST+0WHQDDm8cUZggOnNZZAQ=="
+        length="22932811"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
