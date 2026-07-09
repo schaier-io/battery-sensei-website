@@ -1003,6 +1003,31 @@
         length="22932811"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.9.0</title>
+      <pubDate>Thu, 09 Jul 2026 22:12:17 +0000</pubDate>
+      <sparkle:version>77</sparkle:version>
+      <sparkle:shortVersionString>1.9.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.9.0</h1>
+<p>Per-app battery numbers now tell the whole story: an app&#x27;s helpers and everything it launches count toward that app.</p>
+<h2>App power attribution</h2>
+<ul>
+<li><strong>Apps now own the battery cost of everything they spawn.</strong> Browsers, editors, and AI tools do most of their work in helper and child processes — a browser tab renderer, a compiler kicked off by your IDE, a shell command run by an assistant. Those used to hide in an anonymous &quot;other processes&quot; bucket; now they&#x27;re attributed to the app that launched them, the same way Activity Monitor groups its Energy pane.</li>
+<li><strong>Helper processes no longer clutter the list as separate entries.</strong> Entries like &quot;Steam Helper&quot; or &quot;Discord Helper (Renderer)&quot; fold into their parent app, so the leaderboard shows apps you recognize instead of plumbing.</li>
+<li><strong>The unattributed remainder shrinks dramatically.</strong> With helpers rolled up, nearly all measured process power lands on a named app, making the per-app breakdown far more honest about who&#x27;s actually draining your battery.</li>
+</ul>
+<p>Marketing 1.8.6 → 1.9.0, build 76 → 77.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.9.0/Battery-Sensei.pkg"
+        sparkle:edSignature="SG0pV7MdtL02SH1CMm2+bIEfnIuq+cVH1F+I/UmgBkjj6GjhW+sTtLIR3pEJSWTBnPcvM9eQqDBBlLsnfTMeBw=="
+        length="22935918"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
