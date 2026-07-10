@@ -132,15 +132,14 @@ const RequestSchema = z.object({
   tier: z.enum(['lifetime', 'support']),
   discountCode: z.string().trim().max(64).optional(),
   /**
-   * Optional currency override coming from the /checkout currency
-   * switcher. Allowlist-validated to USD/EUR — Polar's full
-   * `PresentmentCurrency` enum is much larger but we only surface two
-   * choices in the UI (see src/lib/pricing.ts SUPPORTED_CURRENCIES).
+   * Resolved currency coming from the checkout UI. Older or non-browser
+   * callers may omit it, so the API applies the canonical USD fallback
+   * before creating the Polar session.
    */
   currency: z
     .enum(['USD', 'EUR', 'CZK'])
-    .transform((c) => c.toLowerCase() as 'usd' | 'eur' | 'czk')
-    .optional(),
+    .optional()
+    .transform((c) => (c ?? 'USD').toLowerCase() as 'usd' | 'eur' | 'czk'),
 })
 type RequestBody = z.infer<typeof RequestSchema>
 
@@ -319,15 +318,10 @@ export async function POST(request: Request): Promise<Response> {
     embed_origin: embedOrigin,
     success_url: successUrl,
   }
-  // Currency override forwarded from the /checkout switcher. Polar's
-  // CheckoutCreate accepts `currency` independently of any billing
-  // country, so the buyer sees totals in their chosen currency even
-  // before they fill in the billing address. Omit the field entirely
-  // when no override is given — Polar then auto-derives from the
-  // visitor's geo/billing as before.
-  if (body.currency) {
-    basePayload.currency = body.currency
-  }
+  // Always forward a currency so Polar never chooses an implicit default
+  // that disagrees with the page. RequestSchema supplies USD for legacy
+  // clients that omit the field.
+  basePayload.currency = body.currency
 
   // Wrapped so we can fire the request twice (once with the discount,
   // once without on 422) without duplicating the fetch boilerplate.

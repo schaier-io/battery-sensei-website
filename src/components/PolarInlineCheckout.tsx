@@ -50,10 +50,9 @@ interface Props {
   /** Light or dark theme handoff to Polar. Matches washi page tone by
    *  default. */
   theme?: 'light' | 'dark'
-  /** Currency override from the /checkout switcher. When set, the
-   *  session is created with Polar's `currency` field so the iframe
-   *  quotes totals in this code regardless of the visitor's geo. */
-  currency?: 'USD' | 'EUR' | 'CZK'
+  /** Resolved checkout currency. The route supplies the explicit choice,
+   *  detected currency, or USD as its canonical final fallback. */
+  currency: 'USD' | 'EUR' | 'CZK'
 }
 
 const POLAR_MESSAGE_ORIGINS = new Set([
@@ -106,7 +105,7 @@ export function PolarInlineCheckout({ tier, discountCode, theme = 'light', curre
       body: JSON.stringify({
         tier,
         ...(discountCode ? { discountCode } : {}),
-        ...(currency ? { currency } : {}),
+        currency,
       }),
     })
       .then(async (res) => {

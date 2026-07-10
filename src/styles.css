@@ -1947,16 +1947,13 @@ section[id] {
   scroll-margin-top: 5rem;
 }
 
-/* The Free download email input is the single conversion endpoint for
-   every "Download for macOS" CTA on the site. Give it room under the
-   sticky nav so a hash-jump lands the field below the chrome, not under
-   it. A small glow when it becomes the target (.target / :focus) draws
-   the eye after the scroll settles. */
+/* The Free download card grid is the target for every "Download for macOS"
+   CTA. Match the standard section anchor offset so the tier prices land
+   below the sticky nav. */
 #free-download-email {
-  scroll-margin-top: 6.5rem;
+  scroll-margin-top: 5rem;
 }
-#free-download-email:target,
-#free-download-email:focus-visible {
+#free-download-email-input:focus-visible {
   box-shadow:
     0 0 0 2px color-mix(in oklab, var(--hinomaru) 35%, transparent),
     0 0 0 6px color-mix(in oklab, var(--hinomaru) 12%, transparent);

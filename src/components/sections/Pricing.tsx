@@ -182,7 +182,10 @@ export function Pricing() {
           the right as the lower-commitment yearly alternative. RECOMMENDED
           is an inline pill in the normal flow so the .paper-card > * rule
           doesn't pin it out of place. */}
-      <div className="grid gap-6 lg:grid-cols-3 lg:items-stretch">
+      <div
+        id="free-download-email"
+        className="grid scroll-mt-20 gap-6 lg:grid-cols-3 lg:items-stretch"
+      >
         {/* ---------- Free card (left) ---------- */}
         <Reveal delay={120} className="h-full">
           <article
@@ -626,38 +629,70 @@ function FreeDownloadForm() {
   >('idle')
   const [macConfirmOpen, setMacConfirmOpen] = useState(false)
   const inputRef = useRef<HTMLInputElement | null>(null)
-  const buttonRef = useRef<HTMLButtonElement | null>(null)
 
-  // Every "Download for macOS" CTA on the site scrolls to this input
-  // via `href="#free-download-email"`. Native hash navigation puts the
-  // anchor's top at the viewport top, which leaves the submit button
-  // below the fold on most laptops — visitors have to scroll again to
-  // see "Get download". Override: re-scroll so the BUTTON sits near
-  // the bottom of the viewport (block: 'end' + a `scroll-margin-bottom`
-  // breathing room), then focus the email input so they can start
-  // typing without losing the button from view.
+  // `#free-download-email` belongs to the pricing-card grid, so every
+  // Download CTAs target the card grid so tier prices are the destination.
+  // On this page, intercept the click to stop the browser from jumping to the
+  // field while it is focused. Focus first, then place the grid at its anchor
+  // offset; the final viewport always shows prices and the field is ready to
+  // type into. Cross-page `/#free-download-email` links still use the normal
+  // hash-load path below.
   useEffect(() => {
     if (typeof window === 'undefined') return
     const isTarget = () => window.location.hash === '#free-download-email'
+
+    function scrollToCards() {
+      const cards = document.getElementById('free-download-email')
+      if (!cards) return
+      // Temporarily opt out of global smooth-scroll so this corrective scroll
+      // wins immediately after focus, rather than visibly starting at the
+      // email field and drifting down to the cards.
+      const root = document.documentElement
+      const previousBehavior = root.style.scrollBehavior
+      root.style.scrollBehavior = 'auto'
+      cards.scrollIntoView({ block: 'start' })
+      root.style.scrollBehavior = previousBehavior
+    }
+
+    function focusAndPositionCards() {
+      inputRef.current?.focus({ preventScroll: true })
+      scrollToCards()
+    }
+
     function landOnDownload() {
       if (!isTarget()) return
-      // One frame after the browser's initial hash-jump scroll so our
-      // override lands without fighting the easing. Smooth so the two
-      // motions merge into a single feeling rather than a snap.
-      window.requestAnimationFrame(() => {
-        buttonRef.current?.scrollIntoView({ block: 'end', behavior: 'smooth' })
-        // Wait for the scroll to settle before focusing the input —
-        // `preventScroll` keeps focus from yanking the page back, but
-        // we still want the button visible at the time the focus ring
-        // appears so the visitor sees the full path: input → button.
-        window.setTimeout(() => {
-          inputRef.current?.focus({ preventScroll: true })
-        }, 420)
-      })
+      window.requestAnimationFrame(focusAndPositionCards)
     }
+
+    function onDownloadClick(event: MouseEvent) {
+      if (
+        event.defaultPrevented ||
+        event.button !== 0 ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.altKey ||
+        !(event.target instanceof Element)
+      ) return
+      const link = event.target.closest<HTMLAnchorElement>(
+        'a[href="#free-download-email"]',
+      )
+      if (!link) return
+
+      event.preventDefault()
+      if (!isTarget()) {
+        window.history.pushState(null, '', '#free-download-email')
+      }
+      focusAndPositionCards()
+    }
+
     landOnDownload()
     window.addEventListener('hashchange', landOnDownload)
-    return () => window.removeEventListener('hashchange', landOnDownload)
+    document.addEventListener('click', onDownloadClick)
+    return () => {
+      window.removeEventListener('hashchange', landOnDownload)
+      document.removeEventListener('click', onDownloadClick)
+    }
   }, [])
 
   const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())
@@ -717,14 +752,14 @@ function FreeDownloadForm() {
           pre={
             <>
               <label
-                htmlFor="free-download-email"
+                htmlFor="free-download-email-input"
                 className="block text-[0.74rem] font-medium uppercase tracking-[0.14em] text-sumi-soft/85"
               >
                 {t('pricing.free.email.label')}
               </label>
               <input
                 ref={inputRef}
-                id="free-download-email"
+                id="free-download-email-input"
                 type="email"
                 required
                 autoComplete="email"
@@ -762,7 +797,6 @@ function FreeDownloadForm() {
           }
           cta={
             <button
-              ref={buttonRef}
               id="free-download-submit"
               type="submit"
               disabled={status === 'sending'}

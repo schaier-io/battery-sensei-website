@@ -144,8 +144,10 @@ function CheckoutPage() {
   }
 
   // What currency is the page CURRENTLY showing? Prefer the explicit
-  // override; otherwise read the live (or fallback) price's currency
-  // so the inline picker highlights the auto-chosen option.
+  // override; otherwise read the live (or fallback) price's currency.
+  // The final branch is deliberately USD: it is both the canonical
+  // display fallback and the currency we send to checkout when no
+  // stronger signal is available.
   const activeCurrency: 'USD' | 'EUR' | 'CZK' = cur ?? (
     yearly.currency === 'EUR'
       ? 'EUR'
@@ -335,7 +337,7 @@ function CheckoutPage() {
                   are buying ahead of a new Mac, or buying for a family
                   member. */}
               <NotOnMacBanner />
-              <PolarInlineCheckout tier={tier} currency={cur} />
+              <PolarInlineCheckout tier={tier} currency={activeCurrency} />
             </div>
 
             <ul className="mt-4 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[0.75rem] text-nezumi">
