@@ -44,16 +44,14 @@ type FeatureKey = keyof typeof FEATURE_PATHS
 /**
  * Stable row key the comparison table truncates AT (inclusive) when
  * collapsed. Keeping this here, not in i18n, because it's a code-side
- * structural choice — the user picks how much of the table to surface
+ * structural choice: the user picks how much of the table to surface
  * up front, not what to call the cut row.
  *
- * Why this row: "Energy use per app" is the last of the
- * differentiator-light table rows everyone-mostly-has. Past it the
- * table starts showing Sensei-only deltas (custom thresholds, alert
- * presets, meeting guard, battery journal), which read as
- * "what makes Sensei special" once revealed.
+ * Meeting Guard is the first Sensei-only differentiator and stays
+ * visible in the shorter view. The remaining Sensei-only rows reveal
+ * in place below it.
  */
-const CUTOFF_ROW_KEY = 'energy-usage'
+const CUTOFF_ROW_KEY = 'meeting-battery-guard'
 
 function swapRowsByKey(rows: Row[], firstKey: string, secondKey: string): Row[] {
   const next = [...rows]
@@ -64,10 +62,27 @@ function swapRowsByKey(rows: Row[], firstKey: string, secondKey: string): Row[] 
   return next
 }
 
+function moveRowAfterKey(rows: Row[], rowKey: string, afterKey: string): Row[] {
+  const next = [...rows]
+  const rowIdx = next.findIndex((row) => row.key === rowKey)
+  const afterIdx = next.findIndex((row) => row.key === afterKey)
+  if (rowIdx === -1 || afterIdx === -1) return next
+
+  const [row] = next.splice(rowIdx, 1)
+  const adjustedAfterIdx = next.findIndex((item) => item.key === afterKey)
+  next.splice(adjustedAfterIdx + 1, 0, row)
+  return next
+}
+
 export function Compare() {
   const { t } = useTranslation()
   const rowsBase = t('compare.rows', { returnObjects: true }) as Row[]
-  const rows = swapRowsByKey(rowsBase, 'energy-usage', 'travel-mode')
+  const rowsWithTravelFirst = swapRowsByKey(rowsBase, 'energy-usage', 'travel-mode')
+  const rows = moveRowAfterKey(
+    rowsWithTravelFirst,
+    'meeting-battery-guard',
+    'energy-usage',
+  )
   const partialLabel = t('compare.labels.partial')
   const moreInfoLabel = t('compare.labels.moreInfo')
   const openFeatureLabel = t('compare.labels.openFeature')
@@ -202,14 +217,17 @@ export function Compare() {
           </table>
         </div>
 
-        {/* Show-all toggle — anchored on the table's bottom border so
-            the chip visually "breaks" the line, signalling that more
-            rows live beneath it. Washi backdrop (matched to the page,
-            not the table) eats the border behind the chip, producing
-            the cut-line effect. Hidden when there's nothing more. */}
+        {/* In the shorter view, the toggle breaks the table's bottom
+            border to signal that more rows are available. Once expanded,
+            it returns to normal flow below the table so "Show fewer"
+            never covers the final row. */}
         {hasExtras && (
           <div
-            className="pointer-events-none absolute inset-x-0 bottom-0 flex translate-y-1/2 justify-center"
+            className={`pointer-events-none flex justify-center ${
+              expanded
+                ? 'mt-3'
+                : 'absolute inset-x-0 bottom-0 translate-y-1/2'
+            }`}
           >
             <button
               type="button"

@@ -389,6 +389,16 @@
         "coconut": "no",
         "istat": "no",
         "macos": "no"
+      },
+      {
+        "label": "Cute battery achievements",
+        "desc": "Earn collectible seals for battery rescues, healthy charging, and longevity, with streaks, records, and shareable cards.",
+        "sensei": "yes",
+        "aldente": "no",
+        "batfi": "no",
+        "coconut": "no",
+        "istat": "no",
+        "macos": "no"
       }
     ],
     "footnote": "Based on each tool's public site as of May 2026. Each app is good at its own thing; check their sites for the full picture."

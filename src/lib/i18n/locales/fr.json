@@ -389,6 +389,16 @@
         "coconut": "no",
         "istat": "no",
         "macos": "no"
+      },
+      {
+        "label": "Jolis succès de batterie",
+        "desc": "Gagnez des sceaux pour les sauvetages, la recharge saine et la longévité, avec séries, records et cartes à partager.",
+        "sensei": "yes",
+        "aldente": "no",
+        "batfi": "no",
+        "coconut": "no",
+        "istat": "no",
+        "macos": "no"
       }
     ],
     "footnote": "D'après les sites publics de chaque outil, mai 2026. Chaque app excelle à sa manière ; consultez leurs sites pour le tableau complet."
