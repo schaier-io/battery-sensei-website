@@ -285,16 +285,6 @@
         "macos": "partial"
       },
       {
-        "label": "Low battery impact",
-        "desc": "Event-driven sampling, about a 30 s refresh. Typically under 1% of your day.",
-        "sensei": "yes",
-        "aldente": "yes",
-        "batfi": "yes",
-        "coconut": "yes",
-        "istat": "partial",
-        "macos": "yes"
-      },
-      {
         "label": "Silent updates",
         "desc": "Opt-in once, then Sensei checks for new builds on launch and applies them quietly in the background. No nag screens, no \"update available\" popups mid-task. Off by default. You stay in control.",
         "sensei": "yes",
@@ -393,6 +383,7 @@
       {
         "label": "Cute battery achievements",
         "desc": "Earn collectible seals for battery rescues, healthy charging, and longevity, with streaks, records, and shareable cards.",
+        "key": "honors-achievements",
         "sensei": "yes",
         "aldente": "no",
         "batfi": "no",

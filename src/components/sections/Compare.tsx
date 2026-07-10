@@ -41,6 +41,18 @@ const FEATURE_PATHS = {
 
 type FeatureKey = keyof typeof FEATURE_PATHS
 
+const EMPHASIZED_ROW_KEYS = new Set([
+  'meeting-battery-guard',
+  'custom-thresholds',
+  'alert-presets',
+  'battery-journal',
+  'honors-achievements',
+])
+
+function isFeatureKey(key?: string): key is FeatureKey {
+  return key !== undefined && key in FEATURE_PATHS
+}
+
 /**
  * Stable row key the comparison table truncates AT (inclusive) when
  * collapsed. Keeping this here, not in i18n, because it's a code-side
@@ -187,6 +199,7 @@ export function Compare() {
               {visibleRows.map((r, i) => {
                 const isExtra = i > cutoffIdx
                 const extraIdx = i - cutoffIdx - 1
+                const featureKey = isFeatureKey(r.key) ? r.key : undefined
                 return (
                 <tr
                   key={r.label}
@@ -197,7 +210,10 @@ export function Compare() {
                     <FeatureLabel
                       label={r.label}
                       desc={r.desc}
-                      featureKey={r.key as FeatureKey | undefined}
+                      featureKey={featureKey}
+                      emphasized={
+                        r.key !== undefined && EMPHASIZED_ROW_KEYS.has(r.key)
+                      }
                       moreInfoLabel={moreInfoLabel}
                       openFeatureLabel={openFeatureLabel}
                     />
@@ -265,12 +281,14 @@ function FeatureLabel({
   label,
   desc,
   featureKey,
+  emphasized,
   moreInfoLabel,
   openFeatureLabel,
 }: {
   label: string
   desc: string
   featureKey?: FeatureKey
+  emphasized: boolean
   moreInfoLabel: string
   openFeatureLabel: string
 }) {
@@ -278,7 +296,11 @@ function FeatureLabel({
   const path = featureKey ? FEATURE_PATHS[featureKey] : undefined
   const mobileDescId = `compare-desc-${label.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`
   const labelNode = (
-    <span className="inline-flex items-center gap-1.5 transition-transform duration-[280ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover/row:translate-x-0.5 group-hover/row:-translate-y-0.5">
+    <span
+      className={`inline-flex items-center gap-1.5 transition-transform duration-[280ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover/row:translate-x-0.5 group-hover/row:-translate-y-0.5 ${
+        emphasized ? 'font-semibold' : ''
+      }`}
+    >
       {label}
       {path ? (
         <ArrowUpRight

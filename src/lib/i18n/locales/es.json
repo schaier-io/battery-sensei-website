@@ -285,16 +285,6 @@
         "macos": "partial"
       },
       {
-        "label": "Poco impacto en la batería",
-        "desc": "Muestreo por eventos, actualización cada 30 s aproximadamente. Normalmente consume menos del 1% al día.",
-        "sensei": "yes",
-        "aldente": "yes",
-        "batfi": "yes",
-        "coconut": "yes",
-        "istat": "partial",
-        "macos": "yes"
-      },
-      {
         "label": "Actualizaciones silenciosas",
         "desc": "Lo activas una vez y Sensei busca nuevas versiones al iniciar y las aplica con discreción en segundo plano. Sin avisos pesados, sin pop-ups de «actualización disponible» en mitad del trabajo. Desactivado por defecto: tú mantienes el control.",
         "sensei": "yes",
@@ -393,6 +383,7 @@
       {
         "label": "Logros de batería con encanto",
         "desc": "Consigue sellos por rescates, carga saludable y longevidad, con rachas, récords y tarjetas para compartir.",
+        "key": "honors-achievements",
         "sensei": "yes",
         "aldente": "no",
         "batfi": "no",

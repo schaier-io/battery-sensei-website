@@ -285,16 +285,6 @@
         "macos": "partial"
       },
       {
-        "label": "Faible impact sur la batterie",
-        "desc": "Échantillonnage déclenché par les événements, rafraîchi environ toutes les 30 s. Moins de 1 % sur une journée, en général.",
-        "sensei": "yes",
-        "aldente": "yes",
-        "batfi": "yes",
-        "coconut": "yes",
-        "istat": "partial",
-        "macos": "yes"
-      },
-      {
         "label": "Mises à jour silencieuses",
         "desc": "Activez-les une fois : Sensei vérifie ensuite les nouvelles versions au lancement et les installe discrètement en arrière-plan. Pas de fenêtres de rappel, pas de pop-ups « mise à jour disponible » en plein travail. Désactivé par défaut. Vous gardez la main.",
         "sensei": "yes",
@@ -393,6 +383,7 @@
       {
         "label": "Jolis succès de batterie",
         "desc": "Gagnez des sceaux pour les sauvetages, la recharge saine et la longévité, avec séries, records et cartes à partager.",
+        "key": "honors-achievements",
         "sensei": "yes",
         "aldente": "no",
         "batfi": "no",

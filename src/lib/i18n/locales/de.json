@@ -285,16 +285,6 @@
         "macos": "partial"
       },
       {
-        "label": "Geringe Akkubelastung",
-        "desc": "Ereignisbasierte Messung, etwa alle 30 s aktualisiert. Meist unter 1 % Akku pro Tag.",
-        "sensei": "yes",
-        "aldente": "yes",
-        "batfi": "yes",
-        "coconut": "yes",
-        "istat": "partial",
-        "macos": "yes"
-      },
-      {
         "label": "Unaufdringliche Updates",
         "desc": "Einmal aktivieren, dann prüft Sensei beim Start auf neue Versionen und spielt sie unauffällig im Hintergrund ein. Keine nervigen Update-Popups mitten in der Arbeit. Standardmäßig deaktiviert. Sie behalten die Kontrolle.",
         "sensei": "yes",
@@ -393,6 +383,7 @@
       {
         "label": "Liebevolle Akku-Erfolge",
         "desc": "Sammeln Sie Siegel für Akku-Rettungen, gesundes Laden und Langlebigkeit, mit Serien, Rekorden und teilbaren Karten.",
+        "key": "honors-achievements",
         "sensei": "yes",
         "aldente": "no",
         "batfi": "no",
