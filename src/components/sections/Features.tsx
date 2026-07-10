@@ -16,6 +16,13 @@ const supportingMeta: Array<{
   href: string | null
 }> = [
   {
+    key: 'meetings',
+    seal: '会',
+    icon: CalendarClock,
+    mockup: MeetingGuardMockup,
+    href: '/features/meeting-battery-guard',
+  },
+  {
     key: 'chargeLimit',
     seal: '保',
     icon: BatteryCharging,
@@ -33,13 +40,6 @@ const supportingMeta: Array<{
     icon: Eye,
     mockup: MenuBarGlanceMockup,
     href: null,
-  },
-  {
-    key: 'meetings',
-    seal: '会',
-    icon: CalendarClock,
-    mockup: MeetingGuardMockup,
-    href: '/features/meeting-battery-guard',
   },
 ]
 
@@ -159,7 +159,7 @@ function ChargeLimitMockup() {
 }
 
 /**
- * Meeting Battery Guard mockup. Was four stacked blocks (calendar
+ * Meeting Guard mockup. Was four stacked blocks (calendar
  * entry, warning card, reminder buckets, footer chip) — too much
  * detail for a homepage card. Collapsed to a single combined
  * meeting+warning panel with an inline on-device chip below: the

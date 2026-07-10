@@ -3,6 +3,7 @@ import type { CSSProperties } from 'react'
 import { Download, ChevronDown } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Reveal } from '#/components/zen/Reveal'
+import { RotatingHeadline } from '#/components/zen/RotatingHeadline'
 import { MenuBarMockup } from '#/components/zen/MenuBarMockup'
 import { TRIAL_DAYS } from '#/lib/polar'
 import { useLifetimePrice } from '#/lib/use-price'
@@ -210,10 +211,11 @@ export function Hero() {
           delay={160}
           className="hero-display text-sumi"
         >
-          {t('hero.title')}
-          <span className="block mt-1 sm:mt-2 text-sumi-soft italic font-normal">
-            {t('hero.titleItalic')}
+          {/* Stable accessible name for AT + crawlers; the visual rotates. */}
+          <span className="sr-only">
+            {t('hero.title')} {t('hero.titleItalic')}
           </span>
+          <RotatingHeadline />
         </Reveal>
 
         <Reveal as="p" delay={320} className="mx-auto mt-8 font-jp text-base text-hinomaru/75 md:text-lg tracking-[0.08em]">

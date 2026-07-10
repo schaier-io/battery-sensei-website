@@ -92,6 +92,13 @@
     "kicker": "macOS · gratuit à vie · Premium à {{price}} en paiement unique",
     "title": "Prenez soin de la batterie",
     "titleItalic": "de votre MacBook, sans bruit.",
+    "headlines": [
+      { "lead": "Prenez soin de la batterie", "tail": "de votre MacBook, sans bruit." },
+      { "lead": "Restez zen", "tail": "pendant vos réunions." },
+      { "lead": "Une charge plus douce", "tail": "pour une vie plus longue." },
+      { "lead": "Fini les extinctions", "tail": "par surprise." },
+      { "lead": "Des cycles plus frais,", "tail": "une batterie plus sereine." }
+    ],
     "jp": "静かに見守り、無理なく長持ち。",
     "body": "La batterie de votre MacBook s'use un peu à chaque cycle complet de charge. Sensei surveille les détails utiles : il vous prévient avant l'extinction, maintient une limite de charge plus saine et montre quelles apps consomment de l'énergie, comment les cycles s'accumulent et si la capacité vieillit normalement.",
     "readMore": "Explorer les fonctionnalités",
@@ -373,7 +380,7 @@
         "macos": "no"
       },
       {
-        "label": "Gardien de batterie en réunion",
+        "label": "Gardien de réunion",
         "desc": "Analyse les 4 prochaines heures de réunions sur votre Mac. Risque critique : alertes 30/15/5/1 min avant. Catastrophique : alerte immédiate.",
         "key": "meeting-battery-guard",
         "sensei": "yes",
@@ -539,7 +546,7 @@
     },
     "meeting-battery-guard": {
       "kicker": "Premium · 会議",
-      "heading": "Gardien de batterie en réunion.",
+      "heading": "Gardien de réunion.",
       "headingItalic": "Le savoir avant que la batterie ne devienne le problème.",
       "body": "Une fonctionnalité Premium, incluse dans l'essai gratuit puis dans Lifetime. Après activation, Sensei lit les 4 prochaines heures de votre calendrier directement sur votre Mac (EventKit, fenêtre par défaut). Il évalue chaque réunion par rapport à votre batterie actuelle (Confortable, Serré, Critique ou Catastrophique) et ne vous dérange qu'au bon moment. Critique : 30 / 15 / 5 / 1 min avant, avec la minute exacte où l'ordi s'éteindrait et le remède (« 22 min de charge et la batterie tient toute la réunion »). Catastrophique : vous êtes prévenu sur-le-champ. Serré : un seul rappel à 30 min. Confortable : silence. Branchez assez tôt et les rappels en attente s'annulent d'eux-mêmes. Les titres restent lisibles dans les notifications par défaut ; une option permet de les masquer.",
       "mockupCaption": "Fenêtre de 4 heures. Alerte seulement quand il le faut.",
@@ -602,7 +609,8 @@
     },
     "lifetime": {
       "tier": "永遠 · Lifetime",
-      "period": "paiement unique · jusqu'à 3 Mac",
+      "period": "paiement unique",
+      "macsBadge": "jusqu'à 3 Mac",
       "originalLabel": "avant",
       "discountNote": "Offre de lancement · code ZENMODE",
       "redeem": {
@@ -622,11 +630,15 @@
       "activationLabel": "Comment fonctionne l'activation",
       "items": [
         {
+          "title": "Mises à jour à vie",
+          "body": "Chaque version future et mise à jour de macOS incluse. Payez une fois, jamais plus."
+        },
+        {
           "title": "Toutes les fonctionnalités déverrouillées",
           "body": "Tout ce qui est inclus dans Free, plus toutes les fonctionnalités Premium actuelles et futures. Un seul paiement."
         },
         {
-          "title": "Gardien de batterie en réunion",
+          "title": "Gardien de réunion",
           "body": "Sensei vérifie vos prochaines réunions sur votre Mac et vous prévient en amont quand le risque de batterie est élevé."
         },
         {
@@ -641,15 +653,15 @@
     },
     "support": {
       "tier": "応援 · Yearly Patron",
-      "period": "par an",
+      "period": "par an · jusqu'à 5 Mac",
       "badge": "Annulable à tout moment",
-      "blurb": "Toutes les fonctionnalités Premium, facturées chaque année. Moins cher au départ que Lifetime, et votre abonnement aide les prochaines versions de Sensei à exister.",
+      "blurb": "Financez le développement continu de Sensei. Un abonnement annuel avec toutes les fonctionnalités Premium.",
       "ctaLabel": "Devenir Yearly Patron",
       "perksTitle": "Ce que vous obtenez · 応援",
       "items": [
         {
           "title": "Tout Premium",
-          "body": "Le même socle Premium que Lifetime : Gardien de batterie en réunion, historique illimité et règles d'alerte personnalisées."
+          "body": "Le même socle Premium que Lifetime : Gardien de réunion, historique illimité et règles d'alerte personnalisées."
         },
         {
           "title": "Vous financez la prochaine version",
@@ -684,7 +696,7 @@
           "**Paiement unique de {{price}} pour une licence à vie.** {{lifetimeScope}} Pas d'abonnement.",
           "Commencez gratuitement pendant {{trial}} jours. Pas de carte, pas de compte.",
           "À la fin de l'essai, Sensei vous demande une seule fois au lancement. Si vous passez votre tour, les essentiels gratuits continuent de fonctionner : limite de charge, Mode voyage, alertes intelligentes, 24 h d'historique, consommation par app, watts en direct dans la barre des menus.",
-          "Premium ajoute le Gardien de batterie en réunion, historique illimité et règles d'alerte personnalisées. Le paiement s'affiche dans votre devise locale."
+          "Premium ajoute le Gardien de réunion, historique illimité et règles d'alerte personnalisées. Le paiement s'affiche dans votre devise locale."
         ]
       },
       {
@@ -737,7 +749,7 @@
         "q": "Battery Sensei est-il une alternative à AlDente ?",
         "a": [
           "**Oui.** Si vous voulez une limite de charge avec alertes intelligentes et historique de batterie, Sensei est une alternative à AlDente.",
-          "Livré en un seul installateur .pkg avec notarisation Apple. Premium ajoute le Gardien de batterie en réunion, historique illimité et règles personnalisées. Avec Lifetime, un seul paiement débloque Premium durablement.",
+          "Livré en un seul installateur .pkg avec notarisation Apple. Premium ajoute le Gardien de réunion, historique illimité et règles personnalisées. Avec Lifetime, un seul paiement débloque Premium durablement.",
           "Le comparatif côte à côte se trouve dans la section Comparaison ci-dessus."
         ]
       },
@@ -749,7 +761,7 @@
         ]
       },
       {
-        "q": "Comment fonctionne le Gardien de batterie en réunion ?",
+        "q": "Comment fonctionne le Gardien de réunion ?",
         "a": [
           "Fonction Premium à activer volontairement. Sensei lit votre agenda en local et repère les réunions que votre batterie pourrait ne pas tenir jusqu'au bout.",
           "Quand une réunion est à risque, jusqu'à quatre rappels : **30, 15, 5 et 1 minute avant** le début.",
@@ -930,7 +942,7 @@
     },
     "summaryLines": {
       "lifetime": [
-        "Gardien de batterie en réunion : alertes avant les réunions importantes",
+        "Gardien de réunion : alertes avant les réunions importantes",
         "Historique Saga illimité : chaque cycle, sur les 3 Mac couverts par Lifetime",
         "Règles d'alerte personnalisées : ajouter, retirer, modifier les seuils",
         "Mises à jour à vie, sans abonnement"

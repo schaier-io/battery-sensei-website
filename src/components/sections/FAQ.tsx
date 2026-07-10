@@ -67,7 +67,7 @@ export const FAQ_ITEMS: ReadonlyArray<FaqItem> = [
       `**One-time $3.99 for a lifetime license.** ${LICENSE_SCOPE_LIFETIME} No subscription.`,
       'Start free for 5 days. No card, no account.',
       'When the trial ends, Sensei asks once at launch. Skip the purchase and the free essentials keep working: charge limit, Travel Mode, smart alerts, 24-hour history, per-app drain, live menu-bar watts.',
-      'Premium adds Meeting Battery Guard, unlimited history, and custom warning rules. Checkout shows your local currency.',
+      'Premium adds Meeting Guard, unlimited history, and custom warning rules. Checkout shows your local currency.',
     ],
   },
   {
@@ -120,7 +120,7 @@ export const FAQ_ITEMS: ReadonlyArray<FaqItem> = [
     q: 'Is Battery Sensei an AlDente alternative?',
     a: [
       '**Yes.** If you want charge limits plus smart warnings and battery history, Sensei is an AlDente alternative.',
-      'Ships as one notarized .pkg installer. Premium adds Meeting Battery Guard, unlimited history, and custom warning rules. With Lifetime, one payment unlocks Premium for good.',
+      'Ships as one notarized .pkg installer. Premium adds Meeting Guard, unlimited history, and custom warning rules. With Lifetime, one payment unlocks Premium for good.',
       'Side-by-side comparison lives in the Compare section above.',
     ],
   },
@@ -132,7 +132,7 @@ export const FAQ_ITEMS: ReadonlyArray<FaqItem> = [
     ],
   },
   {
-    q: 'How does Meeting Battery Guard work?',
+    q: 'How does Meeting Guard work?',
     a: [
       'Opt-in Premium feature. Sensei reads your calendar locally and predicts which meetings your battery might not survive.',
       'When a meeting is at risk, you get up to four nudges: **30, 15, 5, and 1 minute before** start.',

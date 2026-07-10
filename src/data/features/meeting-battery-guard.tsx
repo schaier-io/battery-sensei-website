@@ -46,13 +46,13 @@ export const extended = (
     <P>
       Calendar event titles are readable in the warning by default so
       you can tell which meeting is at risk. One toggle in Settings →
-      Meeting Battery Guard redacts the titles, so the warning becomes
+      Meeting Guard redacts the titles, so the warning becomes
       "Next meeting" instead of "Quarterly review with Sarah." The data
       itself never leaves your Mac either way; the toggle only affects
       whether the notification text includes the title.
     </P>
     <P>
-      Meeting Battery Guard is Premium. It’s included in the free trial
+      Meeting Guard is Premium. It’s included in the free trial
       and unlocks with a Lifetime license. The 4-hour lookahead is the
       default; the value can be lowered if you prefer shorter horizons,
       but lower values lose the early-Catastrophic warning. For tighter
@@ -64,7 +64,7 @@ export const extended = (
 
 export const faqs = [
   {
-    q: 'Does Meeting Battery Guard work with Google Calendar / Outlook?',
+    q: 'Does Meeting Guard work with Google Calendar / Outlook?',
     a:
       'Yes. Anything that publishes events to macOS Calendar (EventKit) works. That includes Google Calendar via the Mac’s Internet Accounts pane, Outlook via Exchange, iCloud Calendar, and local calendars. Sensei reads the union of all enabled accounts.',
   },

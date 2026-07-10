@@ -92,6 +92,13 @@
     "kicker": "macOS · dauerhaft kostenlos · Premium für einmalig {{price}}",
     "title": "Mehr Ruhe für den Akku",
     "titleItalic": "Ihres MacBooks.",
+    "headlines": [
+      { "lead": "Mehr Ruhe für den Akku", "tail": "Ihres MacBooks." },
+      { "lead": "Bleiben Sie gelassen", "tail": "in jedem Meeting." },
+      { "lead": "Sanfteres Laden", "tail": "für ein längeres Leben." },
+      { "lead": "Nie wieder", "tail": "unerwartetes Abschalten." },
+      { "lead": "Kühlere Zyklen,", "tail": "ein ruhigerer Akku." }
+    ],
     "jp": "静かに見守り、無理なく長持ち。",
     "body": "Jede volle Ladung lässt den Akku Ihres MacBooks ein Stück altern. Battery Sensei behält die Details im Blick: warnt rechtzeitig vor dem Abschalten, hält den Akku bei einem schonenderen Ladelimit und zeigt, welche Apps Energie verbrauchen, wie sich Zyklen summieren und ob die Kapazität normal altert.",
     "readMore": "Funktionen ansehen",
@@ -602,7 +609,8 @@
     },
     "lifetime": {
       "tier": "永遠 · Lifetime",
-      "period": "einmalig · bis zu 3 eigene Macs",
+      "period": "einmalig",
+      "macsBadge": "bis zu 3 Macs",
       "originalLabel": "statt",
       "discountNote": "Startangebot · Code ZENMODE",
       "redeem": {
@@ -621,6 +629,10 @@
       "premiumAdds": "In Lifetime enthalten · 先生",
       "activationLabel": "So funktioniert die Aktivierung",
       "items": [
+        {
+          "title": "Lebenslange Updates",
+          "body": "Jede zukünftige Version und jedes macOS-Update inklusive. Einmal zahlen, nie wieder."
+        },
         {
           "title": "Alle Funktionen freigeschaltet",
           "body": "Alles aus dem Free-Tarif, dazu jede Premium-Funktion jetzt und in Zukunft. Eine Zahlung, dauerhaft freigeschaltet."
@@ -641,9 +653,9 @@
     },
     "support": {
       "tier": "応援 · Yearly Patron",
-      "period": "pro Jahr",
+      "period": "pro Jahr · bis zu 5 Macs",
       "badge": "Jederzeit kündbar",
-      "blurb": "Alle Premium-Funktionen, jährlich abgerechnet. Günstigerer Einstieg als Lifetime, und Ihr Beitrag hilft, neue Sensei-Versionen möglich zu machen.",
+      "blurb": "Fördern Sie Senseis Weiterentwicklung. Ein Jahresabo mit allen Premium-Funktionen.",
       "ctaLabel": "Patron werden",
       "perksTitle": "Was Sie bekommen · 応援",
       "items": [

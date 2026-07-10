@@ -2,7 +2,6 @@ import {
   Sparkles,
   Clock,
   Infinity as InfinityIcon,
-  Headphones,
   Download,
   ShieldCheck,
   Heart,
@@ -31,7 +30,10 @@ import { TRIAL_DAYS } from '#/lib/polar'
 import { usePremiumPrice, useLifetimePrice } from '#/lib/use-price'
 import { useDiscountAvailability } from '#/lib/use-discount-availability'
 
-const lifetimeIcons: readonly LucideIcon[] = [Sparkles, InfinityIcon, Clock, Headphones]
+// Order mirrors `pricing.lifetime.items` in en.json:
+// 1. lifetime updates (∞), 2. all features, 3. Meeting Guard,
+// 4. unlimited history, 5. custom warning rules.
+const lifetimeIcons: readonly LucideIcon[] = [InfinityIcon, Sparkles, Clock, Activity, Bell]
 // Order mirrors `pricing.support.items` in en.json:
 // 1. full Premium feature set, 2. you fund the next release, 3. direct line, 4. cancel anytime.
 const supportIcons: readonly LucideIcon[] = [Sparkles, TrendingUp, Inbox, XCircle]
@@ -50,6 +52,28 @@ const freeIcons: readonly LucideIcon[] = [
 /** Shared primary CTA geometry — all three tiers lock to exactly 2.75rem tall. */
 const PRICING_CTA_BTN =
   'group box-border inline-flex h-11 min-h-11 max-h-11 w-full shrink-0 items-center justify-center gap-2 rounded-md px-5 text-sm font-medium leading-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]'
+
+/**
+ * Prominent "how many Macs one license covers" chip. Pulls the Mac-count
+ * scope out of the small period line into a Laptop-iconed pill directly
+ * under the price so it reads at a glance on both paid cards.
+ *   - `accent` (Lifetime) → hinomaru wash, matching the card's ring.
+ *   - default (Yearly Patron) → quiet sumi container.
+ */
+function MacScopeBadge({ label, accent = false }: { label: string; accent?: boolean }) {
+  return (
+    <span
+      className={
+        accent
+          ? 'mt-3 inline-flex items-center gap-1.5 rounded-full bg-[color-mix(in_oklab,var(--hinomaru)_10%,var(--washi))] px-2.5 py-1 text-[0.75rem] font-medium tracking-wide text-hinomaru'
+          : 'mt-3 inline-flex items-center gap-1.5 rounded-full bg-sumi/[0.06] px-2.5 py-1 text-[0.75rem] font-medium tracking-wide text-sumi'
+      }
+    >
+      <Laptop className="h-3.5 w-3.5" strokeWidth={1.8} aria-hidden />
+      {label}
+    </span>
+  )
+}
 
 /**
  * Pins pre-CTA copy, the CTA, and the post-CTA row (skip link / spacer) to the
@@ -165,7 +189,7 @@ export function Pricing() {
             aria-labelledby="pricing-tier-free"
             className="paper-card flex h-full flex-col px-7 pt-7 pb-5 md:px-8 md:pt-8 md:pb-6"
           >
-            <div className="flex items-center gap-3">
+            <div className="flex min-h-[1.5rem] items-center gap-3">
               {/* `id` on the tier label gives the surrounding <article> an
                   accessible name via aria-labelledby. The element stays a
                   span so the kanji tracking + font-jp styling are
@@ -246,7 +270,7 @@ export function Pricing() {
             aria-labelledby="pricing-tier-lifetime"
             className="paper-card flex h-full flex-col px-7 pt-7 pb-5 md:px-8 md:pt-8 md:pb-6 ring-1 ring-hinomaru/20"
           >
-            <div className="flex items-center gap-3">
+            <div className="flex min-h-[1.5rem] items-center gap-3">
               <h3
                 id="pricing-tier-lifetime"
                 className="font-jp text-xs tracking-widest text-hinomaru/80 m-0 font-normal"
@@ -301,6 +325,7 @@ export function Pricing() {
                 {t('pricing.lifetime.period')}
               </span>
             </div>
+            <MacScopeBadge label={t('pricing.lifetime.macsBadge')} accent />
             {/* Launch-discount marketing chrome (note + scarcity bar)
                 appears ONLY while ZENMODE still has redemptions. Past
                 that, the card reads as a plain lifetime product at
@@ -365,12 +390,21 @@ export function Pricing() {
         </Reveal>
 
         {/* ---------- Yearly Patron card (right) ---------- */}
+        {/* `paper-card--muted` recedes this tier: flatter background, softer
+            elevation, slightly lowered opacity (restored on hover). It reads
+            as the quiet support option next to the Free and RECOMMENDED
+            Lifetime cards, not a competing headline buy. */}
         <Reveal delay={320} className="h-full">
           <article
             aria-labelledby="pricing-tier-support"
-            className="paper-card flex h-full flex-col px-7 pt-7 pb-5 md:px-8 md:pt-8 md:pb-6"
+            className="paper-card paper-card--muted flex h-full flex-col px-7 pt-7 pb-5 md:px-8 md:pt-8 md:pb-6"
           >
-            <div className="flex flex-wrap items-center gap-2">
+            {/* Single-line tier label (min-h shared with the Free and
+                Lifetime headers so all three price rows align). The "support
+                indie development" message is carried by the blurb and the
+                gold "You fund the next release" perk, not a loud header pill —
+                keeping this receded tier quiet. */}
+            <div className="flex min-h-[1.5rem] items-center gap-2">
               <h3
                 id="pricing-tier-support"
                 className="font-jp text-xs tracking-widest text-sumi-soft m-0 font-normal"

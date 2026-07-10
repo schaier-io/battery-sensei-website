@@ -5,7 +5,7 @@ import { extended, faqs } from '#/data/features/meeting-battery-guard'
 
 const SITE_URL = 'https://www.battery-sensei.app'
 const PATH = '/features/meeting-battery-guard'
-const PAGE_TITLE = 'Meeting Battery Guard — Battery Sensei'
+const PAGE_TITLE = 'Meeting Guard — Battery Sensei'
 const PAGE_DESC =
   'Calendar-aware battery warning. Sensei predicts whether your battery will survive each meeting and warns 30, 15, 5, and 1 minute before, all on-device.'
 

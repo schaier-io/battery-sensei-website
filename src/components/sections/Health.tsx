@@ -1,5 +1,14 @@
 import { useEffect, useState } from 'react'
-import { Activity, Thermometer, Repeat, Zap, ShieldCheck, BarChart3 } from 'lucide-react'
+import {
+  Activity,
+  Thermometer,
+  Repeat,
+  Zap,
+  ShieldCheck,
+  BarChart3,
+  ArrowDownToLine,
+  ArrowUpFromLine,
+} from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Hanko } from '#/components/zen/Hanko'
 import { Reveal } from '#/components/zen/Reveal'
@@ -414,57 +423,63 @@ function HeatMockup({ className = '' }: { className?: string }) {
   const over = temp - limit
   return (
     <div
-      className={`heat-mockup mt-3 rounded-md bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-3.5 py-3 ${className}`}
-      style={{
-        boxShadow: '0.4px 0.4px 0 0 var(--line), 0 0 0 1px var(--line)',
-      }}
+      className={`heat-mockup mt-3 overflow-hidden rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,#fff)] shadow-[0_1px_0_rgba(255,255,255,0.5)_inset,0_14px_30px_-14px_rgba(28,26,23,0.30),0_4px_10px_-6px_rgba(28,26,23,0.18)] ${className}`}
     >
-      <div className="flex items-baseline justify-between">
-        <span className="text-[9px] font-semibold uppercase tracking-[0.22em] text-nezumi">
-          Charge guard
-        </span>
-        <span
-          className="rounded-full px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-hinomaru"
-          style={{
-            boxShadow: '0 0 0 1px color-mix(in oklab, var(--hinomaru) 38%, transparent)',
-          }}
-        >
-          Holding
-        </span>
-      </div>
-      <div className="mt-3.5 grid grid-cols-3 gap-2 text-[10px]">
-        <div className="min-w-0 rounded-[6px] border border-[var(--line)]/70 px-2 py-1.5">
-          <p className="truncate uppercase tracking-[0.12em] text-nezumi">Battery</p>
-          <p className="mt-0.5 truncate tabular-nums font-semibold text-sumi">{temp}C</p>
-        </div>
-        <div className="min-w-0 rounded-[6px] border border-[var(--line)]/70 px-2 py-1.5">
-          <p className="truncate uppercase tracking-[0.12em] text-nezumi">Limit</p>
-          <p className="mt-0.5 truncate tabular-nums font-semibold text-sumi">{limit}C</p>
-        </div>
-        <div className="min-w-0 rounded-[6px] border border-[var(--line)]/70 px-2 py-1.5">
-          <p className="truncate uppercase tracking-[0.12em] text-nezumi">Charge</p>
-          <p className="mt-0.5 truncate font-semibold text-hinomaru">Paused</p>
-        </div>
-      </div>
-      <div className="mt-2.5">
-        <div className="relative h-[3px] w-full overflow-hidden rounded-full bg-[var(--line)]">
-          <div
-            className="h-full rounded-full"
-            style={{
-              width: `${tempPct}%`,
-              background:
-                'linear-gradient(90deg, color-mix(in oklab, var(--hinomaru) 64%, var(--nezumi)) 0%, var(--hinomaru) 100%)',
-            }}
-          />
-          {/* Threshold tick — where Sensei eases off the charge. */}
+      <div className="flex h-full flex-col px-3.5 py-3">
+        {/* Header — feature label + live "Holding" pulse, mirroring the
+            app's menu-bar panel chrome. */}
+        <div className="flex items-center justify-between gap-2">
+          <span className="inline-flex items-center gap-1.5 text-[9px] font-semibold uppercase tracking-[0.2em] text-nezumi">
+            <Thermometer className="h-3 w-3 text-hinomaru/85" strokeWidth={1.8} aria-hidden />
+            Charge guard
+          </span>
           <span
-            className="absolute top-1/2 h-[7px] w-px -translate-y-1/2 bg-sumi"
-            style={{ left: `${limitPct}%` }}
-          />
+            className="inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-hinomaru"
+            style={{
+              boxShadow: '0 0 0 1px color-mix(in oklab, var(--hinomaru) 38%, transparent)',
+            }}
+          >
+            <span className="h-1 w-1 rounded-full bg-hinomaru" aria-hidden />
+            Holding
+          </span>
         </div>
-        <div className="mt-1.5 flex items-center justify-between text-[10px] uppercase tracking-[0.12em] text-nezumi">
-          <span className="tabular-nums">Resumes at {resumeAt}C</span>
-          <span className="tabular-nums text-hinomaru">+{over}C over</span>
+        {/* Big battery temperature paired with the pause it triggered. */}
+        <div className="mt-3 flex items-end justify-between gap-3">
+          <p className="display-title tabular-nums text-[26px] font-semibold leading-none text-sumi">
+            {temp}
+            <span className="align-top text-[15px] text-sumi-soft">°C</span>
+          </p>
+          <p className="text-right leading-tight">
+            <span className="block text-[12px] font-semibold text-hinomaru">
+              Charging paused
+            </span>
+            <span className="mt-0.5 block text-[10px] tabular-nums text-sumi-soft">
+              resumes at {resumeAt}°
+            </span>
+          </p>
+        </div>
+        {/* Thermometer gauge — fill to the current temperature, a tick at
+            the chosen limit. "Over the line → paused" reads at a glance. */}
+        <div className="mt-auto pt-3.5">
+          <div className="relative h-[6px] w-full overflow-hidden rounded-full bg-[var(--line)]">
+            <div
+              className="h-full rounded-full"
+              style={{
+                width: `${tempPct}%`,
+                background:
+                  'linear-gradient(90deg, color-mix(in oklab, var(--hinomaru) 52%, var(--nezumi)) 0%, var(--hinomaru) 100%)',
+              }}
+            />
+            {/* Threshold tick — where Sensei eases off the charge. */}
+            <span
+              className="absolute top-1/2 h-[11px] w-[1.5px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-sumi"
+              style={{ left: `${limitPct}%` }}
+            />
+          </div>
+          <div className="mt-1.5 flex items-center justify-between text-[10px] uppercase tracking-[0.12em] text-nezumi">
+            <span className="tabular-nums">Limit {limit}°</span>
+            <span className="tabular-nums text-hinomaru">+{over}° over</span>
+          </div>
         </div>
       </div>
     </div>
@@ -472,69 +487,81 @@ function HeatMockup({ className = '' }: { className?: string }) {
 }
 
 /**
- * Compact power-flow ledger for "Live watts in, watts out."
- * A quick two-side split (in/out) plus net indicator mirrors
- * the app's data-minded style while staying lightweight.
+ * "Live watts in, watts out" — modeled on the app's menu-bar dropdown
+ * (see MenuBarGlanceMockup): same border, washi surface, soft drop
+ * shadow, and Zap "Power adapter" source line, so it reads as the real
+ * Sensei panel rather than a generic chart. Shows the two live figures
+ * that matter — power into the battery and system draw — plus net.
  */
 function WattsMockup({ className = '' }: { className?: string }) {
   const wattsIn = 61.3
   const wattsOut = 28.7
   const net = wattsIn - wattsOut
-  const total = wattsIn + wattsOut
-  const inPct = total > 0 ? (wattsIn / total) * 100 : 0
-  const outPct = total > 0 ? (wattsOut / total) * 100 : 0
+  const rows = [
+    {
+      icon: ArrowDownToLine,
+      label: 'Into battery',
+      value: wattsIn,
+      tint: 'text-hinomaru',
+      flow: 'text-hinomaru',
+    },
+    {
+      icon: ArrowUpFromLine,
+      label: 'System draw',
+      value: wattsOut,
+      tint: 'text-sumi/55',
+      flow: 'text-sumi/40',
+    },
+  ] as const
+  // Dots stream toward the reading; more watts → faster flow, so charging
+  // visibly runs ahead of the system draw.
+  const flowDuration = (w: number) => `${Math.max(0.7, Math.min(2.4, 60 / w)).toFixed(2)}s`
   return (
-    <div
-      className={`watts-mockup mt-3 rounded-md bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-3.5 py-3 ${className}`}
-      style={{
-        boxShadow: '0.4px 0.4px 0 0 var(--line), 0 0 0 1px var(--line)',
-      }}
-    >
-      <div className="flex items-baseline justify-between">
-        <span className="text-[9px] font-semibold uppercase tracking-[0.22em] text-nezumi">
-          Power flow
-        </span>
-        <span className="text-[10px] font-medium tabular-nums text-sumi-soft">
-          Real time
-        </span>
-      </div>
-      <div className="mt-2 grid grid-cols-2 gap-2">
-        <div className="rounded-[6px] border border-[var(--line)]/70 px-2 py-1.5">
-          <p className="text-[10px] uppercase tracking-[0.12em] text-nezumi">In</p>
-          <p className="mt-0.5 text-[12px] font-semibold tabular-nums text-sumi">{wattsIn.toFixed(1)}W</p>
+    <div className={`watts-mockup mt-3 ${className}`}>
+      <div className="overflow-hidden rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,#fff)] shadow-[0_1px_0_rgba(255,255,255,0.5)_inset,0_14px_30px_-14px_rgba(28,26,23,0.30),0_4px_10px_-6px_rgba(28,26,23,0.18)]">
+        <div className="px-3.5 py-3">
+          {/* Source header — Zap + adapter name, plus a live pulse, exactly
+              like the app's menu-bar power line. */}
+          <div className="flex items-center justify-between gap-2 text-[10px]">
+            <span className="inline-flex min-w-0 items-center gap-1.5">
+              <Zap className="h-3 w-3 shrink-0 text-hinomaru/85" strokeWidth={1.8} aria-hidden />
+              <span className="truncate font-medium text-sumi">Power adapter</span>
+            </span>
+            <span className="inline-flex shrink-0 items-center gap-1.5 uppercase tracking-[0.14em] text-hinomaru">
+              <span className="h-1.5 w-1.5 rounded-full bg-hinomaru" aria-hidden />
+              Live
+            </span>
+          </div>
+          {/* In / Out — directional arrows + the live watts figure, the
+              heart of "watts in, watts out." */}
+          <div className="mt-3 space-y-2.5">
+            {rows.map(({ icon: Icon, label, value, tint, flow }) => (
+              <div key={label} className="flex items-center gap-2.5">
+                <Icon className={`h-3.5 w-3.5 shrink-0 ${tint}`} strokeWidth={2} aria-hidden />
+                <span className="w-[4.75rem] shrink-0 whitespace-nowrap text-[11px] text-sumi-soft">
+                  {label}
+                </span>
+                {/* Flowing dots — the live power stream toward the reading. */}
+                <span
+                  className={`power-flow-lane relative h-2 min-w-[1.5rem] flex-1 ${flow}`}
+                  style={{ animationDuration: flowDuration(value) }}
+                  aria-hidden
+                />
+                <span className="shrink-0 display-title tabular-nums text-[16px] font-semibold leading-none text-sumi">
+                  {value.toFixed(1)}
+                  <span className="ml-0.5 text-[10px] font-medium text-sumi-soft">W</span>
+                </span>
+              </div>
+            ))}
+          </div>
+          {/* Net + charging status. */}
+          <div className="mt-2.5 flex items-center justify-between border-t border-[var(--line)] pt-2 text-[10px]">
+            <span className="uppercase tracking-[0.14em] text-nezumi">Charging to 80%</span>
+            <span className="tabular-nums font-semibold text-sumi">
+              Net +{net.toFixed(1)} W
+            </span>
+          </div>
         </div>
-        <div className="rounded-[6px] border border-[var(--line)]/70 px-2 py-1.5">
-          <p className="text-[10px] uppercase tracking-[0.12em] text-nezumi">Out</p>
-          <p className="mt-0.5 text-[12px] font-semibold tabular-nums text-sumi">{wattsOut.toFixed(1)}W</p>
-        </div>
-      </div>
-      <div className="mt-2 space-y-1.5">
-        <div className="flex items-center gap-2">
-          <span className="w-7 text-[9px] uppercase tracking-[0.12em] text-nezumi">In</span>
-          <span className="relative h-[3px] flex-1 overflow-hidden rounded-full bg-[var(--line)]">
-            <span
-              className="absolute inset-y-0 left-0 rounded-full"
-              style={{
-                width: `${inPct}%`,
-                background:
-                  'linear-gradient(90deg, var(--hinomaru) 0%, color-mix(in oklab, var(--hinomaru) 64%, var(--nezumi)) 100%)',
-              }}
-            />
-          </span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="w-7 text-[9px] uppercase tracking-[0.12em] text-nezumi">Out</span>
-          <span className="relative h-[3px] flex-1 overflow-hidden rounded-full bg-[var(--line)]">
-            <span
-              className="absolute inset-y-0 left-0 rounded-full bg-sumi/55"
-              style={{ width: `${outPct}%` }}
-            />
-          </span>
-        </div>
-      </div>
-      <div className="mt-2.5 flex items-center justify-between text-[10px] uppercase tracking-[0.12em]">
-        <span className="text-nezumi">Net</span>
-        <span className="tabular-nums font-semibold text-sumi">{net > 0 ? '+' : ''}{net.toFixed(1)}W</span>
       </div>
     </div>
   )

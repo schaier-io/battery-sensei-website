@@ -774,6 +774,22 @@ body::after {
   .paper-card:focus-within {
     border-color: var(--line-strong);
   }
+
+  /* Receded variant — used by the Yearly Patron tier so it sits behind the
+     Free and RECOMMENDED Lifetime cards: flat (no bright top gradient),
+     minimal elevation, and a touch of transparency. Hover restores full
+     presence so it never reads as disabled. */
+  .paper-card--muted {
+    background: color-mix(in oklab, var(--card) 55%, var(--washi-deep));
+    box-shadow:
+      0.4px 0.4px 0 0 var(--line),
+      0 1px 2px var(--paper-shadow);
+    opacity: 0.9;
+  }
+
+  .paper-card--muted:hover {
+    opacity: 1;
+  }
 }
 
 /* Ink button (primary) */
@@ -1312,6 +1328,119 @@ body::after {
 
 @media (prefers-reduced-motion: reduce) {
   .brush-ring--animate { animation: none; }
+}
+
+/* Rotating hero headline — per-glyph ink draw.
+   Every headline renders in the same grid cell (grid-area 1/1), so the
+   <h1> reserves the tallest line's height and never reflows as copy
+   cycles. Each glyph carries its own soft-edged gradient mask (the wet
+   brush tip); the draw keyframe sweeps that edge off the letter while a
+   short blur resolves and it settles down — staggered left→right with
+   heavy overlap so the line reads as one continuous stroke being drawn,
+   not letters popping in. */
+.hero-headline-layer {
+  grid-area: 1 / 1;
+}
+
+/* Glyphs of hidden layers don't paint; the active layer shows them (either
+   statically before the rotation arms, or via the draw keyframe), and the
+   outgoing layer keeps them lit so its line-out fade can carry them away. */
+.hero-headline-layer .hero-hl-char {
+  opacity: 0;
+}
+.hero-headline-layer[data-active] .hero-hl-char,
+.hero-headline-layer[data-prev] .hero-hl-char {
+  opacity: 1;
+}
+
+.hero-hl-word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.hero-hl-char {
+  /* No mask/overflow clip here: italic glyphs (e.g. an italic "f") overhang
+     their advance box, and a per-glyph mask would shear that overhang off.
+     The draw reads through the staggered blur-bloom below instead. */
+  display: inline-block;
+  will-change: opacity, filter, transform;
+}
+
+/* Incoming: each glyph blooms in from a soft blur; delay ramps with its
+   index so the ink appears to travel across the line. Duration >> stagger
+   keeps neighbours overlapping into one continuous gesture. */
+.hero-headline-layer[data-active][data-animate] .hero-hl-char {
+  animation: hero-char-draw 560ms cubic-bezier(0.22, 0.7, 0.28, 1) both;
+  animation-delay: calc(var(--i) * 38ms);
+}
+
+@keyframes hero-char-draw {
+  0% {
+    opacity: 0;
+    filter: blur(4px);
+    transform: translateY(0.16em);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+
+/* Outgoing: the whole line dries and lifts, so attention stays on the
+   glyphs being drawn in. */
+.hero-headline-layer[data-prev][data-animate] {
+  animation: hero-line-out 480ms cubic-bezier(0.4, 0, 0.6, 1) both;
+}
+@keyframes hero-line-out {
+  0% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    filter: blur(5px);
+    transform: translateY(-8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-hl-char {
+    opacity: 1;
+  }
+  .hero-headline-layer[data-active][data-animate] .hero-hl-char,
+  .hero-headline-layer[data-prev][data-animate] {
+    animation: none;
+  }
+}
+
+/* Power-flow lane — a row of small dots (currentColor) drifting toward the
+   reading to signal live power streaming in / out. The end mask fades dots
+   in and out so they emerge and dissolve rather than marching off a hard
+   edge. `animation-duration` is set inline per row (faster = more watts). */
+.power-flow-lane {
+  --pf-gap: 9px;
+  background-image: radial-gradient(circle at center, currentColor 1.05px, transparent 1.7px);
+  background-size: var(--pf-gap) 100%;
+  background-repeat: repeat-x;
+  background-position: 0 center;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 22%, #000 78%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 22%, #000 78%, transparent 100%);
+  animation: power-flow-drift 1.2s linear infinite;
+  opacity: 0.9;
+}
+
+@keyframes power-flow-drift {
+  to {
+    background-position: var(--pf-gap) center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .power-flow-lane {
+    animation: none;
+  }
 }
 
 /* Menu-bar mockup — coordinated entry once the card scrolls into view.
