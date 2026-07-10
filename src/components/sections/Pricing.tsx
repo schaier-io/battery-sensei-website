@@ -630,13 +630,12 @@ function FreeDownloadForm() {
   const [macConfirmOpen, setMacConfirmOpen] = useState(false)
   const inputRef = useRef<HTMLInputElement | null>(null)
 
-  // `#free-download-email` belongs to the pricing-card grid, so every
-  // Download CTAs target the card grid so tier prices are the destination.
-  // On this page, intercept the click to stop the browser from jumping to the
-  // field while it is focused. Focus first, then place the grid at its anchor
-  // offset; the final viewport always shows prices and the field is ready to
-  // type into. Cross-page `/#free-download-email` links still use the normal
-  // hash-load path below.
+  // `#free-download-email` belongs to the pricing-card grid, so Download CTAs
+  // keep a useful, shareable anchor while landing on the tier prices. On this
+  // page, intercept clicks to stop focus from triggering a competing native
+  // input jump; focus first, then smoothly position the grid at its anchor
+  // offset. Cross-page `/#free-download-email` links use the same hash-load
+  // path below.
   useEffect(() => {
     if (typeof window === 'undefined') return
     const isTarget = () => window.location.hash === '#free-download-email'
@@ -644,14 +643,7 @@ function FreeDownloadForm() {
     function scrollToCards() {
       const cards = document.getElementById('free-download-email')
       if (!cards) return
-      // Temporarily opt out of global smooth-scroll so this corrective scroll
-      // wins immediately after focus, rather than visibly starting at the
-      // email field and drifting down to the cards.
-      const root = document.documentElement
-      const previousBehavior = root.style.scrollBehavior
-      root.style.scrollBehavior = 'auto'
-      cards.scrollIntoView({ block: 'start' })
-      root.style.scrollBehavior = previousBehavior
+      cards.scrollIntoView({ block: 'start', behavior: 'smooth' })
     }
 
     function focusAndPositionCards() {
