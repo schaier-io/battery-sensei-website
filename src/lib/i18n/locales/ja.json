@@ -62,7 +62,7 @@
     "cancel": "今はしない",
     "continue": "それでもダウンロード",
     "bannerHeading": "ご案内です。macOS専用です。",
-    "bannerBody": "このデバイスからライセンスを購入できますが、アプリ本体はMac（macOS 13 Ventura以降）でのみ動作します。",
+    "bannerBody": "このデバイスからライセンスを購入できますが、アプリ本体はMac（macOS 14 Sonoma以降）でのみ動作します。",
     "dismiss": "閉じる"
   },
   "licenseScope": {
@@ -687,7 +687,7 @@
       {
         "q": "対応するMacは？",
         "a": [
-          "**macOS 13 Ventura以降。**",
+          "**macOS 14 Sonoma以降。**",
           "Apple SiliconとIntel MacBookに対応します。"
         ]
       },
@@ -873,7 +873,7 @@
         "body": "テレメトリなし。アカウントなし。クラウドなし。"
       }
     },
-    "specStrip": "macOS 13+ · Apple Silicon / Intel対応 · {{trial}}日間無料、カード不要 · {{price}}買い切り · 14日間返金保証。"
+    "specStrip": "macOS 14+ · Apple Silicon / Intel対応 · {{trial}}日間無料、カード不要 · {{price}}買い切り · 14日間返金保証。"
   },
   "from": {
     "kicker": "Sensei #{{id}} からの一枚 · 縁",
@@ -906,7 +906,7 @@
       }
     },
     "exploreCta": "Senseiができることを見る",
-    "specStrip": "macOS 13+ · Apple Silicon / Intel対応 · {{trial}}日間無料、カード不要 · アカウント不要。"
+    "specStrip": "macOS 14+ · Apple Silicon / Intel対応 · {{trial}}日間無料、カード不要 · アカウント不要。"
   },
   "footer": {
     "tagline": "ひとりのMacBookユーザーから、もうひとりへ。",

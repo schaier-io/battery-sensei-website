@@ -50,27 +50,27 @@ const COPY = {
   en: {
     kicker: 'QUIET POWER FOR YOUR MACBOOK',
     italic: 'Quiet battery care for your MacBook.',
-    spec: 'macOS 13+ · Apple Silicon & Intel · Apple-notarized',
+    spec: 'macOS 14+ · Apple Silicon & Intel · Apple-notarized',
   },
   de: {
     kicker: 'RUHIGE KRAFT FÜR DEIN MACBOOK',
     italic: 'Ruhige Akkupflege für dein MacBook.',
-    spec: 'macOS 13+ · Apple Silicon & Intel · Apple-beglaubigt',
+    spec: 'macOS 14+ · Apple Silicon & Intel · Apple-beglaubigt',
   },
   es: {
     kicker: 'ENERGÍA TRANQUILA PARA TU MAC',
     italic: 'Cuidado silencioso para la batería de tu Mac.',
-    spec: 'macOS 13+ · Apple Silicon e Intel · Notarizado por Apple',
+    spec: 'macOS 14+ · Apple Silicon e Intel · Notarizado por Apple',
   },
   fr: {
     kicker: 'ÉNERGIE SEREINE POUR VOTRE MAC',
     italic: 'Soin discret pour la batterie de votre Mac.',
-    spec: 'macOS 13+ · Apple Silicon & Intel · Notarisé par Apple',
+    spec: 'macOS 14+ · Apple Silicon & Intel · Notarisé par Apple',
   },
   ja: {
     kicker: 'MacBook のための、静かな力',
     italic: '静かなバッテリーケア。そっと見守る。',
-    spec: 'macOS 13+ · Apple Silicon・Intel · Apple 公証済み',
+    spec: 'macOS 14+ · Apple Silicon・Intel · Apple 公証済み',
     kickerJp: true,
     specJp: true,
   },

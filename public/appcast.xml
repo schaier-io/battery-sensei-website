@@ -1027,6 +1027,42 @@
         length="22935918"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.9.1</title>
+      <pubDate>Fri, 10 Jul 2026 13:44:23 +0000</pubDate>
+      <sparkle:version>78</sparkle:version>
+      <sparkle:shortVersionString>1.9.1</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.9.1</h1>
+<p>Today feels light and responsive again, with clearer Travel Mode guidance and more reliable background monitoring.</p>
+<h2>Performance</h2>
+<ul>
+<li><strong>The Today screen stays smooth while Battery Sensei works.</strong> System-load sampling, calendar lookups, history preparation, achievement progress, and other heavier calculations no longer compete with drawing and interaction on the main UI thread.</li>
+<li><strong>The battery shimmer keeps its familiar 60 fps motion with much less rendering work.</strong> Its timing, soft falloff, translucent gold stroke, and bristled edges retain the established hand-painted character.</li>
+<li><strong>App Power monitoring does less repeated work.</strong> Process ownership and running-app information are reused between samples, while history stores only the data needed to reconstruct the charts.</li>
+</ul>
+<h2>Today</h2>
+<ul>
+<li><strong>Travel Mode now explains itself.</strong> A dedicated info button describes what the temporary 100% charge does, when it ends, and how your normal charge and heat settings return afterward.</li>
+<li><strong>The hero layout has a calmer rhythm.</strong> The title, system-load metrics, warning control, and Travel Mode action are grouped and spaced more clearly.</li>
+</ul>
+<h2>Reliability</h2>
+<ul>
+<li><strong>Recent history is safer during launch and quit.</strong> Battery and App Power storage now guard against delayed loads overwriting fresh samples, debounce background saves, and flush pending changes when the app closes.</li>
+<li><strong>Calendar refreshes cannot replace newer results with stale ones.</strong> Meeting checks run away from the UI and discard superseded queries.</li>
+<li><strong>Achievement progress persists consistently.</strong> Newly calculated progress is saved alongside unlock state instead of being recomputed and forgotten between launches.</li>
+</ul>
+<p>Marketing 1.9.0 → 1.9.1, build 77 → 78.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.9.1/Battery-Sensei.pkg"
+        sparkle:edSignature="CB7yGrboGo8k9ac1X8UmwXMbBvWMICUIO177zyv5sDhFXN4Ra4Fv82bnnDL86V9auxi7/xkUeD2EpGZrVQUgAw=="
+        length="23025955"
+        type="application/octet-stream" />
+    </item>
+
 
 
 

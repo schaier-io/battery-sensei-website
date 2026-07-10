@@ -60,13 +60,13 @@ const softwareApplicationLd = {
   alternateName: '電池先生',
   applicationCategory: 'UtilitiesApplication',
   applicationSubCategory: 'BatteryUtility',
-  operatingSystem: 'macOS 13.0',
+  operatingSystem: 'macOS 14.0',
   description: DESCRIPTION,
   url: SITE_URL,
   downloadUrl: `${SITE_URL}/download/latest`,
   installUrl: `${SITE_URL}/download/latest`,
   fileSize: '12 MB',
-  softwareRequirements: 'macOS 13 Ventura or later. Apple Silicon or Intel.',
+  softwareRequirements: 'macOS 14 Sonoma or later. Apple Silicon or Intel.',
   offers: [
     {
       '@type': 'Offer',
@@ -175,7 +175,7 @@ const howToLd = {
   totalTime: 'PT3M',
   estimatedCost: { '@type': 'MonetaryAmount', currency: 'USD', value: '0' },
   supply: [
-    { '@type': 'HowToSupply', name: 'MacBook running macOS 13 or later' },
+    { '@type': 'HowToSupply', name: 'MacBook running macOS 14 or later' },
   ],
   tool: [{ '@type': 'HowToTool', name: 'Battery Sensei (free .pkg installer)' }],
   step: [

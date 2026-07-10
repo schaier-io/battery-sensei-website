@@ -57,7 +57,7 @@ export const FAQ_ITEMS: ReadonlyArray<FaqItem> = [
   {
     q: 'Which Macs are supported?',
     a: [
-      '**macOS 13 Ventura or later.**',
+      '**macOS 14 Sonoma or later.**',
       'Apple Silicon and Intel MacBooks.',
     ],
   },

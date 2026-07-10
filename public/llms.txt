@@ -8,7 +8,7 @@
 Battery Sensei (電池先生) is a single-purpose macOS utility for MacBook owners
 who want to slow battery wear, avoid surprise shutdowns, and understand how
 their battery is aging. Notarized by Apple, native AppKit and SwiftUI,
-supports macOS 13 Ventura or later on Apple Silicon and Intel.
+supports macOS 14 Sonoma or later on Apple Silicon and Intel.
 
 Privacy: nothing leaves the device. No telemetry, no account, no cloud.
 
@@ -20,7 +20,7 @@ Privacy: nothing leaves the device. No telemetry, no account, no cloud.
 - Devices: up to 3 Macs per license
 - Free essentials after trial: charge limit + Travel Mode, smart alerts via 3 presets (Zen / Regular / Senpai), 24-hour battery history, last-hour per-app battery, menu-bar live charge + watts + cycles
 - Premium adds: Meeting Battery Guard, unlimited battery history (3 d, 7 d), custom warning rules (add, remove, edit threshold percentages)
-- Platform: macOS 13+ (Apple Silicon and Intel)
+- Platform: macOS 14+ (Apple Silicon and Intel)
 - Distribution: notarized .pkg installer, direct download from www.battery-sensei.app
 - Languages: English, German, Spanish, French, Japanese
 - Public releases: https://github.com/schaier-io/battery-sensei-releases

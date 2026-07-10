@@ -62,7 +62,7 @@
     "cancel": "Not now",
     "continue": "Download anyway",
     "bannerHeading": "Heads up. macOS only.",
-    "bannerBody": "You can still buy a license from this device, but the app runs only on Macs (macOS 13 Ventura or later).",
+    "bannerBody": "You can still buy a license from this device, but the app runs only on Macs (macOS 14 Sonoma or later).",
     "dismiss": "Dismiss"
   },
   "licenseScope": {
@@ -687,7 +687,7 @@
       {
         "q": "Which Macs are supported?",
         "a": [
-          "**macOS 13 Ventura or later.**",
+          "**macOS 14 Sonoma or later.**",
           "Apple Silicon and Intel MacBooks."
         ]
       },
@@ -873,7 +873,7 @@
         "body": "No telemetry. No account. No cloud, ever."
       }
     },
-    "specStrip": "macOS 13+ · Apple Silicon & Intel · {{trial}} days free, no card · one-time {{price}} · 14-day refund."
+    "specStrip": "macOS 14+ · Apple Silicon & Intel · {{trial}} days free, no card · one-time {{price}} · 14-day refund."
   },
   "from": {
     "kicker": "From Sensei #{{id}} · 縁",
@@ -906,7 +906,7 @@
       }
     },
     "exploreCta": "See what Sensei does",
-    "specStrip": "macOS 13+ · Apple Silicon & Intel · {{trial}} days free, no card · no account, ever."
+    "specStrip": "macOS 14+ · Apple Silicon & Intel · {{trial}} days free, no card · no account, ever."
   },
   "footer": {
     "tagline": "From one MacBook owner to another.",

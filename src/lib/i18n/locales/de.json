@@ -62,7 +62,7 @@
     "cancel": "Jetzt nicht",
     "continue": "Trotzdem herunterladen",
     "bannerHeading": "Hinweis: nur für macOS.",
-    "bannerBody": "Sie können hier eine Lizenz kaufen, aber die App selbst läuft nur auf einem Mac (macOS 13 Ventura oder neuer).",
+    "bannerBody": "Sie können hier eine Lizenz kaufen, aber die App selbst läuft nur auf einem Mac (macOS 14 Sonoma oder neuer).",
     "dismiss": "Ausblenden"
   },
   "licenseScope": {
@@ -687,7 +687,7 @@
       {
         "q": "Welche Macs werden unterstützt?",
         "a": [
-          "**macOS 13 Ventura oder neuer.**",
+          "**macOS 14 Sonoma oder neuer.**",
           "Apple Silicon und Intel-MacBooks."
         ]
       },
@@ -873,7 +873,7 @@
         "body": "Keine Telemetrie. Kein Konto. Keine Cloud. Niemals."
       }
     },
-    "specStrip": "macOS 13+ · Apple Silicon & Intel · {{trial}} Tage kostenlos, keine Karte · einmalig {{price}} · 14 Tage Geld zurück."
+    "specStrip": "macOS 14+ · Apple Silicon & Intel · {{trial}} Tage kostenlos, keine Karte · einmalig {{price}} · 14 Tage Geld zurück."
   },
   "from": {
     "kicker": "Von Sensei #{{id}} · 縁",
@@ -906,7 +906,7 @@
       }
     },
     "exploreCta": "Sehen, was Sensei kann",
-    "specStrip": "macOS 13+ · Apple Silicon & Intel · {{trial}} Tage kostenlos, keine Karte · kein Konto. Niemals."
+    "specStrip": "macOS 14+ · Apple Silicon & Intel · {{trial}} Tage kostenlos, keine Karte · kein Konto. Niemals."
   },
   "footer": {
     "tagline": "Von einem MacBook-Nutzer für andere.",

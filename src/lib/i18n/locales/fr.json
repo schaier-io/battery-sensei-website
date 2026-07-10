@@ -62,7 +62,7 @@
     "cancel": "Plus tard",
     "continue": "Télécharger quand même",
     "bannerHeading": "À noter : macOS uniquement.",
-    "bannerBody": "Vous pouvez acheter une licence depuis cet appareil, mais l'application fonctionne uniquement sur Mac (macOS 13 Ventura ou plus récent).",
+    "bannerBody": "Vous pouvez acheter une licence depuis cet appareil, mais l'application fonctionne uniquement sur Mac (macOS 14 Sonoma ou version ultérieure).",
     "dismiss": "Fermer"
   },
   "licenseScope": {
@@ -687,7 +687,7 @@
       {
         "q": "Quels Mac sont pris en charge ?",
         "a": [
-          "**macOS 13 Ventura ou plus récent.**",
+          "**macOS 14 Sonoma ou version ultérieure.**",
           "MacBook Apple Silicon et MacBook Intel."
         ]
       },
@@ -873,7 +873,7 @@
         "body": "Pas de télémétrie. Pas de compte. Pas de cloud, jamais."
       }
     },
-    "specStrip": "macOS 13+ · Apple Silicon & Intel · {{trial}} jours gratuits, sans carte · {{price}} en paiement unique · garantie 14 jours."
+    "specStrip": "macOS 14+ · Apple Silicon & Intel · {{trial}} jours gratuits, sans carte · {{price}} en paiement unique · garantie 14 jours."
   },
   "from": {
     "kicker": "De la part du Sensei #{{id}} · 縁",
@@ -906,7 +906,7 @@
       }
     },
     "exploreCta": "Voir ce que fait Sensei",
-    "specStrip": "macOS 13+ · Apple Silicon & Intel · {{trial}} jours gratuits, sans carte · sans compte, jamais."
+    "specStrip": "macOS 14+ · Apple Silicon & Intel · {{trial}} jours gratuits, sans carte · sans compte, jamais."
   },
   "footer": {
     "tagline": "D'un propriétaire de MacBook à un autre.",
