@@ -1101,6 +1101,42 @@
         length="25537194"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.10.1</title>
+      <pubDate>Tue, 14 Jul 2026 11:45:58 +0000</pubDate>
+      <sparkle:version>80</sparkle:version>
+      <sparkle:shortVersionString>1.10.1</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.10.1</h1>
+<p>Third-party device alerts now match the Mac&#x27;s in full, warning overlays show how much time you have left, and the alert layouts are calmer and more consistent throughout.</p>
+<h2>Devices</h2>
+<ul>
+<li><strong>Accessory alerts are now fully configurable.</strong> Low-battery alerts for AirPods, mice, and other devices get the same controls as the Mac&#x27;s own warnings — warning style, manual or auto-close dismissal, close timing, and a per-alert sound. The editor mirrors the Mac&#x27;s custom-warning design so it feels identical to set up.</li>
+<li><strong>Preview each device rule in place.</strong> A Test button sits at the top of every device alert card, previewing that rule&#x27;s exact style, sound, and timing.</li>
+</ul>
+<h2>Alerts</h2>
+<ul>
+<li><strong>See how much time you have left.</strong> Low-battery and meeting warnings now show an estimated runtime — &quot;About 1h 20m of battery left&quot; — right under the readout, on the Mac where the estimate is reliable.</li>
+<li><strong>A clearer entrance.</strong> When a battery alert appears, its battery visibly drains once to your current level, so the drop reads at a glance.</li>
+<li><strong>Calmer, more consistent overlays.</strong> The hero icon, the title-and-percentage readout, and the buttons now share one rhythm across every alert style. Device alerts drop the redundant &quot;battery has dropped to X%&quot; line — the title and the big number already say it.</li>
+<li><strong>Give each alert its own sound.</strong> Per-rule and meeting-guard sounds are easier to set, sit in the same place in every editor, and switch instantly.</li>
+</ul>
+<h2>Consistency</h2>
+<ul>
+<li><strong>Preview buttons live in one place.</strong> Every alert — Mac rules, device rules, and the meeting guard — puts its Test/Preview button at the top of the card, the same way.</li>
+<li><strong>Tidier power handoffs.</strong> The Unplug and Plug-in update icons now sit beside their titles instead of floating in the middle of the row.</li>
+</ul>
+<p>Marketing 1.10.0 → 1.10.1, build 79 → 80.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.10.1/Battery-Sensei.pkg"
+        sparkle:edSignature="O7UpI/WwzYPPGwu5Y9Qs37mVW4dx03Ig7fSjg3apPsqnQVnOLPL+Bg5ne2Fq2tdg/i89ATQpRm5odzTadbSsCA=="
+        length="25587319"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
