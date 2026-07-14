@@ -285,6 +285,17 @@
         "macos": "partial"
       },
       {
+        "label": "Multi-device support",
+        "desc": "See battery status and health for your Mac, iPhone, and iPad in one place.",
+        "key": "multi-device-support",
+        "sensei": "yes",
+        "aldente": "no",
+        "batfi": "no",
+        "coconut": "yes",
+        "istat": "no",
+        "macos": "no"
+      },
+      {
         "label": "Silent updates",
         "desc": "Opt-in once, then Sensei checks for new builds on launch and applies them quietly in the background. No nag screens, no \"update available\" popups mid-task. Off by default. You stay in control.",
         "sensei": "yes",

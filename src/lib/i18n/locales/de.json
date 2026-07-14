@@ -285,6 +285,17 @@
         "macos": "partial"
       },
       {
+        "label": "Unterstützung mehrerer Geräte",
+        "desc": "Sehen Sie Akkustand und Akkuzustand von Mac, iPhone und iPad an einem Ort.",
+        "key": "multi-device-support",
+        "sensei": "yes",
+        "aldente": "no",
+        "batfi": "no",
+        "coconut": "yes",
+        "istat": "no",
+        "macos": "no"
+      },
+      {
         "label": "Unaufdringliche Updates",
         "desc": "Einmal aktivieren, dann prüft Sensei beim Start auf neue Versionen und spielt sie unauffällig im Hintergrund ein. Keine nervigen Update-Popups mitten in der Arbeit. Standardmäßig deaktiviert. Sie behalten die Kontrolle.",
         "sensei": "yes",

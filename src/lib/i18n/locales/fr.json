@@ -285,6 +285,17 @@
         "macos": "partial"
       },
       {
+        "label": "Prise en charge multi-appareils",
+        "desc": "Consultez le niveau et l’état de la batterie de votre Mac, iPhone et iPad au même endroit.",
+        "key": "multi-device-support",
+        "sensei": "yes",
+        "aldente": "no",
+        "batfi": "no",
+        "coconut": "yes",
+        "istat": "no",
+        "macos": "no"
+      },
+      {
         "label": "Mises à jour silencieuses",
         "desc": "Activez-les une fois : Sensei vérifie ensuite les nouvelles versions au lancement et les installe discrètement en arrière-plan. Pas de fenêtres de rappel, pas de pop-ups « mise à jour disponible » en plein travail. Désactivé par défaut. Vous gardez la main.",
         "sensei": "yes",

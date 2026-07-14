@@ -285,6 +285,17 @@
         "macos": "partial"
       },
       {
+        "label": "Compatibilidad con varios dispositivos",
+        "desc": "Consulta el nivel y la salud de la batería de tu Mac, iPhone y iPad desde un mismo lugar.",
+        "key": "multi-device-support",
+        "sensei": "yes",
+        "aldente": "no",
+        "batfi": "no",
+        "coconut": "yes",
+        "istat": "no",
+        "macos": "no"
+      },
+      {
         "label": "Actualizaciones silenciosas",
         "desc": "Lo activas una vez y Sensei busca nuevas versiones al iniciar y las aplica con discreción en segundo plano. Sin avisos pesados, sin pop-ups de «actualización disponible» en mitad del trabajo. Desactivado por defecto: tú mantienes el control.",
         "sensei": "yes",

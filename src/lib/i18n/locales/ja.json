@@ -285,6 +285,17 @@
         "macos": "partial"
       },
       {
+        "label": "複数デバイス対応",
+        "desc": "Mac、iPhone、iPadのバッテリー残量と状態を1か所で確認できます。",
+        "key": "multi-device-support",
+        "sensei": "yes",
+        "aldente": "no",
+        "batfi": "no",
+        "coconut": "yes",
+        "istat": "no",
+        "macos": "no"
+      },
+      {
         "label": "サイレント更新",
         "desc": "一度オンにすると、Senseiは起動時に新しいビルドを確認し、作業を邪魔せずバックグラウンドで適用します。しつこいダイアログも、作業中の「アップデートあり」ポップアップもありません。既定ではオフなので、主導権はいつもあなたにあります。",
         "sensei": "yes",
