@@ -263,22 +263,6 @@ export function Hero() {
           </a>
         </Reveal>
 
-        <Reveal delay={560} className="mt-6 flex justify-center">
-          <a
-            href="https://www.producthunt.com/products/battery-sensei?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-battery-sensei"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex rounded-sm transition-transform duration-300 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)] motion-reduce:transform-none"
-          >
-            <img
-              alt="Battery Sensei - Be Zen about your Meetings | Product Hunt"
-              width="250"
-              height="54"
-              src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1195865&amp;theme=light&amp;t=1784011600450"
-            />
-          </a>
-        </Reveal>
-
         <Reveal
           delay={640}
           className="relative mx-auto mt-[69px] w-full max-w-[480px]"
