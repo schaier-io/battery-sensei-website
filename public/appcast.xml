@@ -1062,6 +1062,46 @@
         length="23025955"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.10.0</title>
+      <pubDate>Tue, 14 Jul 2026 07:07:27 +0000</pubDate>
+      <sparkle:version>79</sparkle:version>
+      <sparkle:shortVersionString>1.10.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.10.0</h1>
+<p>Power handoffs are instant, nearby devices read over Bluetooth, and every alert can carry its own sound — with a calmer, more consistent layout throughout.</p>
+<h2>Power handoffs</h2>
+<ul>
+<li><strong>The plug-in estimate appears the moment you connect.</strong> Battery Sensei remembers your charger&#x27;s rate — even across launches — so it shows time-to-full right away instead of waiting for the charge to settle, then quietly refines it. No more loading spinner.</li>
+<li><strong>Unplug estimates use your last ten minutes of usage.</strong> The runtime shown when you disconnect is steadier and more realistic, rather than reacting to a momentary spike.</li>
+<li><strong>Charging time counts down to your charge limit, not to 100%.</strong> At 84% with an 85% limit it now reads a minute or two, not hours; holding at the limit shows no phantom countdown.</li>
+</ul>
+<h2>Devices</h2>
+<ul>
+<li><strong>See nearby iPhone and iPad battery over Bluetooth.</strong> An opt-in in Warnings and the setup wizard — turning it on is the only time Battery Sensei asks for Bluetooth permission, and it&#x27;s off until you do. Accessories like AirPods and mice keep working as before.</li>
+</ul>
+<h2>Alerts</h2>
+<ul>
+<li><strong>Give each alert its own sound.</strong> Low-battery warnings, the unplug and plug-in updates, and every custom warning rule can chime with a fitting sound — or stay silent, which is the default. Picking a sound previews it instantly.</li>
+<li><strong>Redesigned overlays.</strong> The plug-in, unplug, and low-battery windows now use a clean, iconic battery that fills to your level, animates, and shows a fuller bar when critically low. The meeting forecast reads more concisely.</li>
+</ul>
+<h2>Settings &amp; setup</h2>
+<ul>
+<li><strong>A tidier General screen.</strong> The app version and update controls share one panel, &quot;Pro is active&quot; and the About footer line up cleanly, and everything about the menu bar lives under one heading.</li>
+<li><strong>Warnings, together.</strong> The device switcher sits under the Warnings title, and the plug/unplug updates are a connected section rather than a separate card.</li>
+<li><strong>A refreshed setup wizard.</strong> It fits its own height when it opens, drops a duplicate close button, shows your devices, and groups update checks with the other system settings.</li>
+</ul>
+<p>Marketing 1.9.1 → 1.10.0, build 78 → 79.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.10.0/Battery-Sensei.pkg"
+        sparkle:edSignature="jJ8p7KvmDbtpAXrZNNnZSRKiuO61G9F6l9wJzYoRlLPu3ZgeWizHIni8gykzDX2LZrqu9YPtrCMLRB2oXZDUCw=="
+        length="25537194"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
