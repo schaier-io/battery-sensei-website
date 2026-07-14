@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Check, Minus, Info, ArrowUpRight, ChevronDown, Play } from 'lucide-react'
+import { Check, Minus, Info, ArrowUpRight, ChevronDown } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { Hanko } from '#/components/zen/Hanko'
@@ -112,7 +112,7 @@ export function Compare() {
 
   return (
     <section id="compare" className="zen-section mx-auto max-w-6xl px-6">
-      <div className="mb-12 flex flex-col items-center text-center">
+      <div className="mb-16 flex flex-col items-center text-center">
         <Hanko kanji="比" className="mb-5" />
         <Reveal as="p" delay={120} className="kicker-row mb-4">
           {t('compare.kicker')}
@@ -134,29 +134,18 @@ export function Compare() {
         >
           {t('compare.intro')}
         </Reveal>
-        <Reveal delay={360} className="mt-5">
-          <Link
-            to="/walkthrough"
-            // Calm secondary chip — outlined washi base with sumi text.
-            // Replaces the earlier hinomaru-tinted-everywhere version
-            // that was fighting the section's hanko + table accents for
-            // attention. Now only the play disc carries colour: a tiny
-            // hinomaru circle with a washi triangle, reading as
-            // "press play" without flooding the chip with red.
-            className="group inline-flex items-center gap-2.5 rounded-full border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_55%,#fff)] py-1.5 pl-1.5 pr-4 text-[13px] font-medium text-sumi transition-[background-color,transform,box-shadow] duration-[260ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-px hover:bg-[color-mix(in_oklab,var(--washi)_35%,#fff)] hover:shadow-[0_6px_18px_-10px_rgba(28,26,23,0.30)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
-          >
-            <span
-              aria-hidden
-              className="relative grid h-7 w-7 place-items-center rounded-full bg-hinomaru shadow-[0_1px_0_rgba(255,248,235,0.18)_inset,0_2px_4px_rgba(188,0,45,0.22)] transition-transform duration-[300ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.08]"
-            >
-              <Play
-                className="h-3 w-3 translate-x-px text-[#fff8eb]"
-                strokeWidth={2}
-                fill="currentColor"
-              />
-            </span>
-            {t('compare.videoCta')}
-          </Link>
+        <Reveal delay={360} className="mt-8 w-full max-w-4xl">
+          <figure className="paper-card overflow-hidden p-2 md:p-3">
+            <iframe
+              className="block aspect-video w-full rounded-md border border-[var(--line)] bg-sumi"
+              src="https://www.youtube-nocookie.com/embed/kta629OoVZQ?rel=0"
+              title={t('compare.videoCta')}
+              loading="lazy"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            />
+          </figure>
         </Reveal>
       </div>
 
