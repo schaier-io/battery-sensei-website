@@ -138,7 +138,7 @@ export function Compare() {
           <figure className="paper-card overflow-hidden p-2 md:p-3">
             <iframe
               className="block aspect-video w-full rounded-md border border-[var(--line)] bg-sumi"
-              src="https://www.youtube-nocookie.com/embed/kta629OoVZQ?rel=0"
+              src="https://www.youtube-nocookie.com/embed/htaQ20WTf8k?rel=0"
               title={t('compare.videoCta')}
               loading="lazy"
               referrerPolicy="strict-origin-when-cross-origin"
