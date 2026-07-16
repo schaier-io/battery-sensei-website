@@ -1178,6 +1178,37 @@
         length="25881159"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.10.3</title>
+      <pubDate>Thu, 16 Jul 2026 19:21:10 +0000</pubDate>
+      <sparkle:version>83</sparkle:version>
+      <sparkle:shortVersionString>1.10.3</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.10.3</h1>
+<p>A follow-up to 1.10.2: the app-power list tells the truth again, and Low Power Mode repairs itself instead of stalling.</p>
+<h2>App power</h2>
+<ul>
+<li><strong>Your apps are back in the list.</strong> The &quot;Now&quot; list could collapse into a single &quot;14 apps under 0.02 W&quot; row, hiding real apps. An app whose live reading had not arrived yet was being treated as though it were drawing nothing — so it was filed away as negligible. A missing reading now means &quot;unknown&quot;, never &quot;zero&quot;, and the list keeps showing the app.</li>
+<li><strong>The numbers are watts again.</strong> Rows could show a bare three-digit number under &quot;drawing now&quot; — an activity score, not a wattage. Each row&#x27;s value and its caption are now decided together, so they can never disagree; a row with no reading shows &quot;—&quot; rather than a number in the wrong unit.</li>
+<li><strong>Percentages make sense.</strong> In percent mode an app&#x27;s share is measured against the power the apps are drawing, as the panel has always described it — instead of being diluted by the display and other hardware, which made a busy browser read a fraction of a percent. The menu bar&#x27;s top-apps list now agrees with the panel.</li>
+<li><strong>Small apps are summarised, not swallowed.</strong> The collapsed row now shows the group&#x27;s combined draw, so the numbers on screen add up, and it never hides an app you searched for.</li>
+</ul>
+<h2>Low Power Mode</h2>
+<ul>
+<li><strong>It fixes itself.</strong> If the helper stops responding — after the app is moved, restored from a backup, or migrated to a new Mac — Battery Sensei now repairs its own registration instead of waiting and then failing. If it needs your approval, it says so plainly rather than doing nothing.</li>
+<li><strong>The switch updates instantly.</strong> Turning Low Power Mode on or off now updates the menu and the button immediately, instead of showing the previous state for a few seconds.</li>
+</ul>
+<p>Marketing 1.10.2 → 1.10.3, build 82 → 83.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.10.3/Battery-Sensei.pkg"
+        sparkle:edSignature="kB7W8MDXydydO788cKGvWK2yWqmIOoNw6bANOQNYmRexO0t05ukHbxndfv1HMUeA0faupPCv3itr7INarBTEAw=="
+        length="25891691"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
