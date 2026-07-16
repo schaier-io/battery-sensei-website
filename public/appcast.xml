@@ -1136,6 +1136,49 @@
         length="25587319"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.10.2</title>
+      <pubDate>Thu, 16 Jul 2026 13:37:42 +0000</pubDate>
+      <sparkle:version>82</sparkle:version>
+      <sparkle:shortVersionString>1.10.2</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.10.2</h1>
+<p>Battery Sensei now practices what it preaches: with the window open, the app&#x27;s own energy use drops from a steady hum to almost nothing. The app also stays responsive when macOS&#x27;s own power services stall, and plug-in alerts react the moment you connect.</p>
+<h2>Performance</h2>
+<ul>
+<li><strong>The open window no longer costs you battery.</strong> The power-flow dots and the battery ring&#x27;s shimmer are now drawn by the system&#x27;s animation engine instead of being recomputed by the app every frame. CPU use with the window open and focused drops from a constant double-digit load to near zero, with only brief activity while the shimmer sweeps.</li>
+<li><strong>Fewer background wakeups.</strong> Accessory battery checks run half as often (opening the menu still refreshes instantly), and per-app power attribution and system-load telemetry stop re-asking the kernel for answers that cannot change.</li>
+<li><strong>Lighter periodic work.</strong> Achievement progress is evaluated less eagerly, and history lookups scan only the window they need instead of the whole store.</li>
+</ul>
+<h2>Reliability</h2>
+<ul>
+<li><strong>No more freezes when macOS&#x27;s power services stall.</strong> Calls into the system&#x27;s charging and Low Power Mode services are synchronous, so a service that stopped answering could hold up the app. Those calls are now bounded by a deadline and back off briefly after a timeout, so the interface keeps responding and recovers on its own.</li>
+</ul>
+<h2>Alerts</h2>
+<ul>
+<li><strong>Plug-in feedback is immediate.</strong> The charge panel now appears the moment you connect, showing its estimating state while macOS negotiates charge current, then filling in the estimate once telemetry lands — instead of staying blank through the ramp.</li>
+<li><strong>Battery fills settle naturally.</strong> Level animations decelerate into place rather than stopping abruptly.</li>
+<li><strong>Sounds follow the alert.</strong> Warning sounds are configured per alert rather than as one global setting, so each rule plays what you chose for it.</li>
+</ul>
+<h2>Fixes</h2>
+<ul>
+<li><strong>The window remembers its size again.</strong> Reopening the window now restores your exact saved size and position; fresh installs open at the intended default size instead of the minimum.</li>
+</ul>
+<h2>Polish</h2>
+<ul>
+<li><strong>External links look like links.</strong> Every button that leaves the app — buy, manage subscription, system-settings shortcuts — now shares one consistent link style.</li>
+</ul>
+<p>Marketing 1.10.1 → 1.10.2, build 80 → 82.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.10.2/Battery-Sensei.pkg"
+        sparkle:edSignature="2TJAo03xQgHyVCwxWc1cqidVR645mC3xSoorl23t4x/IK/SO+pQZpQIW3A6yQPBpPXMw/qmxvubGfafoNKhEDA=="
+        length="25881159"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
