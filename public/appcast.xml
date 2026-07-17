@@ -1233,6 +1233,48 @@
         length="25908380"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.11.0</title>
+      <pubDate>Fri, 17 Jul 2026 14:10:53 +0000</pubDate>
+      <sparkle:version>85</sparkle:version>
+      <sparkle:shortVersionString>1.11.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.11.0</h1>
+<p>Meeting Battery Guard grows up: forecasts you can trust, a real full-screen alert with keyboard control, and a Low Power Mode remedy on every warning.</p>
+<h2>Meeting Battery Guard</h2>
+<ul>
+<li><strong>Forecasts that match reality.</strong> The prediction no longer bills the waiting time before a meeting at video-call drain: only the meeting itself runs at the elevated rate, and that boost now adapts to how close the meeting is and how hard your Mac is already working. A battery that comfortably outlasts your event no longer cries &quot;thin margin&quot;.</li>
+<li><strong>The alert you configured actually appears.</strong> Critical forecasts now present your chosen alert style live — full-screen included — not just in the Settings preview. Each meeting alerts once: later reminders stay quiet banners, and a snooze brings the alert back after exactly the time you chose.</li>
+<li><strong>Honest wording.</strong> A battery that survives to the start but not the end now says &quot;dies before your meeting ends&quot; instead of claiming it won&#x27;t reach the start.</li>
+<li><strong>A 2-hour lookahead.</strong> Forecasts further out were too uncertain to act on; the guard now watches the window where its advice is dependable.</li>
+</ul>
+<h2>Warnings</h2>
+<ul>
+<li><strong>Low Power Mode, one tap away.</strong> Every battery and meeting alert now offers &quot;Low Power Mode&quot; beside snooze — the remedy for the moments you can&#x27;t reach a charger. Low Power Mode also wears a new tortoise icon everywhere, so the leaf now always means charge care.</li>
+<li><strong>Keyboard control.</strong> Esc dismisses, F1 snoozes, F2 turns on Low Power Mode, and + / − adjust the snooze time — from any app, with the shortcuts printed right on the buttons.</li>
+<li><strong>Alerts that stay out of your way.</strong> Full-screen warnings no longer trap your clicks: the tinted wash lets you keep working underneath, and compact alerts intercept the pointer only where the card actually is.</li>
+</ul>
+<h2>Today &amp; menu bar</h2>
+<ul>
+<li><strong>A calmer hero.</strong> The Today card leads with the app identity, the enso ring now carries your percentage at its centre, and system load moved to its own section beside the app power list.</li>
+<li><strong>System load in the menu — if you want it.</strong> An opt-in line adds live CPU, GPU, memory, and disk readings to the menu, measured only while the menu is open. The new &quot;Menu content&quot; settings group collects everything the dropdown shows.</li>
+</ul>
+<h2>Collection &amp; health</h2>
+<ul>
+<li><strong>A tidier Honors wall.</strong> The seal gallery opens at three rows with a &quot;Show all&quot; capsule — earned seals lead.</li>
+<li><strong>All good means all good.</strong> Battery health recommendations show a green checkmark when everything is a confirmation, instead of counting them like open tasks.</li>
+</ul>
+<p>Marketing 1.10.4 → 1.11.0, build 84 → 85.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.11.0/Battery-Sensei.pkg"
+        sparkle:edSignature="lgTTuWyWuTqGqI9iqrTOmEVjV/yccii8Ctu+GYq1nTX2kiWX0ed1Kr9qQMJEgg+VeEcR6BRuC4ol6WJp4dyzBA=="
+        length="26003793"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
