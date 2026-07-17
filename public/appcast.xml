@@ -1208,6 +1208,32 @@
         length="25891691"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.10.4</title>
+      <pubDate>Fri, 17 Jul 2026 00:45:09 +0000</pubDate>
+      <sparkle:version>84</sparkle:version>
+      <sparkle:shortVersionString>1.10.4</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.10.4</h1>
+<p>The time-remaining estimate settles down: it stops lurching when your workload spikes, and corrects itself gently instead of jumping.</p>
+<h2>Time remaining</h2>
+<ul>
+<li><strong>A steadier estimate.</strong> Battery time was reading straight off instantaneous draw, so a brief CPU burst or a bright display could swing it wildly. Readings are now smoothed, outliers are rejected, and the estimate leans on the whole-system readings Sensei already collects — no extra polling, no extra battery cost.</li>
+<li><strong>No more jumps when it learns more.</strong> As Sensei moves from a cached estimate to live telemetry, the displayed time now eases toward the truth — correcting by at most 45 minutes per minute — instead of snapping to a new number.</li>
+<li><strong>The right direction, always.</strong> Whether the Mac is charging or discharging is now decided by the power source itself, so a contradictory sensor reading can no longer flip the estimate the wrong way. A pack sitting at its charge limit reads as holding, not charging.</li>
+<li><strong>An estimate the moment you unplug.</strong> Recent background readings seed the number immediately, so it is useful straight away rather than after a warm-up.</li>
+</ul>
+<p>Marketing 1.10.3 → 1.10.4, build 83 → 84.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.10.4/Battery-Sensei.pkg"
+        sparkle:edSignature="3Kgd5WVDQC7XZ0DaSjBDpQnED/5ecVokFM1XVUn/e/99ZeJQrpW4YMMC+ikxrQ6pgrk3w3/zkcWK6wSjzvj1CA=="
+        length="25908380"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
