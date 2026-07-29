@@ -18,7 +18,7 @@ export function Reveal({
   delay = 0,
   className = '',
   stamp = false,
-  threshold = 0.18,
+  threshold = 0.04,
   once = true,
   style,
   id,
@@ -49,7 +49,12 @@ export function Reveal({
           }
         }
       },
-      { threshold, rootMargin: '0px 0px -8% 0px' },
+      // Fire as soon as the element's leading edge enters the viewport.
+      // The old 0.18 threshold + -8% bottom inset meant tall sections (which
+      // wrap whole groups) had to be substantially on screen before fading
+      // in — content visibly popped in late, after the reader was already
+      // looking at the empty space it should have occupied.
+      { threshold, rootMargin: '0px 0px 0px 0px' },
     )
     io.observe(el)
     return () => io.disconnect()

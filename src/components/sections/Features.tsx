@@ -1,5 +1,5 @@
 import type { JSX } from 'react'
-import { Eye, Bell, BatteryCharging, Plane, Wifi, Search, Zap, CalendarClock, Lock, ArrowUpRight } from 'lucide-react'
+import { Eye, Bell, BatteryCharging, Plane, Wifi, Search, Zap, CalendarClock, Lock, ArrowUpRight, PlugZap, Unplug, LoaderCircle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Link } from '@tanstack/react-router'
 import { Hanko } from '#/components/zen/Hanko'
@@ -324,6 +324,103 @@ function BatteryGlyph({ fraction }: { fraction: number }) {
   )
 }
 
+function HandoffNotice({
+  kind,
+}: {
+  kind: 'unplug' | 'plug'
+}) {
+  const { t } = useTranslation()
+  const unplugged = kind === 'unplug'
+
+  return (
+    <div className="relative overflow-hidden rounded-xl border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,#fff)] p-4 shadow-[0_1px_0_rgba(255,255,255,0.55)_inset,0_18px_35px_-24px_rgba(28,26,23,0.42)]">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.16] [background-image:radial-gradient(circle_at_18%_24%,var(--sumi)_0_0.45px,transparent_0.65px),radial-gradient(circle_at_76%_64%,var(--hinomaru)_0_0.4px,transparent_0.6px)] [background-size:17px_19px,23px_29px]"
+      />
+      <div className="relative flex items-center gap-4">
+        <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full border border-hinomaru/20 bg-hinomaru/[0.07] text-hinomaru">
+          {unplugged ? (
+            <Unplug className="h-5 w-5 -rotate-12" strokeWidth={1.8} aria-hidden />
+          ) : (
+            <PlugZap className="h-5 w-5 rotate-12" strokeWidth={1.8} aria-hidden />
+          )}
+        </span>
+
+        <div className="min-w-0 flex-1">
+          <div className="flex items-baseline justify-between gap-3">
+            <p className="display-title text-[14px] font-semibold text-sumi">
+              {t(`features.handoffs.${unplugged ? 'unplugTitle' : 'plugTitle'}`)}
+            </p>
+            <span className="shrink-0 rounded-full bg-hinomaru/[0.07] px-2 py-0.5 text-[10px] font-semibold tabular-nums text-hinomaru">
+              46%
+            </span>
+          </div>
+
+          <div className="mt-1.5 flex items-center gap-2">
+            {unplugged && (
+              <LoaderCircle
+                className="h-3.5 w-3.5 shrink-0 animate-spin text-hinomaru motion-reduce:animate-none"
+                strokeWidth={2}
+                aria-hidden
+              />
+            )}
+            <span className="display-title text-[20px] font-semibold tabular-nums leading-none text-sumi">
+              {t(`features.handoffs.${unplugged ? 'unplugTime' : 'plugTime'}`)}
+            </span>
+          </div>
+
+          <div className="mt-1.5 flex items-center justify-between gap-3 text-[10px] text-sumi-soft">
+            <span>{t(`features.handoffs.${unplugged ? 'refining' : 'untilTarget'}`)}</span>
+            <kbd className="rounded border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] px-1.5 py-0.5 font-sans text-[9px] font-semibold text-nezumi shadow-[0_1px_0_rgba(255,255,255,0.55)_inset]">
+              esc
+            </kbd>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function PowerHandoffFeature() {
+  const { t } = useTranslation()
+
+  return (
+    <Reveal delay={80}>
+      <article id="power-handoffs" className="paper-card mt-6 scroll-mt-24 overflow-hidden p-8 md:p-10">
+        <div className="grid items-center gap-9 lg:grid-cols-[0.82fr_1.18fr] lg:gap-14">
+          <div>
+            <div className="flex items-center gap-3.5">
+              <PlugZap className="h-7 w-7 text-sumi" strokeWidth={1.5} aria-hidden />
+              <span className="kanji-accent font-jp text-3xl leading-none text-hinomaru/85" aria-hidden>
+                継
+              </span>
+            </div>
+            <h3 className="display-title mt-5 text-[1.5rem] font-medium leading-tight text-sumi md:text-[1.7rem]">
+              {t('features.handoffs.title')}
+              <span className="mt-1 block text-[1rem] font-normal italic leading-snug text-sumi-soft md:text-[1.05rem]">
+                {t('features.handoffs.italic')}
+              </span>
+            </h3>
+            <p className="prose-readable mt-4 text-[0.925rem] text-sumi-soft">
+              {t('features.handoffs.body')}
+            </p>
+            <div className="mt-5 flex items-center gap-2 text-[10px] uppercase tracking-[0.18em] text-nezumi">
+              <Lock className="h-3 w-3" strokeWidth={2} aria-hidden />
+              {t('features.handoffs.onDevice')}
+            </div>
+          </div>
+
+          <div className="grid gap-3 sm:grid-cols-2" aria-label={t('features.handoffs.previewLabel')}>
+            <HandoffNotice kind="unplug" />
+            <HandoffNotice kind="plug" />
+          </div>
+        </div>
+      </article>
+    </Reveal>
+  )
+}
+
 export function Features() {
   const { t } = useTranslation()
   return (
@@ -434,6 +531,8 @@ export function Features() {
             </div>
         </article>
       </Reveal>
+
+      <PowerHandoffFeature />
 
       {/* Supporting-card layout rules (revised in this pass):
             1. Mockup leads. Visual right after the title, body and

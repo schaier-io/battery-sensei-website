@@ -33,15 +33,15 @@ function Shell({
     <>
       <Nav />
       <main>
-        <section className="zen-section mx-auto max-w-3xl px-5 sm:px-6">
-          <Reveal as="p" delay={80} className="mb-6">
-            <HomeLink
-              className="inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.22em] text-sumi-soft transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:text-sumi"
-            >
-              <ArrowLeft className="h-3.5 w-3.5" strokeWidth={1.6} />
-              {t('thanks.backToHome')}
-            </HomeLink>
-          </Reveal>
+        <Reveal as="div" delay={80} className="mx-auto max-w-6xl px-5 pt-6 sm:px-8 lg:px-10">
+          <HomeLink
+            className="inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.22em] text-sumi-soft transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:text-sumi"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" strokeWidth={1.6} />
+            {t('thanks.backToHome')}
+          </HomeLink>
+        </Reveal>
+        <section className="zen-section mx-auto max-w-3xl px-5 pt-8 sm:px-6 md:pt-10">
 
           <div className="flex flex-col items-start">
             <Hanko kanji={kanji} className="mb-6" />
@@ -158,9 +158,8 @@ export function RouteNotFound() {
       suggestions={[
         {
           label: 'Features',
-          hint: 'Charge limit, alerts, Travel Mode',
-          to: '/',
-          hash: 'features',
+          hint: 'Every panel and automation, one guide each',
+          to: '/features',
         },
         {
           label: 'Journal',
@@ -174,9 +173,9 @@ export function RouteNotFound() {
           hash: 'faq',
         },
         {
-          label: 'Privacy',
-          hint: 'What we collect — and what we don’t',
-          to: '/privacy',
+          label: 'Glossary',
+          hint: 'Battery terms, minus the jargon',
+          to: '/glossary',
         },
       ]}
     />

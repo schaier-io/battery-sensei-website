@@ -39,9 +39,18 @@
       "timelineLabel": "Historial de carga de la batería",
       "footerTagline": "Siempre atento, sin ruido.",
       "entries": {
-        "0": { "date": "4 mar", "body": "Salvada al 12%. Enchufada justo a tiempo." },
-        "1": { "date": "18 feb", "body": "Se mantuvo entre el 78 y el 82% durante sesiones de concentración." },
-        "2": { "date": "30 ene", "body": "Mejor marca hasta ahora: 11h 23m con una carga." }
+        "0": {
+          "date": "4 mar",
+          "body": "Salvada al 12%. Enchufada justo a tiempo."
+        },
+        "1": {
+          "date": "18 feb",
+          "body": "Se mantuvo entre el 78 y el 82% durante sesiones de concentración."
+        },
+        "2": {
+          "date": "30 ene",
+          "body": "Mejor marca hasta ahora: 11h 23m con una carga."
+        }
       }
     },
     "rescueReceipt": {
@@ -93,11 +102,26 @@
     "title": "Cuida la batería",
     "titleItalic": "de tu MacBook sin ruido.",
     "headlines": [
-      { "lead": "Cuida la batería", "tail": "de tu MacBook sin ruido." },
-      { "lead": "Con calma", "tail": "en tus reuniones." },
-      { "lead": "Una carga más suave", "tail": "para una vida más larga." },
-      { "lead": "Sin apagones", "tail": "por sorpresa." },
-      { "lead": "Ciclos más frescos,", "tail": "una batería más serena." }
+      {
+        "lead": "Cuida la batería",
+        "tail": "de tu MacBook sin ruido."
+      },
+      {
+        "lead": "Con calma",
+        "tail": "en tus reuniones."
+      },
+      {
+        "lead": "Una carga más suave",
+        "tail": "para una vida más larga."
+      },
+      {
+        "lead": "Sin apagones",
+        "tail": "por sorpresa."
+      },
+      {
+        "lead": "Ciclos más frescos,",
+        "tail": "una batería más serena."
+      }
     ],
     "jp": "静かに見守り、無理なく長持ち。",
     "body": "La batería de tu MacBook se desgasta un poco con cada carga completa. Sensei vigila lo importante: te avisa antes de que se apague, mantiene la carga dentro de un límite más saludable y te muestra qué apps gastan más, cómo se acumulan los ciclos y si la capacidad envejece con normalidad.",
@@ -108,6 +132,7 @@
     "ariaLabel": "Funciones de Battery Sensei",
     "items": {
       "alerts": "Avisos inteligentes de batería baja",
+      "handoffs": "Avisos al conectar y desconectar",
       "chargeLimit": "Límite de carga al 80%",
       "travelMode": "Modo viaje",
       "cycle": "Recuento de ciclos y capacidad",
@@ -134,6 +159,19 @@
         "alert": "Alerta",
         "alertDetail": "Se queda hasta que la descartas."
       }
+    },
+    "handoffs": {
+      "title": "Un aviso discreto cuando cambia la alimentación.",
+      "italic": "Tiempo restante al desenchufar. Tiempo hasta el límite al conectar.",
+      "body": "Activa o desactiva cada aviso por separado. Al desenchufar, Sensei parte de tu actividad reciente y mejora la estimación en directo. Al enchufar, espera a que la carga se estabilice y muestra el tiempo hasta tu límite activo, o hasta el 100% en Modo viaje. Ambos aparecen sin interrumpir y se cierran con Escape.",
+      "onDevice": "Calculado en tu Mac",
+      "previewLabel": "Vista previa de los avisos al conectar y desconectar",
+      "unplugTitle": "Con batería",
+      "unplugTime": "4 h 12 min",
+      "refining": "aún calculando…",
+      "plugTitle": "Cargando",
+      "plugTime": "~38 min",
+      "untilTarget": "hasta 85%"
     },
     "chargeLimit": {
       "title": "Límite de carga",
@@ -571,7 +609,75 @@
       "body": "En la página Saga, Sensei ordena las apps que más energía consumen. Alterna entre ahora mismo (en vivo), las últimas 3 horas o 5 días, y cambia cada valor entre el porcentaje de una batería completa y vatios (consumo en vivo) o vatios-hora (a lo largo de una ventana). Cada app recibe una puntuación de impacto energético al estilo Monitor de Actividad (tiempo de CPU combinado con activaciones en reposo), una etiqueta de impacto (Bajo / Moderado / Alto / Muy alto) y un filtro de búsqueda para encontrar cada proceso auxiliar de Chrome en la lista. El historial se muestrea cada 5 minutos; la vista Ahora en vivo se actualiza cada 10 segundos aproximadamente. Sin extensiones del sistema, sin tocar el kernel.",
       "mockupCaption": "Top apps · Ahora / 3 h / 5 d · en porcentaje o vatios. Vista en vivo actualizada ~10 s.",
       "why": "La pérdida de batería casi nunca es culpa de la batería. Suele ser un proceso auxiliar colgado, una pestaña que no duerme o una videollamada que no libera la GPU. Saber qué app gasta más puede ser la diferencia entre un día de 4 horas y uno de 7."
-    }
+    },
+    "low-power-mode": {
+      "kicker": "Función · 節電",
+      "heading": "Modo de bajo consumo,",
+      "headingItalic": "sin acordarte de activarlo.",
+      "body": "macOS ofrece el modo de bajo consumo como un interruptor manual escondido en Ajustes del Sistema. Battery Sensei lo convierte en una regla: eliges un porcentaje o un tiempo restante como disparador y Sensei lo activa al cruzar el límite, y lo desactiva en cuanto conectas el cargador. La limitación la aplica el propio ajuste de Apple; Sensei solo se encarga del momento que se te habría pasado.",
+      "mockupCaption": "Configura el disparador una vez. Sensei se ocupa de los dos sentidos.",
+      "why": "Justo cuando necesitas el modo de bajo consumo es cuando menos vas a pensar en él: 18 % de batería, una reunión que empieza, ningún cargador en la mochila. Una regla que defines una tarde tranquila vale más que un interruptor que debes recordar en un mal momento, y como se apaga solo, no pierdes una semana de rendimiento por una crisis que ya pasó."
+    },
+    "power-flow": {
+      "kicker": "Función · 電流",
+      "heading": "Adónde van tus vatios:",
+      "headingItalic": "adaptador, batería, sistema.",
+      "body": "Tres lecturas que macOS nunca reúne: lo que entrega realmente el cargador, cuánto llega a las celdas y cuánto consume el propio Mac. Con batería, esa última cifra es tu ritmo de descarga: el mejor indicador de autonomía que existe.",
+      "mockupCaption": "Entrada del adaptador, flujo de batería, consumo del sistema. En vivo.",
+      "why": "Una carga lenta y una descarga rápida son idénticas si solo miras el porcentaje. Dejan de serlo cuando ves que tu cargador de 96 W negocia 38 W, o que el sistema se come todo lo que entra. La conjetura se convierte en una lectura."
+    },
+    "system-load": {
+      "kicker": "Función · 負荷",
+      "heading": "Por qué baja la batería:",
+      "headingItalic": "CPU, GPU, disco, memoria.",
+      "body": "Cuatro lecturas junto a tus cifras de batería, no en otra app. Una descarga repentina casi siempre tiene una causa visible: un núcleo saturado, una GPU ocupada, un cliente de sincronización escribiendo toda la tarde.",
+      "mockupCaption": "CPU, GPU, presión de memoria y E/S de disco, medidos a la vez.",
+      "why": "«Hoy se descargó rapidísimo» es una sensación hasta que ves la carga que había detrás. El panel de sistema aporta la evidencia; el de energía por app, el nombre. Juntos convierten un mal día de batería en un proceso que puedes cerrar."
+    },
+    "charge-limit": {
+      "kicker": "Función · 充電",
+      "heading": "Un tope de carga diario",
+      "headingItalic": "y un ciclo semanal que mantiene la honestidad.",
+      "body": "Las celdas de litio envejecen más rápido en los extremos, y el tiempo al 100 % es la parte que sí puedes controlar. Pon un tope y Sensei te recordará un ciclo más completo por semana para que las estimaciones no se desvíen.",
+      "mockupCaption": "Pon el tope diario; Sensei se ocupa del recordatorio semanal de calibración.",
+      "why": "Nada repara una batería, pero el patrón que mantienes decide a qué velocidad se desgasta. Un tope cambia autonomía que no usabas por meses de pérdida de capacidad más lenta, y el ciclo semanal mantiene el indicador diciendo la verdad."
+    },
+    "battery-health": {
+      "kicker": "Función · 健康",
+      "heading": "Capacidad, ciclos, estado",
+      "headingItalic": "y los hábitos que hay detrás.",
+      "body": "Las tres cifras que macOS guarda y casi nunca enseña: cuánto retiene hoy tu batería, cuántos ciclos equivalentes lleva y el veredicto de estado de Apple, tal cual, junto a los hábitos de carga que los moldearon.",
+      "mockupCaption": "Capacidad, estado y ciclos, leídos directamente de la batería.",
+      "why": "«92 % de capacidad» no dice nada por sí solo. ¿Es bueno para un Mac de esta edad? ¿Ha caído cuatro puntos en un mes o lleva plano desde la primavera? El estado es una tendencia, y una tendencia necesita el historial al lado."
+    },
+    "statistics": {
+      "kicker": "Función · 統計",
+      "heading": "Tu semana de batería,",
+      "headingItalic": "resumida como lo haría una persona.",
+      "body": "Tiempo sin cargador, sesiones de carga, profundidad media de descarga, el tramo más caliente y los rescates que llegaste a tiempo: en resúmenes semanales y mensuales que se leen en veinte segundos.",
+      "mockupCaption": "Resúmenes semanales y mensuales, calculados en tu Mac.",
+      "why": "Un porcentaje en vivo responde «¿y ahora qué?». No responde «¿es normal en mí?». Los resúmenes hacen visible el patrón —la semana de viaje, el mes del cliente de sincronización— cuando todavía puedes cambiarlo."
+    },
+    "honors": {
+      "kicker": "Función · 名誉",
+      "heading": "Hábitos que vale la pena mantener,",
+      "headingItalic": "reconocidos sin ruido.",
+      "body": "Los honores señalan comportamientos que sí se relacionan con una batería más sana: rangos de carga estables, rescates tomados en serio, rachas que sobreviven a una semana ajetreada. Sin puntos, sin clasificaciones, sin insistencias.",
+      "mockupCaption": "Se ganan en silencio, a partir de tu propio historial.",
+      "why": "No puedes deshacer los ciclos ni reparar la capacidad. Lo que sí puedes cambiar es el patrón, y los patrones responden al feedback. Los honores son el feedback más ligero que aún funciona: visible si miras, silencioso si no."
+    },
+    "general": {
+      "kicker": "Función · 設定",
+      "heading": "Pocos ajustes,",
+      "headingItalic": "porque no hay nada que sincronizar.",
+      "body": "Contenido de la barra de menús, apariencia, idioma e inicio automático. Sin cuenta, sin ajustes en la nube, sin interruptor de telemetría, porque no se recoge nada que apagar.",
+      "mockupCaption": "Apariencia, idioma, barra de menús, arranque.",
+      "why": "Casi todas las apps acaban con una pantalla de ajustes llena de decisiones. La de Battery Sensei es corta a propósito: todo lo que sabe de tu batería vive en tu Mac, así que solo quedan las opciones de aspecto y comportamiento."
+    },
+    "indexKicker": "Todo lo que hay en la app",
+    "indexHeading": "Catorce guías,",
+    "indexHeadingItalic": "una por función.",
+    "indexBody": "Cada panel, tarjeta y automatización de Battery Sensei tiene su página: qué hace, cómo leerla y por qué existe. Empieza por donde quieras: se enlazan entre sí donde las funciones se tocan."
   },
   "pricing": {
     "kicker": "Precios · 値段",
@@ -863,6 +969,71 @@
       "refundHint": "Incluye el ID de pedido de tu correo de Polar. Eso es todo lo que necesitamos para actuar.",
       "journalLabel": "Journal",
       "journalHint": "¿Quieres más consejos? <0>Visita el Journal</0> para guías de batería y novedades."
+    },
+    "board": {
+      "hint": "Las ideas de funciones también pueden ir al tablero público, donde otros usuarios las votan; este formulario sigue siendo un mensaje privado.",
+      "linkLabel": "Ver el tablero público"
+    }
+  },
+  "board": {
+    "kicker": "Hoja de ruta y peticiones",
+    "heading": "Moldeado por",
+    "headingItalic": "quienes lo usan a diario",
+    "intro": "Vota lo próximo que aprenderá Battery Sensei o propón tu propia idea. Cada voto va ligado a una clave de licencia: la hoja de ruta la dirigen usuarios reales, no bots.",
+    "loading": "Cargando peticiones…",
+    "error": "No se pudo cargar el tablero. Inténtalo de nuevo.",
+    "retry": "Reintentar",
+    "empty": {
+      "title": "Aún no hay nada",
+      "message": "Las peticiones aprobadas aparecen aquí tras la revisión. Sé quien proponga la primera idea."
+    },
+    "sections": {
+      "in_progress": "En curso",
+      "planned": "Planificado",
+      "open": "Abierto a votos",
+      "shipped": "Publicado"
+    },
+    "statuses": {
+      "open": "Abierto",
+      "planned": "Planificado",
+      "in_progress": "En curso",
+      "shipped": "Publicado"
+    },
+    "vote": "Votar esta petición",
+    "unvote": "Retirar tu voto",
+    "votes_one": "{{count}} voto",
+    "votes_other": "{{count}} votos",
+    "license": {
+      "armedNote": "Votas con tu clave de licencia guardada.",
+      "changeAction": "Olvidar clave",
+      "dialogTitle": "Vota con tu licencia",
+      "dialogBody": "Votar va ligado a tu clave de licencia de Battery Sensei: cada cliente tiene un voto por idea. Introdúcela una vez y quedará en este dispositivo.",
+      "placeholder": "Tu clave de licencia",
+      "submit": "Desbloquear el voto",
+      "checking": "Comprobando…",
+      "invalid": "No se pudo verificar la clave. Revisa si hay erratas o búscala en el correo de compra.",
+      "error": "No se pudo comprobar la clave ahora mismo. Inténtalo de nuevo en un momento.",
+      "privacyNote": "Tu clave se verifica con Polar y nunca se guarda en nuestros servidores: solo una huella anónima cuenta tu voto.",
+      "show": "Mostrar clave",
+      "hide": "Ocultar clave"
+    },
+    "submit": {
+      "heading": "Proponer una función",
+      "titleLabel": "Título",
+      "titlePlaceholder": "Una línea que resuma la idea",
+      "detailsLabel": "Detalles",
+      "detailsPlaceholder": "¿Qué debería hacer y cuándo lo usarías?",
+      "emailLabel": "Correo",
+      "emailHelp": "Para poder responderte o avisarte cuando esté disponible.",
+      "emailPlaceholder": "tu@ejemplo.com",
+      "moderationNote": "Cada petición se revisa a mano antes de aparecer en el tablero.",
+      "send": "Enviar petición",
+      "sending": "Enviando…",
+      "successTitle": "Gracias — está en revisión.",
+      "successBody": "Tu idea se ha enviado. Cuando se apruebe recibirás un correo y aparecerá aquí para que todos la voten.",
+      "another": "Proponer otra",
+      "errorDefault": "Algo salió mal. Inténtalo de nuevo o usa el formulario de contacto.",
+      "errorNetwork": "Problema de red. Inténtalo de nuevo."
     }
   },
   "download": {
@@ -928,7 +1099,8 @@
     "pricing": "Precios",
     "managePurchase": "Gestionar la compra",
     "copyright": "© {{year}} · Battery Sensei",
-    "lastUpdated": "Actualizado el {{date}}"
+    "lastUpdated": "Actualizado el {{date}}",
+    "roadmap": "Hoja de ruta"
   },
   "checkout": {
     "kicker": "Compra · 会計",

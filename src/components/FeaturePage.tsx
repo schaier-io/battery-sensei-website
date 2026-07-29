@@ -14,6 +14,14 @@ type Slug =
   | 'battery-journal'
   | 'meeting-battery-guard'
   | 'energy-usage'
+  | 'low-power-mode'
+  | 'power-flow'
+  | 'system-load'
+  | 'charge-limit'
+  | 'battery-health'
+  | 'statistics'
+  | 'honors'
+  | 'general'
 
 type Props = {
   slug: Slug
@@ -39,15 +47,15 @@ export function FeaturePage({ slug, kanji, mockup, extended, faqs }: Props) {
     <>
       <Nav />
       <main>
-        <section className="zen-section mx-auto max-w-3xl px-5 sm:px-6">
-          <Reveal as="p" delay={80} className="mb-6">
-            <HomeLink
-              className="inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.22em] text-sumi-soft transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:text-sumi"
-            >
-              <ArrowLeft className="h-3.5 w-3.5" strokeWidth={1.6} />
-              {t('featurePages.backLink')}
-            </HomeLink>
-          </Reveal>
+        <Reveal as="div" delay={80} className="mx-auto max-w-6xl px-5 pt-6 sm:px-8 lg:px-10">
+          <HomeLink
+            className="inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.22em] text-sumi-soft transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:text-sumi"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" strokeWidth={1.6} />
+            {t('featurePages.backLink')}
+          </HomeLink>
+        </Reveal>
+        <section className="zen-section mx-auto max-w-3xl px-5 pb-0 pt-10 sm:px-6 md:pt-12">
 
           <div className="flex flex-col items-start">
             <Hanko kanji={kanji} className="mb-6" />
@@ -75,7 +83,7 @@ export function FeaturePage({ slug, kanji, mockup, extended, faqs }: Props) {
         </section>
 
         {mockup && (
-          <section className="mx-auto max-w-3xl px-5 pb-2 pt-8 sm:px-6 md:pt-12">
+          <section className="mx-auto max-w-3xl px-5 pb-2 pt-8 sm:px-6 md:pt-10">
             <Reveal delay={420}>
               <figure className="paper-card relative overflow-hidden p-6 md:p-8">
                 {/* Ambient hinomaru wash — same trick used in the Contact card.
@@ -93,7 +101,7 @@ export function FeaturePage({ slug, kanji, mockup, extended, faqs }: Props) {
           </section>
         )}
 
-        <section className="zen-section mx-auto max-w-3xl px-5 pt-6 sm:px-6">
+        <section className="zen-section mx-auto max-w-3xl px-5 pt-10 sm:px-6 md:pt-12">
           <Reveal delay={500}>
             <div className="border-l-2 border-hinomaru/30 pl-5 md:pl-6">
               <p className="display-title mb-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-sumi-soft">

@@ -240,4 +240,84 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://www.battery-sensei.app/legal" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.battery-sensei.app/legal" />
   </url>
+  <url>
+    <loc>https://www.battery-sensei.app/roadmap</loc>
+    <lastmod>2026-07-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.battery-sensei.app/roadmap" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.battery-sensei.app/roadmap" />
+  </url>
+  <url>
+    <loc>https://www.battery-sensei.app/features/low-power-mode</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.battery-sensei.app/features/low-power-mode" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.battery-sensei.app/features/low-power-mode" />
+  </url>
+  <url>
+    <loc>https://www.battery-sensei.app/features/power-flow</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.battery-sensei.app/features/power-flow" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.battery-sensei.app/features/power-flow" />
+  </url>
+  <url>
+    <loc>https://www.battery-sensei.app/features/system-load</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.battery-sensei.app/features/system-load" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.battery-sensei.app/features/system-load" />
+  </url>
+  <url>
+    <loc>https://www.battery-sensei.app/features/charge-limit</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.battery-sensei.app/features/charge-limit" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.battery-sensei.app/features/charge-limit" />
+  </url>
+  <url>
+    <loc>https://www.battery-sensei.app/features/battery-health</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.battery-sensei.app/features/battery-health" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.battery-sensei.app/features/battery-health" />
+  </url>
+  <url>
+    <loc>https://www.battery-sensei.app/features/statistics</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.battery-sensei.app/features/statistics" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.battery-sensei.app/features/statistics" />
+  </url>
+  <url>
+    <loc>https://www.battery-sensei.app/features/honors</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.battery-sensei.app/features/honors" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.battery-sensei.app/features/honors" />
+  </url>
+  <url>
+    <loc>https://www.battery-sensei.app/features/general</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.battery-sensei.app/features/general" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.battery-sensei.app/features/general" />
+  </url>
+  <url>
+    <loc>https://www.battery-sensei.app/features</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.battery-sensei.app/features" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.battery-sensei.app/features" />
+  </url>
 </urlset>

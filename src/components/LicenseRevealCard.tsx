@@ -9,6 +9,7 @@ import {
   Sparkles,
 } from 'lucide-react'
 import { CUSTOMER_PORTAL_URL } from '#/lib/polar'
+import { storeLicenseKey } from '#/lib/board-license'
 
 /**
  * Composite post-purchase delivery card. Mounted on /thanks/lifetime and
@@ -158,6 +159,9 @@ export function LicenseRevealCard({
 
         const licenseKey = String(data.licenseKey ?? '').trim()
         if (licenseKey) {
+          // Pre-arm feature-board voting: buyers landing from checkout
+          // never have to re-enter their key on /roadmap.
+          storeLicenseKey(licenseKey)
           flipToReady({
             phase: 'ready',
             licenseKey,

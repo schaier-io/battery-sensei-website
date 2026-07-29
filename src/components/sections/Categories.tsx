@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 const items: { href: string; key: string }[] = [
   { href: '#features', key: 'alerts' },
+  { href: '#power-handoffs', key: 'handoffs' },
   { href: '#features', key: 'chargeLimit' },
   { href: '#features', key: 'travelMode' },
   { href: '#health', key: 'cycle' },

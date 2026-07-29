@@ -2,8 +2,10 @@
 # robotstxt.org
 
 # Default: allow all standard search and AI crawlers.
+# The moderation dashboard is internal-only.
 User-agent: *
 Allow: /
+Disallow: /admin
 
 # Explicit allows for AI search bots (so each platform can cite us in
 # AI answers / Overviews). Listed for clarity even though * already

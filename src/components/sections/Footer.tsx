@@ -139,10 +139,18 @@ export function Footer() {
             {t('footer.pricing')}
           </a>
           <FooterDot />
+          <Link to="/roadmap" className="zen-link-lift">
+            {t('footer.roadmap')}
+          </Link>
+          <FooterDot />
           {/* English-only links (no i18n key) — the journal and glossary
               stay EN-only for now while we build out the content.
               Footer label is hardcoded; translations can be added later
               once we localize the body content. */}
+          <Link to="/features" className="zen-link-lift">
+            Features
+          </Link>
+          <FooterDot />
           <Link to="/blog" className="zen-link-lift">
             Journal
           </Link>

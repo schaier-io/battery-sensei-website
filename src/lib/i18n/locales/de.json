@@ -39,9 +39,18 @@
       "timelineLabel": "Verlauf der Akkuladung über die Zeit",
       "footerTagline": "Ruhig im Blick.",
       "entries": {
-        "0": { "date": "4. Mär", "body": "Bei 12 % gerettet. Gerade noch rechtzeitig eingesteckt." },
-        "1": { "date": "18. Feb", "body": "Während der Fokusphasen stabil bei 78-82 % geblieben." },
-        "2": { "date": "30. Jan", "body": "Bestwert bisher: 11 Std. 23 Min. mit einer Ladung." }
+        "0": {
+          "date": "4. Mär",
+          "body": "Bei 12 % gerettet. Gerade noch rechtzeitig eingesteckt."
+        },
+        "1": {
+          "date": "18. Feb",
+          "body": "Während der Fokusphasen stabil bei 78-82 % geblieben."
+        },
+        "2": {
+          "date": "30. Jan",
+          "body": "Bestwert bisher: 11 Std. 23 Min. mit einer Ladung."
+        }
       }
     },
     "rescueReceipt": {
@@ -93,11 +102,26 @@
     "title": "Mehr Ruhe für den Akku",
     "titleItalic": "Ihres MacBooks.",
     "headlines": [
-      { "lead": "Mehr Ruhe für den Akku", "tail": "Ihres MacBooks." },
-      { "lead": "Bleiben Sie gelassen", "tail": "in jedem Meeting." },
-      { "lead": "Sanfteres Laden", "tail": "für ein längeres Leben." },
-      { "lead": "Nie wieder", "tail": "unerwartetes Abschalten." },
-      { "lead": "Kühlere Zyklen,", "tail": "ein ruhigerer Akku." }
+      {
+        "lead": "Mehr Ruhe für den Akku",
+        "tail": "Ihres MacBooks."
+      },
+      {
+        "lead": "Bleiben Sie gelassen",
+        "tail": "in jedem Meeting."
+      },
+      {
+        "lead": "Sanfteres Laden",
+        "tail": "für ein längeres Leben."
+      },
+      {
+        "lead": "Nie wieder",
+        "tail": "unerwartetes Abschalten."
+      },
+      {
+        "lead": "Kühlere Zyklen,",
+        "tail": "ein ruhigerer Akku."
+      }
     ],
     "jp": "静かに見守り、無理なく長持ち。",
     "body": "Jede volle Ladung lässt den Akku Ihres MacBooks ein Stück altern. Battery Sensei behält die Details im Blick: warnt rechtzeitig vor dem Abschalten, hält den Akku bei einem schonenderen Ladelimit und zeigt, welche Apps Energie verbrauchen, wie sich Zyklen summieren und ob die Kapazität normal altert.",
@@ -108,6 +132,7 @@
     "ariaLabel": "Funktionen von Battery Sensei",
     "items": {
       "alerts": "Intelligente Akkuwarnungen",
+      "handoffs": "Hinweise beim Ein- & Ausstecken",
       "chargeLimit": "80-%-Ladelimit",
       "travelMode": "Reisemodus",
       "cycle": "Zyklenzahl & Kapazität",
@@ -134,6 +159,19 @@
         "alert": "Alarm",
         "alertDetail": "Bleibt sichtbar, bis Sie ihn ausblenden."
       }
+    },
+    "handoffs": {
+      "title": "Ein ruhiger Hinweis, wenn die Stromquelle wechselt.",
+      "italic": "Restzeit beim Abstecken. Ladezeit beim Anschließen.",
+      "body": "Beide Hinweise lassen sich einzeln ein- oder ausschalten. Nach dem Abstecken beginnt Sensei mit der jüngsten Auslastung und verfeinert die Restzeit live. Nach dem Anschließen wartet es auf eine stabile Ladeleistung und zeigt dann die Zeit bis zum aktiven Ladelimit oder im Reisemodus bis 100 %. Beide bleiben unaufdringlich und lassen sich mit Escape schließen.",
+      "onDevice": "Auf Ihrem Mac berechnet",
+      "previewLabel": "Vorschau der Hinweise beim Ein- und Ausstecken",
+      "unplugTitle": "Im Akkubetrieb",
+      "unplugTime": "4 Std. 12 Min.",
+      "refining": "wird noch berechnet…",
+      "plugTitle": "Wird geladen",
+      "plugTime": "~38 Min.",
+      "untilTarget": "bis 85 %"
     },
     "chargeLimit": {
       "title": "Ladelimit",
@@ -571,7 +609,75 @@
       "body": "Auf der Saga-Seite listet Sensei die größten Stromverbraucher. Wechseln Sie zwischen jetzt (live), den letzten 3 Stunden oder 5 Tagen – und schalten Sie jeden Wert zwischen Prozent einer vollen Ladung und Watt (aktuelle Leistung) oder Wattstunden (über einen Zeitraum) um. Jede App bekommt einen Energie-Score im Stil der Aktivitätsanzeige (CPU-Zeit, kombiniert mit Aufwachvorgängen im Leerlauf), eine Verbrauchsstufe (Niedrig / Mittel / Hoch / Sehr hoch) und einen Suchfilter, damit Sie jeden Chrome-Hilfsprozess in der Liste finden. Der Verlauf wird alle 5 Minuten erfasst; die Live-Ansicht „Jetzt“ aktualisiert sich etwa alle 10 Sekunden. Keine Systemerweiterung, keine Kernel-Hooks.",
       "mockupCaption": "Top-Apps · Jetzt / 3 Std. / 5 T. · Prozent oder Watt. Live-Ansicht etwa alle 10 s aktualisiert.",
       "why": "Wenn der Akku schnell leer wird, liegt es fast nie am Akku selbst. Meist ist es ein hängender Hilfsprozess, ein Tab, der nicht schlafen will, oder ein Videoanruf, der die GPU nicht freigibt. Zu wissen, welche App am meisten zieht, kann den Unterschied zwischen vier und sieben Stunden Laufzeit ausmachen."
-    }
+    },
+    "low-power-mode": {
+      "kicker": "Funktion · 節電",
+      "heading": "Stromsparmodus,",
+      "headingItalic": "ohne ans Einschalten zu denken.",
+      "body": "macOS versteckt den Stromsparmodus als manuellen Schalter in den Systemeinstellungen. Battery Sensei macht daraus eine Regel: Sie wählen einen Prozentwert oder eine Restlaufzeit als Auslöser, und Sensei schaltet den Modus ein, sobald die Grenze unterschritten wird – und wieder aus, sobald Sie anschließen. Die Drosselung übernimmt Apples eigene Einstellung; Sensei kümmert sich nur um das Timing, das Sie vergessen hätten.",
+      "mockupCaption": "Auslöser einmal festlegen. Sensei erledigt beide Richtungen.",
+      "why": "Genau dann, wenn Sie den Stromsparmodus brauchen, denken Sie am wenigsten daran: 18 % übrig, ein Meeting beginnt, kein Ladegerät dabei. Eine Regel, die Sie an einem ruhigen Nachmittag festlegen, ist mehr wert als ein Schalter, an den Sie sich in einem schlechten Moment erinnern müssen – und weil er automatisch wieder ausgeht, verlieren Sie nicht eine ganze Woche Leistung wegen einer längst überstandenen Krise."
+    },
+    "power-flow": {
+      "kicker": "Funktion · 電流",
+      "heading": "Wohin die Watt gehen:",
+      "headingItalic": "Netzteil, Akku, System.",
+      "body": "Drei Werte, die macOS nie zusammen zeigt: was das Ladegerät wirklich liefert, wie viel davon in den Zellen ankommt und was der Mac selbst zieht. Im Akkubetrieb ist der letzte Wert Ihre Entladerate – der ehrlichste Indikator für die Laufzeit.",
+      "mockupCaption": "Netzteil rein, Akkufluss, Systemverbrauch. Ein Panel, live.",
+      "why": "Langsames Laden und schnelles Entladen sehen im Prozentwert gleich aus. Das ändert sich, sobald Sie sehen, dass Ihr 96-W-Netzteil nur 38 W aushandelt oder dass das System alles verbraucht, was ankommt. Aus dem Raten wird eine Messung."
+    },
+    "system-load": {
+      "kicker": "Funktion · 負荷",
+      "heading": "Warum der Akku fällt:",
+      "headingItalic": "CPU, GPU, Datenträger, Speicher.",
+      "body": "Vier Messwerte direkt neben den Akkuzahlen statt in einer anderen App. Ein plötzlicher Verbrauch hat fast immer eine sichtbare Ursache – ein blockierter Kern, eine ausgelastete GPU, ein Sync-Dienst, der den ganzen Nachmittag schreibt.",
+      "mockupCaption": "CPU, GPU, Speicherdruck und Datenträger-I/O – gemeinsam gemessen.",
+      "why": "„Heute war der Akku schnell leer“ bleibt ein Gefühl, bis Sie die Last dahinter sehen. Die Systemlast liefert den Beleg, das App-Energie-Panel den Namen. Zusammen wird aus einem schlechten Akkutag ein Prozess, den Sie beenden können."
+    },
+    "charge-limit": {
+      "kicker": "Funktion · 充電",
+      "heading": "Ein tägliches Ladelimit",
+      "headingItalic": "und ein wöchentlicher Zyklus zur Kalibrierung.",
+      "body": "Lithium-Ionen altern an den Extremen am schnellsten, und die Zeit bei 100 % ist der Teil, den Sie steuern können. Setzen Sie ein Limit – Sensei erinnert Sie einmal pro Woche an einen volleren Zyklus, damit die Laufzeitschätzungen nicht abdriften.",
+      "mockupCaption": "Tägliches Limit setzen; die wöchentliche Kalibrierung übernimmt Sensei.",
+      "why": "Ein Akku lässt sich nicht reparieren – aber das Muster entscheidet, wie schnell er altert. Ein Limit tauscht Laufzeit, die Sie ohnehin nicht gebraucht haben, gegen Monate langsameren Kapazitätsverlusts. Der Wochenzyklus hält die Anzeige ehrlich."
+    },
+    "battery-health": {
+      "kicker": "Funktion · 健康",
+      "heading": "Kapazität, Zyklen, Zustand –",
+      "headingItalic": "und die Gewohnheiten dahinter.",
+      "body": "Die drei Werte, die macOS führt und selten zeigt: wie viel Ihr Akku heute hält, wie viele Vollzyklen er hinter sich hat und Apples eigenes Zustandsurteil – unverändert übernommen, neben den Ladegewohnheiten, die sie geprägt haben.",
+      "mockupCaption": "Kapazität, Zustand und Ladezyklen, direkt aus dem Akku gelesen.",
+      "why": "„92 % Kapazität“ sagt für sich genommen nichts. Ist das gut für einen Mac dieses Alters? Sind gerade vier Punkte in einem Monat verloren gegangen, oder ist der Wert seit dem Frühjahr stabil? Zustand ist ein Trend – und ein Trend braucht den Verlauf daneben."
+    },
+    "statistics": {
+      "kicker": "Funktion · 統計",
+      "heading": "Ihre Akku-Woche,",
+      "headingItalic": "zusammengefasst wie von Hand.",
+      "body": "Zeit ohne Netzteil, Ladevorgänge, durchschnittliche Entladetiefe, die heißeste Phase und die rechtzeitigen Rettungen – als Wochen- und Monatsrückblick, den Sie in zwanzig Sekunden lesen.",
+      "mockupCaption": "Wochen- und Monatsrückblicke, direkt auf Ihrem Mac berechnet.",
+      "why": "Ein Prozentwert beantwortet „was jetzt“. Er beantwortet nicht „ist das normal für mich“. Rückblicke machen das Muster sichtbar – die Reisewoche, der Monat mit dem dauerlaufenden Sync-Dienst – solange sich noch etwas ändern lässt."
+    },
+    "honors": {
+      "kicker": "Funktion · 名誉",
+      "heading": "Gewohnheiten, die sich lohnen –",
+      "headingItalic": "still anerkannt.",
+      "body": "Auszeichnungen markieren Verhalten, das nachweislich mit einem gesünderen Akku zusammenhängt: gleichmäßige Ladebereiche, ernst genommene Rettungen, Serien, die eine volle Woche überstehen. Keine Punkte, keine Ranglisten, kein Drängeln.",
+      "mockupCaption": "Still verdient, aus Ihrem eigenen Akkuverlauf.",
+      "why": "Ladezyklen lassen sich nicht zurücknehmen und Kapazität nicht reparieren. Ändern lässt sich das Muster – und Muster reagieren auf Rückmeldung. Auszeichnungen sind die leiseste Rückmeldung, die trotzdem wirkt: sichtbar, wenn Sie hinsehen, still, wenn nicht."
+    },
+    "general": {
+      "kicker": "Funktion · 設定",
+      "heading": "Wenige Einstellungen,",
+      "headingItalic": "weil es nichts zu synchronisieren gibt.",
+      "body": "Menüleisteninhalt, Erscheinungsbild, Sprache und Start bei der Anmeldung. Kein Konto, keine Cloud-Einstellungen, kein Telemetrie-Schalter – weil nichts erfasst wird, das man schalten müsste.",
+      "mockupCaption": "Erscheinungsbild, Sprache, Menüleiste, Startverhalten.",
+      "why": "Die meisten Apps bekommen mit der Zeit einen Einstellungsbildschirm voller Entscheidungen. Der von Battery Sensei bleibt bewusst kurz: Alles, was die App über Ihren Akku weiß, bleibt auf Ihrem Mac – übrig bleiben nur Aussehen und Verhalten."
+    },
+    "indexKicker": "Alles in der App",
+    "indexHeading": "Vierzehn Anleitungen,",
+    "indexHeadingItalic": "eine pro Funktion.",
+    "indexBody": "Jedes Panel, jede Karte und jede Automatik in Battery Sensei hat hier eine Seite: was sie tut, wie man sie liest und warum es sie gibt. Fangen Sie an, wo Sie möchten – die Seiten verlinken sich gegenseitig."
   },
   "pricing": {
     "kicker": "Preise · 値段",
@@ -863,6 +969,71 @@
       "refundHint": "Fügen Sie die Bestell-ID aus Ihrer Polar-Bestätigungsmail bei. Mehr brauchen wir nicht.",
       "journalLabel": "Journal",
       "journalHint": "Mehr Tipps? <0>Im Journal</0> finden Sie Akkuratgeber und Updates."
+    },
+    "board": {
+      "hint": "Feature-Ideen können auch auf dem öffentlichen Board landen, wo andere darüber abstimmen — dieses Formular bleibt eine private Nachricht.",
+      "linkLabel": "Zum öffentlichen Board"
+    }
+  },
+  "board": {
+    "kicker": "Roadmap & Wünsche",
+    "heading": "Geformt von",
+    "headingItalic": "denen, die es täglich nutzen",
+    "intro": "Stimmen Sie darüber ab, was Battery Sensei als Nächstes lernt, oder schlagen Sie eigene Ideen vor. Jede Stimme ist an einen Lizenzschlüssel gebunden — echte Nutzer lenken die Roadmap, keine Bots.",
+    "loading": "Wünsche werden geladen…",
+    "error": "Das Board konnte nicht geladen werden. Bitte versuchen Sie es erneut.",
+    "retry": "Erneut versuchen",
+    "empty": {
+      "title": "Noch nichts zu sehen",
+      "message": "Freigegebene Wünsche erscheinen hier nach der Prüfung. Machen Sie den Anfang und schlagen Sie eine Idee vor."
+    },
+    "sections": {
+      "in_progress": "In Arbeit",
+      "planned": "Geplant",
+      "open": "Offen zur Abstimmung",
+      "shipped": "Ausgeliefert"
+    },
+    "statuses": {
+      "open": "Offen",
+      "planned": "Geplant",
+      "in_progress": "In Arbeit",
+      "shipped": "Ausgeliefert"
+    },
+    "vote": "Für diesen Wunsch stimmen",
+    "unvote": "Stimme zurückziehen",
+    "votes_one": "{{count}} Stimme",
+    "votes_other": "{{count}} Stimmen",
+    "license": {
+      "armedNote": "Sie stimmen mit Ihrem gespeicherten Lizenzschlüssel ab.",
+      "changeAction": "Schlüssel vergessen",
+      "dialogTitle": "Mit Ihrer Lizenz abstimmen",
+      "dialogBody": "Das Abstimmen ist an Ihren Battery-Sensei-Lizenzschlüssel gebunden — so hat jede Kundin und jeder Kunde genau eine Stimme pro Idee. Einmal eingeben, der Schlüssel bleibt auf diesem Gerät.",
+      "placeholder": "Ihr Lizenzschlüssel",
+      "submit": "Abstimmen freischalten",
+      "checking": "Wird geprüft…",
+      "invalid": "Der Schlüssel konnte nicht bestätigt werden. Prüfen Sie auf Tippfehler oder sehen Sie in Ihrer Kauf-E-Mail nach.",
+      "error": "Der Schlüssel konnte gerade nicht geprüft werden. Bitte versuchen Sie es gleich noch einmal.",
+      "privacyNote": "Ihr Schlüssel wird bei Polar geprüft und nie auf unseren Servern gespeichert — nur ein anonymer Fingerabdruck zählt Ihre Stimme.",
+      "show": "Schlüssel anzeigen",
+      "hide": "Schlüssel verbergen"
+    },
+    "submit": {
+      "heading": "Feature vorschlagen",
+      "titleLabel": "Titel",
+      "titlePlaceholder": "Ein Satz, der die Idee auf den Punkt bringt",
+      "detailsLabel": "Details",
+      "detailsPlaceholder": "Was soll es können, und wann würden Sie es nutzen?",
+      "emailLabel": "E-Mail",
+      "emailHelp": "Für Rückfragen — und die Nachricht, wenn es soweit ist.",
+      "emailPlaceholder": "sie@beispiel.de",
+      "moderationNote": "Jeder Wunsch wird von Hand geprüft, bevor er auf dem Board erscheint.",
+      "send": "Wunsch senden",
+      "sending": "Wird gesendet…",
+      "successTitle": "Danke — die Idee ist in Prüfung.",
+      "successBody": "Ihre Idee wurde gesendet. Nach der Freigabe erhalten Sie eine E-Mail, und sie erscheint hier zur Abstimmung.",
+      "another": "Noch eine vorschlagen",
+      "errorDefault": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut oder nutzen Sie das Kontaktformular.",
+      "errorNetwork": "Netzwerkproblem. Bitte versuchen Sie es erneut."
     }
   },
   "download": {
@@ -928,7 +1099,8 @@
     "pricing": "Preise",
     "managePurchase": "Kauf verwalten",
     "copyright": "© {{year}} · Battery Sensei",
-    "lastUpdated": "Zuletzt aktualisiert am {{date}}"
+    "lastUpdated": "Zuletzt aktualisiert am {{date}}",
+    "roadmap": "Roadmap"
   },
   "checkout": {
     "kicker": "Kasse · 会計",

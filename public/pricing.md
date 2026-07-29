@@ -21,6 +21,7 @@
 ### Free essentials (kept forever, including after trial)
 
 - Smart low-battery alerts — three named preset moods (Zen / Regular / Senpai); switch presets any time, edit per-rule style + dismissal mode (manual / auto-close) + auto-close seconds
+- Optional plug and unplug updates — live time remaining after disconnecting, and time to the active charge limit after charging settles
 - Charge limit with Travel Mode
 - 24-hour battery history window
 - Last-hour per-app battery breakdown

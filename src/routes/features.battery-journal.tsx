@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { FeaturePage } from '#/components/FeaturePage'
-import { BatteryJournal } from '#/components/zen/BatteryJournal'
+import { ScreenshotMockup } from '#/components/ScreenshotMockup'
 import { extended, faqs } from '#/data/features/battery-journal'
 
 const SITE_URL = 'https://www.battery-sensei.app'

@@ -210,6 +210,25 @@ export function Contact() {
                 />
               </Field>
 
+              {/* Feature ideas have a public home too: the roadmap board,
+                  where submissions become votable after review. This form
+                  stays the private path — the pointer is informational,
+                  not a mode switch. */}
+              {topic === 'feature' && (
+                <div className="rounded-md border border-dashed border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_82%,transparent)] p-3.5">
+                  <p className="text-[0.8125rem] leading-[1.5] text-sumi-soft">
+                    {t('contact.board.hint')}
+                  </p>
+                  <Link
+                    to="/roadmap"
+                    className="mt-1.5 inline-flex items-center gap-1.5 text-[0.8125rem] font-medium text-sumi transition-colors hover:text-hinomaru"
+                  >
+                    {t('contact.board.linkLabel')}
+                    <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.9} aria-hidden />
+                  </Link>
+                </div>
+              )}
+
               <Field
                 label={t('contact.fields.message')}
                 htmlFor="contact-message"

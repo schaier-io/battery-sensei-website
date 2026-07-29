@@ -29,6 +29,7 @@ Privacy: nothing leaves the device. No telemetry, no account, no cloud.
 ## Key features
 
 - Three-level low-battery alerts (Zen / Regular / Senpai presets, or custom)
+- Optional plug and unplug updates with live battery-runtime and time-to-limit estimates
 - Charge limit (cap at any percent, default 80%) with one-click Travel Mode
 - Live charge, source, watts in/out, and time-left readout in the menu bar
 - Cycle count and capacity tracking with plain-English context

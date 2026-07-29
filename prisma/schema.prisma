@@ -131,3 +131,123 @@ model SupportRequest {
   @@index([status, createdAt])
   @@index([createdAt])
 }
+
+/// Lifecycle of a public feature request. `pending` and `rejected` are
+/// never exposed publicly; the other four double as roadmap columns.
+enum FeatureRequestStatus {
+  pending
+  open
+  planned
+  in_progress
+  shipped
+  rejected
+}
+
+enum FeatureRequestSource {
+  web
+  app
+}
+
+/// A feature request on the public board. Same raw+cleaned audit pattern
+/// as SupportRequest. Public endpoints only ever render publicTitle/
+/// publicBody (falling back to the cleaned title/body) — never raw*,
+/// email, or name.
+model FeatureRequest {
+  id       String @id @default(cuid())
+  // Short shared identifier shown to the submitter and in the inbox.
+  ticketId String @unique
+
+  // Raw, unmodified input as received from the client (post JSON.parse).
+  rawTitle   String?
+  rawBody    String?
+  rawEmail   String?
+  rawName    String?
+  rawPayload Json
+
+  // Cleaned/validated values from the zod schema.
+  title  String
+  body   String
+  email  String
+  name   String @default("")
+  locale String @default("en")
+
+  // Admin-editable copy shown on the public board. Null falls back to
+  // the cleaned title/body.
+  publicTitle String?
+  publicBody  String?
+
+  status FeatureRequestStatus @default(pending)
+  source FeatureRequestSource @default(web)
+
+  // Set on reject; emailed to the submitter verbatim (escaped).
+  rejectionReason String?
+  // Internal-only annotations: honeypot / rate_limited_* / email_failed
+  // quarantine markers plus free-form admin notes.
+  adminNote String?
+  moderatedAt DateTime?
+
+  /// Denormalized vote counter, maintained in the same transaction as
+  /// FeatureVote writes so the public list sort is one indexed query.
+  votesCount Int @default(0)
+
+  // Request metadata for abuse investigation.
+  ipAddress String?
+  userAgent String?
+  origin    String?
+
+  // Resend message ids — useful for tracing delivery failures.
+  adminNotifyEmailId  String?
+  confirmationEmailId String?
+  decisionEmailId     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  votes FeatureVote[]
+
+  // Public list: visible statuses sorted by votes.
+  @@index([status, votesCount])
+  // Admin dashboard filters.
+  @@index([status, createdAt])
+  // Email rate limit lookup.
+  @@index([email, createdAt])
+  // IP rate limit lookup.
+  @@index([ipAddress, createdAt])
+  @@index([createdAt])
+}
+
+/// One vote per license per request. voterHash is
+/// HMAC-SHA256(licenseKey, FEATURE_VOTE_HASH_SECRET) hex — the raw key
+/// is never stored or logged.
+model FeatureVote {
+  id        String         @id @default(cuid())
+  requestId String
+  request   FeatureRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  voterHash String
+  ipAddress String?
+  createdAt DateTime @default(now())
+
+  @@unique([requestId, voterHash])
+  // "Which requests did this key vote for" lookup.
+  @@index([voterHash])
+  // Vote-mutation rate limit lookup.
+  @@index([ipAddress, createdAt])
+}
+
+/// Cache of successful Polar license validations keyed by voterHash, so
+/// vote/check calls within 24h skip the Polar round-trip.
+model LicenseVoter {
+  voterHash       String   @id
+  lastValidatedAt DateTime
+  createdAt       DateTime @default(now())
+}
+
+/// Durable rate limiting for /api/admin/session login attempts.
+model AdminLoginAttempt {
+  id        String   @id @default(cuid())
+  ipAddress String?
+  success   Boolean
+  createdAt DateTime @default(now())
+
+  @@index([ipAddress, createdAt])
+}

@@ -88,6 +88,7 @@ const softwareApplicationLd = {
   ],
   featureList: [
     'Smart low-battery alerts (Zen, Regular, Senpai presets)',
+    'Opt-in plug and unplug updates with live time estimates',
     'Charge limit with one-click Travel Mode',
     'Battery cycle and capacity tracking',
     'Personal battery history with plain-English timeline',
