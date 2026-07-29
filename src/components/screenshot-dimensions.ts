@@ -8,7 +8,7 @@ export const SCREENSHOT_DIMENSIONS: Record<string, { width: number; height: numb
   'charge-limit': { width: 1800, height: 877 },
   'custom-thresholds': { width: 1800, height: 4208 },
   'energy-usage': { width: 1800, height: 384 },
-  'general': { width: 1800, height: 4723 },
+  'general': { width: 1800, height: 4648 },
   'honors': { width: 1800, height: 1598 },
   'low-power-mode': { width: 1800, height: 825 },
   'meeting-battery-guard': { width: 1800, height: 1039 },

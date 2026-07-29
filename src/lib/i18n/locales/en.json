@@ -614,70 +614,70 @@
       "kicker": "Feature · 節電",
       "heading": "Low Power Mode,",
       "headingItalic": "without remembering to turn it on.",
-      "body": "macOS ships Low Power Mode as a manual switch buried in System Settings. Battery Sensei turns it into a rule: pick a percentage or a time-remaining trigger, and Sensei flips it on when you cross the line — then back off the moment you plug in. Apple's own setting does the throttling; Sensei only handles the timing you would have forgotten.",
-      "mockupCaption": "Set the trigger once. Sensei handles both directions.",
-      "why": "The moment you need Low Power Mode is the moment you're least likely to think of it: 18% left, a meeting starting, no charger in the bag. A rule you set on a calm afternoon is worth more than a switch you have to remember during a bad one — and turning it back off automatically means you never lose a week of performance to a crisis you already survived."
+      "body": "macOS hides Low Power Mode three panes deep in System Settings. Battery Sensei turns it into a rule: pick a battery percentage or a time-remaining trigger, and the mode switches on when you cross it — then off again when you plug in. Apple's setting does the throttling. Sensei just remembers for you.",
+      "mockupCaption": "One trigger, both directions: on when you cross it, off when you charge.",
+      "why": "You never think of Low Power Mode at the right moment. 18% left, a meeting starting, no charger in the bag — that is exactly when it's furthest from your mind. Set the rule once on a calm afternoon and it covers every bad one after it. Because it switches back off on its own, you won't find your Mac still throttled a week later."
     },
     "power-flow": {
       "kicker": "Feature · 電流",
       "heading": "Where your watts go,",
       "headingItalic": "adapter, battery, system.",
-      "body": "Three readings macOS never puts in one place: what the charger is actually delivering, how much of it reaches the cells, and what the Mac itself is drawing. Unplugged, that last number is your discharge rate — the most honest predictor of runtime there is.",
-      "mockupCaption": "Adapter in, battery flow, system draw. One panel, live.",
-      "why": "A slow charge and a fast drain look identical from a percentage. They stop looking identical the moment you can see that your 96 W charger is negotiating 38 W, or that the system is eating everything the adapter sends. Power flow turns a guess into a reading."
+      "body": "Three numbers macOS never shows side by side: what the charger delivers, what reaches the battery, and what your Mac draws. Unplugged, that last number is your discharge rate. No estimate — the actual reading.",
+      "mockupCaption": "Adapter in, battery flow, system draw. Live.",
+      "why": "A percentage can't tell you why it's falling. Watts can. Once you see your 96 W charger delivering 38 W through a bad cable, or the system eating everything the adapter sends, the mystery is over."
     },
     "system-load": {
       "kicker": "Feature · 負荷",
       "heading": "Why the battery is dropping:",
       "headingItalic": "CPU, GPU, disk, memory.",
-      "body": "Four readings beside your battery numbers instead of in another app. A sudden drain almost always has a cause you can see — a pinned core, a busy GPU, a sync client writing all afternoon.",
+      "body": "CPU, GPU, disk, and memory pressure, right beside your battery numbers. When the battery drains fast, one of these four usually explains it: a pinned core, a busy GPU, a sync client writing all afternoon.",
       "mockupCaption": "CPU, GPU, memory pressure, disk I/O — sampled together.",
-      "why": "\"It died fast today\" is a feeling until you can see the load behind it. System load supplies the evidence; the app energy panel supplies the name. Between them, a bad battery day becomes a process you can quit."
+      "why": "“It died fast today” is a feeling. Load is evidence. The system panel shows that something is working your Mac; the app energy panel names it. Together they turn a bad battery day into a process you can quit."
     },
     "charge-limit": {
       "kicker": "Feature · 充電",
       "heading": "A daily charge cap,",
       "headingItalic": "and a weekly cycle to keep it honest.",
-      "body": "Lithium-ion ages fastest at the extremes, and time sitting at 100% is the part you can actually control. Set a cap, and Sensei reminds you about one fuller cycle a week so the runtime estimates don't drift.",
-      "mockupCaption": "Cap the daily charge; Sensei handles the weekly calibration reminder.",
-      "why": "Nothing you do repairs a battery — but the pattern you keep decides how quickly it wears. A cap trades runtime you weren't using for months of slower capacity loss, and the weekly cycle keeps the gauge telling you the truth."
+      "body": "Lithium-ion wears fastest at the extremes, and hours parked at 100% are the part you control. Set a daily cap and charging stops there. Once a week, Sensei suggests a fuller cycle so the runtime estimate stays honest.",
+      "mockupCaption": "Set the cap; Sensei reminds you about the weekly calibration cycle.",
+      "why": "You can't repair a battery, but you can slow the wear. A cap trades runtime you weren't using for capacity you'll want in two years. The weekly cycle keeps the gauge calibrated, so you can watch the trade pay off."
     },
     "battery-health": {
       "kicker": "Feature · 健康",
       "heading": "Capacity, cycles, condition,",
       "headingItalic": "and the habits behind them.",
-      "body": "The three numbers macOS keeps and rarely shows: how much your pack holds today, how many full-equivalent cycles it has taken, and Apple's own condition verdict — presented verbatim, next to the charging habits that shaped them.",
-      "mockupCaption": "Capacity, condition, and cycle count, read straight from the pack.",
-      "why": "\"92% capacity\" tells you nothing on its own. Is that good for a Mac your age? Did it just slide four points in a month, or has it been flat since spring? Health is a trend, and a trend needs the history sitting next to it."
+      "body": "The three numbers macOS keeps but rarely shows: how much the pack holds today, how many full cycles it has behind it, and Apple's own condition verdict — unedited, beside the charging habits that shaped them.",
+      "mockupCaption": "Capacity, condition, cycle count. Read straight from the pack.",
+      "why": "“92% capacity” means nothing on its own. Fine for a three-year-old Mac, alarming for a new one. Health is a trend, not a score, which is why these numbers live next to your charge history instead of on their own."
     },
     "statistics": {
       "kicker": "Feature · 統計",
       "heading": "Your battery week,",
       "headingItalic": "summarised like a person would.",
-      "body": "Time unplugged, charge sessions, average depth of discharge, the hottest stretch, and the rescues you made in time — folded into weekly and monthly recaps you can read in twenty seconds.",
+      "body": "Time unplugged, charge sessions, average discharge depth, the hottest stretch, the rescues that landed in time — folded into weekly and monthly recaps you can read in twenty seconds.",
       "mockupCaption": "Weekly and monthly recaps, computed on your Mac.",
-      "why": "A live percentage answers \"what now\". It can't answer \"is this normal for me\". Recaps make the pattern visible — the week you were travelling, the month a sync client ran all day — while it's still early enough to change."
+      "why": "The live percentage answers “what now”. It never answers “is this normal for me”. Recaps show the pattern — the travel week, the month a sync client ran wild — while there's still time to change it."
     },
     "honors": {
       "kicker": "Feature · 名誉",
       "heading": "Habits worth keeping,",
       "headingItalic": "quietly recognised.",
-      "body": "Honors mark the behaviours that actually correlate with a healthier pack: steady charge ranges, rescues taken seriously, streaks that survive a busy week. No points, no leaderboards, no nagging.",
-      "mockupCaption": "Earned quietly, from your own battery history.",
-      "why": "You can't undo cycle count or repair capacity. What you can change is the pattern — and patterns respond to feedback. Honors are the lightest feedback that still works: visible when you look, silent when you don't."
+      "body": "Honors mark the habits that actually help a battery: steady charge ranges, rescues before the crash, streaks that survive a busy week. No points, no leaderboard, no reminders.",
+      "mockupCaption": "Earned quietly, from your own history.",
+      "why": "Cycle count only goes up and capacity only goes down. Habits are the one lever you hold, and habits respond to feedback. Honors are the quietest feedback that still works: there when you look, silent when you don't."
     },
     "general": {
       "kicker": "Feature · 設定",
       "heading": "Short settings,",
       "headingItalic": "because there's nothing to sync.",
-      "body": "Menu-bar content, appearance, language, and start-at-login. No account, no cloud settings, no telemetry toggle — because there's nothing being collected to toggle.",
-      "mockupCaption": "Appearance, language, menu-bar content, startup.",
-      "why": "Most apps grow a settings screen full of things you have to decide about. Battery Sensei's stays short on purpose: everything it knows about your battery lives on your Mac, so the only choices left are the ones about how you want it to look and behave."
+      "body": "Menu-bar content, appearance, language, start at login. No account, no cloud, no telemetry switch — nothing is collected, so there is nothing to switch off.",
+      "mockupCaption": "Appearance, language, menu bar, startup.",
+      "why": "Most settings screens grow into a second job. This one stays short on purpose. Everything Battery Sensei knows lives on your Mac, so the only decisions left are how it looks and when it starts."
     },
     "indexKicker": "Everything in the app",
     "indexHeading": "Fourteen guides,",
     "indexHeadingItalic": "one per feature.",
-    "indexBody": "Every panel, card, and automation in Battery Sensei has a page here: what it does, how to read it, and why it exists. Start anywhere — they cross-link where the features connect."
+    "indexBody": "Every panel, card, and automation has a page: what it does, how to read it, why it exists. Start anywhere — the guides link to each other where the features meet."
   },
   "pricing": {
     "kicker": "Pricing · 値段",

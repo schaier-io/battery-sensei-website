@@ -41,6 +41,9 @@ type FeatureGroup = {
   /** Optional pull-quote rendered after the intro — same treatment as the
    * feature pages' "why it matters" block, so the accent stays on-system. */
   quote?: string
+  /** Renders a sample weekly-recap strip: the statistics section shows what
+   * a recap *is* instead of yet another screenshot. */
+  recap?: boolean
   features: FeatureEntry[]
 }
 
@@ -56,7 +59,7 @@ const GROUPS: FeatureGroup[] = [
     kicker: 'The short game',
     title: 'Keep today from going wrong',
     intro:
-      "Most battery disasters are timing failures: the warning came too late, the meeting ran long, Low Power Mode never got switched on. These four decide when Battery Sensei speaks up and what it quietly does on your behalf — from a gentle nudge at 15% to a calendar-aware forecast that knows your 3 PM call will outlast your charge.",
+      "Most battery disasters are timing failures. The warning came too late, the meeting ran long, nobody switched Low Power Mode on. These four decide when Sensei speaks up and what it handles without asking — from a soft nudge at 15% to a forecast that knows your 3 PM call outlasts your charge.",
     features: [
       { slug: 'meeting-battery-guard', kanji: '会', name: 'Meeting guard', blurb: 'Warns you when a meeting will outlast your battery.' },
       { slug: 'alert-presets', kanji: '警', name: 'Warning presets', blurb: 'Set the whole low-battery ladder in one choice.' },
@@ -69,7 +72,7 @@ const GROUPS: FeatureGroup[] = [
     kicker: 'The diagnosis',
     title: 'See where the power goes',
     intro:
-      "A fast drain always has an author. Sometimes it's a process pinning one CPU core; sometimes it's the charger itself, quietly negotiating 38 W out of a 96 W brick. Battery Sensei lays the evidence out live — and \"it died fast today\" becomes a name you can point at and quit.",
+      "A fast drain always has an author. Sometimes it's a process pinning one core. Sometimes it's the charger itself, negotiating 38 W out of a 96 W brick. Sensei lays the evidence out live, and \"it died fast today\" turns into a name you can quit.",
     shot: {
       name: 'power-flow',
       alt: 'The Power flow panel showing adapter, battery, and system wattage live.',
@@ -91,7 +94,7 @@ const GROUPS: FeatureGroup[] = [
       caption: 'The daily cap in place — less time parked at 100%, with a weekly cycle reminder to keep estimates honest.',
     },
     intro:
-      "Capacity loss is slow, boring, and mostly self-inflicted: heat, time parked at 100%, deep discharges. The habits that prevent it are automatable. Cap the daily charge, lift the cap for travel days, and watch the health numbers move as a trend instead of a daily worry — with the full charge history sitting next to them for context.",
+      "Capacity loss is slow, boring, and mostly self-inflicted: heat, hours parked at 100%, deep discharges. The countermeasures are automatable. Cap the daily charge, lift it for travel days, and read the health numbers as a trend — with the charge history right beside them.",
     features: [
       { slug: 'charge-limit', kanji: '充', name: 'Charge limit', blurb: 'A daily cap, plus a weekly cycle to keep estimates honest.' },
       { slug: 'travel-mode', kanji: '旅', name: 'Travel mode', blurb: 'Full charge and quiet alerts for the day you leave.' },
@@ -105,8 +108,9 @@ const GROUPS: FeatureGroup[] = [
     title: 'Know how you actually did',
     quote:
       'A live percentage answers "what now". It never answers "is this normal for me" — that takes a record.',
+    recap: true,
     intro:
-      "A live percentage answers \"what now\", never \"is this normal for me\". The recaps and honors turn months of history into something readable in twenty seconds — and the settings stay short, because everything Battery Sensei knows lives on your Mac and nothing needs an account.",
+      "Weekly and monthly recaps compress the history into twenty seconds of reading: how long you ran unplugged, how deep you discharged, which rescues landed in time. The settings stay short, because everything Sensei knows lives on your Mac and nothing needs an account.",
     features: [
       { slug: 'statistics', kanji: '統', name: 'Statistics', blurb: 'Weekly and monthly recaps of how the battery behaved.' },
       { slug: 'honors', kanji: '誉', name: 'Honors', blurb: 'Quiet recognition for habits worth keeping.' },
@@ -181,24 +185,49 @@ function FeaturesIndex() {
 
         <section className="mx-auto max-w-3xl px-5 pb-14 pt-2 sm:px-6">
           <Reveal delay={380}>
-            <figure className="paper-card overflow-hidden p-2">
-              <div className="relative flex aspect-video w-full flex-col items-center justify-center gap-4 rounded-md border border-dashed border-sumi/20 bg-[color-mix(in_oklab,var(--washi)_82%,#fff)]">
-                <span
-                  aria-hidden
-                  className="pointer-events-none absolute -right-10 -top-14 h-40 w-40 rounded-full bg-hinomaru/[0.05] blur-3xl"
-                />
-                <span className="flex h-16 w-16 items-center justify-center rounded-full border border-sumi/15 bg-washi shadow-[0_2px_12px_rgba(28,26,23,0.08)]">
-                  <Play className="ml-1 h-6 w-6 text-sumi/70" strokeWidth={1.6} />
+            {/* Player-styled placeholder: the settings screenshot as a dimmed
+                poster frame, a real play disc, and a duration-style chip —
+                reads as a video at a glance. Swap in <video poster=…> later
+                without touching the layout. */}
+            <figure className="group relative aspect-video w-full overflow-hidden rounded-xl bg-sumi shadow-[0_12px_40px_-12px_rgba(28,26,23,0.45)]">
+              <img
+                src="/screenshots/general-dark.png"
+                alt=""
+                aria-hidden
+                className="absolute inset-0 h-full w-full object-cover object-top opacity-45"
+                loading="lazy"
+                decoding="async"
+              />
+              <span
+                aria-hidden
+                className="absolute inset-0 bg-gradient-to-t from-sumi/90 via-sumi/30 to-sumi/50"
+              />
+
+              <span className="absolute inset-0 flex items-center justify-center">
+                <span className="flex h-16 w-16 items-center justify-center rounded-full bg-washi/95 shadow-[0_4px_24px_rgba(0,0,0,0.35)] transition-transform duration-[220ms] group-hover:scale-105">
+                  <Play className="ml-1 h-6 w-6 fill-sumi text-sumi" strokeWidth={0} />
                 </span>
-                <div className="text-center">
-                  <p className="display-title text-[1.0625rem] font-medium text-sumi">
-                    The full tour, in one video
-                  </p>
-                  <p className="mt-1 text-[13px] text-sumi-soft">
-                    A walkthrough of every setting — coming soon.
-                  </p>
-                </div>
-              </div>
+              </span>
+
+              {/* Bottom bar: title left, coming-soon chip where the duration
+                  would sit, and a hairline progress track underneath. */}
+              <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 px-5 pb-4">
+                <span className="min-w-0">
+                  <span className="display-title block text-[1.0625rem] font-medium text-washi">
+                    Every setting, one take
+                  </span>
+                  <span className="mt-0.5 block text-[12.5px] text-washi/70">
+                    A guided pass through the whole app.
+                  </span>
+                </span>
+                <span className="shrink-0 rounded bg-washi/15 px-2 py-1 text-[11px] font-medium uppercase tracking-[0.12em] text-washi/90 backdrop-blur-sm">
+                  Coming soon
+                </span>
+              </span>
+              <span aria-hidden className="absolute inset-x-0 bottom-0 h-[3px] bg-washi/20">
+                <span className="block h-full w-0 bg-hinomaru/80" />
+              </span>
+
               <figcaption className="sr-only">
                 Video walkthrough of Battery Sensei's settings — coming soon.
               </figcaption>
@@ -238,6 +267,22 @@ function FeaturesIndex() {
                   </p>
                 </blockquote>
               )}
+              {group.recap && (
+                <div className="mt-6 grid gap-px overflow-hidden rounded-lg border border-sumi/10 bg-sumi/10 sm:grid-cols-3">
+                  {[
+                    { value: '31h 40m', label: 'on battery this week' },
+                    { value: '9', label: 'charge sessions' },
+                    { value: '1', label: 'rescue, with 12 min to spare' },
+                  ].map((stat) => (
+                    <div key={stat.label} className="bg-washi px-5 py-4">
+                      <div className="display-title text-[1.5rem] font-semibold tabular-nums text-sumi">
+                        {stat.value}
+                      </div>
+                      <div className="mt-0.5 text-[12.5px] text-sumi-soft">{stat.label}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
               <ul className="mt-6 grid gap-3 sm:grid-cols-2">
                 {group.features.map((feature) => (
                   <li key={feature.slug}>
@@ -268,9 +313,9 @@ function FeaturesIndex() {
 
           <Reveal delay={520} className="border-t border-sumi/10 pb-20 pt-10">
             <p className="max-w-2xl text-[15px] leading-[1.7] text-sumi-soft">
-              All of it runs on-device, free to try, with Premium unlocking the
-              automation and history depth. The fastest way to understand any
-              of these is to watch them react to your own battery.
+              Everything above runs on-device and is free to try. The fastest
+              way to understand any of these pages is to watch the app react to
+              your own battery.
             </p>
             <div className="mt-6 flex flex-wrap items-center gap-4">
               <a
