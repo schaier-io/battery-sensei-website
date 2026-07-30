@@ -56,7 +56,7 @@ export function GlossaryTermPage({ term }: Props) {
 
         <section className="zen-section mx-auto max-w-3xl px-5 pt-6 sm:px-6">
           <Reveal delay={500}>
-            <div className="border-l-2 border-hinomaru/30 pl-5 md:pl-6">
+            <div className="rounded-lg border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,var(--paper-lift))] px-5 py-4 md:px-6 md:py-5">
               <p className="display-title mb-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-sumi-soft">
                 Related
               </p>
@@ -67,14 +67,14 @@ export function GlossaryTermPage({ term }: Props) {
                       <Link
                         to="/glossary/$slug"
                         params={{ slug: link.href }}
-                        className="underline decoration-[var(--line-strong)] decoration-1 underline-offset-[4px] transition-colors hover:text-hinomaru hover:decoration-hinomaru/40"
+                        className="underline decoration-[var(--line-strong)] decoration-1 underline-offset-[4px] transition-colors hover:text-hinomaru-ink hover:decoration-hinomaru/40"
                       >
                         {link.label}
                       </Link>
                     ) : (
                       <Link
                         to={link.href}
-                        className="underline decoration-[var(--line-strong)] decoration-1 underline-offset-[4px] transition-colors hover:text-hinomaru hover:decoration-hinomaru/40"
+                        className="underline decoration-[var(--line-strong)] decoration-1 underline-offset-[4px] transition-colors hover:text-hinomaru-ink hover:decoration-hinomaru/40"
                       >
                         {link.label}
                       </Link>
@@ -97,7 +97,7 @@ export function GlossaryTermPage({ term }: Props) {
                       href={src.href}
                       target="_blank"
                       rel="noreferrer"
-                      className="underline decoration-[var(--line-strong)] decoration-1 underline-offset-[4px] transition-colors hover:text-hinomaru hover:decoration-hinomaru/40"
+                      className="underline decoration-[var(--line-strong)] decoration-1 underline-offset-[4px] transition-colors hover:text-hinomaru-ink hover:decoration-hinomaru/40"
                     >
                       {src.label}
                     </a>

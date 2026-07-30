@@ -32,7 +32,7 @@ export function MacOnlyConfirmDialog({
         <AlertDialog.Content
           className="fixed left-1/2 top-1/2 z-50 w-[min(92vw,28rem)] -translate-x-1/2 -translate-y-1/2 rounded-md border border-[var(--line)] bg-[var(--washi)] p-6 shadow-[0_24px_60px_-20px_rgba(28,26,23,0.35)] focus:outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0 data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95 sm:p-7"
         >
-          <div className="mb-3 flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-hinomaru/80">
+          <div className="mb-3 flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-hinomaru-ink/80">
             <Monitor className="h-3.5 w-3.5" strokeWidth={1.7} aria-hidden />
             {t('macOnly.kicker')}
           </div>
@@ -46,7 +46,7 @@ export function MacOnlyConfirmDialog({
             <AlertDialog.Cancel asChild>
               <button
                 type="button"
-                className="inline-flex h-10 items-center justify-center rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] px-4 text-[0.875rem] font-medium text-sumi transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:bg-washi-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/30"
+                className="inline-flex h-10 items-center justify-center rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,var(--paper-lift))] px-4 text-[0.875rem] font-medium text-sumi transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:bg-washi-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/30"
               >
                 {t('macOnly.cancel')}
               </button>

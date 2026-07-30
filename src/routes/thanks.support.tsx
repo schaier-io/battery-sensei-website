@@ -13,7 +13,7 @@ const SITE_URL = 'https://www.battery-sensei.app'
 const PATH = '/thanks/support'
 const PAGE_TITLE = 'Thanks — Battery Sensei Ongoing Support'
 const PAGE_DESC =
-  'Subscription active. Your ongoing-support license is unlocked — open Sensei to enter your key and keep new releases flowing.'
+  'Subscription active. Your ongoing-support license is unlocked. Open Sensei to enter your key and keep new releases flowing.'
 
 export const Route = createFileRoute('/thanks/support')({
   validateSearch: thanksSearchSchema,

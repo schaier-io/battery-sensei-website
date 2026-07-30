@@ -24,11 +24,11 @@ export function BlogPostPage({ post }: Props) {
         <section className="zen-section mx-auto max-w-3xl px-5 sm:px-6">
           <Reveal as="p" delay={80} className="mb-6">
             <Link
-              to="/blog"
+              to="/guides"
               className="inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.22em] text-sumi-soft transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:text-sumi"
             >
               <ArrowLeft className="h-3.5 w-3.5" strokeWidth={1.6} />
-              The journal
+              Guides
             </Link>
           </Reveal>
 
@@ -73,7 +73,10 @@ export function BlogPostPage({ post }: Props) {
               </h2>
               <dl className="space-y-7">
                 {post.faqs.map((entry) => (
-                  <div key={entry.q} className="border-l-2 border-hinomaru/30 pl-5 md:pl-6">
+                  <div
+                    key={entry.q}
+                    className="rounded-lg border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,var(--paper-lift))] px-5 py-4 md:px-6 md:py-5"
+                  >
                     <dt className="display-title text-[1.0625rem] font-medium text-sumi md:text-[1.125rem]">
                       {entry.q}
                     </dt>

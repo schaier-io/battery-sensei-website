@@ -9,10 +9,12 @@ export function RescueReceipt({ className = '' }: { className?: string }) {
   const { t } = useTranslation()
   return (
     <div
-      className={`relative flex flex-col gap-3 rounded-md bg-[color-mix(in_oklab,var(--washi)_85%,white)] p-5 shadow-[0_18px_50px_-20px_rgba(28,26,23,0.45)] ${className}`}
+      className={`relative flex flex-col gap-3 rounded-md bg-[color-mix(in_oklab,var(--washi)_85%,var(--paper-lift))] p-5 shadow-[0_18px_50px_-20px_rgba(28,26,23,0.45)] ${className}`}
       style={{
+        // Ruled-paper lines. Tinted from --line rather than a fixed ink
+        // rgba so they stay faintly visible on the dark theme's paper too.
         backgroundImage:
-          'repeating-linear-gradient(0deg, transparent 0 27px, rgba(28,26,23,0.04) 27px 28px)',
+          'repeating-linear-gradient(0deg, transparent 0 27px, color-mix(in oklab, var(--line) 35%, transparent) 27px 28px)',
         clipPath:
           'polygon(0 6px, 4px 0, 12px 4px, 20px 0, 28px 4px, 36px 0, 100% 0, 100% 100%, 36px 100%, 28px calc(100% - 4px), 20px 100%, 12px calc(100% - 4px), 4px 100%, 0 calc(100% - 6px))',
       }}

@@ -37,7 +37,11 @@ function DialogOverlay({
     <DialogPrimitive.Overlay
       data-slot="dialog-overlay"
       className={cn(
-        "fixed inset-0 z-50 bg-black/50 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0",
+        // Matches MacOnlyConfirm's overlay so the site's two modals dim the
+        // page the same way. Ink at 30% rather than raw black at 50%: pure
+        // black is off-palette, and the heavier veil made the license dialog
+        // read as a harder interruption than the macOS-only one.
+        "fixed inset-0 z-50 bg-sumi/30 backdrop-blur-sm data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0",
         className
       )}
       {...props}

@@ -37,7 +37,7 @@ export function Hanko({ kanji, className = '', animate = true }: HankoProps) {
       ref={ref}
       className={`hanko ${className}`}
       aria-hidden
-      {...(animate ? { 'data-stamp': '', style: { opacity: 0 } } : {})}
+      {...(animate ? { 'data-stamp': '' } : {})}
     >
       {kanji}
     </span>

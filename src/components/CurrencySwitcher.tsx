@@ -33,7 +33,7 @@ const LABEL: Record<SupportedCurrency, string> = {
 // siblings rather than mismatched affordances.
 function CurGlyph({ className = '' }: { className?: string }) {
   return (
-    <span aria-hidden className={`font-jp text-hinomaru/85 leading-none ${className}`}>
+    <span aria-hidden className={`font-jp text-hinomaru-ink/85 leading-none ${className}`}>
       円
     </span>
   )
@@ -164,12 +164,12 @@ export function CurrencySwitcher({
                   className={[
                     'group relative flex w-full items-center justify-between gap-3 rounded-md border px-3.5 py-2.5 text-left transition-[colors,transform] duration-200 active:scale-[0.98]',
                     isActive
-                      ? 'border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_55%,#fff)]'
-                      : 'border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_72%,#fff)] hover:border-[var(--line-strong)]',
+                      ? 'border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_55%,var(--paper-lift))]'
+                      : 'border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_72%,var(--paper-lift))] hover:border-[var(--line-strong)]',
                   ].join(' ')}
                 >
                   <span className="flex items-baseline gap-2 min-w-0">
-                    <span className="font-jp text-base leading-none text-hinomaru/80 w-7 text-center">
+                    <span className="font-jp text-base leading-none text-hinomaru-ink/80 w-7 text-center">
                       {SYMBOL[choice]}
                     </span>
                     <span className="display-title text-[0.9375rem] font-medium text-sumi truncate">
@@ -177,7 +177,7 @@ export function CurrencySwitcher({
                     </span>
                   </span>
                   {isActive && (
-                    <Check className="h-3.5 w-3.5 shrink-0 text-hinomaru" strokeWidth={2.2} aria-hidden />
+                    <Check className="h-3.5 w-3.5 shrink-0 text-hinomaru-ink" strokeWidth={2.2} aria-hidden />
                   )}
                 </button>
               </li>
@@ -198,7 +198,7 @@ export function CurrencySwitcher({
         aria-expanded={open}
         aria-label={t('common.currency', { defaultValue: 'Currency' })}
         className={[
-          'lang-trigger group inline-flex h-9 items-center gap-2 rounded-md border bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-2.5 text-[12px] font-medium uppercase tracking-[0.18em] transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40',
+          'lang-trigger group inline-flex h-9 items-center gap-2 rounded-md border bg-[color-mix(in_oklab,var(--washi)_60%,var(--paper-lift))] px-2.5 text-[12px] font-medium uppercase tracking-[0.18em] transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40',
           open
             ? 'border-[var(--line-strong)] text-sumi'
             : 'border-[var(--line)] text-sumi-soft hover:text-sumi hover:border-[var(--line-strong)]',
@@ -227,7 +227,7 @@ export function CurrencySwitcher({
             top: rect.top + 8,
             ...(align === 'end' ? { right: rect.right } : { left: rect.left }),
           }}
-          className="lang-pop z-[1000] w-56 overflow-hidden rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,#fff)] shadow-[0_1px_0_rgba(255,255,255,0.5)_inset,0_14px_30px_-14px_rgba(28,26,23,0.30),0_4px_10px_-6px_rgba(28,26,23,0.18)]"
+          className="lang-pop z-[1000] w-56 overflow-hidden rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,var(--paper-lift))] shadow-[0_1px_0_rgba(255,255,255,0.5)_inset,0_14px_30px_-14px_rgba(28,26,23,0.30),0_4px_10px_-6px_rgba(28,26,23,0.18)]"
         >
           <div className="lang-pop-header flex items-center gap-2.5 px-3 pt-2.5 pb-2">
             <CurGlyph className="text-base" />
@@ -258,11 +258,11 @@ export function CurrencySwitcher({
                       'flex w-full items-center justify-between gap-3 px-3 py-2 text-left text-[13px] transition-colors duration-[200ms]',
                       isActive
                         ? 'bg-[color-mix(in_oklab,var(--hinomaru)_8%,transparent)] text-sumi'
-                        : 'text-sumi-soft hover:bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] hover:text-sumi',
+                        : 'text-sumi-soft hover:bg-[color-mix(in_oklab,var(--washi)_60%,var(--paper-lift))] hover:text-sumi',
                     ].join(' ')}
                   >
                     <span className="flex items-baseline gap-2.5 min-w-0">
-                      <span className="font-jp text-base leading-none text-hinomaru/80 w-7 text-center shrink-0">
+                      <span className="font-jp text-base leading-none text-hinomaru-ink/80 w-7 text-center shrink-0">
                         {SYMBOL[choice]}
                       </span>
                       <span className="display-title text-[13px] text-sumi truncate">
@@ -270,7 +270,7 @@ export function CurrencySwitcher({
                       </span>
                     </span>
                     {isActive && (
-                      <Check className="h-3.5 w-3.5 shrink-0 text-hinomaru" strokeWidth={2.2} aria-hidden />
+                      <Check className="h-3.5 w-3.5 shrink-0 text-hinomaru-ink" strokeWidth={2.2} aria-hidden />
                     )}
                   </button>
                   <span aria-hidden className="lang-item-rule" />

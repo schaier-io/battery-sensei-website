@@ -6,6 +6,8 @@ import { Hanko } from '#/components/zen/Hanko'
 import { Reveal } from '#/components/zen/Reveal'
 import { Nav } from '#/components/sections/Nav'
 import { Footer } from '#/components/sections/Footer'
+import { DocumentNav, type DocumentNavItem } from '#/components/DocumentNav'
+import { formatLongDate } from '#/lib/format-date'
 
 const SITE_URL = 'https://www.battery-sensei.app'
 const PATH = '/legal'
@@ -14,8 +16,24 @@ const PAGE_DESC =
   'Imprint and legal disclaimer for battery-sensei.app: operator details, liability disclaimer, copyright, governing law and out-of-court dispute resolution.'
 // Last meaningful edit to the legal substance below. Update when you
 // change operator details, governing law, the merchant-of-record or any
-// referenced authority — not on cosmetic tweaks.
+// referenced authority — not on cosmetic tweaks. Deliberately older than
+// the footer's build-time site date: this one dates the imprint, and the
+// label under the title says so.
 const LAST_UPDATED = '2026-05-26'
+
+/** Section order for the jump list. `anchor` must match the `<Block anchor>`
+    below it; `key` is the i18n namespace the heading is read from. */
+const LEGAL_SECTIONS: ReadonlyArray<Omit<DocumentNavItem, 'label'> & { key: string }> = [
+  { anchor: 'operator', key: 'operator' },
+  { anchor: 'merchant-of-record', key: 'merchantOfRecord' },
+  { anchor: 'withdrawal', key: 'withdrawal' },
+  { anchor: 'content-liability', key: 'contentLiability' },
+  { anchor: 'external-links', key: 'externalLinks' },
+  { anchor: 'copyright', key: 'copyright' },
+  { anchor: 'governing-law', key: 'governingLaw' },
+  { anchor: 'dispute-resolution', key: 'disputeResolution' },
+  { anchor: 'privacy-pointer', key: 'privacyPointer' },
+]
 
 export const Route = createFileRoute('/legal')({
   head: () => ({
@@ -60,11 +78,9 @@ export const Route = createFileRoute('/legal')({
  */
 function LegalPage() {
   const { t, i18n } = useTranslation()
-  const formattedDate = new Intl.DateTimeFormat(i18n.language || 'en', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  }).format(new Date(LAST_UPDATED))
+  // Same formatter the footer uses, so the document date and the site date
+  // read in one shape on one screen.
+  const formattedDate = formatLongDate(LAST_UPDATED, i18n.language)
 
   return (
     <>
@@ -105,10 +121,18 @@ function LegalPage() {
             <Reveal
               as="p"
               delay={360}
-              className="mt-6 max-w-2xl text-base leading-relaxed text-sumi-soft md:text-[1.0625rem]"
+              className="prose-readable mt-6 text-base text-sumi-soft md:text-[1.0625rem]"
             >
               {t('legal.intro')}
             </Reveal>
+            <DocumentNav
+              className="mt-8 w-full max-w-2xl text-left"
+              label={t('legal.onThisPage', 'On this page')}
+              items={LEGAL_SECTIONS.map((section) => ({
+                anchor: section.anchor,
+                label: t(`legal.body.${section.key}.heading`),
+              }))}
+            />
           </div>
         </section>
 
@@ -321,7 +345,7 @@ function Block({
 }) {
   return (
     <section id={anchor} className="scroll-mt-24">
-      <p className="font-jp text-[11px] tracking-[0.32em] text-hinomaru/85 uppercase">
+      <p className="font-jp text-[11px] tracking-[0.32em] text-hinomaru-ink/85 uppercase">
         {kicker}
       </p>
       <h2 className="display-title mt-2 text-[1.625rem] md:text-[1.875rem] font-medium text-sumi leading-tight">

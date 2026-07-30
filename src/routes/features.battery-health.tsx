@@ -7,7 +7,7 @@ const SITE_URL = 'https://www.battery-sensei.app'
 const PATH = '/features/battery-health'
 const PAGE_TITLE = 'Battery health — Battery Sensei'
 const PAGE_DESC =
-  "Maximum capacity, cycle count, and macOS's own condition verdict for your Mac's pack — with the charging habits that shaped them."
+  "Maximum capacity, cycle count, and macOS's own condition verdict for your Mac's pack, with the charging habits that shaped them."
 
 const faqLd = {
   '@context': 'https://schema.org',

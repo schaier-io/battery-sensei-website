@@ -57,7 +57,7 @@ export function Categories() {
     >
       <span
         aria-hidden
-        className="font-jp normal-case tracking-[0.32em] text-hinomaru/80 text-xs shrink-0"
+        className="font-jp normal-case tracking-[0.32em] text-hinomaru-ink/80 text-xs shrink-0"
       >
         機能
       </span>

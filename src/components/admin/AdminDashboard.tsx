@@ -144,7 +144,7 @@ function Dashboard({ onSessionExpired }: { onSessionExpired: () => void }) {
       </Tabs>
 
       {error && (
-        <p role="alert" className="text-[0.8125rem] text-hinomaru">
+        <p role="alert" className="text-[0.8125rem] text-hinomaru-ink">
           {error}
         </p>
       )}

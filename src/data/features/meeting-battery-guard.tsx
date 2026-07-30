@@ -52,9 +52,9 @@ export const extended = (
       whether the notification text includes the title.
     </P>
     <P>
-      Meeting Guard is Premium. It’s included in the free trial
-      and unlocks with a Lifetime license. The 4-hour lookahead is the
-      default; the value can be lowered if you prefer shorter horizons,
+      Meeting Guard is Pro. It’s included in the free trial and unlocks
+      with either plan, Lifetime or Yearly Patron. The 4-hour lookahead is
+      the default; the value can be lowered if you prefer shorter horizons,
       but lower values lose the early-Catastrophic warning. For tighter
       everyday timing, pair this with{' '}
       <A to="/features/custom-thresholds">custom thresholds</A>.

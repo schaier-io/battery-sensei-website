@@ -25,12 +25,24 @@ export type GlossaryTerm = {
   /** Authoritative sources cited in the body. Renders as the "Sources"
    * footer, with rel="noreferrer" on externals. */
   sources?: TermLink[]
-  /** Optional broader category: currently informational, not surfaced. */
-  category?: 'health' | 'charging' | 'thermal' | 'app-feature'
+  /** Broader cluster. Drives the grouped headings on the glossary index,
+   * so it is required: an uncategorized term would silently vanish from
+   * the list rather than land in a fallback bucket nobody maintains. */
+  category: 'health' | 'charging' | 'thermal' | 'app-feature'
 }
 
 const para = (children: ReactNode) => (
   <p className="text-[1.0625rem] leading-[1.7] text-sumi md:leading-[1.75]">{children}</p>
+)
+
+/** Sibling of `para()` for the entries that announce a list. Two bodies used
+ * to say "the headline numbers:" or "three reasons to care:" and then deliver
+ * one run-on paragraph of bolded lead-ins; the markup now matches the
+ * sentence, so the items are countable by eye and by an answer engine. */
+const list = (children: ReactNode) => (
+  <ul className="ml-1 list-outside list-disc space-y-2 pl-5 text-[1.0625rem] leading-[1.7] text-sumi marker:text-nezumi md:leading-[1.75]">
+    {children}
+  </ul>
 )
 
 const ApplePage = ({ id, label }: { id: string; label: string }) => (
@@ -38,7 +50,7 @@ const ApplePage = ({ id, label }: { id: string; label: string }) => (
     href={`https://support.apple.com/en-us/${id}`}
     target="_blank"
     rel="noreferrer"
-    className="underline decoration-[var(--line-strong)] decoration-1 underline-offset-[4px] transition-colors hover:text-hinomaru hover:decoration-hinomaru/40"
+    className="underline decoration-[var(--line-strong)] decoration-1 underline-offset-[4px] transition-colors hover:text-hinomaru-ink hover:decoration-hinomaru/40"
   >
     {label}
   </a>
@@ -48,7 +60,7 @@ const G = ({ slug, children }: { slug: string; children: ReactNode }) => (
   <Link
     to="/glossary/$slug"
     params={{ slug }}
-    className="underline decoration-[var(--line-strong)] decoration-1 underline-offset-[4px] transition-colors hover:text-hinomaru hover:decoration-hinomaru/40"
+    className="underline decoration-[var(--line-strong)] decoration-1 underline-offset-[4px] transition-colors hover:text-hinomaru-ink hover:decoration-hinomaru/40"
   >
     {children}
   </Link>
@@ -57,7 +69,7 @@ const G = ({ slug, children }: { slug: string; children: ReactNode }) => (
 const F = ({ to, children }: { to: string; children: ReactNode }) => (
   <Link
     to={to}
-    className="underline decoration-[var(--line-strong)] decoration-1 underline-offset-[4px] transition-colors hover:text-hinomaru hover:decoration-hinomaru/40"
+    className="underline decoration-[var(--line-strong)] decoration-1 underline-offset-[4px] transition-colors hover:text-hinomaru-ink hover:decoration-hinomaru/40"
   >
     {children}
   </Link>
@@ -110,8 +122,8 @@ export const GLOSSARY_TERMS: ReadonlyArray<GlossaryTerm> = [
       { href: 'battery-health', label: 'Battery health' },
       { href: 'design-capacity', label: 'Design capacity' },
       { href: 'cycle-count-threshold', label: 'Cycle-count threshold' },
-      { href: '/features/battery-journal', label: 'Battery Journal (feature)' },
-      { href: '/blog/healthy-cycle-count-macbook', label: "What's a healthy cycle count?" },
+      { href: '/features/battery-journal', label: 'Saga (feature)' },
+      { href: '/guides/healthy-cycle-count-macbook', label: "What's a healthy cycle count?" },
     ],
     sources: [
       {
@@ -160,7 +172,7 @@ export const GLOSSARY_TERMS: ReadonlyArray<GlossaryTerm> = [
       { href: 'cycle-count', label: 'Cycle count' },
       { href: 'design-capacity', label: 'Design capacity' },
       { href: 'calibration', label: 'Calibration' },
-      { href: '/features/battery-journal', label: 'Battery Journal (feature)' },
+      { href: '/features/battery-journal', label: 'Saga (feature)' },
     ],
     sources: [
       {
@@ -251,7 +263,7 @@ export const GLOSSARY_TERMS: ReadonlyArray<GlossaryTerm> = [
       { href: 'cycle-count', label: 'Cycle count' },
       { href: 'battery-health', label: 'Battery health' },
       { href: '/features/travel-mode', label: 'Travel Mode (feature)' },
-      { href: '/blog/optimized-battery-charging-explained', label: 'Deep guide: OBC explained' },
+      { href: '/guides/optimized-battery-charging-explained', label: 'Deep guide: OBC explained' },
     ],
     sources: [
       {
@@ -300,7 +312,7 @@ export const GLOSSARY_TERMS: ReadonlyArray<GlossaryTerm> = [
       { href: 'optimized-battery-charging', label: 'Optimized Battery Charging' },
       { href: 'cycle-count', label: 'Cycle count' },
       { href: '/features/travel-mode', label: 'Travel Mode (feature)' },
-      { href: '/blog/should-i-keep-macbook-plugged-in', label: 'Should I keep my MacBook plugged in?' },
+      { href: '/guides/should-i-keep-macbook-plugged-in', label: 'Should I keep my MacBook plugged in?' },
     ],
   },
   {
@@ -499,14 +511,22 @@ export const GLOSSARY_TERMS: ReadonlyArray<GlossaryTerm> = [
             numbers:
           </>,
         )}
-        {para(
+        {list(
           <>
-            <strong>Apple Silicon (M1-M4):</strong> 1,000 cycles across the entire
-            lineup.{' '}
-            <strong>Intel 2018-2019:</strong> 1,000.{' '}
-            <strong>Intel 2010-2017:</strong> 1,000 for most, with 500-cycle outliers
-            (some MacBook Air 13" Mid 2010 and Late 2017 units).{' '}
-            <strong>Pre-2010:</strong> 300 cycles.
+            <li>
+              <strong>Apple Silicon (M1-M4):</strong> 1,000 cycles across the entire
+              lineup.
+            </li>
+            <li>
+              <strong>Intel 2018-2019:</strong> 1,000.
+            </li>
+            <li>
+              <strong>Intel 2010-2017:</strong> 1,000 for most, with 500-cycle
+              outliers (some MacBook Air 13" Mid 2010 and Late 2017 units).
+            </li>
+            <li>
+              <strong>Pre-2010:</strong> 300 cycles.
+            </li>
           </>,
         )}
         {para(
@@ -579,24 +599,26 @@ export const GLOSSARY_TERMS: ReadonlyArray<GlossaryTerm> = [
             directly via IOKit and shows it live in the menu bar.
           </>,
         )}
-        {para(
+        {para(<>Three reasons to care about the raw watts number:</>)}
+        {list(
           <>
-            Three reasons to care about the raw watts number:
-          </>,
-        )}
-        {para(
-          <>
-            <strong>Diagnosing an underpowered adapter.</strong> If the laptop pulls
-            more than the adapter supplies under load, the balance is zero or
-            negative, and the battery drains while plugged in. Watts in / out makes
-            this visible in seconds.{' '}
-            <strong>Spotting a hung app.</strong> When watts-out spikes with no
-            obvious cause, an app is doing background work it shouldn’t be. Pair
-            with <F to="/features/energy-usage">energy usage</F> to identify the
-            culprit.{' '}
-            <strong>Validating charging speed.</strong> MacBook Pro 14" typically
-            charges at 60-96W; lower numbers point to a weak adapter, a cheap cable,
-            or a thermally throttled charge port.
+            <li>
+              <strong>Diagnosing an underpowered adapter.</strong> If the laptop
+              pulls more than the adapter supplies under load, the balance is zero
+              or negative, and the battery drains while plugged in. Watts in / out
+              makes this visible in seconds.
+            </li>
+            <li>
+              <strong>Spotting a hung app.</strong> When watts-out spikes with no
+              obvious cause, an app is doing background work it shouldn’t be. Pair
+              with <F to="/features/energy-usage">energy usage</F> to identify the
+              culprit.
+            </li>
+            <li>
+              <strong>Validating charging speed.</strong> MacBook Pro 14" typically
+              charges at 60-96W; lower numbers point to a weak adapter, a cheap
+              cable, or a thermally throttled charge port.
+            </li>
           </>,
         )}
       </>

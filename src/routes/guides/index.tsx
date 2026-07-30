@@ -3,8 +3,8 @@ import { BlogIndex } from '#/components/blog/BlogIndex'
 import { BLOG_POSTS } from '#/data/blog'
 
 const SITE_URL = 'https://www.battery-sensei.app'
-const PATH = '/blog'
-const PAGE_TITLE = 'Journal — Battery Sensei'
+const PATH = '/guides'
+const PAGE_TITLE = 'Guides — Battery Sensei'
 const PAGE_DESC =
   'Long-form notes on MacBook battery health, charging behavior, and the macOS settings that actually move the needle. Researched, sourced, plainly written.'
 
@@ -12,7 +12,7 @@ const blogLd = {
   '@context': 'https://schema.org',
   '@type': 'Blog',
   '@id': `${SITE_URL}${PATH}#blog`,
-  name: 'Battery Sensei Journal',
+  name: 'Battery Sensei Guides',
   description: PAGE_DESC,
   url: `${SITE_URL}${PATH}`,
   inLanguage: 'en',
@@ -27,7 +27,7 @@ const blogLd = {
     description: p.description,
     datePublished: p.publishedAt,
     dateModified: p.updatedAt ?? p.publishedAt,
-    url: `${SITE_URL}/blog/${p.slug}`,
+    url: `${SITE_URL}/guides/${p.slug}`,
     inLanguage: 'en',
     keywords: p.tags?.join(', '),
     author: {
@@ -38,7 +38,7 @@ const blogLd = {
   })),
 }
 
-export const Route = createFileRoute('/blog/')({
+export const Route = createFileRoute('/guides/')({
   head: () => ({
     meta: [
       { title: PAGE_TITLE },

@@ -14,10 +14,16 @@
  *
  * Status banner above the button sits in a fixed-height slot so the
  * layout doesn't jump between idle / submitting / error states.
+ *
+ * When the link carries nothing usable there is no one-click opt-out to
+ * offer, so the page hands over the one the privacy notice already
+ * promises: write to us and we take you off by hand. A working control,
+ * not a greyed-out one — its sibling /newsletter/confirm resolves the
+ * same broken-link case the same way.
  */
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { HomeLink } from '#/components/HomeLink'
-import { AlertCircle, ArrowLeft, UserMinus } from 'lucide-react'
+import { AlertCircle, ArrowLeft, Mail, UserMinus } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Nav } from '#/components/sections/Nav'
@@ -53,12 +59,18 @@ export const Route = createFileRoute('/newsletter/unsubscribe')({
 
 type State = 'idle' | 'submitting' | 'error' | 'missing-token'
 
+/** Opt-out address the privacy notice advertises. Same inbox the rest
+ *  of the site writes to; kept here as a constant so the mailto and the
+ *  visible address in the body copy can never drift apart. */
+const SUPPORT_EMAIL = 'info@battery-sensei.app'
+
 function UnsubscribePage() {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { token } = Route.useSearch()
   const hasToken = typeof token === 'string' && token.length > 0
   const [state, setState] = useState<State>(hasToken ? 'idle' : 'missing-token')
+  const linkBroken = state === 'missing-token'
 
   async function onConfirm() {
     if (!hasToken || state === 'submitting') return
@@ -94,65 +106,86 @@ function UnsubscribePage() {
             {t('thanks.backToHome')}
           </HomeLink>
           <div className="flex flex-col items-center text-center">
-            {/* 別 = "parting / farewell" for the pre-click confirm. */}
-            <Hanko kanji="別" className="mb-6" />
+            {/* 別 = "parting / farewell" for the pre-click confirm. ？
+                takes over for the broken link, matching the same seal on
+                /newsletter/confirm and /newsletter/confirmed. */}
+            <Hanko kanji={linkBroken ? '？' : '別'} className="mb-6" />
             <Reveal
               as="h1"
               delay={140}
               className="display-title text-4xl font-semibold leading-[1.04] tracking-[-0.018em] text-sumi md:text-[3.25rem]"
             >
-              {t('newsletter.unsubscribe.heading')}
+              {linkBroken
+                ? t('newsletter.unsubscribe.missing.heading')
+                : t('newsletter.unsubscribe.heading')}
             </Reveal>
             <Reveal
               as="p"
               delay={220}
               className="mt-6 max-w-2xl text-base leading-relaxed text-sumi-soft md:text-[1.0625rem]"
             >
-              {t('newsletter.unsubscribe.body')}
+              {linkBroken
+                ? t('newsletter.unsubscribe.missing.body', {
+                    email: SUPPORT_EMAIL,
+                  })
+                : t('newsletter.unsubscribe.body')}
             </Reveal>
             <Reveal as="div" delay={300} className="mt-10 w-full max-w-sm">
-              {/* Fixed-height status slot above the button. Reserved
-                  even when empty so the layout never jumps when the
-                  error / missing-token banner appears. */}
-              <div
-                className="mb-3 min-h-[1.5rem] text-center text-[0.8125rem] leading-snug"
-                aria-live="polite"
-                role={state === 'error' ? 'alert' : undefined}
-              >
-                {state === 'error' && (
-                  <span className="inline-flex items-center gap-1.5 font-medium text-hinomaru">
-                    <AlertCircle
-                      className="h-4 w-4 shrink-0"
-                      strokeWidth={2}
+              {linkBroken ? (
+                // Same geometry as the Unsubscribe button it replaces, so
+                // the opt-out still looks like the page's main act.
+                <a
+                  href={`mailto:${SUPPORT_EMAIL}?subject=Unsubscribe`}
+                  className="group inline-flex h-11 w-full items-center justify-center gap-2 rounded-md bg-sumi px-4 text-[0.875rem] font-medium text-washi transition-colors duration-[220ms] hover:bg-sumi/90"
+                >
+                  <Mail
+                    className="h-4 w-4 transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5"
+                    strokeWidth={1.8}
+                    aria-hidden
+                  />
+                  {t('newsletter.unsubscribe.missing.cta')}
+                </a>
+              ) : (
+                <>
+                  {/* Fixed-height status slot above the button. Reserved
+                      even when empty so the layout never jumps when the
+                      error banner appears. */}
+                  <div
+                    className="mb-3 min-h-[1.5rem] text-center text-[0.8125rem] leading-snug"
+                    aria-live="polite"
+                    role={state === 'error' ? 'alert' : undefined}
+                  >
+                    {state === 'error' && (
+                      <span className="inline-flex items-center gap-1.5 font-medium text-hinomaru-ink">
+                        <AlertCircle
+                          className="h-4 w-4 shrink-0"
+                          strokeWidth={2}
+                          aria-hidden
+                        />
+                        {t('newsletter.unsubscribe.error')}{' '}
+                        <span className="font-normal text-hinomaru-ink/85">
+                          {t('newsletter.unsubscribe.tryAgain')}
+                        </span>
+                      </span>
+                    )}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={onConfirm}
+                    disabled={!hasToken || state === 'submitting'}
+                    className="group inline-flex h-11 w-full items-center justify-center gap-2 rounded-md bg-sumi px-4 text-[0.875rem] font-medium text-washi transition-colors duration-[220ms] hover:bg-sumi/90 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <UserMinus
+                      className="h-4 w-4 transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-x-0.5"
+                      strokeWidth={1.8}
                       aria-hidden
                     />
-                    {t('newsletter.unsubscribe.error')}{' '}
-                    <span className="font-normal text-hinomaru/85">
-                      {t('newsletter.unsubscribe.tryAgain')}
-                    </span>
-                  </span>
-                )}
-                {state === 'missing-token' && (
-                  <span className="text-sumi-soft">
-                    {t('newsletter.unsubscribe.missingToken')}
-                  </span>
-                )}
-              </div>
-              <button
-                type="button"
-                onClick={onConfirm}
-                disabled={!hasToken || state === 'submitting'}
-                className="group inline-flex h-11 w-full items-center justify-center gap-2 rounded-md bg-sumi px-4 text-[0.875rem] font-medium text-washi transition-colors duration-[220ms] hover:bg-sumi/90 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                <UserMinus
-                  className="h-4 w-4 transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-x-0.5"
-                  strokeWidth={1.8}
-                  aria-hidden
-                />
-                {state === 'submitting'
-                  ? t('newsletter.unsubscribe.submitting')
-                  : t('newsletter.unsubscribe.cta')}
-              </button>
+                    {state === 'submitting'
+                      ? t('newsletter.unsubscribe.submitting')
+                      : t('newsletter.unsubscribe.cta')}
+                  </button>
+                </>
+              )}
             </Reveal>
           </div>
         </section>

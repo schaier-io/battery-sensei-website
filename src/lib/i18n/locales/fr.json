@@ -32,7 +32,7 @@
     "batteryJournal": {
       "ariaLabel": "Battery Sensei, historique personnel de batterie",
       "since": "Depuis le {{date}}",
-      "sinceDate": "30 janv. 2024",
+      "sinceDate": "1 juil. 2025",
       "days": "Jours",
       "cycles": "Cycles",
       "capacity": "Capacité",
@@ -72,6 +72,7 @@
     "continue": "Télécharger quand même",
     "bannerHeading": "À noter : macOS uniquement.",
     "bannerBody": "Vous pouvez acheter une licence depuis cet appareil, mais l'application fonctionne uniquement sur Mac (macOS 14 Sonoma ou version ultérieure).",
+    "bannerBodyDownload": "Le téléchargement est un installeur macOS. Envoyez-vous le lien par e-mail, ou rouvrez cette page depuis votre Mac (macOS 14 Sonoma ou version ultérieure).",
     "dismiss": "Fermer"
   },
   "licenseScope": {
@@ -98,7 +99,7 @@
     }
   },
   "hero": {
-    "kicker": "macOS · gratuit à vie · Premium à {{price}} en paiement unique",
+    "kicker": "macOS · gratuit à vie · Pro à {{price}} en paiement unique",
     "title": "Prenez soin de la batterie",
     "titleItalic": "de votre MacBook, sans bruit.",
     "headlines": [
@@ -234,7 +235,7 @@
       },
       "heat": {
         "title": "Une charge qui cède à la chaleur",
-        "body": "Quand la batterie dépasse la température que vous choisissez, Sensei met la charge en pause jusqu’à ce qu’elle refroidisse — moins de chaleur par cycle, pour une capacité qui dure plus longtemps."
+        "body": "Quand la batterie dépasse la température que vous choisissez, Sensei met la charge en pause jusqu’à ce qu’elle refroidisse : moins de chaleur par cycle, pour une capacité qui dure plus longtemps."
       },
       "watts": {
         "title": "Watts en direct, entrants et sortants",
@@ -451,7 +452,7 @@
     "orderLabel": "Commande",
     "delivery": {
       "label": "Installer Sensei",
-      "from": "Téléchargez la dernière version macOS, puis collez votre clé dans <0>Réglages → Premium</0>.",
+      "from": "Téléchargez la dernière version macOS, puis collez votre clé dans <0>Réglages → Pro</0>.",
       "spam": "Votre clé arrive aussi par e-mail. Copiez-la depuis votre boîte si vous préférez. Si quelque chose coince (téléchargement, collage, activation), écrivez à <0>info@battery-sensei.app</0> et nous réglons ça dans la journée.",
       "supportEmail": "info@battery-sensei.app",
       "downloadCta": "Télécharger pour macOS",
@@ -465,7 +466,11 @@
       "alsoSentDefault": "Envoyée aussi par e-mail",
       "portalLink": "Espace client",
       "expiredKicker": "Vérifiez votre boîte mail",
-      "expiredBody": "Polar a envoyé votre clé par e-mail dès la commande terminée (pensez aussi aux spams). Elle reste aussi disponible dans l'espace client, sous la même adresse."
+      "expiredBody": "Polar a envoyé votre clé par e-mail dès la commande terminée (pensez aussi aux spams). Elle reste aussi disponible dans l'espace client, sous la même adresse.",
+      "missingKicker": "Votre clé est dans votre boîte mail",
+      "missingBody": "Cette page n'affiche votre clé que juste après l'achat. Nous l'avons envoyée par e-mail dès la commande terminée, pensez donc à regarder votre boîte de réception et vos spams. Elle reste aussi disponible dans l'espace client, sous la même adresse.",
+      "timeoutKicker": "Toujours en route",
+      "timeoutBody": "Votre clé n'est pas encore arrivée sur cette page. Elle a été envoyée par e-mail dès la commande terminée, regardez donc votre boîte de réception et vos spams, ou ouvrez l'espace client ci-dessous. Si elle ne s'y trouve pas, écrivez à <0>info@battery-sensei.app</0> et nous vous l'enverrons à la main."
     },
     "provisioning": {
       "kicker": "Votre clé arrive",
@@ -481,13 +486,13 @@
     },
     "lifetime": {
       "heading": "Bienvenue avec Lifetime.",
-      "headingItalic": "Toutes les fonctionnalités Premium, {{lifetimeScopeShort}}.",
-      "body": "<0>{{lifetimeScope}}</0> Toutes les fonctionnalités Premium présentes et à venir. Pas de connexion. Pas de compte.",
-      "next": "Sensei est déjà installé ? Ouvrez Réglages → Premium et collez la clé. La même clé vous attend aussi dans votre boîte mail."
+      "headingItalic": "Toutes les fonctionnalités Pro, {{lifetimeScopeShort}}.",
+      "body": "<0>{{lifetimeScope}}</0> Toutes les fonctionnalités Pro présentes et à venir. Pas de connexion. Pas de compte.",
+      "next": "Sensei est déjà installé ? Ouvrez Réglages → Pro et collez la clé. La même clé vous attend aussi dans votre boîte mail."
     },
     "support": {
       "heading": "Merci pour l'année à venir.",
-      "headingItalic": "Premium déverrouillé, {{yearlyScopeShort}}.",
+      "headingItalic": "Pro déverrouillé, {{yearlyScopeShort}}.",
       "body": "<0>{{yearlyScope}}</0> Une année entière de nouvelles versions et d'assistance par e-mail. Gérez ou annulez à tout moment depuis votre tableau de bord Polar.",
       "next": "On vous écrira une seule fois, peu avant la fin de l'année. Jamais de prélèvement silencieux. Votre clé reste aussi dans votre boîte mail et dans l'espace client."
     }
@@ -519,12 +524,16 @@
       "confirming": "Confirmation de votre inscription. Un instant de calme…",
       "submitting": "Confirmation…",
       "error": "Quelque chose s'est mal passé. Réessayez dans un instant, ou écrivez à info@battery-sensei.app.",
-      "missingToken": "Ce lien n'a pas de jeton. Ouvrez le lien de confirmation directement depuis l'e-mail."
+      "missing": {
+        "heading": "Ce lien est incomplet ou a expiré.",
+        "body": "Les liens de confirmation sont valables 48 heures. Saisissez votre e-mail ci-dessous et nous vous en enverrons un nouveau."
+      }
     },
     "confirmed": {
       "success": {
         "heading": "Vous êtes inscrit. Bienvenue.",
-        "body": "Votre e-mail est confirmé. Nous venons de vous envoyer un mot de bienvenue avec le lien de téléchargement ; il devrait arriver d'un instant à l'autre."
+        "body": "Votre e-mail est confirmé. Nous venons de vous envoyer un mot de bienvenue avec le lien de téléchargement ; il devrait arriver d'un instant à l'autre.",
+        "downloadNote": "Sur un téléphone ? Le même lien vous attend dans l'e-mail que nous venons d'envoyer."
       },
       "invalid": {
         "heading": "Ce lien a expiré.",
@@ -551,7 +560,11 @@
       "submitting": "Un instant…",
       "error": "Désabonnement impossible.",
       "tryAgain": "Veuillez réessayer.",
-      "missingToken": "Ce lien n'a pas de jeton. Ouvrez le lien de désabonnement directement depuis l'e-mail."
+      "missing": {
+        "heading": "Ce lien est incomplet ou a expiré.",
+        "body": "Les liens de désabonnement finissent par expirer. Écrivez à {{email}} et nous vous retirons de la liste à la main, en général sous un jour ouvré.",
+        "cta": "Nous écrire pour se désabonner"
+      }
     },
     "unsubscribed": {
       "heading": "Vous n'êtes plus sur la liste.",
@@ -561,7 +574,7 @@
     }
   },
   "featurePages": {
-    "backLink": "Retour à Battery Sensei",
+    "backLink": "Toutes les pages de fonctionnalités",
     "tryFree": "Essayer Battery Sensei gratuitement",
     "whyItHeading": "Pourquoi c'est important",
     "travel-mode": {
@@ -573,7 +586,7 @@
       "why": "Les batteries lithium-ion vieillissent plus vite quand on les laisse à 100 %. Le classique « je charge avant de partir et j'oublie » laisse le MacBook à pleine charge pendant des semaines, ce qui accélère l'usure des cellules. La réinitialisation à 9 h, c'est le filet de sécurité : même si vous oubliez, la limite revient."
     },
     "custom-thresholds": {
-      "kicker": "Premium · Réglages",
+      "kicker": "Pro · Réglages",
       "heading": "Seuils personnalisés.",
       "headingItalic": "Vos chiffres, vos délais de fermeture.",
       "body": "Les trois préréglages couvrent la plupart des journées. Mais si vous voulez un Avertissement à 22 % pendant 14 s et une Alerte à 6 % jusqu'à validation, vous pouvez créer exactement cette règle. Sensei vous laisse fixer le pourcentage exact pour chaque niveau d'alerte et la durée d'affichage de chaque carte. Niveau par niveau, pas un seul chiffre global.",
@@ -590,17 +603,17 @@
     },
     "battery-journal": {
       "kicker": "Fonctionnalité · 個人史",
-      "heading": "Historique de la batterie du MacBook.",
+      "heading": "Saga : l'historique de la batterie de votre MacBook.",
       "headingItalic": "Cycles, charges, sauvetages : tout en contexte.",
       "body": "Saga, c'est la vue au long cours sur la vie de votre batterie. Un graphique d'historique de charge consultable sur 24 h / 3 j / 7 j, un panneau Santé batterie (capacité, cycles, température, état), les apps les plus voraces en ce moment ou sur les 3 dernières heures / 5 derniers jours, et des récaps hebdo et mensuelles façon Wrapped. Quand vous sauvez la batterie à temps (en branchant votre Mac dans les 30 minutes suivant une alerte critique), Sensei crée un reçu de sauvetage : une petite carte partageable pour marquer le coup.",
       "mockupCaption": "Statistiques à vie, historique, Wrapped. Tout sur la page Saga.",
       "why": "Des chiffres de batterie sans contexte ne sont que des chiffres. « 92 % de capacité » ne vous dit rien. Saga leur donne une histoire : à quoi ils ressemblaient la semaine dernière, quelles apps ont coûté le plus, quel jour vous avez failli tout perdre."
     },
     "meeting-battery-guard": {
-      "kicker": "Premium · 会議",
+      "kicker": "Pro · 会議",
       "heading": "Gardien de réunion.",
       "headingItalic": "Le savoir avant que la batterie ne devienne le problème.",
-      "body": "Une fonctionnalité Premium, incluse dans l'essai gratuit puis dans Lifetime. Après activation, Sensei lit les 4 prochaines heures de votre calendrier directement sur votre Mac (EventKit, fenêtre par défaut). Il évalue chaque réunion par rapport à votre batterie actuelle (Confortable, Serré, Critique ou Catastrophique) et ne vous dérange qu'au bon moment. Critique : 30 / 15 / 5 / 1 min avant, avec la minute exacte où l'ordi s'éteindrait et le remède (« 22 min de charge et la batterie tient toute la réunion »). Catastrophique : vous êtes prévenu sur-le-champ. Serré : un seul rappel à 30 min. Confortable : silence. Branchez assez tôt et les rappels en attente s'annulent d'eux-mêmes. Les titres restent lisibles dans les notifications par défaut ; une option permet de les masquer.",
+      "body": "Une fonctionnalité Pro, incluse dans l'essai gratuit puis débloquée avec Lifetime ou Yearly Patron. Après activation, Sensei lit les 4 prochaines heures de votre calendrier directement sur votre Mac (EventKit, fenêtre par défaut). Il évalue chaque réunion par rapport à votre batterie actuelle (Confortable, Serré, Critique ou Catastrophique) et ne vous dérange qu'au bon moment. Critique : 30 / 15 / 5 / 1 min avant, avec la minute exacte où l'ordi s'éteindrait et le remède (« 22 min de charge et la batterie tient toute la réunion »). Catastrophique : vous êtes prévenu sur-le-champ. Serré : un seul rappel à 30 min. Confortable : silence. Branchez assez tôt et les rappels en attente s'annulent d'eux-mêmes. Les titres restent lisibles dans les notifications par défaut ; une option permet de les masquer.",
       "mockupCaption": "Fenêtre de 4 heures. Alerte seulement quand il le faut.",
       "why": "Un avertissement à 10 % en pleine réunion ne sert à rien : impossible de sortir chercher un chargeur. En lisant le calendrier, Sensei vous prévient quand il reste du temps pour agir, et se tait le reste du temps."
     },
@@ -608,7 +621,7 @@
       "kicker": "Fonctionnalité · 電力",
       "heading": "Consommation de batterie par app.",
       "headingItalic": "Voyez quelles applis coûtent le plus.",
-      "body": "Sur la page Saga, Sensei classe les plus gros consommateurs. Basculez entre l'instant présent (en direct), les 3 dernières heures ou 5 jours — et faites passer chaque valeur du pourcentage d'une batterie pleine aux watts (consommation en direct) ou aux watt-heures (sur une période). Chaque app reçoit un score d'impact énergétique façon Moniteur d'activité (temps CPU mêlé aux réveils en veille), un libellé d'impact (Faible / Modéré / Élevé / Très élevé) et un filtre de recherche pour retrouver chaque processus auxiliaire de Chrome dans la liste. L'historique est relevé toutes les 5 minutes ; la vue Maintenant en direct se rafraîchit environ toutes les 10 secondes. Pas d'extension système, pas de hook noyau.",
+      "body": "Sur la page Saga, Sensei classe les plus gros consommateurs. Basculez entre l'instant présent (en direct), les 3 dernières heures ou 5 jours, et faites passer chaque valeur du pourcentage d'une batterie pleine aux watts (consommation en direct) ou aux watt-heures (sur une période). Chaque app reçoit un score d'impact énergétique façon Moniteur d'activité (temps CPU mêlé aux réveils en veille), un libellé d'impact (Faible / Modéré / Élevé / Très élevé) et un filtre de recherche pour retrouver chaque processus auxiliaire de Chrome dans la liste. L'historique est relevé toutes les 5 minutes ; la vue Maintenant en direct se rafraîchit environ toutes les 10 secondes. Pas d'extension système, pas de hook noyau.",
       "mockupCaption": "Top apps · Maintenant / 3 h / 5 j · en pourcentage ou en watts. Vue en direct rafraîchie ~10 s.",
       "why": "La perte de batterie n'est presque jamais la faute de la batterie. C'est un processus figé, un onglet qui ne dort pas, une visio qui ne lâche pas le GPU. Savoir quelle app vous coûte le plus, c'est la différence entre une journée de 4 heures et une de 7."
     },
@@ -616,24 +629,24 @@
       "kicker": "Fonction · 節電",
       "heading": "Le mode économie d'énergie,",
       "headingItalic": "sans penser à l'activer.",
-      "body": "macOS cache le mode économie d'énergie trois niveaux sous les Réglages Système. Battery Sensei en fait une règle : choisissez un pourcentage ou une autonomie restante comme déclencheur, et le mode s'active au franchissement — puis se coupe au branchement. Le bridage reste celui d'Apple. Sensei se souvient à votre place, c'est tout.",
+      "body": "macOS cache le mode économie d'énergie trois niveaux sous les Réglages Système. Battery Sensei en fait une règle : choisissez un pourcentage ou une autonomie restante comme déclencheur, et le mode s'active au franchissement, puis se coupe au branchement. Le bridage reste celui d'Apple. Sensei se souvient à votre place, c'est tout.",
       "mockupCaption": "Un déclencheur, deux sens : actif au franchissement, coupé à la charge.",
-      "why": "On ne pense jamais au mode économie d'énergie au bon moment. 18 %, une réunion qui commence, pas de chargeur — c'est précisément là qu'il est le plus loin de l'esprit. Réglez la règle un après-midi calme et elle couvre tous les mauvais qui suivent. Comme elle se coupe seule, vous ne retrouverez pas votre Mac bridé une semaine plus tard."
+      "why": "On ne pense jamais au mode économie d'énergie au bon moment. 18 %, une réunion qui commence, pas de chargeur. C'est précisément là qu'il est le plus loin de l'esprit. Réglez la règle un après-midi calme et elle couvre tous les mauvais qui suivent. Comme elle se coupe seule, vous ne retrouverez pas votre Mac bridé une semaine plus tard."
     },
     "power-flow": {
       "kicker": "Fonction · 電流",
       "heading": "Où passent vos watts :",
-      "headingItalic": "adaptateur, batterie, système.",
-      "body": "Trois chiffres que macOS ne montre jamais côte à côte : ce que livre le chargeur, ce qui atteint la batterie, ce que tire votre Mac. Débranché, le dernier est votre vitesse de décharge. Pas une estimation — la mesure.",
-      "mockupCaption": "Entrée adaptateur, flux batterie, consommation système. En direct.",
+      "headingItalic": "adaptateur, système, batterie.",
+      "body": "Trois chiffres que macOS ne montre jamais côte à côte : ce que livre le chargeur, ce qui atteint la batterie, ce que tire votre Mac. Débranché, le dernier est votre vitesse de décharge. Pas une estimation. La mesure.",
+      "mockupCaption": "Entrée adaptateur, consommation système, flux batterie.",
       "why": "Un pourcentage ne dit pas pourquoi il baisse. Les watts, si. Quand vous voyez votre chargeur 96 W livrer 38 W à travers un mauvais câble, ou le système absorber tout ce qui entre, le mystère est levé."
     },
     "system-load": {
       "kicker": "Fonction · 負荷",
       "heading": "Pourquoi la batterie chute :",
-      "headingItalic": "processeur, GPU, disque, mémoire.",
-      "body": "Processeur, GPU, disque et pression mémoire, juste à côté de vos chiffres de batterie. Quand elle se vide vite, l'un de ces quatre l'explique presque toujours : un cœur saturé, un GPU occupé, un client de synchronisation qui écrit tout l'après-midi.",
-      "mockupCaption": "Processeur, GPU, pression mémoire, E/S disque — mesurés ensemble.",
+      "headingItalic": "processeur, GPU, mémoire, disque.",
+      "body": "Processeur, GPU, pression mémoire et E/S disque, juste à côté de vos chiffres de batterie. Quand elle se vide vite, l'un de ces quatre l'explique presque toujours : un cœur saturé, un GPU occupé, un client de synchronisation qui écrit tout l'après-midi.",
+      "mockupCaption": "Processeur, GPU, pression mémoire et E/S disque, mesurés ensemble.",
       "why": "« Elle s'est vidée vite aujourd'hui » est une impression. La charge est une preuve. Le panneau système montre que quelque chose travaille votre Mac ; celui de l'énergie par app le nomme. Ensemble, une mauvaise journée devient un processus à quitter."
     },
     "charge-limit": {
@@ -648,17 +661,17 @@
       "kicker": "Fonction · 健康",
       "heading": "Capacité, cycles, état,",
       "headingItalic": "et les habitudes derrière.",
-      "body": "Les trois chiffres que macOS conserve et montre rarement : ce que la batterie retient aujourd'hui, combien de cycles complets elle a derrière elle, et le verdict d'état d'Apple — brut, à côté des habitudes de charge qui les ont façonnés.",
+      "body": "Les trois chiffres que macOS conserve et montre rarement : ce que la batterie retient aujourd'hui, combien de cycles complets elle a derrière elle, et le verdict d'état d'Apple, brut, à côté des habitudes de charge qui les ont façonnés.",
       "mockupCaption": "Capacité, état, cycles. Lus directement dans la batterie.",
-      "why": "« 92 % de capacité » ne veut rien dire seul. Bien pour un Mac de trois ans, inquiétant pour un neuf. L'état est une tendance, pas une note — c'est pourquoi ces chiffres vivent à côté de votre historique plutôt que seuls."
+      "why": "« 92 % de capacité » ne veut rien dire seul. Bien pour un Mac de trois ans, inquiétant pour un neuf. L'état est une tendance, pas une note. C'est pourquoi ces chiffres vivent à côté de votre historique plutôt que seuls."
     },
     "statistics": {
       "kicker": "Fonction · 統計",
       "heading": "Votre semaine de batterie,",
       "headingItalic": "résumée comme le ferait quelqu'un.",
-      "body": "Temps sans chargeur, sessions de charge, profondeur moyenne de décharge, la période la plus chaude, les sauvetages à temps — pliés en récapitulatifs hebdomadaires et mensuels lisibles en vingt secondes.",
+      "body": "Temps sans chargeur, sessions de charge, profondeur moyenne de décharge, la période la plus chaude, les sauvetages à temps, pliés en récapitulatifs hebdomadaires et mensuels lisibles en vingt secondes.",
       "mockupCaption": "Récapitulatifs hebdomadaires et mensuels, calculés sur votre Mac.",
-      "why": "Le pourcentage en direct répond à « et maintenant ». Jamais à « est-ce normal pour moi ». Les récapitulatifs montrent le schéma — la semaine de déplacement, le mois du client de synchronisation emballé — pendant qu'il est encore temps d'agir."
+      "why": "Le pourcentage en direct répond à « et maintenant ». Jamais à « est-ce normal pour moi ». Les récapitulatifs montrent le schéma (la semaine de déplacement, le mois du client de synchronisation emballé) pendant qu'il est encore temps d'agir."
     },
     "honors": {
       "kicker": "Fonction · 名誉",
@@ -672,20 +685,20 @@
       "kicker": "Fonction · 設定",
       "heading": "Peu de réglages,",
       "headingItalic": "parce qu'il n'y a rien à synchroniser.",
-      "body": "Contenu de la barre des menus, apparence, langue, lancement à l'ouverture. Pas de compte, pas de cloud, pas d'interrupteur de télémétrie — rien n'est collecté, donc rien à désactiver.",
+      "body": "Contenu de la barre des menus, apparence, langue, lancement à l'ouverture. Pas de compte, pas de cloud, pas d'interrupteur de télémétrie. Rien n'est collecté, donc rien à désactiver.",
       "mockupCaption": "Apparence, langue, barre des menus, démarrage.",
       "why": "La plupart des écrans de réglages deviennent un second métier. Celui-ci reste court exprès. Tout ce que Battery Sensei sait vit sur votre Mac ; il ne reste que l'apparence et le démarrage."
     },
     "indexKicker": "Tout ce que contient l'app",
-    "indexHeading": "Quatorze guides,",
+    "indexHeading": "Quatorze pages,",
     "indexHeadingItalic": "un par fonction.",
-    "indexBody": "Chaque panneau, carte et automatisation de Battery Sensei a sa page : ce qu'elle fait, comment la lire, pourquoi elle existe. Commencez où vous voulez — les pages se renvoient les unes aux autres."
+    "indexBody": "Chaque panneau, carte et automatisation de Battery Sensei a sa page : ce qu'elle fait, comment la lire, pourquoi elle existe. Commencez où vous voulez ; les pages se renvoient les unes aux autres."
   },
   "pricing": {
     "kicker": "Tarifs · 値段",
     "heading": "Utilisez Battery Sensei à votre façon.",
     "headingItalic": "Gratuit à vie, Lifetime en paiement unique, ou Yearly Patron.",
-    "intro": "Commencez par Free et gardez les essentiels à vie. Premium est gratuit pendant {{trial}} jours ; ensuite, passez à Lifetime en paiement unique ou restez flexible avec Yearly Patron.",
+    "intro": "Commencez par Free et gardez les essentiels à vie. Pro est gratuit pendant {{trial}} jours ; ensuite, passez à Lifetime en paiement unique ou restez flexible avec Yearly Patron.",
     "free": {
       "tier": "基本 · Free",
       "priceWord": "Gratuit",
@@ -703,7 +716,7 @@
       },
       "whatYouKeep": "Inclus gratuitement · 基本",
       "trialEnd": "Après {{day}} jours, Sensei vous demande une seule fois :",
-      "trialChoice": "<0>Gardez Premium ({{price}})</0> ou <1>revenez à la version gratuite</1>. Pas de carte enregistrée, pas de prélèvement silencieux.",
+      "trialChoice": "<0>Gardez Pro ({{price}})</0> ou <1>revenez à la version gratuite</1>. Pas de carte enregistrée, pas de prélèvement silencieux.",
       "items": [
         {
           "title": "Alertes intelligentes de batterie faible",
@@ -755,7 +768,7 @@
         },
         {
           "title": "Toutes les fonctionnalités déverrouillées",
-          "body": "Tout ce qui est inclus dans Free, plus toutes les fonctionnalités Premium actuelles et futures. Un seul paiement."
+          "body": "Tout ce qui est inclus dans Free, plus toutes les fonctionnalités Pro actuelles et futures. Un seul paiement."
         },
         {
           "title": "Gardien de réunion",
@@ -775,13 +788,13 @@
       "tier": "応援 · Yearly Patron",
       "period": "par an · jusqu'à 5 Mac",
       "badge": "Annulable à tout moment",
-      "blurb": "Financez le développement continu de Sensei. Un abonnement annuel avec toutes les fonctionnalités Premium.",
+      "blurb": "Financez le développement continu de Sensei. Un abonnement annuel avec toutes les fonctionnalités Pro.",
       "ctaLabel": "Devenir Yearly Patron",
       "perksTitle": "Ce que vous obtenez · 応援",
       "items": [
         {
-          "title": "Tout Premium",
-          "body": "Le même socle Premium que Lifetime : Gardien de réunion, historique illimité et règles d'alerte personnalisées."
+          "title": "Tout Pro",
+          "body": "Le même socle Pro que Lifetime : Gardien de réunion, historique illimité et règles d'alerte personnalisées."
         },
         {
           "title": "Vous financez la prochaine version",
@@ -797,7 +810,7 @@
         }
       ]
     },
-    "alreadyBought": "Déjà acheté ? Ouvrez Sensei → Réglages → Premium, puis collez votre clé."
+    "alreadyBought": "Déjà acheté ? Ouvrez Sensei → Réglages → Pro, puis collez votre clé."
   },
   "faq": {
     "kicker": "Questions · 問答",
@@ -816,14 +829,14 @@
           "**Paiement unique de {{price}} pour une licence à vie.** {{lifetimeScope}} Pas d'abonnement.",
           "Commencez gratuitement pendant {{trial}} jours. Pas de carte, pas de compte.",
           "À la fin de l'essai, Sensei vous demande une seule fois au lancement. Si vous passez votre tour, les essentiels gratuits continuent de fonctionner : limite de charge, Mode voyage, alertes intelligentes, 24 h d'historique, consommation par app, watts en direct dans la barre des menus.",
-          "Premium ajoute le Gardien de réunion, historique illimité et règles d'alerte personnalisées. Le paiement s'affiche dans votre devise locale."
+          "Pro ajoute le Gardien de réunion, historique illimité et règles d'alerte personnalisées. Le paiement s'affiche dans votre devise locale."
         ]
       },
       {
         "q": "Comment fonctionne la clé de licence ?",
         "a": [
           "Après l'achat, votre clé arrive par e-mail.",
-          "Ouvrez Sensei → Réglages → Premium et collez-la. Elle s'active via Polar et la licence est stockée sur votre Mac.",
+          "Ouvrez Sensei → Réglages → Pro et collez-la. Elle s'active via Polar et la licence est stockée sur votre Mac.",
           "**Pas de compte. Pas de connexion.** {{lifetimeScope}} {{yearlyScope}}"
         ]
       },
@@ -869,7 +882,7 @@
         "q": "Battery Sensei est-il une alternative à AlDente ?",
         "a": [
           "**Oui.** Si vous voulez une limite de charge avec alertes intelligentes et historique de batterie, Sensei est une alternative à AlDente.",
-          "Livré en un seul installateur .pkg avec notarisation Apple. Premium ajoute le Gardien de réunion, historique illimité et règles personnalisées. Avec Lifetime, un seul paiement débloque Premium durablement.",
+          "Livré en un seul installateur .pkg avec notarisation Apple. Pro ajoute le Gardien de réunion, historique illimité et règles personnalisées. Avec Lifetime, un seul paiement débloque Pro durablement.",
           "Le comparatif côte à côte se trouve dans la section Comparaison ci-dessus."
         ]
       },
@@ -883,7 +896,7 @@
       {
         "q": "Comment fonctionne le Gardien de réunion ?",
         "a": [
-          "Fonction Premium à activer volontairement. Sensei lit votre agenda en local et repère les réunions que votre batterie pourrait ne pas tenir jusqu'au bout.",
+          "Fonction Pro à activer volontairement. Sensei lit votre agenda en local et repère les réunions que votre batterie pourrait ne pas tenir jusqu'au bout.",
           "Quand une réunion est à risque, jusqu'à quatre rappels : **30, 15, 5 et 1 minute avant** le début.",
           "Chaque rappel donne la minute exacte d'extinction prévue (« s'éteint 17 min après le début du standup ») et le temps de charge qui règle le problème (« 22 min de charge et la batterie tient toute la réunion »).",
           "Les titres des événements ne quittent jamais votre Mac. Sensei lit le calendrier en local via EventKit. Si le risque s'éloigne, les rappels en attente s'annulent en silence."
@@ -895,7 +908,7 @@
     "kicker": "Nous joindre · 連絡",
     "heading": "Une vraie personne",
     "headingItalic": "lit chaque message.",
-    "intro": "Les bugs et demandes de fonctionnalités sont suivis publiquement sur GitHub pour que tout le monde profite de la réponse. Tout ce qui touche à votre achat ou votre licence passe par le formulaire. La première réponse arrive généralement sous 48 heures en semaine.",
+    "intro": "Les bugs, les idées de fonctionnalités et tout ce qui touche à votre achat ou votre licence passent par le formulaire ci-dessous. La première réponse arrive généralement sous 48 heures en semaine.",
     "privateMessage": "Message privé",
     "notStored": "Utilisé uniquement pour le support et l'antispam",
     "topicLegend": "De quoi s'agit-il ?",
@@ -949,31 +962,16 @@
       "sending": "Envoi en cours…",
       "sent": "Envoyé"
     },
-    "github": {
-      "label": "Suivi des bugs · GitHub",
-      "title": "Un blocage, ou un comportement étrange ?",
-      "cta": "Ouvrir GitHub Issues",
-      "paths": {
-        "idea": "Signaler un bug",
-        "bug": "Poser une question",
-        "curious": "Parcourir les fils"
-      }
-    },
     "email": {
       "label": "E-mail direct",
       "title": "Ou écrivez directement.",
       "body": "Vous préférez votre propre messagerie ? Même boîte, même personne, même réponse sous environ 48 h. À privilégier pour les signalements de sécurité."
     },
     "before": {
-      "title": "Avant d'écrire",
-      "faqHint": "Beaucoup de réponses sont déjà dans la FAQ ; <0>jetez-y un œil d'abord</0>.",
-      "refundLabel": "Remboursement",
-      "refundHint": "Joignez le numéro de commande de votre e-mail Polar : c'est tout ce qu'il nous faut.",
-      "journalLabel": "Journal",
-      "journalHint": "Envie d'aller plus loin ? <0>Consultez le Journal</0> pour des guides batterie et les nouveautés."
+      "inline": "Consultez d'abord la <0>FAQ</0>, indiquez votre numéro de commande Polar pour toute question de facturation, et retrouvez plus de conseils dans les <1>Guides</1>."
     },
     "board": {
-      "hint": "Les idées de fonctionnalités peuvent aussi rejoindre le tableau public, où les autres utilisateurs votent — ce formulaire reste un message privé.",
+      "hint": "Les idées de fonctionnalités peuvent aussi rejoindre le tableau public, où les autres utilisateurs votent. Ce formulaire reste un message privé.",
       "linkLabel": "Voir le tableau public"
     },
     "tabs": {
@@ -1036,7 +1034,7 @@
       "moderationNote": "Chaque demande est relue à la main avant d'apparaître sur le tableau.",
       "send": "Envoyer la demande",
       "sending": "Envoi…",
-      "successTitle": "Merci — c'est en relecture.",
+      "successTitle": "Merci. C'est en relecture.",
       "successBody": "Votre idée a été envoyée. Une fois approuvée, vous recevrez un e-mail et elle apparaîtra ici pour que chacun puisse voter.",
       "another": "En proposer une autre",
       "errorDefault": "Une erreur s'est produite. Réessayez, ou utilisez le formulaire de contact.",
@@ -1047,7 +1045,7 @@
     "welcome": "ようこそ",
     "heading": "Installez une fois.",
     "headingItalic": "Laissez la batterie de votre MacBook respirer.",
-    "body": "Essayez Premium pendant {{trial}} jours, puis gardez-le pour un paiement unique de {{price}}. Avec notarisation Apple. Reste dans votre barre de menus dès le premier jour et veille sur votre batterie sans bruit.",
+    "body": "Essayez Pro pendant {{trial}} jours, puis gardez-le pour un paiement unique de {{price}}. Avec notarisation Apple. Reste dans votre barre de menus dès le premier jour et veille sur votre batterie sans bruit.",
     "trust": {
       "native": {
         "title": "macOS natif",
@@ -1071,7 +1069,7 @@
       "default": {
         "heading": "Vous avez scanné une carte batterie.",
         "headingItalic": "Derrière elle, un sensei.",
-        "body": "Quelqu'un que vous connaissez confie la batterie de son MacBook à la veille discrète de Battery Sensei — et en a partagé la preuve. Sensei vit dans la barre de menus, prévient avant l'extinction, maintient une limite de charge plus saine et tient un journal de batterie en langage clair. La vôtre pourrait commencer aujourd'hui."
+        "body": "Quelqu'un que vous connaissez confie la batterie de son MacBook à la veille discrète de Battery Sensei, et en a partagé la preuve. Sensei vit dans la barre de menus, prévient avant l'extinction, maintient une limite de charge plus saine et tient un journal de batterie en langage clair. La vôtre pourrait commencer aujourd'hui."
       },
       "rescue": {
         "heading": "Ce sauvetage était réel.",
@@ -1091,7 +1089,34 @@
       "honors": {
         "heading": "Un honneur gagné en silence.",
         "headingItalic": "Scellé par Sensei.",
-        "body": "Ce sceau marque un jalon de batterie — de ceux que seul un soin régulier et patient permet d'atteindre. Battery Sensei accompagne les habitudes, compte les cycles et appose les honneurs. Les vôtres vous attendent."
+        "body": "Ce sceau marque un jalon de batterie, de ceux que seul un soin régulier et patient permet d'atteindre. Battery Sensei accompagne les habitudes, compte les cycles et appose les honneurs. Les vôtres vous attendent."
+      }
+    },
+    "cardMock": {
+      "caption": "Une illustration de la carte que vous avez scannée. L'originale, et la batterie derrière elle, restent sur le Mac de la personne qui l'a partagée.",
+      "wrapped": {
+        "label": "Rétrospective",
+        "headline": "Un chapitre de vie de batterie,",
+        "headlineItalic": "sur une seule page.",
+        "note": "Cycles comptés, habitudes repérées, capacité suivie."
+      },
+      "health": {
+        "label": "Bilan",
+        "headline": "La batterie,",
+        "headlineItalic": "en mots simples.",
+        "note": "Capacité, cycles et température, sans jargon."
+      },
+      "honors": {
+        "label": "Honneurs",
+        "headline": "Un jalon,",
+        "headlineItalic": "scellé en silence.",
+        "note": "Des sceaux gagnés par un soin régulier et patient."
+      },
+      "default": {
+        "label": "Sensei",
+        "headline": "Une carte envoyée par",
+        "headlineItalic": "un autre Sensei.",
+        "note": "Sensei les écrit à partir de ce que le Mac sait déjà."
       }
     },
     "exploreCta": "Voir ce que fait Sensei",
@@ -1106,7 +1131,7 @@
     "pricing": "Tarifs",
     "managePurchase": "Gérer l'achat",
     "copyright": "© {{year}} · Battery Sensei",
-    "lastUpdated": "Dernière mise à jour le {{date}}",
+    "lastUpdated": "Site mis à jour le {{date}}",
     "roadmap": "Feuille de route"
   },
   "checkout": {
@@ -1123,13 +1148,13 @@
       "support": "{{yearlyScopeShort}}."
     },
     "intro": {
-      "lifetime": "Polar Software, Inc. est le vendeur officiel : l'entreprise gère le paiement, la TVA et votre reçu. Vous recevrez votre clé de licence par e-mail en moins d'une minute, puis vous l'activerez dans l'app via Réglages → Premium.",
+      "lifetime": "Polar Software, Inc. est le vendeur officiel : l'entreprise gère le paiement, la TVA et votre reçu. Vous recevrez votre clé de licence par e-mail en moins d'une minute, puis vous l'activerez dans l'app via Réglages → Pro.",
       "support": "Polar Software, Inc. est le vendeur officiel : l'entreprise gère le paiement, la TVA et votre reçu. Vous recevrez votre clé de licence par e-mail en moins d'une minute ; elle reste active tant que votre abonnement Yearly Patron l'est."
     },
     "summaryTitle": "Ce que vous recevez",
     "activationBody": {
-      "lifetime": "Clé de licence envoyée par Polar. Collez-la une fois dans <0>Sensei → Réglages → Premium</0>. {{lifetimeScope}} Pas de connexion ni de compte dans l'app.",
-      "support": "Clé de licence envoyée par Polar. Collez-la une fois dans <0>Sensei → Réglages → Premium</0>. {{yearlyScope}} Gérez ou annulez depuis Polar à tout moment. Pas de connexion ni de compte dans l'app."
+      "lifetime": "Clé de licence envoyée par Polar. Collez-la une fois dans <0>Sensei → Réglages → Pro</0>. {{lifetimeScope}} Pas de connexion ni de compte dans l'app.",
+      "support": "Clé de licence envoyée par Polar. Collez-la une fois dans <0>Sensei → Réglages → Pro</0>. {{yearlyScope}} Gérez ou annulez depuis Polar à tout moment. Pas de connexion ni de compte dans l'app."
     },
     "summaryLines": {
       "lifetime": [
@@ -1139,7 +1164,7 @@
         "Mises à jour à vie, sans abonnement"
       ],
       "support": [
-        "Toutes les fonctionnalités Premium actuelles pendant l'abonnement",
+        "Toutes les fonctionnalités Pro actuelles pendant l'abonnement",
         "Soutien à la prochaine année de développement de Sensei",
         "Annulable à tout moment depuis votre compte Polar",
         "Ligne directe pour vos idées et demandes de fonctionnalités"
@@ -1168,12 +1193,13 @@
     "error": {
       "title": "Paiement indisponible",
       "body": "Polar n'a pas accepté la demande de paiement. Réessayez dans un instant, ou écrivez-nous et nous vous enverrons un lien de paiement direct.",
+      "reference": "Référence :",
       "retry": "Réessayer",
       "email": "Écrivez-nous"
     },
     "refundNote": "Garantie de remboursement de 14 jours",
     "alreadyOwnTitle": "Déjà acheté ?",
-    "alreadyOwnBody": "Ouvrez Battery Sensei → Réglages → Premium. Collez votre clé, saisissez l'e-mail utilisé lors de l'achat, puis cliquez sur Activer Premium.",
+    "alreadyOwnBody": "Ouvrez Battery Sensei → Réglages → Pro. Collez votre clé, saisissez l'e-mail utilisé lors de l'achat, puis cliquez sur Activer Pro.",
     "alreadyOwnDownload": "Télécharger Sensei",
     "alreadyOwnPortal": "Portail client",
     "backToHome": "Retour à l'accueil"
@@ -1182,7 +1208,7 @@
     "kicker": "Confidentialité · 個人情報",
     "title": "Ce que nous collectons.",
     "titleItalic": "Et ce que nous ne collectons pas.",
-    "lastUpdated": "Dernière mise à jour {{date}}",
+    "lastUpdated": "Cet avis a été mis à jour pour la dernière fois le {{date}}",
     "intro": "Battery Sensei est une petite application indépendante pour macOS. Nous collectons le strict minimum pour faire fonctionner le site, traiter les paiements et vous prévenir des nouvelles versions. Tout est expliqué clairement ci-dessous.",
     "backHome": "Retour à l'accueil",
     "footerLink": "Confidentialité",
@@ -1192,12 +1218,12 @@
       "dontLabel": "Ce que nous ne faisons pas",
       "do": {
         "1": "Faire fonctionner l'application Mac entièrement sur votre appareil. Votre historique de batterie et les titres de vos événements de calendrier ne quittent jamais votre Mac.",
-        "2": "Mesurer le trafic du site avec des analytics anonymes et sans cookies — uniquement des comptages agrégés, aucun cookie de suivi.",
+        "2": "Mesurer le trafic du site avec des analytics anonymes et sans cookies : uniquement des comptages agrégés, aucun cookie de suivi.",
         "3": "Ne conserver que les informations que vous nous confiez activement : votre e-mail si vous vous inscrivez, votre message si vous utilisez le formulaire de contact, et votre achat (géré par Polar).",
-        "4": "Recourir à quelques sous-traitants bien connus pour l'hébergement, les paiements et les e-mails — chacun nommé ci-dessous avec un lien vers sa politique."
+        "4": "Recourir à quelques sous-traitants bien connus pour l'hébergement, les paiements et les e-mails, chacun nommé ci-dessous avec un lien vers sa politique."
       },
       "dont": {
-        "1": "Vendre, louer ou partager vos données avec des annonceurs — jamais.",
+        "1": "Vendre, louer ou partager vos données avec des annonceurs. Jamais.",
         "2": "Utiliser des traqueurs publicitaires ou de réseaux sociaux, intégrer des pixels de suivi ou des boutons de partage, déposer des cookies de suivi tiers ou vous profiler d'un site à l'autre.",
         "3": "Établir des profils à votre sujet ni prendre de décisions automatisées qui vous affectent.",
         "4": "Exiger un compte ou une connexion pour utiliser l'application."
@@ -1214,21 +1240,21 @@
       "app": {
         "kicker": "二 · L'application",
         "heading": "Ce que l'application macOS fait sur votre Mac",
-        "p1": "Battery Sensei est une application macOS native qui fonctionne entièrement sur votre Mac. La lecture de votre batterie, de votre charge et des prochaines heures de votre calendrier se fait intégralement sur l'appareil — rien de tout cela ne transite par un serveur que nous exploitons.",
+        "p1": "Battery Sensei est une application macOS native qui fonctionne entièrement sur votre Mac. La lecture de votre batterie, de votre charge et des prochaines heures de votre calendrier se fait intégralement sur l'appareil. Rien de tout cela ne transite par un serveur que nous exploitons.",
         "p2": "L'application ne contient aucune télémétrie, aucun SDK d'analytics, aucun rapporteur de plantage et aucun compte cloud. Votre historique de batterie est stocké uniquement sur votre Mac. Les titres des événements de calendrier sont lus en local pour cadencer vos alertes de réunion et ne quittent jamais votre appareil.",
-        "p3": "La seule connexion réseau que l'application établit d'elle-même est une vérification des mises à jour : elle récupère périodiquement un flux de mise à jour (un « appcast ») depuis battery-sensei.app pour vérifier s'il existe une version plus récente. Cette requête atteint notre hébergeur de la même manière que n'importe quelle requête web, n'apparaît que dans des logs serveur de courte durée et ne transporte aucun identifiant de compte ou d'appareil. Si une mise à jour est disponible, la nouvelle version est téléchargée depuis GitHub — voir la section suivante."
+        "p3": "La seule connexion réseau que l'application établit d'elle-même est une vérification des mises à jour : elle récupère périodiquement un flux de mise à jour (un « appcast ») depuis battery-sensei.app pour vérifier s'il existe une version plus récente. Cette requête atteint notre hébergeur de la même manière que n'importe quelle requête web, n'apparaît que dans des logs serveur de courte durée et ne transporte aucun identifiant de compte ou d'appareil. Si une mise à jour est disponible, la nouvelle version est téléchargée depuis GitHub (voir la section suivante)."
       },
       "github": {
         "kicker": "三 · Téléchargements et mises à jour",
         "heading": "Télécharger l'application et ses mises à jour",
         "p1": "Nous hébergeons l'installateur de l'application et ses notes de version dans un dépôt GitHub public (<0>github.com/schaier-io/battery-sensei-releases</0>). Quand vous cliquez sur « Télécharger pour Mac », ou quand l'outil de mise à jour intégré installe une nouvelle version, votre appareil se connecte directement à GitHub pour récupérer le fichier. Aucun compte GitHub n'est requis.",
         "p2": "Comme tout serveur web, GitHub reçoit votre adresse IP, le fichier que vous avez demandé et le user-agent de votre navigateur afin de servir le téléchargement, et peut enregistrer ces données et déposer ses propres cookies si vous parcourez le dépôt dans un navigateur. Pour cette connexion, <0>GitHub, Inc.</0> (une société de Microsoft) agit comme responsable de traitement indépendant, au titre de sa propre déclaration de confidentialité. Nous ne recevons jamais la liste des personnes ayant téléchargé l'application.",
-        "p3": "Le traitement de ces requêtes par GitHub est régi par la <0>déclaration de confidentialité de GitHub</0>. Si vous ouvrez un ticket ou commentez sur le dépôt, tout ce que vous écrivez — ainsi que votre nom d'utilisateur GitHub — est partagé avec GitHub et est visible publiquement."
+        "p3": "Le traitement de ces requêtes par GitHub est régi par la <0>déclaration de confidentialité de GitHub</0>. Si vous ouvrez un ticket ou commentez sur le dépôt, tout ce que vous écrivez, ainsi que votre nom d'utilisateur GitHub, est partagé avec GitHub et est visible publiquement."
       },
       "what": {
         "kicker": "四 · Ce que nous collectons",
         "heading": "La liste complète, par point de contact",
-        "intro": "Cette section concerne le site marketing battery-sensei.app et le parcours de commande qui s'y trouve — l'application elle-même est traitée plus haut et ne collecte rien. Sur le site, nous réduisons les données au minimum :",
+        "intro": "Cette section concerne le site marketing battery-sensei.app et le parcours de commande qui s'y trouve. L'application elle-même est traitée plus haut et ne collecte rien. Sur le site, nous réduisons les données au minimum :",
         "items": {
           "localeName": "Cookie de préférence de langue",
           "localeBody": "Un cookie propriétaire nommé <0>bs_locale</0>, créé uniquement quand vous changez de langue via le sélecteur du site. Il stocke votre code de langue à deux lettres (par ex. <0>de</0>), expire au bout d'un an et n'est jamais partagé.",
@@ -1275,7 +1301,7 @@
           "resendName": "Resend, Inc.",
           "resendBody": "Envoie les annonces de versions et les e-mails transactionnels (reçu d'achat, renvoi de clé de licence, confirmation de formulaire de contact). Les adresses e-mail que vous transmettez via nos formulaires sont ajoutées à des audiences Resend. Les transferts vers Resend (États-Unis) reposent sur les Clauses Contractuelles Types ; Resend est en outre auto-certifiée au titre de l'EU-US Data Privacy Framework. Politique : <0>resend.com/legal/privacy-policy</0>.",
           "postgresName": "Neon (une société de Databricks)",
-          "postgresBody": "Hébergeur PostgreSQL serverless (Neon, LLC), mis à disposition via la marketplace Vercel. Contient la table des inscriptions à la newsletter et la table du formulaire de contact ; la base de données est hébergée dans l'UE (AWS, Francfort / eu-central-1). Vos données d'achat et de licence n'y sont pas stockées — elles sont conservées par Polar. Neon, LLC est couverte par la certification EU-US Data Privacy Framework de Databricks, et les éventuels transferts reposent en outre sur les Clauses Contractuelles Types. Politique : <0>databricks.com/legal/privacynotice</0>."
+          "postgresBody": "Hébergeur PostgreSQL serverless (Neon, LLC), mis à disposition via la marketplace Vercel. Contient la table des inscriptions à la newsletter et la table du formulaire de contact ; la base de données est hébergée dans l'UE (AWS, Francfort / eu-central-1). Vos données d'achat et de licence n'y sont pas stockées : elles sont conservées par Polar. Neon, LLC est couverte par la certification EU-US Data Privacy Framework de Databricks, et les éventuels transferts reposent en outre sur les Clauses Contractuelles Types. Politique : <0>databricks.com/legal/privacynotice</0>."
         }
       },
       "retention": {
@@ -1310,7 +1336,7 @@
       "changes": {
         "kicker": "九 · Modifications",
         "heading": "Quand cette page est mise à jour",
-        "p1": "Lorsque nous modifions une pratique importante (nouveau sous-traitant, durée de conservation différente, nouveau type de données collecté), nous mettons à jour la date « dernière mise à jour » en haut de cette page. Si un changement affecte votre consentement (par exemple, un nouveau type de newsletter), nous vous en informerons séparément par e-mail et vous demanderons votre accord avant toute inscription."
+        "p1": "Lorsque nous modifions une pratique importante (nouveau sous-traitant, durée de conservation différente, nouveau type de données collecté), nous mettons à jour la date en haut de cette page. Si un changement affecte votre consentement (par exemple, un nouveau type de newsletter), nous vous en informerons séparément par e-mail et vous demanderons votre accord avant toute inscription."
       }
     }
   },
@@ -1318,7 +1344,7 @@
     "kicker": "Mentions légales · 法",
     "title": "Mentions légales et",
     "titleItalic": "avertissement juridique.",
-    "lastUpdated": "Dernière mise à jour {{date}}",
+    "lastUpdated": "Ces mentions légales ont été mises à jour le {{date}}",
     "intro": "Qui exploite battery-sensei.app, comment nous joindre et quelles conditions légales encadrent votre utilisation du site.",
     "backHome": "Retour à l'accueil",
     "footerLink": "Mentions légales",
@@ -1389,5 +1415,45 @@
         "p1": "La manière dont nous collectons, utilisons et protégeons les données personnelles est documentée séparément et fait foi sur ce sujet. Voir l'<0>avis de confidentialité</0>."
       }
     }
+  },
+  "errors": {
+    "boundary": {
+      "kicker": "Quelque chose a cassé · 失礼",
+      "heading": "La page a trébuché.",
+      "headingItalic": "Une respiration, puis réessayez.",
+      "body": "Une erreur inattendue a empêché l'affichage de cette page. Si cela se reproduit, écrivez à info@battery-sensei.app en précisant ce que vous faisiez et nous corrigerons vite.",
+      "retry": "Réessayer"
+    },
+    "notFound": {
+      "kicker": "404 · 迷子",
+      "heading": "Rien ne vit ici.",
+      "headingItalic": "La page que vous cherchiez est ailleurs.",
+      "body": "Le lien est peut-être obsolète, ou nous avons déplacé la page. Retournez à l'accueil. Ou suivez l'une des pistes ci-dessous.",
+      "suggestionsLabel": "Essayez l'un de ceux-ci",
+      "trails": {
+        "features": {
+          "label": "Fonctionnalités",
+          "hint": "Chaque panneau et chaque automatisation, une page chacun"
+        },
+        "guides": {
+          "label": "Guides",
+          "hint": "Notes sur les batteries de MacBook, la longévité, macOS"
+        },
+        "faq": {
+          "label": "FAQ",
+          "hint": "Comment Sensei fonctionne, en clair"
+        },
+        "glossary": {
+          "label": "Glossary",
+          "hint": "Le vocabulaire des batteries, sans jargon"
+        }
+      }
+    }
+  },
+  "theme": {
+    "label": "Thème",
+    "light": "Clair",
+    "system": "Suivre le système",
+    "dark": "Sombre"
   }
 }

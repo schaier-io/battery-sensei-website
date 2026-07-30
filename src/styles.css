@@ -66,6 +66,15 @@
 
 @import 'tw-animate-css';
 
+/* The palette below keys off a `.dark` class on <html>. That class is set by
+   the pre-paint script in __root.tsx, which reads prefers-color-scheme, so
+   the class stays the single source of truth for both the CSS variables and
+   Tailwind's `dark:` utilities.
+
+   This used to be unreachable: nothing in the app ever added `.dark`, so a
+   visitor on a dark-mode Mac got the light site with a dark-mode product
+   screenshot inside it (ScreenshotMockup is the one component that reads
+   prefers-color-scheme directly). */
 @custom-variant dark (&:is(.dark *));
 
 :root {
@@ -77,6 +86,11 @@
   --washi-soft: #ece3d1;    /* shaded paper */
   --washi-deep: #e2d6bd;    /* aged paper */
   --hinomaru: #bc002d;      /* flag red */
+  /* Red used as TEXT rather than as a fill. Identical to --hinomaru in
+     light mode; lightened in dark, where the flag red on a lifted mockup
+     surface measured ~3.2:1. Kept separate from --hinomaru so buttons that
+     use the red as a BACKGROUND are not dragged lighter along with it. */
+  --hinomaru-ink: #bc002d;
   --hinomaru-soft: #d63e35; /* ember red */
   --kin: #c89b3c;           /* gold leaf */
   --matcha: #6f7a3a;        /* tea green */
@@ -85,6 +99,28 @@
   --line: rgba(28, 26, 23, 0.14);
   --line-strong: rgba(28, 26, 23, 0.24);
   --paper-shadow: rgba(28, 26, 23, 0.06);
+
+  /* The colour a paper surface mixes toward when it should sit ABOVE the
+     page ground: input fills, mockup panels, raised cards. Always used as
+     `color-mix(in oklab, var(--washi) N%, var(--paper-lift))`, so N keeps
+     the same meaning in both themes — the higher N, the closer to the page.
+     Hard-coding #fff here used to invert the effect in dark mode: --washi
+     flips to near-black but the mix partner stayed white, so every input
+     rendered as a mid-grey slab with a 1.4:1 placeholder. */
+  --paper-lift: #fffdf8;
+
+  /* The two ellipses that give the page its hand-made unevenness. Cream
+     highlight top-left, aged warmth bottom-right. */
+  --paper-glow: rgba(255, 248, 232, 0.6);
+  --paper-glow-warm: rgba(226, 214, 189, 0.55);
+
+  /* macOS chrome inside the product mockups: the menu bar strip and the
+     dock. This depicts the OS, not our page, so it stays a dark translucent
+     bar in BOTH themes and is deliberately NOT derived from --sumi. It used
+     to be `color-mix(…var(--sumi) 72%…)`, which flipped to a light bar in
+     dark mode and left the white "Finder File Edit View" text on it at
+     roughly 1.2:1. */
+  --os-chrome: rgba(28, 26, 23, 0.72);
 
   --background: oklch(0.94 0.02 80);
   --foreground: oklch(0.18 0.01 50);
@@ -104,18 +140,34 @@
   --destructive-foreground: oklch(0.97 0.015 80);
   --border: oklch(0.82 0.02 80);
   --input: oklch(0.82 0.02 80);
-  --ring: oklch(0.5 0.18 25);
+  /* Focus is NOT an error. This used to be byte-identical to --destructive,
+     so an autofocused empty field (e.g. /admin) painted a red ring on first
+     paint and a genuine validation error was indistinguishable from focus.
+     Ink, matching the hand-rolled inputs' focus:ring-sumi/25. */
+  --ring: oklch(0.42 0.01 50);
   --radius: 0.5rem;
 }
 
 .dark {
   --sumi: #f4ede0;
   --sumi-soft: #cdc6b8;
-  --nezumi: #908a82;
+  /* Lighter than the light-mode counterpart on purpose. The mockup surfaces
+  are LIFTED off the page ground (roughly rgb(53,49,41) once
+  --paper-lift is mixed in), and the old #908a82 measured only 3.79:1
+  against them, so every small label inside a product mockup failed AA.
+  This value clears 4.5:1 on the lifted surfaces and stays comfortably
+  within the mouse-grey character on the page ground. */
+  --nezumi: #a49d94;
   --washi: #15130f;
   --washi-soft: #1d1b16;
   --washi-deep: #26241e;
-  --hinomaru: #e04857;
+  /* Deeper than it was (#e04857). The flag red doubles as a FILL under
+     near-white text (the hanko seal, the dismiss button, status pills), and
+     at the lighter value that pairing measured 3.8:1. Red used as TEXT on a
+     dark ground is handled by --hinomaru-ink above, so the two needs no
+     longer pull the same token in opposite directions. */
+  --hinomaru: #cc3344;
+  --hinomaru-ink: #f58f99;
   --hinomaru-soft: #ef7064;
   --kin: #d8b65a;
   --matcha: #8a9a4a;
@@ -124,6 +176,15 @@
   --line: rgba(244, 237, 224, 0.14);
   --line-strong: rgba(244, 237, 224, 0.26);
   --paper-shadow: rgba(0, 0, 0, 0.4);
+
+  /* Ink-side counterpart: a warm ash that lifts a surface off the near-black
+     page ground by the same relative amount white lifts it off washi. */
+  --paper-lift: #6c6355;
+
+  /* Ink-side glows: the same uneven-paper idea, but they may only whisper.
+     Anything above ~0.10 alpha reads as a grey haze rather than as depth. */
+  --paper-glow: rgba(150, 132, 104, 0.09);
+  --paper-glow-warm: rgba(120, 108, 88, 0.07);
 
   --background: oklch(0.16 0.01 50);
   --foreground: oklch(0.94 0.02 80);
@@ -143,7 +204,90 @@
   --destructive-foreground: oklch(0.97 0.015 80);
   --border: oklch(0.32 0.01 50);
   --input: oklch(0.32 0.01 50);
-  --ring: oklch(0.6 0.18 25);
+  /* See the light-mode note: focus reads as ink, not as an error. */
+  --ring: oklch(0.78 0.01 50);
+}
+
+/* Same palette, applied from the OS preference.
+
+   The `.dark` class above is the manual override (devtools, screenshot
+   tooling, a future in-page toggle). It cannot be the only trigger: the
+   root component renders <html>, so React reconciles that element on
+   hydration and strips any class a pre-paint script adds. Driving the
+   variables from a media query keeps the theme entirely in CSS, where
+   React cannot interfere and there is no flash.
+
+   KEEP IN SYNC with the `.dark` block above. `:not(.light)` leaves room
+   for an explicit light override later. */
+/* Explicit overrides set by the theme switcher.
+
+   `.light` needs no declarations of its own: the media block below is scoped
+   to `:root:not(.light)`, so adding the class simply stops the OS dark
+   palette from applying and `:root` shows through. Documented rather than
+   deleted so nobody "tidies up" the empty-looking selector and breaks the
+   Light option for dark-OS visitors. */
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --sumi: #f4ede0;
+    --sumi-soft: #cdc6b8;
+    /* Lighter than the light-mode counterpart on purpose. The mockup surfaces
+    are LIFTED off the page ground (roughly rgb(53,49,41) once
+    --paper-lift is mixed in), and the old #908a82 measured only 3.79:1
+    against them, so every small label inside a product mockup failed AA.
+    This value clears 4.5:1 on the lifted surfaces and stays comfortably
+    within the mouse-grey character on the page ground. */
+    --nezumi: #a49d94;
+    --washi: #15130f;
+    --washi-soft: #1d1b16;
+    --washi-deep: #26241e;
+    /* Deeper than it was (#e04857). The flag red doubles as a FILL under
+     near-white text (the hanko seal, the dismiss button, status pills), and
+     at the lighter value that pairing measured 3.8:1. Red used as TEXT on a
+     dark ground is handled by --hinomaru-ink above, so the two needs no
+     longer pull the same token in opposite directions. */
+  --hinomaru: #cc3344;
+    --hinomaru-ink: #f58f99;
+  --hinomaru-ink: #f58f99;
+    --hinomaru-soft: #ef7064;
+    --kin: #d8b65a;
+    --matcha: #8a9a4a;
+    --aizome: #6e90c0;
+
+    --line: rgba(244, 237, 224, 0.14);
+    --line-strong: rgba(244, 237, 224, 0.26);
+    --paper-shadow: rgba(0, 0, 0, 0.4);
+
+    /* Ink-side counterpart: a warm ash that lifts a surface off the near-black
+       page ground by the same relative amount white lifts it off washi. */
+    --paper-lift: #6c6355;
+
+    /* Ink-side glows: the same uneven-paper idea, but they may only whisper.
+       Anything above ~0.10 alpha reads as a grey haze rather than as depth. */
+    --paper-glow: rgba(150, 132, 104, 0.09);
+    --paper-glow-warm: rgba(120, 108, 88, 0.07);
+
+    --background: oklch(0.16 0.01 50);
+    --foreground: oklch(0.94 0.02 80);
+    --card: oklch(0.2 0.01 50);
+    --card-foreground: oklch(0.94 0.02 80);
+    --popover: oklch(0.2 0.01 50);
+    --popover-foreground: oklch(0.94 0.02 80);
+    --primary: oklch(0.94 0.02 80);
+    --primary-foreground: oklch(0.18 0.01 50);
+    --secondary: oklch(0.28 0.01 50);
+    --secondary-foreground: oklch(0.94 0.02 80);
+    --muted: oklch(0.28 0.01 50);
+    --muted-foreground: oklch(0.7 0.01 50);
+    --accent: oklch(0.6 0.18 25);
+    --accent-foreground: oklch(0.97 0.015 80);
+    --destructive: oklch(0.6 0.18 25);
+    --destructive-foreground: oklch(0.97 0.015 80);
+    --border: oklch(0.32 0.01 50);
+    --input: oklch(0.32 0.01 50);
+    /* See the light-mode note: focus reads as ink, not as an error. */
+    --ring: oklch(0.78 0.01 50);
+  }
 }
 
 @theme inline {
@@ -186,6 +330,7 @@
   --color-washi-soft: var(--washi-soft);
   --color-washi-deep: var(--washi-deep);
   --color-hinomaru: var(--hinomaru);
+  --color-hinomaru-ink: var(--hinomaru-ink);
   --color-hinomaru-soft: var(--hinomaru-soft);
   --color-kin: var(--kin);
   --color-matcha: var(--matcha);
@@ -316,10 +461,14 @@ body {
   font-size: var(--text-body);
   line-height: var(--leading-body);
   background-color: var(--washi);
-  /* Washi paper: subtle warm gradient + fiber speckle */
+  /* Washi paper: subtle warm gradient + fiber speckle. Both glow stops are
+     tokens, not literals: they used to be baked light-mode creams, so in
+     dark mode a 0.6-alpha near-white ellipse sat over near-black ink and
+     lifted the whole top-left of the viewport to a mid-grey haze. Because
+     the layer is fixed, that haze followed the reader down every page. */
   background-image:
-    radial-gradient(ellipse at 18% 12%, rgba(255, 248, 232, 0.6), transparent 55%),
-    radial-gradient(ellipse at 82% 90%, rgba(226, 214, 189, 0.55), transparent 60%),
+    radial-gradient(ellipse at 18% 12%, var(--paper-glow), transparent 55%),
+    radial-gradient(ellipse at 82% 90%, var(--paper-glow-warm), transparent 60%),
     linear-gradient(180deg, var(--washi) 0%, var(--washi-soft) 100%);
   background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
@@ -467,7 +616,10 @@ main {
   list-style: disc;
 }
 .legal-list li::marker {
-  color: color-mix(in oklab, var(--hinomaru) 60%, transparent);
+  /* Neutral, not hinomaru. Red is the accent that carries meaning on this
+     site (errors, the seal, the privacy "don't" column); spending it on
+     every bullet of a legal document devalues it where it matters. */
+  color: var(--nezumi);
 }
 
 /* Washi fiber texture overlay — paired with foxing spots and pulp speckles
@@ -492,12 +644,29 @@ body::before {
     radial-gradient(ellipse 280px 140px at 92% 12%, rgba(107, 62, 22, 0.035), transparent 70%),
     /* fiber speckle base */
     url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.6' numOctaves='2' seed='5'/><feColorMatrix values='0 0 0 0 0.42  0 0 0 0 0.36  0 0 0 0 0.28  0 0 0 0.18 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-  mix-blend-mode: multiply;
+  /* No mix-blend-mode.
+
+     This layer is `position: fixed` and covers the viewport, so a blend mode
+     makes the compositor read back and re-blend the entire screen on every
+     scroll frame. That work happens on the raster/GPU threads, where neither
+     the main-thread performance metrics nor a headless run can see it, and it
+     is the single most expensive thing this stylesheet used to do. The inks
+     below are already low-alpha rgba, so painting them normally lands within
+     a hair of the multiplied result. */
 }
 
+/* `screen` is right here: the grain is authored as dark fibres for light
+   mode, so it has to add light to register on ink. It just cannot do so at
+   0.35, which visibly greyed the ground once stacked on the body glows. */
 .dark body::before {
-  opacity: 0.35;
-  mix-blend-mode: screen;
+  /* The light-mode image is dark ochre, which needs `screen` to register on
+     an ink ground. Rather than pay for a full-viewport blend, dark gets its
+     own pale grain that shows correctly when painted normally: one speckle
+     layer instead of six foxing gradients plus the speckle, so it is also
+     strictly less to rasterize. */
+  opacity: 0.5;
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.6' numOctaves='2' seed='5'/><feColorMatrix values='0 0 0 0 0.85  0 0 0 0 0.80  0 0 0 0 0.70  0 0 0 0.05 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
 }
 
 /* Subtle horizontal grid like ruled mulberry paper, with deckled edge
@@ -732,13 +901,18 @@ body::after {
     z-index: 0;
     opacity: 0.35;
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220'><filter id='c'><feTurbulence type='fractalNoise' baseFrequency='2.1' numOctaves='2' seed='8'/><feColorMatrix values='0 0 0 0 0.42  0 0 0 0 0.36  0 0 0 0 0.28  0 0 0 0.10 0'/></filter><rect width='100%25' height='100%25' filter='url(%23c)'/></svg>");
-    mix-blend-mode: multiply;
+    /* No blend mode: this grain repeats on every paper-card, so the number of
+       blended layers scales with the page. Painted normally it is visually
+       near-identical at this alpha, and costs no backdrop readback. */
     border-radius: inherit;
   }
 
   .dark .paper-card::before {
-    opacity: 0.22;
-    mix-blend-mode: screen;
+    /* Pale grain rather than `screen`: the light-mode image is dark ochre and
+       needs a blend to register on ink, which is exactly the cost being
+       removed. Same trade as the body layer. */
+    opacity: 0.5;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220'><filter id='c'><feTurbulence type='fractalNoise' baseFrequency='2.1' numOctaves='2' seed='8'/><feColorMatrix values='0 0 0 0 0.85  0 0 0 0 0.80  0 0 0 0 0.70  0 0 0 0.045 0'/></filter><rect width='100%25' height='100%25' filter='url(%23c)'/></svg>");
   }
 
   /* Default children above the ::before fiber overlay. */
@@ -1130,7 +1304,10 @@ body::after {
   );
   animation: pricing-sparkle-sheen 4.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   pointer-events: none;
-  mix-blend-mode: overlay;
+  /* No `overlay` blend. This element animates forever, so a blend mode means
+     the compositor re-reads its backdrop on every frame for the whole time
+     the pricing section exists. The sheen gradient is already near-white at
+     0.95 alpha, so painting it normally reads the same. */
   will-change: transform, opacity;
 }
 .pricing-sparkle-gold {
@@ -2027,7 +2204,17 @@ section[id] {
   transform: translateY(0);
 }
 
-/* Stamp animation for hanko on first reveal */
+/* Stamp animation for hanko on first reveal.
+
+   The pre-stamp opacity lives here rather than as an inline style on the
+   element: an inline `opacity: 0` outranks the stylesheet, so the
+   reduced-motion block below (which cancels the animation that would
+   otherwise restore opacity) could never bring the seal back and it
+   stayed invisible for every visitor with Reduce Motion on. */
+[data-stamp]:not([data-revealed='true']) {
+  opacity: 0;
+}
+
 [data-stamp][data-revealed='true'] {
   animation: hanko-stamp 460ms cubic-bezier(0.4, 1.6, 0.4, 1) both;
 }
@@ -2097,12 +2284,64 @@ section[id] {
   50% { transform: translateY(calc(-50% - 8px)); }
 }
 
+/* Theme change: an ink stroke spreading from the switcher.
+
+   View Transitions snapshot the old and new frames, so the whole page
+   cross-fades for the cost of one clip-path animation. Transitioning
+   background-color on every element instead would fight hover states for
+   the duration and cost a paint per element.
+
+   The old frame holds still underneath while the new one is revealed, which
+   is what makes it read as ink soaking through paper rather than a wipe.
+   Scoped to [data-theme-wipe] so route changes and any other future view
+   transition keep their own timing. */
+@media (prefers-reduced-motion: no-preference) {
+  html[data-theme-wipe='on']::view-transition-old(root) {
+    animation: none;
+  }
+
+  html[data-theme-wipe='on']::view-transition-new(root) {
+    animation: theme-wipe 560ms cubic-bezier(0.22, 1, 0.36, 1);
+    mix-blend-mode: normal;
+  }
+
+  /* The new frame paints above the old one for the whole reveal. */
+  html[data-theme-wipe='on']::view-transition-old(root) {
+    z-index: 0;
+  }
+  html[data-theme-wipe='on']::view-transition-new(root) {
+    z-index: 1;
+  }
+}
+
+@keyframes theme-wipe {
+  from {
+    clip-path: circle(0 at var(--theme-wipe-x, 50%) var(--theme-wipe-y, 0));
+  }
+  to {
+    clip-path: circle(
+      var(--theme-wipe-r, 150vmax) at var(--theme-wipe-x, 50%) var(--theme-wipe-y, 0)
+    );
+  }
+}
+
+/* Snapshots are cheap only if the browser is not asked to also cross-fade
+   the root's own background. */
+::view-transition-image-pair(root) {
+  isolation: auto;
+}
+
 /* Honor reduced motion */
 @media (prefers-reduced-motion: reduce) {
   [data-reveal] {
     transition: none !important;
     opacity: 1 !important;
     transform: none !important;
+  }
+  /* The stamp animation is cancelled below, so the seal has to be made
+     visible here — otherwise the pre-stamp opacity:0 never lifts. */
+  [data-stamp] {
+    opacity: 1 !important;
   }
   .enso-spin,
   .ninja-float,

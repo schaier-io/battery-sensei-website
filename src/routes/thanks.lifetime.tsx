@@ -14,7 +14,7 @@ const SITE_URL = 'https://www.battery-sensei.app'
 const PATH = '/thanks/lifetime'
 const PAGE_TITLE = 'Thanks — Battery Sensei Lifetime'
 const PAGE_DESC =
-  'Payment confirmed. Your Battery Sensei lifetime license is on its way — open Sensei to enter your key and pick up where you left off.'
+  'Payment confirmed. Your Battery Sensei lifetime license is on its way. Open Sensei to enter your key and pick up where you left off.'
 
 export const Route = createFileRoute('/thanks/lifetime')({
   validateSearch: thanksSearchSchema,

@@ -270,7 +270,7 @@ function CycleMockup({ className = '' }: { className?: string }) {
   const unit = t('health.mockups.cycles.unit')
   return (
     <div
-      className={`cycle-mockup mt-3 rounded-md bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-3.5 py-3 ${className}`}
+      className={`cycle-mockup mt-3 rounded-md bg-[color-mix(in_oklab,var(--washi)_60%,var(--paper-lift))] px-3.5 py-3 ${className}`}
       style={{
         boxShadow: '0.4px 0.4px 0 0 var(--line), 0 0 0 1px var(--line)',
       }}
@@ -280,7 +280,12 @@ function CycleMockup({ className = '' }: { className?: string }) {
           {t('health.mockups.cycles.kicker')}
         </span>
         <span className="text-[10px] font-medium tabular-nums text-sumi-soft">
-          {pct.toFixed(1)}<span className="text-nezumi/70">{unit.replace(/^%\s*/, ' ')}</span>
+          {/* The percent sign rides with the number; only the trailing word is
+              muted. Stripping the `%` entirely (as this did) rendered
+              "21.7 used" directly above "217 / 1,000", where the bare decimal
+              read as a typo of the cycle count rather than a share. Every
+              locale's `unit` starts with "%", so the split is safe. */}
+          {pct.toFixed(1)}%<span className="text-nezumi">{unit.replace(/^%\s*/, ' ')}</span>
         </span>
       </div>
       <div className="mt-1.5 flex items-baseline gap-1.5">
@@ -353,7 +358,7 @@ function AppDrainMockup({ className = '' }: { className?: string }) {
   const max = Math.max(...rows.map((r) => r.pct))
   return (
     <div
-      className={`app-drain-mockup mt-3 rounded-md bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-3.5 py-3 ${className}`}
+      className={`app-drain-mockup mt-3 rounded-md bg-[color-mix(in_oklab,var(--washi)_60%,var(--paper-lift))] px-3.5 py-3 ${className}`}
       style={{
         boxShadow: '0.4px 0.4px 0 0 var(--line), 0 0 0 1px var(--line)',
       }}
@@ -392,7 +397,7 @@ function AppDrainMockup({ className = '' }: { className?: string }) {
               </span>
             </span>
             <span className="text-[11px] font-medium tabular-nums text-sumi-soft">
-              {r.pct}<span className="text-nezumi/70">%</span>
+              {r.pct}<span className="text-nezumi">%</span>
             </span>
           </li>
         ))}
@@ -423,18 +428,18 @@ function HeatMockup({ className = '' }: { className?: string }) {
   const over = temp - limit
   return (
     <div
-      className={`heat-mockup mt-3 overflow-hidden rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,#fff)] shadow-[0_1px_0_rgba(255,255,255,0.5)_inset,0_14px_30px_-14px_rgba(28,26,23,0.30),0_4px_10px_-6px_rgba(28,26,23,0.18)] ${className}`}
+      className={`heat-mockup mt-3 overflow-hidden rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,var(--paper-lift))] shadow-[0_1px_0_rgba(255,255,255,0.5)_inset,0_14px_30px_-14px_rgba(28,26,23,0.30),0_4px_10px_-6px_rgba(28,26,23,0.18)] ${className}`}
     >
       <div className="flex h-full flex-col px-3.5 py-3">
         {/* Header — feature label + live "Holding" pulse, mirroring the
             app's menu-bar panel chrome. */}
         <div className="flex items-center justify-between gap-2">
           <span className="inline-flex items-center gap-1.5 text-[9px] font-semibold uppercase tracking-[0.2em] text-nezumi">
-            <Thermometer className="h-3 w-3 text-hinomaru/85" strokeWidth={1.8} aria-hidden />
+            <Thermometer className="h-3 w-3 text-hinomaru-ink/85" strokeWidth={1.8} aria-hidden />
             Charge guard
           </span>
           <span
-            className="inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-hinomaru"
+            className="inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-hinomaru-ink"
             style={{
               boxShadow: '0 0 0 1px color-mix(in oklab, var(--hinomaru) 38%, transparent)',
             }}
@@ -450,7 +455,7 @@ function HeatMockup({ className = '' }: { className?: string }) {
             <span className="align-top text-[15px] text-sumi-soft">°C</span>
           </p>
           <p className="text-right leading-tight">
-            <span className="block text-[12px] font-semibold text-hinomaru">
+            <span className="block text-[12px] font-semibold text-hinomaru-ink">
               Charging paused
             </span>
             <span className="mt-0.5 block text-[10px] tabular-nums text-sumi-soft">
@@ -478,7 +483,7 @@ function HeatMockup({ className = '' }: { className?: string }) {
           </div>
           <div className="mt-1.5 flex items-center justify-between text-[10px] uppercase tracking-[0.12em] text-nezumi">
             <span className="tabular-nums">Limit {limit}°</span>
-            <span className="tabular-nums text-hinomaru">+{over}° over</span>
+            <span className="tabular-nums text-hinomaru-ink">+{over}° over</span>
           </div>
         </div>
       </div>
@@ -502,8 +507,8 @@ function WattsMockup({ className = '' }: { className?: string }) {
       icon: ArrowDownToLine,
       label: 'Into battery',
       value: wattsIn,
-      tint: 'text-hinomaru',
-      flow: 'text-hinomaru',
+      tint: 'text-hinomaru-ink',
+      flow: 'text-hinomaru-ink',
     },
     {
       icon: ArrowUpFromLine,
@@ -518,16 +523,16 @@ function WattsMockup({ className = '' }: { className?: string }) {
   const flowDuration = (w: number) => `${Math.max(0.7, Math.min(2.4, 60 / w)).toFixed(2)}s`
   return (
     <div className={`watts-mockup mt-3 ${className}`}>
-      <div className="overflow-hidden rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,#fff)] shadow-[0_1px_0_rgba(255,255,255,0.5)_inset,0_14px_30px_-14px_rgba(28,26,23,0.30),0_4px_10px_-6px_rgba(28,26,23,0.18)]">
+      <div className="overflow-hidden rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,var(--paper-lift))] shadow-[0_1px_0_rgba(255,255,255,0.5)_inset,0_14px_30px_-14px_rgba(28,26,23,0.30),0_4px_10px_-6px_rgba(28,26,23,0.18)]">
         <div className="px-3.5 py-3">
           {/* Source header — Zap + adapter name, plus a live pulse, exactly
               like the app's menu-bar power line. */}
           <div className="flex items-center justify-between gap-2 text-[10px]">
             <span className="inline-flex min-w-0 items-center gap-1.5">
-              <Zap className="h-3 w-3 shrink-0 text-hinomaru/85" strokeWidth={1.8} aria-hidden />
+              <Zap className="h-3 w-3 shrink-0 text-hinomaru-ink/85" strokeWidth={1.8} aria-hidden />
               <span className="truncate font-medium text-sumi">Power adapter</span>
             </span>
-            <span className="inline-flex shrink-0 items-center gap-1.5 uppercase tracking-[0.14em] text-hinomaru">
+            <span className="inline-flex shrink-0 items-center gap-1.5 uppercase tracking-[0.14em] text-hinomaru-ink">
               <span className="h-1.5 w-1.5 rounded-full bg-hinomaru" aria-hidden />
               Live
             </span>
@@ -591,12 +596,12 @@ function PrivacyMockup() {
   ] as const
   return (
     <div
-      className="app-drain-mockup relative mt-2.5 rounded-md bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-3.5 py-2.5 lg:mt-2 lg:py-2"
+      className="app-drain-mockup relative mt-2.5 rounded-md bg-[color-mix(in_oklab,var(--washi)_60%,var(--paper-lift))] px-3.5 py-2.5 lg:mt-2 lg:py-2"
       style={{
         boxShadow: '0.4px 0.4px 0 0 var(--line), 0 0 0 1px var(--line)',
       }}
     >
-      <span className="absolute -top-2 right-3 z-10 inline-flex items-center gap-1 rounded-full border border-[color-mix(in_oklab,var(--hinomaru)_24%,transparent)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-2 py-0.5 text-[8.5px] font-semibold uppercase tracking-[0.12em] text-hinomaru">
+      <span className="absolute -top-2 right-3 z-10 inline-flex items-center gap-1 rounded-full border border-[color-mix(in_oklab,var(--hinomaru)_24%,transparent)] bg-[color-mix(in_oklab,var(--washi)_60%,var(--paper-lift))] px-2 py-0.5 text-[8.5px] font-semibold uppercase tracking-[0.12em] text-hinomaru-ink">
         <ShieldCheck className="h-2.5 w-2.5" strokeWidth={2} aria-hidden />
         Stays 100% on your Mac
       </span>
@@ -619,7 +624,7 @@ function PrivacyMockup() {
                 {t(`health.mockups.privacy.rows.${r.labelKey}`)}
               </span>
               <span className="inline-flex items-center gap-1.5 shrink-0 text-[9.5px] font-semibold uppercase tracking-[0.12em] text-sumi-soft">
-                <span className="grid h-3.5 w-3.5 place-items-center rounded-full bg-[color-mix(in_oklab,var(--hinomaru)_14%,#fff)] text-hinomaru">
+                <span className="grid h-3.5 w-3.5 place-items-center rounded-full bg-[color-mix(in_oklab,var(--hinomaru)_14%,var(--washi))] text-hinomaru-ink">
                   <ShieldCheck className="h-2.5 w-2.5" strokeWidth={2.3} aria-hidden />
                 </span>
                 This Mac
@@ -675,7 +680,7 @@ export function Health() {
                   strokeWidth={1.5}
                 />
                 <span
-                  className={`kanji-accent font-jp leading-none text-hinomaru/80 ${
+                  className={`kanji-accent font-jp leading-none text-hinomaru-ink/80 ${
                     feature ? 'text-4xl' : 'text-xl'
                   }`}
                 >
@@ -686,7 +691,7 @@ export function Health() {
                 <div className="-mx-1 mt-2 text-sumi">
                   <div className="mb-2 flex items-center justify-end px-2">
                     <div
-                      className="relative z-[2] inline-flex items-center rounded-full border border-[var(--line)]/80 bg-[color-mix(in_oklab,var(--washi)_74%,#fff)] p-0.5 pointer-events-auto"
+                      className="relative z-[2] inline-flex items-center rounded-full border border-[var(--line)]/80 bg-[color-mix(in_oklab,var(--washi)_74%,var(--paper-lift))] p-0.5 pointer-events-auto"
                       role="tablist"
                       aria-label="Battery trend range"
                     >

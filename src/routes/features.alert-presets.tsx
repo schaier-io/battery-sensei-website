@@ -7,7 +7,7 @@ const SITE_URL = 'https://www.battery-sensei.app'
 const PATH = '/features/alert-presets'
 const PAGE_TITLE = 'Alert Presets — Battery Sensei'
 const PAGE_DESC =
-  'Zen Mode, Regular Mode, Teach Me Senpai — three escalating low-battery alert presets. Pick the mood that fits your day, or build your own.'
+  'Zen Mode, Regular Mode, Teach Me Senpai: three escalating low-battery alert presets. Pick the mood that fits your day, or build your own.'
 
 const faqLd = {
   '@context': 'https://schema.org',

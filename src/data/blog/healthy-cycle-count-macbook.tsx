@@ -203,12 +203,12 @@ export const post: BlogPost = {
       </P>
       <P>
         For the wider picture on whether to plug in at all, see{' '}
-        <A to="/blog/should-i-keep-macbook-plugged-in">
+        <A to="/guides/should-i-keep-macbook-plugged-in">
           should I keep my MacBook plugged in?
         </A>{' '}
         And for the related (and routinely misunderstood) feature Apple
         ships,{' '}
-        <A to="/blog/optimized-battery-charging-explained">
+        <A to="/guides/optimized-battery-charging-explained">
           Optimized Battery Charging, explained
         </A>
         .

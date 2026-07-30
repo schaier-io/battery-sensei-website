@@ -61,6 +61,11 @@ export function ThanksPage({ tier, kanji }: { tier: Tier; kanji: string }) {
     checkoutIdRef.current = search.checkout_id
   }
   const checkoutId = checkoutIdRef.current ?? search.checkout_id
+  // No id means this is a revisit, a bookmark or a redirect that ate the
+  // query string — not the moment of purchase. The bow is a celebration
+  // of something that already happened, so we skip it and put the
+  // install card (download, key whereabouts, portal) on screen instead.
+  const hasCheckoutId = Boolean(checkoutId)
   const key = `thanks.${tier}`
 
   // Strip ?checkout_id=… from the visible URL the moment the page
@@ -171,30 +176,27 @@ export function ThanksPage({ tier, kanji }: { tier: Tier; kanji: string }) {
                 ]}
               />
             </Reveal>
-            {/* Order id resolved by the polling card. Fades in once
-                the API returns it (usually ~1 s after the card
-                mounts) so the buyer has a reference they can quote
-                in support without scrolling to the card header. The
-                inline-block + opacity transition avoids a layout
-                shift when the chip lands. */}
-            <p
-              className="mt-4 text-center text-[11px] uppercase tracking-[0.18em] text-nezumi transition-opacity duration-[520ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)]"
-              style={{ opacity: orderId ? 1 : 0 }}
-              aria-live="polite"
-            >
-              {orderId ? (
-                <>
-                  {t('thanks.orderLabel')}{' '}
-                  <span className="font-mono normal-case tracking-[0.04em] text-sumi-soft">
-                    #{orderId}
-                  </span>
-                </>
-              ) : (
-                /* Reserve the line height so the hero doesn't jump
-                   when the chip fades in. */
-                <>&nbsp;</>
-              )}
-            </p>
+            {/* Order id resolved by the polling card. Fades in once the API
+                returns it (usually ~1 s after the card mounts) so the buyer
+                has a reference they can quote in support without scrolling
+                to the card header.
+
+                The slot only reserves space once there is an id on the way.
+                It used to render a permanent `&nbsp;` line, which on the
+                no-`checkout_id` path (a bookmark or a revisit, where no id is
+                ever coming) left a visible empty band under the hero that
+                read as a rendering fault. */}
+            {orderId && (
+              <p
+                className="mt-4 text-center text-[11px] uppercase tracking-[0.18em] text-nezumi motion-safe:animate-in motion-safe:fade-in motion-safe:duration-500"
+                aria-live="polite"
+              >
+                {t('thanks.orderLabel')}{' '}
+                <span className="font-mono normal-case tracking-[0.04em] text-sumi-soft">
+                  #{orderId}
+                </span>
+              </p>
+            )}
           </div>
         </section>
 
@@ -228,6 +230,7 @@ export function ThanksPage({ tier, kanji }: { tier: Tier; kanji: string }) {
             <div className="relative min-h-[300px] sm:min-h-[320px]">
               <DelayedBowVideo
                 hidden={licenseShown}
+                skip={!hasCheckoutId}
                 onComplete={() => {
                   // Half the video's fade-out so the reveal slot starts
                   // expanding while the bow is still dissolving — feels
@@ -296,7 +299,9 @@ export function ThanksPage({ tier, kanji }: { tier: Tier; kanji: string }) {
  *
  * `prefers-reduced-motion` skips play() entirely — the parent gets an
  * `onComplete` fired after `REDUCED_MOTION_REVEAL_MS` so the license
- * card reveals quickly without forcing the video to animate.
+ * card reveals quickly without forcing the video to animate. `skip`
+ * takes the same shortcut for the no-`checkout_id` visit, where there is
+ * no fresh purchase to celebrate and the card is the whole point.
  *
  * `preload="auto"` lets the browser fetch the frames during the 3 s
  * idle wait so play() doesn't have to wait on the network when it
@@ -309,9 +314,11 @@ export function ThanksPage({ tier, kanji }: { tier: Tier; kanji: string }) {
 function DelayedBowVideo({
   onComplete,
   hidden,
+  skip,
 }: {
   onComplete: () => void
   hidden: boolean
+  skip: boolean
 }) {
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const [phase, setPhase] = useState<'hidden' | 'in' | 'out'>('hidden')
@@ -330,10 +337,11 @@ function DelayedBowVideo({
 
     const timers: number[] = []
 
-    if (prefersReducedMotion) {
-      // Reduced-motion path: skip the bow entirely. The parent reveals
-      // the license card after REDUCED_MOTION_REVEAL_MS so the page
-      // still has a paced moment of arrival rather than an instant pop.
+    if (skip || prefersReducedMotion) {
+      // Reduced-motion (or no fresh checkout) path: skip the bow
+      // entirely. The parent reveals the license card after
+      // REDUCED_MOTION_REVEAL_MS so the page still has a paced moment
+      // of arrival rather than an instant pop.
       timers.push(window.setTimeout(fireComplete, REDUCED_MOTION_REVEAL_MS))
       return () => {
         for (const id of timers) window.clearTimeout(id)

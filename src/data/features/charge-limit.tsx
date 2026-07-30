@@ -5,7 +5,7 @@ export const extended = (
     <H2>Why capping charge helps</H2>
     <P>
       Lithium-ion cells age fastest at the extremes. Time spent sitting at
-      100% — especially warm, especially plugged in overnight — is the single
+      100%, especially warm and especially plugged in overnight, is the single
       most controllable contributor to capacity loss. Holding the pack lower
       on ordinary days trades a little runtime you probably weren't using for
       slower long-term wear.
@@ -23,13 +23,15 @@ export const extended = (
       <li>
         <strong>80%</strong> is the common default: meaningful reduction in
         high-state-of-charge time, still a full working day for most people.
+        Sensei badges <strong>85%</strong> as its in-app recommendation, half
+        a step up for anyone who wants a little more runtime in reserve.
       </li>
       <li>
         <strong>90%</strong> suits people who regularly need the runtime and
         want a gentler trade.
       </li>
       <li>
-        <strong>100%</strong> turns the cap off entirely — the right answer
+        <strong>100%</strong> turns the cap off entirely: the right answer
         before travel, and Sensei stops nagging about weekly cycles when
         you're there.
       </li>
@@ -39,10 +41,10 @@ export const extended = (
     <P>
       A pack that never leaves a narrow band gives the battery controller less
       to calibrate against, and runtime estimates drift. With a cap set,
-      Sensei surfaces a weekly reminder to run one fuller cycle — enough to
+      Sensei surfaces a weekly reminder to run one fuller cycle, enough to
       keep the gauge honest without undoing the benefit of the cap. See{' '}
       <G slug="calibration">calibration</G> for the mechanism, and{' '}
-      <A to="/features/battery-journal">the battery journal</A> for whether
+      <A to="/features/battery-journal">Saga</A> for whether
       it's working over time.
     </P>
   </>

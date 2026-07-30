@@ -7,7 +7,7 @@ const SITE_URL = 'https://www.battery-sensei.app'
 const PATH = '/features/general'
 const PAGE_TITLE = 'General settings — Battery Sensei'
 const PAGE_DESC =
-  'Appearance, language, menu-bar content, and startup behaviour for Battery Sensei — with nothing that changes how your Mac charges.'
+  'Appearance, language, menu-bar content, and startup behavior for Battery Sensei, with nothing that changes how your Mac charges.'
 
 const faqLd = {
   '@context': 'https://schema.org',

@@ -18,15 +18,16 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as R404RouteImport } from './routes/404'
 import { Route as LangRouteImport } from './routes/$lang'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as GuidesIndexRouteImport } from './routes/guides/index'
 import { Route as GlossaryIndexRouteImport } from './routes/glossary/index'
 import { Route as FeaturesIndexRouteImport } from './routes/features.index'
-import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as ThanksSupportRouteImport } from './routes/thanks.support'
 import { Route as ThanksLifetimeRouteImport } from './routes/thanks.lifetime'
 import { Route as NewsletterUnsubscribedRouteImport } from './routes/newsletter.unsubscribed'
 import { Route as NewsletterUnsubscribeRouteImport } from './routes/newsletter.unsubscribe'
 import { Route as NewsletterConfirmedRouteImport } from './routes/newsletter.confirmed'
 import { Route as NewsletterConfirmRouteImport } from './routes/newsletter.confirm'
+import { Route as GuidesSlugRouteImport } from './routes/guides/$slug'
 import { Route as GlossarySlugRouteImport } from './routes/glossary/$slug'
 import { Route as FromIdRouteImport } from './routes/from.$id'
 import { Route as FeaturesTravelModeRouteImport } from './routes/features.travel-mode'
@@ -43,7 +44,6 @@ import { Route as FeaturesChargeLimitRouteImport } from './routes/features.charg
 import { Route as FeaturesBatteryJournalRouteImport } from './routes/features.battery-journal'
 import { Route as FeaturesBatteryHealthRouteImport } from './routes/features.battery-health'
 import { Route as FeaturesAlertPresetsRouteImport } from './routes/features.alert-presets'
-import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
 import { Route as ApiCheckoutIdRouteImport } from './routes/api/checkout.$id'
 
 const WalkthroughRoute = WalkthroughRouteImport.update({
@@ -91,6 +91,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GuidesIndexRoute = GuidesIndexRouteImport.update({
+  id: '/guides/',
+  path: '/guides/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GlossaryIndexRoute = GlossaryIndexRouteImport.update({
   id: '/glossary/',
   path: '/glossary/',
@@ -99,11 +104,6 @@ const GlossaryIndexRoute = GlossaryIndexRouteImport.update({
 const FeaturesIndexRoute = FeaturesIndexRouteImport.update({
   id: '/features/',
   path: '/features/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BlogIndexRoute = BlogIndexRouteImport.update({
-  id: '/blog/',
-  path: '/blog/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ThanksSupportRoute = ThanksSupportRouteImport.update({
@@ -134,6 +134,11 @@ const NewsletterConfirmedRoute = NewsletterConfirmedRouteImport.update({
 const NewsletterConfirmRoute = NewsletterConfirmRouteImport.update({
   id: '/newsletter/confirm',
   path: '/newsletter/confirm',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GuidesSlugRoute = GuidesSlugRouteImport.update({
+  id: '/guides/$slug',
+  path: '/guides/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GlossarySlugRoute = GlossarySlugRouteImport.update({
@@ -218,11 +223,6 @@ const FeaturesAlertPresetsRoute = FeaturesAlertPresetsRouteImport.update({
   path: '/features/alert-presets',
   getParentRoute: () => rootRouteImport,
 } as any)
-const BlogSlugRoute = BlogSlugRouteImport.update({
-  id: '/blog/$slug',
-  path: '/blog/$slug',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ApiCheckoutIdRoute = ApiCheckoutIdRouteImport.update({
   id: '/api/checkout/$id',
   path: '/api/checkout/$id',
@@ -239,7 +239,6 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/roadmap': typeof RoadmapRoute
   '/walkthrough': typeof WalkthroughRoute
-  '/blog/$slug': typeof BlogSlugRoute
   '/features/alert-presets': typeof FeaturesAlertPresetsRoute
   '/features/battery-health': typeof FeaturesBatteryHealthRoute
   '/features/battery-journal': typeof FeaturesBatteryJournalRoute
@@ -256,15 +255,16 @@ export interface FileRoutesByFullPath {
   '/features/travel-mode': typeof FeaturesTravelModeRoute
   '/from/$id': typeof FromIdRoute
   '/glossary/$slug': typeof GlossarySlugRoute
+  '/guides/$slug': typeof GuidesSlugRoute
   '/newsletter/confirm': typeof NewsletterConfirmRoute
   '/newsletter/confirmed': typeof NewsletterConfirmedRoute
   '/newsletter/unsubscribe': typeof NewsletterUnsubscribeRoute
   '/newsletter/unsubscribed': typeof NewsletterUnsubscribedRoute
   '/thanks/lifetime': typeof ThanksLifetimeRoute
   '/thanks/support': typeof ThanksSupportRoute
-  '/blog/': typeof BlogIndexRoute
   '/features/': typeof FeaturesIndexRoute
   '/glossary/': typeof GlossaryIndexRoute
+  '/guides/': typeof GuidesIndexRoute
   '/api/checkout/$id': typeof ApiCheckoutIdRoute
 }
 export interface FileRoutesByTo {
@@ -277,7 +277,6 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/roadmap': typeof RoadmapRoute
   '/walkthrough': typeof WalkthroughRoute
-  '/blog/$slug': typeof BlogSlugRoute
   '/features/alert-presets': typeof FeaturesAlertPresetsRoute
   '/features/battery-health': typeof FeaturesBatteryHealthRoute
   '/features/battery-journal': typeof FeaturesBatteryJournalRoute
@@ -294,15 +293,16 @@ export interface FileRoutesByTo {
   '/features/travel-mode': typeof FeaturesTravelModeRoute
   '/from/$id': typeof FromIdRoute
   '/glossary/$slug': typeof GlossarySlugRoute
+  '/guides/$slug': typeof GuidesSlugRoute
   '/newsletter/confirm': typeof NewsletterConfirmRoute
   '/newsletter/confirmed': typeof NewsletterConfirmedRoute
   '/newsletter/unsubscribe': typeof NewsletterUnsubscribeRoute
   '/newsletter/unsubscribed': typeof NewsletterUnsubscribedRoute
   '/thanks/lifetime': typeof ThanksLifetimeRoute
   '/thanks/support': typeof ThanksSupportRoute
-  '/blog': typeof BlogIndexRoute
   '/features': typeof FeaturesIndexRoute
   '/glossary': typeof GlossaryIndexRoute
+  '/guides': typeof GuidesIndexRoute
   '/api/checkout/$id': typeof ApiCheckoutIdRoute
 }
 export interface FileRoutesById {
@@ -316,7 +316,6 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/roadmap': typeof RoadmapRoute
   '/walkthrough': typeof WalkthroughRoute
-  '/blog/$slug': typeof BlogSlugRoute
   '/features/alert-presets': typeof FeaturesAlertPresetsRoute
   '/features/battery-health': typeof FeaturesBatteryHealthRoute
   '/features/battery-journal': typeof FeaturesBatteryJournalRoute
@@ -333,15 +332,16 @@ export interface FileRoutesById {
   '/features/travel-mode': typeof FeaturesTravelModeRoute
   '/from/$id': typeof FromIdRoute
   '/glossary/$slug': typeof GlossarySlugRoute
+  '/guides/$slug': typeof GuidesSlugRoute
   '/newsletter/confirm': typeof NewsletterConfirmRoute
   '/newsletter/confirmed': typeof NewsletterConfirmedRoute
   '/newsletter/unsubscribe': typeof NewsletterUnsubscribeRoute
   '/newsletter/unsubscribed': typeof NewsletterUnsubscribedRoute
   '/thanks/lifetime': typeof ThanksLifetimeRoute
   '/thanks/support': typeof ThanksSupportRoute
-  '/blog/': typeof BlogIndexRoute
   '/features/': typeof FeaturesIndexRoute
   '/glossary/': typeof GlossaryIndexRoute
+  '/guides/': typeof GuidesIndexRoute
   '/api/checkout/$id': typeof ApiCheckoutIdRoute
 }
 export interface FileRouteTypes {
@@ -356,7 +356,6 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/roadmap'
     | '/walkthrough'
-    | '/blog/$slug'
     | '/features/alert-presets'
     | '/features/battery-health'
     | '/features/battery-journal'
@@ -373,15 +372,16 @@ export interface FileRouteTypes {
     | '/features/travel-mode'
     | '/from/$id'
     | '/glossary/$slug'
+    | '/guides/$slug'
     | '/newsletter/confirm'
     | '/newsletter/confirmed'
     | '/newsletter/unsubscribe'
     | '/newsletter/unsubscribed'
     | '/thanks/lifetime'
     | '/thanks/support'
-    | '/blog/'
     | '/features/'
     | '/glossary/'
+    | '/guides/'
     | '/api/checkout/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -394,7 +394,6 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/roadmap'
     | '/walkthrough'
-    | '/blog/$slug'
     | '/features/alert-presets'
     | '/features/battery-health'
     | '/features/battery-journal'
@@ -411,15 +410,16 @@ export interface FileRouteTypes {
     | '/features/travel-mode'
     | '/from/$id'
     | '/glossary/$slug'
+    | '/guides/$slug'
     | '/newsletter/confirm'
     | '/newsletter/confirmed'
     | '/newsletter/unsubscribe'
     | '/newsletter/unsubscribed'
     | '/thanks/lifetime'
     | '/thanks/support'
-    | '/blog'
     | '/features'
     | '/glossary'
+    | '/guides'
     | '/api/checkout/$id'
   id:
     | '__root__'
@@ -432,7 +432,6 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/roadmap'
     | '/walkthrough'
-    | '/blog/$slug'
     | '/features/alert-presets'
     | '/features/battery-health'
     | '/features/battery-journal'
@@ -449,15 +448,16 @@ export interface FileRouteTypes {
     | '/features/travel-mode'
     | '/from/$id'
     | '/glossary/$slug'
+    | '/guides/$slug'
     | '/newsletter/confirm'
     | '/newsletter/confirmed'
     | '/newsletter/unsubscribe'
     | '/newsletter/unsubscribed'
     | '/thanks/lifetime'
     | '/thanks/support'
-    | '/blog/'
     | '/features/'
     | '/glossary/'
+    | '/guides/'
     | '/api/checkout/$id'
   fileRoutesById: FileRoutesById
 }
@@ -471,7 +471,6 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   RoadmapRoute: typeof RoadmapRoute
   WalkthroughRoute: typeof WalkthroughRoute
-  BlogSlugRoute: typeof BlogSlugRoute
   FeaturesAlertPresetsRoute: typeof FeaturesAlertPresetsRoute
   FeaturesBatteryHealthRoute: typeof FeaturesBatteryHealthRoute
   FeaturesBatteryJournalRoute: typeof FeaturesBatteryJournalRoute
@@ -488,15 +487,16 @@ export interface RootRouteChildren {
   FeaturesTravelModeRoute: typeof FeaturesTravelModeRoute
   FromIdRoute: typeof FromIdRoute
   GlossarySlugRoute: typeof GlossarySlugRoute
+  GuidesSlugRoute: typeof GuidesSlugRoute
   NewsletterConfirmRoute: typeof NewsletterConfirmRoute
   NewsletterConfirmedRoute: typeof NewsletterConfirmedRoute
   NewsletterUnsubscribeRoute: typeof NewsletterUnsubscribeRoute
   NewsletterUnsubscribedRoute: typeof NewsletterUnsubscribedRoute
   ThanksLifetimeRoute: typeof ThanksLifetimeRoute
   ThanksSupportRoute: typeof ThanksSupportRoute
-  BlogIndexRoute: typeof BlogIndexRoute
   FeaturesIndexRoute: typeof FeaturesIndexRoute
   GlossaryIndexRoute: typeof GlossaryIndexRoute
+  GuidesIndexRoute: typeof GuidesIndexRoute
   ApiCheckoutIdRoute: typeof ApiCheckoutIdRoute
 }
 
@@ -565,6 +565,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/guides/': {
+      id: '/guides/'
+      path: '/guides'
+      fullPath: '/guides/'
+      preLoaderRoute: typeof GuidesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/glossary/': {
       id: '/glossary/'
       path: '/glossary'
@@ -577,13 +584,6 @@ declare module '@tanstack/react-router' {
       path: '/features'
       fullPath: '/features/'
       preLoaderRoute: typeof FeaturesIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/blog/': {
-      id: '/blog/'
-      path: '/blog'
-      fullPath: '/blog/'
-      preLoaderRoute: typeof BlogIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/thanks/support': {
@@ -626,6 +626,13 @@ declare module '@tanstack/react-router' {
       path: '/newsletter/confirm'
       fullPath: '/newsletter/confirm'
       preLoaderRoute: typeof NewsletterConfirmRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/guides/$slug': {
+      id: '/guides/$slug'
+      path: '/guides/$slug'
+      fullPath: '/guides/$slug'
+      preLoaderRoute: typeof GuidesSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/glossary/$slug': {
@@ -740,13 +747,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FeaturesAlertPresetsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/blog/$slug': {
-      id: '/blog/$slug'
-      path: '/blog/$slug'
-      fullPath: '/blog/$slug'
-      preLoaderRoute: typeof BlogSlugRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/api/checkout/$id': {
       id: '/api/checkout/$id'
       path: '/api/checkout/$id'
@@ -767,7 +767,6 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   RoadmapRoute: RoadmapRoute,
   WalkthroughRoute: WalkthroughRoute,
-  BlogSlugRoute: BlogSlugRoute,
   FeaturesAlertPresetsRoute: FeaturesAlertPresetsRoute,
   FeaturesBatteryHealthRoute: FeaturesBatteryHealthRoute,
   FeaturesBatteryJournalRoute: FeaturesBatteryJournalRoute,
@@ -784,15 +783,16 @@ const rootRouteChildren: RootRouteChildren = {
   FeaturesTravelModeRoute: FeaturesTravelModeRoute,
   FromIdRoute: FromIdRoute,
   GlossarySlugRoute: GlossarySlugRoute,
+  GuidesSlugRoute: GuidesSlugRoute,
   NewsletterConfirmRoute: NewsletterConfirmRoute,
   NewsletterConfirmedRoute: NewsletterConfirmedRoute,
   NewsletterUnsubscribeRoute: NewsletterUnsubscribeRoute,
   NewsletterUnsubscribedRoute: NewsletterUnsubscribedRoute,
   ThanksLifetimeRoute: ThanksLifetimeRoute,
   ThanksSupportRoute: ThanksSupportRoute,
-  BlogIndexRoute: BlogIndexRoute,
   FeaturesIndexRoute: FeaturesIndexRoute,
   GlossaryIndexRoute: GlossaryIndexRoute,
+  GuidesIndexRoute: GuidesIndexRoute,
   ApiCheckoutIdRoute: ApiCheckoutIdRoute,
 }
 export const routeTree = rootRouteImport

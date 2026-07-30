@@ -173,21 +173,28 @@ export function PolarInlineCheckout({ tier, discountCode, theme = 'light', curre
         role="alert"
         className="rounded-md border border-hinomaru/30 bg-[color-mix(in_oklab,var(--hinomaru)_6%,var(--washi))] px-5 py-5"
       >
-        <div className="flex items-center gap-2.5 text-[0.8125rem] font-medium uppercase tracking-[0.2em] text-hinomaru">
+        <div className="flex items-center gap-2.5 text-[0.8125rem] font-medium uppercase tracking-[0.2em] text-hinomaru-ink">
           <AlertTriangle className="h-3.5 w-3.5" strokeWidth={1.8} aria-hidden />
           {t('checkout.error.title')}
         </div>
         <p className="mt-2 text-[0.9375rem] leading-snug text-sumi">
           {t('checkout.error.body')}
         </p>
+        {/* Labelled, not bare. An unlabelled `http-404` under a payment
+            failure reads as leaked internals to a buyer mid-purchase; the
+            same string with "reference:" in front reads as something to
+            quote at support, which is the only reason it is on screen. */}
         {errorReason && (
-          <p className="mt-1 font-mono text-[11px] text-nezumi">{errorReason}</p>
+          <p className="mt-1 text-[11px] text-nezumi">
+            {t('checkout.error.reference', 'Reference:')}{' '}
+            <span className="font-mono">{errorReason}</span>
+          </p>
         )}
         <div className="mt-4 flex flex-wrap gap-3">
           <button
             type="button"
             onClick={() => location.reload()}
-            className="inline-flex h-10 items-center rounded-md border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-4 text-[0.8125rem] font-medium text-sumi transition-colors hover:bg-[color-mix(in_oklab,var(--washi)_40%,#fff)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40"
+            className="inline-flex h-10 items-center rounded-md border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_60%,var(--paper-lift))] px-4 text-[0.8125rem] font-medium text-sumi transition-colors hover:bg-[color-mix(in_oklab,var(--washi)_40%,var(--paper-lift))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40"
           >
             {t('checkout.error.retry')}
           </button>
@@ -219,7 +226,7 @@ export function PolarInlineCheckout({ tier, discountCode, theme = 'light', curre
   // single calm beat instead of a hard cut.
   const isReady = phase === 'loaded' || phase === 'success' || phase === 'confirmed'
   return (
-    <div className="relative min-h-[760px] rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,#fff)] overflow-hidden">
+    <div className="relative min-h-[760px] rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,var(--paper-lift))] overflow-hidden">
       {/* Skeleton wash — a subtle washi shimmer behind the loader so
           the panel reads as "preparing" rather than blank washi. The
           gradient pulses left→right via a CSS keyframe defined inline. */}

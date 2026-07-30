@@ -116,7 +116,7 @@ export function MenuBarMockup({ className = '' }: { className?: string }) {
 
 function MenuBar({ time, percent }: { time: string; percent: number }) {
   return (
-    <div className="relative z-20 flex h-7 items-center justify-between gap-3 border-b border-black/15 bg-[color-mix(in_oklab,var(--sumi)_72%,transparent)] px-3.5 text-[11px] text-white backdrop-blur-md">
+    <div className="relative z-20 flex h-7 items-center justify-between gap-3 border-b border-black/15 bg-[var(--os-chrome)] px-3.5 text-[11px] text-white backdrop-blur-md">
       <div className="flex items-center gap-3.5 min-w-0">
         <AppleGlyph />
         <span className="font-semibold">Finder</span>
@@ -151,7 +151,7 @@ function AlertCard({ percent, revealed }: { percent: number; revealed: boolean }
   const { t } = useTranslation()
   return (
     <div
-      className="alert-card absolute left-1/2 top-1/2 z-10 w-[80%] max-w-[360px] rounded-[22px] border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,#fff)] px-5 pt-4 pb-4 text-center shadow-[0_1px_0_rgba(255,255,255,0.55)_inset,0_28px_60px_-22px_rgba(28,26,23,0.45),0_8px_22px_-10px_rgba(28,26,23,0.30)]"
+      className="alert-card absolute left-1/2 top-1/2 z-10 w-[80%] max-w-[360px] rounded-[22px] border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,var(--paper-lift))] px-5 pt-4 pb-4 text-center shadow-[0_1px_0_rgba(255,255,255,0.55)_inset,0_28px_60px_-22px_rgba(28,26,23,0.45),0_8px_22px_-10px_rgba(28,26,23,0.30)]"
       data-revealed={revealed ? 'true' : 'false'}
       style={{
         transform: `translate(-50%, calc(-50% + ${revealed ? '0px' : '12px'}))`,
@@ -207,7 +207,7 @@ function AlertCard({ percent, revealed }: { percent: number; revealed: boolean }
       </p>
 
       <div className="mt-3 flex items-center justify-between gap-2">
-        <div className="group/snooze flex items-center gap-1 rounded-lg border border-[var(--line)] bg-white p-0.5 shadow-[0_1px_0_rgba(255,255,255,0.45)_inset] transition-[transform,box-shadow,border-color] duration-[240ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-px hover:border-[var(--line-strong)] hover:shadow-[0_1px_0_rgba(255,255,255,0.58)_inset,0_6px_14px_-10px_rgba(28,26,23,0.45)]">
+        <div className="group/snooze flex items-center gap-1 rounded-lg border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_55%,var(--paper-lift))] p-0.5 shadow-[0_1px_0_rgba(255,255,255,0.45)_inset] transition-[transform,box-shadow,border-color] duration-[240ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-px hover:border-[var(--line-strong)] hover:shadow-[0_1px_0_rgba(255,255,255,0.58)_inset,0_6px_14px_-10px_rgba(28,26,23,0.45)]">
           <span
             className="px-1 text-sumi-soft transition-transform duration-[260ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover/snooze:-rotate-12 group-hover/snooze:scale-110"
             aria-hidden
@@ -220,7 +220,7 @@ function AlertCard({ percent, revealed }: { percent: number; revealed: boolean }
           >
             <Minus className="h-3 w-3" strokeWidth={2} />
           </span>
-          <span className="rounded-md bg-white px-2 py-0.5 text-[10px] font-semibold text-sumi shadow-[0_1px_0_rgba(255,255,255,0.6)_inset] transition-[transform,box-shadow,background-color] duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover/snooze:-translate-y-px group-hover/snooze:bg-[color-mix(in_oklab,#fff_90%,var(--washi-soft))] group-hover/snooze:shadow-[0_1px_0_rgba(255,255,255,0.72)_inset,0_4px_10px_-8px_rgba(28,26,23,0.45)]">
+          <span className="rounded-md bg-[color-mix(in_oklab,var(--washi)_35%,var(--paper-lift))] px-2 py-0.5 text-[10px] font-semibold text-sumi shadow-[0_1px_0_rgba(255,255,255,0.6)_inset] transition-[transform,box-shadow,background-color] duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover/snooze:-translate-y-px group-hover/snooze:bg-[color-mix(in_oklab,var(--paper-lift)_90%,var(--washi-soft))] group-hover/snooze:shadow-[0_1px_0_rgba(255,255,255,0.72)_inset,0_4px_10px_-8px_rgba(28,26,23,0.45)]">
             <span className="text-sumi-soft">{t('mockups.menuBar.snooze')} </span>
             <span className="tabular-nums">{t('mockups.menuBar.snoozeStep')}</span>
           </span>
@@ -277,7 +277,7 @@ function SmallBatteryGlyph({ fraction }: { fraction: number }) {
       width="32"
       height="18"
       aria-hidden
-      className="text-hinomaru"
+      className="text-hinomaru-ink"
     >
       <rect
         x="1"

@@ -35,6 +35,8 @@ import { RouteFade } from '#/components/RouteFade'
 import { I18nProvider } from '#/lib/i18n/I18nProvider'
 import i18n, { DEFAULT_LOCALE, HTML_LANG, isLocale, loadLocale, localeFromPath } from '#/lib/i18n'
 import { RouteErrorBoundary, RouteNotFound } from '#/components/CatchBoundary'
+import { LIFETIME_FALLBACK_DEFAULT } from '#/lib/polar'
+import { THEME_INIT_SCRIPT } from '#/lib/theme'
 
 const SITE_URL = 'https://www.battery-sensei.app'
 
@@ -47,7 +49,7 @@ const TITLE =
 // Description: 156 chars. Hook + the three concrete benefits + trial/price
 // + privacy/performance trust signal. Reads as a single sentence in SERPs.
 const DESCRIPTION =
-  'macOS menu-bar app for MacBook battery health. Smart alerts, charge limit, Travel Mode, cycle tracking. 5-day free trial (no card), $3.99 once. Native, <1% impact.'
+  'macOS menu-bar app for MacBook battery health. Smart alerts, charge limit, Travel Mode, cycle tracking. 5-day free trial (no card), $4.49 once. Native, <1% impact.'
 
 // Kept for legacy crawlers — Google ignores `keywords`, Bing weighs it lightly.
 const KEYWORDS =
@@ -74,15 +76,15 @@ const softwareApplicationLd = {
       price: '0',
       priceCurrency: 'USD',
       availability: 'https://schema.org/InStock',
-      description: '5-day free trial of Battery Sensei Premium. No card required.',
+      description: '5-day free trial of Battery Sensei Pro. No card required.',
     },
     {
       '@type': 'Offer',
-      name: 'Sensei Premium',
-      price: '3.99',
+      name: 'Sensei Pro',
+      price: String(LIFETIME_FALLBACK_DEFAULT.discounted),
       priceCurrency: 'USD',
       availability: 'https://schema.org/InStock',
-      description: 'One-time purchase. Lifetime license, all future Premium features.',
+      description: 'One-time purchase. Lifetime license, all future Pro features.',
       url: `${SITE_URL}#pricing`,
     },
   ],
@@ -382,6 +384,10 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   return (
     <html lang={HTML_LANG[isLocale(i18n.language) ? i18n.language : DEFAULT_LOCALE]}>
       <head>
+        {/* Applies an explicit theme override before first paint. Visitors on
+            the default ("system") need nothing here: the prefers-color-scheme
+            block in styles.css already has them covered. */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
         <HeadContent />
         {/* Inline @font-face for above-fold weights. Parsed during HTML load,
             before styles.css arrives — pairs with the preload hints to start

@@ -9,7 +9,7 @@ export const extended = (
     <UL>
       <li>
         <strong>Charge history chart.</strong> Flip between the last 24 hours,
-        3 days, or 7 days (free tier); Premium extends both windows to
+        3 days, or 7 days (free tier); Pro extends both windows to
         unlimited history. Each charge and discharge is a line; the chart
         annotates rescues (you plugged in within 30 minutes of a critical
         warning) and plateaus (long stretches at the same percent).
@@ -24,8 +24,8 @@ export const extended = (
       <li>
         <strong>Top power-hungry apps.</strong> The same metric Activity
         Monitor uses, surfaced live right now or over the last 3 hours or 5
-        days — as a percentage or in watts. A search filter lets you collapse
-        a noisy process tree — type "chrome" and every Chrome helper lines up.
+        days, as a percentage or in watts. A search filter lets you collapse
+        a noisy process tree: type “chrome” and every Chrome helper lines up.
       </li>
       <li>
         <strong>Weekly + Monthly Wrapped.</strong> Spotify-Wrapped-style
@@ -35,7 +35,7 @@ export const extended = (
       </li>
       <li>
         <strong>Rescue Receipts.</strong> When you plug in within 30 minutes
-        of Sensei’s critical warning, the app stitches a small "save" card
+        of Sensei’s critical warning, the app stitches a small “save” card
         with the timing, the apps that were draining you, and the wattage
         in. A quiet record of the close calls.
       </li>
@@ -43,7 +43,7 @@ export const extended = (
 
     <H2>Why a battery needs a story</H2>
     <P>
-      A capacity number — "92%" — tells you almost nothing without context.
+      A capacity number (“92%”) tells you almost nothing without context.
       Is that good for a Mac your age? Did it just drop from 95% in two
       weeks, or has it been holding steady? Which weeks cost you the most
       capacity, and what were you doing then?
@@ -51,16 +51,16 @@ export const extended = (
     <P>
       Saga makes those questions answerable in seconds. The chart shows the
       shape of the curve; the Wrapped recaps surface the patterns; the
-      power-hungry apps panel turns "battery died fast today" into a name
+      power-hungry apps panel turns “battery died fast today” into a name
       you can point at. Battery health stops being a vague feeling and
       starts being a thing you can{' '}
-      <A to="/blog/healthy-cycle-count-macbook">compare against the norm</A>
+      <A to="/guides/healthy-cycle-count-macbook">compare against the norm</A>
       .
     </P>
 
     <H2>Privacy: nothing leaves your Mac</H2>
     <P>
-      Every panel above reads from local sources — IOKit for charge state,
+      Every panel above reads from local sources: IOKit for charge state,
       Apple’s power assertions API for per-app energy impact, the battery’s
       own firmware counters for cycles and capacity. There’s no telemetry,
       no cloud sync, no account. The Wrapped recaps you share are images
@@ -68,7 +68,7 @@ export const extended = (
     </P>
     <P>
       The shape of Saga only makes sense if the data stays on-device,
-      because the chart is yours — your worst week, your nearest miss, the
+      because the chart is yours: your worst week, your nearest miss, the
       hot Saturday that cost you 2% capacity. None of that should live
       anywhere else.
     </P>
@@ -82,7 +82,7 @@ export const extended = (
         Open the 7-day chart and look at the depth of each daily discharge.
         A healthy pattern looks like shallow troughs (you didn’t drain
         below 30% most days). Deep troughs mean you’re cycling the battery
-        hard — see the{' '}
+        hard; see the{' '}
         <A to="/glossary/charge-cycle">charge cycle</A> entry for why that
         matters.
       </li>
@@ -92,8 +92,8 @@ export const extended = (
         tell whether your laptop is aging on schedule or ahead of it.
       </li>
       <li>
-        Skim the Weekly Wrapped on a quiet Sunday. The "hottest day" and
-        "longest unplugged stretch" lines are usually where you’ll find
+        Skim the Weekly Wrapped on a quiet Sunday. The “hottest day” and
+        “longest unplugged stretch” lines are usually where you’ll find
         the actionable insight.
       </li>
     </UL>
@@ -109,11 +109,11 @@ export const faqs = [
   {
     q: 'Can I export the chart data?',
     a:
-      "Premium adds an export to CSV (charge history + cycle/capacity time series). The free tier keeps the data on-screen but doesn't expose a file export.",
+      "Pro adds an export to CSV (charge history + cycle/capacity time series). The free tier keeps the data on-screen but doesn’t expose a file export.",
   },
   {
     q: 'How far back does the history go?',
     a:
-      'Free tier: 24 hours / 3 days / 7 days. Premium: unlimited, going back to whenever you first installed Sensei. The cycle count and capacity are always lifetime values, regardless of tier.',
+      'Free tier: 24 hours / 3 days / 7 days. Pro: unlimited, going back to whenever you first installed Sensei. The cycle count and capacity are always lifetime values, regardless of tier.',
   },
 ]

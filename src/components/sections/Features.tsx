@@ -63,7 +63,7 @@ function MenuBarGlanceMockup() {
         <MenuBarBatteryBadge percent={84} />
       </div>
 
-      <div className="ml-auto mt-1 w-[244px] overflow-hidden rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,#fff)] shadow-[0_1px_0_rgba(255,255,255,0.5)_inset,0_14px_30px_-14px_rgba(28,26,23,0.30),0_4px_10px_-6px_rgba(28,26,23,0.18)]">
+      <div className="ml-auto mt-1 w-[244px] overflow-hidden rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,var(--paper-lift))] shadow-[0_1px_0_rgba(255,255,255,0.5)_inset,0_14px_30px_-14px_rgba(28,26,23,0.30),0_4px_10px_-6px_rgba(28,26,23,0.18)]">
         <div className="px-3 py-3">
           <div className="flex items-end justify-between gap-3">
             <p className="display-title tabular-nums text-[20px] font-semibold leading-none text-sumi">
@@ -74,7 +74,7 @@ function MenuBarGlanceMockup() {
             </p>
           </div>
           <div className="mt-2 flex items-center gap-1.5 text-[10px] text-sumi-soft">
-            <Zap className="h-3 w-3 shrink-0 text-hinomaru/85" strokeWidth={1.8} aria-hidden />
+            <Zap className="h-3 w-3 shrink-0 text-hinomaru-ink/85" strokeWidth={1.8} aria-hidden />
             <span className="truncate">
               {t('features.glance.source')}: {t('features.glance.powerAdapter')} · 29.7 W
             </span>
@@ -110,7 +110,7 @@ function ChargeLimitMockup() {
           stops the charge. h-2.5 keeps it visually quiet beside the
           other mockups which already carry text content. */}
       <div
-        className="relative h-2.5 w-full overflow-hidden rounded-full border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_45%,#fff)]"
+        className="relative h-2.5 w-full overflow-hidden rounded-full border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_45%,var(--paper-lift))]"
         role="presentation"
         aria-hidden
       >
@@ -147,8 +147,8 @@ function ChargeLimitMockup() {
         <span className="absolute right-0">100</span>
       </div>
       {/* Travel Mode action row — one line, plane glyph, the verb. */}
-      <div className="mt-3 inline-flex items-center gap-2 rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] px-2.5 py-1.5 text-[11px] text-sumi-soft">
-        <Plane className="h-3 w-3 text-hinomaru" strokeWidth={1.8} aria-hidden />
+      <div className="mt-3 inline-flex items-center gap-2 rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,var(--paper-lift))] px-2.5 py-1.5 text-[11px] text-sumi-soft">
+        <Plane className="h-3 w-3 text-hinomaru-ink" strokeWidth={1.8} aria-hidden />
         <span>
           <span className="font-medium text-sumi">
             {t('features.chargeLimit.travelLabel')}
@@ -198,7 +198,7 @@ function MeetingGuardMockup() {
               className="mt-[5px] inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-hinomaru"
             />
             <span>
-              <span className="font-semibold text-hinomaru">
+              <span className="font-semibold text-hinomaru-ink">
                 {t('features.meetings.warnShort')}
               </span>{' '}
               {t('features.meetings.warnFix')}
@@ -335,13 +335,13 @@ function HandoffNotice({
   const unplugged = kind === 'unplug'
 
   return (
-    <div className="relative overflow-hidden rounded-xl border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,#fff)] p-4 shadow-[0_1px_0_rgba(255,255,255,0.55)_inset,0_18px_35px_-24px_rgba(28,26,23,0.42)]">
+    <div className="relative overflow-hidden rounded-xl border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,var(--paper-lift))] p-4 shadow-[0_1px_0_rgba(255,255,255,0.55)_inset,0_18px_35px_-24px_rgba(28,26,23,0.42)]">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-[0.16] [background-image:radial-gradient(circle_at_18%_24%,var(--sumi)_0_0.45px,transparent_0.65px),radial-gradient(circle_at_76%_64%,var(--hinomaru)_0_0.4px,transparent_0.6px)] [background-size:17px_19px,23px_29px]"
       />
       <div className="relative flex items-center gap-4">
-        <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full border border-hinomaru/20 bg-hinomaru/[0.07] text-hinomaru">
+        <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full border border-hinomaru/20 bg-hinomaru/[0.07] text-hinomaru-ink">
           {unplugged ? (
             <Unplug className="h-5 w-5 -rotate-12" strokeWidth={1.8} aria-hidden />
           ) : (
@@ -354,7 +354,7 @@ function HandoffNotice({
             <p className="display-title text-[14px] font-semibold text-sumi">
               {t(`features.handoffs.${unplugged ? 'unplugTitle' : 'plugTitle'}`)}
             </p>
-            <span className="shrink-0 rounded-full bg-hinomaru/[0.07] px-2 py-0.5 text-[10px] font-semibold tabular-nums text-hinomaru">
+            <span className="shrink-0 rounded-full bg-hinomaru/[0.07] px-2 py-0.5 text-[10px] font-semibold tabular-nums text-hinomaru-ink">
               46%
             </span>
           </div>
@@ -362,7 +362,7 @@ function HandoffNotice({
           <div className="mt-1.5 flex items-center gap-2">
             {unplugged && (
               <LoaderCircle
-                className="h-3.5 w-3.5 shrink-0 animate-spin text-hinomaru motion-reduce:animate-none"
+                className="h-3.5 w-3.5 shrink-0 animate-spin text-hinomaru-ink motion-reduce:animate-none"
                 strokeWidth={2}
                 aria-hidden
               />
@@ -374,7 +374,7 @@ function HandoffNotice({
 
           <div className="mt-1.5 flex items-center justify-between gap-3 text-[10px] text-sumi-soft">
             <span>{t(`features.handoffs.${unplugged ? 'refining' : 'untilTarget'}`)}</span>
-            <kbd className="rounded border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] px-1.5 py-0.5 font-sans text-[9px] font-semibold text-nezumi shadow-[0_1px_0_rgba(255,255,255,0.55)_inset]">
+            <kbd className="rounded border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,var(--paper-lift))] px-1.5 py-0.5 font-sans text-[9px] font-semibold text-nezumi shadow-[0_1px_0_rgba(255,255,255,0.55)_inset]">
               esc
             </kbd>
           </div>
@@ -447,7 +447,7 @@ function PowerHandoffFeature() {
           <div>
             <div className="flex items-center gap-3.5">
               <PlugZap className="h-7 w-7 text-sumi" strokeWidth={1.5} aria-hidden />
-              <span className="kanji-accent font-jp text-3xl leading-none text-hinomaru/85" aria-hidden>
+              <span className="kanji-accent font-jp text-3xl leading-none text-hinomaru-ink/85" aria-hidden>
                 継
               </span>
             </div>
@@ -514,7 +514,7 @@ export function Features() {
                   className="h-9 w-9 text-sumi"
                   strokeWidth={1.5}
                 />
-                <span className="kanji-accent font-jp text-5xl leading-none text-hinomaru/90">
+                <span className="kanji-accent font-jp text-5xl leading-none text-hinomaru-ink/90">
                   {featuredMeta.seal}
                 </span>
               </div>
@@ -535,7 +535,7 @@ export function Features() {
                 <div className="mt-7 max-w-xl">
                   <div className="mb-3 flex items-baseline justify-between text-[10px] uppercase tracking-[0.28em] text-nezumi">
                     <span>{t('features.featured.battery')}</span>
-                    <span className="font-jp normal-case tracking-[0.3em] text-hinomaru/80">
+                    <span className="font-jp normal-case tracking-[0.3em] text-hinomaru-ink/80">
                       警 告
                     </span>
                   </div>
@@ -572,7 +572,7 @@ export function Features() {
                   <Link
                     to="/features/alert-presets"
                     aria-label={`${t('common.learnMore')} — ${t('features.featured.title')}`}
-                    className="group/learn mt-7 inline-flex items-center gap-1.5 text-[13px] font-medium text-hinomaru/85 hover:text-hinomaru transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-hinomaru/30 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)] rounded-sm"
+                    className="group/learn mt-7 inline-flex items-center gap-1.5 text-[13px] font-medium text-hinomaru-ink/85 hover:text-hinomaru-ink transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-hinomaru/30 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)] rounded-sm"
                   >
                     {t('common.learnMore')}
                     <span className="sr-only"> — {t('features.featured.title')}</span>
@@ -624,7 +624,7 @@ export function Features() {
                     same composed header as the featured alerts card above. */}
                 <div className="flex items-center gap-3.5">
                   <Icon className="h-6 w-6 text-sumi" strokeWidth={1.5} />
-                  <span className="kanji-accent font-jp text-2xl text-hinomaru/80 leading-none">
+                  <span className="kanji-accent font-jp text-2xl text-hinomaru-ink/80 leading-none">
                     {seal}
                   </span>
                 </div>
@@ -652,7 +652,7 @@ export function Features() {
                     <Link
                       to={href}
                       aria-label={`${t('common.learnMore')} — ${t(`features.${key}.title`)}`}
-                      className="group/learn inline-flex items-center gap-1.5 text-[12px] font-medium text-hinomaru/85 hover:text-hinomaru transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-hinomaru/30 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)] rounded-sm"
+                      className="group/learn inline-flex items-center gap-1.5 text-[12px] font-medium text-hinomaru-ink/85 hover:text-hinomaru-ink transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-hinomaru/30 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)] rounded-sm"
                     >
                       {t('common.learnMore')}
                       <span className="sr-only"> — {t(`features.${key}.title`)}</span>

@@ -18,8 +18,11 @@ export const H2 = ({ children }: { children: ReactNode }) => (
   </h2>
 )
 
+/** Pull quote. Boxed rather than side-striped: the shared callout recipe
+ * (hairline border + lifted paper tint) is the one quote/aside shape used
+ * across feature pages, the glossary and the blog. */
 export const Pull = ({ children }: { children: ReactNode }) => (
-  <p className="my-8 border-l-2 border-hinomaru/40 pl-5 text-[1.125rem] italic leading-[1.55] text-sumi-soft md:pl-6 md:text-[1.25rem]">
+  <p className="my-8 rounded-lg border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,var(--paper-lift))] px-5 py-4 text-[1.125rem] italic leading-[1.55] text-sumi-soft md:px-6 md:py-5 md:text-[1.25rem]">
     {children}
   </p>
 )
@@ -37,7 +40,7 @@ export const OL = ({ children }: { children: ReactNode }) => (
 )
 
 const linkClass =
-  'underline decoration-[var(--line-strong)] decoration-1 underline-offset-[4px] transition-colors hover:text-hinomaru hover:decoration-hinomaru/40'
+  'underline decoration-[var(--line-strong)] decoration-1 underline-offset-[4px] transition-colors hover:text-hinomaru-ink hover:decoration-hinomaru/40'
 
 /** Link to a /glossary/<slug> page. */
 export const G = ({

@@ -25,8 +25,33 @@ export const UL = ({ children }: { children: ReactNode }) => (
   </ul>
 )
 
+/** Definition list for "value → what it does" tables (alert tiers, threshold
+ * percentages). These used to be bullets with the term and its definition
+ * welded together by a dash; a real <dl> carries the same meaning in the
+ * markup, so screen readers and answer engines read the pairing instead of
+ * inferring it from punctuation. Terms stack above their definition so the
+ * column never has to be sized for the longest label. */
+export const DL = ({ children }: { children: ReactNode }) => (
+  <dl className="ml-1 space-y-4 text-[1rem] leading-[1.7] text-sumi md:text-[1.0625rem]">
+    {children}
+  </dl>
+)
+
+export const DI = ({
+  term,
+  children,
+}: {
+  term: ReactNode
+  children: ReactNode
+}) => (
+  <div>
+    <dt className="font-semibold text-sumi">{term}</dt>
+    <dd className="mt-0.5 text-sumi-soft">{children}</dd>
+  </div>
+)
+
 const linkClass =
-  'underline decoration-[var(--line-strong)] decoration-1 underline-offset-[4px] transition-colors hover:text-hinomaru hover:decoration-hinomaru/40'
+  'underline decoration-[var(--line-strong)] decoration-1 underline-offset-[4px] transition-colors hover:text-hinomaru-ink hover:decoration-hinomaru/40'
 
 export const G = ({
   slug,

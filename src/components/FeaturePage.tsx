@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { HomeLink } from '#/components/HomeLink'
+import { Link } from '@tanstack/react-router'
 import { ArrowLeft, Download } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Hanko } from '#/components/zen/Hanko'
@@ -48,12 +48,17 @@ export function FeaturePage({ slug, kanji, mockup, extended, faqs }: Props) {
       <Nav />
       <main>
         <Reveal as="div" delay={80} className="mx-auto max-w-6xl px-5 pt-6 sm:px-8 lg:px-10">
-          <HomeLink
+          {/* Back to the feature index, not to the homepage: almost everyone
+              arrives here from /features or from a "Learn more" on the home
+              feature grid, so the homepage is a step further back than the
+              one they actually want. */}
+          <Link
+            to="/features"
             className="inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.22em] text-sumi-soft transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:text-sumi"
           >
             <ArrowLeft className="h-3.5 w-3.5" strokeWidth={1.6} />
             {t('featurePages.backLink')}
-          </HomeLink>
+          </Link>
         </Reveal>
         <section className="zen-section mx-auto max-w-3xl px-5 pb-0 pt-10 sm:px-6 md:pt-12">
 
@@ -68,7 +73,11 @@ export function FeaturePage({ slug, kanji, mockup, extended, faqs }: Props) {
               className="display-title text-4xl font-semibold leading-[1.04] tracking-[-0.018em] text-sumi md:text-[3.25rem]"
             >
               {t(`${key}.heading`)}
-              <span className="block italic text-sumi-soft font-normal">
+              {/* text-balance: several headingItalic lines are three-item
+                  lists ("Charge, hold, release.") that orphan their last
+                  word at 375px. .display-title balances the h1 as a whole,
+                  which is not the same as balancing this line on its own. */}
+              <span className="block text-balance italic text-sumi-soft font-normal">
                 {t(`${key}.headingItalic`)}
               </span>
             </Reveal>
@@ -102,8 +111,16 @@ export function FeaturePage({ slug, kanji, mockup, extended, faqs }: Props) {
         )}
 
         <section className="zen-section mx-auto max-w-3xl px-5 pt-10 sm:px-6 md:pt-12">
+          {/* Callout treatment: full hairline border + lifted paper tint, the
+              same recipe as the privacy TL;DR box. It replaces the coloured
+              left stripe this block used to carry, since a side stripe is a
+              banned shape in this system; the boxed version reads as "aside"
+              without borrowing the accent red for decoration. Every quote and
+              callout on the site (FAQ entries, glossary "Related", blog pull
+              quotes, the features-index quote) uses this exact recipe so the
+              vocabulary stays singular. */}
           <Reveal delay={500}>
-            <div className="border-l-2 border-hinomaru/30 pl-5 md:pl-6">
+            <div className="rounded-lg border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,var(--paper-lift))] px-5 py-4 md:px-6 md:py-5">
               <p className="display-title mb-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-sumi-soft">
                 {t('featurePages.whyItHeading')}
               </p>
@@ -131,7 +148,10 @@ export function FeaturePage({ slug, kanji, mockup, extended, faqs }: Props) {
               </h2>
               <dl className="space-y-6">
                 {faqs.map((entry) => (
-                  <div key={entry.q} className="border-l-2 border-hinomaru/30 pl-5 md:pl-6">
+                  <div
+                    key={entry.q}
+                    className="rounded-lg border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,var(--paper-lift))] px-5 py-4 md:px-6 md:py-5"
+                  >
                     <dt className="display-title text-[1rem] font-medium text-sumi md:text-[1.0625rem]">
                       {entry.q}
                     </dt>
