@@ -1945,9 +1945,13 @@ body::after {
   }
 }
 
-/* Section spacing — generous "ma" 間 */
-.zen-section {
-  padding-block: clamp(4.5rem, 9vw, 8rem);
+/* Section spacing — generous "ma" 間. Lives in the components layer so
+   Tailwind utilities (pb-0, pt-10) can override the block padding per
+   page — unlayered it silently beat every such utility. */
+@layer components {
+  .zen-section {
+    padding-block: clamp(4.5rem, 9vw, 8rem);
+  }
 }
 
 /* Section anchors offset so the sticky nav doesn't cover headings on jump */

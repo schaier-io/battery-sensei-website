@@ -110,7 +110,7 @@ export function ThanksPage({ tier, kanji }: { tier: Tier; kanji: string }) {
     <>
       <Nav />
       <main>
-        <section className="zen-section mx-auto max-w-3xl px-5 sm:px-6">
+        <section className="zen-section mx-auto max-w-3xl px-5 pb-0 sm:px-6">
           {/* Top-left back-to-home anchor — quiet escape hatch above
               the celebratory hero. Single placement per subpage
               (the bottom-of-page duplicate was removed). */}
