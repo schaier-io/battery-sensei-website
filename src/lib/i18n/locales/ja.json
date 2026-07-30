@@ -950,13 +950,13 @@
       "sent": "送信完了"
     },
     "github": {
-      "label": "公開ロードマップ · GitHub",
-      "title": "Senseiをもっと良くするには、何が必要ですか？",
-      "cta": "該当するスレッドを見る",
+      "label": "バグトラッカー · GitHub",
+      "title": "動かない、または様子がおかしいときは",
+      "cta": "GitHub Issues を開く",
       "paths": {
-        "idea": "アイデアがある",
-        "bug": "うまくいかない",
-        "curious": "ちょっと気になる"
+        "idea": "バグを報告",
+        "bug": "質問する",
+        "curious": "スレッドを見る"
       }
     },
     "email": {

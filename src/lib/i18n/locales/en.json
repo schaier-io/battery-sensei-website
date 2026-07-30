@@ -950,13 +950,13 @@
       "sent": "Sent"
     },
     "github": {
-      "label": "Open roadmap · GitHub",
-      "title": "What would make Sensei better for you?",
-      "cta": "Find your thread",
+      "label": "Bug tracker · GitHub",
+      "title": "Hit a wall, or found something odd?",
+      "cta": "Open GitHub issues",
       "paths": {
-        "idea": "Have an idea",
-        "bug": "Hit a wall",
-        "curious": "Just curious"
+        "idea": "Report a bug",
+        "bug": "Ask a question",
+        "curious": "Browse threads"
       }
     },
     "email": {

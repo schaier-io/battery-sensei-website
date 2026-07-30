@@ -950,13 +950,13 @@
       "sent": "Envoyé"
     },
     "github": {
-      "label": "Roadmap ouverte · GitHub",
-      "title": "Qu'est-ce qui rendrait Sensei meilleur pour vous ?",
-      "cta": "Trouver le bon fil",
+      "label": "Suivi des bugs · GitHub",
+      "title": "Un blocage, ou un comportement étrange ?",
+      "cta": "Ouvrir GitHub Issues",
       "paths": {
-        "idea": "J'ai une idée",
-        "bug": "Quelque chose cloche",
-        "curious": "Simple curiosité"
+        "idea": "Signaler un bug",
+        "bug": "Poser une question",
+        "curious": "Parcourir les fils"
       }
     },
     "email": {

@@ -950,13 +950,13 @@
       "sent": "Enviado"
     },
     "github": {
-      "label": "Hoja de ruta abierta · GitHub",
-      "title": "¿Qué haría que Sensei fuera mejor para ti?",
-      "cta": "Busca tu tema",
+      "label": "Registro de errores · GitHub",
+      "title": "¿Algo falla o se ve raro?",
+      "cta": "Abrir GitHub Issues",
       "paths": {
-        "idea": "Tengo una idea",
-        "bug": "Me encontré con un problema",
-        "curious": "Solo curiosidad"
+        "idea": "Informar de un error",
+        "bug": "Hacer una pregunta",
+        "curious": "Ver hilos"
       }
     },
     "email": {

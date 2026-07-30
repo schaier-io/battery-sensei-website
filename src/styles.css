@@ -747,7 +747,15 @@ body::after {
     z-index: 1;
   }
 
-  .paper-card:hover {
+  /* Hover lift is an affordance, so only elements that actually do
+     something get it: links, buttons, and cards that opt in with
+     .paper-card-interactive (e.g. a div with an onClick). A static
+     card that lifts under the cursor promises a click it can't
+     honor — the "Suggest a feature" form card was the reported
+     case, but every non-interactive card had it. */
+  a.paper-card:hover,
+  button.paper-card:hover,
+  .paper-card-interactive:hover {
     transform: translateY(-3px);
     border-color: var(--line-strong);
     box-shadow:

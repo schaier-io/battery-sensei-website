@@ -401,17 +401,17 @@ export function Contact() {
                 </p>
                 <div className="relative flex flex-wrap items-center gap-1.5">
                   <PathChip
-                    icon={Lightbulb}
+                    icon={Bug}
                     label={t('contact.github.paths.idea')}
                     accent="hinomaru"
                   />
                   <PathChip
-                    icon={Bug}
+                    icon={Mail}
                     label={t('contact.github.paths.bug')}
                     accent="kin"
                   />
                   <PathChip
-                    icon={Mail}
+                    icon={Lightbulb}
                     label={t('contact.github.paths.curious')}
                     accent="nezumi"
                   />
