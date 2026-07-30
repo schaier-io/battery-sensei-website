@@ -989,7 +989,7 @@
     "intro": "Votez pour ce que Battery Sensei apprendra ensuite, ou proposez votre propre idée. Chaque vote est lié à une clé de licence : ce sont de vrais utilisateurs qui guident la feuille de route, pas des bots.",
     "loading": "Chargement des demandes…",
     "error": "Impossible de charger le tableau. Veuillez réessayer.",
-    "retry": "Réessayer",
+    "retry": "Actualiser",
     "empty": {
       "title": "Rien à afficher pour l'instant",
       "message": "Les demandes approuvées apparaissent ici après relecture. Soyez la première personne à proposer une idée."

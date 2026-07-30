@@ -989,7 +989,7 @@
     "intro": "Vota lo próximo que aprenderá Battery Sensei o propón tu propia idea. Cada voto va ligado a una clave de licencia: la hoja de ruta la dirigen usuarios reales, no bots.",
     "loading": "Cargando peticiones…",
     "error": "No se pudo cargar el tablero. Inténtalo de nuevo.",
-    "retry": "Reintentar",
+    "retry": "Actualizar",
     "empty": {
       "title": "Aún no hay nada",
       "message": "Las peticiones aprobadas aparecen aquí tras la revisión. Sé quien proponga la primera idea."

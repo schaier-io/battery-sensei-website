@@ -989,7 +989,7 @@
     "intro": "Vote on what Battery Sensei learns next, or suggest your own idea. Every vote is tied to a license key — real users steer the roadmap, not bots.",
     "loading": "Loading requests…",
     "error": "Couldn't load the board. Please try again.",
-    "retry": "Try again",
+    "retry": "Refresh",
     "empty": {
       "title": "Nothing here yet",
       "message": "Approved requests appear here once they've been reviewed. Be the first to suggest one."

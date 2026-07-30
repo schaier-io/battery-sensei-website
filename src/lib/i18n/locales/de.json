@@ -989,7 +989,7 @@
     "intro": "Stimmen Sie darüber ab, was Battery Sensei als Nächstes lernt, oder schlagen Sie eigene Ideen vor. Jede Stimme ist an einen Lizenzschlüssel gebunden — echte Nutzer lenken die Roadmap, keine Bots.",
     "loading": "Wünsche werden geladen…",
     "error": "Das Board konnte nicht geladen werden. Bitte versuchen Sie es erneut.",
-    "retry": "Erneut versuchen",
+    "retry": "Aktualisieren",
     "empty": {
       "title": "Noch nichts zu sehen",
       "message": "Freigegebene Wünsche erscheinen hier nach der Prüfung. Machen Sie den Anfang und schlagen Sie eine Idee vor."
