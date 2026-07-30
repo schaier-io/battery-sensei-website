@@ -79,28 +79,28 @@ export function Footer() {
             >
               <LanguageSwitcher />
               <CurrencySwitcher />
+              <a
+                href="https://www.producthunt.com/products/battery-sensei?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-battery-sensei"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ml-1 inline-flex rounded-sm transition-transform duration-300 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)] motion-reduce:transform-none sm:ml-2"
+              >
+                <img
+                  alt="Battery Sensei - Be Zen about your Meetings | Product Hunt"
+                  width="139"
+                  height="30"
+                  loading="lazy"
+                  decoding="async"
+                  className="h-[30px] w-auto"
+                  src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1195865&amp;theme=light&amp;t=1784011600450"
+                />
+              </a>
             </div>
           </div>
           <p className="font-display italic text-[0.9rem] text-nezumi max-w-md leading-snug sm:text-[0.95rem]">
             {t('footer.tagline')}
           </p>
         </div>
-
-        <a
-          href="https://www.producthunt.com/products/battery-sensei?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-battery-sensei"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex rounded-sm transition-transform duration-300 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)] motion-reduce:transform-none"
-        >
-          <img
-            alt="Battery Sensei - Be Zen about your Meetings | Product Hunt"
-            width="250"
-            height="54"
-            loading="lazy"
-            decoding="async"
-            src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1195865&amp;theme=light&amp;t=1784011600450"
-          />
-        </a>
 
         {/* Hairline divider — narrow centered brush so the secondary
             nav below reads as the footer's colophon row. */}
