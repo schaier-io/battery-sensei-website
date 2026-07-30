@@ -975,6 +975,11 @@
     "board": {
       "hint": "Feature ideas can also live on the public board, where other users vote on them — this form stays a private message.",
       "linkLabel": "See the public board"
+    },
+    "tabs": {
+      "label": "Get in touch",
+      "contact": "Contact",
+      "roadmap": "Roadmap & requests"
     }
   },
   "board": {

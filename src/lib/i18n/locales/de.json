@@ -975,6 +975,11 @@
     "board": {
       "hint": "Feature-Ideen können auch auf dem öffentlichen Board landen, wo andere darüber abstimmen — dieses Formular bleibt eine private Nachricht.",
       "linkLabel": "Zum öffentlichen Board"
+    },
+    "tabs": {
+      "label": "Kontakt aufnehmen",
+      "contact": "Kontakt",
+      "roadmap": "Roadmap & Wünsche"
     }
   },
   "board": {

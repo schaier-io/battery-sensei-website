@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import { lazy, Suspense, useState, type FormEvent } from 'react'
 import {
   ArrowUpRight,
   AtSign,
@@ -24,8 +24,17 @@ const TOPIC_ORDER: ReadonlyArray<Topic> = ['feature', 'bug', 'billing', 'other']
 const ISSUES_URL = 'https://github.com/schaier-io/battery-sensei-releases/issues/new/choose'
 const EMAIL = 'info@battery-sensei.app'
 
+// The board pulls its own data fetching + card stack; load it only when the
+// visitor actually opens the Roadmap tab so the contact tab stays light.
+const FeatureBoard = lazy(() =>
+  import('#/components/board/FeatureBoard').then((m) => ({ default: m.FeatureBoard })),
+)
+
+type ContactTab = 'contact' | 'roadmap'
+
 export function Contact() {
   const { t } = useTranslation()
+  const [tab, setTab] = useState<ContactTab>('contact')
   const [topic, setTopic] = useState<Topic>('feature')
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -88,7 +97,50 @@ export function Contact() {
           </Reveal>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
+        {/* Contact first, roadmap beside it: private message vs public board
+            are different rooms, and the switch makes that explicit. */}
+        <div
+          role="tablist"
+          aria-label={t('contact.tabs.label')}
+          className="mb-8 flex justify-center gap-2"
+        >
+          {(['contact', 'roadmap'] as const).map((value) => {
+            const active = tab === value
+            return (
+              <button
+                key={value}
+                role="tab"
+                type="button"
+                aria-selected={active}
+                onClick={() => setTab(value)}
+                className={`rounded-full border px-5 py-2 text-[0.875rem] font-medium transition-colors duration-[220ms] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 ${
+                  active
+                    ? 'border-sumi bg-sumi text-washi'
+                    : 'border-[var(--line-strong)] bg-transparent text-sumi-soft hover:text-sumi'
+                }`}
+              >
+                {t(`contact.tabs.${value}`)}
+              </button>
+            )
+          })}
+        </div>
+
+        {tab === 'roadmap' && (
+          <div className="mx-auto max-w-3xl">
+            <Suspense
+              fallback={
+                <p className="py-12 text-center text-[0.9rem] text-sumi-soft">…</p>
+              }
+            >
+              <FeatureBoard />
+            </Suspense>
+          </div>
+        )}
+
+        <div
+          hidden={tab !== 'contact'}
+          className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-start"
+        >
           <Reveal delay={120}>
             <form
               onSubmit={handleSubmit}

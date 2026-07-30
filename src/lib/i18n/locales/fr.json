@@ -975,6 +975,11 @@
     "board": {
       "hint": "Les idées de fonctionnalités peuvent aussi rejoindre le tableau public, où les autres utilisateurs votent — ce formulaire reste un message privé.",
       "linkLabel": "Voir le tableau public"
+    },
+    "tabs": {
+      "label": "Nous contacter",
+      "contact": "Contact",
+      "roadmap": "Roadmap et demandes"
     }
   },
   "board": {
