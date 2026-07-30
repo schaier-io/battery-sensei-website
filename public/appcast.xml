@@ -1274,6 +1274,72 @@
         length="26003793"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.12.0</title>
+      <pubDate>Thu, 30 Jul 2026 23:27:50 +0000</pubDate>
+      <sparkle:version>86</sparkle:version>
+      <sparkle:shortVersionString>1.12.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.12.0</h1>
+<p>Choose which calendars the meeting guard watches, read any feature&#x27;s guide without leaving the app, and meet a warning that finally escalates the way it should. Plus a full design pass over every screen.</p>
+<h2>Meeting Battery Guard</h2>
+<ul>
+<li><strong>Watch only the calendars that matter.</strong> A new scope control lets you pick which calendars feed the guard and ignore the rest — birthdays and holiday feeds no longer set off battery forecasts. The list lives behind a summary chip, so the card stays one line until you open it.</li>
+<li><strong>The forecast comes first.</strong> The card used to open with seventeen set-once controls and put the live forecast last. The forecast — the one thing here that changes on its own — now leads, and configuration follows it.</li>
+<li><strong>Sentences that read properly.</strong> A calendar block titled &quot;Busy&quot; produced &quot;Battery dies before Busy starts.&quot; Generic, very short, or untitled events now fall back to &quot;your next meeting&quot;, and the real title is shown separately where it doesn&#x27;t have to be grammatical.</li>
+</ul>
+<h2>Warnings</h2>
+<ul>
+<li><strong>Severity that actually escalates.</strong> The warning tier painted a flat saturated red across the whole screen while the more serious alert tier used a soft blur — so 2% battery looked <em>calmer</em> than 5%. Warning is now a top-weighted wash that fades by mid-screen, alert keeps the full blur and a stronger tint, and each tier claims its own minimum width so the size step is visible.</li>
+<li><strong>Compare the presets at a glance.</strong> Zen, Regular, and Teach Me Senpai each show their trigger points (&quot;Nudges at 15% · 5%&quot;) whether or not they&#x27;re selected. Previously only the expanded one revealed what it did.</li>
+<li><strong>Power handoffs is its own card.</strong> Unplug and plug-in updates answer &quot;what just happened&quot;; the Warnings card answers &quot;tell me before the battery runs out&quot;. They no longer share a title.</li>
+<li><strong>Fewer false affordances.</strong> The preset ladder&#x27;s rail markers looked like draggable handles and its rule rows looked tappable. Neither is, and neither looks it now.</li>
+</ul>
+<h2>Feature guides</h2>
+<ul>
+<li><strong>An ⓘ on every card.</strong> Each feature description now carries an info button opening a written explanation of what the feature does and when to use it, with a link to the full guide on the website. Fourteen features covered.</li>
+<li><strong>New explanations</strong> for the %/W toggle, &quot;System &amp; hardware&quot;, &quot;Everything else&quot;, Dismissal mode, and the alert Sound picker — controls that named a mechanism without saying what it changes.</li>
+</ul>
+<h2>Today</h2>
+<ul>
+<li><strong>A centred hero.</strong> The enso ring carries your percentage at its centre with the remaining time beneath it, instead of a loose caption floating under the arc.</li>
+<li><strong>Only what&#x27;s clickable looks clickable.</strong> One tinted disc used to mean three different things — decorative, tappable, and status. Power flow&#x27;s read-only rows gave theirs up so the System load tiles, which do open a live graph, could keep it.</li>
+<li><strong>A shorter app list.</strong> The energy leaderboard caps at six rows and folds the rest into one expandable summary, instead of fifteen rows where five carry the answer.</li>
+</ul>
+<h2>Statistics</h2>
+<ul>
+<li><strong>Monthly Wrapped shows a trend.</strong> It rendered as a second copy of Weekly. It now compares against the previous month and draws low-battery moments week by week — suppressed when the four weeks are identical, because a flat line implies a shape that isn&#x27;t there.</li>
+<li><strong>Rescue receipts read differently.</strong> Five clutch saves drew from three flavour lines, so repeats were arithmetic rather than bad luck. There are six per grade now, chosen using each save&#x27;s own level and time of day.</li>
+</ul>
+<h2>Accessibility</h2>
+<ul>
+<li><strong>The charge chart takes the keyboard.</strong> Its readings were reachable only by hovering. Arrow keys now walk the samples, Home and End jump to the ends, and each value is announced.</li>
+<li><strong>Signals that aren&#x27;t only colour.</strong> The app presence badge announced nothing at all when an app wasn&#x27;t running, and two identically-named calendars were distinguishable only by a coloured dot. Both now say which is which.</li>
+<li><strong>Bigger targets.</strong> Every ⓘ and the rescue ledger&#x27;s share button meet the 44pt minimum.</li>
+</ul>
+<h2>Fixes</h2>
+<ul>
+<li>Long calendar names and account labels no longer overflow — they fade at the edge and slide into view on hover.</li>
+<li>The rescue ledger&#x27;s flavour text no longer runs underneath the timestamp.</li>
+<li>The calendar popover no longer clips &quot;Use all&quot; or cuts its sixth row in half.</li>
+<li>The CPU-cores popover fits on screen from any anchor.</li>
+<li>The charge chart&#x27;s right-most axis label is no longer truncated.</li>
+<li>Escape closes the honor detail popover, as its own hint promised.</li>
+<li>The recommendations badge count matches the rows it leads.</li>
+<li>Device alerts say so when Bluetooth sync is off and they cannot fire.</li>
+<li>The wizard&#x27;s language label settles instead of cycling forever, and the completion coach-mark has a visible &quot;Got it&quot;.</li>
+<li>German, Spanish, French, and Japanese pick up wording that had only ever changed in English.</li>
+</ul>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.12.0/Battery-Sensei.pkg"
+        sparkle:edSignature="A+oNjDmMfvKprRCELAkeiaYZeDpHimXYF816IPiWI/eqQMfRCLnAKIumb22ItyBzjpaxLx0uv1c0JVw+8nFkAg=="
+        length="26537266"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
