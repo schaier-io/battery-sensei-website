@@ -616,65 +616,65 @@
       "kicker": "Fonction · 節電",
       "heading": "Le mode économie d'énergie,",
       "headingItalic": "sans penser à l'activer.",
-      "body": "macOS propose le mode économie d'énergie sous forme d'un interrupteur manuel enfoui dans les Réglages Système. Battery Sensei en fait une règle : vous choisissez un pourcentage ou une autonomie restante comme déclencheur, et Sensei l'active dès que le seuil est franchi, puis le désactive à la seconde où vous rebranchez. Le bridage reste celui d'Apple ; Sensei ne gère que le moment que vous auriez oublié.",
-      "mockupCaption": "Réglez le déclencheur une fois. Sensei gère les deux sens.",
-      "why": "Le moment où vous avez besoin du mode économie d'énergie est celui où vous y penserez le moins : 18 % restants, une réunion qui commence, aucun chargeur dans le sac. Une règle définie un après-midi calme vaut mieux qu'un interrupteur dont il faut se souvenir dans l'urgence — et comme il se désactive tout seul, vous ne perdez pas une semaine de performances à cause d'une crise déjà passée."
+      "body": "macOS cache le mode économie d'énergie trois niveaux sous les Réglages Système. Battery Sensei en fait une règle : choisissez un pourcentage ou une autonomie restante comme déclencheur, et le mode s'active au franchissement — puis se coupe au branchement. Le bridage reste celui d'Apple. Sensei se souvient à votre place, c'est tout.",
+      "mockupCaption": "Un déclencheur, deux sens : actif au franchissement, coupé à la charge.",
+      "why": "On ne pense jamais au mode économie d'énergie au bon moment. 18 %, une réunion qui commence, pas de chargeur — c'est précisément là qu'il est le plus loin de l'esprit. Réglez la règle un après-midi calme et elle couvre tous les mauvais qui suivent. Comme elle se coupe seule, vous ne retrouverez pas votre Mac bridé une semaine plus tard."
     },
     "power-flow": {
       "kicker": "Fonction · 電流",
       "heading": "Où passent vos watts :",
       "headingItalic": "adaptateur, batterie, système.",
-      "body": "Trois mesures que macOS ne réunit jamais : ce que le chargeur délivre réellement, ce qui atteint les cellules et ce que le Mac consomme. Sur batterie, cette dernière valeur est votre vitesse de décharge — le meilleur indicateur d'autonomie qui soit.",
+      "body": "Trois chiffres que macOS ne montre jamais côte à côte : ce que livre le chargeur, ce qui atteint la batterie, ce que tire votre Mac. Débranché, le dernier est votre vitesse de décharge. Pas une estimation — la mesure.",
       "mockupCaption": "Entrée adaptateur, flux batterie, consommation système. En direct.",
-      "why": "Une charge lente et une décharge rapide se ressemblent quand on ne regarde qu'un pourcentage. Plus du tout quand on voit que le chargeur 96 W ne négocie que 38 W, ou que le système absorbe tout ce qui entre. La supposition devient une mesure."
+      "why": "Un pourcentage ne dit pas pourquoi il baisse. Les watts, si. Quand vous voyez votre chargeur 96 W livrer 38 W à travers un mauvais câble, ou le système absorber tout ce qui entre, le mystère est levé."
     },
     "system-load": {
       "kicker": "Fonction · 負荷",
       "heading": "Pourquoi la batterie chute :",
       "headingItalic": "processeur, GPU, disque, mémoire.",
-      "body": "Quatre mesures à côté de vos chiffres de batterie, pas dans une autre app. Une décharge soudaine a presque toujours une cause visible : un cœur saturé, un GPU sollicité, un client de synchronisation qui écrit tout l'après-midi.",
-      "mockupCaption": "Processeur, GPU, pression mémoire et E/S disque, mesurés ensemble.",
-      "why": "« Elle s'est vidée vite aujourd'hui » reste une impression tant qu'on ne voit pas la charge derrière. Le panneau système fournit la preuve ; celui de l'énergie par app, le nom. Ensemble, une mauvaise journée devient un processus à quitter."
+      "body": "Processeur, GPU, disque et pression mémoire, juste à côté de vos chiffres de batterie. Quand elle se vide vite, l'un de ces quatre l'explique presque toujours : un cœur saturé, un GPU occupé, un client de synchronisation qui écrit tout l'après-midi.",
+      "mockupCaption": "Processeur, GPU, pression mémoire, E/S disque — mesurés ensemble.",
+      "why": "« Elle s'est vidée vite aujourd'hui » est une impression. La charge est une preuve. Le panneau système montre que quelque chose travaille votre Mac ; celui de l'énergie par app le nomme. Ensemble, une mauvaise journée devient un processus à quitter."
     },
     "charge-limit": {
       "kicker": "Fonction · 充電",
       "heading": "Un plafond de charge quotidien,",
       "headingItalic": "et un cycle hebdomadaire pour rester fiable.",
-      "body": "Le lithium-ion vieillit plus vite aux extrêmes, et le temps passé à 100 % est la part que vous maîtrisez. Fixez un plafond : Sensei vous rappelle un cycle plus complet par semaine pour que les estimations ne dérivent pas.",
-      "mockupCaption": "Fixez le plafond ; Sensei gère le rappel de calibration hebdomadaire.",
-      "why": "Rien ne répare une batterie, mais vos habitudes décident de la vitesse d'usure. Un plafond échange une autonomie que vous n'utilisiez pas contre des mois d'usure ralentie, et le cycle hebdomadaire garde la jauge honnête."
+      "body": "Le lithium-ion s'use plus vite aux extrêmes, et les heures garées à 100 % sont la part que vous contrôlez. Fixez un plafond quotidien : la charge s'y arrête. Une fois par semaine, Sensei propose un cycle plus complet pour garder l'estimation honnête.",
+      "mockupCaption": "Fixez le plafond ; Sensei rappelle le cycle de calibration hebdomadaire.",
+      "why": "On ne répare pas une batterie, mais on peut ralentir l'usure. Un plafond échange une autonomie inutilisée contre de la capacité que vous voudrez dans deux ans. Le cycle hebdomadaire garde la jauge calibrée, pour voir l'échange porter ses fruits."
     },
     "battery-health": {
       "kicker": "Fonction · 健康",
       "heading": "Capacité, cycles, état,",
       "headingItalic": "et les habitudes derrière.",
-      "body": "Les trois chiffres que macOS conserve et montre rarement : ce que votre batterie retient aujourd'hui, combien de cycles complets elle a encaissés, et le verdict d'état d'Apple — repris tel quel, à côté des habitudes de charge qui les ont façonnés.",
-      "mockupCaption": "Capacité, état et nombre de cycles, lus directement dans la batterie.",
-      "why": "« 92 % de capacité » ne dit rien seul. Est-ce bon pour un Mac de cet âge ? A-t-elle perdu quatre points en un mois, ou est-elle stable depuis le printemps ? L'état est une tendance, et une tendance a besoin de l'historique à côté."
+      "body": "Les trois chiffres que macOS conserve et montre rarement : ce que la batterie retient aujourd'hui, combien de cycles complets elle a derrière elle, et le verdict d'état d'Apple — brut, à côté des habitudes de charge qui les ont façonnés.",
+      "mockupCaption": "Capacité, état, cycles. Lus directement dans la batterie.",
+      "why": "« 92 % de capacité » ne veut rien dire seul. Bien pour un Mac de trois ans, inquiétant pour un neuf. L'état est une tendance, pas une note — c'est pourquoi ces chiffres vivent à côté de votre historique plutôt que seuls."
     },
     "statistics": {
       "kicker": "Fonction · 統計",
       "heading": "Votre semaine de batterie,",
       "headingItalic": "résumée comme le ferait quelqu'un.",
-      "body": "Temps sans chargeur, sessions de charge, profondeur moyenne de décharge, la période la plus chaude et les sauvetages réussis à temps — en récapitulatifs hebdomadaires et mensuels lisibles en vingt secondes.",
+      "body": "Temps sans chargeur, sessions de charge, profondeur moyenne de décharge, la période la plus chaude, les sauvetages à temps — pliés en récapitulatifs hebdomadaires et mensuels lisibles en vingt secondes.",
       "mockupCaption": "Récapitulatifs hebdomadaires et mensuels, calculés sur votre Mac.",
-      "why": "Un pourcentage répond à « et maintenant ». Pas à « est-ce normal pour moi ». Les récapitulatifs rendent le schéma visible — la semaine de déplacement, le mois du client de synchronisation — pendant qu'il est encore temps d'agir."
+      "why": "Le pourcentage en direct répond à « et maintenant ». Jamais à « est-ce normal pour moi ». Les récapitulatifs montrent le schéma — la semaine de déplacement, le mois du client de synchronisation emballé — pendant qu'il est encore temps d'agir."
     },
     "honors": {
       "kicker": "Fonction · 名誉",
       "heading": "Les habitudes à garder,",
       "headingItalic": "reconnues sans bruit.",
-      "body": "Les honneurs signalent les comportements réellement liés à une batterie en meilleure santé : plages de charge régulières, sauvetages pris au sérieux, séries qui survivent à une semaine chargée. Pas de points, pas de classement, aucune insistance.",
+      "body": "Les honneurs marquent les habitudes qui aident vraiment une batterie : plages de charge stables, sauvetages avant la panne, séries qui survivent à une semaine chargée. Pas de points, pas de classement, pas de rappels.",
       "mockupCaption": "Obtenus discrètement, à partir de votre propre historique.",
-      "why": "On ne défait pas des cycles et on ne répare pas une capacité. Ce qui change, c'est le schéma — et un schéma réagit au retour d'information. Les honneurs sont le retour le plus léger qui fonctionne encore : visible si vous regardez, silencieux sinon."
+      "why": "Le compteur de cycles ne fait que monter et la capacité que descendre. Les habitudes sont votre seul levier, et les habitudes répondent au retour. Les honneurs sont le retour le plus discret qui fonctionne encore : là quand vous regardez, silencieux sinon."
     },
     "general": {
       "kicker": "Fonction · 設定",
       "heading": "Peu de réglages,",
       "headingItalic": "parce qu'il n'y a rien à synchroniser.",
-      "body": "Contenu de la barre des menus, apparence, langue et lancement à l'ouverture. Pas de compte, pas de réglages cloud, pas d'interrupteur de télémétrie — puisque rien n'est collecté.",
+      "body": "Contenu de la barre des menus, apparence, langue, lancement à l'ouverture. Pas de compte, pas de cloud, pas d'interrupteur de télémétrie — rien n'est collecté, donc rien à désactiver.",
       "mockupCaption": "Apparence, langue, barre des menus, démarrage.",
-      "why": "La plupart des apps finissent avec un écran de réglages plein de décisions. Celui de Battery Sensei reste court volontairement : tout ce qu'elle sait de votre batterie reste sur votre Mac, il ne reste donc que l'apparence et le comportement."
+      "why": "La plupart des écrans de réglages deviennent un second métier. Celui-ci reste court exprès. Tout ce que Battery Sensei sait vit sur votre Mac ; il ne reste que l'apparence et le démarrage."
     },
     "indexKicker": "Tout ce que contient l'app",
     "indexHeading": "Quatorze guides,",

@@ -616,65 +616,65 @@
       "kicker": "Funktion · 節電",
       "heading": "Stromsparmodus,",
       "headingItalic": "ohne ans Einschalten zu denken.",
-      "body": "macOS versteckt den Stromsparmodus als manuellen Schalter in den Systemeinstellungen. Battery Sensei macht daraus eine Regel: Sie wählen einen Prozentwert oder eine Restlaufzeit als Auslöser, und Sensei schaltet den Modus ein, sobald die Grenze unterschritten wird – und wieder aus, sobald Sie anschließen. Die Drosselung übernimmt Apples eigene Einstellung; Sensei kümmert sich nur um das Timing, das Sie vergessen hätten.",
-      "mockupCaption": "Auslöser einmal festlegen. Sensei erledigt beide Richtungen.",
-      "why": "Genau dann, wenn Sie den Stromsparmodus brauchen, denken Sie am wenigsten daran: 18 % übrig, ein Meeting beginnt, kein Ladegerät dabei. Eine Regel, die Sie an einem ruhigen Nachmittag festlegen, ist mehr wert als ein Schalter, an den Sie sich in einem schlechten Moment erinnern müssen – und weil er automatisch wieder ausgeht, verlieren Sie nicht eine ganze Woche Leistung wegen einer längst überstandenen Krise."
+      "body": "macOS versteckt den Stromsparmodus drei Ebenen tief in den Systemeinstellungen. Battery Sensei macht daraus eine Regel: Prozentwert oder Restlaufzeit als Auslöser wählen, und der Modus schaltet beim Unterschreiten ein — und beim Anschließen wieder aus. Die Drosselung übernimmt Apples Einstellung. Sensei erinnert sich nur für dich.",
+      "mockupCaption": "Ein Auslöser, beide Richtungen: ein beim Unterschreiten, aus beim Laden.",
+      "why": "An den Stromsparmodus denkst du nie im richtigen Moment. 18 % übrig, ein Meeting beginnt, kein Ladegerät dabei — genau dann ist er am weitesten weg. Lege die Regel an einem ruhigen Nachmittag fest, und sie deckt jeden schlechten danach ab. Weil sie sich selbst wieder abschaltet, findest du deinen Mac nicht eine Woche später noch gedrosselt vor."
     },
     "power-flow": {
       "kicker": "Funktion · 電流",
       "heading": "Wohin die Watt gehen:",
       "headingItalic": "Netzteil, Akku, System.",
-      "body": "Drei Werte, die macOS nie zusammen zeigt: was das Ladegerät wirklich liefert, wie viel davon in den Zellen ankommt und was der Mac selbst zieht. Im Akkubetrieb ist der letzte Wert Ihre Entladerate – der ehrlichste Indikator für die Laufzeit.",
-      "mockupCaption": "Netzteil rein, Akkufluss, Systemverbrauch. Ein Panel, live.",
-      "why": "Langsames Laden und schnelles Entladen sehen im Prozentwert gleich aus. Das ändert sich, sobald Sie sehen, dass Ihr 96-W-Netzteil nur 38 W aushandelt oder dass das System alles verbraucht, was ankommt. Aus dem Raten wird eine Messung."
+      "body": "Drei Werte, die macOS nie nebeneinander zeigt: was das Ladegerät liefert, was den Akku erreicht, was dein Mac zieht. Ohne Netzteil ist der letzte Wert deine Entladerate. Keine Schätzung — die echte Messung.",
+      "mockupCaption": "Netzteil rein, Akkufluss, Systemverbrauch. Live.",
+      "why": "Ein Prozentwert kann nicht sagen, warum er fällt. Watt schon. Sobald du siehst, dass dein 96-W-Ladegerät durch ein schlechtes Kabel 38 W liefert oder das System alles verbraucht, was ankommt, ist das Rätsel gelöst."
     },
     "system-load": {
       "kicker": "Funktion · 負荷",
       "heading": "Warum der Akku fällt:",
       "headingItalic": "CPU, GPU, Datenträger, Speicher.",
-      "body": "Vier Messwerte direkt neben den Akkuzahlen statt in einer anderen App. Ein plötzlicher Verbrauch hat fast immer eine sichtbare Ursache – ein blockierter Kern, eine ausgelastete GPU, ein Sync-Dienst, der den ganzen Nachmittag schreibt.",
-      "mockupCaption": "CPU, GPU, Speicherdruck und Datenträger-I/O – gemeinsam gemessen.",
-      "why": "„Heute war der Akku schnell leer“ bleibt ein Gefühl, bis Sie die Last dahinter sehen. Die Systemlast liefert den Beleg, das App-Energie-Panel den Namen. Zusammen wird aus einem schlechten Akkutag ein Prozess, den Sie beenden können."
+      "body": "CPU, GPU, Datenträger und Speicherdruck, direkt neben deinen Akkuzahlen. Wenn der Akku schnell fällt, erklärt es meist einer dieser vier: ein blockierter Kern, eine ausgelastete GPU, ein Sync-Dienst, der den ganzen Nachmittag schreibt.",
+      "mockupCaption": "CPU, GPU, Speicherdruck, Datenträger-I/O — gemeinsam gemessen.",
+      "why": "„Heute war er schnell leer“ ist ein Gefühl. Last ist ein Beleg. Das Systempanel zeigt, dass etwas den Mac beschäftigt; das App-Energie-Panel nennt den Namen. Zusammen wird aus einem schlechten Akkutag ein Prozess, den du beenden kannst."
     },
     "charge-limit": {
       "kicker": "Funktion · 充電",
       "heading": "Ein tägliches Ladelimit",
       "headingItalic": "und ein wöchentlicher Zyklus zur Kalibrierung.",
-      "body": "Lithium-Ionen altern an den Extremen am schnellsten, und die Zeit bei 100 % ist der Teil, den Sie steuern können. Setzen Sie ein Limit – Sensei erinnert Sie einmal pro Woche an einen volleren Zyklus, damit die Laufzeitschätzungen nicht abdriften.",
-      "mockupCaption": "Tägliches Limit setzen; die wöchentliche Kalibrierung übernimmt Sensei.",
-      "why": "Ein Akku lässt sich nicht reparieren – aber das Muster entscheidet, wie schnell er altert. Ein Limit tauscht Laufzeit, die Sie ohnehin nicht gebraucht haben, gegen Monate langsameren Kapazitätsverlusts. Der Wochenzyklus hält die Anzeige ehrlich."
+      "body": "Lithium-Ionen altern an den Extremen am schnellsten, und Stunden bei 100 % sind der Teil, den du steuerst. Setze ein Tageslimit, und dort stoppt das Laden. Einmal pro Woche schlägt Sensei einen volleren Zyklus vor, damit die Laufzeitschätzung ehrlich bleibt.",
+      "mockupCaption": "Limit setzen; an den wöchentlichen Kalibrierzyklus erinnert Sensei.",
+      "why": "Reparieren kannst du einen Akku nicht, aber das Altern bremsen. Ein Limit tauscht Laufzeit, die du nicht gebraucht hast, gegen Kapazität, die du in zwei Jahren willst. Der Wochenzyklus hält die Anzeige kalibriert, damit der Tausch sichtbar bleibt."
     },
     "battery-health": {
       "kicker": "Funktion · 健康",
       "heading": "Kapazität, Zyklen, Zustand –",
       "headingItalic": "und die Gewohnheiten dahinter.",
-      "body": "Die drei Werte, die macOS führt und selten zeigt: wie viel Ihr Akku heute hält, wie viele Vollzyklen er hinter sich hat und Apples eigenes Zustandsurteil – unverändert übernommen, neben den Ladegewohnheiten, die sie geprägt haben.",
-      "mockupCaption": "Kapazität, Zustand und Ladezyklen, direkt aus dem Akku gelesen.",
-      "why": "„92 % Kapazität“ sagt für sich genommen nichts. Ist das gut für einen Mac dieses Alters? Sind gerade vier Punkte in einem Monat verloren gegangen, oder ist der Wert seit dem Frühjahr stabil? Zustand ist ein Trend – und ein Trend braucht den Verlauf daneben."
+      "body": "Die drei Werte, die macOS führt und selten zeigt: wie viel der Akku heute hält, wie viele Vollzyklen hinter ihm liegen und Apples eigenes Zustandsurteil — unbearbeitet, neben den Ladegewohnheiten, die sie geprägt haben.",
+      "mockupCaption": "Kapazität, Zustand, Ladezyklen. Direkt aus dem Akku gelesen.",
+      "why": "„92 % Kapazität“ heißt für sich nichts. Gut für einen drei Jahre alten Mac, alarmierend für einen neuen. Zustand ist ein Trend, keine Note — darum stehen diese Zahlen neben deinem Ladeverlauf statt allein."
     },
     "statistics": {
       "kicker": "Funktion · 統計",
       "heading": "Ihre Akku-Woche,",
       "headingItalic": "zusammengefasst wie von Hand.",
-      "body": "Zeit ohne Netzteil, Ladevorgänge, durchschnittliche Entladetiefe, die heißeste Phase und die rechtzeitigen Rettungen – als Wochen- und Monatsrückblick, den Sie in zwanzig Sekunden lesen.",
-      "mockupCaption": "Wochen- und Monatsrückblicke, direkt auf Ihrem Mac berechnet.",
-      "why": "Ein Prozentwert beantwortet „was jetzt“. Er beantwortet nicht „ist das normal für mich“. Rückblicke machen das Muster sichtbar – die Reisewoche, der Monat mit dem dauerlaufenden Sync-Dienst – solange sich noch etwas ändern lässt."
+      "body": "Zeit ohne Netzteil, Ladevorgänge, mittlere Entladetiefe, die heißeste Phase, die rechtzeitigen Rettungen — gefaltet in Wochen- und Monatsrückblicke, die du in zwanzig Sekunden liest.",
+      "mockupCaption": "Wochen- und Monatsrückblicke, berechnet auf deinem Mac.",
+      "why": "Der Live-Prozentwert beantwortet „was jetzt“. Nie „ist das normal für mich“. Rückblicke zeigen das Muster — die Reisewoche, den Monat mit dem wildgewordenen Sync-Dienst — solange noch Zeit ist, es zu ändern."
     },
     "honors": {
       "kicker": "Funktion · 名誉",
       "heading": "Gewohnheiten, die sich lohnen –",
       "headingItalic": "still anerkannt.",
-      "body": "Auszeichnungen markieren Verhalten, das nachweislich mit einem gesünderen Akku zusammenhängt: gleichmäßige Ladebereiche, ernst genommene Rettungen, Serien, die eine volle Woche überstehen. Keine Punkte, keine Ranglisten, kein Drängeln.",
-      "mockupCaption": "Still verdient, aus Ihrem eigenen Akkuverlauf.",
-      "why": "Ladezyklen lassen sich nicht zurücknehmen und Kapazität nicht reparieren. Ändern lässt sich das Muster – und Muster reagieren auf Rückmeldung. Auszeichnungen sind die leiseste Rückmeldung, die trotzdem wirkt: sichtbar, wenn Sie hinsehen, still, wenn nicht."
+      "body": "Auszeichnungen markieren die Gewohnheiten, die einem Akku wirklich helfen: stabile Ladebereiche, Rettungen vor dem Absturz, Serien, die eine volle Woche überstehen. Keine Punkte, keine Rangliste, keine Erinnerungen.",
+      "mockupCaption": "Still verdient, aus deinem eigenen Verlauf.",
+      "why": "Ladezyklen steigen nur, Kapazität fällt nur. Gewohnheiten sind der eine Hebel, den du hast — und Gewohnheiten reagieren auf Rückmeldung. Auszeichnungen sind die leiseste Rückmeldung, die noch wirkt: da, wenn du hinsiehst, still, wenn nicht."
     },
     "general": {
       "kicker": "Funktion · 設定",
       "heading": "Wenige Einstellungen,",
       "headingItalic": "weil es nichts zu synchronisieren gibt.",
-      "body": "Menüleisteninhalt, Erscheinungsbild, Sprache und Start bei der Anmeldung. Kein Konto, keine Cloud-Einstellungen, kein Telemetrie-Schalter – weil nichts erfasst wird, das man schalten müsste.",
-      "mockupCaption": "Erscheinungsbild, Sprache, Menüleiste, Startverhalten.",
-      "why": "Die meisten Apps bekommen mit der Zeit einen Einstellungsbildschirm voller Entscheidungen. Der von Battery Sensei bleibt bewusst kurz: Alles, was die App über Ihren Akku weiß, bleibt auf Ihrem Mac – übrig bleiben nur Aussehen und Verhalten."
+      "body": "Menüleisteninhalt, Erscheinungsbild, Sprache, Start bei Anmeldung. Kein Konto, keine Cloud, kein Telemetrie-Schalter — nichts wird erfasst, also gibt es nichts abzuschalten.",
+      "mockupCaption": "Erscheinungsbild, Sprache, Menüleiste, Start.",
+      "why": "Die meisten Einstellungsbildschirme werden zum Zweitjob. Dieser bleibt absichtlich kurz. Alles, was Battery Sensei weiß, liegt auf deinem Mac — bleiben nur die Entscheidungen, wie es aussieht und wann es startet."
     },
     "indexKicker": "Alles in der App",
     "indexHeading": "Vierzehn Anleitungen,",

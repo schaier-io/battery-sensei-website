@@ -616,65 +616,65 @@
       "kicker": "Función · 節電",
       "heading": "Modo de bajo consumo,",
       "headingItalic": "sin acordarte de activarlo.",
-      "body": "macOS ofrece el modo de bajo consumo como un interruptor manual escondido en Ajustes del Sistema. Battery Sensei lo convierte en una regla: eliges un porcentaje o un tiempo restante como disparador y Sensei lo activa al cruzar el límite, y lo desactiva en cuanto conectas el cargador. La limitación la aplica el propio ajuste de Apple; Sensei solo se encarga del momento que se te habría pasado.",
-      "mockupCaption": "Configura el disparador una vez. Sensei se ocupa de los dos sentidos.",
-      "why": "Justo cuando necesitas el modo de bajo consumo es cuando menos vas a pensar en él: 18 % de batería, una reunión que empieza, ningún cargador en la mochila. Una regla que defines una tarde tranquila vale más que un interruptor que debes recordar en un mal momento, y como se apaga solo, no pierdes una semana de rendimiento por una crisis que ya pasó."
+      "body": "macOS esconde el modo de bajo consumo a tres niveles de profundidad en Ajustes del Sistema. Battery Sensei lo convierte en una regla: eliges un porcentaje o un tiempo restante como disparador, y el modo se enciende al cruzarlo — y se apaga al enchufar. La limitación la pone el ajuste de Apple. Sensei solo se acuerda por ti.",
+      "mockupCaption": "Un disparador, dos direcciones: se enciende al cruzarlo, se apaga al cargar.",
+      "why": "Nunca piensas en el modo de bajo consumo en el momento justo. 18 %, una reunión que empieza, sin cargador a mano: exactamente entonces está más lejos de tu cabeza. Define la regla una tarde tranquila y cubre todas las malas que vengan. Como se apaga solo, no encontrarás el Mac limitado una semana después."
     },
     "power-flow": {
       "kicker": "Función · 電流",
       "heading": "Adónde van tus vatios:",
       "headingItalic": "adaptador, batería, sistema.",
-      "body": "Tres lecturas que macOS nunca reúne: lo que entrega realmente el cargador, cuánto llega a las celdas y cuánto consume el propio Mac. Con batería, esa última cifra es tu ritmo de descarga: el mejor indicador de autonomía que existe.",
+      "body": "Tres cifras que macOS nunca muestra juntas: lo que entrega el cargador, lo que llega a la batería, lo que consume tu Mac. Sin enchufar, la última es tu ritmo de descarga. Sin estimaciones: la lectura real.",
       "mockupCaption": "Entrada del adaptador, flujo de batería, consumo del sistema. En vivo.",
-      "why": "Una carga lenta y una descarga rápida son idénticas si solo miras el porcentaje. Dejan de serlo cuando ves que tu cargador de 96 W negocia 38 W, o que el sistema se come todo lo que entra. La conjetura se convierte en una lectura."
+      "why": "Un porcentaje no puede decirte por qué baja. Los vatios sí. Cuando ves que tu cargador de 96 W entrega 38 W por un mal cable, o que el sistema se come todo lo que entra, el misterio se acaba."
     },
     "system-load": {
       "kicker": "Función · 負荷",
       "heading": "Por qué baja la batería:",
       "headingItalic": "CPU, GPU, disco, memoria.",
-      "body": "Cuatro lecturas junto a tus cifras de batería, no en otra app. Una descarga repentina casi siempre tiene una causa visible: un núcleo saturado, una GPU ocupada, un cliente de sincronización escribiendo toda la tarde.",
-      "mockupCaption": "CPU, GPU, presión de memoria y E/S de disco, medidos a la vez.",
-      "why": "«Hoy se descargó rapidísimo» es una sensación hasta que ves la carga que había detrás. El panel de sistema aporta la evidencia; el de energía por app, el nombre. Juntos convierten un mal día de batería en un proceso que puedes cerrar."
+      "body": "CPU, GPU, disco y presión de memoria, justo al lado de tus cifras de batería. Cuando la batería cae rápido, uno de estos cuatro suele explicarlo: un núcleo saturado, una GPU ocupada, un cliente de sincronización escribiendo toda la tarde.",
+      "mockupCaption": "CPU, GPU, presión de memoria, E/S de disco, medidos a la vez.",
+      "why": "«Hoy se gastó rapidísimo» es una sensación. La carga es evidencia. El panel del sistema muestra que algo trabaja tu Mac; el de energía por app le pone nombre. Juntos convierten un mal día de batería en un proceso que puedes cerrar."
     },
     "charge-limit": {
       "kicker": "Función · 充電",
       "heading": "Un tope de carga diario",
       "headingItalic": "y un ciclo semanal que mantiene la honestidad.",
-      "body": "Las celdas de litio envejecen más rápido en los extremos, y el tiempo al 100 % es la parte que sí puedes controlar. Pon un tope y Sensei te recordará un ciclo más completo por semana para que las estimaciones no se desvíen.",
-      "mockupCaption": "Pon el tope diario; Sensei se ocupa del recordatorio semanal de calibración.",
-      "why": "Nada repara una batería, pero el patrón que mantienes decide a qué velocidad se desgasta. Un tope cambia autonomía que no usabas por meses de pérdida de capacidad más lenta, y el ciclo semanal mantiene el indicador diciendo la verdad."
+      "body": "El litio envejece más rápido en los extremos, y las horas aparcadas al 100 % son la parte que controlas. Pon un tope diario y la carga se detiene ahí. Una vez por semana, Sensei sugiere un ciclo más completo para que la estimación siga siendo honesta.",
+      "mockupCaption": "Pon el tope; del recordatorio de calibración semanal se ocupa Sensei.",
+      "why": "No puedes reparar una batería, pero sí frenar el desgaste. Un tope cambia autonomía que no usabas por capacidad que querrás en dos años. El ciclo semanal mantiene el indicador calibrado para que el cambio se note."
     },
     "battery-health": {
       "kicker": "Función · 健康",
       "heading": "Capacidad, ciclos, estado",
       "headingItalic": "y los hábitos que hay detrás.",
-      "body": "Las tres cifras que macOS guarda y casi nunca enseña: cuánto retiene hoy tu batería, cuántos ciclos equivalentes lleva y el veredicto de estado de Apple, tal cual, junto a los hábitos de carga que los moldearon.",
-      "mockupCaption": "Capacidad, estado y ciclos, leídos directamente de la batería.",
-      "why": "«92 % de capacidad» no dice nada por sí solo. ¿Es bueno para un Mac de esta edad? ¿Ha caído cuatro puntos en un mes o lleva plano desde la primavera? El estado es una tendencia, y una tendencia necesita el historial al lado."
+      "body": "Las tres cifras que macOS guarda y casi nunca enseña: cuánto retiene hoy la batería, cuántos ciclos completos lleva y el veredicto de estado del propio Apple — sin editar, junto a los hábitos de carga que los formaron.",
+      "mockupCaption": "Capacidad, estado, ciclos. Leídos directamente de la batería.",
+      "why": "«92 % de capacidad» no significa nada solo. Bien para un Mac de tres años, alarmante para uno nuevo. El estado es una tendencia, no una nota: por eso estas cifras viven junto a tu historial de carga y no aisladas."
     },
     "statistics": {
       "kicker": "Función · 統計",
       "heading": "Tu semana de batería,",
       "headingItalic": "resumida como lo haría una persona.",
-      "body": "Tiempo sin cargador, sesiones de carga, profundidad media de descarga, el tramo más caliente y los rescates que llegaste a tiempo: en resúmenes semanales y mensuales que se leen en veinte segundos.",
+      "body": "Tiempo sin cargador, sesiones de carga, profundidad media de descarga, el tramo más caliente, los rescates a tiempo — plegados en resúmenes semanales y mensuales que se leen en veinte segundos.",
       "mockupCaption": "Resúmenes semanales y mensuales, calculados en tu Mac.",
-      "why": "Un porcentaje en vivo responde «¿y ahora qué?». No responde «¿es normal en mí?». Los resúmenes hacen visible el patrón —la semana de viaje, el mes del cliente de sincronización— cuando todavía puedes cambiarlo."
+      "why": "El porcentaje en vivo responde «¿y ahora qué?». Nunca «¿es normal en mí?». Los resúmenes enseñan el patrón — la semana de viaje, el mes del cliente de sincronización desbocado — cuando aún hay tiempo de cambiarlo."
     },
     "honors": {
       "kicker": "Función · 名誉",
       "heading": "Hábitos que vale la pena mantener,",
       "headingItalic": "reconocidos sin ruido.",
-      "body": "Los honores señalan comportamientos que sí se relacionan con una batería más sana: rangos de carga estables, rescates tomados en serio, rachas que sobreviven a una semana ajetreada. Sin puntos, sin clasificaciones, sin insistencias.",
-      "mockupCaption": "Se ganan en silencio, a partir de tu propio historial.",
-      "why": "No puedes deshacer los ciclos ni reparar la capacidad. Lo que sí puedes cambiar es el patrón, y los patrones responden al feedback. Los honores son el feedback más ligero que aún funciona: visible si miras, silencioso si no."
+      "body": "Los honores marcan los hábitos que de verdad ayudan a una batería: rangos de carga estables, rescates antes del apagón, rachas que sobreviven una semana ajetreada. Sin puntos, sin clasificación, sin recordatorios.",
+      "mockupCaption": "Ganados en silencio, con tu propio historial.",
+      "why": "Los ciclos solo suben y la capacidad solo baja. Los hábitos son la única palanca que tienes, y los hábitos responden al feedback. Los honores son el feedback más silencioso que aún funciona: ahí cuando miras, callados cuando no."
     },
     "general": {
       "kicker": "Función · 設定",
       "heading": "Pocos ajustes,",
       "headingItalic": "porque no hay nada que sincronizar.",
-      "body": "Contenido de la barra de menús, apariencia, idioma e inicio automático. Sin cuenta, sin ajustes en la nube, sin interruptor de telemetría, porque no se recoge nada que apagar.",
+      "body": "Contenido de la barra de menús, apariencia, idioma, inicio de sesión. Sin cuenta, sin nube, sin interruptor de telemetría: no se recoge nada, así que no hay nada que apagar.",
       "mockupCaption": "Apariencia, idioma, barra de menús, arranque.",
-      "why": "Casi todas las apps acaban con una pantalla de ajustes llena de decisiones. La de Battery Sensei es corta a propósito: todo lo que sabe de tu batería vive en tu Mac, así que solo quedan las opciones de aspecto y comportamiento."
+      "why": "La mayoría de pantallas de ajustes acaban siendo un segundo trabajo. Esta se queda corta a propósito. Todo lo que Battery Sensei sabe vive en tu Mac; solo quedan las decisiones de aspecto y arranque."
     },
     "indexKicker": "Todo lo que hay en la app",
     "indexHeading": "Catorce guías,",
