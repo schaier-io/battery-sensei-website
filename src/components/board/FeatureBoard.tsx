@@ -255,24 +255,27 @@ export function FeatureBoard() {
         <p className="text-center text-[0.9375rem] text-nezumi" role="status">
           {t('board.loading')}
         </p>
-      ) : loadError ? (
-        <div className="paper-card flex flex-col items-center gap-4 p-8 text-center">
-          <p className="text-[0.9375rem] text-sumi-soft">{t('board.error')}</p>
-          <button
-            type="button"
-            onClick={() => void loadBoard()}
-            className="btn-sumi inline-flex h-10 items-center gap-2 rounded-md px-5 text-sm font-medium"
-          >
-            <RefreshCw className="h-4 w-4" strokeWidth={1.7} aria-hidden />
-            {t('board.retry')}
-          </button>
-        </div>
-      ) : sections.length === 0 ? (
+      ) : loadError || sections.length === 0 ? (
+        // A failed load and an empty board look the same to the visitor:
+        // nothing to show. The calm empty state covers both — an error
+        // banner with a Try-again button reads as "the site is broken"
+        // when the board is merely young. The quiet retry link below is
+        // enough for the genuine-outage case.
         <div className="paper-card flex flex-col items-center gap-2 p-8 text-center">
           <p className="display-title text-[1.0625rem] font-medium text-sumi">
             {t('board.empty.title')}
           </p>
           <p className="text-[0.9375rem] text-sumi-soft">{t('board.empty.message')}</p>
+          {loadError && (
+            <button
+              type="button"
+              onClick={() => void loadBoard()}
+              className="mt-1 inline-flex items-center gap-1.5 text-[0.8125rem] text-nezumi transition-colors hover:text-sumi"
+            >
+              <RefreshCw className="h-3.5 w-3.5" strokeWidth={1.7} aria-hidden />
+              {t('board.retry')}
+            </button>
+          )}
         </div>
       ) : (
         sections.map((section) => (
