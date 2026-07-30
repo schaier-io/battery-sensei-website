@@ -1,0 +1,10 @@
+# Vercel turns every file under api/ into a Serverless Function, test files
+# included. The Hobby plan caps a deployment at 12 functions and the real
+# endpoints already sit exactly on that limit (see CONTEXT.md), so the four
+# co-located *.test.ts files pushed the deployment to 16 and it was rejected
+# before it built.
+#
+# Ignoring them here keeps the tests next to the handlers they cover — vitest
+# still picks them up locally and in CI, because .vercelignore only affects
+# what gets uploaded to Vercel.
+api/**/*.test.ts
