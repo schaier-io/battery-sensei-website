@@ -17,7 +17,15 @@ export function AdminLogin({ onAuthed }: { onAuthed: () => void }) {
       const response = await fetch('/api/admin/session', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ key: key.trim() }),
+        // Forgive the obvious paste shapes: a full `.env` line
+        // (`ADMIN_DASHBOARD_KEY=…`), surrounding quotes, stray whitespace.
+        body: JSON.stringify({
+          key: key
+            .trim()
+            .replace(/^ADMIN_DASHBOARD_KEY=/, '')
+            .replace(/^["']|["']$/g, '')
+            .trim(),
+        }),
       })
       const data = (await response.json().catch(() => ({}))) as { ok?: boolean; error?: string }
       if (response.ok && data.ok) {
