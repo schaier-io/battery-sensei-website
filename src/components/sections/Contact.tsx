@@ -3,7 +3,6 @@ import {
   ArrowUpRight,
   AtSign,
   Bug,
-  ListChecks,
   Mail,
   Send,
   ShieldCheck,
@@ -482,74 +481,43 @@ export function Contact() {
             </Reveal>
 
             <Reveal delay={360}>
-              {/* Restructured from a single flowing paragraph into a
-                  two-row checklist. Each row leads with a tracked
-                  kicker (FAQ / REFUND) so the user can scan and
-                  pattern-match without reading the body. The dashed
-                  border stays (signals "advisory, not chrome"); the
-                  kanji 注 ("careful / pay attention") replaces the
-                  uppercase title so the section reads native to the
-                  site's kanji-seal vocabulary. */}
-              <aside className="rounded-md border border-dashed border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_82%,transparent)] p-5">
-                <header className="mb-3 flex items-center justify-between gap-3">
-                  <span className="inline-flex items-center gap-3">
-                    <span
-                      aria-hidden
-                      className="font-jp text-base leading-none text-hinomaru/85 w-5 text-center"
-                    >
-                      注
-                    </span>
-                    <span className="display-title text-[0.8125rem] font-semibold uppercase tracking-[0.18em] text-sumi-soft">
-                      {t('contact.before.title')}
-                    </span>
+              {/* Footnote, not a card: this is advisory fine print under
+                  the email card's description — boxing it gave it the same
+                  visual weight as the actual actions around it. Small,
+                  muted, unboxed; the 注 seal keeps the site's vocabulary. */}
+              <div className="px-1 pt-1">
+                <p className="mb-2 inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-nezumi">
+                  <span aria-hidden className="font-jp text-[13px] leading-none text-hinomaru/60">
+                    注
                   </span>
-                  <ListChecks
-                    className="h-4 w-4 text-nezumi/70"
-                    strokeWidth={1.6}
-                    aria-hidden
-                  />
-                </header>
-                <ul className="space-y-2.5 text-[0.875rem] leading-[1.5] text-sumi-soft">
-                  <li className="flex gap-2.5">
-                    <span className="display-title shrink-0 text-[10px] font-semibold uppercase tracking-[0.18em] text-nezumi pt-[3px]">
-                      FAQ
-                    </span>
-                    <span>
-                      <Trans
-                        i18nKey="contact.before.faqHint"
-                        components={[
-                          <a
-                            href="#faq"
-                            className="font-medium text-sumi underline decoration-hinomaru/40 decoration-2 underline-offset-4 hover:decoration-hinomaru transition-colors"
-                          />,
-                        ]}
-                      />
-                    </span>
+                  {t('contact.before.title')}
+                </p>
+                <ul className="space-y-1.5 text-[0.8125rem] leading-[1.5] text-nezumi">
+                  <li>
+                    <Trans
+                      i18nKey="contact.before.faqHint"
+                      components={[
+                        <a
+                          href="#faq"
+                          className="font-medium text-sumi-soft underline decoration-hinomaru/30 underline-offset-4 hover:text-sumi hover:decoration-hinomaru transition-colors"
+                        />,
+                      ]}
+                    />
                   </li>
-                  <li className="flex gap-2.5">
-                    <span className="display-title shrink-0 text-[10px] font-semibold uppercase tracking-[0.18em] text-nezumi pt-[3px]">
-                      {t('contact.before.refundLabel')}
-                    </span>
-                    <span>{t('contact.before.refundHint')}</span>
-                  </li>
-                  <li className="flex gap-2.5">
-                    <span className="display-title shrink-0 text-[10px] font-semibold uppercase tracking-[0.18em] text-nezumi pt-[3px]">
-                      {t('contact.before.journalLabel')}
-                    </span>
-                    <span>
-                      <Trans
-                        i18nKey="contact.before.journalHint"
-                        components={[
-                          <Link
-                            to="/blog"
-                            className="font-medium text-sumi underline decoration-hinomaru/40 decoration-2 underline-offset-4 hover:decoration-hinomaru transition-colors"
-                          />,
-                        ]}
-                      />
-                    </span>
+                  <li>{t('contact.before.refundHint')}</li>
+                  <li>
+                    <Trans
+                      i18nKey="contact.before.journalHint"
+                      components={[
+                        <Link
+                          to="/blog"
+                          className="font-medium text-sumi-soft underline decoration-hinomaru/30 underline-offset-4 hover:text-sumi hover:decoration-hinomaru transition-colors"
+                        />,
+                      ]}
+                    />
                   </li>
                 </ul>
-              </aside>
+              </div>
             </Reveal>
           </div>
         </div>
