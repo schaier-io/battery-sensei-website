@@ -60,29 +60,75 @@ export function FeatureBoard() {
     votedIdsRef.current = votedIds
   }, [votedIds])
 
+  const [nextCursor, setNextCursor] = useState<string | null>(null)
+  const [isLoadingMore, setIsLoadingMore] = useState(false)
+  const loadMoreRef = useRef<HTMLDivElement | null>(null)
+
+  type ListResponse = {
+    items?: BoardItem[]
+    hasMore?: boolean
+    nextCursor?: string | null
+  }
+
+  const fetchPage = useCallback(async (cursor?: string): Promise<ListResponse | null> => {
+    try {
+      const query = cursor ? `?cursor=${encodeURIComponent(cursor)}` : ''
+      const response = await fetch(`/api/feature-requests${query}`, {
+        headers: { accept: 'application/json' },
+      })
+      const data = (await response.json().catch(() => null)) as ListResponse | null
+      if (!response.ok || !data?.items) return null
+      return data
+    } catch {
+      return null
+    }
+  }, [])
+
   const loadBoard = useCallback(async () => {
     setLoadError(false)
     setItems(null)
-    try {
-      const response = await fetch('/api/feature-requests', {
-        headers: { accept: 'application/json' },
-      })
-      const data = (await response.json().catch(() => null)) as { items?: BoardItem[] } | null
-      if (!response.ok || !data?.items) {
-        setLoadError(true)
-        setItems([])
-        return
-      }
-      setItems(data.items)
-    } catch {
+    setNextCursor(null)
+    const data = await fetchPage()
+    if (!data) {
       setLoadError(true)
       setItems([])
+      return
     }
-  }, [])
+    setItems(data.items ?? [])
+    setNextCursor(data.hasMore ? (data.nextCursor ?? null) : null)
+  }, [fetchPage])
+
+  const loadMore = useCallback(async () => {
+    if (!nextCursor || isLoadingMore) return
+    setIsLoadingMore(true)
+    const data = await fetchPage(nextCursor)
+    setIsLoadingMore(false)
+    if (!data) return
+    setItems((current) => {
+      const seen = new Set((current ?? []).map((item) => item.id))
+      return [...(current ?? []), ...(data.items ?? []).filter((item) => !seen.has(item.id))]
+    })
+    setNextCursor(data.hasMore ? (data.nextCursor ?? null) : null)
+  }, [fetchPage, nextCursor, isLoadingMore])
 
   useEffect(() => {
     void loadBoard()
   }, [loadBoard])
+
+  // Infinite load: the sentinel at the bottom of the list's own scroll
+  // region fetches the next page as it scrolls into view.
+  useEffect(() => {
+    const el = loadMoreRef.current
+    if (!el || !nextCursor) return
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) void loadMore()
+      },
+      { rootMargin: '120px' },
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [nextCursor, loadMore])
 
   // Arm voting from a previously stored key (checkout auto-save or a
   // prior dialog entry). Invalid keys are silently forgotten.
@@ -278,23 +324,35 @@ export function FeatureBoard() {
           )}
         </div>
       ) : (
-        sections.map((section) => (
-          <section key={section.status} aria-label={t(`board.sections.${section.status}`)}>
-            <h2 className="display-title mb-4 text-[12px] font-semibold uppercase tracking-[0.22em] text-sumi-soft">
-              {t(`board.sections.${section.status}`)}
-            </h2>
-            <div className="flex flex-col gap-3">
-              {section.items.map((item) => (
-                <FeatureCard
-                  key={item.id}
-                  item={item}
-                  hasVoted={votedIds.has(item.id)}
-                  onVote={() => handleVoteClick(item)}
-                />
-              ))}
+        // The board scrolls inside its own region so a long list never
+        // swallows the page — the submit form below stays reachable.
+        <div className="flex max-h-[560px] flex-col gap-10 overflow-y-auto overscroll-contain pr-1.5">
+          {sections.map((section) => (
+            <section key={section.status} aria-label={t(`board.sections.${section.status}`)}>
+              <h2 className="display-title mb-4 text-[12px] font-semibold uppercase tracking-[0.22em] text-sumi-soft">
+                {t(`board.sections.${section.status}`)}
+              </h2>
+              <div className="flex flex-col gap-3">
+                {section.items.map((item) => (
+                  <FeatureCard
+                    key={item.id}
+                    item={item}
+                    hasVoted={votedIds.has(item.id)}
+                    onVote={() => handleVoteClick(item)}
+                  />
+                ))}
+              </div>
+            </section>
+          ))}
+
+          {nextCursor && (
+            <div ref={loadMoreRef} className="flex justify-center py-2" aria-hidden>
+              {isLoadingMore && (
+                <RefreshCw className="h-4 w-4 animate-spin text-nezumi motion-reduce:animate-none" strokeWidth={1.7} />
+              )}
             </div>
-          </section>
-        ))
+          )}
+        </div>
       )}
 
       {voteError && (

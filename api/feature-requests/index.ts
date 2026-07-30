@@ -40,7 +40,8 @@ import {
   buildFeatureConfirmationEmail,
 } from '../../lib/emails/feature-board.js'
 
-const LIST_MAX_ITEMS = 200
+const LIST_PAGE_SIZE = 20
+const LIST_PAGE_MAX = 50
 
 // Same durable windows as the contact form.
 const EMAIL_RATE_WINDOW_MS = 24 * 60 * 60 * 1000
@@ -124,12 +125,26 @@ function buildRequestRecord({
   }
 }
 
-export async function GET(_request: Request): Promise<Response> {
+export async function GET(request: Request): Promise<Response> {
+  // Cursor pagination: stable order (votes desc, createdAt desc, id desc as
+  // the unique tiebreaker) so pages never skip or repeat rows between calls.
+  const url = new URL(request.url)
+  const rawLimit = Number.parseInt(url.searchParams.get('limit') ?? '', 10)
+  const limit = Number.isFinite(rawLimit)
+    ? Math.min(Math.max(rawLimit, 1), LIST_PAGE_MAX)
+    : LIST_PAGE_SIZE
+  const rawCursor = url.searchParams.get('cursor') ?? undefined
+  const cursor =
+    rawCursor && rawCursor.length <= 64 && /^[A-Za-z0-9_-]+$/.test(rawCursor)
+      ? rawCursor
+      : undefined
+
   const rows = await prisma.featureRequest.findMany({
     where: { status: { in: [...PUBLIC_STATUSES] } },
-    orderBy: [{ votesCount: 'desc' }, { createdAt: 'desc' }],
+    orderBy: [{ votesCount: 'desc' }, { createdAt: 'desc' }, { id: 'desc' }],
     // One extra row detects overflow for the `hasMore` flag.
-    take: LIST_MAX_ITEMS + 1,
+    take: limit + 1,
+    ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),
     select: {
       id: true,
       title: true,
@@ -142,10 +157,13 @@ export async function GET(_request: Request): Promise<Response> {
     },
   })
 
+  const page = rows.slice(0, limit)
+  const hasMore = rows.length > limit
+
   return json(
     {
       ok: true,
-      items: rows.slice(0, LIST_MAX_ITEMS).map((r) => ({
+      items: page.map((r) => ({
         id: r.id,
         title: r.publicTitle ?? r.title,
         body: r.publicBody ?? r.body,
@@ -153,8 +171,8 @@ export async function GET(_request: Request): Promise<Response> {
         votes: r.votesCount,
         createdAt: r.createdAt.toISOString(),
       })),
-      // Honest signal instead of silent truncation at the cap.
-      hasMore: rows.length > LIST_MAX_ITEMS,
+      hasMore,
+      nextCursor: hasMore ? page[page.length - 1]?.id ?? null : null,
     },
     200,
     { 'cache-control': 'public, s-maxage=60, stale-while-revalidate=300' },
