@@ -171,7 +171,9 @@
       "refining": "calcul en cours…",
       "plugTitle": "En charge",
       "plugTime": "~38 min",
-      "untilTarget": "jusqu’à 85 %"
+      "untilTarget": "jusqu’à 85 %",
+      "devicesTitle": "Les appareils à proximité aussi",
+      "devicesNote": "iPhone, iPad et AirPods reçoivent leurs propres alertes de batterie faible, lues via Bluetooth. Sans câble ni app compagnon."
     },
     "chargeLimit": {
       "title": "Limite de charge",

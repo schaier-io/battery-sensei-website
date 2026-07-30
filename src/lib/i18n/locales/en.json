@@ -171,7 +171,9 @@
       "refining": "still calculating…",
       "plugTitle": "Charging",
       "plugTime": "~38m",
-      "untilTarget": "until 85%"
+      "untilTarget": "until 85%",
+      "devicesTitle": "Nearby devices too",
+      "devicesNote": "iPhone, iPad, and AirPods get their own low-battery alerts, read over Bluetooth. No cables, no companion app."
     },
     "chargeLimit": {
       "title": "Charge limit",

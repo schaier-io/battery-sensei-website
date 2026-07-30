@@ -1,7 +1,6 @@
 import { Nav } from '#/components/sections/Nav'
 import { Hero } from '#/components/sections/Hero'
 import { Features } from '#/components/sections/Features'
-import { Saga } from '#/components/sections/Saga'
 import { Health } from '#/components/sections/Health'
 import { FAQ } from '#/components/sections/FAQ'
 import { Pricing } from '#/components/sections/Pricing'
@@ -24,8 +23,6 @@ export function HomePage() {
         <Hero />
         <Categories />
         <Features />
-        <BrushDivider />
-        <Saga />
         <BrushDivider />
         <Health />
         <BrushDivider />

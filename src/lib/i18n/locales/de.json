@@ -171,7 +171,9 @@
       "refining": "wird noch berechnet…",
       "plugTitle": "Wird geladen",
       "plugTime": "~38 Min.",
-      "untilTarget": "bis 85 %"
+      "untilTarget": "bis 85 %",
+      "devicesTitle": "Auch Geräte in der Nähe",
+      "devicesNote": "iPhone, iPad und AirPods bekommen eigene Warnungen bei niedrigem Akku, gelesen über Bluetooth. Ohne Kabel, ohne Zusatz-App."
     },
     "chargeLimit": {
       "title": "Ladelimit",

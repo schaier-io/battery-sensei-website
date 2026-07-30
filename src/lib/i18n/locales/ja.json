@@ -171,7 +171,9 @@
       "refining": "計算を続けています…",
       "plugTitle": "充電中",
       "plugTime": "約38分",
-      "untilTarget": "85%まで"
+      "untilTarget": "85%まで",
+      "devicesTitle": "近くのデバイスも",
+      "devicesNote": "iPhone・iPad・AirPods にもそれぞれ残量低下の通知。Bluetooth 経由で読み取り、ケーブルも追加アプリも不要です。"
     },
     "chargeLimit": {
       "title": "充電制限",

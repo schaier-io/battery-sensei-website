@@ -1,5 +1,7 @@
 import type { JSX } from 'react'
-import { Eye, Bell, BatteryCharging, Plane, Wifi, Search, Zap, CalendarClock, Lock, ArrowUpRight, PlugZap, Unplug, LoaderCircle } from 'lucide-react'
+import {
+  Smartphone,
+  Headphones, Eye, Bell, BatteryCharging, Plane, Wifi, Search, Zap, CalendarClock, Lock, ArrowUpRight, PlugZap, Unplug, LoaderCircle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Link } from '@tanstack/react-router'
 import { Hanko } from '#/components/zen/Hanko'
@@ -382,6 +384,59 @@ function HandoffNotice({
   )
 }
 
+/** One nearby device in the strip below the handoff notices. */
+function DeviceRow({
+  icon,
+  name,
+  percent,
+}: {
+  icon: React.ReactNode
+  name: string
+  percent: number
+}) {
+  return (
+    <span className="flex items-center gap-2.5">
+      <span className="text-sumi-soft">{icon}</span>
+      <span className="text-[12px] font-medium text-sumi">{name}</span>
+      <span className="relative h-[7px] w-12 overflow-hidden rounded-full bg-sumi/10">
+        <span
+          className="absolute inset-y-0 left-0 rounded-full bg-hinomaru/70"
+          style={{ width: `${percent}%` }}
+        />
+      </span>
+      <span className="text-[11px] tabular-nums text-sumi-soft">{percent}%</span>
+    </span>
+  )
+}
+
+/** The same watchfulness extends past the Mac: iPhone, iPad, and Bluetooth
+ * accessories get their own low-battery alerts. Spans the notice grid. */
+function DeviceStrip() {
+  const { t } = useTranslation()
+  return (
+    <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 rounded-xl border border-dashed border-[var(--line-strong)] px-4 py-3 sm:col-span-2">
+      <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-nezumi">
+        {t('features.handoffs.devicesTitle')}
+      </span>
+      <span className="flex flex-wrap items-center gap-x-5 gap-y-2">
+        <DeviceRow
+          icon={<Smartphone className="h-3.5 w-3.5" strokeWidth={1.8} aria-hidden />}
+          name="iPhone"
+          percent={72}
+        />
+        <DeviceRow
+          icon={<Headphones className="h-3.5 w-3.5" strokeWidth={1.8} aria-hidden />}
+          name="AirPods"
+          percent={38}
+        />
+      </span>
+      <span className="w-full text-[11px] leading-snug text-sumi-soft">
+        {t('features.handoffs.devicesNote')}
+      </span>
+    </div>
+  )
+}
+
 function PowerHandoffFeature() {
   const { t } = useTranslation()
 
@@ -414,6 +469,7 @@ function PowerHandoffFeature() {
           <div className="grid gap-3 sm:grid-cols-2" aria-label={t('features.handoffs.previewLabel')}>
             <HandoffNotice kind="unplug" />
             <HandoffNotice kind="plug" />
+            <DeviceStrip />
           </div>
         </div>
       </article>

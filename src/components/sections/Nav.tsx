@@ -40,7 +40,7 @@ function sectionHref(id: string, pathname: string, locale: string): string {
   return base ? `${base}#${target}` : `/#${target}`
 }
 
-const SECTIONS = ['features', 'saga', 'health', 'pricing', 'faq', 'contact'] as const
+const SECTIONS = ['features', 'health', 'pricing', 'faq', 'contact'] as const
 type SectionId = (typeof SECTIONS)[number]
 
 // Desktop bar shows only the conversion-critical trio. History, Health, and
