@@ -195,11 +195,11 @@ export const post: BlogPost = {
         left. A two-year-old MacBook with 1,200 cycles at 88% capacity is in
         better shape than one with 400 cycles at 78%, because the latter has
         been stewed at 100% on a hot desk. For more on that distinction, see{' '}
-        <A to="/blog/healthy-cycle-count-macbook">
+        <A to="/guides/healthy-cycle-count-macbook">
           what’s a healthy MacBook battery cycle count
         </A>
         . If OBC remains mysterious to you, the longer guide is{' '}
-        <A to="/blog/optimized-battery-charging-explained">
+        <A to="/guides/optimized-battery-charging-explained">
           Optimized Battery Charging, explained
         </A>
         .

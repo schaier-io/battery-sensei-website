@@ -44,7 +44,7 @@ export const STATUS_BADGE: Record<string, string> = {
   pending: 'text-kin border-kin/40 bg-kin/[0.08]',
   open: 'text-sumi-soft border-[var(--line-strong)]',
   planned: 'text-kin border-kin/40 bg-kin/[0.06]',
-  in_progress: 'text-hinomaru border-hinomaru/40 bg-hinomaru/[0.06]',
+  in_progress: 'text-hinomaru-ink border-hinomaru/40 bg-hinomaru/[0.06]',
   shipped: 'text-matcha border-matcha/40 bg-matcha/[0.06]',
   rejected: 'text-nezumi border-[var(--line)] opacity-70',
 }
@@ -150,12 +150,12 @@ export function RequestDetail({
               <span>locale: {item.locale}</span>
               <span>votes: {item.votes}</span>
               <span>received: {new Date(item.createdAt).toLocaleString()}</span>
-              {item.adminNote && <span className="text-hinomaru">note: {item.adminNote}</span>}
+              {item.adminNote && <span className="text-hinomaru-ink">note: {item.adminNote}</span>}
             </div>
           </DialogDescription>
         </DialogHeader>
 
-        <section className="rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] p-3.5">
+        <section className="rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,var(--paper-lift))] p-3.5">
           <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-nezumi">
             As submitted
           </p>
@@ -215,7 +215,7 @@ export function RequestDetail({
                 type="button"
                 disabled={busy || reason.trim().length < 4}
                 onClick={() => void patch({ id: item.id, action: 'reject', reason: reason.trim() })}
-                className="inline-flex h-10 items-center gap-2 rounded-md border border-hinomaru/40 px-5 text-sm font-medium text-hinomaru transition-colors hover:bg-hinomaru/[0.06] disabled:opacity-50"
+                className="inline-flex h-10 items-center gap-2 rounded-md border border-hinomaru/40 px-5 text-sm font-medium text-hinomaru-ink transition-colors hover:bg-hinomaru/[0.06] disabled:opacity-50"
               >
                 <X className="h-4 w-4" strokeWidth={1.8} aria-hidden />
                 Reject & notify
@@ -273,7 +273,7 @@ export function RequestDetail({
                 type="button"
                 disabled={busy || reason.trim().length < 4}
                 onClick={() => void patch({ id: item.id, action: 'reject', reason: reason.trim() })}
-                className="inline-flex h-10 w-fit items-center gap-2 rounded-md border border-hinomaru/40 px-5 text-sm font-medium text-hinomaru transition-colors hover:bg-hinomaru/[0.06] disabled:opacity-50"
+                className="inline-flex h-10 w-fit items-center gap-2 rounded-md border border-hinomaru/40 px-5 text-sm font-medium text-hinomaru-ink transition-colors hover:bg-hinomaru/[0.06] disabled:opacity-50"
               >
                 <X className="h-4 w-4" strokeWidth={1.8} aria-hidden />
                 Take down
@@ -291,7 +291,7 @@ export function RequestDetail({
         {(error || notice) && (
           <p
             role={error ? 'alert' : 'status'}
-            className={`text-[0.8125rem] ${error ? 'text-hinomaru' : 'text-matcha'}`}
+            className={`text-[0.8125rem] ${error ? 'text-hinomaru-ink' : 'text-matcha'}`}
           >
             {error || notice}
           </p>

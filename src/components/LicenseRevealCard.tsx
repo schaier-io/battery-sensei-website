@@ -1,15 +1,12 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
-import {
-  Check,
-  Copy,
-  Download as DownloadIcon,
-  ExternalLink,
-  Mail,
-  Sparkles,
-} from 'lucide-react'
+import { Download as DownloadIcon } from 'lucide-react'
 import { CUSTOMER_PORTAL_URL } from '#/lib/polar'
 import { storeLicenseKey } from '#/lib/board-license'
+import {
+  DeliveryStrip,
+  type DeliveryState,
+} from '#/components/LicenseDeliveryStrip'
 
 /**
  * Composite post-purchase delivery card. Mounted on /thanks/lifetime and
@@ -30,33 +27,33 @@ import { storeLicenseKey } from '#/lib/board-license'
  *   │  Customer portal →                      │
  *   └─────────────────────────────────────────┘
  *
- * The top section is always Install. The bottom strip is state-aware:
- *   loading      → small spinner + "Preparing your key"
- *   provisioning → spinner + rotating slogan + email + portal link
- *   ready        → license key + copy button + meta row
- *   expired      → "Check your email" with portal CTA
- *
- * The frame doesn't re-render between states; only the strip morphs.
- * Continuity carries the eye, so the buyer never sees "the page
- * changed" between waiting and key-arrives.
+ * The top section is always Install — including when there is no
+ * `checkout_id` at all. Someone who bookmarked this page, reopened it
+ * from history, or lost the query string to a redirect has still paid,
+ * and must still be able to download the app, learn where their key is
+ * and reach the customer portal. Only the bottom strip depends on the
+ * id; its states live in LicenseDeliveryStrip.
  *
  * Lifecycle
  * ---------
  *   1. Mount, state = loading.
- *   2. Read checkout_id (prop > URL) and strip the query.
- *   3. Poll /api/checkout/[id] every POLL_INTERVAL_MS until either
- *      the key arrives (ready) or the server's 15-min freshness
- *      window closes (410 → expired). No manual retry: the loop runs
- *      for the full server-side window so a slow Polar grant always
- *      lands on screen if it lands at all.
+ *   2. Read checkout_id (prop > URL) and strip the query. No id →
+ *      phase 'missing' and the strip points at the inbox.
+ *   3. Poll /api/checkout/[id] every POLL_INTERVAL_MS until either the
+ *      key arrives (ready), the server's freshness window closes
+ *      (410 → expired), or POLL_TIMEOUT_MS passes with neither
+ *      (→ timeout). No manual retry: the loop runs itself, and when it
+ *      gives up it hands over a recovery instead of a spinner.
  */
 
 const POLL_INTERVAL_MS = 10_000
 
-// Rotating progress slogans for the wait. Each line names a small,
-// concrete step so the wait reads as work being done rather than a
-// stall. List does NOT loop — the last line is the resting state.
-const SLOGAN_INTERVAL_MS = 3400
+// How long the loop may sit on "preparing your key" before it stops and
+// shows a recovery. A healthy Polar grant lands on the first or second
+// poll; past ~25 s the id is almost certainly stale or mistyped, and an
+// endless spinner at the highest-anxiety moment of the funnel is worse
+// than an honest "here is where your key is".
+const POLL_TIMEOUT_MS = 25_000
 
 // Minimum wait before flipping the strip to the key reveal, even when
 // Polar returns the key on the first poll. With the bow-video buffer
@@ -65,10 +62,6 @@ const SLOGAN_INTERVAL_MS = 3400
 // the spinner spin and at least two slogans cycle so the reveal
 // feels earned, not snatched away from the spinner.
 const MIN_HOLD_MS = 4000
-
-// Fallback used only if the locale ships without the slogan array
-// (broken JSON, mid-deploy gap, etc.) so the strip never blanks.
-const FALLBACK_SLOGAN = 'Polar is preparing the paperwork.'
 
 export function LicenseRevealCard({
   checkoutId: checkoutIdProp,
@@ -88,21 +81,37 @@ export function LicenseRevealCard({
 }) {
   const { t } = useTranslation()
   const [state, setState] = useState<DeliveryState>({ phase: 'loading' })
-  const startedRef = useRef(false)
+  // Checkout id resolved on the first effect run. Held in a ref because
+  // that same run strips the query string, so any later run (React's
+  // development double-mount, a Fast Refresh remount) can no longer
+  // read the id off the URL.
+  const resolvedIdRef = useRef<string | null>(null)
   const cancelRef = useRef<(() => void) | null>(null)
 
   const startPolling = useCallback((checkoutId: string) => {
     cancelRef.current?.()
 
     let cancelled = false
+    // Flips once the loop reaches a terminal state (ready, expired or
+    // timeout). Guards every deferred callback so a late poll or the
+    // give-up timer can't overwrite a state already on screen.
+    let settled = false
     let timeoutId: number | undefined
     let holdTimeoutId: number | undefined
+    let giveUpTimeoutId: number | undefined
     const pollStart = Date.now()
+
+    // Last order id / portal URL seen on the wire, so the timeout
+    // recovery can name the buyer's own portal rather than the generic
+    // one whenever the API answered at least once.
+    let lastOrderId: string | null = null
+    let lastPortalUrl = CUSTOMER_PORTAL_URL
 
     cancelRef.current = () => {
       cancelled = true
       if (timeoutId !== undefined) window.clearTimeout(timeoutId)
       if (holdTimeoutId !== undefined) window.clearTimeout(holdTimeoutId)
+      if (giveUpTimeoutId !== undefined) window.clearTimeout(giveUpTimeoutId)
     }
 
     setState({ phase: 'loading' })
@@ -116,6 +125,7 @@ export function LicenseRevealCard({
       ready: Extract<DeliveryState, { phase: 'ready' }>,
     ): void => {
       if (cancelled) return
+      settled = true
       const elapsed = Date.now() - pollStart
       if (elapsed >= MIN_HOLD_MS) {
         setState(ready)
@@ -132,7 +142,22 @@ export function LicenseRevealCard({
       }, MIN_HOLD_MS - elapsed)
     }
 
+    // Hard stop on the wait. Runs on its own clock rather than off the
+    // poll cadence, so the wait ends at POLL_TIMEOUT_MS no matter how
+    // an in-flight request behaves.
+    giveUpTimeoutId = window.setTimeout(() => {
+      if (cancelled || settled) return
+      settled = true
+      if (timeoutId !== undefined) window.clearTimeout(timeoutId)
+      setState({
+        phase: 'timeout',
+        orderId: lastOrderId,
+        customerPortalUrl: lastPortalUrl,
+      })
+    }, POLL_TIMEOUT_MS)
+
     const attempt = async (): Promise<void> => {
+      if (cancelled || settled) return
       try {
         const res = await fetch(
           `/api/checkout/${encodeURIComponent(checkoutId)}`,
@@ -142,7 +167,7 @@ export function LicenseRevealCard({
             headers: { Accept: 'application/json' },
           },
         )
-        if (cancelled) return
+        if (cancelled || settled) return
         const data = (await res.json().catch(() => ({}))) as Record<
           string,
           unknown
@@ -151,8 +176,11 @@ export function LicenseRevealCard({
         const customerEmail = (data.customerEmail as string) ?? null
         const customerPortalUrl =
           (data.customerPortalUrl as string) ?? CUSTOMER_PORTAL_URL
+        lastOrderId = orderId ?? lastOrderId
+        lastPortalUrl = customerPortalUrl
 
         if (res.status === 410 || data.expired) {
+          settled = true
           setState({ phase: 'expired', orderId, customerPortalUrl })
           return
         }
@@ -180,7 +208,8 @@ export function LicenseRevealCard({
         })
         timeoutId = window.setTimeout(attempt, POLL_INTERVAL_MS)
       } catch {
-        if (!cancelled) {
+        if (!cancelled && !settled) {
+          settled = true
           setState({
             phase: 'expired',
             orderId: null,
@@ -193,25 +222,34 @@ export function LicenseRevealCard({
     attempt()
   }, [])
 
+  // Effect is deliberately re-runnable. It used to bail out on a
+  // `started` ref, which paired badly with its own cleanup: React
+  // mounts, unmounts and remounts effects in development, so the first
+  // run's cleanup cancelled the loop and the second run refused to
+  // start a new one. The card then sat on "preparing your key" forever
+  // no matter what the API answered. Resolving the id once and letting
+  // every run restart the loop (startPolling cancels any predecessor)
+  // makes a remount harmless.
   useEffect(() => {
-    if (startedRef.current) return
-    startedRef.current = true
     if (typeof window === 'undefined') return
 
-    let checkoutId = (checkoutIdProp ?? '').trim()
-    if (!checkoutId) {
-      const params = new URLSearchParams(window.location.search)
-      checkoutId = params.get('checkout_id')?.trim() ?? ''
+    if (resolvedIdRef.current === null) {
+      let fromUrl = (checkoutIdProp ?? '').trim()
+      if (!fromUrl) {
+        const params = new URLSearchParams(window.location.search)
+        fromUrl = params.get('checkout_id')?.trim() ?? ''
+      }
+      resolvedIdRef.current = fromUrl
+      if (fromUrl && window.location.search) {
+        const { pathname } = window.location
+        window.history.replaceState({}, '', pathname)
+      }
     }
 
+    const checkoutId = resolvedIdRef.current
     if (!checkoutId) {
       setState({ phase: 'missing' })
       return
-    }
-
-    if (window.location.search) {
-      const { pathname } = window.location
-      window.history.replaceState({}, '', pathname)
     }
 
     startPolling(checkoutId)
@@ -231,27 +269,15 @@ export function LicenseRevealCard({
   onOrderIdRef.current = onOrderId
   const lastReportedOrderIdRef = useRef<string | null>(null)
   useEffect(() => {
-    const id =
-      state.phase === 'ready' ||
-      state.phase === 'provisioning' ||
-      state.phase === 'expired'
-        ? state.orderId
-        : null
+    const id = orderIdOf(state)
     if (id && id !== lastReportedOrderIdRef.current) {
       lastReportedOrderIdRef.current = id
       onOrderIdRef.current?.(id)
     }
   }, [state])
 
-  if (state.phase === 'missing') return null
-
   // Pull the order id out of the active state for the header chip.
-  const orderId =
-    state.phase === 'ready' ||
-    state.phase === 'provisioning' ||
-    state.phase === 'expired'
-      ? state.orderId
-      : null
+  const orderId = orderIdOf(state)
 
   return (
     <section
@@ -263,7 +289,7 @@ export function LicenseRevealCard({
           their own staggered rises on top via inline animationDelay
           so the eye walks the card top → bottom rather than landing
           on everything at once. */}
-      <div className="thanks-card-mount mx-auto w-full max-w-[460px] overflow-hidden rounded-2xl border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,#fff)] shadow-[0_1px_0_rgba(255,255,255,0.5)_inset,0_30px_60px_-32px_rgba(28,26,23,0.22)]">
+      <div className="thanks-card-mount mx-auto w-full max-w-[460px] overflow-hidden rounded-2xl border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,var(--paper-lift))] shadow-[0_1px_0_rgba(255,255,255,0.5)_inset,0_30px_60px_-32px_rgba(28,26,23,0.22)]">
         <Header orderId={orderId} />
         <InstallSection />
         <Hairline />
@@ -283,27 +309,17 @@ export function LicenseRevealCard({
 
 // ---------------------------------------------------------------------------
 
-type DeliveryState =
-  | { phase: 'loading' }
-  | { phase: 'missing' }
-  | {
-      phase: 'ready'
-      licenseKey: string
-      orderId: string | null
-      customerEmail: string | null
-      customerPortalUrl: string
-    }
-  | {
-      phase: 'provisioning'
-      orderId: string | null
-      customerEmail: string | null
-      customerPortalUrl: string
-    }
-  | {
-      phase: 'expired'
-      orderId: string | null
-      customerPortalUrl: string
-    }
+/** Order id carried by whichever delivery state is active. Null for the
+ *  two states that never had one: loading, and missing (no checkout id
+ *  to look one up with). */
+function orderIdOf(state: DeliveryState): string | null {
+  return state.phase === 'ready' ||
+    state.phase === 'provisioning' ||
+    state.phase === 'expired' ||
+    state.phase === 'timeout'
+    ? state.orderId
+    : null
+}
 
 // ─── Header ────────────────────────────────────────────────────────────────
 
@@ -338,7 +354,7 @@ function Header({ orderId }: { orderId: string | null }) {
         </span>
         <span aria-hidden className="text-nezumi/50">·</span>
         <code className="text-[10.5px] tracking-[0.02em] text-sumi-soft break-all license-mono">
-          #{orderId ?? ' '.repeat(16)}
+          #{orderId ?? ' '.repeat(16)}
         </code>
       </div>
     </div>
@@ -366,7 +382,7 @@ function InstallSection() {
             used elsewhere on the site (基 features, 価 pricing, 鍵 key). */}
         <span
           aria-hidden
-          className="font-jp text-base leading-none text-hinomaru/85 w-5 text-center"
+          className="font-jp text-base leading-none text-hinomaru-ink/85 w-5 text-center"
         >
           装
         </span>
@@ -396,7 +412,7 @@ function InstallSection() {
           /checkout. */}
       <a
         href="/download/latest"
-        className="thanks-section-rise group mt-5 inline-flex h-11 w-full items-center justify-center gap-2 rounded-md border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_55%,#fff)] px-5 text-[0.9375rem] font-medium text-sumi transition-[background-color,transform,box-shadow] duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-px hover:bg-[color-mix(in_oklab,var(--washi)_35%,#fff)] hover:shadow-[0_4px_14px_-8px_rgba(28,26,23,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
+        className="thanks-section-rise group mt-5 inline-flex h-11 w-full items-center justify-center gap-2 rounded-md border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_55%,var(--paper-lift))] px-5 text-[0.9375rem] font-medium text-sumi transition-[background-color,transform,box-shadow] duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-px hover:bg-[color-mix(in_oklab,var(--washi)_35%,var(--paper-lift))] hover:shadow-[0_4px_14px_-8px_rgba(28,26,23,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
         style={{ animationDelay: '400ms' }}
       >
         <DownloadIcon
@@ -440,379 +456,3 @@ function Hairline() {
     </div>
   )
 }
-
-// ─── Delivery strip (secondary, state-aware) ───────────────────────────────
-
-function DeliveryStrip({
-  state,
-  t,
-  checkoutEmailHint,
-}: {
-  state: DeliveryState
-  t: ReturnType<typeof useTranslation>['t']
-  checkoutEmailHint: string | null
-}) {
-  // Tinted surface so the strip reads as a different layer of the
-  // card without becoming a nested container. ~3% darker washi. Stays
-  // on the OUTER wrapper so the colored band doesn't flash during
-  // state changes — only the contents inside `<StripContent>` morph.
-  return (
-    <div
-      className="thanks-section-rise bg-[color-mix(in_oklab,var(--washi)_84%,var(--sumi)_4%)] px-5 py-5 sm:px-6 sm:py-6"
-      style={{ animationDelay: '560ms' }}
-    >
-      {/* `key={state.phase}` makes React unmount + remount the inner
-          contents whenever the polling loop hands off between states,
-          which re-fires .thanks-strip-state's keyframe. The visual
-          result: each new state lands with a small breath rather than
-          a hard swap, and the surrounding card frame stays put. */}
-      <div key={state.phase} className="thanks-strip-state">
-        {state.phase === 'loading' && (
-          <LoadingLine label={t('thanks.delivery.preparing')} />
-        )}
-        {state.phase === 'provisioning' && (
-          <ProvisioningLine
-            customerEmail={state.customerEmail}
-            customerPortalUrl={state.customerPortalUrl}
-          />
-        )}
-        {state.phase === 'ready' && (
-          <KeyLine
-            licenseKey={state.licenseKey}
-            customerEmail={state.customerEmail ?? checkoutEmailHint}
-            customerPortalUrl={state.customerPortalUrl}
-          />
-        )}
-        {state.phase === 'expired' && (
-          <ExpiredLine customerPortalUrl={state.customerPortalUrl} />
-        )}
-      </div>
-    </div>
-  )
-}
-
-// ─── Strip variants ────────────────────────────────────────────────────────
-
-function LoadingLine({ label }: { label: string }) {
-  return (
-    <div className="flex items-center gap-3" role="status" aria-live="polite">
-      <ZenSpinner small />
-      <span className="display-title text-[11px] font-semibold uppercase tracking-[0.22em] text-sumi-soft">
-        {label}
-      </span>
-    </div>
-  )
-}
-
-function ProvisioningLine({
-  customerEmail,
-  customerPortalUrl,
-}: {
-  customerEmail: string | null
-  customerPortalUrl: string
-}) {
-  const { t } = useTranslation()
-
-  const slogans = useMemo<readonly string[]>(() => {
-    const raw = t('thanks.provisioning.slogans', { returnObjects: true })
-    if (Array.isArray(raw) && raw.length > 0) {
-      return raw.filter((s): s is string => typeof s === 'string')
-    }
-    return [FALLBACK_SLOGAN]
-  }, [t])
-
-  const [sloganIdx, setSloganIdx] = useState(0)
-  useEffect(() => {
-    if (sloganIdx >= slogans.length - 1) return
-    const id = window.setTimeout(
-      () => setSloganIdx((i) => i + 1),
-      SLOGAN_INTERVAL_MS,
-    )
-    return () => window.clearTimeout(id)
-  }, [sloganIdx, slogans.length])
-
-  return (
-    <div className="space-y-3" role="status" aria-live="polite">
-      <div className="flex items-center gap-3">
-        <ZenSpinner small />
-        <span className="display-title text-[11px] font-semibold uppercase tracking-[0.22em] text-sumi-soft">
-          {t('thanks.provisioning.kicker')}
-          {customerEmail && (
-            <>
-              {' · '}
-              <span className="normal-case tracking-normal font-mono text-[11.5px] text-sumi">
-                {customerEmail}
-              </span>
-            </>
-          )}
-        </span>
-      </div>
-      <p className="text-[14px] leading-[1.5] text-sumi">
-        <span key={sloganIdx} className="zen-slogan inline-block">
-          {slogans[sloganIdx] ?? FALLBACK_SLOGAN}
-        </span>
-      </p>
-      <a
-        href={customerPortalUrl}
-        target="_blank"
-        rel="noreferrer"
-        className="inline-flex items-center gap-1.5 text-[12px] text-nezumi underline-offset-4 transition-colors hover:text-sumi-soft hover:underline"
-      >
-        <ExternalLink className="h-3 w-3" strokeWidth={1.6} />
-        {t('thanks.delivery.portalLink')}
-      </a>
-    </div>
-  )
-}
-
-function KeyLine({
-  licenseKey,
-  customerEmail,
-  customerPortalUrl,
-}: {
-  licenseKey: string
-  customerEmail: string | null
-  customerPortalUrl: string
-}) {
-  const { t } = useTranslation()
-  const [copied, setCopied] = useState(false)
-  // Re-key the copy button on each successful copy so the bump
-  // keyframe replays even when the user clicks twice rapidly.
-  const [copyAnim, setCopyAnim] = useState(0)
-
-  async function copy() {
-    try {
-      await navigator.clipboard.writeText(licenseKey)
-      setCopied(true)
-      setCopyAnim((n) => n + 1)
-      window.setTimeout(() => setCopied(false), 1800)
-    } catch {
-      /* clipboard API unavailable — user can select-all instead */
-    }
-  }
-
-  return (
-    // Inner stack with consistent vertical rhythm. Each row sits flush
-    // with the section padding (no kanji-column indent) so the content
-    // edges line up with the InstallSection above. Per-row stagger
-    // turns the key reveal into a small cascade: label → code+copy →
-    // activate CTA → meta line. Delays are computed off the strip
-    // state-change so they fire each time `<DeliveryStrip>` swaps
-    // states (the parent `key={state.phase}` remount).
-    <div className="space-y-3.5">
-      <div
-        className="thanks-key-row flex items-center gap-3"
-        style={{ ['--row-delay' as string]: '0ms' }}
-      >
-        {/* Kanji lands like a hanko press: starts oversize + invisible,
-            settles to 1× with a quick easing curve (.thanks-kanji-stamp).
-            Reads as the key being "stamped" into existence. */}
-        <span
-          aria-hidden
-          className="thanks-kanji-stamp font-jp text-base leading-none text-hinomaru/85 w-5 text-center"
-        >
-          鍵
-        </span>
-        <span className="display-title text-[11px] font-semibold uppercase tracking-[0.22em] text-sumi-soft">
-          {t('thanks.delivery.keyLabel')}
-        </span>
-        <span
-          aria-hidden
-          className="h-px flex-1 bg-gradient-to-r from-[var(--line-strong)] via-[var(--line)] to-transparent"
-        />
-      </div>
-
-      {/* Code + Copy. Stack vertically on phones (so the UUID gets the
-          full width and the copy button reads as a separate affordance,
-          not a sliver glued to the code). Side-by-side from sm up. */}
-      <div
-        className="thanks-key-row flex flex-col gap-2 sm:flex-row sm:items-stretch"
-        style={{ ['--row-delay' as string]: '120ms' }}
-      >
-        <code
-          // Geist Mono w/ slashed zero + slightly tighter tracking +
-          // small caps via OpenType `cv11` (alternate `a`) keeps the
-          // long UUID readable without looking like a developer log
-          // line. Falls back through ui-monospace → SF Mono on macOS.
-          className="flex-1 min-w-0 select-all rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] px-3 py-2.5 text-[12.5px] leading-[1.4] tracking-[0.015em] text-sumi shadow-[0_1px_0_rgba(255,255,255,0.55)_inset,0_1px_2px_rgba(28,26,23,0.04)]"
-          style={{
-            wordBreak: 'break-all',
-            fontFamily: 'var(--font-mono)',
-            fontFeatureSettings: '"ss01", "cv11", "zero"',
-            fontVariantNumeric: 'tabular-nums slashed-zero',
-          }}
-        >
-          {licenseKey || '—'}
-        </code>
-        <button
-          key={copyAnim}
-          type="button"
-          onClick={copy}
-          className={`group inline-flex items-center justify-center gap-1.5 rounded-md border px-3 py-2 text-[12px] font-medium shrink-0 transition-[colors,transform,box-shadow] duration-[200ms] active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 ${
-            copied
-              ? 'thanks-copy-bump border-matcha/45 bg-[color-mix(in_oklab,var(--matcha)_14%,var(--washi))] text-matcha'
-              : 'border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_55%,#fff)] text-sumi hover:bg-[color-mix(in_oklab,var(--washi)_35%,#fff)]'
-          }`}
-          aria-label={t('thanks.delivery.copyAria')}
-        >
-          {copied ? (
-            <>
-              <Check className="h-3.5 w-3.5" strokeWidth={2.2} />
-              {t('thanks.delivery.copied')}
-            </>
-          ) : (
-            <>
-              <Copy
-                className="h-3.5 w-3.5 transition-transform duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-px"
-                strokeWidth={1.8}
-              />
-              {t('thanks.delivery.copy')}
-            </>
-          )}
-        </button>
-      </div>
-
-      {/* Activate-in-app deeplink. Once the key is in hand, the
-          primary action is "open Sensei and prefill this key" — the
-          macOS app registers the `batterysensei://activate?key=...`
-          URL scheme and routes straight to the Premium activation
-          sheet with the key already filled. Falls back gracefully:
-          if the URL scheme isn't registered (app not installed),
-          the OS shows its standard "no app" dialog, and the user
-          still has the Copy button + the email above.
-
-          `encodeURIComponent` on the key escapes any characters Polar
-          might one day put in the format (today they're ASCII-only). */}
-      {/* Step 2 — Open Sensei & activate. The TRUE primary action of
-          the whole card: this is the deeplink that takes the buyer
-          from "I have a key" to "Premium is on". Slightly taller +
-          softer shadow than the secondary Download chip above so it
-          reads as the loudest affordance on the card. */}
-      <a
-        href={`batterysensei://activate?key=${encodeURIComponent(licenseKey)}`}
-        className="thanks-key-row btn-sumi group inline-flex h-12 w-full items-center justify-center gap-2 rounded-md px-5 text-[0.9375rem] font-semibold shadow-[0_8px_22px_-10px_rgba(28,26,23,0.45)] transition-[transform,box-shadow] duration-[260ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-px hover:shadow-[0_12px_28px_-10px_rgba(28,26,23,0.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
-        style={{ ['--row-delay' as string]: '240ms' }}
-      >
-        <Sparkles
-          className="h-4 w-4 transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5 group-hover:rotate-[10deg]"
-          strokeWidth={1.8}
-          aria-hidden
-        />
-        {t('thanks.delivery.activateInApp')}
-      </a>
-
-      {/* Meta row — email confirmation + portal link. Two separate
-          inline-flex chunks so each is its own focus/hit target.
-          Wraps gracefully to a second line on narrow widths. */}
-      <div
-        className="thanks-key-row flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[11.5px] leading-[1.45] text-nezumi"
-        style={{ ['--row-delay' as string]: '360ms' }}
-      >
-        <span className="inline-flex items-center gap-1.5">
-          <Mail className="h-3 w-3 text-sumi-soft/70" strokeWidth={1.6} />
-          {customerEmail ? (
-            <>
-              {t('thanks.delivery.alsoSentTo')}{' '}
-              <span className="font-medium text-sumi-soft">{customerEmail}</span>
-            </>
-          ) : (
-            t('thanks.delivery.alsoSentDefault')
-          )}
-        </span>
-        <span aria-hidden className="text-[var(--line-strong)]">
-          ·
-        </span>
-        <a
-          href={customerPortalUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex items-center gap-1.5 underline-offset-4 transition-colors hover:text-sumi-soft hover:underline"
-        >
-          <ExternalLink className="h-3 w-3" strokeWidth={1.6} />
-          {t('thanks.delivery.portalLink')}
-        </a>
-      </div>
-    </div>
-  )
-}
-
-function ExpiredLine({ customerPortalUrl }: { customerPortalUrl: string }) {
-  const { t } = useTranslation()
-  return (
-    <div className="space-y-3">
-      <div className="flex items-center gap-3">
-        <Mail className="h-4 w-4 text-hinomaru" strokeWidth={1.8} />
-        <span className="display-title text-[11px] font-semibold uppercase tracking-[0.22em] text-sumi-soft">
-          {t('thanks.delivery.expiredKicker')}
-        </span>
-      </div>
-      <p className="text-[13px] leading-[1.55] text-sumi-soft">
-        {t('thanks.delivery.expiredBody')}
-      </p>
-      <a
-        href={customerPortalUrl}
-        target="_blank"
-        rel="noreferrer"
-        className="inline-flex items-center gap-1.5 text-[12px] text-nezumi underline-offset-4 transition-colors hover:text-sumi-soft hover:underline"
-      >
-        <ExternalLink className="h-3 w-3" strokeWidth={1.6} />
-        {t('thanks.delivery.portalLink')}
-      </a>
-    </div>
-  )
-}
-
-// ─── Spinner ────────────────────────────────────────────────────────────────
-
-/**
- * Zen enso spinner. Thin circular brush arc rotating slowly with a
- * gradient that fades from transparent → sumi → hinomaru at the
- * leading edge. `small` toggles between the inline strip size (16px)
- * and the original card-anchor size (32px). The compact size is used
- * everywhere in the new composite card.
- */
-function ZenSpinner({ small = false }: { small?: boolean }) {
-  const size = small ? 'h-4 w-4' : 'h-8 w-8'
-  return (
-    <svg
-      role="presentation"
-      aria-hidden
-      viewBox="0 0 40 40"
-      className={size}
-    >
-      <defs>
-        <linearGradient
-          id="zen-spinner-grad"
-          x1="100%"
-          y1="0%"
-          x2="0%"
-          y2="100%"
-        >
-          <stop offset="0%" stopColor="var(--sumi)" stopOpacity="0" />
-          <stop offset="55%" stopColor="var(--sumi)" stopOpacity="0.55" />
-          <stop offset="100%" stopColor="var(--hinomaru)" stopOpacity="0.95" />
-        </linearGradient>
-      </defs>
-      <circle
-        cx="20"
-        cy="20"
-        r="14.5"
-        fill="none"
-        stroke="var(--line)"
-        strokeWidth="1"
-      />
-      <circle
-        className="zen-spinner"
-        cx="20"
-        cy="20"
-        r="14.5"
-        fill="none"
-        stroke="url(#zen-spinner-grad)"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeDasharray="38 100"
-      />
-    </svg>
-  )
-}
-

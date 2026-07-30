@@ -5,7 +5,7 @@ export const extended = (
     <H2>The three presets in detail</H2>
     <P>
       Sensei ships with three escalation moods. Each is built around a real
-      use case — pick the one whose stakes match yours.
+      use case, so pick the one whose stakes match yours.
     </P>
     <UL>
       <li>
@@ -17,7 +17,7 @@ export const extended = (
       <li>
         <strong>Regular Mode.</strong> The default. A standard card at
         15%, a red overlay at 5%, and a persistent alert at 2%. The middle
-        of the curve — visible enough to notice during heavy focus, gentle
+        of the curve: visible enough to notice during heavy focus, gentle
         enough not to feel hostile.
       </li>
       <li>
@@ -40,7 +40,7 @@ export const extended = (
     <P>
       Three presets cover the everyday shapes; if none of them quite
       fits, <A to="/features/custom-thresholds">custom thresholds</A>{' '}
-      (Premium) lets you compose your own — per-tier percent and per-tier
+      (Pro) lets you compose your own: per-tier percent and per-tier
       dismiss time.
     </P>
 
@@ -60,7 +60,7 @@ export const faqs = [
   {
     q: 'Can I have different presets for plugged-in vs. on battery?',
     a:
-      'Alert presets fire only when running on battery — plugged-in alerts don’t make sense (you’re not going to die). If you want a "currently using the adapter" indicator, that lives in the menu bar live readout, not the alerts system.',
+      'Alert presets fire only when running on battery. On the adapter there is nothing for them to catch: the tiers are thresholds on a falling charge, and plugged in the charge is climbing back through them. If you want a "currently using the adapter" indicator, that lives in the menu bar live readout, not the alerts system.',
   },
   {
     q: "Why does Senpai keep flashing until I click?",

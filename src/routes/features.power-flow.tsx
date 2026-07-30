@@ -7,7 +7,7 @@ const SITE_URL = 'https://www.battery-sensei.app'
 const PATH = '/features/power-flow'
 const PAGE_TITLE = 'Power flow — Battery Sensei'
 const PAGE_DESC =
-  "See exactly where your MacBook's watts go: what the adapter delivers, how much reaches the battery, and what the system itself draws — live, in one panel."
+  "See exactly where your MacBook's watts go: what the adapter delivers, what the system itself draws, and how much reaches the battery. Live, in one panel."
 
 const faqLd = {
   '@context': 'https://schema.org',

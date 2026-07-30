@@ -192,7 +192,7 @@ function CheckoutPage() {
           <div
             role="tablist"
             aria-label={t('checkout.tierToggleLabel')}
-            className="mb-6 inline-flex w-full rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] p-1 sm:w-auto"
+            className="mb-6 inline-flex w-full rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_60%,var(--paper-lift))] p-1 sm:w-auto"
           >
             <TierTab
               active={isLifetime}
@@ -215,7 +215,7 @@ function CheckoutPage() {
                 card on the homepage. Lifetime adds a strikethrough original. */}
             <header className="flex flex-col gap-3 sm:flex-row sm:items-baseline sm:justify-between">
               <div>
-                <span className="font-jp text-xs tracking-widest text-hinomaru/80 uppercase">
+                <span className="font-jp text-xs tracking-widest text-hinomaru-ink/80 uppercase">
                   {t('checkout.summaryTitle')}
                 </span>
                 <h2 className="display-title mt-1 text-[1.5rem] font-medium text-sumi leading-tight">
@@ -260,7 +260,7 @@ function CheckoutPage() {
                 /api/discount-availability. Hidden once the cap is hit
                 so we don't dangle "0 codes left" stale copy. */}
             {isLifetime && launchOpen ? (
-              <p className="mt-4 inline-flex max-w-full items-start gap-2 rounded-2xl bg-hinomaru/10 px-3 py-1.5 text-[0.75rem] font-medium text-hinomaru tabular-nums">
+              <p className="mt-4 inline-flex max-w-full items-start gap-2 rounded-2xl bg-hinomaru/10 px-3 py-1.5 text-[0.75rem] font-medium text-hinomaru-ink tabular-nums">
                 <Sparkles className="mt-[2px] h-3 w-3 shrink-0" strokeWidth={2} aria-hidden />
                 <span>
                   <Trans
@@ -281,7 +281,7 @@ function CheckoutPage() {
                     className="flex items-start gap-2.5 text-[0.9375rem] leading-snug text-sumi-soft"
                   >
                     <Icon
-                      className="mt-[3px] h-3.5 w-3.5 shrink-0 text-hinomaru/80"
+                      className="mt-[3px] h-3.5 w-3.5 shrink-0 text-hinomaru-ink/80"
                       strokeWidth={1.8}
                       aria-hidden
                     />
@@ -308,9 +308,9 @@ function CheckoutPage() {
                 the bottom of the page; up here it answers the
                 "what happens after I pay" question right at the card
                 form, which is where the doubt actually surfaces. */}
-            <aside className="mt-5 rounded-md border border-dashed border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-5 py-4">
+            <aside className="mt-5 rounded-md border border-dashed border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_60%,var(--paper-lift))] px-5 py-4">
               <p className="flex items-center gap-2 text-[0.7rem] uppercase tracking-[0.22em] font-medium text-sumi-soft">
-                <span className="font-jp normal-case tracking-normal text-hinomaru/80">鍵</span>
+                <span className="font-jp normal-case tracking-normal text-hinomaru-ink/80">鍵</span>
                 {t('pricing.lifetime.activationLabel')}
               </p>
               <p className="mt-2 text-[0.875rem] leading-snug text-sumi-soft">
@@ -462,7 +462,7 @@ function CheckoutPage() {
                 aria-hidden
                 className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-hinomaru/30 bg-[color-mix(in_oklab,var(--hinomaru)_7%,var(--washi))] shadow-[0_1px_0_rgba(255,255,255,0.5)_inset,0_1px_2px_rgba(28,26,23,0.12)]"
               >
-                <KeyRound className="h-5 w-5 text-hinomaru" strokeWidth={1.5} />
+                <KeyRound className="h-5 w-5 text-hinomaru-ink" strokeWidth={1.5} />
               </div>
               <div className="min-w-0 flex-1">
                 <p className="display-title text-[1rem] font-medium leading-tight text-sumi">
@@ -486,7 +486,7 @@ function CheckoutPage() {
                 <div className="mt-3.5 flex flex-wrap items-center gap-2">
                   <a
                     href="/download/latest"
-                    className="inline-flex h-9 items-center gap-2 rounded-md border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_55%,#fff)] px-3.5 text-[0.8125rem] font-medium text-sumi transition-[background-color,transform,box-shadow] duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-px hover:bg-[color-mix(in_oklab,var(--washi)_30%,#fff)] hover:shadow-[0_4px_12px_-6px_rgba(28,26,23,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
+                    className="inline-flex h-9 items-center gap-2 rounded-md border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_55%,var(--paper-lift))] px-3.5 text-[0.8125rem] font-medium text-sumi transition-[background-color,transform,box-shadow] duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-px hover:bg-[color-mix(in_oklab,var(--washi)_30%,var(--paper-lift))] hover:shadow-[0_4px_12px_-6px_rgba(28,26,23,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
                   >
                     <Download className="h-3.5 w-3.5" strokeWidth={1.7} aria-hidden />
                     {t('checkout.alreadyOwnDownload')}
@@ -495,7 +495,7 @@ function CheckoutPage() {
                     href={CUSTOMER_PORTAL_URL}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex h-9 items-center gap-2 rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] px-3.5 text-[0.8125rem] font-medium text-sumi-soft transition-[background-color,color,transform,box-shadow] duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-px hover:text-sumi hover:border-[var(--line-strong)] hover:bg-[color-mix(in_oklab,var(--washi)_50%,#fff)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
+                    className="inline-flex h-9 items-center gap-2 rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,var(--paper-lift))] px-3.5 text-[0.8125rem] font-medium text-sumi-soft transition-[background-color,color,transform,box-shadow] duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-px hover:text-sumi hover:border-[var(--line-strong)] hover:bg-[color-mix(in_oklab,var(--washi)_50%,var(--paper-lift))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
                   >
                     <ExternalLink className="h-3.5 w-3.5" strokeWidth={1.7} aria-hidden />
                     {t('checkout.alreadyOwnPortal', { defaultValue: 'Customer portal' })}
@@ -561,7 +561,7 @@ function TierTab({
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--washi)]',
         active
           ? 'bg-sumi text-[var(--washi)] shadow-sm hover:bg-[color-mix(in_oklab,var(--sumi)_92%,#000)]'
-          : 'text-sumi-soft hover:text-sumi hover:bg-[color-mix(in_oklab,var(--washi)_40%,#fff)]',
+          : 'text-sumi-soft hover:text-sumi hover:bg-[color-mix(in_oklab,var(--washi)_40%,var(--paper-lift))]',
       ].join(' ')}
     >
       {Icon ? (

@@ -3,6 +3,7 @@ import { Download, MessageCircle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useRouterState } from '@tanstack/react-router'
 import { LanguageSwitcher } from '#/components/LanguageSwitcher'
+import { ThemeSwitcher } from '#/components/ThemeSwitcher'
 import { SUPPORTED_LOCALES, localeHomePath } from '#/lib/i18n'
 
 /**
@@ -53,7 +54,6 @@ const DESKTOP_SECTIONS: ReadonlyArray<SectionId> = ['features', 'pricing', 'faq'
 // brand's ink-on-washi aesthetic rather than a generic bullet list.
 const SECTION_KANJI: Record<SectionId, string> = {
   features: '基',
-  saga: '史',
   health: '健',
   pricing: '価',
   faq: '問',
@@ -191,7 +191,7 @@ export function Nav() {
       // top edge (a WebKit backdrop-filter + sticky overscroll artifact).
       // Hidden from md+ where the bar is translucent and there's no
       // elastic document overscroll to cover.
-      className="sticky top-0 z-40 w-full border-b border-transparent bg-[color-mix(in_oklab,var(--washi)_96%,#fff)] backdrop-blur-md transition-[background-color,border-color,box-shadow,height] duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] before:pointer-events-none before:absolute before:inset-x-0 before:bottom-full before:h-[100vh] before:bg-[color-mix(in_oklab,var(--washi)_96%,#fff)] before:content-[''] md:before:hidden data-[scrolled=true]:border-[var(--line-strong)] data-[scrolled=true]:shadow-[0_1px_0_rgba(28,26,23,0.04),0_8px_24px_-12px_rgba(28,26,23,0.18)] md:bg-[color-mix(in_oklab,var(--washi)_78%,transparent)] md:data-[scrolled=true]:bg-[color-mix(in_oklab,var(--washi)_88%,transparent)]"
+      className="sticky top-0 z-40 w-full border-b border-transparent bg-[color-mix(in_oklab,var(--washi)_96%,var(--paper-lift))] backdrop-blur-md transition-[background-color,border-color,box-shadow,height] duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] before:pointer-events-none before:absolute before:inset-x-0 before:bottom-full before:h-[100vh] before:bg-[color-mix(in_oklab,var(--washi)_96%,var(--paper-lift))] before:content-[''] md:before:hidden data-[scrolled=true]:border-[var(--line-strong)] data-[scrolled=true]:shadow-[0_1px_0_rgba(28,26,23,0.04),0_8px_24px_-12px_rgba(28,26,23,0.18)] md:bg-[color-mix(in_oklab,var(--washi)_78%,transparent)] md:data-[scrolled=true]:bg-[color-mix(in_oklab,var(--washi)_88%,transparent)]"
     >
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-start gap-3 px-5 sm:h-20 sm:px-8 md:gap-5 lg:gap-6 lg:px-10">
         {/* Anchor href "/" (not "#") so the browser back button + history
@@ -223,7 +223,7 @@ export function Nav() {
             <span className="display-title text-[12px] font-semibold uppercase tracking-[0.22em] text-sumi whitespace-nowrap leading-none">
               Battery Sensei
             </span>
-            <span className="hidden lg:inline font-jp text-[10px] tracking-[0.36em] text-hinomaru/80 whitespace-nowrap leading-none">
+            <span className="hidden lg:inline font-jp text-[10px] tracking-[0.36em] text-hinomaru-ink/80 whitespace-nowrap leading-none">
               電池先生
             </span>
           </span>
@@ -250,7 +250,7 @@ export function Nav() {
           <a
             href={sectionHref('contact', pathname, i18n.language)}
             aria-label={t('nav.supportAria')}
-            className="nav-support hidden xl:inline-flex items-center gap-2 h-9 px-3 rounded-md text-sm text-sumi-soft hover:text-hinomaru transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40"
+            className="nav-support hidden xl:inline-flex items-center gap-2 h-9 px-3 rounded-md text-sm text-sumi-soft hover:text-hinomaru-ink transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40"
           >
             <MessageCircle className="h-4 w-4" strokeWidth={1.7} aria-hidden />
             <span>{t('nav.support')}</span>
@@ -259,6 +259,10 @@ export function Nav() {
               room. Below lg it sits in the footer; on mobile it lives
               inside the drawer. */}
           <LanguageSwitcher className="hidden lg:block" />
+          {/* Quieter than the language chip on purpose: icon plus
+              chevron, no label. Download stays the only filled
+              control in the bar. */}
+          <ThemeSwitcher className="hidden md:block" />
           <a
             href={sectionHref('download', pathname, i18n.language)}
             className="btn-sumi hidden md:inline-flex h-9 items-center gap-2 rounded-md px-4 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
@@ -276,7 +280,7 @@ export function Nav() {
             aria-label={t('nav.openMenu')}
             aria-expanded={menuOpen}
             aria-controls="mobile-drawer"
-            style={{ backgroundColor: 'color-mix(in oklab, var(--washi) 60%, #fff)' }}
+            style={{ backgroundColor: 'color-mix(in oklab, var(--washi) 60%, var(--paper-lift))' }}
             className="md:hidden group inline-flex h-10 w-10 items-center justify-center rounded-md border border-[var(--line)] text-sumi-soft transition-[color,border-color,transform] duration-200 hover:border-[var(--line-strong)] hover:text-sumi active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40"
           >
             <BrushBurger />
@@ -415,7 +419,7 @@ function MobileDrawer({
         role="dialog"
         aria-modal="true"
         aria-label={t('nav.ariaPrimary')}
-        style={{ backgroundColor: 'color-mix(in oklab, var(--washi) 94%, #fff)' }}
+        style={{ backgroundColor: 'color-mix(in oklab, var(--washi) 94%, var(--paper-lift))' }}
         className="absolute inset-x-0 top-0 max-h-[100dvh] overflow-y-auto shadow-[0_18px_40px_-22px_rgba(28,26,23,0.45)] -translate-y-full opacity-0 transition-[transform,opacity] duration-[360ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] data-[open=true]:translate-y-0 data-[open=true]:opacity-100"
         data-open={open ? 'true' : 'false'}
       >
@@ -435,7 +439,7 @@ function MobileDrawer({
               <span className="display-title text-[11px] font-semibold uppercase tracking-[0.22em] text-sumi leading-none">
                 Battery Sensei
               </span>
-              <span className="font-jp text-[10px] tracking-[0.36em] text-hinomaru/80 leading-none">
+              <span className="font-jp text-[10px] tracking-[0.36em] text-hinomaru-ink/80 leading-none">
                 電池先生
               </span>
             </span>
@@ -480,11 +484,11 @@ function MobileDrawer({
                     <span className="flex items-baseline gap-4 min-w-0 transition-transform duration-[300ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:translate-x-1.5">
                       <span
                         aria-hidden
-                        className="font-jp text-2xl leading-none text-hinomaru/70 transition-colors duration-[220ms] group-hover:text-hinomaru w-8 text-center"
+                        className="font-jp text-2xl leading-none text-hinomaru-ink/70 transition-colors duration-[220ms] group-hover:text-hinomaru-ink w-8 text-center"
                       >
                         {SECTION_KANJI[id]}
                       </span>
-                      <span className="display-title text-[1.25rem] font-medium text-sumi transition-colors duration-[220ms] group-hover:text-hinomaru group-data-[active=true]:text-hinomaru">
+                      <span className="display-title text-[1.25rem] font-medium text-sumi transition-colors duration-[220ms] group-hover:text-hinomaru-ink group-data-[active=true]:text-hinomaru-ink">
                         {t(`nav.sections.${id}`)}
                       </span>
                     </span>
@@ -512,6 +516,11 @@ function MobileDrawer({
           <LanguageSwitcher variant="inline" />
         </div>
 
+        {/* The header chip is md+ only, so the drawer carries theme on phones. */}
+        <div className="bs-drawer-item px-5 pt-4" style={{ ['--i' as string]: 7 }}>
+          <ThemeSwitcher variant="inline" />
+        </div>
+
         {/* Primary CTA, then the closing hanko-style mark, then the support
             link LAST — sitting beneath the seal so it's the quietest thing
             in the drawer (it was competing with Download up top). */}
@@ -530,11 +539,11 @@ function MobileDrawer({
           <a
             href={sectionHref('contact', pathname, i18n.language)}
             onClick={onClose}
-            className="group mt-1 self-center inline-flex items-center gap-2 text-[0.8125rem] text-sumi-soft transition-colors duration-200 hover:text-hinomaru focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:rounded-md"
+            className="group mt-1 self-center inline-flex items-center gap-2 text-[0.8125rem] text-sumi-soft transition-colors duration-200 hover:text-hinomaru-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:rounded-md"
           >
             <MessageCircle
               aria-hidden
-              className="h-3.5 w-3.5 text-nezumi transition-colors group-hover:text-hinomaru"
+              className="h-3.5 w-3.5 text-nezumi transition-colors group-hover:text-hinomaru-ink"
               strokeWidth={1.7}
             />
             <span>{t('nav.support')}</span>

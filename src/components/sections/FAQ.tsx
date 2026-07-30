@@ -9,7 +9,7 @@ import {
 } from '#/components/ui/accordion'
 import { Hanko } from '#/components/zen/Hanko'
 import { Reveal } from '#/components/zen/Reveal'
-import { TRIAL_DAYS } from '#/lib/polar'
+import { TRIAL_DAYS, LIFETIME_FALLBACK_DEFAULT } from '#/lib/polar'
 import { useLifetimePrice } from '#/lib/use-price'
 
 /** Pre-filled refund mailto. Identical body to the /legal `Request a
@@ -47,11 +47,12 @@ const LICENSE_SCOPE_YEARLY = 'Yearly Patron: up to 5 Macs while subscribed.'
  *     the simplest way to keep rich-result snippets in sync with the
  *     on-page copy.
  *
- * Canonical values are baked in here ($3.99 lifetime, 5-day trial)
- * so search engines see a fully-resolved answer. The locale strings
- * use `{{price}}` / `{{trial}}` placeholders that the renderer
- * interpolates at runtime. If the canonical price changes, update
- * BOTH en.json AND this array.
+ * The trial length and the price are read from `#/lib/polar`, the same
+ * source the pricing section and the JSON-LD offer use, so a price change
+ * lands in the rich-result snippet automatically. Baking the number in
+ * here is what left the FAQ schema advertising $3.99 after the price
+ * moved to $4.49. The locale strings still use `{{price}}` / `{{trial}}`
+ * placeholders that the renderer interpolates at runtime.
  */
 export const FAQ_ITEMS: ReadonlyArray<FaqItem> = [
   {
@@ -64,17 +65,17 @@ export const FAQ_ITEMS: ReadonlyArray<FaqItem> = [
   {
     q: 'How much does Battery Sensei cost?',
     a: [
-      `**One-time $3.99 for a lifetime license.** ${LICENSE_SCOPE_LIFETIME} No subscription.`,
-      'Start free for 5 days. No card, no account.',
+      `**One-time $${LIFETIME_FALLBACK_DEFAULT.discounted} for a lifetime license.** ${LICENSE_SCOPE_LIFETIME} No subscription.`,
+      `Start free for ${TRIAL_DAYS} days. No card, no account.`,
       'When the trial ends, Sensei asks once at launch. Skip the purchase and the free essentials keep working: charge limit, Travel Mode, smart alerts, 24-hour history, per-app drain, live menu-bar watts.',
-      'Premium adds Meeting Guard, unlimited history, and custom warning rules. Checkout shows your local currency.',
+      'Pro adds Meeting Guard, unlimited history, and custom warning rules. Checkout shows your local currency.',
     ],
   },
   {
     q: 'How does the license key work?',
     a: [
       'After checkout, your key arrives by email.',
-      'Open Sensei → Settings → Premium and paste it in. It activates through Polar and stores the license locally.',
+      'Open Sensei → Settings → Pro and paste it in. It activates through Polar and stores the license locally.',
       `**No account. No login.** ${LICENSE_SCOPE_LIFETIME} ${LICENSE_SCOPE_YEARLY}`,
     ],
   },
@@ -120,7 +121,7 @@ export const FAQ_ITEMS: ReadonlyArray<FaqItem> = [
     q: 'Is Battery Sensei an AlDente alternative?',
     a: [
       '**Yes.** If you want charge limits plus smart warnings and battery history, Sensei is an AlDente alternative.',
-      'Ships as one notarized .pkg installer. Premium adds Meeting Guard, unlimited history, and custom warning rules. With Lifetime, one payment unlocks Premium for good.',
+      'Ships as one notarized .pkg installer. Pro adds Meeting Guard, unlimited history, and custom warning rules. With Lifetime, one payment unlocks Pro for good.',
       'Side-by-side comparison lives in the Compare section above.',
     ],
   },
@@ -134,7 +135,7 @@ export const FAQ_ITEMS: ReadonlyArray<FaqItem> = [
   {
     q: 'How does Meeting Guard work?',
     a: [
-      'Opt-in Premium feature. Sensei reads your calendar locally and predicts which meetings your battery might not survive.',
+      'Opt-in Pro feature. Sensei reads your calendar locally and predicts which meetings your battery might not survive.',
       'When a meeting is at risk, you get up to four nudges: **30, 15, 5, and 1 minute before** start.',
       'Each nudge names the exact minute the laptop is predicted to die ("dies 17 min into standup") and the plug-in time that fixes it ("22 min on the charger and it lasts through the meeting").',
       'Event titles never leave your Mac. Sensei reads the calendar locally via EventKit. If the risk passes, pending reminders cancel silently.',

@@ -3,49 +3,26 @@ import { useTranslation } from 'react-i18next'
 import { LanguageSwitcher } from '#/components/LanguageSwitcher'
 import { CurrencySwitcher } from '#/components/CurrencySwitcher'
 import { CUSTOMER_PORTAL_URL } from '#/lib/polar'
+import { formatLongDate } from '#/lib/format-date'
 
 // Build-time injected ISO date of the latest meaningful commit
 // (vite.config.ts → `lastUpdated()`). Falls back to today if git is
 // unavailable (sandbox builds). This replaces the formerly hand-edited
 // "Last updated 28 May 2026" string in the i18n locales — the date now
 // updates automatically on every deploy that touches user-facing files.
+//
+// This is the SITE's date, hence "Site updated" in the label: /privacy and
+// /legal carry their own, older document dates, and the two used to sit on
+// one screen reading "Last updated" twice with different values.
 declare const __LAST_UPDATED__: string
 const LAST_UPDATED_ISO: string =
   typeof __LAST_UPDATED__ !== 'undefined'
     ? __LAST_UPDATED__
     : new Date().toISOString().slice(0, 10)
 
-// Map i18n language codes to Intl locale tags. Keeps the date format
-// idiomatic in each locale ("28 May 2026" / "28. Mai 2026" / "2026年5月28日")
-// without baking the date into the translation string.
-const INTL_LOCALES: Record<string, string> = {
-  en: 'en-GB',
-  de: 'de-DE',
-  es: 'es-ES',
-  fr: 'fr-FR',
-  ja: 'ja-JP',
-}
-
-function formatLastUpdated(iso: string, lang: string): string {
-  // YYYY-MM-DD → local-format day month year. Parse as UTC noon to
-  // dodge timezone day-boundary skew (no DST math needed at noon).
-  const d = new Date(`${iso}T12:00:00Z`)
-  if (Number.isNaN(d.getTime())) return iso
-  const tag = INTL_LOCALES[lang.split('-')[0]] ?? 'en-GB'
-  try {
-    return new Intl.DateTimeFormat(tag, {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    }).format(d)
-  } catch {
-    return iso
-  }
-}
-
 export function Footer() {
   const { t, i18n } = useTranslation()
-  const formattedDate = formatLastUpdated(LAST_UPDATED_ISO, i18n.language)
+  const formattedDate = formatLongDate(LAST_UPDATED_ISO, i18n.language)
   return (
     <footer className="relative border-t border-[var(--line)] py-10 sm:py-12 lg:py-14">
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-5 px-6 text-center sm:gap-6">
@@ -69,7 +46,7 @@ export function Footer() {
                 Battery Sensei
               </span>
               <span aria-hidden className="text-[var(--line-strong)] text-[10px]">·</span>
-              <span className="font-jp text-[10px] tracking-[0.36em] text-hinomaru">
+              <span className="font-jp text-[10px] tracking-[0.36em] text-hinomaru-ink">
                 電池先生
               </span>
             </span>
@@ -117,15 +94,9 @@ export function Footer() {
             {t('nav.support')}
           </a>
           <FooterDot />
-          <a
-            href="https://github.com/schaier-io/battery-sensei-releases/issues/new/choose"
-            target="_blank"
-            rel="noreferrer"
-            className="zen-link-lift"
-          >
-            {t('footer.reportIssue')}
-          </a>
-          <FooterDot />
+          {/* "Report an issue" used to open a GitHub issue form. Bugs now go
+              through the contact form, so a second, differently-shaped door
+              to the same job would just split the reports. */}
           <a
             href="https://github.com/schaier-io/battery-sensei-releases"
             target="_blank"
@@ -151,8 +122,8 @@ export function Footer() {
             Features
           </Link>
           <FooterDot />
-          <Link to="/blog" className="zen-link-lift">
-            Journal
+          <Link to="/guides" className="zen-link-lift">
+            Guides
           </Link>
           <FooterDot />
           <Link to="/glossary" className="zen-link-lift">

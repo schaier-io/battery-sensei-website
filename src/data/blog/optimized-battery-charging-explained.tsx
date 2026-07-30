@@ -204,11 +204,11 @@ export const post: BlogPost = {
       </P>
       <P>
         Related reading:{' '}
-        <A to="/blog/should-i-keep-macbook-plugged-in">
+        <A to="/guides/should-i-keep-macbook-plugged-in">
           should I keep my MacBook plugged in
         </A>{' '}
         for the broader question of when plugged-in is fine, and{' '}
-        <A to="/blog/healthy-cycle-count-macbook">
+        <A to="/guides/healthy-cycle-count-macbook">
           what’s a healthy MacBook cycle count
         </A>{' '}
         for the metric that actually matters in the end.

@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { HomeLink } from '#/components/HomeLink'
-import { ArrowLeft, PlayCircle, Leaf, Bell, Check } from 'lucide-react'
+import { ArrowLeft, Leaf, Bell, Check } from 'lucide-react'
 import { useState, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import i18n from 'i18next'
@@ -73,15 +73,15 @@ function WalkthroughPage() {
               </Reveal>
               <Reveal delay={360} className="self-start">
                 <Link
-                  to="/blog"
-                  className="group inline-flex h-10 items-center gap-2.5 whitespace-nowrap rounded-md border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_64%,#fff)] px-4 text-[0.85rem] font-medium text-sumi transition-[transform,background-color,border-color,box-shadow] duration-[300ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-px hover:border-hinomaru/35 hover:bg-[color-mix(in_oklab,var(--washi)_48%,#fff)] hover:shadow-[0_10px_20px_-16px_rgba(28,26,23,0.45)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
+                  to="/guides"
+                  className="group inline-flex h-10 items-center gap-2.5 whitespace-nowrap rounded-md border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_64%,var(--paper-lift))] px-4 text-[0.85rem] font-medium text-sumi transition-[transform,background-color,border-color,box-shadow] duration-[300ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-px hover:border-hinomaru/35 hover:bg-[color-mix(in_oklab,var(--washi)_48%,var(--paper-lift))] hover:shadow-[0_10px_20px_-16px_rgba(28,26,23,0.45)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
                 >
                   <Leaf
-                    className="h-4 w-4 text-hinomaru transition-transform duration-[320ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5 group-hover:rotate-6"
+                    className="h-4 w-4 text-hinomaru-ink transition-transform duration-[320ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5 group-hover:rotate-6"
                     strokeWidth={1.8}
                     aria-hidden
                   />
-                  Check out the Journal
+                  Check out the Guides
                 </Link>
               </Reveal>
             </div>
@@ -129,9 +129,9 @@ function WalkthroughPage() {
 
               <div className="relative flex flex-col gap-5 md:gap-6">
                 <div className="max-w-md">
-                  <p className="mb-3 inline-flex items-center gap-2.5 text-[11px] font-medium uppercase tracking-[0.24em] text-hinomaru/85">
+                  <p className="mb-3 inline-flex items-center gap-2.5 text-[11px] font-medium uppercase tracking-[0.24em] text-hinomaru-ink/85">
                     <Bell className="h-3.5 w-3.5" strokeWidth={1.8} aria-hidden />
-                    <span className="font-jp tracking-[0.2em] text-hinomaru/75">通知</span>
+                    <span className="font-jp tracking-[0.2em] text-hinomaru-ink/75">通知</span>
                   </p>
                   <h2 className="display-title text-[1.5rem] leading-[1.16] tracking-[-0.015em] text-sumi md:text-[1.75rem]">
                     {t('walkthrough.notifyHeading')}
@@ -203,7 +203,7 @@ function WalkthroughNotifyForm() {
             if (status === 'error' || status === 'success') setStatus('idle')
           }}
           placeholder={t('walkthrough.notifyForm.placeholder')}
-          className="block h-11 w-full min-w-0 rounded-md border border-[color-mix(in_oklab,var(--sumi)_16%,transparent)] bg-[color-mix(in_oklab,var(--washi)_72%,#fff)] px-3 text-[0.875rem] text-sumi placeholder:text-nezumi/70 focus:outline-none focus:ring-2 focus:ring-sumi/25 sm:min-w-[16rem] sm:flex-1"
+          className="block h-11 w-full min-w-0 rounded-md border border-[color-mix(in_oklab,var(--sumi)_16%,transparent)] bg-[color-mix(in_oklab,var(--washi)_72%,var(--paper-lift))] px-3 text-[0.875rem] text-sumi placeholder:text-nezumi/70 focus:outline-none focus:ring-2 focus:ring-sumi/25 sm:min-w-[16rem] sm:flex-1"
           aria-invalid={status === 'error'}
         />
         <button
@@ -223,7 +223,7 @@ function WalkthroughNotifyForm() {
       </div>
       <div className="mt-2 h-5">
         {status === 'error' && (
-          <p role="alert" className="text-[0.75rem] text-hinomaru">
+          <p role="alert" className="text-[0.75rem] text-hinomaru-ink">
             {t('walkthrough.notifyForm.errorInvalid')}
           </p>
         )}
@@ -247,7 +247,7 @@ function VideoPlaceholder({ badge, caption }: { badge: string; caption: string }
   return (
     <figure className="paper-card relative overflow-hidden p-3 md:p-4">
       <div
-        className="relative aspect-video w-full overflow-hidden rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_75%,#fff)]"
+        className="relative aspect-video w-full overflow-hidden rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_75%,var(--paper-lift))]"
         aria-label={badge}
       >
         {/* Ambient washes — diagonal hinomaru + kin so the empty plate has
@@ -269,23 +269,16 @@ function VideoPlaceholder({ badge, caption }: { badge: string; caption: string }
               'repeating-linear-gradient(0deg, transparent 0 23px, rgba(28,26,23,0.04) 23px 24px)',
           }}
         />
-        {/* Center play affordance — a glass disc with a brushed play glyph. */}
+        {/* No play glyph while there is nothing to play. A disc that looks
+            exactly like a button but does nothing is the most clickable
+            object on the page, and every click it absorbs teaches the
+            visitor that this page does not respond. The seal and the badge
+            carry the "not yet" message on their own. */}
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 text-center">
-          <span className="relative inline-flex h-20 w-20 items-center justify-center rounded-full border border-hinomaru/25 bg-[color-mix(in_oklab,var(--washi)_55%,#fff)] shadow-[0_18px_40px_-22px_rgba(28,26,23,0.35)] backdrop-blur-sm">
-            <span
-              aria-hidden
-              className="absolute inset-0 rounded-full bg-hinomaru/[0.06] animate-gentle-bob"
-            />
-            <PlayCircle
-              className="relative h-9 w-9 text-hinomaru"
-              strokeWidth={1.4}
-              aria-hidden
-            />
-          </span>
-          <span className="font-jp text-[10px] uppercase tracking-[0.32em] text-hinomaru/80">
+          <span className="font-jp text-[10px] uppercase tracking-[0.32em] text-hinomaru-ink/80">
             動 画
           </span>
-          <span className="inline-block rounded-full border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_55%,#fff)] px-3 py-1 text-[11px] font-medium text-sumi">
+          <span className="inline-block rounded-full border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_55%,var(--paper-lift))] px-3 py-1 text-[11px] font-medium text-sumi">
             {badge}
           </span>
         </div>

@@ -12,7 +12,7 @@ export const extended = (
       </li>
       <li>
         <strong>Cycle count.</strong> Full equivalent discharges, not plug-in
-        events — two half-discharges count as one. Modern Apple Silicon packs
+        events: two half-discharges count as one. Modern Apple Silicon packs
         are rated around 1000 cycles; see{' '}
         <G slug="cycle-count">cycle count</G>.
       </li>
@@ -25,7 +25,7 @@ export const extended = (
 
     <H2>Read it as a trend, not a score</H2>
     <P>
-      Capacity readings are noisy day to day — they depend on temperature,
+      Capacity readings are noisy day to day. They depend on temperature,
       recent cycles, and when the controller last recalibrated. A single 1%
       drop means nothing; the shape over months means everything. That's why
       the panel sits alongside{' '}
@@ -35,7 +35,7 @@ export const extended = (
 
     <H2>What actually moves it</H2>
     <P>
-      Heat, time spent at very high or very low charge, and cycle count — in
+      Heat, time spent at very high or very low charge, and cycle count, in
       roughly that order. Most of what you can control lives in{' '}
       <A to="/features/charge-limit">the charge limit</A> and in avoiding
       long, hot, fully-charged sessions on a desk.
@@ -57,6 +57,6 @@ export const faqs = [
   {
     q: 'Does Battery Sensei read the battery differently from macOS?',
     a:
-      'No. It reads the same firmware counters through IOKit and presents them without adjustment — including the condition string, verbatim.',
+      'No. It reads the same firmware counters through IOKit and presents them without adjustment, including the condition string, verbatim.',
   },
 ] as const

@@ -70,7 +70,7 @@ export function LicenseKeyDialog({
       <DialogContent className="border-[var(--line)] bg-[var(--washi)] sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="display-title flex items-center gap-2 text-[1.125rem] font-medium text-sumi">
-            <KeyRound className="h-4.5 w-4.5 text-hinomaru" strokeWidth={1.7} aria-hidden />
+            <KeyRound className="h-4.5 w-4.5 text-hinomaru-ink" strokeWidth={1.7} aria-hidden />
             {t('board.license.dialogTitle')}
           </DialogTitle>
           <DialogDescription className="text-[0.875rem] leading-[1.55] text-sumi-soft">
@@ -88,7 +88,7 @@ export function LicenseKeyDialog({
               spellCheck={false}
               maxLength={256}
               aria-label={t('board.license.placeholder')}
-              className="block w-full rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-3.5 py-2.5 pr-11 font-mono text-[0.875rem] text-sumi placeholder:font-sans placeholder:text-nezumi/70 focus:border-[var(--line-strong)] focus:outline-none focus:ring-2 focus:ring-sumi/15"
+              className="block w-full rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_60%,var(--paper-lift))] px-3.5 py-2.5 pr-11 font-mono text-[0.875rem] text-sumi placeholder:font-sans placeholder:text-nezumi/70 focus:border-[var(--line-strong)] focus:outline-none focus:ring-2 focus:ring-sumi/15"
             />
             <button
               type="button"
@@ -105,7 +105,7 @@ export function LicenseKeyDialog({
           </div>
 
           {error && (
-            <p role="alert" className="text-[0.8125rem] text-hinomaru">
+            <p role="alert" className="text-[0.8125rem] text-hinomaru-ink">
               {error}
             </p>
           )}

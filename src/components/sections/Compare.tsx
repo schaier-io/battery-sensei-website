@@ -4,6 +4,7 @@ import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { Hanko } from '#/components/zen/Hanko'
 import { Reveal } from '#/components/zen/Reveal'
+import { VideoFacade } from '#/components/zen/VideoFacade'
 
 type CellValue = 'yes' | 'no' | 'partial'
 
@@ -136,14 +137,10 @@ export function Compare() {
         </Reveal>
         <Reveal delay={360} className="mt-8 w-full max-w-4xl">
           <figure className="paper-card overflow-hidden p-2 md:p-3">
-            <iframe
-              className="block aspect-video w-full rounded-md border border-[var(--line)] bg-sumi"
-              src="https://www.youtube-nocookie.com/embed/htaQ20WTf8k?rel=0"
+            <VideoFacade
+              videoId="htaQ20WTf8k"
               title={t('compare.videoCta')}
-              loading="lazy"
-              referrerPolicy="strict-origin-when-cross-origin"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
+              className="block aspect-video w-full rounded-md border border-[var(--line)] bg-sumi"
             />
           </figure>
         </Reveal>
@@ -155,14 +152,14 @@ export function Compare() {
             overflow-y to `auto` per spec and the tooltip gets clipped
             above the first row. The min-w-[720px] table fits within
             max-w-6xl past md, so we don't need scroll there anyway. */}
-        <div className="overflow-x-auto md:overflow-visible rounded-xl border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_92%,#fff)] shadow-[0_1px_0_rgba(255,255,255,0.45)_inset,0_18px_40px_-22px_rgba(28,26,23,0.18)]">
+        <div className="overflow-x-auto md:overflow-visible rounded-xl border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_92%,var(--paper-lift))] shadow-[0_1px_0_rgba(255,255,255,0.45)_inset,0_18px_40px_-22px_rgba(28,26,23,0.18)]">
           <table className="w-full min-w-[720px] text-left text-sm">
             <thead>
               <tr className="meta-label border-b border-[var(--line)] text-sumi-soft">
                 <th className="w-[36%] px-5 py-4 font-semibold">
                   {t('compare.headers.feature')}
                 </th>
-                <th className="px-3 py-4 text-center font-semibold text-hinomaru bg-hinomaru/[0.045] border-x border-hinomaru/15">
+                <th className="px-3 py-4 text-center font-semibold text-hinomaru-ink bg-hinomaru/[0.045] border-x border-hinomaru/15">
                   {t('compare.headers.sensei')}
                 </th>
                 {COMPETITORS.map((c) => (
@@ -238,7 +235,7 @@ export function Compare() {
               type="button"
               onClick={() => setExpanded((e) => !e)}
               aria-expanded={expanded}
-              className="pointer-events-auto group inline-flex items-center gap-2 rounded-full border border-[var(--line-strong)] bg-[var(--washi)] px-4 py-1.5 text-[13px] font-medium text-sumi-soft transition-[background-color,transform,box-shadow,color] duration-[260ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-px hover:bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] hover:text-sumi hover:shadow-[0_6px_18px_-10px_rgba(28,26,23,0.30)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
+              className="pointer-events-auto group inline-flex items-center gap-2 rounded-full border border-[var(--line-strong)] bg-[var(--washi)] px-4 py-1.5 text-[13px] font-medium text-sumi-soft transition-[background-color,transform,box-shadow,color] duration-[260ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-px hover:bg-[color-mix(in_oklab,var(--washi)_70%,var(--paper-lift))] hover:text-sumi hover:shadow-[0_6px_18px_-10px_rgba(28,26,23,0.30)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
             >
               {expanded
                 ? t('compare.showFewer')
@@ -293,7 +290,7 @@ function FeatureLabel({
       {label}
       {path ? (
         <ArrowUpRight
-          className="h-3.5 w-3.5 text-hinomaru/55 transition-all duration-[280ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover/row:text-hinomaru group-hover/row:translate-x-0.5 group-hover/row:-translate-y-0.5"
+          className="h-3.5 w-3.5 text-hinomaru-ink/55 transition-all duration-[280ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover/row:text-hinomaru-ink group-hover/row:translate-x-0.5 group-hover/row:-translate-y-0.5"
           strokeWidth={2}
           aria-hidden
         />
@@ -303,7 +300,7 @@ function FeatureLabel({
   const labelEl = path ? (
     <Link
       to={path}
-      className="inline-flex items-center text-sumi underline-offset-[6px] decoration-hinomaru/30 transition-[color,text-decoration-color,transform] duration-[280ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:underline hover:text-hinomaru"
+      className="inline-flex items-center text-sumi underline-offset-[6px] decoration-hinomaru/30 transition-[color,text-decoration-color,transform] duration-[280ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:underline hover:text-hinomaru-ink"
       aria-label={`${label} — ${openFeatureLabel}`}
     >
       {labelNode}
@@ -378,7 +375,7 @@ function Cell({
     return (
       <td className={cls}>
         <Check
-          className={`inline h-4 w-4 ${accent ? 'text-hinomaru' : 'text-matcha'}`}
+          className={`inline h-4 w-4 ${accent ? 'text-hinomaru-ink' : 'text-matcha'}`}
           strokeWidth={accent ? 2.4 : 2}
           aria-hidden
         />

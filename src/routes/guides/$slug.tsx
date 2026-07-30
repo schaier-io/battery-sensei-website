@@ -4,7 +4,7 @@ import { BLOG_POSTS, POSTS_BY_SLUG } from '#/data/blog'
 
 const SITE_URL = 'https://www.battery-sensei.app'
 
-export const Route = createFileRoute('/blog/$slug')({
+export const Route = createFileRoute('/guides/$slug')({
   // Match the glossary pattern — resolve post per lifecycle from the static
   // map rather than passing it through the loader, since `body: () => JSX`
   // would break Tanstack's wire serializer.
@@ -16,9 +16,9 @@ export const Route = createFileRoute('/blog/$slug')({
   },
   head: ({ params }) => {
     const post = params?.slug ? POSTS_BY_SLUG[params.slug] : undefined
-    if (!post) return { meta: [{ title: 'Journal — Battery Sensei' }] }
+    if (!post) return { meta: [{ title: 'Guides — Battery Sensei' }] }
 
-    const pageUrl = `${SITE_URL}/blog/${post.slug}`
+    const pageUrl = `${SITE_URL}/guides/${post.slug}`
 
     const blogPostingLd = {
       '@context': 'https://schema.org',
@@ -56,7 +56,7 @@ export const Route = createFileRoute('/blog/$slug')({
       '@type': 'BreadcrumbList',
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Battery Sensei', item: SITE_URL },
-        { '@type': 'ListItem', position: 2, name: 'Journal', item: `${SITE_URL}/blog` },
+        { '@type': 'ListItem', position: 2, name: 'Guides', item: `${SITE_URL}/guides` },
         { '@type': 'ListItem', position: 3, name: post.title, item: pageUrl },
       ],
     }

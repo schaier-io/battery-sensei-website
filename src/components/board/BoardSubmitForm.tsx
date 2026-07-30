@@ -103,7 +103,7 @@ export function BoardSubmitForm() {
         className="pointer-events-none absolute -right-8 -top-10 h-32 w-32 rounded-full bg-hinomaru/[0.06] blur-2xl"
       />
       <header className="relative flex items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.22em] text-sumi-soft display-title">
-        <Lightbulb className="h-3.5 w-3.5 text-hinomaru" strokeWidth={1.7} aria-hidden />
+        <Lightbulb className="h-3.5 w-3.5 text-hinomaru-ink" strokeWidth={1.7} aria-hidden />
         {t('board.submit.heading')}
       </header>
 
@@ -172,7 +172,7 @@ export function BoardSubmitForm() {
           aria-live="polite"
           className={[
             'text-[0.8125rem] leading-snug',
-            status === 'error' ? 'text-hinomaru' : 'text-nezumi',
+            status === 'error' ? 'text-hinomaru-ink' : 'text-nezumi',
           ].join(' ')}
         >
           {status === 'error'
@@ -200,7 +200,7 @@ export function BoardSubmitForm() {
 
 // Same brush-underline focus treatment as the contact form fields.
 const inputClass = [
-  'block w-full rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-3.5 py-2.5 text-[0.9375rem] text-sumi placeholder:text-nezumi/70',
+  'block w-full rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_60%,var(--paper-lift))] px-3.5 py-2.5 text-[0.9375rem] text-sumi placeholder:text-nezumi/70',
   'transition-[colors,background-size,box-shadow] duration-[320ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]',
   'bg-no-repeat bg-[length:0%_1.5px] bg-[position:8px_calc(100%-2px)]',
   "bg-[image:linear-gradient(to_right,var(--hinomaru),color-mix(in_oklab,var(--hinomaru)_30%,transparent))]",

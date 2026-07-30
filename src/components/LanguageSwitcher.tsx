@@ -31,7 +31,7 @@ function LangGlyph({ className = '' }: { className?: string }) {
   return (
     <span
       aria-hidden
-      className={`lang-glyph-anim font-jp text-hinomaru/85 leading-none ${className}`}
+      className={`lang-glyph-anim font-jp text-hinomaru-ink/85 leading-none ${className}`}
     >
       言
     </span>
@@ -233,7 +233,7 @@ export function LanguageSwitcher({
             localized word, set above the compact code row so the picker reads
             as "Language: EN DE …" without the old full-width header bulk. */}
         <div className="mb-2 flex items-center gap-1.5">
-          <span aria-hidden className="font-jp text-[12px] leading-none text-hinomaru">
+          <span aria-hidden className="font-jp text-[12px] leading-none text-hinomaru-ink">
             言
           </span>
           <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-sumi-soft">
@@ -263,7 +263,7 @@ export function LanguageSwitcher({
               className={[
                 'inline-flex h-8 min-w-[2.5rem] items-center justify-center rounded-md border px-2.5 font-jp text-[12px] tracking-[0.08em] transition-[colors,transform] duration-200 active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40',
                 active
-                  ? 'border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--hinomaru)_10%,transparent)] text-hinomaru'
+                  ? 'border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--hinomaru)_10%,transparent)] text-hinomaru-ink'
                   : 'border-[var(--line)] text-sumi-soft hover:border-[var(--line-strong)] hover:text-sumi',
                 isPending ? 'opacity-60' : '',
               ].join(' ')}
@@ -291,7 +291,7 @@ export function LanguageSwitcher({
         aria-expanded={open}
         aria-label={t('common.language')}
         className={[
-          'lang-trigger group inline-flex h-9 items-center gap-2 rounded-md border bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-2.5 text-[12px] font-medium uppercase tracking-[0.18em] transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40',
+          'lang-trigger group inline-flex h-9 items-center gap-2 rounded-md border bg-[color-mix(in_oklab,var(--washi)_60%,var(--paper-lift))] px-2.5 text-[12px] font-medium uppercase tracking-[0.18em] transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40',
           open
             ? 'border-[var(--line-strong)] text-sumi'
             : 'border-[var(--line)] text-sumi-soft hover:text-sumi hover:border-[var(--line-strong)]',
@@ -322,7 +322,7 @@ export function LanguageSwitcher({
               ? { right: rect.right }
               : { left: rect.left }),
           }}
-          className="lang-pop z-[1000] w-56 overflow-hidden rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,#fff)] shadow-[0_1px_0_rgba(255,255,255,0.5)_inset,0_14px_30px_-14px_rgba(28,26,23,0.30),0_4px_10px_-6px_rgba(28,26,23,0.18)]"
+          className="lang-pop z-[1000] w-56 overflow-hidden rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,var(--paper-lift))] shadow-[0_1px_0_rgba(255,255,255,0.5)_inset,0_14px_30px_-14px_rgba(28,26,23,0.30),0_4px_10px_-6px_rgba(28,26,23,0.18)]"
         >
           {/* Header strip — kanji accent + label + brush rule */}
           <div className="lang-pop-header flex items-center gap-2.5 px-3 pt-2.5 pb-2">
@@ -358,12 +358,12 @@ export function LanguageSwitcher({
                       'flex w-full items-center justify-between gap-3 px-3 py-2 text-left text-[13px] transition-colors duration-[200ms]',
                       active
                         ? 'bg-[color-mix(in_oklab,var(--hinomaru)_8%,transparent)] text-sumi'
-                        : 'text-sumi-soft hover:bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] hover:text-sumi',
+                        : 'text-sumi-soft hover:bg-[color-mix(in_oklab,var(--washi)_60%,var(--paper-lift))] hover:text-sumi',
                       isPending ? 'opacity-60' : '',
                     ].join(' ')}
                   >
                     <span className="flex items-baseline gap-2.5 min-w-0">
-                      <span className="font-jp text-base leading-none text-hinomaru/80 w-5 text-center shrink-0 transition-transform duration-[260ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-[1.08]">
+                      <span className="font-jp text-base leading-none text-hinomaru-ink/80 w-5 text-center shrink-0 transition-transform duration-[260ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-[1.08]">
                         {SHORT_LABEL[loc]}
                       </span>
                       <span className="display-title text-[13px] text-sumi truncate">
@@ -371,7 +371,7 @@ export function LanguageSwitcher({
                       </span>
                     </span>
                     {active ? (
-                      <Check className="h-3.5 w-3.5 shrink-0 text-hinomaru" strokeWidth={2.2} aria-hidden />
+                      <Check className="h-3.5 w-3.5 shrink-0 text-hinomaru-ink" strokeWidth={2.2} aria-hidden />
                     ) : isPending ? (
                       <span
                         aria-hidden

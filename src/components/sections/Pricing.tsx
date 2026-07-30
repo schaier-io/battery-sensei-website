@@ -22,6 +22,7 @@ import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'rea
 import { Trans, useTranslation } from 'react-i18next'
 import i18n from 'i18next'
 import { Hanko } from '#/components/zen/Hanko'
+import { CurrencySwitcher } from '#/components/CurrencySwitcher'
 import { PriceDisplay } from '#/components/zen/PriceDisplay'
 import { Reveal } from '#/components/zen/Reveal'
 import { MacOnlyConfirm, MacOnlyConfirmDialog } from '#/components/MacOnlyConfirm'
@@ -35,7 +36,7 @@ import { useDiscountAvailability } from '#/lib/use-discount-availability'
 // 4. unlimited history, 5. custom warning rules.
 const lifetimeIcons: readonly LucideIcon[] = [InfinityIcon, Sparkles, Clock, Activity, Bell]
 // Order mirrors `pricing.support.items` in en.json:
-// 1. full Premium feature set, 2. you fund the next release, 3. direct line, 4. cancel anytime.
+// 1. full Pro feature set, 2. you fund the next release, 3. direct line, 4. cancel anytime.
 const supportIcons: readonly LucideIcon[] = [Sparkles, TrendingUp, Inbox, XCircle]
 // Mirrors the order of `pricing.free.items`. Icons are intentionally
 // quieter (sumi-soft / nezumi container) than Lifetime's hinomaru wash
@@ -65,7 +66,7 @@ function MacScopeBadge({ label, accent = false }: { label: string; accent?: bool
     <span
       className={
         accent
-          ? 'mt-3 inline-flex items-center gap-1.5 rounded-full bg-[color-mix(in_oklab,var(--hinomaru)_10%,var(--washi))] px-2.5 py-1 text-[0.75rem] font-medium tracking-wide text-hinomaru'
+          ? 'mt-3 inline-flex items-center gap-1.5 rounded-full bg-[color-mix(in_oklab,var(--hinomaru)_10%,var(--washi))] px-2.5 py-1 text-[0.75rem] font-medium tracking-wide text-hinomaru-ink'
           : 'mt-3 inline-flex items-center gap-1.5 rounded-full bg-sumi/[0.06] px-2.5 py-1 text-[0.75rem] font-medium tracking-wide text-sumi'
       }
     >
@@ -175,6 +176,12 @@ export function Pricing() {
             yearlyScope,
           })}
         </Reveal>
+        {/* Currency belongs at the decision, not only in the footer. A
+            visitor weighing the price shouldn't have to scroll past the
+            whole page to find out the amounts come in their own currency. */}
+        <Reveal delay={340} className="mt-6">
+          <CurrencySwitcher />
+        </Reveal>
       </div>
 
       {/* Three-card layout. Lifetime sits in the middle as the recommended
@@ -218,7 +225,7 @@ export function Pricing() {
             <p className="mt-3 text-[0.9375rem] leading-snug text-sumi-soft max-w-md">
               {t('pricing.free.blurb')}
               <span className="mt-1.5 block text-[0.82rem] uppercase tracking-[0.12em] text-sumi-soft/80">
-                <span className="font-jp normal-case tracking-normal text-hinomaru/80">日 {TRIAL_DAYS}</span>{' '}
+                <span className="font-jp normal-case tracking-normal text-hinomaru-ink/80">日 {TRIAL_DAYS}</span>{' '}
                 {t('pricing.free.trialEnd', { day: TRIAL_DAYS })}
               </span>
               <span className="mt-1 block text-sumi">
@@ -276,11 +283,11 @@ export function Pricing() {
             <div className="flex min-h-[1.5rem] items-center gap-3">
               <h3
                 id="pricing-tier-lifetime"
-                className="font-jp text-xs tracking-widest text-hinomaru/80 m-0 font-normal"
+                className="font-jp text-xs tracking-widest text-hinomaru-ink/80 m-0 font-normal"
               >
                 {t('pricing.lifetime.tier')}
               </h3>
-              <span className="meta-label inline-flex items-center gap-1 rounded-full bg-hinomaru/10 px-2 py-0.5 text-hinomaru">
+              <span className="meta-label inline-flex items-center gap-1 rounded-full bg-hinomaru/10 px-2 py-0.5 text-hinomaru-ink">
                 {t('common.recommended')}
               </span>
             </div>
@@ -335,7 +342,7 @@ export function Pricing() {
                 full price, no stale urgency cues. */}
             {launchOpen && (
               <>
-                <p className="mt-2 text-[0.75rem] uppercase tracking-[0.16em] font-medium text-hinomaru/90">
+                <p className="mt-2 text-[0.75rem] uppercase tracking-[0.16em] font-medium text-hinomaru-ink/90">
                   {t('pricing.lifetime.discountNote')}
                 </p>
                 <LimitedRedeemBar fullPriceFormatted={lifetime.original.formatted} />
@@ -343,7 +350,7 @@ export function Pricing() {
             )}
             <div aria-hidden className="mt-7 h-px w-full bg-[var(--line)]" />
 
-            <p className="meta-label mt-6 font-jp text-hinomaru/80">
+            <p className="meta-label mt-6 font-jp text-hinomaru-ink/80">
               {t('pricing.lifetime.premiumAdds')}
             </p>
             <ul className="mt-4 space-y-4">
@@ -351,7 +358,7 @@ export function Pricing() {
                 const Icon = lifetimeIcons[idx] ?? Sparkles
                 return (
                   <li key={title} className="flex items-start gap-3">
-                    <span className="mt-[2px] inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-[color-mix(in_oklab,var(--hinomaru)_10%,var(--washi))] text-hinomaru">
+                    <span className="mt-[2px] inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-[color-mix(in_oklab,var(--hinomaru)_10%,var(--washi))] text-hinomaru-ink">
                       <Icon className="h-3.5 w-3.5" strokeWidth={1.8} aria-hidden />
                     </span>
                     <span className="min-w-0">
@@ -478,7 +485,7 @@ export function Pricing() {
                       <span className="flex w-full flex-wrap items-center gap-2 text-[0.9375rem] font-medium text-sumi leading-tight">
                         <span>{title}</span>
                         {idx === 3 && (
-                          <span className="ml-auto shrink-0 inline-flex rotate-3 items-center rounded-full border border-hinomaru/35 bg-[color-mix(in_oklab,var(--hinomaru)_12%,#fff)] px-1.5 py-0.5 text-[0.625rem] font-semibold uppercase tracking-[0.12em] text-hinomaru">
+                          <span className="ml-auto shrink-0 inline-flex rotate-3 items-center rounded-full border border-hinomaru/35 bg-[color-mix(in_oklab,var(--hinomaru)_12%,var(--washi))] px-1.5 py-0.5 text-[0.625rem] font-semibold uppercase tracking-[0.12em] text-hinomaru-ink">
                             {t('pricing.support.anytimeTag', { defaultValue: 'Anytime' })}
                           </span>
                         )}
@@ -509,10 +516,10 @@ export function Pricing() {
                 <Link
                   to="/checkout"
                   search={{ tier: 'support', cur: undefined }}
-                  className={`btn-sumi-soft border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] text-sumi transition-colors duration-200 hover:bg-[color-mix(in_oklab,var(--washi)_40%,#fff)] ${PRICING_CTA_BTN}`}
+                  className={`btn-sumi-soft border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_60%,var(--paper-lift))] text-sumi transition-colors duration-200 hover:bg-[color-mix(in_oklab,var(--washi)_40%,var(--paper-lift))] ${PRICING_CTA_BTN}`}
                 >
                   <Heart
-                    className="h-4 w-4 text-hinomaru fill-transparent transition-[fill,transform] duration-[460ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:fill-current group-hover:scale-110"
+                    className="h-4 w-4 text-hinomaru-ink fill-transparent transition-[fill,transform] duration-[460ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:fill-current group-hover:scale-110"
                     strokeWidth={1.8}
                   />
                   {t('pricing.support.ctaLabel')}
@@ -569,7 +576,7 @@ function LimitedRedeemBar({ fullPriceFormatted }: { fullPriceFormatted: string }
             {t('pricing.lifetime.redeem.soldOut')}
           </span>
         ) : almostGone ? (
-          <span className="font-semibold text-hinomaru">
+          <span className="font-semibold text-hinomaru-ink">
             {t('pricing.lifetime.redeem.almostGone', { remaining })}
           </span>
         ) : (
@@ -687,16 +694,39 @@ function FreeDownloadForm() {
     }
   }, [])
 
-  const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())
+  const trimmedEmail = email.trim()
+  const isEmpty = trimmedEmail.length === 0
+  const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)
 
   function startDownload() {
     window.location.assign('/download/latest')
   }
 
+  /** Mac visitors go straight to the file; everyone else gets the
+      macOS-only confirm first. Shared by the with-email and the
+      empty-field paths so both behave identically once the (optional)
+      signup is out of the way. */
+  function proceedToDownload() {
+    if (detectIsMac()) {
+      startDownload()
+    } else {
+      setMacConfirmOpen(true)
+    }
+  }
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    if (!isValid || status === 'sending') {
-      if (!isValid) setStatus('invalid')
+    if (status === 'sending') return
+    // The address is OPTIONAL — the card offers release alerts, it doesn't
+    // gate the download on them. An empty field therefore means "just give
+    // me the app" and must not block the primary CTA; only a non-empty,
+    // malformed address is an error worth stopping for.
+    if (isEmpty) {
+      proceedToDownload()
+      return
+    }
+    if (!isValid) {
+      setStatus('invalid')
       return
     }
     setStatus('sending')
@@ -724,13 +754,8 @@ function FreeDownloadForm() {
     // Platform check happens after the API ping so the email-capture
     // signup still lands even if the visitor cancels the download
     // (someone researching on Windows for a Mac at home is still a
-    // qualified lead). On Mac or pre-hydration: go straight to the
-    // download. On a confirmed non-Mac: open the dialog instead.
-    if (detectIsMac()) {
-      startDownload()
-    } else {
-      setMacConfirmOpen(true)
-    }
+    // qualified lead).
+    proceedToDownload()
   }
 
   return (
@@ -753,7 +778,6 @@ function FreeDownloadForm() {
                 ref={inputRef}
                 id="free-download-email-input"
                 type="email"
-                required
                 autoComplete="email"
                 inputMode="email"
                 value={email}
@@ -763,7 +787,7 @@ function FreeDownloadForm() {
                 }}
                 placeholder={t('pricing.free.email.placeholder')}
                 aria-invalid={status === 'invalid'}
-                className="mt-2 block h-11 w-full min-w-0 rounded-md border border-[color-mix(in_oklab,var(--sumi)_16%,transparent)] bg-[color-mix(in_oklab,var(--washi)_72%,#fff)] px-3 text-[0.875rem] text-sumi placeholder:text-nezumi/70 focus:outline-none focus:ring-2 focus:ring-sumi/25"
+                className="mt-2 block h-11 w-full min-w-0 rounded-md border border-[color-mix(in_oklab,var(--sumi)_16%,transparent)] bg-[color-mix(in_oklab,var(--washi)_72%,var(--paper-lift))] px-3 text-[0.875rem] text-sumi placeholder:text-nezumi/70 focus:outline-none focus:ring-2 focus:ring-sumi/25"
               />
               {/* One line occupies this slot in every state, so the fixed
                   footer height never shifts: footnote → invalid/success/error. */}
@@ -773,11 +797,11 @@ function FreeDownloadForm() {
                   {t('pricing.free.email.success')}
                 </p>
               ) : status === 'error' ? (
-                <p role="alert" className="mt-2 text-[0.73rem] leading-[1.55] text-hinomaru">
+                <p role="alert" className="mt-2 text-[0.73rem] leading-[1.55] text-hinomaru-ink">
                   {t('pricing.free.email.error')}
                 </p>
               ) : status === 'invalid' ? (
-                <p role="alert" className="mt-2 text-[0.73rem] leading-[1.55] text-hinomaru">
+                <p role="alert" className="mt-2 text-[0.73rem] leading-[1.55] text-hinomaru-ink">
                   {t('pricing.free.email.errorInvalid')}
                 </p>
               ) : (

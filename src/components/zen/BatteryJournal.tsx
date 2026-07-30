@@ -137,7 +137,7 @@ function Stat({
         }}
       />
       <Icon
-        className="relative h-3 w-3 text-hinomaru/70 transition-colors duration-[260ms] group-data-[done=true]:text-hinomaru"
+        className="relative h-3 w-3 text-hinomaru-ink/70 transition-colors duration-[260ms] group-data-[done=true]:text-hinomaru-ink"
         strokeWidth={1.8}
         aria-hidden
       />
@@ -175,7 +175,7 @@ function Entry({
       </span>
       <span className="flex-1 text-sumi-soft">{body}</span>
       {mark && (
-        <span className="font-jp text-[11px] text-hinomaru/80 leading-none pt-0.5">
+        <span className="font-jp text-[11px] text-hinomaru-ink/80 leading-none pt-0.5">
           {mark}
         </span>
       )}

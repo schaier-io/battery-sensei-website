@@ -4,14 +4,14 @@
 
 - Price: $0 (local currency at checkout)
 - Duration: 5 days, no card required
-- Includes: every Premium feature, full functionality
-- End of trial: Sensei asks once at launch — keep Premium, or revert to the free essentials. Not on every launch. No card on file, no silent charge. Your Meeting Battery Guard toggle keeps its previous state but stops firing — your config is preserved, simply locked behind activation.
+- Includes: every Pro feature, full functionality
+- End of trial: Sensei asks once at launch — keep Pro, or revert to the free essentials. Not on every launch. No card on file, no silent charge. Your Meeting Battery Guard toggle keeps its previous state but stops firing — your config is preserved, simply locked behind activation.
 
-## Sensei Premium
+## Sensei Pro
 
-- Price: $3.99 USD one-time (local currency at checkout via Polar)
+- Price: $4.49 USD one-time (local currency at checkout via Polar)
 - Refund: 14-day, no questions
-- License: lifetime; every future Premium feature included
+- License: lifetime; every future Pro feature included
 - Devices: up to 3 Macs per license
 - Payment: processed by Polar (merchant of record)
 - Distribution: notarized .pkg installer from https://www.battery-sensei.app/download/latest
@@ -30,7 +30,7 @@
 - Apple-notarized .pkg installer + auto-updates via Sparkle
 - Runs entirely on the local Mac
 
-### Premium (active during trial, then unlocked by Lifetime license)
+### Pro (active during trial, then unlocked by Lifetime license)
 
 - **Meeting Battery Guard.** Calendar-aware warnings — reads upcoming calendar events on-device and fires up to four warnings (30 / 15 / 5 / 1 minute before) when the battery won't survive a meeting, with a concrete plug-in remedy ("22 min on the charger and you're clear through")
 - **Unlimited battery history.** 3-day and 7-day windows on the main timeline; 24-hour and 7-day windows on the per-app breakdown
@@ -40,7 +40,7 @@
 ## Comparison
 
 - AlDente Pro: annual subscription, charges every year
-- Battery Sensei Premium: $3.99 once, lifetime license, 3 Macs
+- Battery Sensei Pro: $4.49 once, lifetime license, 3 Macs
 
 ## Requirements
 

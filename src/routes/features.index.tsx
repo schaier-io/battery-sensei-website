@@ -6,7 +6,6 @@ import { Reveal } from '#/components/zen/Reveal'
 import { Hanko } from '#/components/zen/Hanko'
 import { ScreenshotMockup } from '#/components/ScreenshotMockup'
 import { BrushDivider } from '#/components/zen/BrushDivider'
-import { Play } from 'lucide-react'
 
 const SITE_URL = 'https://www.battery-sensei.app'
 const PATH = '/features'
@@ -15,15 +14,34 @@ const PAGE_DESC =
   'Every part of Battery Sensei, explained: meeting guard, warning presets, power flow, system load, charge limit, battery health, energy usage, and more.'
 
 /**
- * Hub page for the feature guides.
+ * Hub page for the feature pages.
  *
- * Without it each guide was an orphan — reachable only by typing the URL,
+ * Without it each page was an orphan — reachable only by typing the URL,
  * which means no internal links, no crawl path, and no way for a reader on
- * one guide to find the next. The list is the crawl path and the reader's
+ * one page to find the next. The list is the crawl path and the reader's
  * table of contents at once. Kanji + one-line summary keep it scannable.
  */
+/** Every feature page is its own file route, so the slug has to narrow to
+    the literal set the router generated — a bare `string` widens the `to`
+    prop to `/features/${string}` and fails the typed-link check. */
+type FeatureSlug =
+  | 'meeting-battery-guard'
+  | 'alert-presets'
+  | 'custom-thresholds'
+  | 'low-power-mode'
+  | 'power-flow'
+  | 'system-load'
+  | 'energy-usage'
+  | 'charge-limit'
+  | 'travel-mode'
+  | 'battery-health'
+  | 'battery-journal'
+  | 'statistics'
+  | 'honors'
+  | 'general'
+
 type FeatureEntry = {
-  slug: string
+  slug: FeatureSlug
   kanji: string
   name: string
   blurb: string
@@ -59,7 +77,7 @@ const GROUPS: FeatureGroup[] = [
     kicker: 'The short game',
     title: 'Keep today from going wrong',
     intro:
-      "Most battery disasters are timing failures. The warning came too late, the meeting ran long, nobody switched Low Power Mode on. These four decide when Sensei speaks up and what it handles without asking — from a soft nudge at 15% to a forecast that knows your 3 PM call outlasts your charge.",
+      "Most battery disasters are timing failures. The warning came too late, the meeting ran long, nobody switched Low Power Mode on. These four decide when Sensei speaks up and what it handles without asking, from a soft nudge at 15% to a forecast that knows your 3 PM call outlasts your charge.",
     features: [
       { slug: 'meeting-battery-guard', kanji: '会', name: 'Meeting guard', blurb: 'Warns you when a meeting will outlast your battery.' },
       { slug: 'alert-presets', kanji: '警', name: 'Warning presets', blurb: 'Set the whole low-battery ladder in one choice.' },
@@ -76,11 +94,11 @@ const GROUPS: FeatureGroup[] = [
     shot: {
       name: 'power-flow',
       alt: 'The Power flow panel showing adapter, battery, and system wattage live.',
-      caption: 'Power flow, live: what the adapter delivers, what reaches the battery, what the system draws.',
+      caption: 'Power flow: what the adapter delivers, what the system draws, what reaches the battery.',
     },
     features: [
-      { slug: 'power-flow', kanji: '流', name: 'Power flow', blurb: 'Adapter in, battery flow, system draw — live.' },
-      { slug: 'system-load', kanji: '負', name: 'System load', blurb: 'CPU, GPU, disk, and memory beside your battery.' },
+      { slug: 'power-flow', kanji: '流', name: 'Power flow', blurb: 'Adapter in, system draw, battery flow, live.' },
+      { slug: 'system-load', kanji: '負', name: 'System load', blurb: 'CPU, GPU, memory, and disk beside your battery.' },
       { slug: 'energy-usage', kanji: '喰', name: 'App energy usage', blurb: 'Which apps are draining you, ranked by share.' },
     ],
   },
@@ -91,15 +109,15 @@ const GROUPS: FeatureGroup[] = [
     shot: {
       name: 'charge-limit',
       alt: 'The Charging card with the daily charge cap and optimized charging status.',
-      caption: 'The daily cap in place — less time parked at 100%, with a weekly cycle reminder to keep estimates honest.',
+      caption: 'The daily cap in place: less time parked at 100%, with a weekly cycle reminder to keep estimates honest.',
     },
     intro:
-      "Capacity loss is slow, boring, and mostly self-inflicted: heat, hours parked at 100%, deep discharges. The countermeasures are automatable. Cap the daily charge, lift it for travel days, and read the health numbers as a trend — with the charge history right beside them.",
+      "Capacity loss is slow, boring, and mostly self-inflicted: heat, hours parked at 100%, deep discharges. The countermeasures are automatable. Cap the daily charge, lift it for travel days, and read the health numbers as a trend, with the charge history right beside them.",
     features: [
       { slug: 'charge-limit', kanji: '充', name: 'Charge limit', blurb: 'A daily cap, plus a weekly cycle to keep estimates honest.' },
       { slug: 'travel-mode', kanji: '旅', name: 'Travel mode', blurb: 'Full charge and quiet alerts for the day you leave.' },
-      { slug: 'battery-health', kanji: '健', name: 'Battery health', blurb: 'Capacity, cycles, condition — and what moves them.' },
-      { slug: 'battery-journal', kanji: '史', name: 'Charge history', blurb: 'Your charge curve over a day, three days, or a week.' },
+      { slug: 'battery-health', kanji: '健', name: 'Battery health', blurb: 'Capacity, cycles, condition, and what moves them.' },
+      { slug: 'battery-journal', kanji: '史', name: 'Saga', blurb: 'Your charge curve over a day, three days, or a week.' },
     ],
   },
   {
@@ -107,7 +125,7 @@ const GROUPS: FeatureGroup[] = [
     kicker: 'The record',
     title: 'Know how you actually did',
     quote:
-      'A live percentage answers "what now". It never answers "is this normal for me" — that takes a record.',
+      'A live percentage answers "what now". It never answers "is this normal for me"; that takes a record.',
     recap: true,
     intro:
       "Weekly and monthly recaps compress the history into twenty seconds of reading: how long you ran unplugged, how deep you discharged, which rescues landed in time. The settings stay short, because everything Sensei knows lives on your Mac and nothing needs an account.",
@@ -185,10 +203,11 @@ function FeaturesIndex() {
 
         <section className="mx-auto max-w-3xl px-5 pb-14 pt-2 sm:px-6">
           <Reveal delay={380}>
-            {/* Player-styled placeholder: the settings screenshot as a dimmed
-                poster frame, a real play disc, and a duration-style chip —
-                reads as a video at a glance. Swap in <video poster=…> later
-                without touching the layout. */}
+            {/* Dimmed poster frame with a "coming soon" chip. Deliberately
+                NO play disc: the video does not exist yet, and a 64px button
+                that looks exactly like play but absorbs every click teaches
+                the visitor that this page does not respond. Add the disc back
+                in the same slot when the <video> lands. */}
             <figure className="group relative aspect-video w-full overflow-hidden rounded-xl bg-sumi shadow-[0_12px_40px_-12px_rgba(28,26,23,0.45)]">
               <img
                 src="/screenshots/general-dark.png"
@@ -202,12 +221,6 @@ function FeaturesIndex() {
                 aria-hidden
                 className="absolute inset-0 bg-gradient-to-t from-sumi/90 via-sumi/30 to-sumi/50"
               />
-
-              <span className="absolute inset-0 flex items-center justify-center">
-                <span className="flex h-16 w-16 items-center justify-center rounded-full bg-washi/95 shadow-[0_4px_24px_rgba(0,0,0,0.35)] transition-transform duration-[220ms] group-hover:scale-105">
-                  <Play className="ml-1 h-6 w-6 fill-sumi text-sumi" strokeWidth={0} />
-                </span>
-              </span>
 
               {/* Bottom bar: title left, coming-soon chip where the duration
                   would sit, and a hairline progress track underneath. */}
@@ -229,7 +242,7 @@ function FeaturesIndex() {
               </span>
 
               <figcaption className="sr-only">
-                Video walkthrough of Battery Sensei's settings — coming soon.
+                Video walkthrough of Battery Sensei's settings, coming soon.
               </figcaption>
             </figure>
           </Reveal>
@@ -261,7 +274,7 @@ function FeaturesIndex() {
                 </figure>
               )}
               {group.quote && (
-                <blockquote className="mt-6 max-w-2xl border-l-2 border-hinomaru/30 pl-5 md:pl-6">
+                <blockquote className="mt-6 max-w-2xl rounded-lg border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,var(--paper-lift))] px-5 py-4 md:px-6 md:py-5">
                   <p className="display-title text-[1.125rem] italic leading-[1.55] text-sumi">
                     {group.quote}
                   </p>
@@ -292,7 +305,7 @@ function FeaturesIndex() {
                     >
                       <span
                         aria-hidden
-                        className="display-title mt-0.5 text-[1.35rem] leading-none text-hinomaru/70"
+                        className="display-title mt-0.5 text-[1.35rem] leading-none text-hinomaru-ink/70"
                       >
                         {feature.kanji}
                       </span>

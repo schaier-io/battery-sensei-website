@@ -6,6 +6,8 @@ import { Hanko } from '#/components/zen/Hanko'
 import { Reveal } from '#/components/zen/Reveal'
 import { Nav } from '#/components/sections/Nav'
 import { Footer } from '#/components/sections/Footer'
+import { DocumentNav, type DocumentNavItem } from '#/components/DocumentNav'
+import { formatLongDate } from '#/lib/format-date'
 
 const SITE_URL = 'https://www.battery-sensei.app'
 const PATH = '/privacy'
@@ -15,7 +17,25 @@ const PAGE_DESC =
 // Last meaningful edit to the legal substance below. Update when you
 // change WHAT is collected / processors / retention — not on cosmetic
 // tweaks. Format matches the schema.org Article spec.
+//
+// The §changes section promises this date tracks the notice, so it must
+// never be swapped for the footer's build-time site date. The label under
+// the title names the document to keep the two apart.
 const LAST_UPDATED = '2026-05-31'
+
+/** Section order for the jump list. `anchor` must match the `<Block anchor>`
+    below it; `key` is the i18n namespace the heading is read from. */
+const PRIVACY_SECTIONS: ReadonlyArray<Omit<DocumentNavItem, 'label'> & { key: string }> = [
+  { anchor: 'controller', key: 'controller' },
+  { anchor: 'app', key: 'app' },
+  { anchor: 'github', key: 'github' },
+  { anchor: 'what', key: 'what' },
+  { anchor: 'why', key: 'why' },
+  { anchor: 'processors', key: 'processors' },
+  { anchor: 'retention', key: 'retention' },
+  { anchor: 'rights', key: 'rights' },
+  { anchor: 'changes', key: 'changes' },
+]
 
 export const Route = createFileRoute('/privacy')({
   head: () => ({
@@ -56,11 +76,9 @@ export const Route = createFileRoute('/privacy')({
  */
 function PrivacyPage() {
   const { t, i18n } = useTranslation()
-  const formattedDate = new Intl.DateTimeFormat(i18n.language || 'en', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  }).format(new Date(LAST_UPDATED))
+  // Same formatter the footer uses, so the document date and the site date
+  // read in one shape on one screen.
+  const formattedDate = formatLongDate(LAST_UPDATED, i18n.language)
 
   return (
     <>
@@ -117,6 +135,14 @@ function PrivacyPage() {
           <Reveal>
             <Tldr />
           </Reveal>
+          <DocumentNav
+            className="mt-6"
+            label={t('privacy.onThisPage', 'On this page')}
+            items={PRIVACY_SECTIONS.map((section) => ({
+              anchor: section.anchor,
+              label: t(`privacy.body.${section.key}.heading`),
+            }))}
+          />
         </section>
 
         {/* Authoritative English body. Keep section anchors (#app, #github,
@@ -331,8 +357,8 @@ function Tldr() {
   const { t } = useTranslation()
   const keys = ['1', '2', '3', '4'] as const
   return (
-    <div className="rounded-2xl border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] p-6 sm:p-8">
-      <p className="font-jp text-[11px] tracking-[0.32em] text-hinomaru/85 uppercase">
+    <div className="rounded-2xl border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,var(--paper-lift))] p-6 sm:p-8">
+      <p className="font-jp text-[11px] tracking-[0.32em] text-hinomaru-ink/85 uppercase">
         TL;DR · 要約
       </p>
       <h2 className="display-title mt-2 text-[1.5rem] font-medium leading-tight text-sumi md:text-[1.75rem]">
@@ -372,7 +398,7 @@ function TldrColumn({
   items: string[]
 }) {
   const Icon = tone === 'do' ? Check : X
-  const iconColor = tone === 'do' ? 'text-matcha' : 'text-hinomaru'
+  const iconColor = tone === 'do' ? 'text-matcha' : 'text-hinomaru-ink'
   return (
     <div>
       <p className="text-[11px] uppercase tracking-[0.18em] text-nezumi">{label}</p>
@@ -397,8 +423,10 @@ function TldrColumn({
 
 /**
  * One data-item row. Standard shape across the "what" / "why" /
- * "processors" / "retention" sections — bold name, em-dash, descriptive
+ * "processors" / "retention" sections: bold name, colon, descriptive
  * body that may carry inline rich-text components (links, em, code).
+ * The separator used to be an em dash, which the house style bans in
+ * copy; a colon reads the same definition without it.
  * Pulling the pattern into a single helper means each row stays one
  * line in the JSX and Trans markers stay shallow.
  */
@@ -416,7 +444,7 @@ function DataItem({
   const { t } = useTranslation()
   return (
     <li>
-      <strong className="text-sumi">{t(nameKey)}</strong> —{' '}
+      <strong className="text-sumi">{t(nameKey)}</strong>:{' '}
       {inlineComponents && inlineComponents.length > 0 ? (
         <Trans i18nKey={bodyKey} components={inlineComponents} />
       ) : (
@@ -444,7 +472,7 @@ function Block({
 }) {
   return (
     <section id={anchor} className="scroll-mt-24">
-      <p className="font-jp text-[11px] tracking-[0.32em] text-hinomaru/85 uppercase">
+      <p className="font-jp text-[11px] tracking-[0.32em] text-hinomaru-ink/85 uppercase">
         {kicker}
       </p>
       <h2 className="display-title mt-2 text-[1.625rem] md:text-[1.875rem] font-medium text-sumi leading-tight">

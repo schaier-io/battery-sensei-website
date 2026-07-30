@@ -118,27 +118,27 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.battery-sensei.app/features/meeting-battery-guard" />
   </url>
 
-  <!-- Journal (long-form blog) — English only for now -->
+  <!-- Guides (long-form articles) - English only for now -->
   <url>
-    <loc>https://www.battery-sensei.app/blog</loc>
+    <loc>https://www.battery-sensei.app/guides</loc>
     <lastmod>2026-05-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.battery-sensei.app/blog/should-i-keep-macbook-plugged-in</loc>
+    <loc>https://www.battery-sensei.app/guides/should-i-keep-macbook-plugged-in</loc>
     <lastmod>2026-05-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.battery-sensei.app/blog/healthy-cycle-count-macbook</loc>
+    <loc>https://www.battery-sensei.app/guides/healthy-cycle-count-macbook</loc>
     <lastmod>2026-05-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.battery-sensei.app/blog/optimized-battery-charging-explained</loc>
+    <loc>https://www.battery-sensei.app/guides/optimized-battery-charging-explained</loc>
     <lastmod>2026-05-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

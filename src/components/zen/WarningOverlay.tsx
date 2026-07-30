@@ -49,7 +49,7 @@ export function WarningOverlay({
     <div
       ref={ref}
       data-revealed={revealed ? 'true' : 'false'}
-      className={`warning-overlay relative isolate mx-auto w-full max-w-[460px] rounded-[28px] border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_92%,#fff)] px-7 pt-5 pb-6 text-center shadow-[0_1px_0_rgba(255,255,255,0.55)_inset,0_28px_60px_-22px_rgba(28,26,23,0.30),0_8px_22px_-10px_rgba(28,26,23,0.18)] ${className}`}
+      className={`warning-overlay relative isolate mx-auto w-full max-w-[460px] rounded-[28px] border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_92%,var(--paper-lift))] px-7 pt-5 pb-6 text-center shadow-[0_1px_0_rgba(255,255,255,0.55)_inset,0_28px_60px_-22px_rgba(28,26,23,0.30),0_8px_22px_-10px_rgba(28,26,23,0.18)] ${className}`}
     >
       {/* Grab handle — washi rule, like the Swift Capsule at the top */}
       <span
@@ -107,7 +107,7 @@ export function WarningOverlay({
 
       {/* Action row */}
       <div className="mt-6 flex items-center justify-between gap-3">
-        <div className="flex items-center gap-1.5 rounded-xl border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,#fff)] p-1 shadow-[0_1px_0_rgba(255,255,255,0.45)_inset]">
+        <div className="flex items-center gap-1.5 rounded-xl border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,var(--paper-lift))] p-1 shadow-[0_1px_0_rgba(255,255,255,0.45)_inset]">
           <span className="px-1.5 text-sumi-soft" aria-hidden>
             <MoonStar className="h-3.5 w-3.5" strokeWidth={1.8} />
           </span>
@@ -116,7 +116,7 @@ export function WarningOverlay({
           </StepButton>
           <button
             type="button"
-            className="flex items-center gap-2 whitespace-nowrap rounded-lg bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-3 py-1.5 text-[13px] font-semibold text-sumi shadow-[0_1px_2px_rgba(28,26,23,0.06),0_1px_0_rgba(255,255,255,0.6)_inset] transition-transform duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/30"
+            className="flex items-center gap-2 whitespace-nowrap rounded-lg bg-[color-mix(in_oklab,var(--washi)_60%,var(--paper-lift))] px-3 py-1.5 text-[13px] font-semibold text-sumi shadow-[0_1px_2px_rgba(28,26,23,0.06),0_1px_0_rgba(255,255,255,0.6)_inset] transition-transform duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/30"
           >
             <span className="text-sumi-soft">{t('mockups.warningOverlay.snooze')}</span>
             <span className="tabular-nums text-sumi">{t('mockups.warningOverlay.snoozeStep')}</span>
@@ -167,7 +167,7 @@ function BatteryGlyph({ fraction }: { fraction: number }) {
       width="46"
       height="26"
       aria-hidden
-      className="text-hinomaru"
+      className="text-hinomaru-ink"
     >
       <rect
         x="1.6"

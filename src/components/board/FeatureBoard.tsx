@@ -302,16 +302,25 @@ export function FeatureBoard() {
           {t('board.loading')}
         </p>
       ) : loadError || sections.length === 0 ? (
-        // A failed load and an empty board look the same to the visitor:
-        // nothing to show. The calm empty state covers both — an error
-        // banner with a Try-again button reads as "the site is broken"
-        // when the board is merely young. The quiet retry link below is
-        // enough for the genuine-outage case.
+        // Both states show a calm card rather than an error banner, which
+        // would read as "the site is broken" when the board is merely
+        // young. They do NOT share a headline though: telling someone whose
+        // request failed that there is "nothing here yet" is simply untrue,
+        // and it hides the fact that refreshing would help.
         <div className="paper-card flex flex-col items-center gap-2 p-8 text-center">
           <p className="display-title text-[1.0625rem] font-medium text-sumi">
-            {t('board.empty.title')}
+            {loadError
+              ? t('board.loadError.title', "The board didn't load.")
+              : t('board.empty.title')}
           </p>
-          <p className="text-[0.9375rem] text-sumi-soft">{t('board.empty.message')}</p>
+          <p className="text-[0.9375rem] text-sumi-soft">
+            {loadError
+              ? t(
+                  'board.loadError.message',
+                  'That is on us, not on you. Refresh to try again.',
+                )
+              : t('board.empty.message')}
+          </p>
           {loadError && (
             <button
               type="button"
@@ -356,7 +365,7 @@ export function FeatureBoard() {
       )}
 
       {voteError && (
-        <p role="alert" className="text-center text-[0.8125rem] text-hinomaru">
+        <p role="alert" className="text-center text-[0.8125rem] text-hinomaru-ink">
           {voteError}
         </p>
       )}

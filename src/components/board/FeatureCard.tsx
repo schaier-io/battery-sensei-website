@@ -16,7 +16,7 @@ export type BoardItem = {
 const STATUS_CHIP: Record<BoardStatus, string> = {
   open: 'text-nezumi border-[var(--line)]',
   planned: 'text-kin border-kin/30 bg-kin/[0.06]',
-  in_progress: 'text-hinomaru border-hinomaru/30 bg-hinomaru/[0.06]',
+  in_progress: 'text-hinomaru-ink border-hinomaru/30 bg-hinomaru/[0.06]',
   shipped: 'text-matcha border-matcha/30 bg-matcha/[0.06]',
 }
 
@@ -50,8 +50,8 @@ export function FeatureCard({
         className={[
           'flex w-14 shrink-0 flex-col items-center gap-0.5 rounded-md border px-2 py-2 transition-[colors,transform,box-shadow] duration-[220ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]',
           hasVoted
-            ? 'border-hinomaru/40 bg-hinomaru/[0.08] text-hinomaru shadow-[inset_0_1px_0_rgba(255,255,255,0.4)]'
-            : 'border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] text-sumi-soft hover:border-[var(--line-strong)] hover:text-sumi',
+            ? 'border-hinomaru/40 bg-hinomaru/[0.08] text-hinomaru-ink shadow-[inset_0_1px_0_rgba(255,255,255,0.4)]'
+            : 'border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,var(--paper-lift))] text-sumi-soft hover:border-[var(--line-strong)] hover:text-sumi',
           votable ? 'cursor-pointer hover:-translate-y-0.5' : 'cursor-default opacity-55',
         ].join(' ')}
       >

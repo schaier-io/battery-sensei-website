@@ -23,6 +23,13 @@
  *
  * A manual button remains as a fallback for the automation case and for
  * retry after an error.
+ *
+ * When the link carries nothing usable, the page becomes the resend
+ * page: same copy and same form as /newsletter/confirmed?status=invalid,
+ * because a fresh link is the only thing that gets the visitor
+ * subscribed. Its sibling /newsletter/unsubscribe answers the same
+ * broken-link case the same way — a working control, never a hidden or
+ * disabled one.
  */
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { HomeLink } from '#/components/HomeLink'
@@ -31,6 +38,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Nav } from '#/components/sections/Nav'
 import { Footer } from '#/components/sections/Footer'
+import { NewsletterResendForm } from '#/components/NewsletterResendForm'
 import { EnsoSpinner } from '#/components/zen/EnsoSpinner'
 import { Hanko } from '#/components/zen/Hanko'
 import { Reveal } from '#/components/zen/Reveal'
@@ -87,7 +95,7 @@ function isAutomatedAgent(): boolean {
 }
 
 function ConfirmPage() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const navigate = useNavigate()
   const { token } = Route.useSearch()
   const [state, setState] = useState<FormState>('checking')
@@ -166,6 +174,11 @@ function ConfirmPage() {
   }, [hasToken, confirmNow])
 
   const showSpinner = state === 'checking' || state === 'confirming'
+  // Nothing usable in the link. The page stops asking for a confirm it
+  // cannot perform and turns into the resend page instead, so the
+  // heading, the seal and the control below all change together rather
+  // than leaving "Tap below" above an empty space.
+  const linkBroken = state === 'missing-token'
 
   return (
     <>
@@ -201,55 +214,60 @@ function ConfirmPage() {
             ) : (
               <>
                 {/* 印 = "seal / stamp / confirm" — the quiet opt-in gesture
-                    before the heavier 了 stamp on the success page. */}
-                <Hanko kanji="印" className="mb-6" />
+                    before the heavier 了 stamp on the success page. ？ takes
+                    over for the broken link, matching the same seal on
+                    /newsletter/confirmed's error states. */}
+                <Hanko kanji={linkBroken ? '？' : '印'} className="mb-6" />
                 <Reveal
                   as="h1"
                   delay={140}
                   className="display-title text-4xl font-semibold leading-[1.04] tracking-[-0.018em] text-sumi md:text-[3.25rem]"
                 >
-                  {t('newsletter.confirm.heading')}
+                  {linkBroken
+                    ? t('newsletter.confirm.missing.heading')
+                    : t('newsletter.confirm.heading')}
                 </Reveal>
                 <Reveal
                   as="p"
                   delay={220}
                   className="mt-6 max-w-2xl text-base leading-relaxed text-sumi-soft md:text-[1.0625rem]"
                 >
-                  {t('newsletter.confirm.body')}
+                  {linkBroken
+                    ? t('newsletter.confirm.missing.body')
+                    : t('newsletter.confirm.body')}
                 </Reveal>
                 <Reveal as="div" delay={300} className="mt-10 w-full max-w-sm">
-                  {/* Status banner. Fixed-height slot so the layout doesn't
-                      jump when the message swaps. */}
-                  <div
-                    className="mb-3 min-h-[1.25rem] text-center"
-                    aria-live="polite"
-                    role={state === 'error' ? 'alert' : undefined}
-                  >
-                    {state === 'error' && (
-                      <p className="text-[0.8125rem] font-medium text-hinomaru">
-                        {t('newsletter.confirm.error')}
-                      </p>
-                    )}
-                    {state === 'missing-token' && (
-                      <p className="text-[0.8125rem] text-sumi-soft">
-                        {t('newsletter.confirm.missingToken')}
-                      </p>
-                    )}
-                  </div>
-                  {state !== 'missing-token' && (
-                    <button
-                      type="button"
-                      onClick={() => void confirmNow()}
-                      disabled={!hasToken}
-                      className="group inline-flex h-11 w-full items-center justify-center gap-2 rounded-md bg-sumi px-4 text-[0.875rem] font-medium text-washi transition-colors duration-[220ms] hover:bg-sumi/90 disabled:cursor-not-allowed disabled:opacity-50"
-                    >
-                      <Check
-                        className="h-4 w-4 transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-110"
-                        strokeWidth={2}
-                        aria-hidden
-                      />
-                      {t('newsletter.confirm.cta')}
-                    </button>
+                  {linkBroken ? (
+                    <NewsletterResendForm currentLocale={i18n.language} />
+                  ) : (
+                    <>
+                      {/* Status banner. Fixed-height slot so the layout doesn't
+                          jump when the message swaps. */}
+                      <div
+                        className="mb-3 min-h-[1.25rem] text-center"
+                        aria-live="polite"
+                        role={state === 'error' ? 'alert' : undefined}
+                      >
+                        {state === 'error' && (
+                          <p className="text-[0.8125rem] font-medium text-hinomaru-ink">
+                            {t('newsletter.confirm.error')}
+                          </p>
+                        )}
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => void confirmNow()}
+                        disabled={!hasToken}
+                        className="group inline-flex h-11 w-full items-center justify-center gap-2 rounded-md bg-sumi px-4 text-[0.875rem] font-medium text-washi transition-colors duration-[220ms] hover:bg-sumi/90 disabled:cursor-not-allowed disabled:opacity-50"
+                      >
+                        <Check
+                          className="h-4 w-4 transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-110"
+                          strokeWidth={2}
+                          aria-hidden
+                        />
+                        {t('newsletter.confirm.cta')}
+                      </button>
+                    </>
                   )}
                 </Reveal>
               </>

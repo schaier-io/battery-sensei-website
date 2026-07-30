@@ -3,10 +3,13 @@ import { ArrowRight, Download as DownloadIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { HomeLink } from '#/components/HomeLink'
 import { MacOnlyConfirm } from '#/components/MacOnlyConfirm'
+import { NotOnMacBanner } from '#/components/NotOnMacBanner'
 import { Footer } from '#/components/sections/Footer'
 import { Nav } from '#/components/sections/Nav'
 import { Hanko } from '#/components/zen/Hanko'
+import { RescueReceipt } from '#/components/zen/RescueReceipt'
 import { Reveal } from '#/components/zen/Reveal'
+import { SharedCardMock } from '#/components/zen/SharedCardMock'
 import { TRIAL_DAYS } from '#/lib/polar'
 import type { CardType } from '#/lib/referral'
 
@@ -89,9 +92,36 @@ export function FromSenseiPage({
             >
               {t(`${key}.body`)}
             </Reveal>
+            {/* The card they just scanned. The whole page is written as
+                "about that card", so showing its shape is what makes the
+                claim legible — a wall of prose about an artwork the visitor
+                can no longer see is not an argument. Illustrative only; the
+                caption says so, and no figure here is a reading off the
+                sharer's Mac. */}
+            <Reveal delay={360} className="mt-10 w-full max-w-[20rem]">
+              {/* text-left: the mocks are laid out like the real cards, so
+                  they must not inherit the hero's centering. */}
+              <figure className="m-0 text-left">
+                {variant === 'rescue' ? (
+                  <RescueReceipt />
+                ) : (
+                  <SharedCardMock variant={variant} />
+                )}
+                <figcaption className="mt-4 text-[12px] leading-relaxed text-nezumi">
+                  {t('from.cardMock.caption')}
+                </figcaption>
+              </figure>
+            </Reveal>
+            {/* QR codes get scanned by phones, so most of this page's
+                traffic cannot run the app at all. The banner renders
+                nothing on a Mac (and during SSR), so the wrapper collapses
+                to zero height for everyone else. */}
+            <div className="mt-10 w-full max-w-md text-left">
+              <NotOnMacBanner variant="download" />
+            </div>
             <Reveal
-              delay={380}
-              className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row"
+              delay={440}
+              className="flex flex-col items-center justify-center gap-3 sm:flex-row"
             >
               <MacOnlyConfirm
                 onConfirm={() => window.location.assign(downloadUrl)}
@@ -123,7 +153,7 @@ export function FromSenseiPage({
                 />
               </HomeLink>
             </Reveal>
-            <Reveal as="p" delay={460} className="spec-strip mt-8">
+            <Reveal as="p" delay={520} className="spec-strip mt-8">
               {t('from.specStrip', { trial: TRIAL_DAYS })}
             </Reveal>
           </div>

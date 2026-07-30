@@ -5,9 +5,9 @@ import { extended, faqs } from '#/data/features/battery-journal'
 
 const SITE_URL = 'https://www.battery-sensei.app'
 const PATH = '/features/battery-journal'
-const PAGE_TITLE = 'Battery Journal — Battery Sensei'
+const PAGE_TITLE = 'Saga — Battery Sensei'
 const PAGE_DESC =
-  'A plain-English diary of your MacBook battery: cycles, plateaus, capacity over time — written in sentences, not jargon.'
+  'A plain-English diary of your MacBook battery: cycles, plateaus, capacity over time, written in sentences, not jargon.'
 
 const faqLd = {
   '@context': 'https://schema.org',

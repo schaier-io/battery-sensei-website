@@ -3,7 +3,7 @@
 > A calm, native macOS menu-bar app that watches your MacBook battery.
 > Smart low-battery alerts, charge limit with Travel Mode, cycle and capacity
 > tracking, and a plain-English battery history. Runs entirely on your Mac.
-> 5-day free trial, no card. $3.99 once, lifetime license.
+> 5-day free trial, no card. $4.49 once, lifetime license.
 
 Battery Sensei (電池先生) is a single-purpose macOS utility for MacBook owners
 who want to slow battery wear, avoid surprise shutdowns, and understand how
@@ -14,12 +14,12 @@ Privacy: nothing leaves the device. No telemetry, no account, no cloud.
 
 ## Quick facts
 
-- Price: $3.99 USD one-time, lifetime license (local currency at checkout via Polar)
+- Price: $4.49 USD one-time, lifetime license (local currency at checkout via Polar)
 - Free trial: 5 days, no card required; at trial end Sensei asks once at launch
 - Refund: 14-day, no questions
 - Devices: up to 3 Macs per license
 - Free essentials after trial: charge limit + Travel Mode, smart alerts via 3 presets (Zen / Regular / Senpai), 24-hour battery history, last-hour per-app battery, menu-bar live charge + watts + cycles
-- Premium adds: Meeting Battery Guard, unlimited battery history (3 d, 7 d), custom warning rules (add, remove, edit threshold percentages)
+- Pro adds: Meeting Battery Guard, unlimited battery history (3 d, 7 d), custom warning rules (add, remove, edit threshold percentages)
 - Platform: macOS 14+ (Apple Silicon and Intel)
 - Distribution: notarized .pkg installer, direct download from www.battery-sensei.app
 - Languages: English, German, Spanish, French, Japanese
@@ -35,7 +35,7 @@ Privacy: nothing leaves the device. No telemetry, no account, no cloud.
 - Cycle count and capacity tracking with plain-English context
 - Heat-throttling awareness with explanation of macOS pause behaviour
 - Personal battery history (timeline of cycles, rescues, plateaus)
-- Meeting Battery Guard (Premium): reads upcoming calendar events on-device and
+- Meeting Battery Guard (Pro): reads upcoming calendar events on-device and
   fires up to four warnings (30 / 15 / 5 / 1 minute before) when the battery
   won't survive a meeting, with a concrete plug-in remedy
 - AlDente alternative for users who want a one-time-purchase, native option

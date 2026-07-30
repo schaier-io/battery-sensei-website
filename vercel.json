@@ -8,6 +8,21 @@
       "permanent": true
     },
     {
+      "source": "/blog",
+      "destination": "/guides",
+      "permanent": true
+    },
+    {
+      "source": "/blog/:slug",
+      "destination": "/guides/:slug",
+      "permanent": true
+    },
+    {
+      "source": "/:locale(de|es|fr|ja)/:path(.*)",
+      "destination": "/:path",
+      "permanent": true
+    },
+    {
       "source": "/download/latest",
       "destination": "https://github.com/schaier-io/battery-sensei-releases/releases/latest/download/Battery-Sensei.pkg",
       "permanent": false
@@ -48,7 +63,7 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://api.producthunt.com; font-src 'self' data:; connect-src 'self' https://va.vercel-scripts.com; media-src 'self' blob:; frame-src https://buy.polar.sh https://sandbox.polar.sh https://polar.sh; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'"
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://api.producthunt.com https://i.ytimg.com; font-src 'self' data:; connect-src 'self' https://va.vercel-scripts.com; media-src 'self' blob:; frame-src https://buy.polar.sh https://sandbox.polar.sh https://polar.sh https://www.youtube-nocookie.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'"
         }
       ]
     },

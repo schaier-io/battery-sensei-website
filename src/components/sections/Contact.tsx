@@ -2,16 +2,12 @@ import { lazy, Suspense, useState, type FormEvent } from 'react'
 import {
   ArrowUpRight,
   AtSign,
-  Bug,
   Mail,
   Send,
   ShieldCheck,
-  Lightbulb,
-  Sparkles,
 } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 import { Trans, useTranslation } from 'react-i18next'
-import { GithubMark } from '#/components/icons/GithubMark'
 import { Hanko } from '#/components/zen/Hanko'
 import { Reveal } from '#/components/zen/Reveal'
 
@@ -20,7 +16,6 @@ type Status = 'idle' | 'sending' | 'sent' | 'error'
 
 const TOPIC_ORDER: ReadonlyArray<Topic> = ['feature', 'bug', 'billing', 'other']
 
-const ISSUES_URL = 'https://github.com/schaier-io/battery-sensei-releases/issues/new/choose'
 const EMAIL = 'info@battery-sensei.app'
 
 // The board pulls its own data fetching + card stack; load it only when the
@@ -93,6 +88,35 @@ export function Contact() {
             className="prose-readable mx-auto mt-5 text-[1.0625rem] text-sumi-soft"
           >
             {t('contact.intro')}
+          </Reveal>
+          {/* Sits directly under the intro rather than beside the email card:
+              these three notes change whether someone writes at all, and what
+              they put in the message. Advisory weight, so it stays a quiet
+              inline row rather than a boxed card competing with the form. */}
+          {/* Normal inline flow, not a flex row: flex would put a gap
+              between every child, which strands the closing period away
+              from the link that precedes it. */}
+          <Reveal
+            as="p"
+            delay={340}
+            className="prose-readable mx-auto mt-4 text-[0.8125rem] leading-[1.6] text-nezumi"
+          >
+            <span aria-hidden className="mr-1.5 font-jp text-[13px] text-hinomaru-ink/60">
+              注
+            </span>
+            <Trans
+              i18nKey="contact.before.inline"
+              components={[
+                <a
+                  href="#faq"
+                  className="font-medium text-sumi-soft underline decoration-hinomaru/30 underline-offset-4 transition-colors hover:text-sumi hover:decoration-hinomaru"
+                />,
+                <Link
+                  to="/guides"
+                  className="font-medium text-sumi-soft underline decoration-hinomaru/30 underline-offset-4 transition-colors hover:text-sumi hover:decoration-hinomaru"
+                />,
+              ]}
+            />
           </Reveal>
         </div>
 
@@ -174,8 +198,8 @@ export function Contact() {
                         className={[
                           'group relative cursor-pointer rounded-md border px-3 py-2.5 text-left transition-[border-color,background-color,box-shadow,transform] duration-200',
                           active
-                            ? 'border-hinomaru/40 bg-[color-mix(in_oklab,var(--washi)_48%,#fff)] shadow-[inset_2px_0_0_var(--hinomaru),0_1px_0_rgba(255,255,255,0.5)]'
-                            : 'border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_72%,#fff)] hover:border-[var(--line-strong)]',
+                            ? 'border-hinomaru/55 bg-[color-mix(in_oklab,var(--hinomaru)_6%,var(--washi))] shadow-[0_1px_0_rgba(255,255,255,0.5)]'
+                            : 'border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_72%,var(--paper-lift))] hover:border-[var(--line-strong)]',
                         ].join(' ')}
                       >
                         <input
@@ -197,7 +221,7 @@ export function Contact() {
                           className={[
                             'absolute right-2.5 top-2.5 grid h-3.5 w-3.5 place-items-center rounded-full transition-[opacity,transform,background-color] duration-200',
                             active
-                              ? 'bg-hinomaru/16 text-hinomaru opacity-100 scale-100'
+                              ? 'bg-hinomaru/16 text-hinomaru-ink opacity-100 scale-100'
                               : 'opacity-0 scale-90',
                           ].join(' ')}
                         >
@@ -208,6 +232,25 @@ export function Contact() {
                   })}
                 </div>
               </fieldset>
+
+              {/* Sits with the topic selector, not further down the form: it
+                  explains what happens to a FEATURE IDEA specifically, so it
+                  belongs where that choice is made. Informational, not a mode
+                  switch, so the form below stays exactly as it was. */}
+              {topic === 'feature' && (
+                <div className="rounded-md border border-dashed border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_82%,transparent)] p-3.5">
+                  <p className="text-[0.8125rem] leading-[1.5] text-sumi-soft">
+                    {t('contact.board.hint')}
+                  </p>
+                  <Link
+                    to="/roadmap"
+                    className="mt-1.5 inline-flex items-center gap-1.5 text-[0.8125rem] font-medium text-sumi transition-colors hover:text-hinomaru-ink"
+                  >
+                    {t('contact.board.linkLabel')}
+                    <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.9} aria-hidden />
+                  </Link>
+                </div>
+              )}
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <Field label={t('contact.fields.name')} htmlFor="contact-name">
@@ -261,24 +304,6 @@ export function Contact() {
                 />
               </Field>
 
-              {/* Feature ideas have a public home too: the roadmap board,
-                  where submissions become votable after review. This form
-                  stays the private path — the pointer is informational,
-                  not a mode switch. */}
-              {topic === 'feature' && (
-                <div className="rounded-md border border-dashed border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_82%,transparent)] p-3.5">
-                  <p className="text-[0.8125rem] leading-[1.5] text-sumi-soft">
-                    {t('contact.board.hint')}
-                  </p>
-                  <Link
-                    to="/roadmap"
-                    className="mt-1.5 inline-flex items-center gap-1.5 text-[0.8125rem] font-medium text-sumi transition-colors hover:text-hinomaru"
-                  >
-                    {t('contact.board.linkLabel')}
-                    <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.9} aria-hidden />
-                  </Link>
-                </div>
-              )}
 
               <Field
                 label={t('contact.fields.message')}
@@ -324,7 +349,7 @@ export function Contact() {
                   aria-live="polite"
                   className={[
                     'text-[0.8125rem] leading-snug',
-                    status === 'error' ? 'text-hinomaru' :
+                    status === 'error' ? 'text-hinomaru-ink' :
                     status === 'sent'  ? 'text-matcha font-medium' :
                     'text-nezumi',
                   ].join(' ')}
@@ -355,92 +380,6 @@ export function Contact() {
           </Reveal>
 
           <div className="flex flex-col gap-4">
-            <Reveal delay={200}>
-              {/* Compact roadmap card. Was 6 stacked rows (header,
-                  title, chips, body paragraph, CTA, ambient blur);
-                  collapsed to 4 (header, title, chips+inline CTA).
-                  The body paragraph was restating what the chips
-                  already communicate — dropped. Tighter padding
-                  (p-5) and a smaller title size (1rem, was 1.125)
-                  reduce the card's total height by ~40%, which
-                  brings it closer to the email card below and
-                  stops the right column from towering over the
-                  form on the left. */}
-              {/* Roadmap card — tightened padding to p-4 (was p-5) so the
-                  header chip sits closer to the title. Arrow no longer
-                  lives inside a tracked-letter circle that made it
-                  look like it was orbiting; it's now a proper SVG
-                  chevron that slides + brightens on group hover. */}
-              <a
-                href={ISSUES_URL}
-                target="_blank"
-                rel="noreferrer"
-                className="paper-card group relative flex flex-col gap-2.5 overflow-hidden p-3.5 sm:p-4 transition-transform duration-300"
-              >
-                <span
-                  aria-hidden
-                  className="pointer-events-none absolute -right-8 -top-10 h-32 w-32 rounded-full bg-hinomaru/[0.06] blur-2xl transition-opacity duration-500 group-hover:opacity-100 group-hover:bg-hinomaru/[0.10]"
-                />
-                <header className="relative flex items-center justify-between gap-3">
-                  <span className="inline-flex items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.22em] text-sumi-soft display-title">
-                    <Sparkles
-                      className="h-3.5 w-3.5 text-hinomaru transition-transform duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:rotate-[12deg] group-hover:scale-110"
-                      strokeWidth={1.7}
-                      aria-hidden
-                    />
-                    {t('contact.github.label')}
-                  </span>
-                  <GithubMark
-                    className="h-4 w-4 text-nezumi transition-colors duration-[220ms] group-hover:text-sumi"
-                    strokeWidth={1.6}
-                  />
-                </header>
-                <p className="display-title relative text-[1rem] font-medium leading-snug text-sumi">
-                  {t('contact.github.title')}
-                </p>
-                <div className="relative flex flex-wrap items-center gap-1.5">
-                  <PathChip
-                    icon={Bug}
-                    label={t('contact.github.paths.idea')}
-                    accent="hinomaru"
-                  />
-                  <PathChip
-                    icon={Mail}
-                    label={t('contact.github.paths.bug')}
-                    accent="kin"
-                  />
-                  <PathChip
-                    icon={Lightbulb}
-                    label={t('contact.github.paths.curious')}
-                    accent="nezumi"
-                  />
-                  {/* CTA inline at the end of the chip row on wide
-                      screens, wraps to its own line on narrow. The
-                      arrow now uses a clipped reveal — the chevron sits
-                      inside a fixed-width slot and translates within
-                      that slot on hover, so it never looks like it's
-                      escaping a parent circle or pushing the label. */}
-                  <span
-                    aria-hidden
-                    className="hidden text-[var(--line-strong)] sm:inline"
-                  >
-                    ·
-                  </span>
-                  {/* "Find your thread ↗" — use an open-in-new-page cue.
-                      Nudge up-right on hover so the direction is clear
-                      without heavy motion. */}
-                  <span className="inline-flex items-center gap-1.5 text-[0.8125rem] font-medium text-sumi transition-colors duration-[220ms] group-hover:text-hinomaru">
-                    {t('contact.github.cta')}
-                    <ArrowUpRight
-                      aria-hidden
-                      className="h-4 w-4 transition-transform duration-[300ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                      strokeWidth={1.9}
-                    />
-                  </span>
-                </div>
-              </a>
-            </Reveal>
-
             <Reveal delay={280}>
               <a
                 href={`mailto:${EMAIL}`}
@@ -480,45 +419,6 @@ export function Contact() {
               </a>
             </Reveal>
 
-            <Reveal delay={360}>
-              {/* Footnote, not a card: this is advisory fine print under
-                  the email card's description — boxing it gave it the same
-                  visual weight as the actual actions around it. Small,
-                  muted, unboxed; the 注 seal keeps the site's vocabulary. */}
-              <div className="px-1 pt-1">
-                <p className="mb-2 inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-nezumi">
-                  <span aria-hidden className="font-jp text-[13px] leading-none text-hinomaru/60">
-                    注
-                  </span>
-                  {t('contact.before.title')}
-                </p>
-                <ul className="space-y-1.5 text-[0.8125rem] leading-[1.5] text-nezumi">
-                  <li>
-                    <Trans
-                      i18nKey="contact.before.faqHint"
-                      components={[
-                        <a
-                          href="#faq"
-                          className="font-medium text-sumi-soft underline decoration-hinomaru/30 underline-offset-4 hover:text-sumi hover:decoration-hinomaru transition-colors"
-                        />,
-                      ]}
-                    />
-                  </li>
-                  <li>{t('contact.before.refundHint')}</li>
-                  <li>
-                    <Trans
-                      i18nKey="contact.before.journalHint"
-                      components={[
-                        <Link
-                          to="/blog"
-                          className="font-medium text-sumi-soft underline decoration-hinomaru/30 underline-offset-4 hover:text-sumi hover:decoration-hinomaru transition-colors"
-                        />,
-                      ]}
-                    />
-                  </li>
-                </ul>
-              </div>
-            </Reveal>
           </div>
         </div>
       </div>
@@ -534,7 +434,7 @@ export function Contact() {
 // finishing a label.
 const inputClass =
   [
-    'block w-full rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_60%,#fff)] px-3.5 py-2.5 text-[0.9375rem] text-sumi placeholder:text-nezumi/70',
+    'block w-full rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_60%,var(--paper-lift))] px-3.5 py-2.5 text-[0.9375rem] text-sumi placeholder:text-nezumi/70',
     'transition-[colors,background-size,box-shadow] duration-[320ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]',
     'bg-no-repeat bg-[length:0%_1.5px] bg-[position:8px_calc(100%-2px)]',
     "bg-[image:linear-gradient(to_right,var(--hinomaru),color-mix(in_oklab,var(--hinomaru)_30%,transparent))]",
@@ -568,45 +468,3 @@ function Field({
   )
 }
 
-function PathChip({
-  icon: Icon,
-  label,
-  accent,
-}: {
-  icon: typeof Bug
-  label: string
-  accent: 'hinomaru' | 'kin' | 'nezumi'
-}) {
-  const iconColor =
-    accent === 'hinomaru'
-      ? 'text-hinomaru'
-      : accent === 'kin'
-        ? 'text-kin'
-        : 'text-nezumi'
-  // Tinted hover surface keyed to the chip's accent so each path
-  // briefly lights up in its own colour when the parent card is
-  // hovered — Lightbulb/idea blushes hinomaru, Bug glows kin, etc.
-  const hoverBg =
-    accent === 'hinomaru'
-      ? 'group-hover:bg-[color-mix(in_oklab,var(--hinomaru)_8%,var(--washi))]'
-      : accent === 'kin'
-        ? 'group-hover:bg-[color-mix(in_oklab,var(--kin)_10%,var(--washi))]'
-        : 'group-hover:bg-[color-mix(in_oklab,var(--washi)_50%,#fff)]'
-  return (
-    <span
-      // Direct chip hover adds a 2° rotation on top of the parent
-      // card's group-hover lift, so each path-chip feels independently
-      // alive — visitors can hover any single chip and feel it tilt
-      // before tapping. Combined with the accent-keyed tinted bg,
-      // each path lights up in its own colour.
-      className={`path-chip inline-flex items-center gap-1.5 rounded-full border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,#fff)] px-2.5 py-1 text-[11px] font-medium text-sumi-soft transition-[colors,transform,box-shadow] duration-[260ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-0.5 group-hover:border-[var(--line-strong)] group-hover:text-sumi group-hover:shadow-[0_2px_6px_-4px_rgba(28,26,23,0.18)] hover:!-translate-y-1 hover:!rotate-[2deg] hover:!shadow-[0_6px_14px_-8px_rgba(28,26,23,0.30)] ${hoverBg}`}
-    >
-      <Icon
-        className={`h-3 w-3 ${iconColor} transition-transform duration-[260ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110 [.path-chip:hover_&]:scale-125 [.path-chip:hover_&]:-rotate-[8deg]`}
-        strokeWidth={1.8}
-        aria-hidden
-      />
-      {label}
-    </span>
-  )
-}
