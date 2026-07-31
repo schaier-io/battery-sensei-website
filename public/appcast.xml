@@ -1339,6 +1339,35 @@
         length="26537266"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.12.1</title>
+      <pubDate>Fri, 31 Jul 2026 00:32:38 +0000</pubDate>
+      <sparkle:version>87</sparkle:version>
+      <sparkle:shortVersionString>1.12.1</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.12.1</h1>
+<p>Share cards scan again, and four small things from 1.12.0 that were reported within the hour.</p>
+<h2>Share cards</h2>
+<ul>
+<li><strong>The QR code scans.</strong> On the Weekly and Monthly Wrapped cards it did not — not &quot;sometimes&quot;, but never. Two causes, both quiet: the code was drawn with its modules landing on fractional pixels, and it was stamped slightly too small with too thin a white margin around it. Every card&#x27;s code is now larger, crisper, and verified by machine rather than by eye.</li>
+<li><strong>The card wears the real Sensei mark.</strong> The lockup used a generic system heart-and-bolt symbol that appears nowhere else in the app. The share card is the one thing people post in public; it now carries the same icon as the menu bar.</li>
+</ul>
+<h2>Fixes</h2>
+<ul>
+<li><strong>Meeting Battery Guard</strong> drew two dividers between its description and the forecast.</li>
+<li><strong>The Today ring</strong> reads &quot;3h12m&quot; rather than &quot;3:12&quot; — under a percentage, a colon reads as a clock time — and sits further from the number.</li>
+<li><strong>Roadmap rows</strong> are tappable across their whole width. Only the text column responded before, so clicking the status pill or the space beside the title did nothing, and nothing indicated a row would open at all. There is now a chevron that turns.</li>
+</ul>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.12.1/Battery-Sensei.pkg"
+        sparkle:edSignature="ZBjV3sDoWYxf/NxFu4cl5WdNBWdDw4/YlmlvhXpFbddm9+HFfbhbeXrfAWnbdZADwh8bqw+vBE7kvLqwoThbDg=="
+        length="26543966"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
