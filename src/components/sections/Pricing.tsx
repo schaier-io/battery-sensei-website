@@ -128,7 +128,7 @@ export function Pricing() {
   // still positive on our side.
   const hasRealDiscount =
     lifetime.hasDiscount && lifetime.original.amount > lifetime.discounted.amount
-  const launchOpen = zenmodeRemaining > 0 && hasRealDiscount
+  const launchOpen = zenmodeRemaining > 0 && hasRealDiscount && false
   // While the launch discount is active we show the discounted price as
   // the headline; once exhausted, the original full price becomes the
   // headline and the strikethrough is gone too.
