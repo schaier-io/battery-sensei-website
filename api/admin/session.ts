@@ -25,6 +25,7 @@ import {
   createAdminToken,
   requireAdmin,
 } from '../../lib/admin-session.js'
+import { GET as enforceRetention } from '../../lib/retention-endpoint.js'
 
 const LOGIN_RATE_WINDOW_MS = 15 * 60 * 1000
 const LOGIN_RATE_MAX_FAILURES = 5
@@ -89,6 +90,13 @@ export async function POST(request: Request): Promise<Response> {
 }
 
 export async function GET(request: Request): Promise<Response> {
+  // Vercel Hobby permits 12 functions per deployment. The public cron URL is
+  // internally rewritten here so retention shares this existing function
+  // without changing its authenticated external endpoint.
+  if (new URL(request.url).searchParams.get('job') === 'retention') {
+    return enforceRetention(request)
+  }
+
   return requireAdmin(request)
     ? json({ ok: true }, 200, NO_STORE)
     : json({ ok: false }, 401, NO_STORE)

@@ -1,11 +1,11 @@
 /** Daily, authenticated retention enforcement invoked by Vercel Cron. */
-import { db } from '../../lib/db.js'
-import { getResendClient } from '../../lib/resend.js'
+import { db } from './db.js'
+import { getResendClient } from './resend.js'
 import {
   runRetention,
   type PendingNewsletter,
   type RetentionDatabase,
-} from '../../lib/retention.js'
+} from './retention.js'
 
 type ResendDeleteResult = {
   data: unknown | null

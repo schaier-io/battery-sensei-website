@@ -7,6 +7,12 @@
     }
   ],
   "outputDirectory": "dist/client",
+  "rewrites": [
+    {
+      "source": "/api/cron/retention",
+      "destination": "/api/admin/session?job=retention"
+    }
+  ],
   "redirects": [
     {
       "source": "/vs-aldente",

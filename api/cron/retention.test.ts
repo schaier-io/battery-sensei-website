@@ -4,8 +4,9 @@ import {
   deletePendingResendContact,
   isCronAuthorized,
   minimizeUnsubscribedResendContact,
-} from './retention'
+} from '../../lib/retention-endpoint'
 import type { RetentionDatabase } from '../../lib/retention'
+import { GET as sharedAdminGet } from '../admin/session'
 
 function emptyDatabase(): RetentionDatabase {
   return {
@@ -39,6 +40,16 @@ afterEach(() => {
 })
 
 describe('retention cron authorization', () => {
+  it('dispatches the rewritten cron URL through the shared admin function', async () => {
+    vi.stubEnv('CRON_SECRET', 'retention-secret-123456789')
+    const response = await sharedAdminGet(
+      new Request('https://battery-sensei.app/api/admin/session?job=retention'),
+    )
+
+    expect(response.status).toBe(401)
+    expect(await response.json()).toEqual({ error: 'Unauthorized' })
+  })
+
   it('accepts only the configured bearer secret and fails closed when missing', () => {
     const request = new Request('https://battery-sensei.app/api/cron/retention', {
       headers: { authorization: 'Bearer retention-secret-123456789' },

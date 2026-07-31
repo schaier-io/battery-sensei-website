@@ -8,7 +8,10 @@
    deployment. The migration adds legal-hold fields and the public-feature
    anonymization marker.
 3. Deploy `vercel.json`. Production calls `/api/cron/retention` every day at
-   `03:17 UTC`. Preview deployments do not run Vercel Cron jobs.
+   `03:17 UTC`. Preview deployments do not run Vercel Cron jobs. That public
+   path is internally rewritten to the existing admin-session function so the
+   Hobby deployment stays within its 12-function limit; bearer-secret
+   authorization still runs before any retention work.
 4. In Vercel, open Project → Settings → Cron Jobs. Confirm the path and
    schedule, then use **View Logs** after the first production invocation.
 
