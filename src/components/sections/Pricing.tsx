@@ -128,7 +128,7 @@ export function Pricing() {
   // still positive on our side.
   const hasRealDiscount =
     lifetime.hasDiscount && lifetime.original.amount > lifetime.discounted.amount
-  const launchOpen = zenmodeRemaining > 0 && hasRealDiscount && false
+  const launchOpen = zenmodeRemaining > 0 && hasRealDiscount
   // While the launch discount is active we show the discounted price as
   // the headline; once exhausted, the original full price becomes the
   // headline and the strikethrough is gone too.
@@ -340,7 +340,7 @@ export function Pricing() {
                 appears ONLY while ZENMODE still has redemptions. Past
                 that, the card reads as a plain lifetime product at
                 full price, no stale urgency cues. */}
-            {launchOpen && (
+            {launchOpen && false && (
               <>
                 <p className="mt-2 text-[0.75rem] uppercase tracking-[0.16em] font-medium text-hinomaru-ink/90">
                   {t('pricing.lifetime.discountNote')}
