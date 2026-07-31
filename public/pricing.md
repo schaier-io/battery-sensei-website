@@ -28,7 +28,7 @@
 - Menu-bar live charge + watts + cycles
 - Multi-language (English, Deutsch, Español, Français, 日本語)
 - Apple-notarized .pkg installer + auto-updates via Sparkle
-- Runs entirely on the local Mac
+- Core battery, calendar, and per-app energy monitoring runs locally
 
 ### Pro (active during trial, then unlocked by Lifetime license)
 
@@ -49,7 +49,7 @@
 
 ## Privacy
 
-- Runs entirely on the local Mac
-- No telemetry, no analytics, no cloud account
-- Battery history stays on the device
-- License activation hits Polar once, then is cached locally; no login required afterwards
+- Battery, calendar, and per-app energy history stays on the local Mac
+- No app telemetry, analytics SDK, cloud sync, or cloud account
+- Update checks, licensing, feature-board actions, and sharing you choose use the services named in the privacy notice
+- License activation and periodic entitlement checks use Polar; no app login is required

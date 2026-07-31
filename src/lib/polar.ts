@@ -1,6 +1,5 @@
-// Polar.sh checkout. Pre-created Checkout Links in the Polar dashboard
-// produce stable URLs like `https://buy.polar.sh/polar_cl_xxxxxxxx`; we
-// just append prefill params (`discount_code`, etc.) on click.
+// Polar.sh checkout. The purchase path creates embedded sessions through the
+// server API; these public links remain optional compatibility fallbacks.
 //
 // Public client-side env (exposed to the bundle):
 //   VITE_POLAR_CHECKOUT_URL_LIFETIME   Checkout Link for the one-time
@@ -8,21 +7,17 @@
 //   VITE_POLAR_CHECKOUT_URL_SUPPORT    Checkout Link for the yearly
 //                                      "Yearly Patron" product
 //
-// Server-only env (used by `api/price.ts` for per-country totals — never
-// exposed to the bundle):
-//   POLAR_ACCESS_TOKEN          organization access token from Polar
-//                               dashboard → Settings → Developers
-//   POLAR_PRODUCT_ID_SUPPORT    UUID of the $3.99/yr support product —
-//                               used as the live FX/VAT reference price
-//                               (Lifetime is derived from it: +1 unit
-//                               discounted, ×3 full)
+// Server-only `_NEW` token/product ids drive live per-country totals. Names
+// without `_NEW` remain the legacy fallback and never reach the client bundle.
 
 const LIFETIME_CHECKOUT_URL =
-  import.meta.env.VITE_POLAR_CHECKOUT_URL_LIFETIME ??
+  import.meta.env.VITE_POLAR_CHECKOUT_URL_LIFETIME_NEW ||
+  import.meta.env.VITE_POLAR_CHECKOUT_URL_LIFETIME ||
   'https://buy.polar.sh/YOUR_LIFETIME_CHECKOUT_LINK'
 
 const SUPPORT_CHECKOUT_URL =
-  import.meta.env.VITE_POLAR_CHECKOUT_URL_SUPPORT ??
+  import.meta.env.VITE_POLAR_CHECKOUT_URL_SUPPORT_NEW ||
+  import.meta.env.VITE_POLAR_CHECKOUT_URL_SUPPORT ||
   'https://buy.polar.sh/YOUR_SUPPORT_CHECKOUT_LINK'
 
 /**
@@ -35,23 +30,42 @@ const SUPPORT_CHECKOUT_URL =
  * general sign-in page so the link never 404s if the env var is unset.
  */
 export const CUSTOMER_PORTAL_URL =
-  import.meta.env.VITE_POLAR_CUSTOMER_PORTAL_URL ??
+  import.meta.env.VITE_POLAR_CUSTOMER_PORTAL_URL_NEW ||
+  'https://polar.sh/41bit-llc/portal'
+
+/** Existing buyers remain in the original Polar organization. */
+export const LEGACY_CUSTOMER_PORTAL_URL =
+  import.meta.env.VITE_POLAR_CUSTOMER_PORTAL_URL ||
   'https://polar.sh/schaier-io/portal/overview'
+
+export const HAS_SEPARATE_LEGACY_CUSTOMER_PORTAL =
+  LEGACY_CUSTOMER_PORTAL_URL !== CUSTOMER_PORTAL_URL
 
 /**
  * Launch discount for the Lifetime tier.
  *
- * **ZENMODE** is the silent, auto-applied launch code: the server
+ * The configured code is the silent, auto-applied launch discount: the server
  * attaches it to every embed session by default, Polar caps it at
- * 500 redemptions and 422s once exhausted. Visitors never have to
+ * the configured redemption maximum and 422s once exhausted. Visitors never have to
  * type it. Once exhausted, every "launch discount" surface on the
  * site (scarcity bar, discount-note chip, strikethrough, the
  * /checkout hint chip) hides itself, and the headline price becomes
  * the original full price.
  *
  */
-export const LIFETIME_DISCOUNT_CODE = 'ZENMODE'
-export const LIFETIME_DISCOUNT_MAX_REDEMPTIONS = 500
+export const LIFETIME_DISCOUNT_CODE =
+  import.meta.env.VITE_POLAR_DISCOUNT_CODE_NEW ||
+  import.meta.env.VITE_POLAR_DISCOUNT_CODE ||
+  'ZENMODE'
+const configuredDiscountMaximum = Number(
+  import.meta.env.VITE_POLAR_DISCOUNT_MAX_REDEMPTIONS_NEW ||
+  import.meta.env.VITE_POLAR_DISCOUNT_MAX_REDEMPTIONS ||
+  500,
+)
+export const LIFETIME_DISCOUNT_MAX_REDEMPTIONS =
+  Number.isSafeInteger(configuredDiscountMaximum) && configuredDiscountMaximum > 0
+    ? configuredDiscountMaximum
+    : 500
 
 /**
  * Lifetime fallback prices, per currency. ONLY rendered before the
@@ -61,16 +75,16 @@ export const LIFETIME_DISCOUNT_MAX_REDEMPTIONS = 500
  * dashboard configuration for the Lifetime product, or the slow-
  * connection FOIT flashes quotes the wrong number for a beat.
  *
- * Source of truth (Polar Lifetime product + ZENMODE discount):
+ * Source of truth (Polar Lifetime product + configured discount):
  *   Currency │  Full   │  Discount removes  │  Final
  *   ─────────┼─────────┼────────────────────┼────────
  *   USD      │ $11.99  │  $7.50             │  $4.49
  *   EUR      │ €10.99  │  €7.00             │  €3.99
  *   CZK      │ 205 Kč  │  110 Kč            │  95 Kč
  *
- * The "discounted" value is what buyers pay during the first-500
+ * The "discounted" value is what buyers pay during the limited launch
  * window. "full" is the strikethrough anchor (and the headline once
- * ZENMODE is exhausted).
+ * the discount is exhausted).
  */
 export const LIFETIME_FALLBACK: Record<
   string,
@@ -104,10 +118,10 @@ export function supportCheckoutUrl(opts: CheckoutUrlOptions = {}): string {
   return withDiscount(SUPPORT_CHECKOUT_URL, opts.discountCode)
 }
 
-/** Lifetime one-time license. ZENMODE is auto-applied unless overridden. */
+/** Lifetime one-time license. The configured discount is auto-applied. */
 export function lifetimeCheckoutUrl(opts: CheckoutUrlOptions = {}): string {
-  // Caller's discount code wins; otherwise we pre-fill ZENMODE so the
-  // first-500 discount is always applied. Once Polar exhausts the cap the
+  // Caller's discount code wins; otherwise pre-fill the configured launch
+  // discount. Once Polar exhausts the cap the
   // param is silently ignored server-side.
   const code = opts.discountCode?.trim() || LIFETIME_DISCOUNT_CODE
   return withDiscount(LIFETIME_CHECKOUT_URL, code)

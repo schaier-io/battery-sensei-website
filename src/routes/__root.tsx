@@ -39,6 +39,22 @@ import { LIFETIME_FALLBACK_DEFAULT } from '#/lib/polar'
 import { THEME_INIT_SCRIPT } from '#/lib/theme'
 
 const SITE_URL = 'https://www.battery-sensei.app'
+const SITE_OPERATOR = '41BIT LLC'
+const SOFTWARE_DEVELOPER = 'Sandro Thabiso Schaier'
+
+/** Keep referral ids, checkout ids, and campaign parameters out of Vercel
+ * Analytics and Speed Insights. Aggregate route-level measurements are enough. */
+function redactObservabilityUrl<T extends { url: string }>(event: T): T {
+  try {
+    const url = new URL(event.url, SITE_URL)
+    url.pathname = url.pathname.replace(/^\/from\/[^/]+/, '/from/[id]')
+    url.search = ''
+    url.hash = ''
+    return { ...event, url: url.toString() }
+  } catch {
+    return event
+  }
+}
 
 // Title: 58 chars. Primary kw ("MacBook Battery") at the front, value-pop
 // after, brand at the end. Punctuation chosen to render as a compact title
@@ -96,7 +112,7 @@ const softwareApplicationLd = {
     'Personal battery history with plain-English timeline',
     'Menu-bar live charge and watts readout',
     'Heat-throttling awareness',
-    'Privacy-first, runs entirely on your Mac',
+    'Battery, app-energy, and calendar data stay on your Mac',
   ],
   inLanguage: ['en', 'de', 'es', 'fr', 'ja'],
   image: [
@@ -109,13 +125,13 @@ const softwareApplicationLd = {
   ],
   screenshot: `${SITE_URL}/share-card.png`,
   author: {
-    '@type': 'Organization',
-    name: 'Battery Sensei',
+    '@type': 'Person',
+    name: SOFTWARE_DEVELOPER,
     url: SITE_URL,
   },
   publisher: {
     '@type': 'Organization',
-    name: 'Battery Sensei',
+    name: SITE_OPERATOR,
     url: SITE_URL,
   },
 }
@@ -123,10 +139,10 @@ const softwareApplicationLd = {
 const organizationLd = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
-  name: 'Battery Sensei',
+  name: SITE_OPERATOR,
+  alternateName: 'Battery Sensei',
   url: SITE_URL,
   logo: `${SITE_URL}/logo.svg`,
-  sameAs: ['https://github.com/schaier-io/battery-sensei-releases'],
 }
 
 const webSiteLd = {
@@ -135,7 +151,7 @@ const webSiteLd = {
   url: SITE_URL,
   name: 'Battery Sensei',
   inLanguage: 'en',
-  publisher: { '@type': 'Organization', name: 'Battery Sensei', url: SITE_URL },
+  publisher: { '@type': 'Organization', name: SITE_OPERATOR, url: SITE_URL },
 }
 
 const faqPageLd = {
@@ -174,7 +190,7 @@ const howToLd = {
   '@type': 'HowTo',
   name: 'How to extend MacBook battery life with Battery Sensei',
   description:
-    'Install Battery Sensei, set a charge limit, configure low-battery alerts, and keep a personal battery history. Free, native macOS, runs entirely on your Mac.',
+    'Install Battery Sensei, set a charge limit, configure low-battery alerts, and keep a personal battery history. Free, native macOS, with battery history stored on your Mac.',
   totalTime: 'PT3M',
   estimatedCost: { '@type': 'MonetaryAmount', currency: 'USD', value: '0' },
   supply: [
@@ -211,7 +227,7 @@ const howToLd = {
       '@type': 'HowToStep',
       position: 5,
       name: 'Read your battery history',
-      text: 'Open the Saga view to see cycles, capacity, and plateaus in plain English. Everything stays on your Mac.',
+      text: 'Open the Saga view to see cycles, capacity, and plateaus in plain English. Battery, app-energy, and calendar data stay on your Mac; update checks, licensing, and user-triggered actions use the services disclosed in the Privacy Policy.',
     },
   ],
 }
@@ -230,8 +246,8 @@ const webPageLd = {
   datePublished: '2025-09-01',
   dateModified: LAST_UPDATED,
   author: {
-    '@type': 'Organization',
-    name: 'Battery Sensei',
+    '@type': 'Person',
+    name: SOFTWARE_DEVELOPER,
     url: SITE_URL,
   },
   about: { '@type': 'SoftwareApplication', name: 'Battery Sensei' },
@@ -271,7 +287,7 @@ export const Route = createRootRoute({
       { name: 'keywords', content: KEYWORDS },
       { name: 'application-name', content: 'Battery Sensei' },
       { name: 'apple-mobile-web-app-title', content: 'Battery Sensei' },
-      { name: 'author', content: 'Battery Sensei' },
+      { name: 'author', content: SOFTWARE_DEVELOPER },
       { name: 'robots', content: 'index, follow, max-image-preview:large, max-snippet:-1' },
       { name: 'format-detection', content: 'telephone=no' },
       // Open Graph
@@ -339,16 +355,12 @@ export const Route = createRootRoute({
       // Self-hosted at /fonts/ so no Vite hashing — plain absolute path.
       { rel: 'preload', as: 'font', href: '/fonts/noto-serif-jp-400.woff2', type: 'font/woff2', crossOrigin: 'anonymous' },
       //
-      // `buy.polar.sh` keeps its preconnect: that's the one origin a
-      // visitor's BROWSER actually hits directly (the Buy click is a
-      // full-page navigation to the hosted Polar checkout).
-      { rel: 'preconnect', href: 'https://buy.polar.sh' },
       { rel: 'stylesheet', href: appCss },
     ],
     scripts: [
       // Polar's checkout is a plain hosted page (buy.polar.sh/...) — no
-      // overlay JS to load. The click is a normal navigation, which is why
-      // we only preconnect to buy.polar.sh above and ship no extra script.
+      // overlay JS or pre-click connection. The browser contacts Polar only
+      // after the visitor chooses checkout.
       {
         type: 'application/ld+json',
         children: JSON.stringify(softwareApplicationLd),
@@ -400,7 +412,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         </I18nProvider>
         {/* Vercel Web Analytics — cookieless, no PII, aggregate counts only.
             No-op outside Vercel (dev console logs a notice and does nothing). */}
-        <Analytics />
+        <Analytics beforeSend={redactObservabilityUrl} />
         {/* Vercel Speed Insights — Core Web Vitals from real visits.
             Cookieless, sampled, no PII. No-op outside production. */}
         <VercelSpeedInsights />
@@ -435,5 +447,5 @@ function VercelSpeedInsights() {
     },
   })
 
-  return <SpeedInsights route={route} />
+  return <SpeedInsights route={route} beforeSend={redactObservabilityUrl} />
 }

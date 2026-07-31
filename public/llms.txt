@@ -2,7 +2,9 @@
 
 > A calm, native macOS menu-bar app that watches your MacBook battery.
 > Smart low-battery alerts, charge limit with Travel Mode, cycle and capacity
-> tracking, and a plain-English battery history. Runs entirely on your Mac.
+> tracking, and a plain-English battery history. Sensitive monitoring data
+> stays on your Mac; limited update, licensing, and user-triggered actions use
+> the network.
 > 5-day free trial, no card. $4.49 once, lifetime license.
 
 Battery Sensei (電池先生) is a single-purpose macOS utility for MacBook owners
@@ -10,7 +12,9 @@ who want to slow battery wear, avoid surprise shutdowns, and understand how
 their battery is aging. Notarized by Apple, native AppKit and SwiftUI,
 supports macOS 14 Sonoma or later on Apple Silicon and Intel.
 
-Privacy: nothing leaves the device. No telemetry, no account, no cloud.
+Privacy: battery, calendar, and per-app energy data stays on the device. No app
+telemetry, cloud account, or cloud sync. Update checks, licensing, feature-board
+actions, and sharing you choose use the services named in the privacy notice.
 
 ## Quick facts
 

@@ -43,31 +43,31 @@ type Props = {
 const COPY = {
   en: {
     why: 'A quiet note from Battery Sensei',
-    ignore: 'Didn\'t sign up? You can ignore this email. Nothing is saved until you confirm.',
+    ignore: 'Didn\'t sign up? Ignore this email. Your address remains unsubscribed unless you confirm; contact us to delete the pending request.',
     unsub: 'Unsubscribe',
     tagline: 'Calm energy for your Mac.',
   },
   de: {
     why: 'Eine kurze Nachricht von Battery Sensei',
-    ignore: 'Nicht angemeldet? Ignorieren Sie diese E-Mail einfach. Ohne Ihre Bestätigung wird nichts gespeichert.',
+    ignore: 'Nicht angemeldet? Ignorieren Sie diese E-Mail. Ihre Adresse bleibt vom Versand abgemeldet, solange Sie nicht bestätigen; kontaktieren Sie uns, um die ausstehende Anfrage löschen zu lassen.',
     unsub: 'Abmelden',
     tagline: 'Mehr Ruhe für Ihren Mac-Akku.',
   },
   es: {
     why: 'Un mensaje tranquilo de Battery Sensei',
-    ignore: '¿No te registraste? Ignora este correo. No guardamos nada hasta que confirmes.',
+    ignore: '¿No te registraste? Ignora este correo. Tu dirección seguirá sin estar suscrita a menos que confirmes; ponte en contacto con nosotros para eliminar la solicitud pendiente.',
     unsub: 'Cancelar suscripción',
     tagline: 'Batería en calma para tu Mac.',
   },
   fr: {
     why: 'Un mot discret de Battery Sensei',
-    ignore: 'Vous n\'avez rien demandé ? Ignorez ce message : rien n\'est enregistré tant que vous ne confirmez pas.',
+    ignore: 'Vous ne vous êtes pas inscrit ? Ignorez cet e-mail. Votre adresse restera non abonnée tant que vous n’aurez pas confirmé ; contactez-nous pour supprimer la demande en attente.',
     unsub: 'Se désabonner',
     tagline: 'Moins de stress pour la batterie de votre Mac.',
   },
   ja: {
     why: 'Battery Senseiより、静かなお知らせ',
-    ignore: 'ご登録のお心当たりがなければ、このメールは無視してください。ご確認いただくまで、何も保存されません。',
+    ignore: 'お申し込みに心当たりがなければ、このメールは無視してください。確認手続きをしない限り、メールアドレスは配信未登録のままです。保留中のリクエストの削除は、お問い合わせください。',
     unsub: '配信停止',
     tagline: 'Macのバッテリーに、静かな安心を。',
   },

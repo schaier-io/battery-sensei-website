@@ -243,36 +243,57 @@ export async function validateLicenseKey(
     return 'valid'
   }
 
-  const organizationId = process.env.POLAR_ORGANIZATION_ID
-  if (!organizationId) {
+  const organizationIds = [
+    process.env.POLAR_ORGANIZATION_ID_NEW,
+    process.env.POLAR_ORGANIZATION_ID,
+  ].filter((id, index, all): id is string =>
+    Boolean(id) && all.indexOf(id) === index,
+  )
+  if (organizationIds.length === 0) {
     return 'error'
   }
   const base = process.env.POLAR_API_BASE || 'https://api.polar.sh'
 
-  let response: Response
-  try {
-    response = await fetch(`${base}/v1/customer-portal/license-keys/validate`, {
-      method: 'POST',
-      headers: {
-        accept: 'application/json',
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({ key: licenseKey.trim(), organization_id: organizationId }),
-      signal: AbortSignal.timeout(POLAR_VALIDATE_TIMEOUT_MS),
-    })
-  } catch {
-    return 'error'
+  let valid = false
+  for (let index = 0; index < organizationIds.length; index += 1) {
+    let response: Response
+    try {
+      response = await fetch(`${base}/v1/customer-portal/license-keys/validate`, {
+        method: 'POST',
+        headers: {
+          accept: 'application/json',
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          key: licenseKey.trim(),
+          organization_id: organizationIds[index],
+        }),
+        signal: AbortSignal.timeout(POLAR_VALIDATE_TIMEOUT_MS),
+      })
+    } catch {
+      return 'error'
+    }
+
+    if (response.status >= 500) return 'error'
+    // Polar-side throttling/timeouts are transient — never fall back or mark
+    // the key invalid, because the primary organization was not authoritative.
+    if (response.status === 429 || response.status === 408) return 'error'
+    if (!response.ok) {
+      const canTryLegacy =
+        index < organizationIds.length - 1
+        && (response.status === 403 || response.status === 404)
+      if (canTryLegacy) continue
+      return 'invalid'
+    }
+
+    const body = (await response.json().catch(() => null)) as { status?: unknown } | null
+    const status = typeof body?.status === 'string' ? body.status.toLowerCase() : null
+    if (status === 'disabled' || status === 'revoked') return 'invalid'
+    valid = true
+    break
   }
 
-  if (response.status >= 500) return 'error'
-  // Polar-side throttling/timeouts are transient — treating them as
-  // "invalid" would make clients discard perfectly good stored keys.
-  if (response.status === 429 || response.status === 408) return 'error'
-  if (!response.ok) return 'invalid'
-
-  const body = (await response.json().catch(() => null)) as { status?: unknown } | null
-  const status = typeof body?.status === 'string' ? body.status.toLowerCase() : null
-  if (status === 'disabled' || status === 'revoked') return 'invalid'
+  if (!valid) return 'invalid'
 
   await prisma.licenseVoter
     .upsert({

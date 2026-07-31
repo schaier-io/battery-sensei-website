@@ -2,7 +2,11 @@ import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { LanguageSwitcher } from '#/components/LanguageSwitcher'
 import { CurrencySwitcher } from '#/components/CurrencySwitcher'
-import { CUSTOMER_PORTAL_URL } from '#/lib/polar'
+import {
+  CUSTOMER_PORTAL_URL,
+  HAS_SEPARATE_LEGACY_CUSTOMER_PORTAL,
+  LEGACY_CUSTOMER_PORTAL_URL,
+} from '#/lib/polar'
 import { formatLongDate } from '#/lib/format-date'
 
 // Build-time injected ISO date of the latest meaningful commit
@@ -60,17 +64,18 @@ export function Footer() {
                 href="https://www.producthunt.com/products/battery-sensei?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-battery-sensei"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="ml-1 inline-flex rounded-sm transition-transform duration-300 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)] motion-reduce:transform-none sm:ml-2"
+                aria-label="Battery Sensei on Product Hunt"
+                className="ml-1 inline-flex h-[30px] items-center gap-2 rounded-sm border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_88%,var(--paper-lift))] px-2.5 text-sumi shadow-sm transition-transform duration-300 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)] motion-reduce:transform-none sm:ml-2"
               >
-                <img
-                  alt="Battery Sensei - Be Zen about your Meetings | Product Hunt"
-                  width="139"
-                  height="30"
-                  loading="lazy"
-                  decoding="async"
-                  className="h-[30px] w-auto"
-                  src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1195865&amp;theme=light&amp;t=1784011600450"
-                />
+                <span
+                  aria-hidden
+                  className="grid h-4 w-4 place-items-center rounded-full bg-[#da552f] text-[10px] font-bold leading-none text-white"
+                >
+                  P
+                </span>
+                <span className="text-[10px] font-semibold leading-none tracking-wide">
+                  Product Hunt
+                </span>
               </a>
             </div>
           </div>
@@ -141,6 +146,19 @@ export function Footer() {
           >
             {t('footer.managePurchase')}
           </a>
+          {HAS_SEPARATE_LEGACY_CUSTOMER_PORTAL && (
+            <>
+              <FooterDot />
+              <a
+                href={LEGACY_CUSTOMER_PORTAL_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="zen-link-lift"
+              >
+                {t('footer.manageLegacyPurchase')}
+              </a>
+            </>
+          )}
           <FooterDot />
           <Link to="/privacy" className="zen-link-lift">
             {t('privacy.footerLink')}

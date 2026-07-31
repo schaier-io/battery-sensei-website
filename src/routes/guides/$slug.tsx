@@ -3,6 +3,8 @@ import { BlogPostPage } from '#/components/blog/BlogPost'
 import { BLOG_POSTS, POSTS_BY_SLUG } from '#/data/blog'
 
 const SITE_URL = 'https://www.battery-sensei.app'
+const SITE_OPERATOR = '41BIT LLC'
+const CONTENT_AUTHOR = 'Sandro Thabiso Schaier'
 
 export const Route = createFileRoute('/guides/$slug')({
   // Match the glossary pattern — resolve post per lifecycle from the static
@@ -35,13 +37,13 @@ export const Route = createFileRoute('/guides/$slug')({
       wordCount: estimateWords(post.readingMinutes),
       timeRequired: `PT${post.readingMinutes}M`,
       author: {
-        '@type': 'Organization',
-        name: 'Battery Sensei',
+        '@type': 'Person',
+        name: CONTENT_AUTHOR,
         url: SITE_URL,
       },
       publisher: {
         '@type': 'Organization',
-        name: 'Battery Sensei',
+        name: SITE_OPERATOR,
         url: SITE_URL,
         logo: {
           '@type': 'ImageObject',

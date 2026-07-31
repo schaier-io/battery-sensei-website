@@ -56,7 +56,6 @@ export function FromSenseiPage({
     try {
       track('referral_download_click', {
         card: variant,
-        ...(senseiId ? { ref: senseiId } : {}),
       })
     } catch {
       // Analytics never blocks the download.

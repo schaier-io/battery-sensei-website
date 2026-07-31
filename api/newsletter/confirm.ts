@@ -17,9 +17,9 @@
  * but don't run that JS, so they never execute the POST. No email is sent
  * on confirm: the /newsletter/confirmed page offers the download directly.
  *
- * Idempotent: once `confirmedAt` is set on the local row we return a
- * success payload (the page navigates to /newsletter/confirmed). Resend is
- * treated as a side-channel; the source of truth lives in Postgres.
+ * Idempotent: every valid click reconciles the Resend subscription first,
+ * including clicks for an already-confirmed local row. A new local
+ * `confirmedAt` is written only after that provider step succeeds.
  *
  * Vercel Function note
  * --------------------
@@ -93,6 +93,70 @@ function safeRedirectPath(path: string): string {
   return ALLOWED_REDIRECTS.some((p) => trimmed === p)
     ? path
     : '/newsletter/confirmed?status=invalid'
+}
+
+type ProviderError = {
+  name: string
+  message: string
+  statusCode: number | null
+}
+
+function isNotFound(error: ProviderError | null): boolean {
+  return error?.name === 'not_found' || error?.statusCode === 404
+}
+
+function logProviderFailure(
+  operation: 'update' | 'create',
+  error?: ProviderError | null,
+): void {
+  // Provider code/status is enough for operations. Never put the subscriber
+  // email or the provider's free-form message into Vercel logs.
+  console.error('[newsletter] confirm provider failure', {
+    operation,
+    code: error?.name ?? 'transport_error',
+    status: error?.statusCode ?? null,
+  })
+}
+
+/** Ensure the account-level Resend contact is subscribed. */
+async function reconcileResendSubscription(
+  email: string,
+  locale: string,
+): Promise<{ contactId: string | null } | null> {
+  const resend = getResendClient()
+
+  try {
+    const updated = await resend.contacts.update({ email, unsubscribed: false })
+    if (!updated.error) {
+      return { contactId: updated.data?.id ?? null }
+    }
+    if (!isNotFound(updated.error)) {
+      logProviderFailure('update', updated.error)
+      return null
+    }
+  } catch {
+    logProviderFailure('update')
+    return null
+  }
+
+  // The signup-time contact creation may have failed. Recreate only when the
+  // update explicitly reports absence; transient update failures stay retryable.
+  try {
+    const created = await resend.contacts.create({
+      email,
+      unsubscribed: false,
+      firstName: `src:confirm-recovery|lang:${locale}`,
+      segments: signupSegments(),
+    })
+    if (created.error) {
+      logProviderFailure('create', created.error)
+      return null
+    }
+    return { contactId: created.data?.id ?? null }
+  } catch {
+    logProviderFailure('create')
+    return null
+  }
 }
 
 /**
@@ -209,52 +273,51 @@ export async function POST(request: Request): Promise<Response> {
     })
   }
 
-  // Already confirmed → skip the side effects, return success so the
-  // page still navigates to /newsletter/confirmed (the user expects a
-  // success moment even on a second click).
-  if (row.confirmedAt) {
-    return json({
-      ok: true,
-      redirectTo: safeRedirectPath(`/newsletter/confirmed?locale=${locale}`),
-    })
+  const provider = await reconcileResendSubscription(email, locale)
+  if (!provider) {
+    // The confirm page keeps the token and shows its retry button. No local
+    // confirmation is written, and already-confirmed rows still retry repair.
+    return json(
+      { ok: false, error: 'temporarily-unavailable' },
+      { status: 503 },
+    )
   }
 
-  // Mark confirmed locally BEFORE talking to Resend. If Resend is down, a
-  // retry just re-tries the contact update without duplicate work.
-  const confirmed = await db.newsletterSignup.update({
-    where: { email },
-    data: { confirmedAt: new Date(), unsubscribedAt: null, locale },
-  })
-
-  const resend = getResendClient()
-
-  // Flip the contact to subscribed. `unsubscribed` is an account-level
-  // property, so this single update opts them in across every segment
-  // they were attached to at signup — no per-audience walk needed.
-  try {
-    await resend.contacts.update({ email, unsubscribed: false })
-  } catch {
-    // Contact missing (e.g. the signup-time create failed). Recreate it
-    // already-subscribed, attached to both signup segments.
+  if (!row.confirmedAt) {
     try {
-      const created = await resend.contacts.create({
-        email,
-        unsubscribed: false,
-        firstName: `src:confirm-recovery|lang:${locale}`,
-        segments: signupSegments(),
+      await db.newsletterSignup.update({
+        where: { email },
+        data: {
+          confirmedAt: new Date(),
+          unsubscribedAt: null,
+          locale,
+          ...(provider.contactId
+            ? { releasesContactId: provider.contactId }
+            : {}),
+        },
       })
-      const id = (created as { data?: { id?: string } } | undefined)?.data?.id
-      if (id && id !== confirmed.releasesContactId) {
-        await db.newsletterSignup
-          .update({
-            where: { email },
-            data: { releasesContactId: id },
-          })
-          .catch(() => {})
-      }
-    } catch (err) {
-      console.error('[newsletter] confirm subscribe recovery failed', err)
+    } catch {
+      console.error('[newsletter] local confirmation write failed', {
+        code: 'database_error',
+      })
+      return json(
+        { ok: false, error: 'temporarily-unavailable' },
+        { status: 503 },
+      )
     }
+  } else if (
+    provider.contactId &&
+    provider.contactId !== row.releasesContactId
+  ) {
+    // Already confirmed clicks are repair attempts too. Keep the current
+    // provider id for future suppression/deletion, but do not block success if
+    // this bookkeeping-only update fails after Resend is already subscribed.
+    await db.newsletterSignup
+      .update({
+        where: { email },
+        data: { releasesContactId: provider.contactId },
+      })
+      .catch(() => undefined)
   }
 
   // Subscription confirmed. No welcome email is sent: the

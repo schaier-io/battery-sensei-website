@@ -38,7 +38,8 @@
  *
  * Env (server-only)
  * -----------------
- *   POLAR_ACCESS_TOKEN          Organization Access Token
+ *   POLAR_ACCESS_TOKEN_NEW      New 41BIT organization access token
+ *   POLAR_ACCESS_TOKEN          Legacy organization access token
  *   POLAR_API_BASE              Optional override, defaults to
  *                               https://api.polar.sh
  *   POLAR_CUSTOMER_PORTAL_URL   Public portal URL fallback
@@ -46,19 +47,43 @@
 
 const POLAR_API_BASE = process.env.POLAR_API_BASE ?? 'https://api.polar.sh'
 const FRESHNESS_MS = 15 * 60 * 1000 // 15 minutes
+const NEW_CUSTOMER_PORTAL_URL = 'https://polar.sh/41bit-llc/portal'
+const LEGACY_CUSTOMER_PORTAL_URL = 'https://polar.sh/schaier-io/portal/overview'
 
-function token(): string {
-  const t = process.env.POLAR_ACCESS_TOKEN
-  if (!t) throw new Error('POLAR_ACCESS_TOKEN is not set')
-  return t
+type PolarContext = {
+  token: string
+  organizationId: string | null
+  customerPortalUrl: string
 }
 
-/** Optional. Polar's list endpoints (orders, license-keys) sometimes
- *  require an `organization_id` query param even when called with an
- *  org-scoped token. Set POLAR_ORGANIZATION_ID in Vercel env to wire
- *  it through; unset is fine for org tokens that auto-scope. */
-function orgId(): string | null {
-  return process.env.POLAR_ORGANIZATION_ID ?? null
+function envValue(name: string): string | undefined {
+  const value = process.env[name]?.trim()
+  return value || undefined
+}
+
+function polarContexts(): PolarContext[] {
+  const contexts: PolarContext[] = []
+  const newToken = envValue('POLAR_ACCESS_TOKEN_NEW')
+  const legacyToken = envValue('POLAR_ACCESS_TOKEN')
+  if (newToken) {
+    contexts.push({
+      token: newToken,
+      organizationId: envValue('POLAR_ORGANIZATION_ID_NEW') ?? null,
+      customerPortalUrl:
+        envValue('POLAR_CUSTOMER_PORTAL_URL_NEW')
+        ?? NEW_CUSTOMER_PORTAL_URL,
+    })
+  }
+  if (legacyToken && legacyToken !== newToken) {
+    contexts.push({
+      token: legacyToken,
+      organizationId: envValue('POLAR_ORGANIZATION_ID') ?? null,
+      customerPortalUrl:
+        envValue('POLAR_CUSTOMER_PORTAL_URL')
+        ?? LEGACY_CUSTOMER_PORTAL_URL,
+    })
+  }
+  return contexts
 }
 
 /** Read a response body without throwing — used purely to log Polar's
@@ -74,7 +99,7 @@ async function readBodyExcerpt(res: Response): Promise<string> {
   }
 }
 
-function customerPortalFallback(): string {
+function customerPortalFallback(context?: PolarContext): string {
   // Default fallback matches the actual Polar org slug + path.
   // Overrideable via env so an operator running their own deploy
   // can point at their own org without editing source. Without the
@@ -82,10 +107,9 @@ function customerPortalFallback(): string {
   // response carries) this URL lands on the org's portal login
   // page; the buyer signs in with their checkout email and lands
   // on their own dashboard from there.
-  return (
-    process.env.POLAR_CUSTOMER_PORTAL_URL ??
-    'https://polar.sh/schaier-io/portal/overview'
-  )
+  return context?.customerPortalUrl
+    ?? envValue('POLAR_CUSTOMER_PORTAL_URL_NEW')
+    ?? NEW_CUSTOMER_PORTAL_URL
 }
 
 type FetchedLicenseDelivery = {
@@ -110,21 +134,40 @@ type FetchedLicenseDelivery = {
 async function fetchCheckoutLicense(
   checkoutId: string,
 ): Promise<FetchedLicenseDelivery | null> {
-  const authHeaders = {
-    Authorization: `Bearer ${token()}`,
-    Accept: 'application/json',
-  }
-
+  const contexts = polarContexts()
+  if (contexts.length === 0) return null
+  let context: PolarContext | null = null
   let checkoutData: Record<string, unknown> | null = null
-  try {
-    const res = await fetch(
-      `${POLAR_API_BASE}/v1/checkouts/${encodeURIComponent(checkoutId)}`,
-      { headers: authHeaders },
-    )
-    if (!res.ok) return null
-    checkoutData = (await res.json()) as Record<string, unknown>
-  } catch {
-    return null
+  for (let index = 0; index < contexts.length; index += 1) {
+    const candidate = contexts[index]
+    try {
+      const res = await fetch(
+        `${POLAR_API_BASE}/v1/checkouts/${encodeURIComponent(checkoutId)}`,
+        {
+          headers: {
+            Authorization: `Bearer ${candidate.token}`,
+            Accept: 'application/json',
+          },
+        },
+      )
+      if (res.ok) {
+        checkoutData = (await res.json()) as Record<string, unknown>
+        context = candidate
+        break
+      }
+      const canTryLegacy =
+        index < contexts.length - 1
+        && res.status === 404
+      if (!canTryLegacy) return null
+    } catch {
+      return null
+    }
+  }
+  if (!checkoutData || !context) return null
+
+  const authHeaders = {
+    Authorization: `Bearer ${context.token}`,
+    Accept: 'application/json',
   }
 
   // 1. Try to find the order id inline on the checkout payload.
@@ -158,7 +201,7 @@ async function fetchCheckoutLicense(
       const listUrl = new URL(`${POLAR_API_BASE}/v1/orders/`)
       listUrl.searchParams.set('checkout_id', checkoutId)
       listUrl.searchParams.set('limit', '1')
-      const org = orgId()
+      const org = context.organizationId
       if (org) listUrl.searchParams.set('organization_id', org)
       const listRes = await fetch(listUrl, { headers: authHeaders })
       if (listRes.ok) {
@@ -283,7 +326,7 @@ async function fetchCheckoutLicense(
       // staying `-created_at` forever. Newest first guarantees the
       // grant from this checkout is near the top of page 1.
       grantsUrl.searchParams.set('sorting', '-created_at')
-      const org = orgId()
+      const org = context.organizationId
       if (org) grantsUrl.searchParams.set('organization_id', org)
 
       let grantsRes: Response
@@ -463,7 +506,7 @@ async function fetchCheckoutLicense(
         checkoutData,
         'customer_portal_url',
         'customer.portal_url',
-      ) ?? customerPortalFallback(),
+      ) ?? customerPortalFallback(context),
     createdAt: Number.isFinite(createdAt) ? createdAt : null,
   }
 }

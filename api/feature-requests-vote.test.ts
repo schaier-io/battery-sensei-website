@@ -110,6 +110,33 @@ describe('POST /api/feature-requests/vote', () => {
     expect(response.status).toBe(502)
   })
 
+  it('accepts a legacy-organization key after a new-organization 404', async () => {
+    vi.stubEnv('POLAR_ORGANIZATION_ID_NEW', 'org_new')
+    const organizations: string[] = []
+    vi.stubGlobal('fetch', vi.fn(async (_input: string | URL | Request, init?: RequestInit) => {
+      const body = JSON.parse(String(init?.body)) as { organization_id: string }
+      organizations.push(body.organization_id)
+      if (body.organization_id === 'org_new') {
+        return new Response(JSON.stringify({ detail: 'Not found' }), { status: 404 })
+      }
+      return new Response(JSON.stringify({ status: 'granted' }), { status: 200 })
+    }))
+
+    const response = await POST(voteRequest({ action: 'check', licenseKey: KEY }, nextIp()))
+    expect(response.status).toBe(200)
+    expect(((await response.json()) as { valid: boolean }).valid).toBe(true)
+    expect(organizations).toEqual(['org_new', 'org_test'])
+  })
+
+  it('does not fall back to legacy when the new organization is unavailable', async () => {
+    vi.stubEnv('POLAR_ORGANIZATION_ID_NEW', 'org_new')
+    const fetchMock = stubPolar(500, { detail: 'boom' })
+
+    const response = await POST(voteRequest({ action: 'check', licenseKey: KEY }, nextIp()))
+    expect(response.status).toBe(502)
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+  })
+
   it('skips the Polar round-trip on a fresh cache entry', async () => {
     const fetchMock = stubPolar(500) // would fail if called
     mockPrisma.licenseVoter.findUnique.mockResolvedValue({

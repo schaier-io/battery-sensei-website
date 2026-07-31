@@ -9,10 +9,9 @@ import { Play } from 'lucide-react'
  * inside the paper card. It also pulls ~1 MB of third-party script on every
  * page view whether or not anyone watches.
  *
- * The facade shows the video's own poster frame (served from YouTube's image
- * CDN, already allowed by img-src) with a play affordance, and swaps in the
- * real iframe on the first click, autoplaying so the click still reads as
- * "play" rather than "load".
+ * The facade stays entirely local until the first click, then swaps in the
+ * real iframe and autoplays so the click still reads as "play" rather than
+ * "load". This avoids disclosing a visit to YouTube just to fetch a poster.
  */
 export function VideoFacade({
   videoId,
@@ -46,22 +45,20 @@ export function VideoFacade({
       aria-label={title}
       className={`group relative isolate block cursor-pointer overflow-hidden ${className}`}
     >
-      <img
-        src={`https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`}
-        alt=""
-        loading="lazy"
-        decoding="async"
-        className="absolute inset-0 h-full w-full object-cover"
-      />
       <span
         aria-hidden
-        className="absolute inset-0 bg-sumi/25 transition-colors duration-[320ms] group-hover:bg-sumi/15"
+        className="absolute inset-0 bg-[color-mix(in_oklab,var(--washi)_82%,var(--sumi))] transition-colors duration-[320ms] group-hover:bg-[color-mix(in_oklab,var(--washi)_88%,var(--sumi))]"
       />
-      <span
-        aria-hidden
-        className="absolute left-1/2 top-1/2 grid h-16 w-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-[color-mix(in_oklab,var(--washi)_92%,var(--paper-lift))] shadow-[0_8px_24px_-8px_rgba(28,26,23,0.5)] transition-transform duration-[320ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-105"
-      >
-        <Play className="ml-0.5 h-6 w-6 fill-hinomaru text-hinomaru-ink" strokeWidth={1.5} />
+      <span className="absolute inset-0 flex flex-col items-center justify-center gap-4 px-6 text-center">
+        <span
+          aria-hidden
+          className="grid h-16 w-16 place-items-center rounded-full bg-[color-mix(in_oklab,var(--washi)_92%,var(--paper-lift))] shadow-[0_8px_24px_-8px_rgba(28,26,23,0.5)] transition-transform duration-[320ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-105"
+        >
+          <Play className="ml-0.5 h-6 w-6 fill-hinomaru text-hinomaru-ink" strokeWidth={1.5} />
+        </span>
+        <span className="font-display text-base font-semibold text-sumi sm:text-lg">
+          {title}
+        </span>
       </span>
     </button>
   )

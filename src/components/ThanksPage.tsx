@@ -57,6 +57,7 @@ export function ThanksPage({ tier, kanji }: { tier: Tier; kanji: string }) {
   // back empty — but the polling card may not mount until after the
   // bow video finishes (3–12 s), so we need a stable copy here.
   const checkoutIdRef = useRef<string | null>(null)
+  const purchaseTrackedRef = useRef(false)
   if (checkoutIdRef.current === null && search.checkout_id) {
     checkoutIdRef.current = search.checkout_id
   }
@@ -79,21 +80,17 @@ export function ThanksPage({ tier, kanji }: { tier: Tier; kanji: string }) {
     window.history.replaceState({}, '', pathname)
   }, [])
 
-  // Track the purchase exactly once per mount. This is the *reliable*
-  // conversion event — visitors only land here after Polar (or the dev
-  // fake-checkout) confirms a successful charge. Vercel Analytics
-  // dedupes by event id, but we also gate on a session-storage flag so
-  // a soft refresh or back-then-forward doesn't double-count.
+  // Track a confirmed checkout once per mount. Keep the checkout id out of
+  // analytics and browser storage; an in-memory ref only guards React effect
+  // replays. A revisit without Polar's checkout id is not counted as a sale.
   useEffect(() => {
     if (typeof window === 'undefined') return
-    const flag = `bs_purchase_tracked:${tier}:${checkoutId ?? 'unknown'}`
-    if (window.sessionStorage.getItem(flag)) return
+    if (!checkoutId || purchaseTrackedRef.current) return
+    purchaseTrackedRef.current = true
     try {
       track('purchase_complete', {
         tier,
-        ...(checkoutId ? { checkoutId } : {}),
       })
-      window.sessionStorage.setItem(flag, '1')
     } catch {
       // Analytics never blocks the page.
     }

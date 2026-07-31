@@ -11,7 +11,7 @@
  *     product id AND (when configured) the lifetime product id in parallel.
  *     Polar returns checkout objects with `total_amount`, `subtotal_amount`,
  *     `tax_amount`, and `currency` — those are the values the buyer will see.
- *     For the lifetime product we additionally resolve `ZENMODE` → discount
+ *     For the lifetime product we additionally resolve the configured code → discount
  *     UUID and pass `discount_id` so the returned total reflects the actual
  *     post-discount price (e.g. 56 CZK vs the 165 CZK subtotal).
  *  3. Result is cached per-country in-process for 24h. Vercel Fluid Compute
@@ -22,13 +22,11 @@
  *     table without surfacing an error to the user.
  *
  * Required env (server-only, never exposed to the bundle):
- *   POLAR_ACCESS_TOKEN          Organization access token from Polar
- *                               dashboard → Settings → Developers
- *   POLAR_PRODUCT_ID            UUID of the yearly support product
- *                               (fallback: POLAR_PRODUCT_ID_SUPPORT)
- *   POLAR_PRODUCT_ID_LIFETIME   UUID of the Lifetime one-time product.
- *                               When set, payload includes a `lifetime`
- *                               block with the live post-ZENMODE total.
+ *   POLAR_ACCESS_TOKEN_NEW          New organization access token
+ *   POLAR_PRODUCT_ID_SUPPORT_NEW    New yearly support product UUID
+ *   POLAR_PRODUCT_ID_LIFETIME_NEW   New Lifetime product UUID
+ *   POLAR_DISCOUNT_CODE_NEW         New Lifetime discount code
+ * Legacy names without `_NEW` remain the fallback until migration completes.
  *
  * The Checkout Link URL used by the client buy button stays in
  * VITE_POLAR_CHECKOUT_URL; the API token + product id are server-only.
@@ -45,13 +43,26 @@
 // import path resolves locally. `api/discount-availability.ts` and
 // `api/checkout-session.ts` document the same limitation.
 //
-// Search the codebase for `ZENMODE` / `resolveDiscountId` to find all
+// Search the codebase for `resolveDiscountId` to find all
 // copies that need to stay in lockstep.
 
 const POLAR_API_BASE = 'https://api.polar.sh/v1'
-/** Launch discount auto-applied to every Lifetime preview. */
-const LIFETIME_DISCOUNT_CODE = 'ZENMODE'
 const POLAR_TIMEOUT_MS = 4_000
+
+function envValue(name: string): string | undefined {
+  const value = process.env[name]?.trim()
+  return value || undefined
+}
+
+/** Keep the preview discount in the same organization as its products. */
+function lifetimeDiscountCode(organization: 'new' | 'legacy'): string {
+  if (organization === 'new') {
+    return envValue('POLAR_DISCOUNT_CODE_NEW')
+      ?? envValue('POLAR_DISCOUNT_CODE')
+      ?? 'ZENMODE'
+  }
+  return envValue('POLAR_DISCOUNT_CODE') ?? 'ZENMODE'
+}
 
 // ────────────────────────────────────────────────────────────────────
 //  Currency policy (mirror of src/lib/pricing.ts)
@@ -112,8 +123,13 @@ const discountIdCache: Map<string, DiscountIdEntry> =
   globalForDiscountCache.__polarDiscountIdCache ??
   (globalForDiscountCache.__polarDiscountIdCache = new Map())
 
-async function resolveDiscountId(code: string, token: string): Promise<string | null> {
-  const key = code.toUpperCase()
+async function resolveDiscountId(
+  code: string,
+  token: string,
+  organization: 'new' | 'legacy',
+): Promise<string | null> {
+  const normalizedCode = code.toUpperCase()
+  const key = `${organization}:${normalizedCode}`
   const now = Date.now()
   const cached = discountIdCache.get(key)
   if (cached && cached.expiresAt > now) return cached.id
@@ -132,7 +148,7 @@ async function resolveDiscountId(code: string, token: string): Promise<string | 
       const body = (await r.json()) as { items?: Array<{ id?: string; code?: string }> }
       const items = Array.isArray(body.items) ? body.items : []
       const match = items.find(
-        (d) => typeof d.code === 'string' && d.code.toUpperCase() === key,
+        (d) => typeof d.code === 'string' && d.code.toUpperCase() === normalizedCode,
       )
       id = typeof match?.id === 'string' ? match.id : null
     } else {
@@ -336,22 +352,37 @@ async function fetchPolarPreview(
   country: string,
   currency: 'usd' | 'eur' | 'czk',
 ): Promise<PricePayload | PriceFallback> {
-  const token = process.env.POLAR_ACCESS_TOKEN
-  // Accept both `POLAR_PRODUCT_ID` (legacy) and `POLAR_PRODUCT_ID_SUPPORT`
-  // (newer convention used by checkout-session.ts). Whichever is set wins.
-  const yearlyProductId =
-    process.env.POLAR_PRODUCT_ID ?? process.env.POLAR_PRODUCT_ID_SUPPORT
-  const lifetimeProductId = process.env.POLAR_PRODUCT_ID_LIFETIME
+  const newToken = envValue('POLAR_ACCESS_TOKEN_NEW')
+  const newYearlyProductId = envValue('POLAR_PRODUCT_ID_SUPPORT_NEW')
+  const newLifetimeProductId = envValue('POLAR_PRODUCT_ID_LIFETIME_NEW')
+  const hasNewSalesConfig = Boolean(
+    newToken || newYearlyProductId || newLifetimeProductId,
+  )
+
+  // Token and product ids must come from one organization. Once any `_NEW`
+  // sales value is present, never combine it with a legacy value.
+  const token = hasNewSalesConfig ? newToken : envValue('POLAR_ACCESS_TOKEN')
+  const yearlyProductId = hasNewSalesConfig
+    ? newYearlyProductId
+    : envValue('POLAR_PRODUCT_ID_SUPPORT') ?? envValue('POLAR_PRODUCT_ID')
+  const lifetimeProductId = hasNewSalesConfig
+    ? newLifetimeProductId
+    : envValue('POLAR_PRODUCT_ID_LIFETIME')
+  const organization = hasNewSalesConfig ? 'new' : 'legacy'
 
   if (!token || !yearlyProductId) {
     return { ok: false, country, reason: 'unconfigured', source: 'fallback' }
   }
 
-  // Resolve ZENMODE → UUID once up front so the lifetime preview can
+  // Resolve the configured code → UUID once so the lifetime preview can
   // attach `discount_id` (the only field Polar honours; see lib/polar-server.ts).
   // Cached module-scope so repeat country lookups skip this round-trip.
   const discountId = lifetimeProductId
-    ? await resolveDiscountId(LIFETIME_DISCOUNT_CODE, token)
+      ? await resolveDiscountId(
+        lifetimeDiscountCode(organization),
+        token,
+        organization,
+      )
     : null
 
   // Use a currency-matched country for the preview call so Polar's

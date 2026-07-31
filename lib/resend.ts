@@ -3,15 +3,11 @@
  *
  * Segment model (matches .env.example):
  *   Resend replaced Audiences with Segments — contacts now live at the
- *   account level and are grouped by segment. A signup is created ONCE
- *   (`contacts.create`) and attached to every configured segment via the
- *   `segments` field. The `unsubscribed` flag is a contact-level property,
- *   so it gates delivery across all segments at once.
- *     - RESEND_SEGMENT_RELEASES  — "heads-up on new versions" build alerts.
- *     - RESEND_SEGMENT_UI_NOTIFY — "UI notify" updates.
- *   Both segments receive EVERY signup, regardless of entry surface. The
- *   contact starts `unsubscribed: true` (pending) and is flipped to
- *   subscribed on double-opt-in confirm.
+ *   account level and are grouped by segment. Every public form clearly
+ *   describes the same Battery Sensei updates scope; two operational segments
+ *   let campaigns target releases or walkthrough/product news within that
+ *   disclosed scope. The contact starts `unsubscribed: true` (pending) and is
+ *   flipped only after double-opt-in confirmation.
  *
  * The legacy `audienceId` create path is intentionally NOT used: a
  * freshly-created segment has no legacy "audience" record, so the old
@@ -131,15 +127,13 @@ export function getResendClient(): Resend {
 }
 
 /**
- * Resend Segment ids a new signup is enrolled in, shaped for the
- * `contacts.create({ segments })` payload. Both configured segments
- * receive EVERY signup regardless of which surface it came from
- * (pricing free card, walkthrough notify, …).
+ * Resend Segment ids for the disclosed Battery Sensei updates stream, shaped
+ * for `contacts.create({ segments })`. All public forms describe both release
+ * and walkthrough/product-update mail within this scope.
  *
- * Empty/unset ids are filtered out rather than throwing, so a partially
- * configured env still subscribes to whatever IS set. Returns an empty
- * array only when neither is configured — callers treat that as a
- * misconfiguration.
+ * Empty values are filtered rather than thrown here. The function returns an
+ * empty array when neither segment is configured; callers report that as a
+ * deployment misconfiguration.
  */
 export function signupSegments(): Array<{ id: string }> {
   return [

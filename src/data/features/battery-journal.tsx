@@ -58,13 +58,14 @@ export const extended = (
       .
     </P>
 
-    <H2>Privacy: nothing leaves your Mac</H2>
+    <H2>Privacy: sensitive history stays on your Mac</H2>
     <P>
       Every panel above reads from local sources: IOKit for charge state,
       Apple’s power assertions API for per-app energy impact, the battery’s
-      own firmware counters for cycles and capacity. There’s no telemetry,
-      no cloud sync, no account. The Wrapped recaps you share are images
-      you create and choose to send; Sensei doesn’t see them.
+      own firmware counters for cycles and capacity. There’s no app telemetry,
+      cloud sync, or cloud account. When you choose to share a recap, macOS
+      hands the image, caption, and a referral link with campaign tags to the
+      destination you select; that destination then applies its own policy.
     </P>
     <P>
       The shape of Saga only makes sense if the data stays on-device,

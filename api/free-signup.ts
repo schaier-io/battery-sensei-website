@@ -92,31 +92,31 @@ const LAYOUT_COPY: Record<Locale, { why: string; ignore: string; tagline: string
   en: {
     why: 'A quiet note from Battery Sensei',
     ignore:
-      "Didn't sign up? You can ignore this email. Nothing is saved until you confirm.",
+      "Didn't sign up? Ignore this email. Your address remains unsubscribed unless you confirm; contact us to delete the pending request.",
     tagline: 'Calm energy for your Mac.',
   },
   de: {
     why: 'Eine kurze Nachricht von Battery Sensei',
     ignore:
-      'Nicht angemeldet? Ignorieren Sie diese E-Mail einfach. Ohne Ihre Bestätigung wird nichts gespeichert.',
+      'Nicht angemeldet? Ignorieren Sie diese E-Mail. Ihre Adresse bleibt vom Versand abgemeldet, solange Sie nicht bestätigen; kontaktieren Sie uns, um die ausstehende Anfrage löschen zu lassen.',
     tagline: 'Mehr Ruhe für Ihren Mac-Akku.',
   },
   es: {
     why: 'Un mensaje tranquilo de Battery Sensei',
     ignore:
-      '¿No te registraste? Ignora este correo. No guardamos nada hasta que confirmes.',
+      '¿No te registraste? Ignora este correo. Tu dirección seguirá sin estar suscrita a menos que confirmes; ponte en contacto con nosotros para eliminar la solicitud pendiente.',
     tagline: 'Batería en calma para tu Mac.',
   },
   fr: {
     why: 'Un mot discret de Battery Sensei',
     ignore:
-      'Vous n’avez rien demandé ? Ignorez ce message : rien n’est enregistré tant que vous ne confirmez pas.',
+      'Vous ne vous êtes pas inscrit ? Ignorez cet e-mail. Votre adresse restera non abonnée tant que vous n’aurez pas confirmé ; contactez-nous pour supprimer la demande en attente.',
     tagline: 'Moins de stress pour la batterie de votre Mac.',
   },
   ja: {
     why: 'Battery Senseiより、静かなお知らせ',
     ignore:
-      'ご登録のお心当たりがなければ、このメールは無視してください。ご確認いただくまで、何も保存されません。',
+      'お申し込みに心当たりがなければ、このメールは無視してください。確認手続きをしない限り、メールアドレスは配信未登録のままです。保留中のリクエストの削除は、お問い合わせください。',
     tagline: 'Macのバッテリーに、静かな安心を。',
   },
 }
@@ -483,8 +483,10 @@ async function rateLimited(ip: string | null): Promise<boolean> {
       where: { ipAddress: null, createdAt: { gt: since } },
     })
     return count >= FALLBACK_RATE_MAX
-  } catch (err) {
-    console.error('[newsletter] rate limit query failed', err)
+  } catch {
+    console.error('[newsletter] rate limit query failed', {
+      code: 'database_error',
+    })
     return false
   }
 }
@@ -558,9 +560,9 @@ export async function POST(request: Request): Promise<Response> {
       : 'other'
 
   // Upsert the row. On re-signup after a prior unsub, bump tokenEpoch
-  // so the old unsubscribe link can't unsubscribe the freshly opted-in
-  // address. confirmedAt is intentionally NOT cleared — we keep the
-  // historical opt-in record but rely on tokenEpoch + Resend state.
+  // so the old unsubscribe link can't unsubscribe the fresh pending request.
+  // Only the explicit unsubscribed path below clears confirmedAt; duplicate
+  // requests from an active subscriber remain confirmed and idempotent.
   const row = await db.newsletterSignup.upsert({
     where: { email },
     create: {
@@ -593,19 +595,37 @@ export async function POST(request: Request): Promise<Response> {
       data: {
         tokenEpoch: { increment: 1 },
         unsubscribedAt: null,
+        // Prior consent was withdrawn. A new signup must pass through a fresh
+        // double opt-in instead of inheriting the historical confirmation.
+        confirmedAt: null,
+        // Retention is anchored to collection/link issuance. Reset the age of
+        // this upserted row for the new pending request; this also makes the
+        // fresh request count in subsequent durable rate-limit windows.
+        createdAt: new Date(),
       },
     })
     epoch = bumped.tokenEpoch
+  } else if (row.confirmedAt) {
+    // An active subscriber is already done. Do not recreate the Resend contact
+    // as `unsubscribed: true` or send a redundant confirmation message.
+    return json({ ok: true })
+  } else {
+    // A repeat pending signup issues a fresh 48-hour link. Refresh the
+    // collection/link clock without changing tokenEpoch, so both the earlier
+    // and latest links remain valid and cleanup runs nine days after the most
+    // recent request.
+    await db.newsletterSignup.update({
+      where: { email },
+      data: { createdAt: new Date() },
+    })
   }
 
   const resend = getResendClient()
 
-  // Create the account-level contact and attach it to BOTH signup
-  // segments in one call (Segments replaced Audiences in Resend). Pending
-  // (`unsubscribed: true`) until the double-opt-in confirm flips it; the
-  // `unsubscribed` flag is a contact-level property, so it gates delivery
-  // across every segment at once. Resend dedupes by email, so a repeat
-  // signup is an idempotent no-op.
+  // Create one account-level contact across the two operational segments that
+  // make up the disclosed Battery Sensei updates stream. It remains pending
+  // (`unsubscribed: true`) until double-opt-in confirmation. Resend dedupes by
+  // email, so a repeat signup is an idempotent no-op.
   try {
     const created = await resend.contacts.create({
       email,
@@ -613,8 +633,13 @@ export async function POST(request: Request): Promise<Response> {
       firstName: `src:${source}|lang:${locale}`,
       segments,
     })
-    const contactId = (created as { data?: { id?: string } } | undefined)
-      ?.data?.id
+    if (created.error) {
+      console.error('[newsletter] contacts.create failed', {
+        code: created.error.name,
+        status: created.error.statusCode,
+      })
+    }
+    const contactId = created.data?.id
     // One account-level contact id now (no per-audience ids). Reuse the
     // existing `releasesContactId` column as its canonical home.
     if (contactId && contactId !== row.releasesContactId) {
@@ -625,8 +650,11 @@ export async function POST(request: Request): Promise<Response> {
         })
         .catch(() => {})
     }
-  } catch (err) {
-    console.error('[newsletter] contacts.create failed', err)
+  } catch {
+    console.error('[newsletter] contacts.create failed', {
+      code: 'transport_error',
+      status: null,
+    })
   }
 
   const confirmToken = createToken(email, 'confirm', locale, epoch)
@@ -643,7 +671,7 @@ export async function POST(request: Request): Promise<Response> {
   })
 
   try {
-    await resend.emails.send({
+    const sent = await resend.emails.send({
       from: resendFrom(),
       to: email,
       replyTo: resendReplyTo(),
@@ -660,8 +688,18 @@ export async function POST(request: Request): Promise<Response> {
         { name: 'source', value: source },
       ],
     })
-  } catch (err) {
-    console.error('[newsletter] confirm send failed', err)
+    if (sent.error) {
+      console.error('[newsletter] confirm send failed', {
+        code: sent.error.name,
+        status: sent.error.statusCode,
+      })
+      return json({ ok: false, error: 'send-failed' }, { status: 502 })
+    }
+  } catch {
+    console.error('[newsletter] confirm send failed', {
+      code: 'transport_error',
+      status: null,
+    })
     return json({ ok: false, error: 'send-failed' }, { status: 502 })
   }
 

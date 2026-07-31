@@ -7,6 +7,7 @@ import { Reveal } from '#/components/zen/Reveal'
 import { Nav } from '#/components/sections/Nav'
 import { Footer } from '#/components/sections/Footer'
 import { DocumentNav, type DocumentNavItem } from '#/components/DocumentNav'
+import { ProtectedBusinessPhone } from '#/components/ProtectedBusinessPhone'
 import { formatLongDate } from '#/lib/format-date'
 
 const SITE_URL = 'https://www.battery-sensei.app'
@@ -21,7 +22,7 @@ const PAGE_DESC =
 // The §changes section promises this date tracks the notice, so it must
 // never be swapped for the footer's build-time site date. The label under
 // the title names the document to keep the two apart.
-const LAST_UPDATED = '2026-05-31'
+const LAST_UPDATED = '2026-07-31'
 
 /** Section order for the jump list. `anchor` must match the `<Block anchor>`
     below it; `key` is the i18n namespace the heading is read from. */
@@ -34,6 +35,8 @@ const PRIVACY_SECTIONS: ReadonlyArray<Omit<DocumentNavItem, 'label'> & { key: st
   { anchor: 'processors', key: 'processors' },
   { anchor: 'retention', key: 'retention' },
   { anchor: 'rights', key: 'rights' },
+  { anchor: 'security', key: 'security' },
+  { anchor: 'children', key: 'children' },
   { anchor: 'changes', key: 'changes' },
 ]
 
@@ -60,19 +63,12 @@ export const Route = createFileRoute('/privacy')({
 /**
  * Privacy notice.
  *
- * The body is authoritative in English — the chrome (kicker, page
- * title italic, last-updated label, footer back-link) is translated
- * via i18n keys so it sits naturally inside whichever locale the
- * visitor has selected. Translating legal substance is out of scope
- * until counsel can review; localized summaries can be added later
- * under each section if the audience justifies it.
+ * The notice is maintained in all five supported locales. English is the
+ * drafting source; translated legal substance must change with it.
  *
  * Every claim below maps to something a developer can verify in the
- * repo: the cookies/storage table mirrors the actual surface area
- * audited in the chat (`bs_locale`, sessionStorage purchase dedupe),
- * the processors list mirrors what's actually wired in
- * (`@vercel/analytics`, `@vercel/speed-insights`, Polar Software Inc.
- * for checkout, Resend for newsletter, PostgreSQL via Vercel).
+ * repo: browser storage, website analytics, forms, feature-board actions,
+ * checkout/licensing, and the processors wired into those paths.
  */
 function PrivacyPage() {
   const { t, i18n } = useTranslation()
@@ -167,13 +163,34 @@ function PrivacyPage() {
                     i18nKey="privacy.body.controller.p2"
                     components={[<a className="legal-link" href="mailto:info@battery-sensei.app" />]}
                   />
+                  <br />
+                  <ProtectedBusinessPhone
+                    label={t('legal.body.operator.phoneLabel')}
+                    revealLabel={t('legal.body.operator.phoneReveal')}
+                    callLabel={t('legal.body.operator.phoneCallLabel')}
+                  />
                 </p>
+                <p>
+                  <Trans
+                    i18nKey="privacy.body.controller.p3"
+                    components={[
+                      <strong className="text-sumi" />,
+                      <a
+                        className="legal-link"
+                        href="https://eur-lex.europa.eu/eli/reg/2016/679/oj"
+                        target="_blank"
+                        rel="noreferrer"
+                      />,
+                      <a className="legal-link" href="mailto:info@battery-sensei.app" />,
+                    ]}
+                  />
+                </p>
+                <p>{t('privacy.body.controller.p4')}</p>
               </Block>
 
               {/* The app itself. Deliberately placed before the website
-                  sections: the question most visitors actually have is "does
-                  the app on my Mac phone home?" — and the answer is no, beyond
-                  the update check described in p3. */}
+                  sections: the question most visitors actually have is which
+                  local data and narrow network actions the app uses. */}
               <Block
                 anchor="app"
                 kicker={t('privacy.body.app.kicker')}
@@ -182,6 +199,7 @@ function PrivacyPage() {
                 <p>{t('privacy.body.app.p1')}</p>
                 <p>{t('privacy.body.app.p2')}</p>
                 <p>{t('privacy.body.app.p3')}</p>
+                <p>{t('privacy.body.app.p4')}</p>
               </Block>
 
               {/* GitHub release pages. Split out from the app section on
@@ -221,7 +239,6 @@ function PrivacyPage() {
                 <p>{t('privacy.body.what.intro')}</p>
                 <ul className="legal-list">
                   <DataItem nameKey="privacy.body.what.items.localeName" bodyKey="privacy.body.what.items.localeBody" inlineComponents={[<code />]} />
-                  <DataItem nameKey="privacy.body.what.items.purchaseName" bodyKey="privacy.body.what.items.purchaseBody" inlineComponents={[<code />]} />
                   <DataItem nameKey="privacy.body.what.items.analyticsName" bodyKey="privacy.body.what.items.analyticsBody" />
                   <DataItem nameKey="privacy.body.what.items.signupName" bodyKey="privacy.body.what.items.signupBody" />
                   <DataItem nameKey="privacy.body.what.items.contactName" bodyKey="privacy.body.what.items.contactBody" />
@@ -239,12 +256,15 @@ function PrivacyPage() {
                   <DataItem nameKey="privacy.body.why.items.functionalName" bodyKey="privacy.body.why.items.functionalBody" inlineComponents={[<em />]} />
                   <DataItem nameKey="privacy.body.why.items.orderName" bodyKey="privacy.body.why.items.orderBody" inlineComponents={[<em />]} />
                   <DataItem nameKey="privacy.body.why.items.newsletterName" bodyKey="privacy.body.why.items.newsletterBody" inlineComponents={[<em />, <a className="legal-link" href="mailto:info@battery-sensei.app" />]} />
+                  <DataItem nameKey="privacy.body.why.items.communicationsName" bodyKey="privacy.body.why.items.communicationsBody" inlineComponents={[<em />]} />
+                  <DataItem nameKey="privacy.body.why.items.mediaName" bodyKey="privacy.body.why.items.mediaBody" inlineComponents={[<em />]} />
                   <DataItem nameKey="privacy.body.why.items.analyticsName" bodyKey="privacy.body.why.items.analyticsBody" inlineComponents={[<em />]} />
                   <DataItem nameKey="privacy.body.why.items.abuseName" bodyKey="privacy.body.why.items.abuseBody" inlineComponents={[<em />]} />
                 </ul>
                 <p className="text-[0.875rem] leading-[1.65] text-nezumi">
                   {t('privacy.body.why.noAutomated')}
                 </p>
+                <p>{t('privacy.body.why.required')}</p>
               </Block>
 
               <Block
@@ -252,7 +272,12 @@ function PrivacyPage() {
                 kicker={t('privacy.body.processors.kicker')}
                 heading={t('privacy.body.processors.heading')}
               >
-                <p>{t('privacy.body.processors.intro')}</p>
+                <p>
+                  <Trans
+                    i18nKey="privacy.body.processors.intro"
+                    components={[<a className="legal-link" href="mailto:info@battery-sensei.app" />]}
+                  />
+                </p>
                 <ul className="legal-list">
                   <DataItem
                     nameKey="privacy.body.processors.items.vercelName"
@@ -260,9 +285,14 @@ function PrivacyPage() {
                     inlineComponents={[<a className="legal-link" href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noreferrer" />]}
                   />
                   <DataItem
+                    nameKey="privacy.body.processors.items.youtubeName"
+                    bodyKey="privacy.body.processors.items.youtubeBody"
+                    inlineComponents={[<a className="legal-link" href="https://policies.google.com/privacy" target="_blank" rel="noreferrer" />]}
+                  />
+                  <DataItem
                     nameKey="privacy.body.processors.items.polarName"
                     bodyKey="privacy.body.processors.items.polarBody"
-                    inlineComponents={[<a className="legal-link" href="https://polar.sh/legal/privacy" target="_blank" rel="noreferrer" />]}
+                    inlineComponents={[<a className="legal-link" href="https://polar.sh/legal/privacy-policy" target="_blank" rel="noreferrer" />]}
                   />
                   <DataItem
                     nameKey="privacy.body.processors.items.resendName"
@@ -284,6 +314,8 @@ function PrivacyPage() {
               >
                 <ul className="legal-list">
                   <DataItem nameKey="privacy.body.retention.items.signupName" bodyKey="privacy.body.retention.items.signupBody" />
+                  <DataItem nameKey="privacy.body.retention.items.localName" bodyKey="privacy.body.retention.items.localBody" />
+                  <DataItem nameKey="privacy.body.retention.items.analyticsName" bodyKey="privacy.body.retention.items.analyticsBody" />
                   <DataItem nameKey="privacy.body.retention.items.contactName" bodyKey="privacy.body.retention.items.contactBody" />
                   <DataItem nameKey="privacy.body.retention.items.purchaseName" bodyKey="privacy.body.retention.items.purchaseBody" />
                   <DataItem nameKey="privacy.body.retention.items.logsName" bodyKey="privacy.body.retention.items.logsBody" />
@@ -324,8 +356,29 @@ function PrivacyPage() {
                     i18nKey="privacy.body.rights.closing"
                     components={[
                       <a className="legal-link" href="mailto:info@battery-sensei.app" />,
-                      <a className="legal-link" href="https://uoou.gov.cz" target="_blank" rel="noreferrer" />,
+                      <a className="legal-link" href="https://www.edpb.europa.eu/about-edpb/about-edpb/members_en" target="_blank" rel="noreferrer" />,
                     ]}
+                  />
+                </p>
+              </Block>
+
+              <Block
+                anchor="security"
+                kicker={t('privacy.body.security.kicker')}
+                heading={t('privacy.body.security.heading')}
+              >
+                <p>{t('privacy.body.security.p1')}</p>
+              </Block>
+
+              <Block
+                anchor="children"
+                kicker={t('privacy.body.children.kicker')}
+                heading={t('privacy.body.children.heading')}
+              >
+                <p>
+                  <Trans
+                    i18nKey="privacy.body.children.p1"
+                    components={[<a className="legal-link" href="mailto:info@battery-sensei.app" />]}
                   />
                 </p>
               </Block>

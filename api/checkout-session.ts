@@ -18,10 +18,10 @@
  * Flow
  * ----
  *  1. Client clicks Buy → POSTs `{tier, discountCode?}` to this endpoint.
- *  2. We resolve the product id from env (`POLAR_PRODUCT_ID_LIFETIME` /
- *     `POLAR_PRODUCT_ID_SUPPORT`), then POST to `https://api.polar.sh/v1/
+ *  2. We resolve the `_NEW` token/product pair (or the complete legacy pair),
+ *     then POST to `https://api.polar.sh/v1/
  *     checkouts/` with `embed_origin`, `success_url`, and (optionally)
- *     a `discount_code` for the Lifetime ZENMODE first-500 deal.
+ *     the configured Lifetime discount.
  *  3. Polar returns the session URL, which we hand back to the client to
  *     pass into `PolarEmbedCheckout.create(url, {theme})`.
  *  4. On any failure (token missing, network blip, Polar 4xx/5xx) we
@@ -36,9 +36,10 @@
  *
  * Env (server-only)
  * -----------------
- *   POLAR_ACCESS_TOKEN        Organization Access Token
- *   POLAR_PRODUCT_ID_LIFETIME UUID of the Lifetime one-time product
- *   POLAR_PRODUCT_ID_SUPPORT  UUID of the yearly support product
+ *   POLAR_ACCESS_TOKEN_NEW          New organization access token
+ *   POLAR_PRODUCT_ID_LIFETIME_NEW   New Lifetime product UUID
+ *   POLAR_PRODUCT_ID_SUPPORT_NEW    New yearly support product UUID
+ * Names without `_NEW` remain the complete legacy fallback.
  *   POLAR_EMBED_ORIGIN        Public origin allowed to iframe the page
  *                             (defaults to https://battery-sensei.app)
  */
@@ -46,6 +47,43 @@
 import { z } from 'zod'
 
 type Tier = 'lifetime' | 'support'
+
+type PolarSalesConfig = {
+  token: string
+  productId: string
+  organization: 'new' | 'legacy'
+}
+
+function envValue(name: string): string | undefined {
+  const value = process.env[name]?.trim()
+  return value || undefined
+}
+
+/** Keep token and product from the same Polar organization. A partially
+ * configured `_NEW` pair fails closed instead of creating a cross-org call. */
+function resolveSalesConfig(tier: Tier): PolarSalesConfig | null {
+  const newToken = envValue('POLAR_ACCESS_TOKEN_NEW')
+  const newProductId = envValue(
+    tier === 'lifetime'
+      ? 'POLAR_PRODUCT_ID_LIFETIME_NEW'
+      : 'POLAR_PRODUCT_ID_SUPPORT_NEW',
+  )
+  if (newToken || newProductId) {
+    return newToken && newProductId
+      ? { token: newToken, productId: newProductId, organization: 'new' }
+      : null
+  }
+
+  const legacyToken = envValue('POLAR_ACCESS_TOKEN')
+  const legacyProductId = envValue(
+    tier === 'lifetime'
+      ? 'POLAR_PRODUCT_ID_LIFETIME'
+      : 'POLAR_PRODUCT_ID_SUPPORT',
+  )
+  return legacyToken && legacyProductId
+    ? { token: legacyToken, productId: legacyProductId, organization: 'legacy' }
+    : null
+}
 
 // ────────────────────────────────────────────────────────────────────
 //  Inlined Polar helpers — duplicated, NOT imported
@@ -60,16 +98,24 @@ type Tier = 'lifetime' | 'support'
 // inlines its constants accordingly.
 //
 // Until the bundler issue is fixed, every `api/*.ts` keeps its own
-// copy of any cross-file helper. Search the codebase for `ZENMODE`
+// copy of any cross-file helper. Search for `resolveDiscountId`
 // or `resolveDiscountId` to find the other copies if they ever need
 // to drift in unison.
 
 const POLAR_API_BASE = 'https://api.polar.sh/v1'
-/** Launch discount auto-applied to every Lifetime checkout. */
-const LIFETIME_DISCOUNT_CODE = 'ZENMODE'
 const POLAR_TIMEOUT_MS = 4_000
 
-const AUTO_DISCOUNT_CODE = LIFETIME_DISCOUNT_CODE
+/** Keep the automatic discount in the same organization as the checkout. */
+function lifetimeDiscountCode(
+  organization: PolarSalesConfig['organization'],
+): string {
+  if (organization === 'new') {
+    return envValue('POLAR_DISCOUNT_CODE_NEW')
+      ?? envValue('POLAR_DISCOUNT_CODE')
+      ?? 'ZENMODE'
+  }
+  return envValue('POLAR_DISCOUNT_CODE') ?? 'ZENMODE'
+}
 
 type DiscountIdEntry = { id: string | null; expiresAt: number }
 const DISCOUNT_ID_TTL_MS = 10 * 60 * 1000
@@ -81,13 +127,18 @@ const discountIdCache: Map<string, DiscountIdEntry> =
   (globalForDiscountCache.__polarDiscountIdCache = new Map())
 
 /**
- * Resolve a Polar discount **code** (e.g. "ZENMODE") to its UUID.
+ * Resolve a Polar discount code to its UUID.
  * Polar's `POST /v1/checkouts/` schema only accepts the UUID via
  * `discount_id`; the string `discount_code` field is silently dropped.
  * Returns `null` (cached) on no-token / Polar error / no match.
  */
-async function resolveDiscountId(code: string, token: string): Promise<string | null> {
-  const key = code.toUpperCase()
+async function resolveDiscountId(
+  code: string,
+  token: string,
+  organization: PolarSalesConfig['organization'],
+): Promise<string | null> {
+  const normalizedCode = code.toUpperCase()
+  const key = `${organization}:${normalizedCode}`
   const now = Date.now()
   const cached = discountIdCache.get(key)
   if (cached && cached.expiresAt > now) return cached.id
@@ -106,7 +157,7 @@ async function resolveDiscountId(code: string, token: string): Promise<string | 
       const body = (await r.json()) as { items?: Array<{ id?: string; code?: string }> }
       const items = Array.isArray(body.items) ? body.items : []
       const match = items.find(
-        (d) => typeof d.code === 'string' && d.code.toUpperCase() === key,
+        (d) => typeof d.code === 'string' && d.code.toUpperCase() === normalizedCode,
       )
       id = typeof match?.id === 'string' ? match.id : null
     } else {
@@ -253,26 +304,29 @@ export async function POST(request: Request): Promise<Response> {
   }
   const tier = body.tier
 
-  const token = process.env.POLAR_ACCESS_TOKEN
-  const productId =
-    tier === 'lifetime'
-      ? process.env.POLAR_PRODUCT_ID_LIFETIME
-      : process.env.POLAR_PRODUCT_ID_SUPPORT
+  const salesConfig = resolveSalesConfig(tier)
 
-  if (!token || !productId) {
+  if (!salesConfig) {
     // Log WHICH env var is missing so the Vercel function logs make
     // the misconfiguration obvious without leaking values. Most common
     // prod gotcha: token was set in "Preview" env but not "Production",
     // or the product id env name was misspelled.
     console.error('[checkout-session] missing config', {
       tier,
-      hasToken: Boolean(token),
-      hasProductId: Boolean(productId),
+      hasNewToken: Boolean(envValue('POLAR_ACCESS_TOKEN_NEW')),
+      hasNewProductId: Boolean(envValue(
+        tier === 'lifetime'
+          ? 'POLAR_PRODUCT_ID_LIFETIME_NEW'
+          : 'POLAR_PRODUCT_ID_SUPPORT_NEW',
+      )),
       envVarName:
-        tier === 'lifetime' ? 'POLAR_PRODUCT_ID_LIFETIME' : 'POLAR_PRODUCT_ID_SUPPORT',
+        tier === 'lifetime'
+          ? 'POLAR_PRODUCT_ID_LIFETIME_NEW'
+          : 'POLAR_PRODUCT_ID_SUPPORT_NEW',
     })
     return json({ ok: false, reason: 'missing-config' }, 503)
   }
+  const { token, productId } = salesConfig
 
   // Use the visitor's actual Origin (within the allowlist) as
   // embed_origin so Polar serves `frame-ancestors: <that-origin>` and
@@ -294,7 +348,10 @@ export async function POST(request: Request): Promise<Response> {
   //     cap is reached, so the visitor sees the plain full price.
   //   - Support tier never gets an auto-apply.
   const autoDiscountCode =
-    body.discountCode ?? (tier === 'lifetime' ? AUTO_DISCOUNT_CODE : undefined)
+    body.discountCode
+    ?? (tier === 'lifetime'
+      ? lifetimeDiscountCode(salesConfig.organization)
+      : undefined)
 
   // CRITICAL: Polar's `POST /v1/checkouts/` schema accepts `discount_id`
   // (UUID) and silently ignores `discount_code` (string). We resolve the
@@ -303,7 +360,7 @@ export async function POST(request: Request): Promise<Response> {
   // the body OR appending `?discount_code=` to the returned URL both
   // result in `discount: null` server-side.
   const discountId = autoDiscountCode
-    ? await resolveDiscountId(autoDiscountCode, token)
+    ? await resolveDiscountId(autoDiscountCode, token, salesConfig.organization)
     : null
 
   if (autoDiscountCode && !discountId) {

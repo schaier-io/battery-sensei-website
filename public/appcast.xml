@@ -1367,6 +1367,43 @@
         length="26543966"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.12.2</title>
+      <pubDate>Fri, 31 Jul 2026 23:25:37 +0000</pubDate>
+      <sparkle:version>88</sparkle:version>
+      <sparkle:shortVersionString>1.12.2</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.12.2</h1>
+<p>Battery Sensei now has a clearer privacy and legal hand-off, a smoother first-run setup, and a safe move to 41BIT LLC&#x27;s Polar organization.</p>
+<h2>Privacy and legal clarity</h2>
+<ul>
+<li><strong>41BIT LLC is identified as the responsible legal entity and distributor.</strong> The developer&#x27;s private intellectual-property ownership remains documented separately in the full legal terms.</li>
+<li><strong>The signed installer presents the binding EULA.</strong> Inside the app, the EULA and Privacy Notice remain available as readable references without a duplicate agreement gate.</li>
+<li><strong>The Privacy Notice is easier to scan.</strong> It explains what stays local, what can leave the Mac, who is responsible, and links to the complete online Privacy Policy.</li>
+<li><strong>A privacy manifest now ships with the app.</strong> Optional Calendar, Bluetooth, Accessibility, notification, and advanced-diagnostics access is described more precisely.</li>
+</ul>
+<h2>Setup and battery guidance</h2>
+<ul>
+<li><strong>Meeting Battery Guard uses the complete Warnings configuration in Setup Wizard.</strong> Calendar selection, reminder times, warning style, dismissal, sound, title privacy, forecast, and preview now stay in sync between both places.</li>
+<li><strong>Optional extras are grouped by purpose.</strong> Advanced diagnostics is off by default and clearly explains that enabling it requires Full Disk Access to read only macOS&#x27;s power log.</li>
+<li><strong>On-battery estimates settle more quietly.</strong> Long-running calculations switch to the shorter “Refining…” state and stop showing it after the refinement window.</li>
+</ul>
+<h2>Licensing and data care</h2>
+<ul>
+<li><strong>New purchases use 41BIT LLC&#x27;s Polar organization.</strong> Existing licences continue validating against the original organization, including their correct customer portal.</li>
+<li><strong>Local history has explicit retention limits and deletion support.</strong> Battery and app-energy stores trim stale records while preserving active features.</li>
+</ul>
+<p>Marketing 1.12.1 → 1.12.2, build 87 → 88.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.12.2/Battery-Sensei.pkg"
+        sparkle:edSignature="Qqqpg9TwDwsESBHERbi8H6ahNpuN/Oqps0Z+DmTzXd3EOQTFcLloBbPFcrEJq6C5bZ5IZzSjPejLm2F2n6B0CA=="
+        length="26743430"
+        type="application/octet-stream" />
+    </item>
+
 
 
 

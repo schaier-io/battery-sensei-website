@@ -3,6 +3,8 @@ import { BlogIndex } from '#/components/blog/BlogIndex'
 import { BLOG_POSTS } from '#/data/blog'
 
 const SITE_URL = 'https://www.battery-sensei.app'
+const SITE_OPERATOR = '41BIT LLC'
+const CONTENT_AUTHOR = 'Sandro Thabiso Schaier'
 const PATH = '/guides'
 const PAGE_TITLE = 'Guides — Battery Sensei'
 const PAGE_DESC =
@@ -18,7 +20,7 @@ const blogLd = {
   inLanguage: 'en',
   publisher: {
     '@type': 'Organization',
-    name: 'Battery Sensei',
+    name: SITE_OPERATOR,
     url: SITE_URL,
   },
   blogPost: BLOG_POSTS.map((p) => ({
@@ -31,8 +33,8 @@ const blogLd = {
     inLanguage: 'en',
     keywords: p.tags?.join(', '),
     author: {
-      '@type': 'Organization',
-      name: 'Battery Sensei',
+      '@type': 'Person',
+      name: CONTENT_AUTHOR,
       url: SITE_URL,
     },
   })),

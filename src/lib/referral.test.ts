@@ -87,30 +87,18 @@ describe('downloadHref', () => {
     expect(downloadHref({})).toBe('/download/latest')
   })
 
-  it('carries ref and utm_* through to the download link', () => {
+  it('does not pass referral or campaign values to GitHub', () => {
     const href = downloadHref({
       card: 'rescue',
-      // Number on purpose: this is how TanStack's search parser delivers
-      // the app-stamped `ref=1234`.
       ref: 1234,
       utm_source: 'card',
       utm_medium: 'share',
       utm_campaign: 'rescue',
     })
-    const url = new URL(href, 'https://example.test')
-    expect(url.pathname).toBe('/download/latest')
-    expect(url.searchParams.get('ref')).toBe('1234')
-    expect(url.searchParams.get('utm_source')).toBe('card')
-    expect(url.searchParams.get('utm_medium')).toBe('share')
-    expect(url.searchParams.get('utm_campaign')).toBe('rescue')
-    // `card` drives page copy, not attribution — it must NOT leak through.
-    expect(url.searchParams.has('card')).toBe(false)
+    expect(href).toBe('/download/latest')
   })
 
-  it('URL-encodes forwarded values', () => {
-    const href = downloadHref({ utm_source: 'a b&c=d' })
-    const url = new URL(href, 'https://example.test')
-    expect(url.searchParams.get('utm_source')).toBe('a b&c=d')
-    expect(url.searchParams.size).toBe(1)
+  it('returns the same path for malformed-but-sanitized attribution', () => {
+    expect(downloadHref({ utm_source: 'a b&c=d' })).toBe('/download/latest')
   })
 })

@@ -243,7 +243,7 @@
       },
       "privacy": {
         "title": "Vos données vous appartiennent",
-        "body": "Pas de cloud, pas de compte, pas de télémétrie. Tout ce que Sensei voit reste sur votre Mac, pour vous et personne d'autre."
+      "body": "Pas de compte cloud ni de télémétrie intégrée. Les données sensibles de batterie, de calendrier et de consommation énergétique par app restent sur votre Mac ; les mises à jour, les licences et les actions que vous déclenchez utilisent les services nommés dans l'avis de confidentialité."
       },
       "languages": {
         "title": "Les apps qui vident vos heures de batterie",
@@ -505,7 +505,7 @@
     "videoBadge": "Vidéo bientôt disponible",
     "videoCaption": "Durée estimée · 60 s · 1080p",
     "notifyHeading": "Prévenez-moi quand la vidéo est en ligne.",
-    "notifyBody": "Un court e-mail quand la vidéo est en ligne, plus quelques nouvelles du développeur de temps en temps. Pas de spam.",
+    "notifyBody": "Un court e-mail quand la vidéo est en ligne, plus des nouvelles occasionnelles sur les versions et le produit Battery Sensei. Désabonnement à tout moment.",
     "notifyForm": {
       "label": "E-mail pour être prévenu",
       "placeholder": "vous@exemple.com",
@@ -519,7 +519,7 @@
   "newsletter": {
     "confirm": {
       "heading": "Confirmez votre inscription.",
-      "body": "Touchez ci-dessous pour ajouter votre adresse à la liste des nouvelles versions.",
+      "body": "Touchez ci-dessous pour ajouter votre adresse à la liste des nouvelles de Battery Sensei.",
       "cta": "Confirmer l'inscription",
       "confirming": "Confirmation de votre inscription. Un instant de calme…",
       "submitting": "Confirmation…",
@@ -532,8 +532,8 @@
     "confirmed": {
       "success": {
         "heading": "Vous êtes inscrit. Bienvenue.",
-        "body": "Votre e-mail est confirmé. Nous venons de vous envoyer un mot de bienvenue avec le lien de téléchargement ; il devrait arriver d'un instant à l'autre.",
-        "downloadNote": "Sur un téléphone ? Le même lien vous attend dans l'e-mail que nous venons d'envoyer."
+        "body": "Votre e-mail est confirmé. Vous êtes inscrit aux nouvelles de Battery Sensei et pouvez télécharger l'app ici, sur cette page.",
+        "downloadNote": "Sur un téléphone ? Ouvrez cette page sur votre Mac lorsque vous voudrez télécharger l'app."
       },
       "invalid": {
         "heading": "Ce lien a expiré.",
@@ -685,9 +685,9 @@
       "kicker": "Fonction · 設定",
       "heading": "Peu de réglages,",
       "headingItalic": "parce qu'il n'y a rien à synchroniser.",
-      "body": "Contenu de la barre des menus, apparence, langue, lancement à l'ouverture. Pas de compte, pas de cloud, pas d'interrupteur de télémétrie. Rien n'est collecté, donc rien à désactiver.",
+      "body": "Contenu de la barre des menus, apparence, langue, lancement à l'ouverture. Pas de compte cloud ni de télémétrie intégrée. Les connexions réseau limitées servent aux mises à jour, aux licences et aux actions que vous déclenchez.",
       "mockupCaption": "Apparence, langue, barre des menus, démarrage.",
-      "why": "La plupart des écrans de réglages deviennent un second métier. Celui-ci reste court exprès. Tout ce que Battery Sensei sait vit sur votre Mac ; il ne reste que l'apparence et le démarrage."
+      "why": "La plupart des écrans de réglages deviennent un second métier. Celui-ci reste court exprès. Les mesures sensibles restent sur votre Mac ; vous ne réglez que l'apparence, le démarrage et quelques préférences locales."
     },
     "indexKicker": "Tout ce que contient l'app",
     "indexHeading": "Quatorze pages,",
@@ -704,11 +704,11 @@
       "priceWord": "Gratuit",
       "blurb": "Gratuit pour toujours. Pas de carte, pas de compte.",
       "email": {
-        "label": "E-mail pour les alertes de nouvelle version",
+        "label": "E-mail pour les nouvelles de Battery Sensei",
         "placeholder": "vous@exemple.com",
         "cta": "Obtenir le téléchargement",
         "skip": "ou télécharger sans e-mail",
-        "footnote": "Un e-mail lors des nouvelles versions. Désabonnement en un clic.",
+        "footnote": "Nouvelles occasionnelles sur les versions, la vidéo et le produit Battery Sensei. Désabonnement en un clic.",
         "errorInvalid": "Cette adresse ne ressemble pas à un e-mail valide.",
         "success": "Envoyé. Confirmez dans votre boîte mail.",
         "error": "L’inscription a échoué, mais le téléchargement démarre.",
@@ -736,7 +736,7 @@
         },
         {
           "title": "Native, privée, multilingue",
-          "body": "AppKit + SwiftUI. Fonctionne entièrement sur votre Mac. English, Deutsch, Français, Español, 日本語."
+          "body": "AppKit + SwiftUI. Les mesures sensibles restent sur votre Mac. English, Deutsch, Français, Español, 日本語."
         }
       ]
     },
@@ -745,11 +745,11 @@
       "period": "paiement unique",
       "macsBadge": "jusqu'à 3 Mac",
       "originalLabel": "avant",
-      "discountNote": "Offre de lancement · code ZENMODE",
+      "discountNote": "Offre de lancement · appliquée automatiquement",
       "redeem": {
-        "label": "<0>{{remaining}}</0> codes ZENMODE restants",
+        "label": "<0>{{remaining}}</0> codes de lancement restants",
         "almostGone": "Bientôt épuisé : il en reste {{remaining}}",
-        "soldOut": "Tous les codes ZENMODE ont été utilisés",
+        "soldOut": "Offre de lancement épuisée",
         "soldOutHint": "Le prix revient à {{full}}"
       },
       "ctaLabel": "Choisir Lifetime",
@@ -859,8 +859,8 @@
       {
         "q": "Sensei envoie-t-il mes données quelque part ?",
         "a": [
-          "**Non. Rien ne quitte votre Mac.**",
-          "Pas de télémétrie. Pas d'analytics. Pas de compte cloud. Votre historique de batterie reste sur cette machine."
+          "**Les données sensibles restent sur votre Mac.**",
+          "Pas de télémétrie intégrée, d'analytics dans l'app ni de compte cloud. L'historique de batterie, les titres du calendrier et la consommation par app restent locaux ; les mises à jour, les licences et les actions que vous déclenchez utilisent les services nommés dans l'avis de confidentialité."
         ]
       },
       {
@@ -1018,7 +1018,7 @@
       "checking": "Vérification…",
       "invalid": "Impossible de vérifier cette clé. Vérifiez les fautes de frappe ou retrouvez-la dans votre e-mail d'achat.",
       "error": "Impossible de vérifier la clé pour le moment. Veuillez réessayer dans un instant.",
-      "privacyNote": "Votre clé est vérifiée auprès de Polar et n'est jamais stockée sur nos serveurs : seule une empreinte anonyme compte votre vote.",
+      "privacyNote": "Votre clé est vérifiée auprès de Polar et la clé brute n'est jamais stockée sur nos serveurs. Nous conservons un identifiant pseudonyme dérivé avec une clé cryptographique et l'adresse IP du vote afin d'appliquer une voix par idée et de prévenir les abus.",
       "show": "Afficher la clé",
       "hide": "Masquer la clé"
     },
@@ -1056,8 +1056,8 @@
         "body": "Pas d'interrogation en arrière-plan. Sensei se réveille uniquement quand macOS signale un changement."
       },
       "private": {
-        "title": "Rien ne quitte votre Mac",
-        "body": "Pas de télémétrie. Pas de compte. Pas de cloud, jamais."
+        "title": "Vos données sensibles restent locales",
+        "body": "Pas de télémétrie intégrée ni de compte cloud. Les connexions limitées sont décrites dans l'avis de confidentialité."
       }
     },
     "specStrip": "macOS 14+ · Apple Silicon & Intel · {{trial}} jours gratuits, sans carte · {{price}} en paiement unique · garantie 14 jours."
@@ -1130,7 +1130,8 @@
     "releases": "Versions",
     "pricing": "Tarifs",
     "managePurchase": "Gérer l'achat",
-    "copyright": "© {{year}} · Battery Sensei",
+    "manageLegacyPurchase": "Portail des achats antérieurs",
+    "copyright": "© {{year}} Sandro Thabiso Schaier · Battery Sensei",
     "lastUpdated": "Site mis à jour le {{date}}",
     "roadmap": "Feuille de route"
   },
@@ -1202,6 +1203,7 @@
     "alreadyOwnBody": "Ouvrez Battery Sensei → Réglages → Pro. Collez votre clé, saisissez l'e-mail utilisé lors de l'achat, puis cliquez sur Activer Pro.",
     "alreadyOwnDownload": "Télécharger Sensei",
     "alreadyOwnPortal": "Portail client",
+    "alreadyOwnLegacyPortal": "Portail des achats antérieurs",
     "backToHome": "Retour à l'accueil"
   },
   "privacy": {
@@ -1209,7 +1211,7 @@
     "title": "Ce que nous collectons.",
     "titleItalic": "Et ce que nous ne collectons pas.",
     "lastUpdated": "Cet avis a été mis à jour pour la dernière fois le {{date}}",
-    "intro": "Battery Sensei est une petite application indépendante pour macOS. Nous collectons le strict minimum pour faire fonctionner le site, traiter les paiements et vous prévenir des nouvelles versions. Tout est expliqué clairement ci-dessous.",
+    "intro": "Battery Sensei est une application macOS conçue dans le respect de la vie privée par 41BIT LLC. Les données sensibles de batterie, de calendrier et de consommation énergétique par app restent sur votre Mac. Nous traitons le minimum nécessaire au site, aux licences, aux achats, aux e-mails, au support et aux actions du tableau des fonctionnalités ; chaque service réseau est nommé ci-dessous.",
     "backHome": "Retour à l'accueil",
     "footerLink": "Confidentialité",
     "tldr": {
@@ -1217,10 +1219,10 @@
       "doLabel": "Ce que nous faisons",
       "dontLabel": "Ce que nous ne faisons pas",
       "do": {
-        "1": "Faire fonctionner l'application Mac entièrement sur votre appareil. Votre historique de batterie et les titres de vos événements de calendrier ne quittent jamais votre Mac.",
-        "2": "Mesurer le trafic du site avec des analytics anonymes et sans cookies : uniquement des comptages agrégés, aucun cookie de suivi.",
-        "3": "Ne conserver que les informations que vous nous confiez activement : votre e-mail si vous vous inscrivez, votre message si vous utilisez le formulaire de contact, et votre achat (géré par Polar).",
-        "4": "Recourir à quelques sous-traitants bien connus pour l'hébergement, les paiements et les e-mails, chacun nommé ci-dessous avec un lien vers sa politique."
+        "1": "Conserver sur votre Mac les données sensibles de batterie, de calendrier et de consommation énergétique par app. L'app ne contient ni télémétrie, ni SDK d'analytics, ni rapporteur de plantage, ni compte cloud.",
+        "2": "Mesurer l'utilisation du site avec les analytics sans cookies de Vercel : données agrégées et pseudonymes de pages vues et de performance, ainsi que les événements personnalisés limités nommés ci-dessous.",
+        "3": "Ne conserver que les données que vous transmettez ou générez par vos actions sur le site : inscription, contact, demandes de fonctionnalités, votes pseudonymes, références limitées de paiement ou de licence et liens de parrainage que vous choisissez de partager.",
+        "4": "Utiliser un petit nombre de sous-traitants et de responsables indépendants nommés pour l'hébergement, les paiements, les e-mails, les téléchargements et les licences."
       },
       "dont": {
         "1": "Vendre, louer ou partager vos données avec des annonceurs. Jamais.",
@@ -1228,21 +1230,24 @@
         "3": "Établir des profils à votre sujet ni prendre de décisions automatisées qui vous affectent.",
         "4": "Exiger un compte ou une connexion pour utiliser l'application."
       },
-      "note": "Il n'y a pas de bandeau cookies parce que nous ne déposons aucun cookie de suivi. Les téléchargements et les mises à jour intégrées sont servis depuis GitHub, qui voit votre adresse IP comme n'importe quel serveur web. Le détail complet figure ci-dessous."
+      "note": "Il n'y a pas de bandeau de cookies de suivi, car nous n'utilisons aucun cookie publicitaire ni de suivi intersites. Nous ne vendons pas les données et ne les partageons pas à des fins de publicité comportementale intercontextuelle ; les signaux Do Not Track ou Global Privacy Control ne modifient donc pas le comportement du service. Les visites du site ainsi que les mises à jour, licences, téléchargements et actions de support ou de fonctionnalités déclenchées dans l'app contactent les services nommés ci-dessous."
     },
     "body": {
       "controller": {
         "kicker": "一 · Responsable du traitement",
         "heading": "Qui est responsable de vos données",
-        "p1": "Battery Sensei est exploité par <0>Sandro Thabiso Schaier</0>, travailleur indépendant (živnostník), dont le siège d'activité est situé Korunní 2569/108, 101 00 Prague 10, République tchèque. Les mentions « nous » sur cette page désignent cet exploitant.",
-        "p2": "Pour toute question, demande ou réclamation liée à la vie privée : <0>info@battery-sensei.app</0>. Nous tâchons de répondre sous un jour ouvré."
+        "p1": "Battery Sensei et battery-sensei.app sont exploités exclusivement par <0>41BIT LLC</0>, société à responsabilité limitée du Wyoming, dont l'adresse est 5830 E 2nd St, Ste 7000 #36418, Casper, Wyoming 82609, États-Unis. 41BIT LLC est l'unique exploitant de l'app et du site, l'éditeur et le distributeur du logiciel, le concédant de licences aux utilisateurs finaux autorisé par le développeur, ainsi que le responsable des traitements dont elle détermine les finalités et les moyens. Le développeur, Sandro Thabiso Schaier, détient séparément le Logiciel et la propriété intellectuelle associée. Les responsables indépendants nommés, tels que Polar et GitHub, restent responsables de leurs propres traitements. « Nous » désigne 41BIT LLC.",
+        "p2": "Pour toute question, demande ou réclamation liée à la vie privée : <0>info@battery-sensei.app</0>. Nous répondons dans le délai prévu par le droit applicable.",
+        "p3": "41BIT LLC a désigné <0>Sandro Thabiso Schaier</0>, Korunní 2569/108, 101 00 Prague 10, Vinohrady, République tchèque, comme représentant dans l'Union européenne au titre de <1>l'article 27 du RGPD</1>. Les personnes concernées de l'UE/EEE et les autorités de contrôle peuvent contacter le représentant au sujet des traitements de 41BIT LLC à <2>info@battery-sensei.app</2> ou à l'adresse postale ci-dessus.",
+        "p4": "Le représentant est uniquement un point de contact en matière de protection des données. Sandro Thabiso Schaier est aussi le développeur et titulaire de la propriété intellectuelle de Battery Sensei, mais ce rôle distinct ne fait pas de lui l'exploitant contractuel, le distributeur, le vendeur, le concédant de licences aux utilisateurs finaux ou le responsable du traitement de l'app ou du site. 41BIT LLC reste seule responsable de ces opérations et du traitement."
       },
       "app": {
         "kicker": "二 · L'application",
         "heading": "Ce que l'application macOS fait sur votre Mac",
-        "p1": "Battery Sensei est une application macOS native qui fonctionne entièrement sur votre Mac. La lecture de votre batterie, de votre charge et des prochaines heures de votre calendrier se fait intégralement sur l'appareil. Rien de tout cela ne transite par un serveur que nous exploitons.",
-        "p2": "L'application ne contient aucune télémétrie, aucun SDK d'analytics, aucun rapporteur de plantage et aucun compte cloud. Votre historique de batterie est stocké uniquement sur votre Mac. Les titres des événements de calendrier sont lus en local pour cadencer vos alertes de réunion et ne quittent jamais votre appareil.",
-        "p3": "La seule connexion réseau que l'application établit d'elle-même est une vérification des mises à jour : elle récupère périodiquement un flux de mise à jour (un « appcast ») depuis battery-sensei.app pour vérifier s'il existe une version plus récente. Cette requête atteint notre hébergeur de la même manière que n'importe quelle requête web, n'apparaît que dans des logs serveur de courte durée et ne transporte aucun identifiant de compte ou d'appareil. Si une mise à jour est disponible, la nouvelle version est téléchargée depuis GitHub (voir la section suivante)."
+        "p1": "La surveillance principale de Battery Sensei s'effectue localement sur votre Mac. Les mesures de batterie et de charge, les titres des événements du calendrier, l'historique de batterie et les mesures de consommation énergétique par app restent sur l'appareil et ne sont pas envoyés à 41BIT LLC ni à ses prestataires.",
+        "p2": "L'app ne contient aucune télémétrie, aucun SDK d'analytics, aucun rapporteur de plantage, aucun traceur publicitaire et aucun compte cloud. Les données locales de l'app ne servent ni à vous profiler ni à mesurer votre utilisation de l'app.",
+        "p3": "L'app utilise le réseau à des fins précises : elle consulte le flux de mise à jour sur battery-sensei.app et télécharge les versions depuis GitHub ; les licences sont activées ou validées par Polar ; les demandes de fonctionnalités, les votes ou les actions de support que vous choisissez passent par battery-sensei.app. Ces requêtes révèlent des métadonnées réseau usuelles, comme l'adresse IP et le user-agent, et n'envoient une clé de licence ou le contenu saisi que lorsque c'est nécessaire. Le partage d'une carte Battery Sensei est également déclenché par vous : l'image, la légende et un lien contenant votre code de parrainage Sensei persistant généré par l'app, ainsi que des paramètres de carte ou de campagne, sont remis au service de partage macOS que vous sélectionnez, qui les traite selon ses propres conditions. Aucune requête automatique ne contient votre historique de batterie, les titres du calendrier ou les mesures de consommation énergétique par app.",
+        "p4": "Les réglages comprennent la commande « Supprimer toutes les données locales ». Elle efface l'historique local, les préférences, l'identité de l'app, les appareils enregistrés ainsi que les données locales de licence et d'essai contrôlés par Battery Sensei, puis quitte l'app. Elle ne supprime pas les dossiers d'achat, d'activation ou de licence de Polar, les envois au site, les décisions d'autorisation de macOS, ni l'état de charge et les données système propres à macOS."
       },
       "github": {
         "kicker": "三 · Téléchargements et mises à jour",
@@ -1254,22 +1259,20 @@
       "what": {
         "kicker": "四 · Ce que nous collectons",
         "heading": "La liste complète, par point de contact",
-        "intro": "Cette section concerne le site marketing battery-sensei.app et le parcours de commande qui s'y trouve. L'application elle-même est traitée plus haut et ne collecte rien. Sur le site, nous réduisons les données au minimum :",
+        "intro": "Cette section couvre battery-sensei.app, le paiement, le tableau des fonctionnalités et les actions réseau limitées de l'app. L'app ne téléverse pas ses mesures locales sensibles. Le site et les services nommés traitent les données minimales suivantes :",
         "items": {
-          "localeName": "Cookie de préférence de langue",
-          "localeBody": "Un cookie propriétaire nommé <0>bs_locale</0>, créé uniquement quand vous changez de langue via le sélecteur du site. Il stocke votre code de langue à deux lettres (par ex. <0>de</0>), expire au bout d'un an et n'est jamais partagé.",
-          "purchaseName": "Indicateur de confirmation d'achat",
-          "purchaseBody": "Une entrée de sessionStorage limitée à la session, nommée <0>bs_purchase_tracked</0>, qui empêche le déclenchement d'événements de conversion en double si vous rechargez la page de remerciement. Elle est effacée dès que vous fermez l'onglet.",
-          "analyticsName": "Analytics sans cookies",
-          "analyticsBody": "Compteurs de pages vues anonymisés et Core Web Vitals via Vercel Analytics et Vercel Speed Insights, plus un unique événement anonyme « achat finalisé » sur la page de remerciement (la formule que vous avez achetée et la référence de commande Polar) afin de compter les paiements aboutis. Pas de cookies, pas d'identifiants inter-sites ; les adresses IP des visiteurs sont hachées une fois au niveau edge avant tout stockage.",
+          "localeName": "Préférences du site et justificatif du tableau",
+          "localeBody": "Le cookie propriétaire <0>bs_locale</0> conserve pendant un an la langue choisie. Les entrées de stockage local <0>bs_theme</0> et <0>bs:currency</0> conservent vos choix explicites de thème et de devise. <0>bs_board_license</0> conserve votre clé de licence sur cet appareil uniquement si vous la saisissez ou la recevez après l'achat, afin de mémoriser votre droit de vote. Elle n'est envoyée que dans le corps des requêtes POST de vote ou de validation, jamais dans une URL, un en-tête ou un cookie.",
+          "analyticsName": "Analytics et performances sans cookies",
+          "analyticsBody": "Vercel Web Analytics enregistre sans cookies des données agrégées et pseudonymes de pages vues au moyen d'un hachage quotidien de la requête. Vercel Analytics ne conserve pas l'adresse IP brute ; les données peuvent inclure l'URL ou la route normalisée, le référent, une localisation approximative, l'appareil, le système d'exploitation et le navigateur. Avant l'envoi des analytics, nous supprimons toutes les chaînes de requête et remplaçons le code Sensei dynamique de /from/<id> par une route générique. Vercel Speed Insights enregistre les Core Web Vitals. Les événements personnalisés ne contiennent que la formule achetée ou la variante de carte de parrainage, jamais d'identifiant de paiement, de code de parrainage, de paramètre de campagne, de valeur de batterie, de titre de calendrier ni de mesure énergétique par app. Nous n'utilisons pas les analytics pour la publicité ou le profilage intersites.",
           "signupName": "Données d'inscription par e-mail",
-          "signupBody": "Uniquement si vous envoyez le formulaire « obtenir le téléchargement » : l'adresse e-mail saisie, la langue de la page, votre IP et votre user-agent (pour détecter les abus), plus un horodatage.",
-          "contactName": "Données du formulaire de contact",
-          "contactBody": "Uniquement si vous nous écrivez via le formulaire de contact : nom, e-mail, objet et corps du message, plus IP / user-agent / origine du référent pour la protection antispam.",
-          "checkoutName": "Données du paiement",
-          "checkoutBody": "Uniquement si vous cliquez sur Acheter : l'iframe de paiement Polar collecte directement vos informations de paiement. Nous ne voyons jamais le numéro de carte ; nous ne voyons que ce que Polar nous transmet (e-mail utilisé, pays, identifiant de reçu, statut de livraison de la licence).",
-          "logsName": "Logs serveur",
-          "logsBody": "Logs de requêtes de courte durée chez Vercel, contenant le chemin, le statut, le user-agent et une IP tronquée. Ils servent au débogage et à la détection des abus. Vercel les conserve sur une fenêtre glissante de 30 jours."
+          "signupBody": "Uniquement si vous envoyez le formulaire d'inscription : adresse e-mail, langue de la page, source de l'inscription, adresse IP, user-agent, origine, horodatages, état de confirmation ou de désinscription et identifiants de contact Resend nécessaires à la livraison.",
+          "contactName": "Données de contact et du tableau des fonctionnalités",
+          "contactBody": "Si vous nous contactez, nous conservons le nom brut et validé, l'e-mail, le thème, l'objet, le message, l'adresse IP, le user-agent, l'origine, le ticket, l'état et les identifiants de livraison des e-mails. Si vous proposez une fonctionnalité, nous conservons de même son titre, sa description, l'e-mail, le nom facultatif, la langue, la source, l'état de modération et les métadonnées de la requête ; seuls le titre et la description approuvés sont publics, jamais l'identité de l'auteur. Pour voter, votre clé de licence est envoyée à notre serveur et à Polar pour validation, sans jamais être stockée en clair. Neon conserve un identifiant d'électeur obtenu par HMAC avec clé, la relation avec la demande de fonctionnalité et l'adresse IP du vote, ainsi qu'un cache distinct et temporaire de validation de licence. L'adresse IP du vote est effacée après 30 jours. La relation pseudonyme entre l'électeur et la demande subsiste tant que l'entrée publique existe afin de conserver le décompte et d'empêcher les votes en double ; elle est supprimée avec cette entrée.",
+          "checkoutName": "Données de paiement",
+          "checkoutBody": "Pour afficher les prix en temps réel, /api/price déduit le code pays à deux lettres du visiteur de l'en-tête de pays par IP de Vercel afin de choisir la devise et de gérer le cache au sein de 41BIT LLC/Vercel. Il n'envoie à Polar qu'un code représentatif de région tarifaire US, DE ou CZ et la devise demandée, sans l'adresse IP ni le pays réel du visiteur. Lors d'un achat, Polar collecte indépendamment les données de contact, de facturation, fiscales, de paiement, d'appareil et d'achat nécessaires à la vente. 41BIT LLC ne reçoit pas votre numéro de carte complet. Notre serveur récupère auprès de Polar des informations limitées sur le paiement, la commande, l'e-mail client, le produit, la licence, la livraison et le portail client afin de remettre la clé et d'assurer le support.",
+          "logsName": "Journaux serveur",
+          "logsBody": "Les journaux d'hébergement et de fonctions serveur de Vercel peuvent contenir l'horodatage, le chemin ou l'URL complète demandée, les paramètres de requête, l'état, le user-agent, l'adresse IP, des références de paiement ou de commande présentes dans l'URL ou ses paramètres, et des données de diagnostic. Une requête vers un lien partagé /from/<id> peut donc inscrire dans ces journaux le code de parrainage Sensei persistant et ses paramètres de carte ou de campagne, même si les analytics les expurgent. Nous utilisons ces journaux uniquement pour la fiabilité, la sécurité, la prévention de la fraude et l'analyse des abus. Vercel contrôle leur conservation selon la configuration actuelle du service et du compte, qui peut changer."
         }
       },
       "why": {
@@ -1277,31 +1280,38 @@
         "heading": "Finalité et base juridique",
         "items": {
           "functionalName": "Fonctionnement du site",
-          "functionalBody": "Cookie de langue, indicateur de confirmation d'achat. Base juridique : <0>intérêt légitime</0> (art. 6, §1, point f RGPD) et considérant 30 de la directive ePrivacy (stockage strictement fonctionnel).",
+          "functionalBody": "Préférences de langue, de thème et de devise, ainsi que justificatif du tableau que vous demandez à cet appareil de mémoriser. Base juridique : <0>intérêt légitime et fourniture des réglages demandés</0> (art. 6, §1, point f du RGPD lorsqu'il s'applique, et exception de stockage strictement nécessaire prévue par les règles ePrivacy applicables).",
           "orderName": "Exécution du tunnel de commande",
-          "orderBody": "Données du paiement, livraison de la clé de licence, gestion des remboursements. Base juridique : <0>exécution du contrat</0> (art. 6, §1, point b RGPD).",
-          "newsletterName": "Annonces de versions et e-mails de nouvelles apps",
-          "newsletterBody": "Uniquement les adresses e-mail que vous transmettez explicitement via le formulaire d'inscription, confirmées par double opt-in (nous vous envoyons un lien par e-mail et ne vous ajoutons qu'une fois que vous avez cliqué). Base juridique : <0>consentement</0> (art. 6, §1, point a RGPD), que vous pouvez retirer à tout moment via le lien de désinscription présent dans chaque e-mail, ou en écrivant à <1>info@battery-sensei.app</1>.",
-          "analyticsName": "Analytics sans cookies + logs serveur",
-          "analyticsBody": "Un signal minimal du type « le site est en ligne et des gens le lisent ». Base juridique : <0>intérêt légitime</0> (art. 6, §1, point f RGPD) pour exploiter et améliorer le service. Pas de profilage, pas de reciblage publicitaire.",
+          "orderBody": "Coordination du paiement, remise et validation de la licence, support d'achat, remboursements et votes liés à une licence. Base juridique : <0>exécution du contrat</0> (art. 6, §1, point b du RGPD lorsqu'il s'applique) et intérêt légitime à prévenir les votes en double ou frauduleux.",
+          "newsletterName": "Nouvelles de Battery Sensei par e-mail",
+          "newsletterBody": "Si vous envoyez un formulaire d'inscription, un enregistrement provisoire dans la base et un contact Resend sont créés afin d'envoyer l'e-mail de confirmation. L'adresse reste non abonnée et ne reçoit les nouvelles de version, de vidéo ou de produit Battery Sensei qu'après votre clic sur le lien de double opt-in. Base juridique : <0>consentement</0> (art. 6, §1, point a du RGPD lorsqu'il s'applique), révocable à tout moment via le lien de désinscription de chaque nouvelle ou en écrivant à <1>info@battery-sensei.app</1>.",
+          "communicationsName": "Communications de support et de fonctionnalités demandées",
+          "communicationsBody": "Répondre aux demandes de contact ou de support, modérer ou publier les propositions de fonctionnalités et envoyer les avis d'état demandés. Bases juridiques : <0>contrat ou mesures prises à votre demande, et intérêt légitime</0> (art. 6, §1, point b du RGPD lorsqu'il s'applique au support contractuel ou précontractuel, et point f pour les communications demandées et la planification du produit).",
+          "mediaName": "Lecture vidéo demandée par l'utilisateur",
+          "mediaBody": "La connexion à YouTube ne commence que lorsque vous appuyez sur Lecture. Base juridique : <0>mesures prises à votre demande pour fournir la vidéo</0> (art. 6, §1, point b du RGPD lorsqu'il s'applique). Ce clic autorise la connexion et la lecture ; nous ne le qualifions pas de consentement au sens du RGPD si toutes les conditions légales du consentement ne sont pas réunies.",
+          "analyticsName": "Analytics sans cookies, performances et sécurité du service",
+          "analyticsBody": "Signaux respectueux de la vie privée sur les pages, les performances, les conversions, les parrainages et la fiabilité. Base juridique : <0>intérêt légitime</0> (art. 6, §1, point f du RGPD lorsqu'il s'applique) à exploiter, sécuriser et améliorer le service. Aucun reciblage publicitaire ni profilage intersites.",
           "abuseName": "Signaux d'abus et de fraude",
-          "abuseBody": "IP et user-agent sur les formulaires de contact et d'inscription. Base juridique : <0>intérêt légitime</0> (art. 6, §1, point f RGPD) pour protéger le service contre le spam, le scraping et les tentatives d'achat frauduleuses."
+          "abuseBody": "Adresse IP, user-agent, origine, données de limitation de débit et identifiants de vote pseudonymes pour l'inscription, le contact, le tableau des fonctionnalités et les licences. Base juridique : <0>intérêt légitime</0> (art. 6, §1, point f du RGPD lorsqu'il s'applique) à protéger le service contre le spam, le scraping, les tentatives sur les identifiants et la fraude."
         },
-        "noAutomated": "Nous ne mettons en œuvre aucune décision automatisée ni profilage produisant des effets juridiques vous concernant ou vous affectant de manière significative de façon similaire (art. 22 du RGPD)."
+        "noAutomated": "Nous ne mettons en œuvre aucune décision automatisée ni profilage produisant des effets juridiques vous concernant ou vous affectant de manière significative de façon similaire (art. 22 du RGPD).",
+        "required": "La transmission de données pour l'inscription, le contact et les propositions de fonctionnalités est facultative. Les informations de paiement demandées par Polar sont nécessaires pour conclure un achat. Une clé de licence ou un identifiant d'activation est nécessaire pour activer ou valider Pro, et une clé est nécessaire pour voter avec une licence ; sans les données requises, l'action concernée ne peut pas aboutir. L'app gratuite de base ne nécessite aucun compte."
       },
       "processors": {
-        "kicker": "六 · Sous-traitants",
-        "heading": "Qui stocke vos données",
-        "intro": "Nous utilisons un petit nombre de sous-traitants. Chacun a sa propre politique de confidentialité, indiquée ci-dessous. Aucune des données que nous détenons n'est vendue ni partagée avec des réseaux publicitaires.",
+        "kicker": "六 · Prestataires",
+        "heading": "Qui reçoit ou stocke les données",
+        "intro": "Nous utilisons un petit nombre de prestataires nommés. Certains traitent les données pour 41BIT LLC ; Polar, GitHub et Google/YouTube agissent aussi comme responsables indépendants pour leurs propres services destinés aux clients. Certains traitements peuvent avoir lieu aux États-Unis ou dans d'autres pays. Lorsque le droit applicable restreint un transfert, celui-ci ne peut avoir lieu que sur le fondement d'un mécanisme licite applicable au prestataire et au pays de destination, tel qu'une décision d'adéquation ou des clauses contractuelles types. Écrivez à <0>info@battery-sensei.app</0> pour demander des informations sur les garanties pertinentes ou une copie de celles-ci, sous réserve des occultations autorisées par la loi. Chaque rôle est décrit ci-dessous. Nous ne vendons pas les données et ne les partageons pas avec des réseaux publicitaires.",
         "items": {
           "vercelName": "Vercel Inc.",
-          "vercelBody": "Hébergeur basé aux États-Unis ; diffuse le site, exécute les fonctions serveur et hache les IP au niveau edge. Vercel est certifié au titre de l'EU-US Data Privacy Framework. Politique : <0>vercel.com/legal/privacy-policy</0>.",
+          "vercelBody": "Héberge le site, les fonctions serveur, les journaux de requêtes, Vercel Web Analytics et Speed Insights. Les analytics reçoivent des routes expurgées, des hachages quotidiens sans cookies et des champs d'événements limités ; les journaux d'hébergement et de sécurité peuvent encore traiter les chemins de parrainage complets, les paramètres de campagne et les métadonnées de connexion usuelles. Politique : <0>vercel.com/legal/privacy-policy</0>.",
+          "youtubeName": "YouTube (Google LLC)",
+          "youtubeBody": "La façade vidéo n'envoie aucune requête à YouTube avant que vous appuyiez sur Lecture. Après ce clic, le lecteur intégré se charge depuis youtube-nocookie.com et transmet à Google/YouTube des données usuelles de connexion et d'appareil, telles que l'adresse IP, le user-agent, le référent et la requête vidéo. Google/YouTube agit comme responsable indépendant selon ses propres conditions. Politique : <0>policies.google.com/privacy</0>.",
           "polarName": "Polar Software, Inc.",
-          "polarBody": "Vendeur officiel pour tous les achats. Gère le traitement des paiements, la TVA, les remboursements et l'émission de licences. Les données de carte bancaire sont collectées directement par Polar ; nous ne les voyons jamais. Les transferts vers Polar (États-Unis) reposent sur les Clauses Contractuelles Types. Politique : <0>polar.sh/legal/privacy</0>.",
-          "resendName": "Resend, Inc.",
-          "resendBody": "Envoie les annonces de versions et les e-mails transactionnels (reçu d'achat, renvoi de clé de licence, confirmation de formulaire de contact). Les adresses e-mail que vous transmettez via nos formulaires sont ajoutées à des audiences Resend. Les transferts vers Resend (États-Unis) reposent sur les Clauses Contractuelles Types ; Resend est en outre auto-certifiée au titre de l'EU-US Data Privacy Framework. Politique : <0>resend.com/legal/privacy-policy</0>.",
-          "postgresName": "Neon (une société de Databricks)",
-          "postgresBody": "Hébergeur PostgreSQL serverless (Neon, LLC), mis à disposition via la marketplace Vercel. Contient la table des inscriptions à la newsletter et la table du formulaire de contact ; la base de données est hébergée dans l'UE (AWS, Francfort / eu-central-1). Vos données d'achat et de licence n'y sont pas stockées : elles sont conservées par Polar. Neon, LLC est couverte par la certification EU-US Data Privacy Framework de Databricks, et les éventuels transferts reposent en outre sur les Clauses Contractuelles Types. Politique : <0>databricks.com/legal/privacynotice</0>."
+          "polarBody": "Revendeur et vendeur officiel pour les achats, et responsable indépendant de son paiement et de ses services destinés aux clients. Pour afficher les prix en temps réel, notre serveur n'envoie à Polar qu'un code représentatif de région tarifaire US, DE ou CZ et la devise demandée, sans l'adresse IP ni le pays réel du visiteur. Polar gère la facturation, le paiement, les taxes, les factures, les remboursements, les rétrofacturations et l'émission des licences ; il valide aussi les clés utilisées par l'app et le tableau des fonctionnalités. Polar collecte directement les données de carte ; 41BIT LLC ne reçoit pas le numéro complet. Politique : <0>polar.sh/legal/privacy-policy</0>.",
+          "resendName": "Resend (Plus Five Five, Inc.)",
+          "resendBody": "Notre sous-traitant d'acheminement des e-mails. Il traite les adresses destinataires, le contenu des messages et les métadonnées de livraison pour les confirmations de double opt-in, les nouvelles de version, de vidéo ou de produit Battery Sensei, les confirmations de contact et les notifications du tableau des fonctionnalités. Un contact Resend provisoire existe avant la confirmation mais reste non abonné ; les e-mails de nouvelles ne commencent qu'après confirmation. Politique : <0>resend.com/legal/privacy-policy</0>.",
+          "postgresName": "Neon, LLC (société affiliée à Databricks)",
+          "postgresBody": "Notre prestataire PostgreSQL serverless via la marketplace Vercel. La base hébergée dans l'UE conserve les inscriptions à la newsletter, les contacts, les demandes de fonctionnalités et leur modération, les votes pseudonymes, le cache de validation des licences et les données opérationnelles de limitation de débit. Elle ne conserve ni les numéros de carte complets ni les clés de licence brutes du tableau. Politique : <0>databricks.com/legal/privacynotice</0>."
         }
       },
       "retention": {
@@ -1309,34 +1319,48 @@
         "heading": "Durées de conservation",
         "items": {
           "signupName": "Inscriptions e-mail",
-          "signupBody": "Conservées tant que vous restez abonné. Si vous vous désinscrivez, nous conservons votre adresse dans un court registre de suppression afin de respecter votre désinscription et de ne pas vous réinscrire en silence si le formulaire est renvoyé ; vous pouvez nous demander de l'effacer entièrement à tout moment.",
-          "contactName": "Messages du formulaire de contact",
-          "contactBody": "Conservés jusqu'à 24 mois après la dernière réponse dans la conversation, puis purgés.",
+          "signupBody": "Les enregistrements provisoires non confirmés de la base et leurs contacts Resend sont supprimés automatiquement par un nettoyage quotidien dès qu'ils atteignent 9 jours au total (la période de confirmation de 48 heures plus 7 jours). Les enregistrements confirmés sont conservés tant que vous restez abonné. Après votre désinscription, l'enregistrement Neon est automatiquement réduit aux données nécessaires pour respecter et documenter ce choix et éviter une réinscription accidentelle. Vous pouvez demander l'effacement, sous réserve de tout registre minimal d'opposition ou légal qui doit être conservé.",
+          "localName": "Données locales de l'app et du navigateur",
+          "localBody": "La commande « Supprimer toutes les données locales » de l'app efface toutes les données locales contrôlées par Battery Sensei, puis quitte l'app ; les dossiers Polar, les envois au site, les autorisations macOS et l'état du système restent hors de cet effacement local. La langue, le thème, la devise et la clé de licence du tableau du site restent dans votre navigateur jusqu'à ce que vous les effaciez ou les changiez ; la clé du tableau est aussi supprimée lorsque l'app détecte qu'elle n'est plus valide.",
+          "analyticsName": "Données d'analytics et de performance",
+          "analyticsBody": "Conservées selon les réglages configurés du compte fournisseur Vercel concerné. Ces durées peuvent varier avec l'offre de service ou la configuration du compte.",
+          "contactName": "Données de contact et du tableau des fonctionnalités",
+          "contactBody": "Les messages privés d'assistance et les données non publiques des propositions de fonctionnalités sont supprimés automatiquement 24 mois après la dernière activité, sauf si une mesure de conservation juridique ou une obligation légale exige de les garder plus longtemps. Pour les entrées publiques approuvées, l'identité de l'auteur et les métadonnées privées de la demande sont anonymisées après 24 mois ; le titre, la description et le nombre total de votes publics peuvent rester sur le tableau. L'adresse IP de chaque vote de fonctionnalité est effacée après 30 jours. Son hachage d'électeur avec clé et sa relation avec la demande subsistent tant que l'entrée publique existe afin de conserver le décompte et d'empêcher les votes en double, puis sont supprimés avec cette entrée. Le cache pseudonyme distinct LicenseVoter servant à valider les licences est supprimé après 60 jours d'inactivité.",
           "purchaseName": "Données d'achat et d'exécution",
-          "purchaseBody": "Polar, en qualité de vendeur officiel, conserve la facture fiscale et l'enregistrement de licence sous-jacents pendant la durée légalement requise (typiquement 10 ans en vertu de la loi tchèque n° 563/1991 Rec.). Nous ne conservons aucune copie de votre achat ou de votre licence dans notre propre base de données ; lorsque vous avez besoin d'assistance, nous les retrouvons dans Polar à l'aide de l'identifiant de commande.",
-          "logsName": "Logs serveur",
-          "logsBody": "Supprimés par rotation chez Vercel dans les 30 jours suivant la requête."
+          "purchaseBody": "Polar, en qualité de vendeur officiel et de responsable indépendant, conserve les données de transaction, de facture fiscale et de licence selon sa politique et le droit applicable. 41BIT LLC ne conserve pas de dossier complet d'achat ou de licence dans Neon ; elle consulte Polar lorsque la livraison ou le support l'exige. L'événement d'analytics signalant un achat terminé ne conserve que la formule, sans identifiant de paiement, de commande, de client ou de licence.",
+          "logsName": "Journaux de sécurité administrative et du fournisseur",
+          "logsBody": "Les enregistrements de tentatives de connexion administrateur contrôlés par 41BIT sont supprimés automatiquement après 30 jours. Vercel contrôle la conservation des journaux de requêtes et de fonctions d'infrastructure selon la configuration de son service et du compte. Un incident de sécurité précis, une mesure de conservation juridique ou une obligation légale peut exiger une conservation plus longue."
         }
       },
       "rights": {
         "kicker": "八 · Vos droits",
         "heading": "Ce que vous pouvez nous demander de faire",
-        "intro": "En vertu du RGPD (et de la loi tchèque n° 110/2019 Sb.), vous avez le droit de :",
+        "intro": "Selon votre lieu de résidence et sous réserve du droit applicable, vous pouvez disposer des droits suivants. Lorsque le RGPD s'applique, ils comprennent :",
         "items": {
           "access": "Demander l'<0>accès</0> aux données personnelles que nous détenons à votre sujet (art. 15 RGPD).",
           "correct": "Nous demander de <0>rectifier</0> des données inexactes ou incomplètes (art. 16).",
-          "delete": "Nous demander d'<0>effacer</0> vos données lorsqu'elles ne sont plus nécessaires (art. 17). Pour les données d'achat, nous devons conserver les pièces comptables conformément à la législation fiscale tchèque.",
+          "delete": "Nous demander d'<0>effacer</0> vos données lorsqu'elles ne sont plus nécessaires (art. 17 du RGPD lorsqu'il s'applique). Polar peut conserver les données de transaction et de comptabilité lorsque le droit applicable l'exige.",
           "restrict": "Nous demander de <0>limiter</0> le traitement le temps de l'examen d'une rectification (art. 18).",
           "portable": "Recevoir une <0>copie de vos données</0> dans un format portable et lisible par machine (art. 20).",
           "object": "Vous <0>opposer</0> au traitement fondé sur l'intérêt légitime (art. 21).",
           "withdraw": "<0>Retirer votre consentement</0> à tout moment. Le lien de désinscription se trouve au bas de chaque e-mail de la newsletter."
         },
-        "closing": "Pour exercer l'un de ces droits, écrivez-nous à <0>info@battery-sensei.app</0>. Nous vous répondrons dans un délai d'un mois à compter de la réception et pouvons prolonger ce délai de deux mois supplémentaires en cas de demandes complexes ; dans ce cas, nous vous informerons dans le premier mois et vous en expliquerons les motifs. Vous avez également le droit d'introduire une réclamation auprès de l'Autorité tchèque de protection des données personnelles (Úřad pro ochranu osobních údajů, <1>uoou.gov.cz</1>) ou auprès de l'autorité de protection des données de votre pays de résidence."
+        "closing": "Pour exercer l'un de ces droits, écrivez à <0>info@battery-sensei.app</0>. Nous répondons dans le délai prévu par le droit applicable. Lorsque le RGPD s'applique, ce délai est normalement d'un mois ; une demande complexe peut le prolonger de deux mois au plus, auquel cas nous vous en informons pendant le premier mois et en expliquons la raison. Vous pouvez aussi saisir une autorité de protection des données compétente. Selon le RGPD, il peut s'agir de l'autorité de votre résidence habituelle, de votre lieu de travail ou du lieu de l'infraction alléguée ; <1>trouvez ici l'autorité compétente</1>."
+      },
+      "security": {
+        "kicker": "九 · Sécurité",
+        "heading": "Comment nous protégeons les données",
+        "p1": "Nous appliquons des mesures techniques et organisationnelles raisonnables, adaptées à la nature des données et aux risques, afin de les protéger. Aucun système ni aucune transmission ne peut toutefois être garanti comme absolument sûr."
+      },
+      "children": {
+        "kicker": "十 · Enfants",
+        "heading": "Service non destiné aux enfants",
+        "p1": "Battery Sensei, battery-sensei.app et la lettre d'information ne s'adressent pas aux enfants de moins de 16 ans ni aux personnes n'ayant pas atteint l'âge local applicable pour consentir seules à ce traitement. 41BIT LLC ne collecte pas sciemment leurs données personnelles. Si vous êtes parent ou tuteur et pensez qu'un enfant a transmis des données sans autorisation valable, écrivez à <0>info@battery-sensei.app</0> afin que nous puissions les examiner et les supprimer comme l'exige la loi."
       },
       "changes": {
-        "kicker": "九 · Modifications",
+        "kicker": "十一 · Modifications",
         "heading": "Quand cette page est mise à jour",
-        "p1": "Lorsque nous modifions une pratique importante (nouveau sous-traitant, durée de conservation différente, nouveau type de données collecté), nous mettons à jour la date en haut de cette page. Si un changement affecte votre consentement (par exemple, un nouveau type de newsletter), nous vous en informerons séparément par e-mail et vous demanderons votre accord avant toute inscription."
+        "p1": "Lorsque nous modifions une pratique importante (nouveau sous-traitant, durée de conservation différente ou nouveau type de données), nous actualisons la date en haut de cette page. Si une modification affecte votre consentement, nous vous en informons séparément et demandons votre accord avant de vous inscrire."
       }
     }
   },
@@ -1352,65 +1376,73 @@
       "operator": {
         "kicker": "一 · Exploitant",
         "heading": "Qui exploite ce site",
-        "name": "Sandro Thabiso Schaier",
-        "status": "Travailleur indépendant (živnostník), pas une société immatriculée. Exerce sous une licence d'activité tchèque (živnostenské oprávnění) délivrée par l'Úřad městské části Praha 7, en vigueur depuis le 6 mai 2026 pour une durée indéterminée.",
-        "seatLabel": "Siège d'activité :",
-        "seatLine1": "Korunní 2569/108",
-        "seatLine2": "101 00 Prague 10, Vinohrady",
-        "seatLine3": "République tchèque",
-        "ico": "<0>IČO :</0> 29541263",
-        "dic": "<0>DIČ :</0> Non assujetti à la TVA (neplátce DPH). La TVA sur votre achat est collectée et reversée par Polar Software, Inc. en qualité de vendeur officiel.",
+        "name": "41BIT LLC",
+        "status": "Société à responsabilité limitée constituée dans l'État du Wyoming, États-Unis.",
+        "seatLabel": "Adresse de la société :",
+        "seatLine1": "5830 E 2nd St, Ste 7000 #36418",
+        "seatLine2": "Casper, Wyoming 82609",
+        "seatLine3": "États-Unis",
+        "entityId": "<0>Identifiant d'entité du Wyoming :</0> 2026-001999964",
         "emailLine": "E-mail : <0>info@battery-sensei.app</0>",
-        "activity": "<0>Étendue de l'activité</0> : activité libre relevant de l'Annexe 4 de la loi tchèque sur les licences d'activité, à savoir : fourniture de logiciels, conseil informatique, traitement de données, hébergement et activités connexes, portails web ; préparation de projets techniques, travaux graphiques et de dessin ; recherche et développement en sciences naturelles, techniques et sociales ; publicité, marketing et représentation médiatique.",
-        "authority": "<0>Autorité de surveillance des activités commerciales</0> : Úřad městské části Praha 10 (mairie du 10ᵉ arrondissement de Prague), désignée en vertu du §71(2) de la loi tchèque sur les licences d'activité."
+        "phoneLabel": "Téléphone professionnel",
+        "phoneReveal": "Afficher le numéro de téléphone",
+        "phoneCallLabel": "Appeler 41BIT LLC",
+        "responsibility": "<0>Responsabilité :</0> 41BIT LLC est l'unique exploitant de l'app et du site, l'éditeur et le distributeur du logiciel, le concédant de licences aux utilisateurs finaux autorisé par le développeur, ainsi que le responsable des traitements dont elle détermine les finalités et les moyens. Sandro Thabiso Schaier est le développeur et titulaire de la propriété intellectuelle. Les responsables indépendants nommés restent responsables de leurs propres services."
+      },
+      "euRepresentative": {
+        "kicker": "二 · Représentant dans l'UE",
+        "heading": "Contact au titre de l'article 27",
+        "p1": "41BIT LLC a désigné <0>Sandro Thabiso Schaier</0>, Korunní 2569/108, 101 00 Prague 10, Vinohrady, République tchèque, comme représentant dans l'Union européenne au titre de <1>l'article 27 du RGPD</1>. Les personnes concernées de l'UE/EEE et les autorités de contrôle peuvent contacter le représentant au sujet des traitements de 41BIT LLC à <2>info@battery-sensei.app</2> ou à l'adresse postale ci-dessus.",
+        "p2": "Cette désignation limitée crée uniquement un point de contact en matière de protection des données. Sandro Thabiso Schaier est séparément le développeur et titulaire de la propriété intellectuelle de Battery Sensei, mais il n'est ni l'exploitant contractuel, ni le distributeur, ni le vendeur, ni le concédant de licences aux utilisateurs finaux, ni le responsable du traitement de l'app ou du site. 41BIT LLC reste seule responsable de ses traitements et de l'ensemble des opérations de l'app et du site."
       },
       "merchantOfRecord": {
-        "kicker": "二 · Vendeur officiel",
+        "kicker": "三 · Vendeur officiel",
         "heading": "Qui gère votre paiement",
-        "p1": "Tous les achats sur battery-sensei.app sont traités par <0>Polar Software, Inc.</0>, notre revendeur et vendeur officiel. Polar gère le paiement, la collecte et le reversement de la TVA, les remboursements, la facturation et les rétrofacturations. Votre contrat d'achat de la licence est conclu avec Polar ; votre contrat d'utilisation du logiciel est conclu avec l'exploitant désigné ci-dessus. Polar émet la facture fiscale en son propre nom ; vous pouvez la télécharger à nouveau via le lien présent dans votre e-mail d'achat ou en demander une copie au support de Polar à tout moment.",
+        "p1": "Tous les achats sur battery-sensei.app sont traités par <0>Polar Software, Inc.</0>, revendeur et vendeur officiel de la transaction. Polar gère indépendamment le paiement, les taxes applicables, les remboursements, la facturation et les rétrofacturations. Votre transaction d'achat est conclue avec Polar ; 41BIT LLC est l'unique exploitant et le concédant de licences aux utilisateurs finaux autorisé par le développeur, et répond de l'app, des conditions de licence, du support produit et des traitements qu'elle détermine. Polar émet la facture fiscale en son nom et la fournit dans l'e-mail d'achat ou le portail client.",
         "p2": "Les conditions et la politique de confidentialité de Polar s'appliquent au paiement proprement dit et sont disponibles à <0>polar.sh/legal</0>."
       },
       "withdrawal": {
-        "kicker": "三 · Rétractation",
+        "kicker": "四 · Rétractation",
         "heading": "Votre droit de rétractation de 14 jours",
-        "p1": "En tant que consommateur résidant dans l'Union européenne, vous disposez en principe de <0>14 jours</0> pour vous rétracter d'un contrat à distance en vertu du §1829 du Code civil tchèque (loi n° 89/2012 Rec.).",
-        "p2": "Battery Sensei étant livré sous forme de contenu numérique immédiatement après le paiement, vous acceptez expressément, en finalisant la commande, que l'exécution commence sans délai et reconnaissez que, en vertu du <0>§1837(l) du Code civil tchèque</0>, vous perdez le droit de rétractation dès que la clé de licence a été émise.",
-        "p3": "Si votre clé n'a pas encore été émise, ou si vous ne l'avez pas encore activée, vous pouvez toujours vous rétracter dans le délai de 14 jours. Écrivez à <0>info@battery-sensei.app</0> et nous coordonnerons le remboursement avec Polar. La procédure de remboursement de Polar (accessible depuis votre e-mail d'achat ou le tableau de bord Polar) est généralement la voie la plus rapide.",
+        "p1": "Si vous êtes consommateur dans l'Union européenne, vous disposez en principe de <0>14 jours</0> à compter de la conclusion d'un contrat à distance pour vous rétracter, sous réserve du droit de la consommation qui vous est applicable.",
+        "p2": "Pour un contenu numérique fourni immédiatement, ce droit ne peut prendre fin au début de la fourniture que si vous avez donné au préalable votre consentement exprès à l'exécution immédiate, reconnu que vous perdriez ainsi votre droit de rétractation et reçu confirmation de ce consentement et de cette reconnaissance sur un support durable. La seule émission ou activation d'une clé ne remplace pas ces conditions. Rien ici ne limite un droit auquel le droit applicable ne vous permet pas de renoncer.",
+        "p3": "Polar, en qualité de vendeur officiel, traite les remboursements d'achat. Si vous pensez conserver un droit légal de rétractation ou de remboursement, utilisez la procédure de Polar ou écrivez à <0>info@battery-sensei.app</0> ; 41BIT LLC aidera à coordonner la demande.",
+        "p4": "Indépendamment de tout droit légal, 41BIT LLC offre à chaque client de Battery Sensei un remboursement inconditionnel et sans justification pendant les 14 jours suivant l'achat. Polar traite le remboursement en qualité de vendeur officiel ; utilisez sa procédure ou contactez-nous afin que nous le coordonnions. Cette politique volontaire ne limite pas vos droits légaux.",
         "refundCta": "Demander un remboursement",
         "refundCtaHint": "Écrivez-nous depuis l'adresse utilisée à la commande : cela nous permet de retrouver votre achat en quelques secondes.",
         "faqLink": "Plus d'informations sur les remboursements dans la FAQ →"
       },
       "contentLiability": {
-        "kicker": "四 · Contenu",
+        "kicker": "五 · Contenu",
         "heading": "Responsabilité quant au contenu",
         "p1": "Le contenu de battery-sensei.app est fourni de bonne foi et maintenu aussi à jour qu'il est raisonnablement possible. Nous ne garantissons pas que chaque détail soit exact, complet ou à jour à un instant donné : les logiciels, les prix, les politiques des tiers et les références juridiques évoluent.",
-        "p2": "Dans la mesure permise par la loi applicable, nous excluons toute responsabilité pour les dommages indirects, accessoires, spéciaux ou consécutifs résultant de l'utilisation (ou de l'impossibilité d'utiliser) du site ou du logiciel. Cela ne limite pas vos droits légaux en tant que consommateur, qui s'appliquent toujours pleinement."
+        "p2": "Dans la mesure permise par le droit applicable, nous excluons la responsabilité des dommages indirects, accessoires, spéciaux ou consécutifs découlant de l'utilisation ou de l'impossibilité d'utiliser le site ou le logiciel. Cette exclusion ne s'applique pas à la faute intentionnelle, à la faute lourde, au décès ou aux dommages corporels, ni à toute autre responsabilité qui ne peut être exclue. Elle ne limite pas vos droits impératifs de consommateur."
       },
       "externalLinks": {
-        "kicker": "五 · Liens externes",
+        "kicker": "六 · Liens externes",
         "heading": "Liens vers d'autres sites",
-        "p1": "Ce site renvoie vers des pages tierces que nous estimons utiles : sites concurrents, documentation, pages de prestataires de paiement, autorités de sécurité sociale et de protection des données. Nous n'avons aucun contrôle sur le contenu de ces pages externes et n'en assumons aucune responsabilité. Les exploitants de ces pages sont seuls responsables de leur propre contenu."
+        "p1": "Ce site renvoie vers des pages tierces que nous estimons utiles, notamment des documents, des sites de comparaison, des services de paiement et de licence et des ressources relatives à la vie privée ou aux consommateurs. Nous ne contrôlons pas ces pages. Leurs exploitants répondent indépendamment de leur contenu et de leurs pratiques de traitement des données."
       },
       "copyright": {
-        "kicker": "六 · Droit d'auteur",
+        "kicker": "七 · Droit d'auteur",
         "heading": "À qui appartient le contenu",
-        "p1": "L'ensemble des textes, du code, des images, des illustrations et des marques sur battery-sensei.app appartient à l'exploitant, sauf attribution expresse contraire. Ils sont protégés au titre de la loi tchèque n° 121/2000 Sb. (loi sur le droit d'auteur) ainsi que des lois équivalentes dans les autres juridictions. Toute réutilisation, reproduction ou modification au-delà de ce que permettent les exceptions au droit d'auteur applicables requiert notre consentement préalable écrit.",
+        "p1": "Sandro Thabiso Schaier, le développeur, détient Battery Sensei, son code source, sa marque, sa documentation ainsi que les textes, codes, images et illustrations originaux de battery-sensei.app, à l'exception des éléments de tiers identifiés. 41BIT LLC n'est pas propriétaire de cette propriété intellectuelle ; le développeur autorise 41BIT LLC à l'exploiter, la commercialiser, la publier, la distribuer, l'assister et la concéder sous licence aux utilisateurs finaux. Ces éléments sont protégés par les lois applicables sur le droit d'auteur, les marques et la propriété intellectuelle. Toute réutilisation, reproduction ou modification au-delà des exceptions légales impératives exige l'accord écrit préalable du titulaire de la propriété intellectuelle.",
         "p2": "Les marques de tiers (AlDente, BatFi, coconutBattery, iStat Menus, macOS, Apple) sont mentionnées au titre du fair use nominatif à des fins de comparaison et appartiennent à leurs détenteurs respectifs."
       },
       "governingLaw": {
-        "kicker": "七 · Droit applicable",
+        "kicker": "八 · Droit applicable",
         "heading": "Quelle loi s'applique",
-        "p1": "L'utilisation de ce site est régie par les lois de la République tchèque ; les tribunaux compétents sont ceux de la République tchèque. Si vous êtes consommateur résidant dans l'Union européenne, les règles impératives de protection des consommateurs de votre pays de résidence continuent de s'appliquer pleinement et ne sont pas écartées par cette clause."
+        "p1": "Les présentes conditions et l'utilisation du site et du logiciel sont régies par les lois de l'État du Wyoming, États-Unis, sans égard aux règles de conflit de lois. Sauf disposition impérative contraire, les juridictions d'État et fédérales situées au Wyoming sont compétentes. Les protections impératives des consommateurs et tout droit de saisir une juridiction différente prévu par le droit de votre résidence restent inchangés."
       },
       "disputeResolution": {
-        "kicker": "八 · Règlement des litiges",
+        "kicker": "九 · Règlement des litiges",
         "heading": "Si quelque chose tourne mal",
-        "p1": "Nous essayons d'abord de régler toute difficulté directement avec vous. Écrivez à <0>info@battery-sensei.app</0>, nous répondons sous un jour ouvré.",
-        "p2": "Les consommateurs en République tchèque peuvent aussi déposer une plainte extrajudiciaire auprès de l'Inspection commerciale tchèque (Česká obchodní inspekce, <0>coi.cz</0>), désignée comme organe de règlement extrajudiciaire des litiges au titre de la loi tchèque n° 634/1992 Sb.",
-        "p3": "Les consommateurs de l'UE peuvent également utiliser la plateforme de règlement en ligne des litiges de la Commission européenne à l'adresse <0>ec.europa.eu/consumers/odr</0>."
+        "p1": "Nous cherchons d'abord à régler directement tout problème. Écrivez à <0>info@battery-sensei.app</0> afin que nous puissions examiner la situation.",
+        "p2": "Les litiges liés à l'achat et au paiement sont également soumis aux <0>Conditions d'achat de Polar</0> ; Polar reste indépendamment responsable de la vente en qualité de vendeur officiel. 41BIT LLC apporte son aide pour les problèmes de produit ou de licence relevant de sa responsabilité.",
+        "p3": "Selon votre lieu de résidence, vous pouvez saisir une autorité de protection des consommateurs ou un organisme de règlement extrajudiciaire compétent. Nous y participons lorsque le droit applicable l'exige. Rien ici ne limite les recours disponibles devant une autorité, un tribunal administratif ou une juridiction compétente."
       },
       "privacyPointer": {
-        "kicker": "九 · Données personnelles",
+        "kicker": "十 · Données personnelles",
         "heading": "Un avis de confidentialité séparé",
         "p1": "La manière dont nous collectons, utilisons et protégeons les données personnelles est documentée séparément et fait foi sur ce sujet. Voir l'<0>avis de confidentialité</0>."
       }

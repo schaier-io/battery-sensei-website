@@ -7,6 +7,7 @@ import { Reveal } from '#/components/zen/Reveal'
 import { Nav } from '#/components/sections/Nav'
 import { Footer } from '#/components/sections/Footer'
 import { DocumentNav, type DocumentNavItem } from '#/components/DocumentNav'
+import { ProtectedBusinessPhone } from '#/components/ProtectedBusinessPhone'
 import { formatLongDate } from '#/lib/format-date'
 
 const SITE_URL = 'https://www.battery-sensei.app'
@@ -16,15 +17,15 @@ const PAGE_DESC =
   'Imprint and legal disclaimer for battery-sensei.app: operator details, liability disclaimer, copyright, governing law and out-of-court dispute resolution.'
 // Last meaningful edit to the legal substance below. Update when you
 // change operator details, governing law, the merchant-of-record or any
-// referenced authority — not on cosmetic tweaks. Deliberately older than
-// the footer's build-time site date: this one dates the imprint, and the
-// label under the title says so.
-const LAST_UPDATED = '2026-05-26'
+// referenced authority — not on cosmetic tweaks. This dates the imprint,
+// independently of the footer's build-time site date.
+const LAST_UPDATED = '2026-07-31'
 
 /** Section order for the jump list. `anchor` must match the `<Block anchor>`
     below it; `key` is the i18n namespace the heading is read from. */
 const LEGAL_SECTIONS: ReadonlyArray<Omit<DocumentNavItem, 'label'> & { key: string }> = [
   { anchor: 'operator', key: 'operator' },
+  { anchor: 'eu-representative', key: 'euRepresentative' },
   { anchor: 'merchant-of-record', key: 'merchantOfRecord' },
   { anchor: 'withdrawal', key: 'withdrawal' },
   { anchor: 'content-liability', key: 'contentLiability' },
@@ -40,9 +41,8 @@ export const Route = createFileRoute('/legal')({
     meta: [
       { title: PAGE_TITLE },
       { name: 'description', content: PAGE_DESC },
-      // Czech / EU consumer-protection law requires the operator's
-      // identifying details to be reachable; index this page so the
-      // disclosure is verifiable from outside the site.
+      // Keep the operator's identifying details crawlable and directly
+      // reachable from the site footer.
       { name: 'robots', content: 'index, follow' },
       { property: 'og:type', content: 'website' },
       { property: 'og:url', content: `${SITE_URL}${PATH}` },
@@ -57,24 +57,9 @@ export const Route = createFileRoute('/legal')({
 /**
  * Imprint + legal disclaimer.
  *
- * Substance authoritative in English; the page chrome (kicker, title
- * italic, last-updated label, back-link) flows through i18n so it sits
- * inside whichever locale the visitor picked. Operator identity below
- * reflects the real Czech sole-trader registration as of 2026-05-06:
- *
- *   Sandro Thabiso Schaier
- *   Korunní 2569/108, 101 00 Prague 10, Czech Republic
- *
- * NOT included on the page until you supply the value:
- *   - IČO (Czech business identification number) — look up at
- *     ares.gov.cz/ekonomicke-subjekty by name; same value will also
- *     appear on the Živnostenský list from your local trade office.
- *   - DIČ (VAT identification number) — only if you are VAT-registered.
- *     Many small SVČ stay under the threshold and have no DIČ.
- *
- * When you have the IČO + (optionally) DIČ, paste them into the
- * `<Block anchor="operator">` section below — search for the comment
- * marker `IČO_DIC_INSERT_HERE` to find the spot.
+ * Operator identity is intentionally limited to the fields needed to
+ * identify and contact 41BIT LLC. Formation date, NAICS classification,
+ * and good-standing status are not customer-facing legal disclosures.
  */
 function LegalPage() {
   const { t, i18n } = useTranslation()
@@ -144,13 +129,8 @@ function LegalPage() {
                 kicker={t('legal.body.operator.kicker')}
                 heading={t('legal.body.operator.heading')}
               >
-                {/* Identifying details required by §53 Civil Code +
-                    Consumer Protection Act for e-commerce in CZ, plus
-                    GDPR Art. 13 controller identity. Drawn from the
-                    Czech Trade Register (živnostenský rejstřík)
-                    extract issued 13 May 2026 by Úřad městské části
-                    Praha 7. Address is the registered business seat —
-                    residential addresses are intentionally omitted. */}
+                {/* Legal entity, reachable company address, registry id,
+                    contact channel, and separate developer/IP ownership. */}
                 <p>
                   <strong className="text-sumi">{t('legal.body.operator.name')}</strong>
                   <br />
@@ -166,23 +146,46 @@ function LegalPage() {
                   {t('legal.body.operator.seatLine3')}
                 </p>
                 <p>
-                  <Trans i18nKey="legal.body.operator.ico" components={[<strong className="text-sumi" />]} />
-                </p>
-                <p className="text-[0.875rem] leading-[1.65] text-nezumi">
-                  <Trans i18nKey="legal.body.operator.dic" components={[<strong className="text-sumi-soft" />]} />
+                  <Trans i18nKey="legal.body.operator.entityId" components={[<strong className="text-sumi" />]} />
                 </p>
                 <p>
                   <Trans
                     i18nKey="legal.body.operator.emailLine"
                     components={[<a className="legal-link" href="mailto:info@battery-sensei.app" />]}
                   />
+                  <br />
+                  <ProtectedBusinessPhone
+                    label={t('legal.body.operator.phoneLabel')}
+                    revealLabel={t('legal.body.operator.phoneReveal')}
+                    callLabel={t('legal.body.operator.phoneCallLabel')}
+                  />
                 </p>
                 <p className="text-[0.875rem] leading-[1.65] text-nezumi">
-                  <Trans i18nKey="legal.body.operator.activity" components={[<strong className="text-sumi-soft" />]} />
+                  <Trans i18nKey="legal.body.operator.responsibility" components={[<strong className="text-sumi-soft" />]} />
                 </p>
-                <p className="text-[0.875rem] text-nezumi">
-                  <Trans i18nKey="legal.body.operator.authority" components={[<strong className="text-sumi-soft" />]} />
+              </Block>
+
+              <Block
+                anchor="eu-representative"
+                kicker={t('legal.body.euRepresentative.kicker')}
+                heading={t('legal.body.euRepresentative.heading')}
+              >
+                <p>
+                  <Trans
+                    i18nKey="legal.body.euRepresentative.p1"
+                    components={[
+                      <strong className="text-sumi" />,
+                      <a
+                        className="legal-link"
+                        href="https://eur-lex.europa.eu/eli/reg/2016/679/oj"
+                        target="_blank"
+                        rel="noreferrer"
+                      />,
+                      <a className="legal-link" href="mailto:info@battery-sensei.app" />,
+                    ]}
+                  />
                 </p>
+                <p>{t('legal.body.euRepresentative.p2')}</p>
               </Block>
 
               <Block
@@ -218,6 +221,7 @@ function LegalPage() {
                     components={[<a className="legal-link" href="mailto:info@battery-sensei.app" />]}
                   />
                 </p>
+                <p>{t('legal.body.withdrawal.p4')}</p>
                 {/* One-click refund-request mailto. Pre-fills subject +
                     body so support can match the purchase by Polar order
                     id in a few seconds; the hint underneath nudges the
@@ -295,15 +299,10 @@ function LegalPage() {
                 <p>
                   <Trans
                     i18nKey="legal.body.disputeResolution.p2"
-                    components={[<a className="legal-link" href="https://coi.cz" target="_blank" rel="noreferrer" />]}
+                    components={[<a className="legal-link" href="https://polar.sh/legal/checkout-buyer-terms" target="_blank" rel="noreferrer" />]}
                   />
                 </p>
-                <p>
-                  <Trans
-                    i18nKey="legal.body.disputeResolution.p3"
-                    components={[<a className="legal-link" href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noreferrer" />]}
-                  />
-                </p>
+                <p>{t('legal.body.disputeResolution.p3')}</p>
               </Block>
 
               <Block

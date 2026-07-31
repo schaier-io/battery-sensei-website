@@ -25,10 +25,10 @@ export const extended = (
 
     <H2>What deliberately isn't here</H2>
     <P>
-      No account, no sync settings, no telemetry toggle, because there's
-      nothing to sync and nothing being collected. Everything Battery Sensei
-      knows about your battery stays on your Mac, which is why the settings
-      list is short. The charging behavior itself lives in{' '}
+      No cloud account, sync settings, app telemetry, or analytics SDK.
+      Battery, calendar, and per-app energy data stays on your Mac. Update
+      checks, licensing, feature-board actions, and sharing you choose use the
+      services named in the Privacy notice. The charging behavior itself lives in{' '}
       <A to="/features/charge-limit">the charge limit</A>, and alerting in{' '}
       <A to="/features/alert-presets">warning presets</A>.
     </P>
@@ -39,7 +39,7 @@ export const faqs = [
   {
     q: 'Does Battery Sensei need an account?',
     a:
-      "No. There's no sign-up, no cloud, and no telemetry. A license key unlocks Pro and is checked against the store, nothing else.",
+      "No cloud account or app login. A license key unlocks Pro and is activated and periodically validated through Polar; no battery, calendar, or per-app energy data is included.",
   },
   {
     q: "Can the app's language differ from macOS?",

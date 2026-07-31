@@ -36,13 +36,10 @@ enum NewsletterSource {
 
 /// Free-download email capture (homepage Pricing card + future surfaces).
 ///
-/// Every successful signup is upserted here AND mirrored to two Resend
-/// Audiences:
-///   - releases: per-app build alerts ("new Sensei version is out")
-///   - launches: cross-app announcements ("new app from the same maker")
-/// The mirror happens server-side in `api/free-signup.ts`. We store the
-/// returned Resend contact ids so retries / unsubscribes can target the
-/// right rows.
+/// Every successful signup is upserted here and mirrored to two operational
+/// Resend segments within one disclosed Battery Sensei updates scope. The
+/// mirror happens server-side in `api/free-signup.ts`; the returned contact id
+/// supports retries and unsubscribe handling.
 model NewsletterSignup {
   id     String @id @default(cuid())
   email  String @unique
@@ -120,6 +117,10 @@ model SupportRequest {
 
   status SupportRequestStatus @default(pending)
 
+  /// Optional operational hold for an active dispute or legal obligation.
+  /// The daily retention job skips the row until this UTC timestamp passes.
+  retentionHoldUntil DateTime?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -130,6 +131,7 @@ model SupportRequest {
   // Operational dashboards: filter by status + recency.
   @@index([status, createdAt])
   @@index([createdAt])
+  @@index([updatedAt])
 }
 
 /// Lifecycle of a public feature request. `pending` and `rejected` are
@@ -200,6 +202,12 @@ model FeatureRequest {
   confirmationEmailId String?
   decisionEmailId     String?
 
+  /// Set after the daily retention job removes submitter/raw/request data
+  /// from an approved public entry while preserving its public copy/count.
+  privateDataPurgedAt DateTime?
+  /// Optional operational hold for an active dispute or legal obligation.
+  retentionHoldUntil DateTime?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -214,6 +222,8 @@ model FeatureRequest {
   // IP rate limit lookup.
   @@index([ipAddress, createdAt])
   @@index([createdAt])
+  @@index([updatedAt])
+  @@index([privateDataPurgedAt, moderatedAt])
 }
 
 /// One vote per license per request. voterHash is
@@ -232,6 +242,8 @@ model FeatureVote {
   @@index([voterHash])
   // Vote-mutation rate limit lookup.
   @@index([ipAddress, createdAt])
+  // Daily privacy retention pass: clear vote IP after 30 days.
+  @@index([createdAt])
 }
 
 /// Cache of successful Polar license validations keyed by voterHash, so
@@ -247,7 +259,10 @@ model AdminLoginAttempt {
   id        String   @id @default(cuid())
   ipAddress String?
   success   Boolean
+  /// Optional security-incident/legal hold; daily cleanup skips until expiry.
+  retentionHoldUntil DateTime?
   createdAt DateTime @default(now())
 
   @@index([ipAddress, createdAt])
+  @@index([createdAt])
 }

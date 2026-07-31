@@ -98,8 +98,8 @@ export const FAQ_ITEMS: ReadonlyArray<FaqItem> = [
   {
     q: 'Does Sensei send my data anywhere?',
     a: [
-      '**No. Nothing leaves your Mac.**',
-      'No telemetry. No analytics. No cloud account. Your battery history stays on this machine.',
+      '**Your battery, app-energy, and calendar data stay on your Mac.**',
+      'Sensei uses network services for update checks and license activation. Actions you choose—such as downloads, checkout, support, or video playback—contact the services disclosed in the Privacy Policy. The macOS app has no behavioral analytics.',
     ],
   },
   {

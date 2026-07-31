@@ -18,7 +18,9 @@
  * a leaked List-Unsubscribe URL can't be replayed weeks later to
  * silently disable a user who re-subscribed in between.
  *
- * We always answer 200 / a redirect on POST — never leak membership.
+ * Invalid or unknown tokens always answer 200. A valid request returns 503
+ * only when the local suppression write fails, allowing standards-compliant
+ * senders and the confirmation page to retry without creating split state.
  *
  * Vercel Function note
  * --------------------
@@ -44,13 +46,24 @@ async function pushUnsubToResend(email: string): Promise<void> {
   // `unsubscribed` is an account-level contact property, so one update
   // by email opts the contact out of every segment at once.
   try {
-    await resend.contacts.update({ email, unsubscribed: true })
-  } catch (err) {
-    console.error('[newsletter] resend unsubscribe failed', err)
+    const result = await resend.contacts.update({ email, unsubscribed: true })
+    if (result.error) {
+      // Local opt-out remains authoritative; the daily retention job retries
+      // Resend suppression. Log only provider code/status, never the email.
+      console.error('[newsletter] resend unsubscribe failed', {
+        code: result.error.name,
+        status: result.error.statusCode,
+      })
+    }
+  } catch {
+    console.error('[newsletter] resend unsubscribe failed', {
+      code: 'transport_error',
+      status: null,
+    })
   }
 }
 
-async function unsubscribe(email: string): Promise<void> {
+async function unsubscribe(email: string): Promise<boolean> {
   try {
     await db.newsletterSignup.update({
       where: { email },
@@ -59,10 +72,14 @@ async function unsubscribe(email: string): Promise<void> {
         tokenEpoch: { increment: 1 },
       },
     })
-  } catch (err) {
-    console.error('[newsletter] unsubscribe row update failed', err)
+  } catch {
+    console.error('[newsletter] unsubscribe row update failed', {
+      code: 'database_error',
+    })
+    return false
   }
   await pushUnsubToResend(email)
+  return true
 }
 
 function redirectTo(path: string): Response {
@@ -119,6 +136,6 @@ export async function POST(request: Request): Promise<Response> {
     return new Response(null, { status: 200 })
   }
 
-  await unsubscribe(verified.email)
-  return new Response(null, { status: 200 })
+  const succeeded = await unsubscribe(verified.email)
+  return new Response(null, { status: succeeded ? 200 : 503 })
 }

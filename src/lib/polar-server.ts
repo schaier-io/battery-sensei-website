@@ -5,11 +5,40 @@
 
 const POLAR_API_BASE =
   process.env.POLAR_API_BASE ?? 'https://api.polar.sh'
+const NEW_CUSTOMER_PORTAL_URL = 'https://polar.sh/41bit-llc/portal'
+const LEGACY_CUSTOMER_PORTAL_URL = 'https://polar.sh/schaier-io/portal/overview'
 
-function token(): string {
-  const t = process.env.POLAR_ACCESS_TOKEN
-  if (!t) throw new Error('POLAR_ACCESS_TOKEN is not set')
-  return t
+type PolarContext = {
+  token: string
+  customerPortalUrl: string
+}
+
+function envValue(name: string): string | undefined {
+  const value = process.env[name]?.trim()
+  return value || undefined
+}
+
+function polarContexts(): PolarContext[] {
+  const contexts: PolarContext[] = []
+  const newToken = envValue('POLAR_ACCESS_TOKEN_NEW')
+  const legacyToken = envValue('POLAR_ACCESS_TOKEN')
+  if (newToken) {
+    contexts.push({
+      token: newToken,
+      customerPortalUrl:
+        envValue('POLAR_CUSTOMER_PORTAL_URL_NEW')
+        ?? NEW_CUSTOMER_PORTAL_URL,
+    })
+  }
+  if (legacyToken && legacyToken !== newToken) {
+    contexts.push({
+      token: legacyToken,
+      customerPortalUrl:
+        envValue('POLAR_CUSTOMER_PORTAL_URL')
+        ?? LEGACY_CUSTOMER_PORTAL_URL,
+    })
+  }
+  return contexts
 }
 
 export type FetchedLicenseDelivery = {
@@ -47,22 +76,36 @@ export type FetchedLicenseDelivery = {
 export async function fetchCheckoutLicense(
   checkoutId: string,
 ): Promise<FetchedLicenseDelivery | null> {
+  const contexts = polarContexts()
+  if (contexts.length === 0) return null
+  let context: PolarContext | null = null
   let checkoutData: Record<string, unknown> | null = null
-  try {
-    const res = await fetch(
-      `${POLAR_API_BASE}/v1/checkouts/${encodeURIComponent(checkoutId)}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token()}`,
-          Accept: 'application/json',
+  for (let index = 0; index < contexts.length; index += 1) {
+    const candidate = contexts[index]
+    try {
+      const res = await fetch(
+        `${POLAR_API_BASE}/v1/checkouts/${encodeURIComponent(checkoutId)}`,
+        {
+          headers: {
+            Authorization: `Bearer ${candidate.token}`,
+            Accept: 'application/json',
+          },
         },
-      },
-    )
-    if (!res.ok) return null
-    checkoutData = (await res.json()) as Record<string, unknown>
-  } catch {
-    return null
+      )
+      if (res.ok) {
+        checkoutData = (await res.json()) as Record<string, unknown>
+        context = candidate
+        break
+      }
+      const canTryLegacy =
+        index < contexts.length - 1
+        && res.status === 404
+      if (!canTryLegacy) return null
+    } catch {
+      return null
+    }
   }
+  if (!checkoutData || !context) return null
 
   const orderId =
     pluck<string>(
@@ -81,7 +124,7 @@ export async function fetchCheckoutLicense(
         `${POLAR_API_BASE}/v1/orders/${encodeURIComponent(orderId)}`,
         {
           headers: {
-            Authorization: `Bearer ${token()}`,
+            Authorization: `Bearer ${context.token}`,
             Accept: 'application/json',
           },
         },
@@ -120,16 +163,15 @@ export async function fetchCheckoutLicense(
         checkoutData,
         'customer_portal_url',
         'customer.portal_url',
-      ) ?? customerPortalFallback(),
+      ) ?? customerPortalFallback(context),
     createdAt: Number.isFinite(createdAt) ? createdAt : null,
   }
 }
 
-export function customerPortalFallback(): string {
-  return (
-    process.env.POLAR_CUSTOMER_PORTAL_URL ??
-    'https://polar.sh/battery-sensei/portal'
-  )
+export function customerPortalFallback(context?: PolarContext): string {
+  return context?.customerPortalUrl
+    ?? envValue('POLAR_CUSTOMER_PORTAL_URL_NEW')
+    ?? NEW_CUSTOMER_PORTAL_URL
 }
 
 // ---- helpers --------------------------------------------------------------
