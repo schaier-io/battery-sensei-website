@@ -205,16 +205,17 @@ export async function POST(request: Request): Promise<Response> {
   const metadata = { ipAddress, userAgent, origin }
   const ticketId = generateTicketId()
 
-  const [emailCount, ipCount] = await Promise.all([
-    prisma.featureRequest.count({
-      where: { email, createdAt: { gte: new Date(Date.now() - EMAIL_RATE_WINDOW_MS) } },
-    }),
-    ipAddress
-      ? prisma.featureRequest.count({
-          where: { ipAddress, createdAt: { gte: new Date(Date.now() - IP_RATE_WINDOW_MS) } },
-        })
-      : Promise.resolve(0),
-  ])
+  // Keep this serverless request to one active Prisma operation at a time.
+  // The two short indexed counts are not latency-critical, and serializing
+  // them avoids creating a second database checkout for one submission.
+  const emailCount = await prisma.featureRequest.count({
+    where: { email, createdAt: { gte: new Date(Date.now() - EMAIL_RATE_WINDOW_MS) } },
+  })
+  const ipCount = ipAddress
+    ? await prisma.featureRequest.count({
+        where: { ipAddress, createdAt: { gte: new Date(Date.now() - IP_RATE_WINDOW_MS) } },
+      })
+    : 0
 
   // Audit rows for trapped/limited requests are themselves capped so a
   // flooding IP cannot grow the table (and the moderation queue) without
