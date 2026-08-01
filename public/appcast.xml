@@ -1403,6 +1403,37 @@
         length="26743430"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.12.3</title>
+      <pubDate>Sat, 01 Aug 2026 02:59:23 +0000</pubDate>
+      <sparkle:version>89</sparkle:version>
+      <sparkle:shortVersionString>1.12.3</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.12.3</h1>
+<p>Feature Requests quits cleanly when a draft is open, and the suggest form shows clearer live length guidance.</p>
+<h2>Feature Requests</h2>
+<ul>
+<li><strong>Quit while editing asks first.</strong> Cmd+Q, the app menu, menu-bar Quit, Dock Quit, and Settings Quit raise Battery Sensei and ask Continue Editing or Quit, so unsaved draft text is not discarded by a silent no-op or system beep.</li>
+<li><strong>The confirm sits on the Feature Requests sheet.</strong> The alert is centered over that panel instead of appearing elsewhere on screen.</li>
+<li><strong>Closing the sheet before the alert appears cancels quit.</strong> Dismissing Feature Requests while the confirm is queued no longer treats that as confirmation.</li>
+<li><strong>A second quit attempt during the confirm no longer beeps.</strong> Dock Quit while the dialog is open re-raises it instead of returning a cancelled terminate.</li>
+</ul>
+<h2>Suggest form</h2>
+<ul>
+<li><strong>Live length hints stay soft below the minimum</strong>, then switch to a clear <code>n/max</code> character count once you pass it.</li>
+<li><strong>Copy is gentler.</strong> Short drafts get calm guidance instead of a hard “at least N characters” scolding.</li>
+</ul>
+<p>Marketing 1.12.2 → 1.12.3, build 88 → 89.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.12.3/Battery-Sensei.pkg"
+        sparkle:edSignature="dvJym4ZO6s0gifOwBvnUFvutanu3ltlKkxjwsagOqmifkOeYmy23GBmTl9kLGMZyJBOvDxFnGxdiaLwphsYPBg=="
+        length="26764764"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
