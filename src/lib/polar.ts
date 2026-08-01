@@ -7,17 +7,14 @@
 //   VITE_POLAR_CHECKOUT_URL_SUPPORT    Checkout Link for the yearly
 //                                      "Yearly Patron" product
 //
-// Server-only `_NEW` token/product ids drive live per-country totals. Names
-// without `_NEW` remain the legacy fallback and never reach the client bundle.
+// Server-only `_NEW` token/product ids drive live per-country totals.
 
 const LIFETIME_CHECKOUT_URL =
   import.meta.env.VITE_POLAR_CHECKOUT_URL_LIFETIME_NEW ||
-  import.meta.env.VITE_POLAR_CHECKOUT_URL_LIFETIME ||
   'https://buy.polar.sh/YOUR_LIFETIME_CHECKOUT_LINK'
 
 const SUPPORT_CHECKOUT_URL =
   import.meta.env.VITE_POLAR_CHECKOUT_URL_SUPPORT_NEW ||
-  import.meta.env.VITE_POLAR_CHECKOUT_URL_SUPPORT ||
   'https://buy.polar.sh/YOUR_SUPPORT_CHECKOUT_LINK'
 
 /**
@@ -55,11 +52,9 @@ export const HAS_SEPARATE_LEGACY_CUSTOMER_PORTAL =
  */
 export const LIFETIME_DISCOUNT_CODE =
   import.meta.env.VITE_POLAR_DISCOUNT_CODE_NEW ||
-  import.meta.env.VITE_POLAR_DISCOUNT_CODE ||
   'ZENMODE'
 const configuredDiscountMaximum = Number(
   import.meta.env.VITE_POLAR_DISCOUNT_MAX_REDEMPTIONS_NEW ||
-  import.meta.env.VITE_POLAR_DISCOUNT_MAX_REDEMPTIONS ||
   500,
 )
 export const LIFETIME_DISCOUNT_MAX_REDEMPTIONS =
@@ -78,9 +73,8 @@ export const LIFETIME_DISCOUNT_MAX_REDEMPTIONS =
  * Source of truth (Polar Lifetime product + configured discount):
  *   Currency │  Full   │  Discount removes  │  Final
  *   ─────────┼─────────┼────────────────────┼────────
- *   USD      │ $11.99  │  $7.50             │  $4.49
- *   EUR      │ €10.99  │  €7.00             │  €3.99
- *   CZK      │ 205 Kč  │  110 Kč            │  95 Kč
+ *   USD      │  $9.99  │  $3.00             │  $6.99
+ *   EUR      │  €9.99  │  €3.00             │  €6.99
  *
  * The "discounted" value is what buyers pay during the limited launch
  * window. "full" is the strikethrough anchor (and the headline once
@@ -90,9 +84,8 @@ export const LIFETIME_FALLBACK: Record<
   string,
   { discounted: number; full: number }
 > = {
-  USD: { discounted: 4.49, full: 11.99 },
-  EUR: { discounted: 3.99, full: 10.99 },
-  CZK: { discounted: 95, full: 205 },
+  USD: { discounted: 6.99, full: 9.99 },
+  EUR: { discounted: 6.99, full: 9.99 },
 }
 /** Used when the visitor's currency isn't in LIFETIME_FALLBACK. */
 export const LIFETIME_FALLBACK_DEFAULT = LIFETIME_FALLBACK.USD

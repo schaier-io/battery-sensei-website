@@ -50,8 +50,8 @@ const LICENSE_SCOPE_YEARLY = 'Yearly Patron: up to 5 Macs while subscribed.'
  * The trial length and the price are read from `#/lib/polar`, the same
  * source the pricing section and the JSON-LD offer use, so a price change
  * lands in the rich-result snippet automatically. Baking the number in
- * here is what left the FAQ schema advertising $3.99 after the price
- * moved to $4.49. The locale strings still use `{{price}}` / `{{trial}}`
+ * here is what previously left the FAQ schema advertising a stale price.
+ * The locale strings still use `{{price}}` / `{{trial}}`
  * placeholders that the renderer interpolates at runtime.
  */
 export const FAQ_ITEMS: ReadonlyArray<FaqItem> = [

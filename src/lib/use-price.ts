@@ -230,7 +230,7 @@ export function useLifetimePrice(currency?: 'USD' | 'EUR' | 'CZK'): LifetimePric
 
   const yearly = usePremiumPrice(currency)
   const [live, setLive] = useState<LifetimeBlock | null>(null)
-  const [hasDiscount, setHasDiscount] = useState<boolean>(true)
+  const [hasDiscount, setHasDiscount] = useState<boolean>(false)
 
   useEffect(() => {
     let cancelled = false
@@ -241,6 +241,7 @@ export function useLifetimePrice(currency?: 'USD' | 'EUR' | 'CZK'): LifetimePric
         setHasDiscount(data.lifetime.has_discount)
       } else {
         setLive(null)
+        setHasDiscount(false)
       }
     })
     return () => {
@@ -309,6 +310,8 @@ export function useLifetimePrice(currency?: 'USD' | 'EUR' | 'CZK'): LifetimePric
       amount: fallback.full,
       formatted: formatPriceAmount(yearly, fallback.full),
     },
-    hasDiscount: true,
+    // A fallback price is useful for layout, but cannot prove that Polar
+    // accepted the discount. Keep launch claims hidden until the live preview.
+    hasDiscount: false,
   }
 }

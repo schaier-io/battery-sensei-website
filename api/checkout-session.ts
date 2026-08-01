@@ -18,7 +18,7 @@
  * Flow
  * ----
  *  1. Client clicks Buy → POSTs `{tier, discountCode?}` to this endpoint.
- *  2. We resolve the `_NEW` token/product pair (or the complete legacy pair),
+ *  2. We resolve the `_NEW` token/product pair,
  *     then POST to `https://api.polar.sh/v1/
  *     checkouts/` with `embed_origin`, `success_url`, and (optionally)
  *     the configured Lifetime discount.
@@ -39,7 +39,7 @@
  *   POLAR_ACCESS_TOKEN_NEW          New organization access token
  *   POLAR_PRODUCT_ID_LIFETIME_NEW   New Lifetime product UUID
  *   POLAR_PRODUCT_ID_SUPPORT_NEW    New yearly support product UUID
- * Names without `_NEW` remain the complete legacy fallback.
+ * Legacy credentials are intentionally excluded from new checkout creation.
  *   POLAR_EMBED_ORIGIN        Public origin allowed to iframe the page
  *                             (defaults to https://battery-sensei.app)
  */
@@ -51,7 +51,6 @@ type Tier = 'lifetime' | 'support'
 type PolarSalesConfig = {
   token: string
   productId: string
-  organization: 'new' | 'legacy'
 }
 
 function envValue(name: string): string | undefined {
@@ -59,8 +58,7 @@ function envValue(name: string): string | undefined {
   return value || undefined
 }
 
-/** Keep token and product from the same Polar organization. A partially
- * configured `_NEW` pair fails closed instead of creating a cross-org call. */
+/** New purchases must always use 41BIT's Polar organization. */
 function resolveSalesConfig(tier: Tier): PolarSalesConfig | null {
   const newToken = envValue('POLAR_ACCESS_TOKEN_NEW')
   const newProductId = envValue(
@@ -68,20 +66,8 @@ function resolveSalesConfig(tier: Tier): PolarSalesConfig | null {
       ? 'POLAR_PRODUCT_ID_LIFETIME_NEW'
       : 'POLAR_PRODUCT_ID_SUPPORT_NEW',
   )
-  if (newToken || newProductId) {
-    return newToken && newProductId
-      ? { token: newToken, productId: newProductId, organization: 'new' }
-      : null
-  }
-
-  const legacyToken = envValue('POLAR_ACCESS_TOKEN')
-  const legacyProductId = envValue(
-    tier === 'lifetime'
-      ? 'POLAR_PRODUCT_ID_LIFETIME'
-      : 'POLAR_PRODUCT_ID_SUPPORT',
-  )
-  return legacyToken && legacyProductId
-    ? { token: legacyToken, productId: legacyProductId, organization: 'legacy' }
+  return newToken && newProductId
+    ? { token: newToken, productId: newProductId }
     : null
 }
 
@@ -106,15 +92,8 @@ const POLAR_API_BASE = 'https://api.polar.sh/v1'
 const POLAR_TIMEOUT_MS = 4_000
 
 /** Keep the automatic discount in the same organization as the checkout. */
-function lifetimeDiscountCode(
-  organization: PolarSalesConfig['organization'],
-): string {
-  if (organization === 'new') {
-    return envValue('POLAR_DISCOUNT_CODE_NEW')
-      ?? envValue('POLAR_DISCOUNT_CODE')
-      ?? 'ZENMODE'
-  }
-  return envValue('POLAR_DISCOUNT_CODE') ?? 'ZENMODE'
+function lifetimeDiscountCode(): string {
+  return envValue('POLAR_DISCOUNT_CODE_NEW') ?? 'ZENMODE'
 }
 
 type DiscountIdEntry = { id: string | null; expiresAt: number }
@@ -135,10 +114,9 @@ const discountIdCache: Map<string, DiscountIdEntry> =
 async function resolveDiscountId(
   code: string,
   token: string,
-  organization: PolarSalesConfig['organization'],
 ): Promise<string | null> {
   const normalizedCode = code.toUpperCase()
-  const key = `${organization}:${normalizedCode}`
+  const key = `new:${normalizedCode}`
   const now = Date.now()
   const cached = discountIdCache.get(key)
   if (cached && cached.expiresAt > now) return cached.id
@@ -350,7 +328,7 @@ export async function POST(request: Request): Promise<Response> {
   const autoDiscountCode =
     body.discountCode
     ?? (tier === 'lifetime'
-      ? lifetimeDiscountCode(salesConfig.organization)
+      ? lifetimeDiscountCode()
       : undefined)
 
   // CRITICAL: Polar's `POST /v1/checkouts/` schema accepts `discount_id`
@@ -360,7 +338,7 @@ export async function POST(request: Request): Promise<Response> {
   // the body OR appending `?discount_code=` to the returned URL both
   // result in `discount: null` server-side.
   const discountId = autoDiscountCode
-    ? await resolveDiscountId(autoDiscountCode, token, salesConfig.organization)
+    ? await resolveDiscountId(autoDiscountCode, token)
     : null
 
   if (autoDiscountCode && !discountId) {

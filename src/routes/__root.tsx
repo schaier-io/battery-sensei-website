@@ -65,7 +65,7 @@ const TITLE =
 // Description: 156 chars. Hook + the three concrete benefits + trial/price
 // + privacy/performance trust signal. Reads as a single sentence in SERPs.
 const DESCRIPTION =
-  'macOS menu-bar app for MacBook battery health. Smart alerts, charge limit, Travel Mode, cycle tracking. 5-day free trial (no card), $4.49 once. Native, <1% impact.'
+  'macOS menu-bar app for MacBook battery health. Smart alerts, charge limit, Travel Mode, cycle tracking. 5-day free trial (no card), $6.99 once. Native, <1% impact.'
 
 // Kept for legacy crawlers — Google ignores `keywords`, Bing weighs it lightly.
 const KEYWORDS =

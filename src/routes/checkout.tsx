@@ -95,14 +95,17 @@ function CheckoutPage() {
   // "ZENMODE applied" pill, and the inline hint chip above the embed.
   // Once `remaining` hits 0 we revert to the full lifetime price and
   // hide all of them — no stale urgency.
-  const { remaining: zenmodeRemaining } = useDiscountAvailability()
+  const {
+    remaining: zenmodeRemaining,
+    live: hasLiveZenmodeCount,
+  } = useDiscountAvailability()
   // Gate the launch UI on BOTH our redemption counter AND Polar's live
   // preview reporting a real discount. Without the second gate, the
-  // strikethrough renders "was $4.49 / $4.49" once Polar quietly stops
+  // strikethrough renders identical "was" and current prices once Polar stops
   // honouring ZENMODE — same bug as Pricing.tsx.
   const hasRealDiscount =
     lifetime.hasDiscount && lifetime.original.amount > lifetime.discounted.amount
-  const launchOpen = zenmodeRemaining > 0 && hasRealDiscount
+  const launchOpen = hasLiveZenmodeCount && zenmodeRemaining > 0 && hasRealDiscount
 
   const isLifetime = tier === 'lifetime'
 

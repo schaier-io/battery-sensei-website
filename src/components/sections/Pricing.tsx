@@ -115,7 +115,10 @@ export function Pricing() {
   // discount-note chip, AND the strikethrough — the page then reads as
   // a plain full-price product, not a stale "was X / now Y" anchor that
   // would lie about the active offer.
-  const { remaining: zenmodeRemaining } = useDiscountAvailability()
+  const {
+    remaining: zenmodeRemaining,
+    live: hasLiveZenmodeCount,
+  } = useDiscountAvailability()
   // "Launch is open" only when BOTH gates agree:
   //   1. ZENMODE redemption count > 0 (marketing scarcity bar)
   //   2. Polar's live price preview reports the discount is still being
@@ -123,12 +126,12 @@ export function Pricing() {
   //
   // Without the Polar gate, the strikethrough used to render even after
   // Polar quietly stopped applying ZENMODE — the page then showed
-  // "was $4.49 / $4.49" because `lifetime.original` and `lifetime.discounted`
+  // identical "was" and current prices because `lifetime.original` and `lifetime.discounted`
   // came back identical from `/api/price` while `zenmodeRemaining` was
   // still positive on our side.
   const hasRealDiscount =
     lifetime.hasDiscount && lifetime.original.amount > lifetime.discounted.amount
-  const launchOpen = zenmodeRemaining > 0 && hasRealDiscount
+  const launchOpen = hasLiveZenmodeCount && zenmodeRemaining > 0 && hasRealDiscount
   // While the launch discount is active we show the discounted price as
   // the headline; once exhausted, the original full price becomes the
   // headline and the strikethrough is gone too.
@@ -552,8 +555,8 @@ export function Pricing() {
  */
 function LimitedRedeemBar({ fullPriceFormatted }: { fullPriceFormatted: string }) {
   const { t } = useTranslation()
-  const { max, remaining } = useDiscountAvailability()
-  if (max <= 0) return null
+  const { max, remaining, live } = useDiscountAvailability()
+  if (!live || max <= 0) return null
   // Fill = `remaining`, not `used`. Starts at 100% on day one with
   // the full 500 codes available; shrinks as buyers claim. The
   // visual matches the verbal copy ("X of 500 remaining") and reads

@@ -19,7 +19,8 @@
  *   POLAR_ACCESS_TOKEN_NEW                 New organization access token
  *   POLAR_DISCOUNT_CODE_NEW                New discount code
  *   POLAR_DISCOUNT_MAX_REDEMPTIONS_NEW     Static fallback cap
- * Names without `_NEW` remain the legacy fallback.
+ * Legacy credentials are intentionally excluded: the UI must never show the
+ * previous organization's redemption count for a new 41BIT purchase.
  *
  * Note: the discount code + max-redemptions cap are duplicated here
  * instead of imported from `src/lib/polar`. Vercel's serverless
@@ -43,20 +44,10 @@ type DiscountConfig = {
 
 /** Keep token, code, and fallback cap in one Polar organization. */
 function resolveDiscountConfig(): DiscountConfig {
-  const newToken = envValue('POLAR_ACCESS_TOKEN_NEW')
-  const useNewOrganization = Boolean(newToken)
-  const token = newToken ?? envValue('POLAR_ACCESS_TOKEN')
-  const code = useNewOrganization
-    ? envValue('POLAR_DISCOUNT_CODE_NEW')
-      ?? envValue('POLAR_DISCOUNT_CODE')
-      ?? 'ZENMODE'
-    : envValue('POLAR_DISCOUNT_CODE') ?? 'ZENMODE'
+  const token = envValue('POLAR_ACCESS_TOKEN_NEW')
+  const code = envValue('POLAR_DISCOUNT_CODE_NEW') ?? 'ZENMODE'
   const configuredMaximum = Number(
-    useNewOrganization
-      ? envValue('POLAR_DISCOUNT_MAX_REDEMPTIONS_NEW')
-        ?? envValue('POLAR_DISCOUNT_MAX_REDEMPTIONS')
-        ?? '500'
-      : envValue('POLAR_DISCOUNT_MAX_REDEMPTIONS') ?? '500',
+    envValue('POLAR_DISCOUNT_MAX_REDEMPTIONS_NEW') ?? '500',
   )
   const fallbackMaximum =
     Number.isSafeInteger(configuredMaximum) && configuredMaximum > 0

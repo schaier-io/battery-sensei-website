@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { LIFETIME_DISCOUNT_MAX_REDEMPTIONS } from '#/lib/polar'
 
 /** Shape mirrored from `api/discount-availability.ts`. */
 export type DiscountAvailability = {
@@ -13,8 +12,8 @@ export type DiscountAvailability = {
 
 const DEFAULT: DiscountAvailability = {
   used: 0,
-  max: LIFETIME_DISCOUNT_MAX_REDEMPTIONS,
-  remaining: LIFETIME_DISCOUNT_MAX_REDEMPTIONS,
+  max: 0,
+  remaining: 0,
   live: false,
 }
 
@@ -44,14 +43,7 @@ async function load(): Promise<DiscountAvailability> {
         cached = data
         return data
       }
-      const fallback: DiscountAvailability = {
-        used: 0,
-        max: json.max,
-        remaining: json.max,
-        live: false,
-      }
-      cached = fallback
-      return fallback
+      return DEFAULT
     } catch {
       cached = DEFAULT
       return DEFAULT
@@ -63,8 +55,8 @@ async function load(): Promise<DiscountAvailability> {
 }
 
 /**
- * Returns the live availability of the ZENMODE discount, or a safe
- * static default while the request is in flight. The first call kicks
+ * Returns live new-organization ZENMODE availability. Until that succeeds,
+ * the zero default suppresses all scarcity claims. The first call kicks
  * off the network request; subsequent mounts read from the module-level
  * cache.
  */

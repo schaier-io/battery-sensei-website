@@ -36,4 +36,20 @@ describe('GET /api/price organization migration', () => {
     expect(body.reason).toBe('unconfigured')
     expect(fetchMock).not.toHaveBeenCalled()
   })
+
+  it('does not preview a complete legacy sales configuration', async () => {
+    vi.stubEnv('POLAR_ACCESS_TOKEN_NEW', '')
+    vi.stubEnv('POLAR_PRODUCT_ID_SUPPORT_NEW', '')
+    vi.stubEnv('POLAR_ACCESS_TOKEN', 'legacy-token')
+    vi.stubEnv('POLAR_PRODUCT_ID_SUPPORT', 'legacy-support')
+    const fetchMock = vi.fn()
+    vi.stubGlobal('fetch', fetchMock)
+
+    const response = await GET(new Request('https://battery-sensei.app/api/price?country=ZX'))
+    const body = await response.json() as Record<string, unknown>
+
+    expect(body.ok).toBe(false)
+    expect(body.reason).toBe('unconfigured')
+    expect(fetchMock).not.toHaveBeenCalled()
+  })
 })

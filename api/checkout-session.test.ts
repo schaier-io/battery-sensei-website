@@ -3,8 +3,8 @@ import { POST } from './checkout-session'
 
 describe('checkout session currency', () => {
   beforeEach(() => {
-    vi.stubEnv('POLAR_ACCESS_TOKEN', 'test-token')
-    vi.stubEnv('POLAR_PRODUCT_ID_SUPPORT', 'support-product')
+    vi.stubEnv('POLAR_ACCESS_TOKEN_NEW', 'test-token')
+    vi.stubEnv('POLAR_PRODUCT_ID_SUPPORT_NEW', 'support-product')
   })
 
   afterEach(() => {
@@ -109,6 +109,7 @@ describe('checkout session currency', () => {
 
   it('fails closed instead of mixing a new token with a legacy product', async () => {
     vi.stubEnv('POLAR_ACCESS_TOKEN_NEW', 'new-token')
+    vi.stubEnv('POLAR_PRODUCT_ID_SUPPORT_NEW', '')
     const fetchMock = vi.fn()
     vi.stubGlobal('fetch', fetchMock)
 
@@ -124,7 +125,26 @@ describe('checkout session currency', () => {
   })
 
   it('fails closed instead of mixing a new product with a legacy token', async () => {
+    vi.stubEnv('POLAR_ACCESS_TOKEN_NEW', '')
     vi.stubEnv('POLAR_PRODUCT_ID_SUPPORT_NEW', 'new-support-product')
+    const fetchMock = vi.fn()
+    vi.stubGlobal('fetch', fetchMock)
+
+    const response = await POST(new Request('https://battery-sensei.app/api/checkout-session', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ tier: 'support' }),
+    }))
+
+    expect(response.status).toBe(503)
+    expect(fetchMock).not.toHaveBeenCalled()
+  })
+
+  it('never creates a new purchase with a complete legacy pair', async () => {
+    vi.stubEnv('POLAR_ACCESS_TOKEN_NEW', '')
+    vi.stubEnv('POLAR_PRODUCT_ID_SUPPORT_NEW', '')
+    vi.stubEnv('POLAR_ACCESS_TOKEN', 'legacy-token')
+    vi.stubEnv('POLAR_PRODUCT_ID_SUPPORT', 'legacy-support-product')
     const fetchMock = vi.fn()
     vi.stubGlobal('fetch', fetchMock)
 

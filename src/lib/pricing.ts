@@ -13,16 +13,14 @@
 // We deliberately do NOT auto-default to other local currencies (CZK,
 // GBP, JPY, …) even when Polar would happily settle in them. Reasons:
 //   1. Two clean choices make the on-page switcher comprehensible.
-//   2. The canonical brand price is stated as US$3.99 — anchoring to
+//   2. The support price uses USD/EUR — anchoring to those currencies
 //      USD/EUR keeps the headline number stable across regions.
 //   3. Visitors who *want* to pay in their local currency can hit the
 //      currency switcher on /checkout; Polar's session-create API
 //      accepts the full `PresentmentCurrency` enum at that point.
 //
-// Display amounts here are hand-picked for psychological price comfort
-// (charm pricing at 3.99 in both currencies). They're a rough static
-// fallback — Polar's live preview replaces them whenever the API
-// round-trip succeeds.
+// These are rough static support-tier fallbacks. Polar's live preview
+// replaces them whenever the API round-trip succeeds.
 
 export type PriceEntry = {
   amount: number

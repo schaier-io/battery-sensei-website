@@ -26,7 +26,7 @@
  *   POLAR_PRODUCT_ID_SUPPORT_NEW    New yearly support product UUID
  *   POLAR_PRODUCT_ID_LIFETIME_NEW   New Lifetime product UUID
  *   POLAR_DISCOUNT_CODE_NEW         New Lifetime discount code
- * Legacy names without `_NEW` remain the fallback until migration completes.
+ * Legacy credentials are intentionally excluded from new price previews.
  *
  * The Checkout Link URL used by the client buy button stays in
  * VITE_POLAR_CHECKOUT_URL; the API token + product id are server-only.
@@ -54,14 +54,9 @@ function envValue(name: string): string | undefined {
   return value || undefined
 }
 
-/** Keep the preview discount in the same organization as its products. */
-function lifetimeDiscountCode(organization: 'new' | 'legacy'): string {
-  if (organization === 'new') {
-    return envValue('POLAR_DISCOUNT_CODE_NEW')
-      ?? envValue('POLAR_DISCOUNT_CODE')
-      ?? 'ZENMODE'
-  }
-  return envValue('POLAR_DISCOUNT_CODE') ?? 'ZENMODE'
+/** The new-organization launch discount. */
+function lifetimeDiscountCode(): string {
+  return envValue('POLAR_DISCOUNT_CODE_NEW') ?? 'ZENMODE'
 }
 
 // ────────────────────────────────────────────────────────────────────
@@ -126,10 +121,9 @@ const discountIdCache: Map<string, DiscountIdEntry> =
 async function resolveDiscountId(
   code: string,
   token: string,
-  organization: 'new' | 'legacy',
 ): Promise<string | null> {
   const normalizedCode = code.toUpperCase()
-  const key = `${organization}:${normalizedCode}`
+  const key = `new:${normalizedCode}`
   const now = Date.now()
   const cached = discountIdCache.get(key)
   if (cached && cached.expiresAt > now) return cached.id
@@ -355,20 +349,9 @@ async function fetchPolarPreview(
   const newToken = envValue('POLAR_ACCESS_TOKEN_NEW')
   const newYearlyProductId = envValue('POLAR_PRODUCT_ID_SUPPORT_NEW')
   const newLifetimeProductId = envValue('POLAR_PRODUCT_ID_LIFETIME_NEW')
-  const hasNewSalesConfig = Boolean(
-    newToken || newYearlyProductId || newLifetimeProductId,
-  )
-
-  // Token and product ids must come from one organization. Once any `_NEW`
-  // sales value is present, never combine it with a legacy value.
-  const token = hasNewSalesConfig ? newToken : envValue('POLAR_ACCESS_TOKEN')
-  const yearlyProductId = hasNewSalesConfig
-    ? newYearlyProductId
-    : envValue('POLAR_PRODUCT_ID_SUPPORT') ?? envValue('POLAR_PRODUCT_ID')
-  const lifetimeProductId = hasNewSalesConfig
-    ? newLifetimeProductId
-    : envValue('POLAR_PRODUCT_ID_LIFETIME')
-  const organization = hasNewSalesConfig ? 'new' : 'legacy'
+  const token = newToken
+  const yearlyProductId = newYearlyProductId
+  const lifetimeProductId = newLifetimeProductId
 
   if (!token || !yearlyProductId) {
     return { ok: false, country, reason: 'unconfigured', source: 'fallback' }
@@ -379,9 +362,8 @@ async function fetchPolarPreview(
   // Cached module-scope so repeat country lookups skip this round-trip.
   const discountId = lifetimeProductId
       ? await resolveDiscountId(
-        lifetimeDiscountCode(organization),
+        lifetimeDiscountCode(),
         token,
-        organization,
       )
     : null
 
