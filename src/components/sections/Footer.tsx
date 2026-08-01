@@ -2,11 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { LanguageSwitcher } from '#/components/LanguageSwitcher'
 import { CurrencySwitcher } from '#/components/CurrencySwitcher'
-import {
-  CUSTOMER_PORTAL_URL,
-  HAS_SEPARATE_LEGACY_CUSTOMER_PORTAL,
-  LEGACY_CUSTOMER_PORTAL_URL,
-} from '#/lib/polar'
+import { CUSTOMER_PORTAL_URL } from '#/lib/polar'
 import { formatLongDate } from '#/lib/format-date'
 
 // Build-time injected ISO date of the latest meaningful commit
@@ -146,19 +142,6 @@ export function Footer() {
           >
             {t('footer.managePurchase')}
           </a>
-          {HAS_SEPARATE_LEGACY_CUSTOMER_PORTAL && (
-            <>
-              <FooterDot />
-              <a
-                href={LEGACY_CUSTOMER_PORTAL_URL}
-                target="_blank"
-                rel="noreferrer"
-                className="zen-link-lift"
-              >
-                {t('footer.manageLegacyPurchase')}
-              </a>
-            </>
-          )}
           <FooterDot />
           <Link to="/privacy" className="zen-link-lift">
             {t('privacy.footerLink')}

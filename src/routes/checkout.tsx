@@ -26,8 +26,6 @@ import { usePremiumPrice, useLifetimePrice } from '#/lib/use-price'
 import { setCurrencyPreference } from '#/lib/currency-preference'
 import {
   CUSTOMER_PORTAL_URL,
-  HAS_SEPARATE_LEGACY_CUSTOMER_PORTAL,
-  LEGACY_CUSTOMER_PORTAL_URL,
 } from '#/lib/polar'
 
 const SITE_URL = 'https://www.battery-sensei.app'
@@ -507,17 +505,6 @@ function CheckoutPage() {
                     <ExternalLink className="h-3.5 w-3.5" strokeWidth={1.7} aria-hidden />
                     {t('checkout.alreadyOwnPortal', { defaultValue: 'Customer portal' })}
                   </a>
-                  {HAS_SEPARATE_LEGACY_CUSTOMER_PORTAL && (
-                    <a
-                      href={LEGACY_CUSTOMER_PORTAL_URL}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex h-9 items-center gap-2 rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,var(--paper-lift))] px-3.5 text-[0.8125rem] font-medium text-sumi-soft transition-[background-color,color,transform,box-shadow] duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-px hover:text-sumi hover:border-[var(--line-strong)] hover:bg-[color-mix(in_oklab,var(--washi)_50%,var(--paper-lift))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
-                    >
-                      <ExternalLink className="h-3.5 w-3.5" strokeWidth={1.7} aria-hidden />
-                      {t('checkout.alreadyOwnLegacyPortal')}
-                    </a>
-                  )}
                 </div>
               </div>
             </div>

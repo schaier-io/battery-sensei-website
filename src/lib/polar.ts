@@ -30,14 +30,6 @@ export const CUSTOMER_PORTAL_URL =
   import.meta.env.VITE_POLAR_CUSTOMER_PORTAL_URL_NEW ||
   'https://polar.sh/41bit-llc/portal'
 
-/** Existing buyers remain in the original Polar organization. */
-export const LEGACY_CUSTOMER_PORTAL_URL =
-  import.meta.env.VITE_POLAR_CUSTOMER_PORTAL_URL ||
-  'https://polar.sh/schaier-io/portal/overview'
-
-export const HAS_SEPARATE_LEGACY_CUSTOMER_PORTAL =
-  LEGACY_CUSTOMER_PORTAL_URL !== CUSTOMER_PORTAL_URL
-
 /**
  * Launch discount for the Lifetime tier.
  *

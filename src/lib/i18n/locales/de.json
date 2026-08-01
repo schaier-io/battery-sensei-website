@@ -1130,7 +1130,6 @@
     "releases": "Versionen",
     "pricing": "Preise",
     "managePurchase": "Kauf verwalten",
-    "manageLegacyPurchase": "Portal für frühere Käufe",
     "copyright": "© {{year}} Sandro Thabiso Schaier · Battery Sensei",
     "lastUpdated": "Website aktualisiert am {{date}}",
     "roadmap": "Roadmap"
@@ -1203,7 +1202,6 @@
     "alreadyOwnBody": "Öffnen Sie Battery Sensei → Einstellungen → Pro. Geben Sie Ihren Schlüssel und die beim Kauf verwendete E-Mail-Adresse ein und klicken Sie auf „Pro aktivieren“.",
     "alreadyOwnDownload": "Sensei herunterladen",
     "alreadyOwnPortal": "Kundenportal",
-    "alreadyOwnLegacyPortal": "Portal für frühere Käufe",
     "backToHome": "Zurück zur Startseite"
   },
   "privacy": {
