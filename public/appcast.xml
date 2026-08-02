@@ -1433,6 +1433,31 @@
         length="26764764"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.12.4</title>
+      <pubDate>Sun, 02 Aug 2026 18:33:55 +0000</pubDate>
+      <sparkle:version>90</sparkle:version>
+      <sparkle:shortVersionString>1.12.4</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.12.4</h1>
+<p>Warning overlays are calmer, clearer, and more reliable when power changes hands.</p>
+<h2>Warnings</h2>
+<ul>
+<li><strong>Cleaner alert banners.</strong> Low-battery, device, and meeting warnings use a more consistent layout and clearer actions.</li>
+<li><strong>Better handoff guidance.</strong> Plug-in and unplug information now explains the next useful step without competing controls.</li>
+<li><strong>Reliable interaction.</strong> Alert buttons and dismiss actions keep their intended behavior across the refined overlay layouts.</li>
+</ul>
+<p>Marketing 1.12.3 → 1.12.4, build 89 → 90.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.12.4/Battery-Sensei.pkg"
+        sparkle:edSignature="hPHXlyq3D513ylgif4V2egjISGqRaKt684jcCz+WNIF1woNcH2ZAbMXb6Isxf38uT3YzxFqv6eOQTEbQAZHrDQ=="
+        length="26775100"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
