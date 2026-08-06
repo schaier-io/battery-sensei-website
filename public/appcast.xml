@@ -1500,6 +1500,38 @@
         length="26861409"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.12.6</title>
+      <pubDate>Thu, 06 Aug 2026 02:19:45 +0000</pubDate>
+      <sparkle:version>92</sparkle:version>
+      <sparkle:shortVersionString>1.12.6</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.12.6</h1>
+<p>Pause warnings and Low Power Mode can now be set for a while instead of until you remember them, and the Today surface has had its hover and selection behaviour cleaned up.</p>
+<h2>Today</h2>
+<ul>
+<li><strong>Pause warnings and Low Power Mode can be armed for a set time.</strong> A clock beside each switch offers 15 minutes, 1 hour, 3 hours, or an end tied to power — &quot;until the next charge&quot; while on battery, &quot;until it&#x27;s charged&quot; once plugged in. The switch turns itself back off when the time is up.</li>
+<li><strong>A running timer shows what it is doing.</strong> The clock becomes a status button: how much longer, buttons to add or remove 15 minutes, the full set of durations to change to, and &quot;Don&#x27;t turn off automatically&quot; to keep the setting without the timer.</li>
+<li><strong>Changing either switch by hand cancels its timer</strong>, so a deadline can never undo a deliberate choice.</li>
+<li><strong>Timers survive sleep, quitting, and restarts.</strong> They are checked against each battery reading rather than run on a countdown, so a Mac that slept past the end reverts on its next reading instead of waiting out the remaining time again.</li>
+</ul>
+<h2>Fixes</h2>
+<ul>
+<li><strong>The hero buttons respond to the pointer again.</strong> Hovering Pause warnings, Low Power, or Travel Mode now lifts the button towards its own colour; hovering the info or clock beside it highlights only that half.</li>
+<li><strong>Segmented controls hold their size.</strong> Repeatedly switching between options could grow a row taller each time, and a long option could render at a different text size to its neighbours in the same row.</li>
+<li><strong>The selected option fills its segment again</strong>, and the ones that are meant to grow when chosen still do.</li>
+</ul>
+<p>Marketing 1.12.5 → 1.12.6, build 91 → 92.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.12.6/Battery-Sensei.pkg"
+        sparkle:edSignature="Ra/tknHHgD9rVbJrwSDiargwg6OA31u/egr4b5sh2N5z0bqYmRUpAnUcrXHtOdLAmCYzgqit+JBHnACrWFq8BA=="
+        length="26932563"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
