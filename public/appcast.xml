@@ -1457,6 +1457,50 @@
         length="26775100"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.12.5</title>
+      <pubDate>Thu, 06 Aug 2026 00:42:50 +0000</pubDate>
+      <sparkle:version>91</sparkle:version>
+      <sparkle:shortVersionString>1.12.5</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.12.5</h1>
+<p>Scrolling costs less, the charge chart no longer flickers under the pointer, and Sensei can now tell you when a charge is running slower than your charger allows.</p>
+<h2>Charging</h2>
+<ul>
+<li><strong>A new slow-charge notice.</strong> When your Mac charges more slowly than the charger permits, Sensei says so once, naming what the charger is rated for against what the connection actually agreed on. It stays quiet unless your Mac is drawing everything that connection allows, the battery is cool, and charging is not being held back by your charge cap, Optimised Battery Charging, or the heat guard — and it waits for the reading to hold steady before saying anything.</li>
+<li><strong>Power handoffs is now &quot;Charging updates&quot;.</strong> Unplug, plug-in, and the new slow-charge notice sit together, each with its own preview and sound.</li>
+</ul>
+<h2>Performance</h2>
+<ul>
+<li><strong>Scrolling the Today surface does noticeably less work.</strong> Panels used to publish their on-screen position on every scrolled pixel, which made SwiftUI re-evaluate whole sections of the window continuously. They now publish only whether they are visible, which changes a couple of times per gesture instead of a hundred times a second.</li>
+<li><strong>Decorative motion stops when nobody can see it.</strong> The card watermark&#x27;s drift and the charging meter&#x27;s shimmer kept animating for windows that were unfocused, covered, or on another Space.</li>
+<li><strong>Filtering the app list no longer stalls typing.</strong> Keystrokes are coalesced, so a burst of typing rebuilds the list once rather than once per character.</li>
+</ul>
+<h2>Fixes</h2>
+<ul>
+<li><strong>The charge chart&#x27;s readout no longer flickers.</strong> The tooltip was taking the pointer away from the chart, which cleared the selection, which removed the tooltip — a loop that ran for as long as you hovered near it.</li>
+<li><strong>Hovering the chart no longer flashes the rest of the window.</strong></li>
+<li><strong>Models clean up on the right thread.</strong> A background task could release the app&#x27;s models off the main actor, which tripped an internal assertion.</li>
+</ul>
+<h2>Interface</h2>
+<ul>
+<li><strong>Menu bar settings are their own card</strong>, instead of a subsection inside General.</li>
+<li><strong>Nearby devices over Bluetooth moved to Settings</strong>, where it applies, rather than appearing under &quot;This Mac&quot; in Warnings.</li>
+<li><strong>The meeting guard reads top-down.</strong> Reminder times moved in with the rest of the notification settings, and the calendars being watched now sit beside the forecast they produce.</li>
+<li><strong>Selected options in segmented controls are unmistakable again</strong> — filled, lifted, and sized to their row, with the width animating alongside the pill.</li>
+<li><strong>Quieter, plainer wording throughout</strong>, in all five languages.</li>
+</ul>
+<p>Marketing 1.12.4 → 1.12.5, build 90 → 91.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.12.5/Battery-Sensei.pkg"
+        sparkle:edSignature="sVAQZC77JIfn2lEJjljwIdMso3wBU1Z0SneqnslPTV51E7jUjG1UvbA/GFvgUCyzS133ixc04cHUWLKFwLJHDg=="
+        length="26861409"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
