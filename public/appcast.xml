@@ -1531,6 +1531,45 @@
         length="26932563"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.12.7</title>
+      <pubDate>Tue, 18 Aug 2026 21:36:30 +0000</pubDate>
+      <sparkle:version>93</sparkle:version>
+      <sparkle:shortVersionString>1.12.7</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.12.7</h1>
+<p>The setup wizard&#x27;s first page has been rebuilt around a preview of the menu bar it is recommending, menu glyphs are readable again in both appearances, and the menu itself does less work while it is closed.</p>
+<h2>Setup wizard</h2>
+<ul>
+<li><strong>The first page shows the menu bar it recommends.</strong> A strip at the top of the recommendation card draws the status item exactly as the listed defaults would draw it, with this Mac&#x27;s own charge, its charging bolt, and its charge-limit leaf — beside Wi-Fi, Control Centre, and the clock, where it will actually sit.</li>
+<li><strong>The page fills its window.</strong> The window used to reserve room for a footer bar the first page never draws, and sized itself once, so every later step was squeezed into the shortest page&#x27;s height. It now fits each step, never growing past the size the window opened at.</li>
+<li><strong>The two ways forward are an actual choice.</strong> &quot;Use recommended setup&quot; and &quot;Next&quot; were a bordered button beside a prominent one; they are now two tiles that say what each does — apply everything and finish, or step through every setting. Customize is drawn as the default.</li>
+<li><strong>The page stopped saying things twice.</strong> The language was listed as a recommended default directly under the card that already shows it, and the card&#x27;s subtitle re-listed the bullets below it.</li>
+<li><strong>Start at login is stated outright</strong> instead of being mentioned in passing, and the page closes by saying that nothing on it is permanent.</li>
+<li><strong>The language row no longer types through every language in turn.</strong> It flashes the others quickly and types your own word last, so the row is not labelled &quot;Sprache&quot; for the first seconds of a wizard you opened in English.</li>
+</ul>
+<h2>Fixes</h2>
+<ul>
+<li><strong>Menu bar and menu glyphs follow the appearance they are drawn into.</strong> The charge-limit leaf turned black on a dark menu bar, and the device rows&#x27; glyphs were nearly invisible against the menu behind them — a tinted symbol is baked into a bitmap, and the bake was resolving against the app&#x27;s appearance rather than the menu&#x27;s.</li>
+<li><strong>Settings rows share one grid</strong>, the sound field is a single row everywhere, an update that is off no longer claims a sound, and locked seals no longer print &quot;Locked&quot; under every one of them.</li>
+<li><strong>The shared card is translated</strong> and no longer repeats itself.</li>
+</ul>
+<h2>Under the hood</h2>
+<ul>
+<li><strong>The menu resolves each app&#x27;s icon once</strong> instead of asking LaunchServices and IconServices again for every row on every battery reading, and stops rebuilding the app and device sections while the menu is closed.</li>
+<li>Thirty source files were split along their responsibilities; no file in the project is over 750 lines.</li>
+</ul>
+<p>Marketing 1.12.6 → 1.12.7, build 92 → 93.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.12.7/Battery-Sensei.pkg"
+        sparkle:edSignature="8dmN2LqlR/TT42tErJ7alfrkaFUEEOCE3hPhSiCZZ1kxfDBl+1EFWcd3Hyxb4hHqYMpgKSc8SNMRyUZi4qf9CA=="
+        length="27035977"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
