@@ -1569,6 +1569,29 @@
         length="27035977"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.12.8</title>
+      <pubDate>Wed, 26 Aug 2026 11:28:25 +0000</pubDate>
+      <sparkle:version>94</sparkle:version>
+      <sparkle:shortVersionString>1.12.8</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.12.8</h1>
+<p>The slow-charge warning stops accusing a healthy charger whose brick does not publish its name.</p>
+<h2>Fixes</h2>
+<ul>
+<li><strong>The slow-charge warning no longer holds the current charger to the previous charger&#x27;s rating.</strong> Many third-party bricks report their negotiated watts but no model name. The battery snapshot used to fill that gap with the last name it had seen, so after swapping from an Apple 140 W brick to a 65 W charger the app compared the 65 W contract against a stale 140 W rating and warned about a slow cable that did not exist. Adapter name and wattage now travel as a pair: when a present adapter publishes no name, the app makes no rating claim at all.</li>
+</ul>
+<p>Marketing 1.12.7 → 1.12.8, build 93 → 94.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.12.8/Battery-Sensei.pkg"
+        sparkle:edSignature="APTZyjnrK090k8HGgvpsIL8Sz61tWRF4kM1BpZJRBQFFlvEVrzg8Ag9p84G0uTLD7P/OR2dgLESv05mnDAFaAw=="
+        length="27036101"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
