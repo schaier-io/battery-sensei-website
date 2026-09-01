@@ -1591,6 +1591,33 @@
         length="27036101"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.13.0</title>
+      <pubDate>Tue, 01 Sep 2026 11:54:46 +0000</pubDate>
+      <sparkle:version>95</sparkle:version>
+      <sparkle:shortVersionString>1.13.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.13.0</h1>
+<p>Sensei now notices when a cable is plugged in but no power is arriving.</p>
+<h2>New</h2>
+<ul>
+<li><strong>Ghost-charger notice.</strong> A dead outlet, a loose connector, or a hub asleep on its power rail leaves the cable looking perfectly plugged in while the battery quietly drains. Sensei now tells you, within a minute or two of it happening.</li>
+</ul>
+<p>macOS reports only whether power is arriving, so a charger on a dead outlet is invisible to it: the battery service reads byte-for-byte the same as a Mac with nothing attached at all. Sensei reads each USB-C and MagSafe port directly instead, where a cable into an unpowered brick still registers as attached.</p>
+<p>It is deliberately hard to make it speak. It waits until the battery is really draining, until the connection carries power and no data, and until something has actually changed: a cable went in, or the power went away. A cable left resting in a port with nothing on the far end stays quiet forever. When Sensei watched the power stop it says so after twenty seconds; when it never saw power arrive it waits a full minute, because that case leans harder on telling a charger cable from a peripheral. It says it once per attach, then holds its tongue about the same port for six hours.</p>
+<p>Macs that do not report their ports say nothing at all. Unknown stays silent rather than guessing.</p>
+<p>On by default, with its own optional chime, next to the slow-charge notice in Warnings.</p>
+<p>Marketing 1.12.8 → 1.13.0, build 94 → 95.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.13.0/Battery-Sensei.pkg"
+        sparkle:edSignature="pO2ZzY567W0aXNPo755sWBf0Cnp9JSEO2ohavhe/4dGEVsF9Hqwto7GLCfBe0lVZzCLAQBDCHA4inf8eLhHrBw=="
+        length="27091829"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
