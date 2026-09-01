@@ -1617,6 +1617,41 @@
         length="27091829"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.14.0</title>
+      <pubDate>Tue, 01 Sep 2026 15:18:16 +0000</pubDate>
+      <sparkle:version>96</sparkle:version>
+      <sparkle:shortVersionString>1.14.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.14.0</h1>
+<p>A quieter interface. The chrome steps back so the numbers read first.</p>
+<h2>Changed</h2>
+<ul>
+<li><strong>Less decoration around everything.</strong> Badges, borders and boxes came off the parts of the interface that were only labelling themselves. The Pro marker is now plain lettering instead of a filled pill.</li>
+<li><strong>Empty panels stop pretending to be full ones.</strong> A chart or a leaderboard with nothing to show yet drops its scaffolding and shows a single line with a brush mark, instead of an empty card sized for data that has not arrived.</li>
+<li><strong>Shorter rows in Settings.</strong> Each row shows its title, and its description moves to hover and VoiceOver. More settings fit on screen at once.</li>
+<li><strong>The Honors gallery opens at two rows.</strong> It leads with the seals you have earned, then the three you are closest to, which now carry wet ink so you can pick them out.</li>
+<li><strong>Warnings comes before Charging updates.</strong> The Warnings tab now opens with the thing you went there to change.</li>
+<li><strong>Dark mode reads better.</strong> Secondary and tertiary text carry more contrast against the dark paper.</li>
+</ul>
+<h2>Fixed</h2>
+<ul>
+<li><strong>The Honors gallery could not be closed again.</strong> Opening it hid the only control that closes it, so the gallery stayed open for the rest of the session.</li>
+<li><strong>The Today header could clip its travel-mode note.</strong> The right column was pinned to the height of the charge ring, which left no room for the note when Travel Mode was armed.</li>
+<li><strong>An empty panel hid its own explanation.</strong> The ⓘ lives next to the panel description, and a panel with no data yet dropped that description, which took the explanation with it. It now sits in the panel header instead.</li>
+<li><strong>The calendar privacy note could go missing.</strong> Pro users with the meeting guard switched off and calendar access not yet granted saw the invitation to turn it on without the note saying what Sensei reads. The note is back, next to the switch that raises the system prompt.</li>
+</ul>
+<p>Marketing 1.13.0 → 1.14.0, build 95 → 96.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.14.0/Battery-Sensei.pkg"
+        sparkle:edSignature="ZeWZ21AzdgjYDAnd0LCr5qNKoZkx0Dp4vSf9O11NTJ3a0lvgkmPlNMCiYQPTZpjLwNc5KsOFqooICI0ZMT7EBA=="
+        length="27108918"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
