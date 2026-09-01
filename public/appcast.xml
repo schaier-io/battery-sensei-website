@@ -1651,6 +1651,33 @@
         length="27108918"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.14.1</title>
+      <pubDate>Tue, 01 Sep 2026 17:48:48 +0000</pubDate>
+      <sparkle:version>97</sparkle:version>
+      <sparkle:shortVersionString>1.14.1</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.14.1</h1>
+<p>The mark on an empty panel is now a small turning brush stroke, sized to the text.</p>
+<h2>Fixed</h2>
+<ul>
+<li><strong>The empty-panel mark was drawing itself as a squared-off box.</strong> It is a brush ring whose bristles fan outward, and it was given no room for them, so the canvas cut them flat at the top, bottom, left and right. It did not read as a ring at all.</li>
+<li><strong>The mark was also far too large and far too vague.</strong> It was a detailed drawing shrunk into a 22pt box, where nine fine strokes averaged into a grey blob. It is now a single tapered arc at the same size as the text beside it, and it turns slowly while a panel waits for data.</li>
+<li><strong>A message that wraps keeps its mark on the first line</strong>, instead of letting it drift to the middle of the paragraph.</li>
+</ul>
+<p>Two of these panels never resolve: a Mac that does not report battery health, and a search that matched no apps. Those hold still rather than turning, so nothing suggests Sensei is still working on an answer that is not coming.</p>
+<p>The motion is deliberately cheap. It runs well below the display&#x27;s refresh rate and stops completely when the window is not focused, or when Reduce Motion is on.</p>
+<p>Marketing 1.14.0 → 1.14.1, build 96 → 97.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.14.1/Battery-Sensei.pkg"
+        sparkle:edSignature="wKHgEFRBNuS5MUGY4jyO/JYPj/OJl+rkfItfM9IzqZwN79X8CvM8MiNNa+nYpUymj8327538Ne/u82ahgDeOCQ=="
+        length="27119554"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
