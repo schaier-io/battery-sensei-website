@@ -130,6 +130,32 @@ function CheckoutPage() {
     returnObjects: true,
   }) as Record<Tier, string>)[tier]
 
+  // Index 2 is "Priority support and feature requests", which is what the
+  // `Mail` chip below is for. `Pricing.tsx:40` puts `Inbox` at the same index.
+  // (The prose comment above that line still calls index 2 "direct line",
+  // which is the summary bullet's wording, not this string's.)
+  // Index 3 is "Cancel in two clicks", and the chip right before this one
+  // already renders `pricing.support.badge` ("Cancel anytime"), so reading 3
+  // said cancel twice and hung a mail icon on a cancellation.
+  //
+  // Note this chip still restates `checkout.summaryLines.support[3]` from the
+  // card above. Every entry in `pricing.support.items` restates one of those
+  // four bullets, so no index avoids that; the row's redundancy is a copy
+  // question, not an index one.
+  //
+  // `pricing.support.items` ships as `{ title, body }[]` in every locale.
+  // Accept both shapes the way `Pricing.tsx` already does: reading the raw
+  // entry rendered an object as a React child and blanked the whole Yearly
+  // Patron page.
+  const supportPriorityNote = (() => {
+    const raw = t('pricing.support.items', { returnObjects: true }) as Array<
+      string | { title: string; body?: string }
+    >
+    const entry = Array.isArray(raw) ? raw[2] : undefined
+    if (!entry) return ''
+    return typeof entry === 'string' ? entry : entry.title
+  })()
+
   function switchTier(next: Tier) {
     if (next === tier) return
     void navigate({ search: { tier: next, cur }, replace: true })
@@ -380,9 +406,7 @@ function CheckoutPage() {
                   </li>
                   <li className="inline-flex items-center gap-1.5">
                     <Mail className="h-3 w-3 shrink-0" strokeWidth={1.8} aria-hidden />
-                    {
-                      (t('pricing.support.items', { returnObjects: true }) as string[])[3]
-                    }
+                    {supportPriorityNote}
                   </li>
                 </>
               )}
