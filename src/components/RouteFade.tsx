@@ -1,25 +1,26 @@
 import { useEffect } from 'react'
-import { useRouter, useRouterState } from '@tanstack/react-router'
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
-import { prefersReducedMotion } from '#/lib/prefers-reduced-motion'
-
-function supportsViewTransitions(): boolean {
-  return (
-    typeof document !== 'undefined' &&
-    'startViewTransition' in document &&
-    typeof document.startViewTransition === 'function'
-  )
-}
+import { useRouter } from '@tanstack/react-router'
 
 /**
  * Route transitions: View Transition API + CSS when motion is allowed;
- * instant snap when prefers-reduced-motion. Motion/react fallback only
- * for browsers without the API and without reduced motion.
+ * instant snap when prefers-reduced-motion.
+ *
+ * This component renders its children unchanged. It exists only to keep the
+ * router's `defaultViewTransition` flag in step with the OS motion setting.
+ *
+ * It must not branch on anything the server cannot see. It used to render a
+ * `motion.div` wrapper for browsers without `document.startViewTransition`,
+ * decided by a `typeof document` test. That test is always false during SSR
+ * and true in a browser that has the API, so the server sent one tree and the
+ * client built another. React failed hydration and re-rendered the whole app
+ * on the client, on every route.
+ *
+ * Browsers without the View Transition API now get an instant route change
+ * instead of a 410ms cross-fade. That is the whole cost of removing the
+ * wrapper, and it is smaller than losing the server-rendered markup.
  */
 export function RouteFade({ children }: { children: React.ReactNode }) {
   const router = useRouter()
-  const pathname = useRouterState({ select: (s) => s.location.pathname })
-  const reduceMotion = useReducedMotion()
 
   // Keep router defaultViewTransition aligned if the OS preference changes.
   useEffect(() => {
@@ -32,36 +33,5 @@ export function RouteFade({ children }: { children: React.ReactNode }) {
     return () => mq.removeEventListener('change', sync)
   }, [router])
 
-  if (reduceMotion || prefersReducedMotion()) {
-    return children
-  }
-
-  if (supportsViewTransitions()) {
-    return children
-  }
-
-  return (
-    <AnimatePresence initial={false}>
-      <motion.div
-        key={pathname}
-        className="route-fade-shell"
-        variants={{
-          initial: { opacity: 0 },
-          animate: {
-            opacity: 1,
-            transition: { duration: 0.41, delay: 0.15, ease: [0.22, 1, 0.36, 1] },
-          },
-          exit: {
-            opacity: 0,
-            transition: { duration: 0.41, ease: [0.22, 1, 0.36, 1] },
-          },
-        }}
-        initial="initial"
-        animate="animate"
-        exit="exit"
-      >
-        {children}
-      </motion.div>
-    </AnimatePresence>
-  )
+  return children
 }
