@@ -81,7 +81,11 @@
   /* Sumi ink + washi paper palette */
   --sumi: #1c1a17;          /* ink black */
   --sumi-soft: #4a4540;     /* charcoal */
-  --nezumi: #8a847c;        /* mouse gray */
+  /* Muted text. Was #8a847c, which measured 3.18:1 on --washi,
+     2.90:1 on --washi-soft and 2.57:1 on --washi-deep, all under the
+     4.5:1 text floor. This value clears 4.5:1 on all three paper
+     surfaces (5.88 / 5.37 / 4.76) and keeps the warm gray hue. */
+  --nezumi: #5e5a54;        /* mouse gray */
   --washi: #f4ede0;         /* warm paper */
   --washi-soft: #ece3d1;    /* shaded paper */
   --washi-deep: #e2d6bd;    /* aged paper */
@@ -93,7 +97,9 @@
   --hinomaru-ink: #bc002d;
   --hinomaru-soft: #d63e35; /* ember red */
   --kin: #c89b3c;           /* gold leaf */
-  --matcha: #6f7a3a;        /* tea green */
+  /* Was #6f7a3a at 3.99:1 on --washi. Lightest value that clears
+     4.5:1 on all three paper surfaces (5.62 / 5.13 / 4.54). */
+  --matcha: #59622e;        /* tea green */
   --aizome: #1a345a;        /* indigo */
 
   --line: rgba(28, 26, 23, 0.14);
@@ -134,8 +140,12 @@
   --secondary-foreground: oklch(0.18 0.01 50);
   --muted: oklch(0.88 0.02 80);
   --muted-foreground: oklch(0.45 0.01 50);
-  --accent: oklch(0.5 0.18 25);
-  --accent-foreground: oklch(0.97 0.015 80);
+  /* Hover is NOT an error. Same class of bug as the --ring note below: this
+     was byte-identical to --destructive, so a neutral hover or an open dialog
+     close control painted the danger hue. Neutral surface, matching
+     --secondary / --secondary-foreground. */
+  --accent: oklch(0.88 0.02 80);
+  --accent-foreground: oklch(0.18 0.01 50);
   --destructive: oklch(0.5 0.18 25);
   --destructive-foreground: oklch(0.97 0.015 80);
   --border: oklch(0.82 0.02 80);
@@ -198,8 +208,9 @@
   --secondary-foreground: oklch(0.94 0.02 80);
   --muted: oklch(0.28 0.01 50);
   --muted-foreground: oklch(0.7 0.01 50);
-  --accent: oklch(0.6 0.18 25);
-  --accent-foreground: oklch(0.97 0.015 80);
+  /* See the light-mode note: hover reads as a neutral surface, not an error. */
+  --accent: oklch(0.28 0.01 50);
+  --accent-foreground: oklch(0.94 0.02 80);
   --destructive: oklch(0.6 0.18 25);
   --destructive-foreground: oklch(0.97 0.015 80);
   --border: oklch(0.32 0.01 50);
@@ -279,8 +290,9 @@
     --secondary-foreground: oklch(0.94 0.02 80);
     --muted: oklch(0.28 0.01 50);
     --muted-foreground: oklch(0.7 0.01 50);
-    --accent: oklch(0.6 0.18 25);
-    --accent-foreground: oklch(0.97 0.015 80);
+    /* See the light-mode note: hover reads as a neutral surface, not an error. */
+    --accent: oklch(0.28 0.01 50);
+    --accent-foreground: oklch(0.94 0.02 80);
     --destructive: oklch(0.6 0.18 25);
     --destructive-foreground: oklch(0.97 0.015 80);
     --border: oklch(0.32 0.01 50);
