@@ -2,8 +2,13 @@ import { useEffect, useRef, useState } from 'react'
 import { Wifi, Search, MoonStar, Minus, Plus } from 'lucide-react'
 import { Trans, useTranslation } from 'react-i18next'
 
-const formatTime = (d: Date) =>
-  d.toLocaleTimeString([], {
+// Formats in the site language, not the visitor's browser language. The
+// rendered width drives the slot reservation in `MenuBar`, and browser locales
+// the site does not ship run much wider (pl-PL "niedz., 27, 23:58" is 14.5ch
+// against ja-JP's 13ch), which would either shift the layout or force a slot
+// wide enough to leave a permanent gap.
+const formatTime = (d: Date, locale: string) =>
+  d.toLocaleTimeString(locale, {
     weekday: 'short',
     day: 'numeric',
     hour: '2-digit',
@@ -20,11 +25,17 @@ const CHARGE = 0.15
  * desktop, then the warning card centered with its own scrim.
  */
 export function MenuBarMockup({ className = '' }: { className?: string }) {
-  const [now, setNow] = useState(() => new Date())
+  // Starts null on purpose. `toLocaleTimeString` gives the server one value
+  // and the browser another, so reading it during render broke hydration for
+  // the whole page. The clock is set after mount instead, and `MenuBar`
+  // reserves its width so the icons beside it do not move when it arrives.
+  const { i18n } = useTranslation()
+  const [now, setNow] = useState<Date | null>(null)
   const [revealed, setRevealed] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    setNow(new Date())
     const id = setInterval(() => setNow(new Date()), 30_000)
     return () => clearInterval(id)
   }, [])
@@ -61,7 +72,7 @@ export function MenuBarMockup({ className = '' }: { className?: string }) {
     }
   }, [])
 
-  const time = formatTime(now)
+  const time = now ? formatTime(now, i18n.language) : ''
   const percent = Math.round(CHARGE * 100)
 
   return (
@@ -128,7 +139,24 @@ function MenuBar({ time, percent }: { time: string; percent: number }) {
         <BatteryIcon level={percent / 100} highlighted />
         <Wifi className="h-3 w-3" strokeWidth={1.8} />
         <Search className="h-3 w-3" strokeWidth={1.8} />
-        <span className="font-medium tabular-nums tracking-wide whitespace-nowrap">
+        {/* Reserves the clock's real width while it is empty before mount.
+            The clock is empty until then by design (see the note on `now`
+            above), so with no reserve these three icons would jump left by the
+            clock's whole rendered width on every hydration: up to 67 to 71px
+            depending on language, less on single-digit days.
+
+            Measured in Chrome at this font and tracking: ja is widest at
+            12.93ch, then de 12.77, es 12.44, en 12.26, fr 12.10. 13.5ch is
+            13ch plus slack, because the `日` in the ja string is outside the
+            latin subsets this site loads (styles.css:29-37) and so comes from
+            whichever CJK face the platform falls back to. Five macOS faces
+            measured between 70.6 and 71.1px; Windows and Linux were not
+            measured, and an overflow there would bring the shift back.
+
+            `text-right` keeps the clock flush with the bar's padding edge:
+            the span inherits `text-align: center`, which would otherwise split
+            the reserve and float the clock ~7px inside. */}
+        <span className="min-w-[13.5ch] text-right font-medium tabular-nums tracking-wide whitespace-nowrap">
           {time}
         </span>
       </div>
