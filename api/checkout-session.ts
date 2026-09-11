@@ -102,9 +102,10 @@ function resolveSalesConfig(tier: Tier): PolarSalesConfig | null {
  * and src/lib/polar-server.ts; they must move together. A stale pin does
  * not announce itself: Polar answers an unknown version with a bare
  * `404 {"detail":"Not Found"}`, which every call site handles as its
- * ordinary upstream failure — a logged non-2xx here, a missing record on
- * the license paths. lib/polar-version.test.ts fails if the copies drift
- * apart or if the pin nears the date Polar removes it.
+ * own ordinary upstream failure; lib/polar-version.test.ts lists what
+ * that looks like per file. That test fails if the copies drift apart,
+ * if a call site loses the pin, or if the pin nears the date Polar
+ * removes it.
  */
 const POLAR_API_VERSION = '2026-04'
 

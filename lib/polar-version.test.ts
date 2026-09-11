@@ -1,5 +1,5 @@
-import { readFileSync } from 'node:fs'
-import { join } from 'node:path'
+import { readdirSync, readFileSync } from 'node:fs'
+import { join, relative, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
 
@@ -26,13 +26,14 @@ import { describe, expect, it } from 'vitest'
  *      at the next quarterly release.
  *   3. The pin outlives the version. An unknown version is that same
  *      `404 {"detail":"Not Found"}`, and no call site can tell it apart
- *      from a normal failure. api/checkout-session.ts and api/price.ts
- *      log `polar non-2xx` and answer 502 or static fallback prices, so
- *      purchases stop with the cause only in the function logs. The
- *      license paths are quieter still: api/checkout/[id].ts and
- *      src/lib/polar-server.ts read the 404 as "no such checkout" and
- *      show the expired page, and lib/feature-board.ts reads it as
- *      "invalid license".
+ *      from a normal failure. api/checkout-session.ts logs
+ *      `polar non-2xx` and answers 502, so purchases stop with the cause
+ *      only in the function log; api/price.ts logs the same and serves
+ *      static fallback prices. The rest say nothing at all:
+ *      api/discount-availability.ts returns `polar-error`, which hides
+ *      the scarcity bar; api/checkout/[id].ts and src/lib/polar-server.ts
+ *      read the 404 as "no such checkout" and show the expired page; and
+ *      lib/feature-board.ts reads it as "invalid license".
  *
  * This test turns all three into a failing test run. NOTE: the repo has
  * no CI workflow and no git hooks, so nothing runs it automatically —
@@ -86,6 +87,27 @@ const VERSION_REMOVED_AT: Record<string, string> = {
 /** Runway to test and migrate before the pinned version disappears. */
 const BUMP_LEAD_MS = 30 * 24 * 60 * 60 * 1000
 
+/**
+ * Server-side trees that may hold a Polar caller. Everything here that
+ * names the Polar API has to be classified: pinned above, or listed as a
+ * non-caller below.
+ */
+const SCANNED_DIRS = ['api', 'lib', 'src']
+
+/** Matches a reference to the Polar REST API, in code or in a comment. */
+const POLAR_REFERENCE = /POLAR_API_BASE|api\.polar\.sh/
+
+/**
+ * Files that name the Polar API but send it nothing: PolarInlineCheckout
+ * compares the embed iframe's origin, use-polar-embed documents the
+ * session URL its own /api call returns. Neither issues a request, so
+ * neither can carry a header.
+ */
+const NON_CALLERS = [
+  'src/components/PolarInlineCheckout.tsx',
+  'src/lib/use-polar-embed.ts',
+]
+
 /** Files that assert the pinned value on the wire; bump them together. */
 const WIRE_ASSERTION_FILES = [
   'api/checkout-session.test.ts',
@@ -103,6 +125,17 @@ function pinnedVersion(relativePath: string): string | null {
 
 function countMatches(relativePath: string, pattern: RegExp): number {
   return sourceOf(relativePath).match(pattern)?.length ?? 0
+}
+
+/** Every .ts/.tsx source under `dir`, tests excluded, repo-relative. */
+function sourceFiles(dir: string): string[] {
+  const found: string[] = []
+  for (const entry of readdirSync(join(repoRoot, dir), { recursive: true, withFileTypes: true })) {
+    if (!entry.isFile() || !/\.tsx?$/.test(entry.name) || /\.test\.tsx?$/.test(entry.name)) continue
+    const absolute = join(entry.parentPath, entry.name)
+    found.push(relative(repoRoot, absolute).split(sep).join('/'))
+  }
+  return found
 }
 
 describe('Polar API version pin', () => {
@@ -135,6 +168,20 @@ describe('Polar API version pin', () => {
           + 'update PINNED_FILES.',
       ).toBe(fetchCalls)
     }
+  })
+
+  it('knows about every file that talks to Polar', () => {
+    const referencing = SCANNED_DIRS
+      .flatMap(sourceFiles)
+      .filter((file) => POLAR_REFERENCE.test(sourceOf(file)))
+      .sort()
+    const classified = [...PINNED_FILES.map(([file]) => file), ...NON_CALLERS].sort()
+    expect(
+      referencing,
+      'A file references the Polar API without being classified here. If it sends '
+        + "a request, pin it with 'Polar-Version': POLAR_API_VERSION and add it to "
+        + 'PINNED_FILES; if it only names the API, add it to NON_CALLERS.',
+    ).toEqual(classified)
   })
 
   it('has not outlived the pinned version', () => {
