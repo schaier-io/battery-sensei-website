@@ -105,6 +105,12 @@ describe('checkout session currency', () => {
 
     expect(response.ok).toBe(true)
     expect(fetchMock).toHaveBeenCalledTimes(2)
+    // Both Polar calls carry the pinned API version. Asserted on the
+    // recorded calls, not inside the mock: production wraps these fetches
+    // in try/catch, which would swallow an assertion thrown in there.
+    for (const [, init] of fetchMock.mock.calls) {
+      expect(new Headers(init?.headers).get('polar-version')).toBe('2026-04')
+    }
   })
 
   it('fails closed instead of mixing a new token with a legacy product', async () => {

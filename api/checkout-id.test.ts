@@ -14,9 +14,11 @@ describe('GET /api/checkout/[id] organization migration', () => {
     vi.stubEnv('POLAR_CUSTOMER_PORTAL_URL_NEW', 'https://polar.sh/new/portal')
     vi.stubEnv('POLAR_CUSTOMER_PORTAL_URL', 'https://polar.sh/legacy/portal')
     const authorizations: string[] = []
+    const polarVersions: Array<string | null> = []
     vi.stubGlobal('fetch', vi.fn(async (_input: string | URL | Request, init?: RequestInit) => {
       const authorization = new Headers(init?.headers).get('authorization') ?? ''
       authorizations.push(authorization)
+      polarVersions.push(new Headers(init?.headers).get('polar-version'))
       if (authorization === 'Bearer new-token') {
         return new Response(JSON.stringify({ detail: 'Not found' }), { status: 404 })
       }
@@ -35,6 +37,10 @@ describe('GET /api/checkout/[id] organization migration', () => {
     expect(body.licenseKey).toBe('OLD-LICENSE-KEY')
     expect(body.customerPortalUrl).toBe('https://polar.sh/legacy/portal')
     expect(authorizations).toEqual(['Bearer new-token', 'Bearer legacy-token'])
+    // Both attempts carry the pinned API version. Recorded and asserted
+    // outside the mock: fetchCheckoutLicense wraps the fetch in try/catch,
+    // which would swallow an assertion thrown inside it.
+    expect(polarVersions).toEqual(['2026-04', '2026-04'])
   })
 
   it('does not use the legacy token for a transient new-org failure', async () => {

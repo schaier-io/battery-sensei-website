@@ -5,6 +5,27 @@
 
 const POLAR_API_BASE =
   process.env.POLAR_API_BASE ?? 'https://api.polar.sh'
+/**
+ * Pinned Polar API version (date-based, `YYYY-MM`). Sent as the
+ * `Polar-Version` header on every Polar request so endpoint, field and
+ * payload changes in a later quarterly release cannot alter the
+ * contract this code reads. Without the header Polar serves the
+ * *Current* version, which rolls over in January, April, July and
+ * October. Bump this constant deliberately, after testing the new
+ * version.
+ *
+ * Copies of this constant live in api/price.ts, api/checkout-session.ts,
+ * api/discount-availability.ts, api/checkout/[id].ts, lib/feature-board.ts
+ * and src/lib/polar-server.ts; they must move together. A stale pin does
+ * not announce itself: Polar answers an unknown version with a bare
+ * `404 {"detail":"Not Found"}`, which every call site handles as its
+ * own ordinary upstream failure; lib/polar-version.test.ts lists what
+ * that looks like per file. That test fails if the copies drift apart,
+ * if a call site loses the pin, or if the pin nears the date Polar
+ * removes it.
+ */
+const POLAR_API_VERSION = '2026-04'
+
 const NEW_CUSTOMER_PORTAL_URL = 'https://polar.sh/41bit-llc/portal'
 const LEGACY_CUSTOMER_PORTAL_URL = 'https://polar.sh/schaier-io/portal/overview'
 
@@ -89,6 +110,7 @@ export async function fetchCheckoutLicense(
           headers: {
             Authorization: `Bearer ${candidate.token}`,
             Accept: 'application/json',
+            'Polar-Version': POLAR_API_VERSION,
           },
         },
       )
@@ -126,6 +148,7 @@ export async function fetchCheckoutLicense(
           headers: {
             Authorization: `Bearer ${context.token}`,
             Accept: 'application/json',
+            'Polar-Version': POLAR_API_VERSION,
           },
         },
       )
