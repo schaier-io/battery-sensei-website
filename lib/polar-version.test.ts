@@ -92,7 +92,7 @@ const BUMP_LEAD_MS = 30 * 24 * 60 * 60 * 1000
  * names the Polar API has to be classified: pinned above, or listed as a
  * non-caller below.
  */
-const SCANNED_DIRS = ['api', 'lib', 'src']
+const SCANNED_DIRS = ['api', 'lib', 'src', 'scripts']
 
 /** Matches a reference to the Polar REST API, in code or in a comment. */
 const POLAR_REFERENCE = /POLAR_API_BASE|api\.polar\.sh/
@@ -127,11 +127,13 @@ function countMatches(relativePath: string, pattern: RegExp): number {
   return sourceOf(relativePath).match(pattern)?.length ?? 0
 }
 
-/** Every .ts/.tsx source under `dir`, tests excluded, repo-relative. */
+/** Every source file under `dir`, tests excluded, repo-relative. */
 function sourceFiles(dir: string): string[] {
   const found: string[] = []
   for (const entry of readdirSync(join(repoRoot, dir), { recursive: true, withFileTypes: true })) {
-    if (!entry.isFile() || !/\.tsx?$/.test(entry.name) || /\.test\.tsx?$/.test(entry.name)) continue
+    const isSource = /\.(tsx?|jsx?|mjs|cjs)$/.test(entry.name)
+    const isTest = /\.(test|spec)\.[a-z]+$/.test(entry.name)
+    if (!entry.isFile() || !isSource || isTest) continue
     const absolute = join(entry.parentPath, entry.name)
     found.push(relative(repoRoot, absolute).split(sep).join('/'))
   }
