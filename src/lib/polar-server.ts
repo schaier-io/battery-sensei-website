@@ -5,6 +5,17 @@
 
 const POLAR_API_BASE =
   process.env.POLAR_API_BASE ?? 'https://api.polar.sh'
+/**
+ * Pinned Polar API version (date-based, `YYYY-MM`). Sent as the
+ * `Polar-Version` header on every Polar request so endpoint, field and
+ * payload changes in a later quarterly release cannot alter the
+ * contract this code reads. Without the header Polar serves the
+ * *Current* version, which rolls over in January, April, July and
+ * October. Bump this constant deliberately, after testing the new
+ * version.
+ */
+const POLAR_API_VERSION = '2026-04'
+
 const NEW_CUSTOMER_PORTAL_URL = 'https://polar.sh/41bit-llc/portal'
 const LEGACY_CUSTOMER_PORTAL_URL = 'https://polar.sh/schaier-io/portal/overview'
 
@@ -89,6 +100,7 @@ export async function fetchCheckoutLicense(
           headers: {
             Authorization: `Bearer ${candidate.token}`,
             Accept: 'application/json',
+            'Polar-Version': POLAR_API_VERSION,
           },
         },
       )
@@ -126,6 +138,7 @@ export async function fetchCheckoutLicense(
           headers: {
             Authorization: `Bearer ${context.token}`,
             Accept: 'application/json',
+            'Polar-Version': POLAR_API_VERSION,
           },
         },
       )

@@ -46,6 +46,17 @@
 // Search the codebase for `resolveDiscountId` to find all
 // copies that need to stay in lockstep.
 
+/**
+ * Pinned Polar API version (date-based, `YYYY-MM`). Sent as the
+ * `Polar-Version` header on every Polar request so endpoint, field and
+ * payload changes in a later quarterly release cannot alter the
+ * contract this code reads. Without the header Polar serves the
+ * *Current* version, which rolls over in January, April, July and
+ * October. Bump this constant deliberately, after testing the new
+ * version.
+ */
+const POLAR_API_VERSION = '2026-04'
+
 const POLAR_API_BASE = 'https://api.polar.sh/v1'
 const POLAR_TIMEOUT_MS = 4_000
 
@@ -135,7 +146,11 @@ async function resolveDiscountId(
   let id: string | null = null
   try {
     const r = await fetch(url, {
-      headers: { Authorization: `Bearer ${token}`, accept: 'application/json' },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        accept: 'application/json',
+        'Polar-Version': POLAR_API_VERSION,
+      },
       signal: AbortSignal.timeout(POLAR_TIMEOUT_MS),
     })
     if (r.ok) {
@@ -300,6 +315,7 @@ async function fetchCheckoutPreview(
         accept: 'application/json',
         'content-type': 'application/json',
         authorization: `Bearer ${token}`,
+        'Polar-Version': POLAR_API_VERSION,
       },
       body: JSON.stringify(body),
       signal: controller.signal,

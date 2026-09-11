@@ -45,6 +45,17 @@
  *   POLAR_CUSTOMER_PORTAL_URL   Public portal URL fallback
  */
 
+/**
+ * Pinned Polar API version (date-based, `YYYY-MM`). Sent as the
+ * `Polar-Version` header on every Polar request so endpoint, field and
+ * payload changes in a later quarterly release cannot alter the
+ * contract this code reads. Without the header Polar serves the
+ * *Current* version, which rolls over in January, April, July and
+ * October. Bump this constant deliberately, after testing the new
+ * version.
+ */
+const POLAR_API_VERSION = '2026-04'
+
 const POLAR_API_BASE = process.env.POLAR_API_BASE ?? 'https://api.polar.sh'
 const FRESHNESS_MS = 15 * 60 * 1000 // 15 minutes
 const NEW_CUSTOMER_PORTAL_URL = 'https://polar.sh/41bit-llc/portal'
@@ -147,6 +158,7 @@ async function fetchCheckoutLicense(
           headers: {
             Authorization: `Bearer ${candidate.token}`,
             Accept: 'application/json',
+            'Polar-Version': POLAR_API_VERSION,
           },
         },
       )
@@ -168,6 +180,7 @@ async function fetchCheckoutLicense(
   const authHeaders = {
     Authorization: `Bearer ${context.token}`,
     Accept: 'application/json',
+    'Polar-Version': POLAR_API_VERSION,
   }
 
   // 1. Try to find the order id inline on the checkout payload.

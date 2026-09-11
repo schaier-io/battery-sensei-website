@@ -206,6 +206,17 @@ export function voterHash(licenseKey: string): string {
 // ---------------------------------------------------------------------------
 // Polar license validation (+ 24h cache)
 
+/**
+ * Pinned Polar API version (date-based, `YYYY-MM`). Sent as the
+ * `Polar-Version` header on every Polar request so endpoint, field and
+ * payload changes in a later quarterly release cannot alter the
+ * contract this code reads. Without the header Polar serves the
+ * *Current* version, which rolls over in January, April, July and
+ * October. Bump this constant deliberately, after testing the new
+ * version.
+ */
+const POLAR_API_VERSION = '2026-04'
+
 const POLAR_VALIDATE_TIMEOUT_MS = 15_000
 /** Read-only checks tolerate a day-old validation. */
 export const LICENSE_CACHE_READ_MS = 24 * 60 * 60 * 1000
@@ -263,6 +274,7 @@ export async function validateLicenseKey(
         headers: {
           accept: 'application/json',
           'content-type': 'application/json',
+          'Polar-Version': POLAR_API_VERSION,
         },
         body: JSON.stringify({
           key: licenseKey.trim(),
