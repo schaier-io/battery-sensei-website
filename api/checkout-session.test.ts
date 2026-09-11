@@ -83,9 +83,6 @@ describe('checkout session currency', () => {
     vi.stubEnv('POLAR_DISCOUNT_CODE_NEW', 'NEWCODE')
     const fetchMock = vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
       const url = String(input)
-      // Every Polar call is pinned to an explicit API version; without the
-      // header Polar follows Current, which rolls over each quarter.
-      expect(new Headers(init?.headers).get('polar-version')).toBe('2026-04')
       if (url.includes('/discounts')) {
         return new Response(JSON.stringify({
           items: [{ id: 'new-discount-id', code: 'newcode' }],
@@ -108,6 +105,12 @@ describe('checkout session currency', () => {
 
     expect(response.ok).toBe(true)
     expect(fetchMock).toHaveBeenCalledTimes(2)
+    // Both Polar calls carry the pinned API version. Asserted on the
+    // recorded calls, not inside the mock: production wraps these fetches
+    // in try/catch, which would swallow an assertion thrown in there.
+    for (const [, init] of fetchMock.mock.calls) {
+      expect(new Headers(init?.headers).get('polar-version')).toBe('2026-04')
+    }
   })
 
   it('fails closed instead of mixing a new token with a legacy product', async () => {
