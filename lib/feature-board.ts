@@ -217,11 +217,12 @@ export function voterHash(licenseKey: string): string {
  *
  * Copies of this constant live in api/price.ts, api/checkout-session.ts,
  * api/discount-availability.ts, api/checkout/[id].ts, lib/feature-board.ts
- * and src/lib/polar-server.ts; they must move together. A stale pin is not
- * a soft failure: Polar answers an unknown version with a bare
- * `404 {"detail":"Not Found"}`, which this codebase reads as "no such
- * checkout" or "invalid license". lib/polar-version.test.ts fails if the
- * copies drift apart or if the pin reaches its bump deadline.
+ * and src/lib/polar-server.ts; they must move together. A stale pin does
+ * not announce itself: Polar answers an unknown version with a bare
+ * `404 {"detail":"Not Found"}`, which every call site handles as its
+ * ordinary upstream failure — a logged non-2xx here, a missing record on
+ * the license paths. lib/polar-version.test.ts fails if the copies drift
+ * apart or if the pin nears the date Polar removes it.
  */
 const POLAR_API_VERSION = '2026-04'
 

@@ -14,7 +14,8 @@ import { describe, expect, it } from 'vitest'
  * what an unpinned request gets) and `2026-10` (Next) — and every other
  * `YYYY-MM` answering `404 {"detail":"Not Found"}`.
  *
- * Three ways the pin can rot, all silent in production:
+ * Three ways the pin can rot, none of which names itself in
+ * production:
  *
  *   1. The copies drift. The version constant is duplicated per file
  *      (the api/ tree deliberately does not import from src/lib), so a
@@ -24,10 +25,14 @@ import { describe, expect, it } from 'vitest'
  *      That endpoint silently follows Current again and changes contract
  *      at the next quarterly release.
  *   3. The pin outlives the version. An unknown version is that same
- *      `404 {"detail":"Not Found"}`, which is indistinguishable from "no
- *      such checkout" or "no such license key" at every call site, so a
- *      removed version does not surface as an outage: buyers get the
- *      "expired" page and licence holders are told their key is invalid.
+ *      `404 {"detail":"Not Found"}`, and no call site can tell it apart
+ *      from a normal failure. api/checkout-session.ts and api/price.ts
+ *      log `polar non-2xx` and answer 502 or static fallback prices, so
+ *      purchases stop with the cause only in the function logs. The
+ *      license paths are quieter still: api/checkout/[id].ts and
+ *      src/lib/polar-server.ts read the 404 as "no such checkout" and
+ *      show the expired page, and lib/feature-board.ts reads it as
+ *      "invalid license".
  *
  * This test turns all three into a failing test run. NOTE: the repo has
  * no CI workflow and no git hooks, so nothing runs it automatically —
@@ -38,13 +43,15 @@ const repoRoot = fileURLToPath(new URL('..', import.meta.url))
 
 /**
  * Every file that pins a Polar API version, with the number of `fetch(`
- * calls it makes and the number of request header blocks that carry the
- * pin. The two differ where several fetches share one header object
- * (api/checkout/[id].ts builds `authHeaders` once and reuses it).
+ * call sites it contains and the number of request header blocks that
+ * carry the pin. The two differ where several fetches share one header
+ * object (api/checkout/[id].ts builds `authHeaders` once and reuses it).
+ * Call sites, not requests: api/checkout-session.ts re-invokes one of
+ * its fetches when Polar rejects the discount.
  *
  * Both counts are deliberate. A dropped header fails the header count;
- * a new Polar call fails the fetch count, which is the prompt to pin it
- * and update this map. Refactoring the header blocks (a shared helper,
+ * a new call site fails the fetch count, which is the prompt to pin it
+ * if it talks to Polar. Refactoring the header blocks (a shared helper,
  * say) also fails here: update the counts once you have checked the pin
  * still reaches every call.
  */
@@ -60,10 +67,12 @@ const PINNED_FILES: ReadonlyArray<
 ]
 
 /**
- * When each pinned version stops being served, taken from Polar's own
- * announcement rather than from a guessed cadence: `2026-04` stays on
- * its contract while Deprecated and "is removed at the January 2027
- * quarterly release".
+ * When each pinned version stops being served. Polar names a release,
+ * not a day: `2026-04` keeps its contract while Deprecated and is
+ * removed at the January 2027 quarterly release, and releases land in
+ * the first week of the month. So this date is the conservative first
+ * of that month, not a date Polar published. Read the release notes for
+ * the next one rather than extrapolating a cadence from this entry.
  *
  * Keyed by version, so bumping the pin without recording the new
  * version's removal date fails, and nobody can push the deadline out
@@ -121,8 +130,9 @@ describe('Polar API version pin', () => {
       ).toBe(headerBlocks)
       expect(
         countMatches(file, /\bfetch\(/g),
-        `${file} now makes a different number of requests. Pin any new Polar call `
-          + "with 'Polar-Version': POLAR_API_VERSION, then update PINNED_FILES.",
+        `${file} has a different number of fetch( call sites. If the new one talks `
+          + "to Polar, pin it with 'Polar-Version': POLAR_API_VERSION. Either way, "
+          + 'update PINNED_FILES.',
       ).toBe(fetchCalls)
     }
   })
@@ -143,8 +153,8 @@ describe('Polar API version pin', () => {
         + 'against staging, then update POLAR_API_VERSION in '
         + `${PINNED_FILES.map(([file]) => file).join(', ')} and the asserted value in `
         + `${WIRE_ASSERTION_FILES.join(', ')}. Leaving the pin stale makes Polar `
-        + 'return 404 on every request, which this codebase reports as an expired '
-        + 'checkout or an invalid license.',
+        + 'return 404 on every request: checkout creation answers 502, the license '
+        + 'paths report an expired checkout or an invalid license.',
     ).toBeLessThan(deadline)
   })
 })
