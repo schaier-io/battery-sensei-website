@@ -83,6 +83,9 @@ describe('checkout session currency', () => {
     vi.stubEnv('POLAR_DISCOUNT_CODE_NEW', 'NEWCODE')
     const fetchMock = vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
       const url = String(input)
+      // Every Polar call is pinned to an explicit API version; without the
+      // header Polar follows Current, which rolls over each quarter.
+      expect(new Headers(init?.headers).get('polar-version')).toBe('2026-04')
       if (url.includes('/discounts')) {
         return new Response(JSON.stringify({
           items: [{ id: 'new-discount-id', code: 'newcode' }],

@@ -17,6 +17,9 @@ describe('GET /api/checkout/[id] organization migration', () => {
     vi.stubGlobal('fetch', vi.fn(async (_input: string | URL | Request, init?: RequestInit) => {
       const authorization = new Headers(init?.headers).get('authorization') ?? ''
       authorizations.push(authorization)
+      // Every Polar call is pinned to an explicit API version; without the
+      // header Polar follows Current, which rolls over each quarter.
+      expect(new Headers(init?.headers).get('polar-version')).toBe('2026-04')
       if (authorization === 'Bearer new-token') {
         return new Response(JSON.stringify({ detail: 'Not found' }), { status: 404 })
       }

@@ -53,6 +53,14 @@
  * *Current* version, which rolls over in January, April, July and
  * October. Bump this constant deliberately, after testing the new
  * version.
+ *
+ * Copies of this constant live in api/price.ts, api/checkout-session.ts,
+ * api/discount-availability.ts, api/checkout/[id].ts, lib/feature-board.ts
+ * and src/lib/polar-server.ts; they must move together. A stale pin is not
+ * a soft failure: Polar answers an unknown version with a bare
+ * `404 {"detail":"Not Found"}`, which this codebase reads as "no such
+ * checkout" or "invalid license". lib/polar-version.test.ts fails if the
+ * copies drift apart or if the pin reaches its bump deadline.
  */
 const POLAR_API_VERSION = '2026-04'
 
