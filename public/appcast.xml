@@ -1677,6 +1677,30 @@
         length="27119554"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.14.2</title>
+      <pubDate>Tue, 22 Sep 2026 22:30:47 +0000</pubDate>
+      <sparkle:version>98</sparkle:version>
+      <sparkle:shortVersionString>1.14.2</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.14.2</h1>
+<p>A low-battery warning now goes away when you plug in, even if the screen was off at the time.</p>
+<h2>Fixed</h2>
+<ul>
+<li><strong>A device warning stayed up after you charged the device.</strong> When your iPhone, AirPods or another device ran low, its warning stayed on screen until you closed it by hand, even after the device was on charge. The warning now closes as soon as the device reports a higher level than before.</li>
+<li><strong>Warnings could outlast the screen being off.</strong> While the display sleeps, macOS lets Sensei check the battery less often, so a plug-in could go unseen. When the screen wakes, Sensei now reads the Mac and your devices at once and closes any warning that is no longer true.</li>
+</ul>
+<p>Marketing 1.14.1 → 1.14.2, build 97 → 98.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.14.2/Battery-Sensei.pkg"
+        sparkle:edSignature="dP9OvDAeXk8vN2SHJPxUSt82LTcFHm8jOT0qDFOnlKVjz4eBCTtjQrZ4TraCdamxmp27NqHeqeBraXqb9awoDA=="
+        length="26992248"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
