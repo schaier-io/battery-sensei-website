@@ -1700,6 +1700,34 @@
         length="26992248"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.14.3</title>
+      <pubDate>Fri, 25 Sep 2026 08:32:32 +0000</pubDate>
+      <sparkle:version>99</sparkle:version>
+      <sparkle:shortVersionString>1.14.3</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.14.3</h1>
+<p>Your AirPods show once in the device list again, and the case now gets its own low-battery warning.</p>
+<h2>New</h2>
+<ul>
+<li><strong>A warning for the AirPods case.</strong> When the charging case runs low, Sensei now tells you with its own &quot;case is low&quot; warning, apart from the earbuds. A buds warning closes when you put the buds in the case to charge.</li>
+</ul>
+<h2>Fixed</h2>
+<ul>
+<li><strong>AirPods showed up several times as &quot;Asleep&quot;.</strong> On macOS 27, the system lists paired AirPods a second time under an address that changes. Sensei now joins these entries into one device. The extra rows that were saved earlier go away by themselves after the update.</li>
+<li><strong>Many devices made the Warnings page too wide.</strong> With a lot of connected devices, the device tabs under Warnings pushed the whole page wider. The tabs now scroll sideways instead.</li>
+</ul>
+<p>Marketing 1.14.2 → 1.14.3, build 98 → 99.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.14.3/Battery-Sensei.pkg"
+        sparkle:edSignature="QvR+GTA/fayl1cKPRVVdOL1/Y1Esq2SZBiDMZQOJ/yc8C8iKuleRrUkkozXTQP4lIxAyleoi5ZNQH3/CSCPYDg=="
+        length="27009396"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
