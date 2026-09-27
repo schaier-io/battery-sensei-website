@@ -1727,6 +1727,30 @@
         length="27009396"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.14.4</title>
+      <pubDate>Sun, 27 Sep 2026 14:41:20 +0000</pubDate>
+      <sparkle:version>100</sparkle:version>
+      <sparkle:shortVersionString>1.14.4</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.14.4</h1>
+<h2>Fixed</h2>
+<ul>
+<li>Unplugging can now show a recent cached runtime while fresh sensor data arrives, instead of staying on &quot;Estimating&quot;.</li>
+<li>Battery warnings read the battery again before they appear. If you have plugged in or the charge has recovered, the warning stays closed.</li>
+<li>The battery graphic in time-based warnings now shows the charge level instead of a number parsed from the remaining time.</li>
+</ul>
+<p>Marketing 1.14.3 → 1.14.4, build 99 → 100.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.14.4/Battery-Sensei.pkg"
+        sparkle:edSignature="YejgguGkp6SwU6fqpqIxUu5Fot4fjYlyyHJXPhRQqkuIGoV/SmtXgmr5K4n4RlqYhEdpff2AxHZOlDSb0O2ODQ=="
+        length="27009329"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
