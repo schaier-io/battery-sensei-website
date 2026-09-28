@@ -1750,6 +1750,31 @@
         length="27009329"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.14.5</title>
+      <pubDate>Mon, 28 Sep 2026 14:51:13 +0000</pubDate>
+      <sparkle:version>101</sparkle:version>
+      <sparkle:shortVersionString>1.14.5</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.14.5</h1>
+<h2>Fixed</h2>
+<ul>
+<li>On macOS 27, unplugging shows the time remaining right away again, instead of &quot;Estimating…&quot; for half a minute.</li>
+<li>On macOS 27, the time to reach your charge limit is correct again. It was too short because the battery size could not be read.</li>
+<li>On macOS 27, the battery health percentage appears again.</li>
+<li>On macOS 27, the power history used for app energy use records new samples again.</li>
+</ul>
+<p>Marketing 1.14.4 → 1.14.5, build 100 → 101.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.14.5/Battery-Sensei.pkg"
+        sparkle:edSignature="jej6WR6WRz6oAGan+iKL+UfR72qpAaRr5RqCIdhT4dsNr/BkpjGk19B7mLRKq8DkV8eyS4p3Nym4DXa/1eUvCQ=="
+        length="27010385"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
