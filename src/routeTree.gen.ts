@@ -9,76 +9,46 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as WalkthroughRouteImport } from './routes/walkthrough'
-import { Route as RoadmapRouteImport } from './routes/roadmap'
-import { Route as PrivacyRouteImport } from './routes/privacy'
-import { Route as LegalRouteImport } from './routes/legal'
-import { Route as CheckoutRouteImport } from './routes/checkout'
-import { Route as AdminRouteImport } from './routes/admin'
-import { Route as R404RouteImport } from './routes/404'
-import { Route as LangRouteImport } from './routes/$lang'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as GuidesIndexRouteImport } from './routes/guides/index'
-import { Route as GlossaryIndexRouteImport } from './routes/glossary/index'
+import { Route as LangRouteImport } from './routes/$lang'
+import { Route as R404RouteImport } from './routes/404'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as LegalRouteImport } from './routes/legal'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as RoadmapRouteImport } from './routes/roadmap'
+import { Route as WalkthroughRouteImport } from './routes/walkthrough'
 import { Route as FeaturesIndexRouteImport } from './routes/features.index'
-import { Route as ThanksSupportRouteImport } from './routes/thanks.support'
-import { Route as ThanksLifetimeRouteImport } from './routes/thanks.lifetime'
-import { Route as NewsletterUnsubscribedRouteImport } from './routes/newsletter.unsubscribed'
-import { Route as NewsletterUnsubscribeRouteImport } from './routes/newsletter.unsubscribe'
-import { Route as NewsletterConfirmedRouteImport } from './routes/newsletter.confirmed'
-import { Route as NewsletterConfirmRouteImport } from './routes/newsletter.confirm'
-import { Route as GuidesSlugRouteImport } from './routes/guides/$slug'
-import { Route as GlossarySlugRouteImport } from './routes/glossary/$slug'
-import { Route as FromIdRouteImport } from './routes/from.$id'
-import { Route as FeaturesTravelModeRouteImport } from './routes/features.travel-mode'
-import { Route as FeaturesSystemLoadRouteImport } from './routes/features.system-load'
-import { Route as FeaturesStatisticsRouteImport } from './routes/features.statistics'
-import { Route as FeaturesPowerFlowRouteImport } from './routes/features.power-flow'
-import { Route as FeaturesMeetingBatteryGuardRouteImport } from './routes/features.meeting-battery-guard'
-import { Route as FeaturesLowPowerModeRouteImport } from './routes/features.low-power-mode'
-import { Route as FeaturesHonorsRouteImport } from './routes/features.honors'
-import { Route as FeaturesGeneralRouteImport } from './routes/features.general'
-import { Route as FeaturesEnergyUsageRouteImport } from './routes/features.energy-usage'
-import { Route as FeaturesCustomThresholdsRouteImport } from './routes/features.custom-thresholds'
-import { Route as FeaturesChargeLimitRouteImport } from './routes/features.charge-limit'
-import { Route as FeaturesBatteryJournalRouteImport } from './routes/features.battery-journal'
-import { Route as FeaturesBatteryHealthRouteImport } from './routes/features.battery-health'
 import { Route as FeaturesAlertPresetsRouteImport } from './routes/features.alert-presets'
+import { Route as FeaturesBatteryHealthRouteImport } from './routes/features.battery-health'
+import { Route as FeaturesBatteryJournalRouteImport } from './routes/features.battery-journal'
+import { Route as FeaturesChargeLimitRouteImport } from './routes/features.charge-limit'
+import { Route as FeaturesCustomThresholdsRouteImport } from './routes/features.custom-thresholds'
+import { Route as FeaturesEnergyUsageRouteImport } from './routes/features.energy-usage'
+import { Route as FeaturesGeneralRouteImport } from './routes/features.general'
+import { Route as FeaturesHonorsRouteImport } from './routes/features.honors'
+import { Route as FeaturesLowPowerModeRouteImport } from './routes/features.low-power-mode'
+import { Route as FeaturesMeetingBatteryGuardRouteImport } from './routes/features.meeting-battery-guard'
+import { Route as FeaturesPowerFlowRouteImport } from './routes/features.power-flow'
+import { Route as FeaturesStatisticsRouteImport } from './routes/features.statistics'
+import { Route as FeaturesSystemLoadRouteImport } from './routes/features.system-load'
+import { Route as FeaturesTravelModeRouteImport } from './routes/features.travel-mode'
+import { Route as FromIdRouteImport } from './routes/from.$id'
+import { Route as GlossaryIndexRouteImport } from './routes/glossary/index'
+import { Route as GlossarySlugRouteImport } from './routes/glossary/$slug'
+import { Route as GuidesIndexRouteImport } from './routes/guides/index'
+import { Route as GuidesSlugRouteImport } from './routes/guides/$slug'
+import { Route as NewsletterConfirmRouteImport } from './routes/newsletter.confirm'
+import { Route as NewsletterConfirmedRouteImport } from './routes/newsletter.confirmed'
+import { Route as NewsletterUnsubscribeRouteImport } from './routes/newsletter.unsubscribe'
+import { Route as NewsletterUnsubscribedRouteImport } from './routes/newsletter.unsubscribed'
+import { Route as ThanksLifetimeRouteImport } from './routes/thanks.lifetime'
+import { Route as ThanksSupportRouteImport } from './routes/thanks.support'
 import { Route as ApiCheckoutIdRouteImport } from './routes/api/checkout.$id'
 
-const WalkthroughRoute = WalkthroughRouteImport.update({
-  id: '/walkthrough',
-  path: '/walkthrough',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RoadmapRoute = RoadmapRouteImport.update({
-  id: '/roadmap',
-  path: '/roadmap',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PrivacyRoute = PrivacyRouteImport.update({
-  id: '/privacy',
-  path: '/privacy',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LegalRoute = LegalRouteImport.update({
-  id: '/legal',
-  path: '/legal',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CheckoutRoute = CheckoutRouteImport.update({
-  id: '/checkout',
-  path: '/checkout',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminRoute = AdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const R404Route = R404RouteImport.update({
-  id: '/404',
-  path: '/404',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LangRoute = LangRouteImport.update({
@@ -86,19 +56,39 @@ const LangRoute = LangRouteImport.update({
   path: '/$lang',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const R404Route = R404RouteImport.update({
+  id: '/404',
+  path: '/404',
   getParentRoute: () => rootRouteImport,
 } as any)
-const GuidesIndexRoute = GuidesIndexRouteImport.update({
-  id: '/guides/',
-  path: '/guides/',
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
-const GlossaryIndexRoute = GlossaryIndexRouteImport.update({
-  id: '/glossary/',
-  path: '/glossary/',
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LegalRoute = LegalRouteImport.update({
+  id: '/legal',
+  path: '/legal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RoadmapRoute = RoadmapRouteImport.update({
+  id: '/roadmap',
+  path: '/roadmap',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WalkthroughRoute = WalkthroughRouteImport.update({
+  id: '/walkthrough',
+  path: '/walkthrough',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FeaturesIndexRoute = FeaturesIndexRouteImport.update({
@@ -106,95 +96,24 @@ const FeaturesIndexRoute = FeaturesIndexRouteImport.update({
   path: '/features/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ThanksSupportRoute = ThanksSupportRouteImport.update({
-  id: '/thanks/support',
-  path: '/thanks/support',
+const FeaturesAlertPresetsRoute = FeaturesAlertPresetsRouteImport.update({
+  id: '/features/alert-presets',
+  path: '/features/alert-presets',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ThanksLifetimeRoute = ThanksLifetimeRouteImport.update({
-  id: '/thanks/lifetime',
-  path: '/thanks/lifetime',
+const FeaturesBatteryHealthRoute = FeaturesBatteryHealthRouteImport.update({
+  id: '/features/battery-health',
+  path: '/features/battery-health',
   getParentRoute: () => rootRouteImport,
 } as any)
-const NewsletterUnsubscribedRoute = NewsletterUnsubscribedRouteImport.update({
-  id: '/newsletter/unsubscribed',
-  path: '/newsletter/unsubscribed',
+const FeaturesBatteryJournalRoute = FeaturesBatteryJournalRouteImport.update({
+  id: '/features/battery-journal',
+  path: '/features/battery-journal',
   getParentRoute: () => rootRouteImport,
 } as any)
-const NewsletterUnsubscribeRoute = NewsletterUnsubscribeRouteImport.update({
-  id: '/newsletter/unsubscribe',
-  path: '/newsletter/unsubscribe',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NewsletterConfirmedRoute = NewsletterConfirmedRouteImport.update({
-  id: '/newsletter/confirmed',
-  path: '/newsletter/confirmed',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NewsletterConfirmRoute = NewsletterConfirmRouteImport.update({
-  id: '/newsletter/confirm',
-  path: '/newsletter/confirm',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GuidesSlugRoute = GuidesSlugRouteImport.update({
-  id: '/guides/$slug',
-  path: '/guides/$slug',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GlossarySlugRoute = GlossarySlugRouteImport.update({
-  id: '/glossary/$slug',
-  path: '/glossary/$slug',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FromIdRoute = FromIdRouteImport.update({
-  id: '/from/$id',
-  path: '/from/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FeaturesTravelModeRoute = FeaturesTravelModeRouteImport.update({
-  id: '/features/travel-mode',
-  path: '/features/travel-mode',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FeaturesSystemLoadRoute = FeaturesSystemLoadRouteImport.update({
-  id: '/features/system-load',
-  path: '/features/system-load',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FeaturesStatisticsRoute = FeaturesStatisticsRouteImport.update({
-  id: '/features/statistics',
-  path: '/features/statistics',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FeaturesPowerFlowRoute = FeaturesPowerFlowRouteImport.update({
-  id: '/features/power-flow',
-  path: '/features/power-flow',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FeaturesMeetingBatteryGuardRoute =
-  FeaturesMeetingBatteryGuardRouteImport.update({
-    id: '/features/meeting-battery-guard',
-    path: '/features/meeting-battery-guard',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const FeaturesLowPowerModeRoute = FeaturesLowPowerModeRouteImport.update({
-  id: '/features/low-power-mode',
-  path: '/features/low-power-mode',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FeaturesHonorsRoute = FeaturesHonorsRouteImport.update({
-  id: '/features/honors',
-  path: '/features/honors',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FeaturesGeneralRoute = FeaturesGeneralRouteImport.update({
-  id: '/features/general',
-  path: '/features/general',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FeaturesEnergyUsageRoute = FeaturesEnergyUsageRouteImport.update({
-  id: '/features/energy-usage',
-  path: '/features/energy-usage',
+const FeaturesChargeLimitRoute = FeaturesChargeLimitRouteImport.update({
+  id: '/features/charge-limit',
+  path: '/features/charge-limit',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FeaturesCustomThresholdsRoute =
@@ -203,24 +122,105 @@ const FeaturesCustomThresholdsRoute =
     path: '/features/custom-thresholds',
     getParentRoute: () => rootRouteImport,
   } as any)
-const FeaturesChargeLimitRoute = FeaturesChargeLimitRouteImport.update({
-  id: '/features/charge-limit',
-  path: '/features/charge-limit',
+const FeaturesEnergyUsageRoute = FeaturesEnergyUsageRouteImport.update({
+  id: '/features/energy-usage',
+  path: '/features/energy-usage',
   getParentRoute: () => rootRouteImport,
 } as any)
-const FeaturesBatteryJournalRoute = FeaturesBatteryJournalRouteImport.update({
-  id: '/features/battery-journal',
-  path: '/features/battery-journal',
+const FeaturesGeneralRoute = FeaturesGeneralRouteImport.update({
+  id: '/features/general',
+  path: '/features/general',
   getParentRoute: () => rootRouteImport,
 } as any)
-const FeaturesBatteryHealthRoute = FeaturesBatteryHealthRouteImport.update({
-  id: '/features/battery-health',
-  path: '/features/battery-health',
+const FeaturesHonorsRoute = FeaturesHonorsRouteImport.update({
+  id: '/features/honors',
+  path: '/features/honors',
   getParentRoute: () => rootRouteImport,
 } as any)
-const FeaturesAlertPresetsRoute = FeaturesAlertPresetsRouteImport.update({
-  id: '/features/alert-presets',
-  path: '/features/alert-presets',
+const FeaturesLowPowerModeRoute = FeaturesLowPowerModeRouteImport.update({
+  id: '/features/low-power-mode',
+  path: '/features/low-power-mode',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeaturesMeetingBatteryGuardRoute =
+  FeaturesMeetingBatteryGuardRouteImport.update({
+    id: '/features/meeting-battery-guard',
+    path: '/features/meeting-battery-guard',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const FeaturesPowerFlowRoute = FeaturesPowerFlowRouteImport.update({
+  id: '/features/power-flow',
+  path: '/features/power-flow',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeaturesStatisticsRoute = FeaturesStatisticsRouteImport.update({
+  id: '/features/statistics',
+  path: '/features/statistics',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeaturesSystemLoadRoute = FeaturesSystemLoadRouteImport.update({
+  id: '/features/system-load',
+  path: '/features/system-load',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeaturesTravelModeRoute = FeaturesTravelModeRouteImport.update({
+  id: '/features/travel-mode',
+  path: '/features/travel-mode',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FromIdRoute = FromIdRouteImport.update({
+  id: '/from/$id',
+  path: '/from/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GlossaryIndexRoute = GlossaryIndexRouteImport.update({
+  id: '/glossary/',
+  path: '/glossary/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GlossarySlugRoute = GlossarySlugRouteImport.update({
+  id: '/glossary/$slug',
+  path: '/glossary/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GuidesIndexRoute = GuidesIndexRouteImport.update({
+  id: '/guides/',
+  path: '/guides/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GuidesSlugRoute = GuidesSlugRouteImport.update({
+  id: '/guides/$slug',
+  path: '/guides/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NewsletterConfirmRoute = NewsletterConfirmRouteImport.update({
+  id: '/newsletter/confirm',
+  path: '/newsletter/confirm',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NewsletterConfirmedRoute = NewsletterConfirmedRouteImport.update({
+  id: '/newsletter/confirmed',
+  path: '/newsletter/confirmed',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NewsletterUnsubscribeRoute = NewsletterUnsubscribeRouteImport.update({
+  id: '/newsletter/unsubscribe',
+  path: '/newsletter/unsubscribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NewsletterUnsubscribedRoute = NewsletterUnsubscribedRouteImport.update({
+  id: '/newsletter/unsubscribed',
+  path: '/newsletter/unsubscribed',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ThanksLifetimeRoute = ThanksLifetimeRouteImport.update({
+  id: '/thanks/lifetime',
+  path: '/thanks/lifetime',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ThanksSupportRoute = ThanksSupportRouteImport.update({
+  id: '/thanks/support',
+  path: '/thanks/support',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiCheckoutIdRoute = ApiCheckoutIdRouteImport.update({
@@ -502,53 +502,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/walkthrough': {
-      id: '/walkthrough'
-      path: '/walkthrough'
-      fullPath: '/walkthrough'
-      preLoaderRoute: typeof WalkthroughRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/roadmap': {
-      id: '/roadmap'
-      path: '/roadmap'
-      fullPath: '/roadmap'
-      preLoaderRoute: typeof RoadmapRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/privacy': {
-      id: '/privacy'
-      path: '/privacy'
-      fullPath: '/privacy'
-      preLoaderRoute: typeof PrivacyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/legal': {
-      id: '/legal'
-      path: '/legal'
-      fullPath: '/legal'
-      preLoaderRoute: typeof LegalRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/checkout': {
-      id: '/checkout'
-      path: '/checkout'
-      fullPath: '/checkout'
-      preLoaderRoute: typeof CheckoutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin': {
-      id: '/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/404': {
-      id: '/404'
-      path: '/404'
-      fullPath: '/404'
-      preLoaderRoute: typeof R404RouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/$lang': {
@@ -558,25 +516,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LangRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/404': {
+      id: '/404'
+      path: '/404'
+      fullPath: '/404'
+      preLoaderRoute: typeof R404RouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/guides/': {
-      id: '/guides/'
-      path: '/guides'
-      fullPath: '/guides/'
-      preLoaderRoute: typeof GuidesIndexRouteImport
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/glossary/': {
-      id: '/glossary/'
-      path: '/glossary'
-      fullPath: '/glossary/'
-      preLoaderRoute: typeof GlossaryIndexRouteImport
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal': {
+      id: '/legal'
+      path: '/legal'
+      fullPath: '/legal'
+      preLoaderRoute: typeof LegalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/roadmap': {
+      id: '/roadmap'
+      path: '/roadmap'
+      fullPath: '/roadmap'
+      preLoaderRoute: typeof RoadmapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/walkthrough': {
+      id: '/walkthrough'
+      path: '/walkthrough'
+      fullPath: '/walkthrough'
+      preLoaderRoute: typeof WalkthroughRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/features/': {
@@ -586,151 +572,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FeaturesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/thanks/support': {
-      id: '/thanks/support'
-      path: '/thanks/support'
-      fullPath: '/thanks/support'
-      preLoaderRoute: typeof ThanksSupportRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/thanks/lifetime': {
-      id: '/thanks/lifetime'
-      path: '/thanks/lifetime'
-      fullPath: '/thanks/lifetime'
-      preLoaderRoute: typeof ThanksLifetimeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/newsletter/unsubscribed': {
-      id: '/newsletter/unsubscribed'
-      path: '/newsletter/unsubscribed'
-      fullPath: '/newsletter/unsubscribed'
-      preLoaderRoute: typeof NewsletterUnsubscribedRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/newsletter/unsubscribe': {
-      id: '/newsletter/unsubscribe'
-      path: '/newsletter/unsubscribe'
-      fullPath: '/newsletter/unsubscribe'
-      preLoaderRoute: typeof NewsletterUnsubscribeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/newsletter/confirmed': {
-      id: '/newsletter/confirmed'
-      path: '/newsletter/confirmed'
-      fullPath: '/newsletter/confirmed'
-      preLoaderRoute: typeof NewsletterConfirmedRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/newsletter/confirm': {
-      id: '/newsletter/confirm'
-      path: '/newsletter/confirm'
-      fullPath: '/newsletter/confirm'
-      preLoaderRoute: typeof NewsletterConfirmRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/guides/$slug': {
-      id: '/guides/$slug'
-      path: '/guides/$slug'
-      fullPath: '/guides/$slug'
-      preLoaderRoute: typeof GuidesSlugRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/glossary/$slug': {
-      id: '/glossary/$slug'
-      path: '/glossary/$slug'
-      fullPath: '/glossary/$slug'
-      preLoaderRoute: typeof GlossarySlugRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/from/$id': {
-      id: '/from/$id'
-      path: '/from/$id'
-      fullPath: '/from/$id'
-      preLoaderRoute: typeof FromIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/features/travel-mode': {
-      id: '/features/travel-mode'
-      path: '/features/travel-mode'
-      fullPath: '/features/travel-mode'
-      preLoaderRoute: typeof FeaturesTravelModeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/features/system-load': {
-      id: '/features/system-load'
-      path: '/features/system-load'
-      fullPath: '/features/system-load'
-      preLoaderRoute: typeof FeaturesSystemLoadRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/features/statistics': {
-      id: '/features/statistics'
-      path: '/features/statistics'
-      fullPath: '/features/statistics'
-      preLoaderRoute: typeof FeaturesStatisticsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/features/power-flow': {
-      id: '/features/power-flow'
-      path: '/features/power-flow'
-      fullPath: '/features/power-flow'
-      preLoaderRoute: typeof FeaturesPowerFlowRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/features/meeting-battery-guard': {
-      id: '/features/meeting-battery-guard'
-      path: '/features/meeting-battery-guard'
-      fullPath: '/features/meeting-battery-guard'
-      preLoaderRoute: typeof FeaturesMeetingBatteryGuardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/features/low-power-mode': {
-      id: '/features/low-power-mode'
-      path: '/features/low-power-mode'
-      fullPath: '/features/low-power-mode'
-      preLoaderRoute: typeof FeaturesLowPowerModeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/features/honors': {
-      id: '/features/honors'
-      path: '/features/honors'
-      fullPath: '/features/honors'
-      preLoaderRoute: typeof FeaturesHonorsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/features/general': {
-      id: '/features/general'
-      path: '/features/general'
-      fullPath: '/features/general'
-      preLoaderRoute: typeof FeaturesGeneralRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/features/energy-usage': {
-      id: '/features/energy-usage'
-      path: '/features/energy-usage'
-      fullPath: '/features/energy-usage'
-      preLoaderRoute: typeof FeaturesEnergyUsageRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/features/custom-thresholds': {
-      id: '/features/custom-thresholds'
-      path: '/features/custom-thresholds'
-      fullPath: '/features/custom-thresholds'
-      preLoaderRoute: typeof FeaturesCustomThresholdsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/features/charge-limit': {
-      id: '/features/charge-limit'
-      path: '/features/charge-limit'
-      fullPath: '/features/charge-limit'
-      preLoaderRoute: typeof FeaturesChargeLimitRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/features/battery-journal': {
-      id: '/features/battery-journal'
-      path: '/features/battery-journal'
-      fullPath: '/features/battery-journal'
-      preLoaderRoute: typeof FeaturesBatteryJournalRouteImport
+    '/features/alert-presets': {
+      id: '/features/alert-presets'
+      path: '/features/alert-presets'
+      fullPath: '/features/alert-presets'
+      preLoaderRoute: typeof FeaturesAlertPresetsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/features/battery-health': {
@@ -740,11 +586,165 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FeaturesBatteryHealthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/features/alert-presets': {
-      id: '/features/alert-presets'
-      path: '/features/alert-presets'
-      fullPath: '/features/alert-presets'
-      preLoaderRoute: typeof FeaturesAlertPresetsRouteImport
+    '/features/battery-journal': {
+      id: '/features/battery-journal'
+      path: '/features/battery-journal'
+      fullPath: '/features/battery-journal'
+      preLoaderRoute: typeof FeaturesBatteryJournalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/features/charge-limit': {
+      id: '/features/charge-limit'
+      path: '/features/charge-limit'
+      fullPath: '/features/charge-limit'
+      preLoaderRoute: typeof FeaturesChargeLimitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/features/custom-thresholds': {
+      id: '/features/custom-thresholds'
+      path: '/features/custom-thresholds'
+      fullPath: '/features/custom-thresholds'
+      preLoaderRoute: typeof FeaturesCustomThresholdsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/features/energy-usage': {
+      id: '/features/energy-usage'
+      path: '/features/energy-usage'
+      fullPath: '/features/energy-usage'
+      preLoaderRoute: typeof FeaturesEnergyUsageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/features/general': {
+      id: '/features/general'
+      path: '/features/general'
+      fullPath: '/features/general'
+      preLoaderRoute: typeof FeaturesGeneralRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/features/honors': {
+      id: '/features/honors'
+      path: '/features/honors'
+      fullPath: '/features/honors'
+      preLoaderRoute: typeof FeaturesHonorsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/features/low-power-mode': {
+      id: '/features/low-power-mode'
+      path: '/features/low-power-mode'
+      fullPath: '/features/low-power-mode'
+      preLoaderRoute: typeof FeaturesLowPowerModeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/features/meeting-battery-guard': {
+      id: '/features/meeting-battery-guard'
+      path: '/features/meeting-battery-guard'
+      fullPath: '/features/meeting-battery-guard'
+      preLoaderRoute: typeof FeaturesMeetingBatteryGuardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/features/power-flow': {
+      id: '/features/power-flow'
+      path: '/features/power-flow'
+      fullPath: '/features/power-flow'
+      preLoaderRoute: typeof FeaturesPowerFlowRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/features/statistics': {
+      id: '/features/statistics'
+      path: '/features/statistics'
+      fullPath: '/features/statistics'
+      preLoaderRoute: typeof FeaturesStatisticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/features/system-load': {
+      id: '/features/system-load'
+      path: '/features/system-load'
+      fullPath: '/features/system-load'
+      preLoaderRoute: typeof FeaturesSystemLoadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/features/travel-mode': {
+      id: '/features/travel-mode'
+      path: '/features/travel-mode'
+      fullPath: '/features/travel-mode'
+      preLoaderRoute: typeof FeaturesTravelModeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/from/$id': {
+      id: '/from/$id'
+      path: '/from/$id'
+      fullPath: '/from/$id'
+      preLoaderRoute: typeof FromIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/glossary/': {
+      id: '/glossary/'
+      path: '/glossary'
+      fullPath: '/glossary/'
+      preLoaderRoute: typeof GlossaryIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/glossary/$slug': {
+      id: '/glossary/$slug'
+      path: '/glossary/$slug'
+      fullPath: '/glossary/$slug'
+      preLoaderRoute: typeof GlossarySlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/guides/': {
+      id: '/guides/'
+      path: '/guides'
+      fullPath: '/guides/'
+      preLoaderRoute: typeof GuidesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/guides/$slug': {
+      id: '/guides/$slug'
+      path: '/guides/$slug'
+      fullPath: '/guides/$slug'
+      preLoaderRoute: typeof GuidesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/newsletter/confirm': {
+      id: '/newsletter/confirm'
+      path: '/newsletter/confirm'
+      fullPath: '/newsletter/confirm'
+      preLoaderRoute: typeof NewsletterConfirmRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/newsletter/confirmed': {
+      id: '/newsletter/confirmed'
+      path: '/newsletter/confirmed'
+      fullPath: '/newsletter/confirmed'
+      preLoaderRoute: typeof NewsletterConfirmedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/newsletter/unsubscribe': {
+      id: '/newsletter/unsubscribe'
+      path: '/newsletter/unsubscribe'
+      fullPath: '/newsletter/unsubscribe'
+      preLoaderRoute: typeof NewsletterUnsubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/newsletter/unsubscribed': {
+      id: '/newsletter/unsubscribed'
+      path: '/newsletter/unsubscribed'
+      fullPath: '/newsletter/unsubscribed'
+      preLoaderRoute: typeof NewsletterUnsubscribedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/thanks/lifetime': {
+      id: '/thanks/lifetime'
+      path: '/thanks/lifetime'
+      fullPath: '/thanks/lifetime'
+      preLoaderRoute: typeof ThanksLifetimeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/thanks/support': {
+      id: '/thanks/support'
+      path: '/thanks/support'
+      fullPath: '/thanks/support'
+      preLoaderRoute: typeof ThanksSupportRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/checkout/$id': {
