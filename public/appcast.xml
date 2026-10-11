@@ -1774,6 +1774,30 @@
         length="27010385"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.14.6</title>
+      <pubDate>Sun, 11 Oct 2026 16:46:24 +0000</pubDate>
+      <sparkle:version>102</sparkle:version>
+      <sparkle:shortVersionString>1.14.6</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.14.6</h1>
+<h2>Fixed</h2>
+<ul>
+<li>Rescue receipts show an honest time estimate. A receipt at 1% no longer shows a time left that was read at a much higher charge. When macOS gives no estimate, the card leaves the time out.</li>
+<li>Shared cards now use your language in the caption too. Before, the rescue, wrapped, health and achievement captions stayed in English on a translated card.</li>
+<li>The rescue receipt serial label and ledger labels are translated in all five languages.</li>
+</ul>
+<p>Marketing 1.14.5 → 1.14.6, build 101 → 102.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.14.6/Battery-Sensei.pkg"
+        sparkle:edSignature="jA9JShcU0E/DuA3/EqEZvoBKunrB2mtMOW9BDkjqH25Di1somHeQf458UPcPWnCx61yk9CXEQXtXg7z9DzXbAA=="
+        length="27013424"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
