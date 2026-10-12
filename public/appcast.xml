@@ -1797,6 +1797,35 @@
         length="27013424"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.15.0</title>
+      <pubDate>Mon, 12 Oct 2026 08:35:54 +0000</pubDate>
+      <sparkle:version>103</sparkle:version>
+      <sparkle:shortVersionString>1.15.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.15.0</h1>
+<h2>New</h2>
+<ul>
+<li>Sensei tells you when your Mac is plugged in but the battery still runs down. The menu bar icon shows a bolt with a warning sign for as long as it lasts.</li>
+<li>A short notice names the cause. A weak charger gets both numbers: what it gives and what your Mac uses. A charger that gives no power gets a hint to check the outlet or cable.</li>
+<li>The notice shows once per plug-in. You can turn it off or pick its sound in Warnings.</li>
+</ul>
+<h2>Fixed</h2>
+<ul>
+<li>The menu bar shows the charging bolt right after you plug in. Before, it could show the plug icon for up to a minute while the Mac already charged.</li>
+<li>The power handoff panel no longer shows a spinner.</li>
+</ul>
+<p>Marketing 1.14.6 → 1.15.0, build 102 → 103.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.15.0/Battery-Sensei.pkg"
+        sparkle:edSignature="2fMYUZJZMuntwxmSA0K4ecBHpnsPxC1rJoSfy0GSV8a7Vu6F/7U+wW1GF2GJHRS597yTBLWB6NOMx3k69e/QAw=="
+        length="27050781"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
