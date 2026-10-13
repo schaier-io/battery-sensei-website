@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { Check, ChevronDown, Monitor, Moon, Sun } from 'lucide-react'
+import { ChevronDown, Monitor, Moon, Sun } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
   applyThemePreference,
@@ -16,6 +16,17 @@ const ICONS: Record<ThemePreference, typeof Sun> = {
   dark: Moon,
 }
 
+/** Hover motion per icon, played when its button (`group`) is hovered: the
+    sun turns a quarter (its 8 rays land back on themselves), the moon tilts,
+    the monitor lifts. Motion-safe only. */
+const ICON_HOVER: Record<ThemePreference, string> = {
+  light: 'motion-safe:group-hover:rotate-90',
+  system: 'motion-safe:group-hover:-translate-y-px',
+  dark: 'motion-safe:group-hover:-rotate-[18deg]',
+}
+const ICON_MOTION =
+  'transition-[rotate,translate] duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)]'
+
 /** Matches the language/currency popovers, which keep the panel mounted for
     one animation beat after close. */
 const CLOSE_MS = 180
@@ -26,10 +37,10 @@ const useIsomorphicLayoutEffect =
 /**
  * Light / Match system / Dark.
  *
- * Sits in the header beside the language chip, deliberately at LOWER visual
- * weight than either: icon plus chevron, no text, no divider. The Download
- * button is the only filled control in the bar and has to stay that way, so
- * this reads as a utility affordance rather than a third thing to decide.
+ * In the header it is `bare`: one icon, no border, fill or chevron, and its
+ * popup is a single row of three icons. The Download button is the only
+ * filled control in the bar and has to stay that way, so this reads as a
+ * utility affordance rather than a third thing to decide.
  *
  * Three options rather than a two-way toggle: the site follows the OS by
  * default, and a binary switch would silently discard that for anyone whose
@@ -38,8 +49,12 @@ const useIsomorphicLayoutEffect =
 export function ThemeSwitcher({
   className = '',
   variant = 'dropdown',
+  bare = false,
 }: {
   className?: string
+  /** Dropdown only: icon alone, no border, fill or chevron (the header, where
+   *  Download must stay the only button-shaped control). */
+  bare?: boolean
   /** `inline` is the mobile-drawer form: a flat row, no popover. Mirrors
       LanguageSwitcher's variant so the drawer reads as one utility block. */
   variant?: 'dropdown' | 'inline'
@@ -110,10 +125,11 @@ export function ThemeSwitcher({
     const root = document.documentElement
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-    // Cross-fade the whole page as an ink stroke spreading from the control.
-    // View Transitions snapshot the old and new frames for us, so this costs
-    // one clip-path animation rather than transitioning colours on every
-    // element (which would also fight hover states for the duration).
+    // Reveal the new theme as an ink blot spreading from the control
+    // (styles/theme-wipe.css). View Transitions snapshot the old and new
+    // frames for us, so this costs one mask animation rather than
+    // transitioning colours on every element (which would also fight hover
+    // states for the duration).
     if (reduced || !document.startViewTransition) {
       applyThemePreference(next)
       return
@@ -122,7 +138,8 @@ export function ThemeSwitcher({
     const r = triggerRef.current?.getBoundingClientRect()
     const x = r ? r.left + r.width / 2 : window.innerWidth / 2
     const y = r ? r.top + r.height / 2 : 0
-    // Far corner, so the circle always finishes past the last pixel.
+    // Distance to the far corner. theme-wipe.css scales the blot past it,
+    // so the ink always covers the last pixel.
     const radius = Math.hypot(
       Math.max(x, window.innerWidth - x),
       Math.max(y, window.innerHeight - y),
@@ -192,18 +209,24 @@ export function ThemeSwitcher({
         aria-label={t('theme.label')}
         title={t('theme.label')}
         className={[
-          'lang-trigger group inline-flex h-9 items-center gap-1.5 rounded-md border bg-[color-mix(in_oklab,var(--washi)_60%,var(--paper-lift))] px-2 transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40',
-          open
-            ? 'border-[var(--line-strong)] text-sumi'
-            : 'border-[var(--line)] text-sumi-soft hover:text-sumi hover:border-[var(--line-strong)]',
+          'lang-trigger group inline-flex h-9 items-center rounded-md transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40',
+          bare
+            ? `w-9 justify-center ${open ? 'text-sumi' : 'text-sumi-soft hover:text-sumi'}`
+            : `gap-1.5 border bg-[color-mix(in_oklab,var(--washi)_60%,var(--paper-lift))] px-2 ${
+                open
+                  ? 'border-[var(--line-strong)] text-sumi'
+                  : 'border-[var(--line)] text-sumi-soft hover:text-sumi hover:border-[var(--line-strong)]'
+              }`,
         ].join(' ')}
       >
-        <CurrentIcon className="h-4 w-4" strokeWidth={1.7} aria-hidden />
-        <ChevronDown
-          aria-hidden
-          className="lang-chevron h-3 w-3 text-nezumi/70 group-hover:text-sumi-soft"
-          strokeWidth={2}
-        />
+        <CurrentIcon className={`h-4 w-4 ${ICON_MOTION} ${ICON_HOVER[preference]}`} strokeWidth={1.7} aria-hidden />
+        {!bare && (
+          <ChevronDown
+            aria-hidden
+            className="lang-chevron h-3 w-3 text-nezumi/70 group-hover:text-sumi-soft"
+            strokeWidth={2}
+          />
+        )}
       </button>
 
       {mounted && rect && createPortal(
@@ -215,9 +238,11 @@ export function ThemeSwitcher({
             top: rect.top + 8,
             right: rect.right,
           }}
-          className="lang-pop z-[1000] w-44 overflow-hidden rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,var(--paper-lift))] shadow-[0_1px_0_rgba(255,255,255,0.5)_inset,0_14px_30px_-14px_rgba(28,26,23,0.30),0_4px_10px_-6px_rgba(28,26,23,0.18)]"
+          className="lang-pop z-[1000] overflow-hidden rounded-lg border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,var(--paper-lift))] shadow-[0_1px_0_rgba(255,255,255,0.5)_inset,0_14px_30px_-14px_rgba(28,26,23,0.30),0_4px_10px_-6px_rgba(28,26,23,0.18)]"
         >
-          <ul role="listbox" aria-label={t('theme.label')}>
+          {/* One row of icons, no text: the name is on aria-label and the
+              tooltip, the active option is the tinted one. */}
+          <ul role="listbox" aria-label={t('theme.label')} className="flex gap-0.5 p-1">
             {THEME_OPTIONS.map((option, i) => {
               const Icon = ICONS[option]
               const active = preference === option
@@ -232,18 +257,16 @@ export function ThemeSwitcher({
                   <button
                     type="button"
                     onClick={() => choose(option)}
+                    aria-label={t(`theme.${option}`)}
+                    title={t(`theme.${option}`)}
                     className={[
-                      'flex w-full items-center gap-2.5 px-3 py-2 text-left text-[13px] transition-colors duration-[200ms]',
+                      'group grid h-9 w-9 place-items-center rounded-md transition-colors duration-[200ms] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40',
                       active
-                        ? 'bg-[color-mix(in_oklab,var(--hinomaru)_8%,transparent)] text-sumi'
-                        : 'text-sumi-soft hover:bg-[color-mix(in_oklab,var(--washi)_60%,transparent)] hover:text-sumi',
+                        ? 'bg-[color-mix(in_oklab,var(--hinomaru)_10%,transparent)] text-hinomaru-ink'
+                        : 'text-sumi-soft hover:bg-[color-mix(in_oklab,var(--sumi)_8%,transparent)] hover:text-sumi',
                     ].join(' ')}
                   >
-                    <Icon className="h-3.5 w-3.5 shrink-0" strokeWidth={1.7} aria-hidden />
-                    <span className="flex-1">{t(`theme.${option}`)}</span>
-                    {active && (
-                      <Check className="h-3.5 w-3.5 shrink-0 text-hinomaru-ink" strokeWidth={2.2} aria-hidden />
-                    )}
+                    <Icon className={`h-4 w-4 ${ICON_MOTION} ${ICON_HOVER[option]}`} strokeWidth={1.7} aria-hidden />
                   </button>
                 </li>
               )
