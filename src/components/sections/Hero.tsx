@@ -238,11 +238,11 @@ export function Hero() {
             aria-label={`${t('hero.readMore')} — ${t('nav.sections.features')}`}
             className="group inline-flex h-11 items-center gap-2.5 rounded-md pl-4 pr-2 text-sm text-sumi-soft transition-colors duration-[360ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:text-sumi focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
           >
-            <span className="transition-transform duration-[360ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-[1px] motion-reduce:transform-none">
-              {t('hero.readMore')}
-            </span>
+            {/* The label stays put and only darkens; the arrow circle nudges
+                down, the way it points, so the link moves as one. */}
+            <span>{t('hero.readMore')}</span>
             <span
-              className={`relative inline-flex h-8 w-8 items-center justify-center rounded-full border bg-[color-mix(in_oklab,var(--washi)_60%,var(--paper-lift))] shadow-[0_6px_20px_-12px_rgba(28,26,23,0.25)] backdrop-blur-sm transition-[opacity,transform,background-color,border-color,box-shadow] duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-110 group-hover:border-sumi/35 group-hover:bg-[color-mix(in_oklab,var(--washi)_45%,var(--paper-lift))] group-hover:shadow-[0_8px_18px_-12px_rgba(28,26,23,0.32)] motion-reduce:transform-none ${
+              className={`relative inline-flex h-8 w-8 items-center justify-center rounded-full border bg-[color-mix(in_oklab,var(--washi)_60%,var(--paper-lift))] shadow-[0_6px_20px_-12px_rgba(28,26,23,0.25)] backdrop-blur-sm transition-[opacity,translate,background-color,border-color,box-shadow] duration-[420ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] motion-safe:group-hover:translate-y-0.5 group-hover:border-sumi/35 group-hover:bg-[color-mix(in_oklab,var(--washi)_45%,var(--paper-lift))] group-hover:shadow-[0_8px_18px_-12px_rgba(28,26,23,0.32)] ${
                 hasStartedScroll
                   ? 'border-sumi/15 opacity-100'
                   : 'border-sumi/10 opacity-70 group-hover:opacity-100'
