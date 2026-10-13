@@ -243,26 +243,13 @@ export function Nav() {
         </nav>
 
         <div className="ml-auto flex items-center gap-2">
-          {/* Quiet support affordance — signals "humans answer here" without
-              competing with the primary nav. Visible only at xl+ where
-              the bar has room; below xl the same link is in the footer
-              and the mobile drawer. */}
-          <a
-            href={sectionHref('contact', pathname, i18n.language)}
-            aria-label={t('nav.supportAria')}
-            className="nav-support hidden xl:inline-flex items-center gap-2 h-9 px-3 rounded-md text-sm text-sumi-soft hover:text-hinomaru-ink transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40"
-          >
-            <MessageCircle className="h-4 w-4" strokeWidth={1.7} aria-hidden />
-            <span>{t('nav.support')}</span>
-          </a>
           {/* Language switcher: visible only at lg+ where the bar has
               room. Below lg it sits in the footer; on mobile it lives
               inside the drawer. */}
-          <LanguageSwitcher className="hidden lg:block" />
-          {/* Quieter than the language chip on purpose: icon plus
-              chevron, no label. Download stays the only filled
-              control in the bar. */}
-          <ThemeSwitcher className="hidden md:block" />
+          {/* Theme and language are bare (no border or fill), so Download
+              stays the only button-shaped control in the bar. */}
+          <ThemeSwitcher bare className="hidden md:block" />
+          <LanguageSwitcher bare className="hidden lg:block" />
           <a
             href={sectionHref('download', pathname, i18n.language)}
             className="btn-sumi hidden md:inline-flex h-9 items-center gap-2 rounded-md px-4 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
@@ -312,7 +299,54 @@ export function Nav() {
       pathname={pathname}
       onClose={requestCloseMenu}
     />
+    <FloatingSupport
+      href={sectionHref('contact', pathname, i18n.language)}
+      hidden={menuOpen}
+    />
     </>
+  )
+}
+
+/**
+ * Support link, pinned bottom-right on every page. Moved out of the header so
+ * Download stays the bar's only call to action. It steps aside while the
+ * Contact section is on screen (the form is right there) and while the mobile
+ * drawer is open. A body-level sibling like `MobileDrawer`, for the same
+ * stacking reason. z-45 keeps it under the modal dialogs (z-50) and the drawer
+ * (z-70).
+ *
+ * Has its own observer instead of reading Nav's `active`: that one only
+ * counts a 30-45% viewport band and picks the first match, so at the bottom
+ * of the page Contact never became active.
+ */
+function FloatingSupport({ href, hidden: forceHidden }: { href: string; hidden: boolean }) {
+  const { t } = useTranslation()
+  const [contactInView, setContactInView] = useState(false)
+
+  useEffect(() => {
+    const el = document.getElementById('contact')
+    if (!el) return
+    const io = new IntersectionObserver(([e]) => setContactInView(e.isIntersecting))
+    io.observe(el)
+    return () => {
+      io.disconnect()
+      setContactInView(false)
+    }
+  }, [href])
+
+  const hidden = forceHidden || contactInView
+  return (
+    <a
+      href={href}
+      aria-label={t('nav.supportAria')}
+      aria-hidden={hidden || undefined}
+      tabIndex={hidden ? -1 : undefined}
+      data-hidden={hidden ? 'true' : 'false'}
+      className="group fixed right-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-[45] inline-flex h-11 items-center gap-2 rounded-full border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_92%,var(--paper-lift))] px-3.5 text-sm text-sumi-soft shadow-[0_1px_0_rgba(255,255,255,0.45)_inset,0_10px_28px_-12px_rgba(28,26,23,0.40)] backdrop-blur-md transition-[opacity,translate,color,box-shadow] duration-[320ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:text-hinomaru-ink hover:shadow-[0_1px_0_rgba(255,255,255,0.55)_inset,0_14px_32px_-12px_rgba(28,26,23,0.48)] motion-safe:hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 data-[hidden=true]:pointer-events-none motion-safe:data-[hidden=true]:translate-y-2 data-[hidden=true]:opacity-0 sm:right-6 sm:bottom-[calc(1.5rem+env(safe-area-inset-bottom))] md:px-4"
+    >
+      <MessageCircle className="h-4 w-4 shrink-0" strokeWidth={1.7} aria-hidden />
+      <span className="hidden sm:inline">{t('nav.support')}</span>
+    </a>
   )
 }
 

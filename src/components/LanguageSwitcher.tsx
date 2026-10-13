@@ -48,9 +48,13 @@ export function LanguageSwitcher({
   className = '',
   variant = 'chip',
   align = 'end',
+  bare = false,
 }: {
   className?: string
   variant?: Variant
+  /** Chip only: drop the border and fill so the trigger reads as plain text
+   *  (the header, where Download must stay the only button-shaped control). */
+  bare?: boolean
   /** Dropdown alignment relative to the trigger. */
   align?: 'start' | 'end'
 }) {
@@ -291,17 +295,23 @@ export function LanguageSwitcher({
         aria-expanded={open}
         aria-label={t('common.language')}
         className={[
-          'lang-trigger group inline-flex h-9 items-center gap-2 rounded-md border bg-[color-mix(in_oklab,var(--washi)_60%,var(--paper-lift))] px-2.5 text-[12px] font-medium uppercase tracking-[0.18em] transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40',
-          open
-            ? 'border-[var(--line-strong)] text-sumi'
-            : 'border-[var(--line)] text-sumi-soft hover:text-sumi hover:border-[var(--line-strong)]',
+          'lang-trigger group inline-flex h-9 items-center rounded-md text-[12px] font-medium uppercase tracking-[0.18em] transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40',
+          bare
+            ? `gap-1.5 px-1.5 ${open ? 'text-sumi' : 'text-sumi-soft hover:text-sumi'}`
+            : `gap-2 border bg-[color-mix(in_oklab,var(--washi)_60%,var(--paper-lift))] px-2.5 ${
+                open
+                  ? 'border-[var(--line-strong)] text-sumi'
+                  : 'border-[var(--line)] text-sumi-soft hover:text-sumi hover:border-[var(--line-strong)]'
+              }`,
         ].join(' ')}
       >
         <LangGlyph className="text-[15px]" />
-        <span
-          aria-hidden
-          className="h-3 w-px bg-[var(--line)] group-hover:bg-[var(--line-strong)] transition-colors"
-        />
+        {!bare && (
+          <span
+            aria-hidden
+            className="h-3 w-px bg-[var(--line)] group-hover:bg-[var(--line-strong)] transition-colors"
+          />
+        )}
         <span className="tabular-nums">{SHORT_LABEL[current]}</span>
         <ChevronDown
           aria-hidden
