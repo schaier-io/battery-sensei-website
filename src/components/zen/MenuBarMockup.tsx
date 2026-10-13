@@ -240,7 +240,7 @@ function AlertCard({ percent, revealed }: { percent: number; revealed: boolean }
       <div className="mt-3 flex items-center justify-between gap-2">
         <div className="group/snooze flex shrink-0 items-center gap-0.5 rounded-lg border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_55%,var(--paper-lift))] p-0.5 shadow-[0_1px_0_rgba(255,255,255,0.45)_inset] transition-[border-color,box-shadow] duration-[240ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:border-[var(--line-strong)] hover:shadow-[0_1px_0_rgba(255,255,255,0.58)_inset,0_6px_14px_-10px_rgba(28,26,23,0.45)]">
           <span
-            className="px-1 text-sumi-soft transition-[rotate,color] duration-[320ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover/snooze:-rotate-12 group-hover/snooze:text-sumi motion-reduce:rotate-none"
+            className="px-1 text-sumi-soft transition-[rotate,color] duration-[320ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover/snooze:text-sumi motion-safe:group-hover/snooze:-rotate-12"
             aria-hidden
           >
             <MoonStar className="h-3 w-3" strokeWidth={1.8} />
@@ -259,7 +259,7 @@ function AlertCard({ percent, revealed }: { percent: number; revealed: boolean }
           </StepGlyph>
         </div>
         <span
-          className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg bg-hinomaru px-2.5 py-1.5 text-[11px] font-semibold text-[#fff8eb] shadow-[0_1px_0_rgba(255,255,255,0.18)_inset,0_2px_4px_rgba(188,0,45,0.22)] transition-[translate,box-shadow] duration-[240ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-px hover:shadow-[0_1px_0_rgba(255,255,255,0.2)_inset,0_8px_18px_-10px_rgba(188,0,45,0.65)] motion-reduce:translate-none"
+          className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg bg-hinomaru px-2.5 py-1.5 text-[11px] font-semibold text-[#fff8eb] shadow-[0_1px_0_rgba(255,255,255,0.18)_inset,0_2px_4px_rgba(188,0,45,0.22)] transition-[translate,box-shadow] duration-[240ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:shadow-[0_1px_0_rgba(255,255,255,0.2)_inset,0_8px_18px_-10px_rgba(188,0,45,0.65)] motion-safe:hover:-translate-y-px"
         >
           {t('mockups.menuBar.dismiss')}
           <kbd className="hidden rounded bg-[color-mix(in_oklab,#fff8eb_24%,transparent)] px-1 py-0.5 text-[9px] font-medium tracking-wider text-[#fff8eb] ring-1 ring-inset ring-[#fff8eb]/30 sm:inline-block">
