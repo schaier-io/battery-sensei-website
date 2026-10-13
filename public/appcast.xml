@@ -1848,6 +1848,38 @@
         length="27042624"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.16.0</title>
+      <pubDate>Tue, 13 Oct 2026 19:17:45 +0000</pubDate>
+      <sparkle:version>105</sparkle:version>
+      <sparkle:shortVersionString>1.16.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.16.0</h1>
+<h2>New</h2>
+<ul>
+<li>Every warning and notice has a new card. A small kicker names the alert. Below it, an icon sits beside a large title, and one line of detail follows.</li>
+<li>Each alert has an ⓘ button next to its name. Click it to see what the alert means and which keys it answers to. On the battery and meeting warnings, the ? key opens it too.</li>
+</ul>
+<h2>Improved</h2>
+<ul>
+<li>The snooze control is one field now. Use − and + inside it to change the time, then click it to snooze.</li>
+<li>Dismiss is red on every alert, so the way out is easy to find.</li>
+<li>Small notices no longer block clicks on the windows below them. Only the ⓘ button takes a click.</li>
+<li>When you open the ⓘ on a notice, the notice stays on screen longer so you can read it.</li>
+<li>Long alert text now fits in the full-screen warnings at large text sizes.</li>
+<li>The meeting feature is now called Meeting guard everywhere in the app.</li>
+</ul>
+<p>Marketing 1.15.1 → 1.16.0, build 104 → 105.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.16.0/Battery-Sensei.pkg"
+        sparkle:edSignature="Pwnuxe/zOKNXUusHKTD2yk0GBZMBAfGkyiEUSXt3AJFZbB+5fI8Wm+/2/4MfCOUEfnMbu9NRHITaPTbd9KShAg=="
+        length="27073671"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
