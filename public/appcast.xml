@@ -1825,6 +1825,30 @@
         length="27050781"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.15.1</title>
+      <pubDate>Tue, 13 Oct 2026 12:36:29 +0000</pubDate>
+      <sparkle:version>104</sparkle:version>
+      <sparkle:shortVersionString>1.15.1</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.15.1</h1>
+<h2>Improved</h2>
+<ul>
+<li>The esc, F1 and F2 key hints have a new look. They are now a thin outline in the color of each notice. Before, they were grey boxes that looked like disabled buttons.</li>
+<li>In the small notices, esc now lines up with the title.</li>
+<li>The same key hint shows everywhere: the low battery warning, the rescue receipt and the honors screens.</li>
+</ul>
+<p>Marketing 1.15.0 → 1.15.1, build 103 → 104.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.15.1/Battery-Sensei.pkg"
+        sparkle:edSignature="1X/Mx798MsIiFpG2yShV+ECNUoJ8aG0XgRXXJQ4mTuWlvVtd70rrKPZsQxKxx3JosBA638eZJmPDHKrvDZeLCQ=="
+        length="27042624"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
