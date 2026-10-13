@@ -705,9 +705,9 @@
       "blurb": "Dauerhaft kostenlos. Keine Karte, kein Konto.",
       "email": {
         "label": "E-Mail für Battery-Sensei-Updates",
+        "optional": "Optional",
         "placeholder": "name@beispiel.de",
         "cta": "Herunterladen",
-        "skip": "oder ohne E-Mail herunterladen",
         "footnote": "Gelegentliche Battery-Sensei-Updates zu Versionen, Rundgang und Produkt. Mit einem Klick abmelden.",
         "errorInvalid": "Das sieht nicht nach einer E-Mail aus.",
         "success": "Gesendet. Bitte bestätigen Sie in Ihrem Postfach.",

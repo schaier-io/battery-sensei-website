@@ -705,9 +705,9 @@
       "blurb": "Gratuit pour toujours. Pas de carte, pas de compte.",
       "email": {
         "label": "E-mail pour les nouvelles de Battery Sensei",
+        "optional": "Facultatif",
         "placeholder": "vous@exemple.com",
         "cta": "Obtenir le téléchargement",
-        "skip": "ou télécharger sans e-mail",
         "footnote": "Nouvelles occasionnelles sur les versions, la vidéo et le produit Battery Sensei. Désabonnement en un clic.",
         "errorInvalid": "Cette adresse ne ressemble pas à un e-mail valide.",
         "success": "Envoyé. Confirmez dans votre boîte mail.",

@@ -705,9 +705,9 @@
       "blurb": "Free forever. No card, no account.",
       "email": {
         "label": "Email for Battery Sensei updates",
+        "optional": "Optional",
         "placeholder": "you@example.com",
         "cta": "Get the download",
-        "skip": "or download without email",
         "footnote": "Occasional Battery Sensei release, walkthrough, and product updates. Unsubscribe in one click.",
         "errorInvalid": "That doesn't look like an email.",
         "success": "Sent. Check your inbox to confirm.",

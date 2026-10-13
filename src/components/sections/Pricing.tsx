@@ -25,7 +25,7 @@ import { Hanko } from '#/components/zen/Hanko'
 import { CurrencySwitcher } from '#/components/CurrencySwitcher'
 import { PriceDisplay } from '#/components/zen/PriceDisplay'
 import { Reveal } from '#/components/zen/Reveal'
-import { MacOnlyConfirm, MacOnlyConfirmDialog } from '#/components/MacOnlyConfirm'
+import { MacOnlyConfirmDialog } from '#/components/MacOnlyConfirm'
 import { detectIsMac } from '#/lib/use-is-mac'
 import { TRIAL_DAYS } from '#/lib/polar'
 import { usePremiumPrice, useLifetimePrice } from '#/lib/use-price'
@@ -77,7 +77,7 @@ function MacScopeBadge({ label, accent = false }: { label: string; accent?: bool
 }
 
 /**
- * Pins pre-CTA copy, the CTA, and the post-CTA row (skip link / spacer) to the
+ * Pins pre-CTA copy, the CTA, and the post-CTA row (content or spacer) to the
  * card bottom with a fixed footer height so all three primary buttons share
  * the same baseline across the pricing grid.
  */
@@ -611,16 +611,15 @@ function LimitedRedeemBar({ fullPriceFormatted }: { fullPriceFormatted: string }
 }
 
 /**
- * Email-gated download for the Free card.
+ * Download for the Free card, with an optional email field.
  *
  * Marketing-psychology design:
  *   - Default path is the email opt-in (Default Effect). The form is
- *     the visible action; the no-email link sits below as a quiet
- *     escape hatch.
+ *     the visible action, and the field is marked optional.
  *   - Reciprocity: you give us an email, we hand you the download
  *     plus one quiet email per release. Honest trade, no clutter.
- *   - Self-determination: skip link preserves autonomy — no dark
- *     pattern, no gate, the download is still one click away.
+ *   - Self-determination: the email is labelled optional and an empty
+ *     field downloads straight away. No gate, no second link to find.
  *   - Reduced friction (BJ Fogg): single email field, no name, no
  *     extra confirmation; submit fires the download immediately so
  *     the visitor never waits for an email-link round-trip.
@@ -773,9 +772,12 @@ function FreeDownloadForm() {
             <>
               <label
                 htmlFor="free-download-email-input"
-                className="block text-[0.74rem] font-medium uppercase tracking-[0.14em] text-sumi-soft/85"
+                className="flex items-baseline justify-between gap-2 text-[0.74rem] font-medium uppercase tracking-[0.14em] text-sumi-soft/85"
               >
                 {t('pricing.free.email.label')}
+                <span className="shrink-0 normal-case tracking-normal text-nezumi">
+                  {t('pricing.free.email.optional')}
+                </span>
               </label>
               <input
                 ref={inputRef}
@@ -831,21 +833,6 @@ function FreeDownloadForm() {
                 ? t('pricing.free.email.sending')
                 : t('pricing.free.email.cta')}
             </button>
-          }
-          post={
-            <p className="text-center">
-              <MacOnlyConfirm onConfirm={startDownload}>
-                {({ onClick }) => (
-                  <a
-                    href="/download/latest"
-                    onClick={onClick}
-                    className="text-[0.8rem] font-medium text-sumi/90 underline decoration-[var(--line-strong)] underline-offset-[5px] transition-colors duration-[220ms] hover:text-sumi hover:decoration-sumi"
-                  >
-                    {t('pricing.free.email.skip')}
-                  </a>
-                )}
-              </MacOnlyConfirm>
-            </p>
           }
         />
       </form>
