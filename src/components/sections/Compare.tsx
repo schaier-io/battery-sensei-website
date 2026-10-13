@@ -140,6 +140,7 @@ export function Compare() {
             <VideoFacade
               videoId="htaQ20WTf8k"
               title={t('compare.videoCta')}
+              poster="/walkthrough-poster.webp"
               className="block aspect-video w-full rounded-md border border-[var(--line)] bg-sumi"
             />
           </figure>

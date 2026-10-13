@@ -705,9 +705,9 @@
       "blurb": "Gratis para siempre. Sin tarjeta, sin cuenta.",
       "email": {
         "label": "Correo para novedades de Battery Sensei",
+        "optional": "Opcional",
         "placeholder": "tu@ejemplo.com",
         "cta": "Obtener la descarga",
-        "skip": "o descarga sin correo",
         "footnote": "Novedades ocasionales sobre versiones, recorrido y producto de Battery Sensei. Cancela en un clic.",
         "errorInvalid": "Eso no parece un correo.",
         "success": "Enviado: revisa tu correo para confirmar.",
