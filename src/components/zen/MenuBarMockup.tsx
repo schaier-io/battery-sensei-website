@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { Wifi, Search, MoonStar, Minus, Plus } from 'lucide-react'
 import { Trans, useTranslation } from 'react-i18next'
 
@@ -179,7 +179,7 @@ function AlertCard({ percent, revealed }: { percent: number; revealed: boolean }
   const { t } = useTranslation()
   return (
     <div
-      className="alert-card absolute left-1/2 top-1/2 z-10 w-[80%] max-w-[360px] rounded-[22px] border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,var(--paper-lift))] px-5 pt-4 pb-4 text-center shadow-[0_1px_0_rgba(255,255,255,0.55)_inset,0_28px_60px_-22px_rgba(28,26,23,0.45),0_8px_22px_-10px_rgba(28,26,23,0.30)]"
+      className="alert-card absolute left-1/2 top-[calc(50%-20px)] z-10 w-[86%] max-w-[360px] sm:w-[80%] rounded-[22px] border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,var(--paper-lift))] px-5 pt-4 pb-4 text-center shadow-[0_1px_0_rgba(255,255,255,0.55)_inset,0_28px_60px_-22px_rgba(28,26,23,0.45),0_8px_22px_-10px_rgba(28,26,23,0.30)]"
       data-revealed={revealed ? 'true' : 'false'}
       style={{
         transform: `translate(-50%, calc(-50% + ${revealed ? '0px' : '12px'}))`,
@@ -234,41 +234,51 @@ function AlertCard({ percent, revealed }: { percent: number; revealed: boolean }
         />
       </p>
 
+      {/* Hover states copy the real `WarningOverlay`: each stepper button
+          lights up on its own, nothing inside the stepper moves. Stacked lifts
+          (group plus pill) pushed the pill past the group's 2px padding. */}
       <div className="mt-3 flex items-center justify-between gap-2">
-        <div className="group/snooze flex items-center gap-1 rounded-lg border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_55%,var(--paper-lift))] p-0.5 shadow-[0_1px_0_rgba(255,255,255,0.45)_inset] transition-[transform,box-shadow,border-color] duration-[240ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-px hover:border-[var(--line-strong)] hover:shadow-[0_1px_0_rgba(255,255,255,0.58)_inset,0_6px_14px_-10px_rgba(28,26,23,0.45)]">
+        <div className="group/snooze flex shrink-0 items-center gap-0.5 rounded-lg border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_55%,var(--paper-lift))] p-0.5 shadow-[0_1px_0_rgba(255,255,255,0.45)_inset] transition-[border-color,box-shadow] duration-[240ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:border-[var(--line-strong)] hover:shadow-[0_1px_0_rgba(255,255,255,0.58)_inset,0_6px_14px_-10px_rgba(28,26,23,0.45)]">
           <span
-            className="px-1 text-sumi-soft transition-transform duration-[260ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover/snooze:-rotate-12 group-hover/snooze:scale-110"
+            className="px-1 text-sumi-soft transition-[rotate,color] duration-[320ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover/snooze:text-sumi motion-safe:group-hover/snooze:-rotate-12"
             aria-hidden
           >
             <MoonStar className="h-3 w-3" strokeWidth={1.8} />
           </span>
-          <span
-            aria-hidden
-            className="grid h-5 w-5 place-items-center rounded-md text-sumi-soft"
-          >
+          <StepGlyph>
             <Minus className="h-3 w-3" strokeWidth={2} />
-          </span>
-          <span className="rounded-md bg-[color-mix(in_oklab,var(--washi)_35%,var(--paper-lift))] px-2 py-0.5 text-[10px] font-semibold text-sumi shadow-[0_1px_0_rgba(255,255,255,0.6)_inset] transition-[transform,box-shadow,background-color] duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover/snooze:-translate-y-px group-hover/snooze:bg-[color-mix(in_oklab,var(--paper-lift)_90%,var(--washi-soft))] group-hover/snooze:shadow-[0_1px_0_rgba(255,255,255,0.72)_inset,0_4px_10px_-8px_rgba(28,26,23,0.45)]">
-            <span className="text-sumi-soft">{t('mockups.menuBar.snooze')} </span>
+          </StepGlyph>
+          {/* `nowrap` holds the pill on one line; the word "Snooze" drops
+              below `sm` (the moon says it) so de fits a 375px phone. */}
+          <span className="whitespace-nowrap rounded-md bg-[color-mix(in_oklab,var(--washi)_35%,var(--paper-lift))] px-2 py-0.5 text-[10px] font-semibold text-sumi shadow-[0_1px_0_rgba(255,255,255,0.6)_inset] transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:bg-[color-mix(in_oklab,var(--paper-lift)_90%,var(--washi-soft))]">
+            <span className="hidden text-sumi-soft sm:inline">{t('mockups.menuBar.snooze')} </span>
             <span className="tabular-nums">{t('mockups.menuBar.snoozeStep')}</span>
           </span>
-          <span
-            aria-hidden
-            className="grid h-5 w-5 place-items-center rounded-md text-sumi-soft"
-          >
+          <StepGlyph>
             <Plus className="h-3 w-3" strokeWidth={2} />
-          </span>
+          </StepGlyph>
         </div>
         <span
-          className="inline-flex items-center gap-1.5 rounded-lg bg-hinomaru px-2.5 py-1.5 text-[11px] font-semibold text-[#fff8eb] shadow-[0_1px_0_rgba(255,255,255,0.18)_inset,0_2px_4px_rgba(188,0,45,0.22)] transition-[transform,box-shadow,filter] duration-[240ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-px hover:brightness-105 hover:shadow-[0_1px_0_rgba(255,255,255,0.2)_inset,0_8px_18px_-10px_rgba(188,0,45,0.65)]"
+          className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg bg-hinomaru px-2.5 py-1.5 text-[11px] font-semibold text-[#fff8eb] shadow-[0_1px_0_rgba(255,255,255,0.18)_inset,0_2px_4px_rgba(188,0,45,0.22)] transition-[translate,box-shadow] duration-[240ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:shadow-[0_1px_0_rgba(255,255,255,0.2)_inset,0_8px_18px_-10px_rgba(188,0,45,0.65)] motion-safe:hover:-translate-y-px"
         >
           {t('mockups.menuBar.dismiss')}
-          <kbd className="rounded bg-[color-mix(in_oklab,#fff8eb_24%,transparent)] px-1 py-0.5 text-[9px] font-medium tracking-wider text-[#fff8eb] ring-1 ring-inset ring-[#fff8eb]/30">
+          <kbd className="hidden rounded bg-[color-mix(in_oklab,#fff8eb_24%,transparent)] px-1 py-0.5 text-[9px] font-medium tracking-wider text-[#fff8eb] ring-1 ring-inset ring-[#fff8eb]/30 sm:inline-block">
             Esc
           </kbd>
         </span>
       </div>
     </div>
+  )
+}
+
+function StepGlyph({ children }: { children: ReactNode }) {
+  return (
+    <span
+      aria-hidden
+      className="grid h-5 w-5 place-items-center rounded-md text-sumi-soft transition-colors duration-[200ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:bg-[color-mix(in_oklab,var(--sumi)_10%,transparent)] hover:text-sumi"
+    >
+      {children}
+    </span>
   )
 }
 
