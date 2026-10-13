@@ -13,6 +13,7 @@
    English homepage). Removes the render-blocking fetch from fonts.googleapis. */
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
+@import './styles/theme-wipe.css';
 
 /* Latin fonts: import only the latin + latin-ext subsets we actually use.
    The default `<weight>.css` entry points include Cyrillic, Greek,
@@ -2290,47 +2291,6 @@ section[id] {
 @keyframes vertical-drift {
   0%, 100% { transform: translateY(-50%); }
   50% { transform: translateY(calc(-50% - 8px)); }
-}
-
-/* Theme change: an ink stroke spreading from the switcher.
-
-   View Transitions snapshot the old and new frames, so the whole page
-   cross-fades for the cost of one clip-path animation. Transitioning
-   background-color on every element instead would fight hover states for
-   the duration and cost a paint per element.
-
-   The old frame holds still underneath while the new one is revealed, which
-   is what makes it read as ink soaking through paper rather than a wipe.
-   Scoped to [data-theme-wipe] so route changes and any other future view
-   transition keep their own timing. */
-@media (prefers-reduced-motion: no-preference) {
-  html[data-theme-wipe='on']::view-transition-old(root) {
-    animation: none;
-  }
-
-  html[data-theme-wipe='on']::view-transition-new(root) {
-    animation: theme-wipe 560ms cubic-bezier(0.22, 1, 0.36, 1);
-    mix-blend-mode: normal;
-  }
-
-  /* The new frame paints above the old one for the whole reveal. */
-  html[data-theme-wipe='on']::view-transition-old(root) {
-    z-index: 0;
-  }
-  html[data-theme-wipe='on']::view-transition-new(root) {
-    z-index: 1;
-  }
-}
-
-@keyframes theme-wipe {
-  from {
-    clip-path: circle(0 at var(--theme-wipe-x, 50%) var(--theme-wipe-y, 0));
-  }
-  to {
-    clip-path: circle(
-      var(--theme-wipe-r, 150vmax) at var(--theme-wipe-x, 50%) var(--theme-wipe-y, 0)
-    );
-  }
 }
 
 /* Snapshots are cheap only if the browser is not asked to also cross-fade

@@ -1,0 +1,78 @@
+/* Theme change: a sumi-ink blot spreading from the theme switcher.
+
+   View Transitions snapshot the old and new frames, so the whole page swaps
+   theme for the cost of one mask animation. Transitioning background-color on
+   every element instead would fight hover states and repaint each element.
+
+   The new frame is revealed through an ink-blot mask (ragged edge plus a few
+   splatter drops) that grows from the click point. The old frame holds still
+   underneath but fades a little over the NEW theme's paper colour, so the
+   part the ink has not reached yet already drifts toward the new theme. The
+   tokens resolve to the new theme because <html> already carries the new
+   class while the transition runs. The whole thing reads as ink soaking into
+   washi paper.
+   Scoped to [data-theme-wipe] so route changes keep their own fade.
+
+   Coverage: the blob's narrowest point is 70.4% of its half-width (generated
+   shape, see --theme-ink-reach). The mask grows to 2r / 0.7, where r is the
+   distance from the click point to the farthest corner (set in
+   ThemeSwitcher.tsx), so the last pixel is always covered. */
+
+@media (prefers-reduced-motion: no-preference) {
+  html[data-theme-wipe='on']::view-transition-image-pair(root) {
+    background: var(--washi);
+  }
+
+  html[data-theme-wipe='on']::view-transition-old(root) {
+    z-index: 0;
+    animation: theme-ink-tint var(--theme-ink-duration) ease-in-out both;
+  }
+
+  html[data-theme-wipe='on']::view-transition-new(root) {
+    --theme-ink-reach: 0.7;
+    --theme-ink-size: calc(var(--theme-wipe-r, 150vmax) * 2 / var(--theme-ink-reach));
+    z-index: 1;
+    mix-blend-mode: normal;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpath d='M191.2 100C191.8 104.6 191.3 109.7 189.9 114.2C188.6 118.7 185.9 123.2 183 127C180.1 130.8 174.7 133 172.5 136.9C170.2 140.8 171.7 146.7 169.5 150.5C167.3 154.2 163.2 157.1 159.4 159.4C155.6 161.7 150.2 161.6 146.5 164.1C142.9 166.5 141.2 171.6 137.7 173.9C134.1 176.2 129.5 177.2 125.3 177.8C121.1 178.4 116.5 178.3 112.3 177.5C108.1 176.7 104 173.1 100 172.9C96 172.6 92.2 174.9 88 175.9C83.7 176.9 79 178.5 74.5 178.6C70 178.7 65.3 177.9 61 176.6C56.6 175.3 53.1 172.6 48.4 171C43.8 169.4 37.2 169.5 33.1 166.9C28.9 164.4 25.6 160 23.6 155.5C21.6 151.1 21.5 145.2 21 140.3C20.4 135.3 20.4 130.5 20.3 125.9C20.2 121.3 20 116.9 20.3 112.6C20.5 108.3 20.4 104 21.7 100C23 96 28.1 92.9 27.9 88.6C27.8 84.3 21.2 78.7 20.8 74.3C20.4 69.9 23.3 65.7 25.6 62.1C28 58.5 32.1 56 34.9 52.7C37.7 49.4 40 46.1 42.4 42.4C44.9 38.8 46.6 34 49.7 30.7C52.7 27.4 56.5 24.3 60.7 22.8C64.8 21.3 70.4 23.6 74.6 21.8C78.8 19.9 81.7 14.1 86 11.5C90.2 8.9 95.4 6.1 100 6.3C104.6 6.5 109.4 10.5 113.8 12.6C118.2 14.7 122.5 16.5 126.3 19C130.2 21.4 133.9 24.2 137 27.4C140.1 30.6 142.6 34.6 144.8 38.4C146.9 42.2 147.2 47.3 149.8 50.2C152.5 53.1 157 53.7 160.7 55.9C164.5 58 169.2 60.1 172.3 63.2C175.5 66.2 177.3 70.3 179.6 74.1C181.9 78 184.2 82.1 186.1 86.4C188 90.7 190.5 95.4 191.2 100Z'/%3E%3Ccircle cx='179.5' cy='142.3' r='3.2'/%3E%3Ccircle cx='26.2' cy='147.9' r='2.4'/%3E%3Ccircle cx='22.0' cy='51.2' r='3.6'/%3E%3Ccircle cx='166.1' cy='40.4' r='2.2'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpath d='M191.2 100C191.8 104.6 191.3 109.7 189.9 114.2C188.6 118.7 185.9 123.2 183 127C180.1 130.8 174.7 133 172.5 136.9C170.2 140.8 171.7 146.7 169.5 150.5C167.3 154.2 163.2 157.1 159.4 159.4C155.6 161.7 150.2 161.6 146.5 164.1C142.9 166.5 141.2 171.6 137.7 173.9C134.1 176.2 129.5 177.2 125.3 177.8C121.1 178.4 116.5 178.3 112.3 177.5C108.1 176.7 104 173.1 100 172.9C96 172.6 92.2 174.9 88 175.9C83.7 176.9 79 178.5 74.5 178.6C70 178.7 65.3 177.9 61 176.6C56.6 175.3 53.1 172.6 48.4 171C43.8 169.4 37.2 169.5 33.1 166.9C28.9 164.4 25.6 160 23.6 155.5C21.6 151.1 21.5 145.2 21 140.3C20.4 135.3 20.4 130.5 20.3 125.9C20.2 121.3 20 116.9 20.3 112.6C20.5 108.3 20.4 104 21.7 100C23 96 28.1 92.9 27.9 88.6C27.8 84.3 21.2 78.7 20.8 74.3C20.4 69.9 23.3 65.7 25.6 62.1C28 58.5 32.1 56 34.9 52.7C37.7 49.4 40 46.1 42.4 42.4C44.9 38.8 46.6 34 49.7 30.7C52.7 27.4 56.5 24.3 60.7 22.8C64.8 21.3 70.4 23.6 74.6 21.8C78.8 19.9 81.7 14.1 86 11.5C90.2 8.9 95.4 6.1 100 6.3C104.6 6.5 109.4 10.5 113.8 12.6C118.2 14.7 122.5 16.5 126.3 19C130.2 21.4 133.9 24.2 137 27.4C140.1 30.6 142.6 34.6 144.8 38.4C146.9 42.2 147.2 47.3 149.8 50.2C152.5 53.1 157 53.7 160.7 55.9C164.5 58 169.2 60.1 172.3 63.2C175.5 66.2 177.3 70.3 179.6 74.1C181.9 78 184.2 82.1 186.1 86.4C188 90.7 190.5 95.4 191.2 100Z'/%3E%3Ccircle cx='179.5' cy='142.3' r='3.2'/%3E%3Ccircle cx='26.2' cy='147.9' r='2.4'/%3E%3Ccircle cx='22.0' cy='51.2' r='3.6'/%3E%3Ccircle cx='166.1' cy='40.4' r='2.2'/%3E%3C/svg%3E");
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    /* Ink gathers, spreads, then settles: a gentle ease-in-out, so the blot
+       visibly grows across the page instead of bursting past it. */
+    animation: theme-ink-spread var(--theme-ink-duration) cubic-bezier(0.5, 0, 0.2, 1) both;
+  }
+}
+
+html[data-theme-wipe='on'] {
+  --theme-ink-duration: 1200ms;
+}
+
+@keyframes theme-ink-tint {
+  to {
+    opacity: 0.7;
+  }
+}
+
+/* Animates mask-size and mask-position themselves, not a registered custom
+   property: Firefox (and Zen) left a custom property on the view-transition
+   pseudo stuck at its start value, so the new theme never showed until the
+   end. Size and position share one easing, so position = centre - size / 2
+   holds at every frame and the blot stays anchored on the switcher. */
+@keyframes theme-ink-spread {
+  from {
+    -webkit-mask-size: 0px 0px;
+    mask-size: 0px 0px;
+    -webkit-mask-position: var(--theme-wipe-x, 50%) var(--theme-wipe-y, 0px);
+    mask-position: var(--theme-wipe-x, 50%) var(--theme-wipe-y, 0px);
+  }
+  to {
+    -webkit-mask-size: var(--theme-ink-size) var(--theme-ink-size);
+    mask-size: var(--theme-ink-size) var(--theme-ink-size);
+    -webkit-mask-position:
+      calc(var(--theme-wipe-x, 50%) - var(--theme-ink-size) / 2)
+      calc(var(--theme-wipe-y, 0px) - var(--theme-ink-size) / 2);
+    mask-position:
+      calc(var(--theme-wipe-x, 50%) - var(--theme-ink-size) / 2)
+      calc(var(--theme-wipe-y, 0px) - var(--theme-ink-size) / 2);
+  }
+}
