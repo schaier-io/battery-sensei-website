@@ -1879,6 +1879,31 @@
         length="27073671"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.17.0</title>
+      <pubDate>Wed, 14 Oct 2026 05:49:38 +0000</pubDate>
+      <sparkle:version>106</sparkle:version>
+      <sparkle:shortVersionString>1.17.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.17.0</h1>
+<h2>Improved</h2>
+<ul>
+<li>The small notices in the corner of the screen are now only as wide as their content. Before, every notice was the same width, and short ones had a large empty space on the right.</li>
+<li>In each notice, the icon sits in its own column. The name, the title and the text below now line up on one edge.</li>
+<li>The notices have less padding, so they take less space on screen.</li>
+<li>When the charge or battery estimate updates while a notice is open, the notice stays in its corner as it changes size.</li>
+</ul>
+<p>Marketing 1.16.0 → 1.17.0, build 105 → 106.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.17.0/Battery-Sensei.pkg"
+        sparkle:edSignature="hRM3oUjaiZ1RDv0lFoyUzIsgGcOqjm4+y9ZOaqxPbZTABubjMx24xcVoS5YTBCd3f4WE4XeFBjKlXGLlHcAxDg=="
+        length="27086934"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
