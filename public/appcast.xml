@@ -1930,6 +1930,32 @@
         length="27096218"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.17.2</title>
+      <pubDate>Mon, 19 Oct 2026 17:02:24 +0000</pubDate>
+      <sparkle:version>108</sparkle:version>
+      <sparkle:shortVersionString>1.17.2</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.17.2</h1>
+<h2>Improved</h2>
+<ul>
+<li>Earned seals in Honors show their rank again. Each one is a coin in its own metal: bronze, silver, gold, jade or dragon. Before, every earned seal was the same red stamp.</li>
+<li>Under each earned seal, the rank name shows in its own color, next to the date you earned it.</li>
+<li>Buttons on achievement popups now have light text on every rank, gold included. The button colors are deeper so the text is easy to read.</li>
+<li>In the seal popups, the rank badge, the earned date and the &quot;Seal earned&quot; title are easier to read, mostly in dark mode. The Close and Dismiss all buttons have darker text.</li>
+<li>The earned date uses the same format on the seal and in its popup, in the app&#x27;s language.</li>
+</ul>
+<p>Marketing 1.17.1 → 1.17.2, build 107 → 108.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.17.2/Battery-Sensei.pkg"
+        sparkle:edSignature="hijHugOrLu1xOA4Zg/JCUyPeR5yq52uTHYP2wf+Me56+f6h0IDnEQuEf4hG8iUdLFZFA85HB+zM/ZfrsNj0dBg=="
+        length="27099005"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
