@@ -1903,6 +1903,34 @@
         length="27086934"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.17.1</title>
+      <pubDate>Mon, 19 Oct 2026 14:44:44 +0000</pubDate>
+      <sparkle:version>107</sparkle:version>
+      <sparkle:shortVersionString>1.17.1</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.17.1</h1>
+<h2>Improved</h2>
+<ul>
+<li>Every alert popup and every main screen uses one spacing scale. Items that belong together sit closer, and groups have more room between them.</li>
+<li>The Snooze and Low Power keys in an alert line up with the alert text. Under Increase Contrast, the Snooze key keeps its outline.</li>
+<li>In Saga, the number of open recommendations is now visible in dark mode. Before, it showed as an empty dot.</li>
+<li>In the setup wizard, the warning names (Info, Warning, Alert) and their levels are easier to read. The color stays in the small badge.</li>
+<li>On achievement buttons, the gold button now has dark text, so the label is easier to read. The &quot;Seal earned&quot; title and the earned date are also easier to read.</li>
+<li>Buttons in the achievement, rescue receipt and feature request sheets now have the same corner shape and height as the other buttons in the app.</li>
+<li>In Settings, the menu bar style picker lines up with the text above it.</li>
+</ul>
+<p>Marketing 1.17.0 → 1.17.1, build 106 → 107.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.17.1/Battery-Sensei.pkg"
+        sparkle:edSignature="wIIun7DWGUxlJD6Z+u8iMeBEgwn3AqqD5hrq4BFY8iFndHfUEJOv1ehSZnIhp1PGoUI59JC+CTA0vVA0d37xAw=="
+        length="27096218"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
