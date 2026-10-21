@@ -1955,6 +1955,28 @@
         length="27099005"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.17.3</title>
+      <pubDate>Wed, 21 Oct 2026 09:37:36 +0000</pubDate>
+      <sparkle:version>109</sparkle:version>
+      <sparkle:shortVersionString>1.17.3</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.17.3</h1>
+<h2>Improved</h2>
+<ul>
+<li>In the small corner notices (on battery, charging, ghost charger, slow charge and draining on power), the icon now sits next to the title. The label, the icon and the text below now start on the same line at the left, like in the larger alerts. Before, the icon sat in its own column, left of the text.</li>
+</ul>
+<p>Marketing 1.17.2 → 1.17.3, build 108 → 109.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.17.3/Battery-Sensei.pkg"
+        sparkle:edSignature="yAx8d9LfisZzdlS4h58+lRtvt0OcFTBcAy1yhhmoE3g+0Lx0oQtHGSgEgpzEjrzPktLL7cMwL0frCxLSMWpbCQ=="
+        length="27096566"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
