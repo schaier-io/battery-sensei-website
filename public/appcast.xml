@@ -2030,6 +2030,37 @@
         length="27298752"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.19.0</title>
+      <pubDate>Thu, 22 Oct 2026 15:33:42 +0000</pubDate>
+      <sparkle:version>112</sparkle:version>
+      <sparkle:shortVersionString>1.19.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.19.0</h1>
+<h2>New</h2>
+<ul>
+<li>The main window now unrolls from its top edge like a hanging scroll when it opens.</li>
+<li>Now and then, closing the main window cuts it in two with a katana stroke. Most closes stay the normal macOS close.</li>
+<li>Seal popups unroll when they appear and roll back up when they close.</li>
+<li>On Today, the battery ring draws itself in, and the cards rise one after another.</li>
+</ul>
+<h2>Improved</h2>
+<ul>
+<li>A seal popup now resizes to fit each seal in a batch, and when its Share button comes or goes.</li>
+<li>While a seal popup closes, extra clicks or key presses on it are ignored.</li>
+</ul>
+<p>With Reduce Motion on, all of this motion is off.</p>
+<p>Marketing 1.18.0 → 1.19.0, build 111 → 112.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.19.0/Battery-Sensei.pkg"
+        sparkle:edSignature="5OaM8cvi61SpMIDE1cQfPxMpPJmgD22INWV+rnkDqgH59LzX5M4p0B7a/yAgv5Q3OBHUgHeCavLor0hfzuOkAw=="
+        length="27344662"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
