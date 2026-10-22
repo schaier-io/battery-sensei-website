@@ -2000,6 +2000,37 @@
         length="27103878"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.18.0</title>
+      <pubDate>Thu, 22 Oct 2026 15:04:22 +0000</pubDate>
+      <sparkle:version>111</sparkle:version>
+      <sparkle:shortVersionString>1.18.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.18.0</h1>
+<h2>New</h2>
+<ul>
+<li>Battery calibration. When a battery story in Saga suggests it, click &quot;Start calibration&quot;. The app pauses your charge limit for one cycle: use your Mac down to 10%, then charge it to 100%. Your limit comes back after the cycle, or at the shown time if the cycle does not finish. Heat protection stays on, and you can cancel at any time from Saga or the menu.</li>
+<li>A &quot;Share invitations&quot; switch in Settings. Turn it off to stop the occasional invitations to share a rescue or a seal. The Share buttons in Saga and Honors still work.</li>
+<li>Saga has its own settings section with the &quot;Achievement pop-ups&quot; switch.</li>
+<li>When you beat your own record on a seal, its popup now says &quot;New personal best&quot;.</li>
+</ul>
+<h2>Improved</h2>
+<ul>
+<li>New design for the unplug and plug-in alerts: the time estimate comes first, and a charge bar marks your charge limit.</li>
+<li>The plug-in alert no longer shows &quot;esc&quot;. Press ? or click the ⓘ to see its keys.</li>
+<li>If you press Esc twice on a seal popup while it fades out, the next seal now shows correctly. Before, its Share and Esc stopped working.</li>
+</ul>
+<p>Marketing 1.17.4 → 1.18.0, build 110 → 111.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.18.0/Battery-Sensei.pkg"
+        sparkle:edSignature="8hP4m3P7HbPK6/N8nNX7xPDPEP1pi4FdQXUykqf93+VZi3GmmxWLecjhF7iI1xw5ITYhwqFynXikqTNaxhmGBA=="
+        length="27298752"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
