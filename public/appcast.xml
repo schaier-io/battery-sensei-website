@@ -1976,6 +1976,31 @@
         length="27096566"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.17.4</title>
+      <pubDate>Thu, 22 Oct 2026 13:50:04 +0000</pubDate>
+      <sparkle:version>110</sparkle:version>
+      <sparkle:shortVersionString>1.17.4</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.17.4</h1>
+<h2>Improved</h2>
+<ul>
+<li>Buttons on the rescue receipt, the new-seal popup and the seal popups in Honors no longer show &quot;esc&quot;. The key still works.</li>
+<li>To see the keys of these popups, click the ⓘ next to the buttons or the title. After you click the popup, you can also press ? to show or hide the list. The alerts already worked this way.</li>
+<li>While the ⓘ list is open, the rescue receipt and a new seal stay on screen. When you close the list, the receipt or seal can close by itself again after a short time.</li>
+<li>The short card that shows when you plug in during an alert with the Alert style no longer shows &quot;esc&quot;, &quot;F1&quot; or &quot;F2&quot;, or names them in its tooltips. These keys did nothing on that card.</li>
+</ul>
+<p>Marketing 1.17.3 → 1.17.4, build 109 → 110.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.17.4/Battery-Sensei.pkg"
+        sparkle:edSignature="D3QHf8gSs6OY8VdQLKtL3U+0VscVey+WvGMaFJ8oFI05zRXYcDoQMFQVQoN0BtU5yBmcl3W/49Q87vi6ZsS4CA=="
+        length="27103878"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
