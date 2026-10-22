@@ -2060,6 +2060,45 @@
         length="27344662"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.20.0</title>
+      <pubDate>Thu, 22 Oct 2026 18:38:20 +0000</pubDate>
+      <sparkle:version>113</sparkle:version>
+      <sparkle:shortVersionString>1.20.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.20.0</h1>
+<h2>New</h2>
+<ul>
+<li>When the main window opens, the sections fade in one after another once the scroll has unrolled. Then the Today ring draws itself in. Switching tabs uses a lighter, quicker version of this.</li>
+<li>Saga now has two cards: Statistics, with Battery health above Weekly, and Honors.</li>
+<li>The Warnings tab is now called Alerts.</li>
+<li>The Low Power card is now called Automatic Low Power Mode.</li>
+<li>The licence details have a new, cleaner layout.</li>
+</ul>
+<h2>Improved</h2>
+<ul>
+<li>The Pause warnings, Low Power and Travel Mode buttons on Today are shorter.</li>
+<li>Seal popups are smaller and appear at the top-right of the screen.</li>
+<li>The katana slice moved from the main window to the popups. Now and then, a corner notice, the rescue receipt or a seal popup is cut in two when it closes.</li>
+<li>The window roll stays on the paper edge and ends cleanly, without a dark bar.</li>
+<li>General settings are tidier: the licence sits next to the app version, and the support links are one quiet line. Advanced diagnostics moved into the General card, and its Enabled tag sits next to its switch.</li>
+<li>The seal pop-ups switch is now a small switch under Honors.</li>
+<li>During the trial, Settings shows one Activate button. Hover it to see the days left.</li>
+<li>Sharing in Saga is a small icon. The duplicate Copy image buttons are gone, also from the rescue receipt.</li>
+<li>The Control Center link shows only after you hide the battery icon.</li>
+</ul>
+<p>With Reduce Motion on, all of this motion is off.</p>
+<p>Marketing 1.19.0 → 1.20.0, build 112 → 113.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.20.0/Battery-Sensei.pkg"
+        sparkle:edSignature="SRtpXlDoAy37pSzMGOWkbhxIUFaS7/ToKtqkllXnjWiJtCvkHFhH8ObShbOb1qRK9pkyUCPtaKcYO5bnwGnYAA=="
+        length="27354984"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
