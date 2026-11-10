@@ -24,8 +24,8 @@
     "@fontsource/source-sans-3": "^5.2.9",
     "@fontsource/spectral": "^5.2.8",
     "@polar-sh/checkout": "^0.3.0",
-    "@prisma/adapter-pg": "^7.8.0",
-    "@prisma/client": "^7.8.0",
+    "@prisma/adapter-pg": "^7.10.1",
+    "@prisma/client": "^7.10.1",
     "@tailwindcss/vite": "^4.3.0",
     "@tanstack/react-devtools": "^0.10.5",
     "@tanstack/react-router": "^1.170.41",
@@ -68,7 +68,7 @@
     "@vitejs/plugin-react": "^6.0.2",
     "jsdom": "^29.1.1",
     "png-to-ico": "^3.0.1",
-    "prisma": "^7.8.0",
+    "prisma": "^7.10.1",
     "react-email": "^6.11.11",
     "sharp": "^0.35.5",
     "subset-font": "^2.5.0",
@@ -85,9 +85,6 @@
       "prisma"
     ],
     "overrides": {
-      "@prisma/dev>@hono/node-server": "^1.19.15",
-      "@prisma/dev>valibot": "^1.4.2",
-      "prisma>mysql2": "^3.23.1",
       "@tailwindcss/typography>postcss-selector-parser": "^6.1.5",
       "socket.io-adapter>ws": "^8.21.0"
     }
