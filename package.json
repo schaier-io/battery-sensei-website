@@ -85,8 +85,7 @@
       "prisma"
     ],
     "overrides": {
-      "@tailwindcss/typography>postcss-selector-parser": "^6.1.5",
-      "socket.io-adapter>ws": "^8.21.0"
+      "@tailwindcss/typography>postcss-selector-parser": "^6.1.5"
     }
   }
 }
