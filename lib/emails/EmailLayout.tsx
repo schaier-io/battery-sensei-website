@@ -26,7 +26,7 @@ import {
   Preview,
   Section,
   Text,
-} from '@react-email/components'
+} from 'react-email'
 import type { ReactNode } from 'react'
 import { fontStack, jpStack, palette, serifStack } from './theme.js'
 
@@ -187,7 +187,7 @@ export function EmailLayout({
         >
           {/* Masthead */}
           <Section
-            className="bs-pad bs-pad-top"
+            tdClassName="bs-pad bs-pad-top"
             style={{
               padding: '36px 44px 0',
             }}
@@ -262,7 +262,7 @@ export function EmailLayout({
 
           {/* Body */}
           <Section
-            className="bs-pad"
+            tdClassName="bs-pad"
             style={{ padding: '24px 44px 36px' }}
           >
             {children}
@@ -270,7 +270,7 @@ export function EmailLayout({
 
           {/* Footer */}
           <Section
-            className="bs-pad"
+            tdClassName="bs-pad"
             style={{
               padding: '24px 44px 36px',
               borderTop: `1px solid ${palette.line}`,
