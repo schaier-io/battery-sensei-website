@@ -2098,6 +2098,42 @@
         length="27354984"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.21.0</title>
+      <pubDate>Wed, 11 Nov 2026 19:00:42 +0000</pubDate>
+      <sparkle:version>114</sparkle:version>
+      <sparkle:shortVersionString>1.21.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.21.0</h1>
+<h2>New</h2>
+<ul>
+<li>In Low Power Mode, the menu bar battery icon is yellow, like on iPhone. It changes as soon as you turn Low Power Mode on or off.</li>
+<li>The menu icons show again on macOS 27.</li>
+<li>The menu toggles say what they do: Pause warnings or Resume warnings, Turn on or Turn off Low Power Mode. There are no checkmarks.</li>
+</ul>
+<h2>Improved</h2>
+<ul>
+<li>The status line at the top of the menu is easier to read. Its icon sits on the line of text, and the calendar icon is gray unless a meeting is at risk.</li>
+<li>While a calibration runs, the menu does not show a calibration item. It shows Retry restore only when the restore failed.</li>
+<li>During calibration or Travel Mode, the Charge limit setting shows your own limit. A tag tells you when the limit is lifted for this charge.</li>
+<li>A running calibration does not count as a recommendation.</li>
+<li>The Battery health tiles have a new, calmer look. The health tiles, Weekly tiles, inset panels and settings rows do not react to the pointer anymore, because you cannot click them.</li>
+<li>The segmented buttons, for example in Top power-hungry apps, do not grow or shrink when you point at or click them.</li>
+<li>Labels in the alert rules and settings have the same distance to their controls.</li>
+<li>The Run Setup Wizard Again button is now called Setup Wizard and has an icon.</li>
+<li>Start at login now says &quot;Starts automatically when you sign in.&quot;</li>
+</ul>
+<p>Marketing 1.20.0 → 1.21.0, build 113 → 114.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.21.0/Battery-Sensei.pkg"
+        sparkle:edSignature="8dzhwpF22ZaHhD+9lI8HIg92ej+kxWbVWdyzo/cgX7BGdFi5cBPSOGI2UEA0PdnhasVU/Hs30jovJu9AzI/nBg=="
+        length="27359060"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
