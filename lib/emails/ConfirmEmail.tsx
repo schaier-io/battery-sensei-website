@@ -6,7 +6,7 @@
  * an "if you didn't sign up, ignore this" note (CASL/CAN-SPAM friendly,
  * and matches how real opt-in funnels work).
  */
-import { Button, Link, Section, Text } from '@react-email/components'
+import { Button, Link, Section, Text } from 'react-email'
 import { EmailLayout } from './EmailLayout.js'
 import { fontStack, jpStack, palette, serifStack } from './theme.js'
 
