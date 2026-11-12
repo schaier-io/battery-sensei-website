@@ -11,6 +11,14 @@
     {
       "source": "/api/cron/retention",
       "destination": "/api/admin/session?job=retention"
+    },
+    {
+      "source": "/api/telemetry",
+      "destination": "/api/feature-requests?ingest=telemetry"
+    },
+    {
+      "source": "/api/crash-reports",
+      "destination": "/api/feature-requests?ingest=crash"
     }
   ],
   "redirects": [

@@ -41,6 +41,10 @@ const DEV_API_ROUTES: Record<string, string> = {
   '/api/feature-requests/vote': '/api/feature-requests/vote.ts',
   '/api/admin/session': '/api/admin/session.ts',
   '/api/admin/feature-requests': '/api/admin/feature-requests.ts',
+  // Production reaches these through vercel.json rewrites, which vite dev
+  // does not run, so map them straight to their handler modules.
+  '/api/telemetry': '/lib/app-telemetry.ts',
+  '/api/crash-reports': '/lib/app-crash-reports.ts',
 }
 
 function devApiFunctions(): Plugin {
