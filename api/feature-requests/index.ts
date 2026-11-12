@@ -16,6 +16,11 @@
  *
  * Required env vars: DATABASE_URL, RESEND_API_KEY, CONTACT_INBOX_TO,
  * CONTACT_INBOX_FROM.
+ *
+ * Vercel Hobby allows 12 functions and all 12 exist, so vercel.json also
+ * rewrites the app's opt-in ingest endpoints here with `?ingest=`:
+ *   /api/telemetry      → lib/app-telemetry.ts
+ *   /api/crash-reports  → lib/app-crash-reports.ts
  */
 import { z } from 'zod'
 // Explicit `.js` extensions — Node ESM (`"type":"module"`) on Vercel
@@ -39,6 +44,14 @@ import {
   buildFeatureAdminNotifyEmail,
   buildFeatureConfirmationEmail,
 } from '../../lib/emails/feature-board.js'
+import { NO_STORE, ingestEnabled } from '../../lib/app-ingest.js'
+import { POST as telemetryPOST } from '../../lib/app-telemetry.js'
+import { POST as crashReportPOST } from '../../lib/app-crash-reports.js'
+
+const INGEST_HANDLERS = new Map([
+  ['telemetry', telemetryPOST],
+  ['crash', crashReportPOST],
+])
 
 const LIST_PAGE_SIZE = 20
 const LIST_PAGE_MAX = 50
@@ -126,6 +139,15 @@ function buildRequestRecord({
 }
 
 export async function GET(request: Request): Promise<Response> {
+  // Rewrites apply to every method: without this, GET /api/telemetry would
+  // answer with the cacheable public board list.
+  if (new URL(request.url).searchParams.has('ingest')) {
+    // While switched off, stay indistinguishable from a missing route.
+    return ingestEnabled()
+      ? json({ error: 'method_not_allowed' }, 405, { ...NO_STORE, allow: 'POST' })
+      : json({ error: 'not_found' }, 404, NO_STORE)
+  }
+
   // Cursor pagination: stable order (votes desc, createdAt desc, id desc as
   // the unique tiebreaker) so pages never skip or repeat rows between calls.
   const url = new URL(request.url)
@@ -180,6 +202,12 @@ export async function GET(request: Request): Promise<Response> {
 }
 
 export async function POST(request: Request): Promise<Response> {
+  const ingest = new URL(request.url).searchParams.get('ingest')
+  if (ingest !== null) {
+    const handler = INGEST_HANDLERS.get(ingest)
+    return handler ? handler(request) : json({ error: 'not_found' }, 404, NO_STORE)
+  }
+
   const gate = await checkOriginAndBody(request, { allowNoOrigin: true })
   if (!gate.ok) return gate.response
   const { payload: rawPayload, origin } = gate
