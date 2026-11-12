@@ -15,6 +15,8 @@ const PENDING_NEWSLETTER_MS = 9 * DAY_MS
 const LICENSE_CACHE_MS = 60 * DAY_MS
 const SECURITY_RECORD_MS = 30 * DAY_MS
 const PRIVATE_RECORD_MONTHS = 24
+const CRASH_REPORT_MS = 90 * DAY_MS
+const USAGE_COUNTER_MONTHS = 13
 
 export type PendingNewsletter = {
   id: string
@@ -54,6 +56,8 @@ export type RetentionDatabase = {
   featureVote: Delegate<'updateMany'>
   licenseVoter: Delegate<'deleteMany'>
   adminLoginAttempt: Delegate<'deleteMany'>
+  crashReport: Delegate<'deleteMany'>
+  telemetryDailyCount: Delegate<'deleteMany'>
 }
 
 export type RetentionReport = {
@@ -65,6 +69,8 @@ export type RetentionReport = {
   featureVoteIpsMinimized: number
   licenseVotersDeleted: number
   adminLoginAttemptsDeleted: number
+  crashReportsDeleted: number
+  usageCounterRowsDeleted: number
   failures: string[]
 }
 
@@ -110,6 +116,17 @@ export async function runRetention({
   const privateCutoff = monthsBefore(now, PRIVATE_RECORD_MONTHS)
   const licenseCutoff = new Date(now.getTime() - LICENSE_CACHE_MS)
   const securityCutoff = new Date(now.getTime() - SECURITY_RECORD_MS)
+  const crashCutoff = new Date(now.getTime() - CRASH_REPORT_MS)
+  // Counters are keyed by UTC day, so cut at a day boundary: a row is
+  // deleted once its whole day is older than the retention period.
+  const counterMonthsAgo = monthsBefore(now, USAGE_COUNTER_MONTHS)
+  const usageCounterCutoff = new Date(
+    Date.UTC(
+      counterMonthsAgo.getUTCFullYear(),
+      counterMonthsAgo.getUTCMonth(),
+      counterMonthsAgo.getUTCDate(),
+    ),
+  )
   const failures: string[] = []
 
   const pending = await db.newsletterSignup.findMany({
@@ -219,6 +236,8 @@ export async function runRetention({
     voteIps,
     licenses,
     loginAttempts,
+    crashReports,
+    usageCounters,
   ] = await Promise.all([
       db.supportRequest.deleteMany({
         where: {
@@ -267,6 +286,15 @@ export async function runRetention({
           createdAt: { lt: securityCutoff },
           OR: holdExpiredOrAbsent,
         },
+      }),
+      db.crashReport.deleteMany({
+        where: {
+          createdAt: { lt: crashCutoff },
+          OR: holdExpiredOrAbsent,
+        },
+      }),
+      db.telemetryDailyCount.deleteMany({
+        where: { day: { lt: usageCounterCutoff } },
       }),
     ])
 
@@ -320,6 +348,8 @@ export async function runRetention({
     featureVoteIpsMinimized: voteIps.count,
     licenseVotersDeleted: licenses.count,
     adminLoginAttemptsDeleted: loginAttempts.count,
+    crashReportsDeleted: crashReports.count,
+    usageCounterRowsDeleted: usageCounters.count,
     failures,
   }
 }
