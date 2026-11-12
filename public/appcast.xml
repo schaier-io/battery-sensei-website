@@ -2155,6 +2155,29 @@
         length="27356450"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.22.0</title>
+      <pubDate>Thu, 12 Nov 2026 21:22:43 +0000</pubDate>
+      <sparkle:version>116</sparkle:version>
+      <sparkle:shortVersionString>1.22.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.22.0</h1>
+<h2>New</h2>
+<ul>
+<li>The charging popup has a new charge bar. An ink stroke shows the current level and ends in a round dot. A thin line runs on to your charge limit. Past the limit, a gray fade shows the part of the battery that the limit keeps free.</li>
+<li>The current percentage sits under the dot. When it would touch the limit label, the bar hides it. The percentage at the top of the popup stays.</li>
+</ul>
+<p>Marketing 1.21.1 → 1.22.0, build 115 → 116.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.22.0/Battery-Sensei.pkg"
+        sparkle:edSignature="nKDb5GQ+xRK40zegnk/NZb3LnQQT9Al7QvwUYEdQAApN7JvyUoGYzv4vFZICaFxC2EpkU8tcWLN2bFNRd2kwBw=="
+        length="27376371"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
