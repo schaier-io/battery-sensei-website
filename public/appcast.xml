@@ -2133,6 +2133,29 @@
         length="27359060"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.21.1</title>
+      <pubDate>Thu, 12 Nov 2026 17:20:50 +0000</pubDate>
+      <sparkle:version>115</sparkle:version>
+      <sparkle:shortVersionString>1.21.1</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.21.1</h1>
+<h2>Fixed</h2>
+<ul>
+<li>A running calibration charges to 100% again. Before, it could stop at 85% while the menu bar showed the power adapter as plugged in. If something turns the charge limit back on during a calibration, Battery Sensei now turns it off again.</li>
+<li>If Battery Sensei cannot turn the charge limit off during a calibration, it now shows an error. It does not show 100% while the limit is still on.</li>
+</ul>
+<p>Marketing 1.21.0 → 1.21.1, build 114 → 115.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.21.1/Battery-Sensei.pkg"
+        sparkle:edSignature="KSJzTFvDLIR8cTNbfZ0rJrofWwcKQyBRbds8qx+UaUPc6o8m6J6s8D0fKP6LtEs73C4UbK1NnH3PZemCnHqDAw=="
+        length="27356450"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
