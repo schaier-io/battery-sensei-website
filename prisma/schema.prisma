@@ -266,3 +266,68 @@ model AdminLoginAttempt {
   @@index([ipAddress, createdAt])
   @@index([createdAt])
 }
+
+/// License state the macOS app reports with opt-in usage counts and crash
+/// reports. Mirrors the app's LicenseEntitlement: licensed, trial, trialExpired.
+enum AppTier {
+  paid
+  trial
+  expired
+}
+
+enum CrashReportStatus {
+  received
+  notified
+  notify_failed
+  duplicate
+}
+
+/// Opt-in daily usage count from the macOS app, aggregate only. One row per
+/// UTC day and (version, tier, macOS major) combination. There is no IP,
+/// install id, user agent, or timestamp column by design: `updatedAt` alone
+/// would reveal when the last device in a small bucket checked in.
+model TelemetryDailyCount {
+  day        DateTime @db.Date
+  appVersion String   @db.VarChar(16)
+  tier       AppTier
+  osMajor    Int      @db.SmallInt
+  count      Int      @default(0)
+
+  // The primary-key prefix also serves the per-day key-cap count and the
+  // retention cutoff on `day`.
+  @@id([day, appVersion, tier, osMajor])
+}
+
+/// Opt-in crash report from the macOS app. The app strips device and user
+/// identifiers before upload and the server rejects any report that still
+/// carries one. Unlike SupportRequest there is no raw payload, IP address,
+/// user agent, or origin.
+model CrashReport {
+  id         String            @id @default(cuid())
+  /// Short id shown to the user so they can ask for early deletion.
+  reportId   String            @unique
+  appVersion String
+  tier       AppTier
+  osVersion  String
+  /// Truncated SHA-256 of version, exception, and top faulting frames.
+  /// Groups repeats: one full report and one email per crash per day.
+  signature  String
+  /// Redacted `.ips` text exactly as the app sent it: one JSON header line,
+  /// then the JSON body. Kept as text, not JSONB, because `.ips` files hold
+  /// 64-bit integers that a JSON parse would round, and symbolication tools
+  /// read this format directly. Empty for a `duplicate` row: a repeat of a
+  /// recent crash keeps only the row (no text, no note) to count how often
+  /// it happens.
+  ips        String
+  note       String?
+  status     CrashReportStatus @default(received)
+  notifyEmailId String?
+  /// Optional operational hold; the daily retention job skips until expiry.
+  retentionHoldUntil DateTime?
+  createdAt  DateTime          @default(now())
+
+  // Global daily cap and retention cutoff.
+  @@index([createdAt])
+  // Duplicate-signature lookup for notification dedupe.
+  @@index([signature, createdAt])
+}
