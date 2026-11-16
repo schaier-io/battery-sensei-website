@@ -2177,6 +2177,31 @@
         length="27376371"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.23.0</title>
+      <pubDate>Mon, 16 Nov 2026 17:30:11 +0000</pubDate>
+      <sparkle:version>117</sparkle:version>
+      <sparkle:shortVersionString>1.23.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.23.0</h1>
+<h2>New</h2>
+<ul>
+<li>The charging popup and the on-battery popup now have the same charge bar. It is a gold brush stroke, like the ring on the Today page. Behind it, a sumi ink stroke runs on to your charge limit.</li>
+<li>When you unplug, the bar first fills to 100%, then drains to the current level. When you plug in, the bar fills part of the way, then climbs to the current level. The percentage shows under the bar when it stops.</li>
+<li>At 15% or less on battery, the popup and its bar turn red.</li>
+<li>The popups now stay on screen for 4 seconds, so you can see the bar settle.</li>
+</ul>
+<p>Marketing 1.22.0 → 1.23.0, build 116 → 117.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.23.0/Battery-Sensei.pkg"
+        sparkle:edSignature="26EEbAaeUyjGeXswAyf5tVI0Aqt/mwrUslFqTx7pf1yU6a4rw2lpf8U78MXql68FbyWpGxdpHwBwjxyjKUsGAQ=="
+        length="27337175"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
