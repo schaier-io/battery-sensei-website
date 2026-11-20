@@ -2201,6 +2201,31 @@
         length="27337175"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.23.1</title>
+      <pubDate>Fri, 20 Nov 2026 12:09:56 +0000</pubDate>
+      <sparkle:version>118</sparkle:version>
+      <sparkle:shortVersionString>1.23.1</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.23.1</h1>
+<h2>Accessory battery alerts</h2>
+<ul>
+<li>Plug in your iPhone, iPad, or accessory and its low-battery popup closes when Battery Sensei detects charging.</li>
+<li>AirPods earbuds and their case have separate warnings. Charging the case leaves a low-earbud warning on screen.</li>
+<li>While a popup is open, Battery Sensei checks that device more often. Accessories that report only a percentage can close the popup when their battery level rises.</li>
+</ul>
+<p>VERIFIED in <code>testAlertPollClosesChargingPhoneWarningAtSameLevelAndStops</code>, <code>testCaseRiseKeepsABudAlertOpen</code>, and <code>testClosesAlertWhenDeviceLevelRises</code>.</p>
+<p>Marketing 1.23.0 → 1.23.1, build 117 → 118.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.23.1/Battery-Sensei.pkg"
+        sparkle:edSignature="0OcGKNFqNXqjFYfOGsSkzw9geQUs800lDZop+rxjrrD8vgtlCObb5xxrp8/pbaVbgz8JtiwWVISCO9heNzKNAg=="
+        length="27397653"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
