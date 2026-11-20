@@ -165,7 +165,9 @@ export async function checkOriginAndBody(
   } catch {
     return { ok: false, response: json({ error: 'Invalid request body' }, 400) }
   }
-  if (raw.length > maxBytes) {
+  // Bytes, not UTF-16 units: a body without Content-Length full of
+  // multi-byte characters must not slip past the cap.
+  if (Buffer.byteLength(raw, 'utf8') > maxBytes) {
     return { ok: false, response: json({ error: 'Payload too large' }, 413) }
   }
 
@@ -343,11 +345,21 @@ export async function validateLicenseKey(
 
 const memoryBuckets = new Map<string, { count: number; resetAt: number }>()
 const MEMORY_BUCKET_PRUNE_THRESHOLD = 1000
+/** A full scan is O(n), so it runs at most this often. */
+const MEMORY_BUCKET_PRUNE_INTERVAL_MS = 60 * 1000
+/** Hard ceiling for a many-IP flood where nothing expires in time. */
+const MEMORY_BUCKET_MAX = 10_000
+let lastPruneAt = 0
 
 function pruneExpiredBuckets(now: number): void {
-  if (memoryBuckets.size < MEMORY_BUCKET_PRUNE_THRESHOLD) return
-  for (const [key, bucket] of memoryBuckets) {
-    if (now > bucket.resetAt) memoryBuckets.delete(key)
+  if (
+    memoryBuckets.size >= MEMORY_BUCKET_PRUNE_THRESHOLD
+    && now - lastPruneAt >= MEMORY_BUCKET_PRUNE_INTERVAL_MS
+  ) {
+    lastPruneAt = now
+    for (const [key, bucket] of memoryBuckets) {
+      if (now > bucket.resetAt) memoryBuckets.delete(key)
+    }
   }
 }
 
@@ -367,6 +379,14 @@ export function recordMemoryThrottleHit(key: string, windowMs: number): void {
   pruneExpiredBuckets(now)
   const bucket = memoryBuckets.get(key)
   if (!bucket || now > bucket.resetAt) {
+    // New or expired: re-insert at the end so Map order stays oldest-first,
+    // then evict the oldest bucket if a flood hit the ceiling. That weakens
+    // the brake for that key, which is acceptable for a soft brake.
+    memoryBuckets.delete(key)
+    if (memoryBuckets.size >= MEMORY_BUCKET_MAX) {
+      const oldest = memoryBuckets.keys().next()
+      if (!oldest.done) memoryBuckets.delete(oldest.value)
+    }
     memoryBuckets.set(key, { count: 1, resetAt: now + windowMs })
     return
   }

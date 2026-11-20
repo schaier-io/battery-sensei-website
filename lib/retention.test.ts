@@ -46,6 +46,12 @@ function database(overrides: {
     adminLoginAttempt: {
       deleteMany: vi.fn(async () => ({ count: 6 })),
     },
+    crashReport: {
+      deleteMany: vi.fn(async () => ({ count: 8 })),
+    },
+    telemetryDailyCount: {
+      deleteMany: vi.fn(async () => ({ count: 9 })),
+    },
   }
 }
 
@@ -97,6 +103,8 @@ describe('runRetention', () => {
       featureVoteIpsMinimized: 7,
       licenseVotersDeleted: 5,
       adminLoginAttemptsDeleted: 6,
+      crashReportsDeleted: 8,
+      usageCounterRowsDeleted: 9,
       failures: [],
     })
     expect(deletePendingContact).toHaveBeenCalledWith({
@@ -162,6 +170,20 @@ describe('runRetention', () => {
           { retentionHoldUntil: { lt: NOW } },
         ],
       },
+    })
+    expect(db.crashReport.deleteMany).toHaveBeenCalledWith({
+      where: {
+        createdAt: { lt: new Date('2026-05-02T12:00:00.000Z') },
+        OR: [
+          { retentionHoldUntil: null },
+          { retentionHoldUntil: { lt: NOW } },
+        ],
+      },
+    })
+    // 13 calendar months before July 31 clamps to June 30; counters are
+    // keyed by UTC day, so the cut sits at that day's midnight.
+    expect(db.telemetryDailyCount.deleteMany).toHaveBeenCalledWith({
+      where: { day: { lt: new Date('2025-06-30T00:00:00.000Z') } },
     })
     expect(db.featureVote.updateMany).toHaveBeenCalledWith({
       where: {

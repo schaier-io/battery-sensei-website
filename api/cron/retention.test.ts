@@ -32,6 +32,12 @@ function emptyDatabase(): RetentionDatabase {
     adminLoginAttempt: {
       deleteMany: vi.fn(async () => ({ count: 0 })),
     },
+    crashReport: {
+      deleteMany: vi.fn(async () => ({ count: 0 })),
+    },
+    telemetryDailyCount: {
+      deleteMany: vi.fn(async () => ({ count: 0 })),
+    },
   }
 }
 
@@ -87,6 +93,8 @@ describe('retention cron authorization', () => {
       featureVoteIpsMinimized: 0,
       licenseVotersDeleted: 0,
       adminLoginAttemptsDeleted: 0,
+      crashReportsDeleted: 0,
+      usageCounterRowsDeleted: 0,
       failures: [],
     })
     expect(JSON.stringify(body)).not.toContain('@')

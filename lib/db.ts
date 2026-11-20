@@ -14,9 +14,18 @@ import { PrismaClient } from './generated/prisma/client.js'
 
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient }
 
+/**
+ * How long a query may wait for a pooled connection, or for a new one to
+ * open, before it fails. pg-pool's default is to wait forever, so a full
+ * pool (a flood, a slow database) would hang every endpoint until the
+ * function times out. Long enough for a Neon compute to wake from suspend.
+ */
+const DB_CONNECT_TIMEOUT_MS = 10_000
+
 function createPrismaClient() {
   const adapter = new PrismaPg({
     connectionString: process.env.DATABASE_URL,
+    connectionTimeoutMillis: DB_CONNECT_TIMEOUT_MS,
   })
   return new PrismaClient({ adapter })
 }

@@ -30,6 +30,8 @@ A successful invocation returns HTTP 200 and a count-only JSON report:
   "featureVoteIpsMinimized": 0,
   "licenseVotersDeleted": 0,
   "adminLoginAttemptsDeleted": 0,
+  "crashReportsDeleted": 0,
+  "usageCounterRowsDeleted": 0,
   "failures": []
 }
 ```
@@ -52,6 +54,10 @@ The job enforces these first-party deadlines:
   duplicate-vote prevention. Parent request deletion still cascades the vote.
 - License-validation cache: deleted 60 days after last validation. Admin login
   attempts: deleted after 30 days unless an active security/legal hold applies.
+- App crash reports: deleted 90 days after receipt unless an active legal hold
+  applies.
+- App usage counters: aggregate rows with no personal data, deleted once their
+  UTC day is more than 13 calendar months old.
 
 ## Failures and retries
 
