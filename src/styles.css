@@ -1686,16 +1686,17 @@ body::after {
 }
 
 /* Stepwise descent that mirrors the app's `startPreviewAnimation`
-   (Surfaces/SetupWizard.swift): starts above the first flick, drops to
-   each visual position in turn, holds briefly so the checkpoint flick can
+   (Surfaces/SetupWizard.swift): drains from full to each visual flick
+   position in turn, holds briefly so the checkpoint flick can
    pulse, then recharges to 1.0 with the app's `previewTravelAnimation`
    curve. Cycle: 10s. Values match `displayFraction` in Features.tsx so
    the wet brush head settles exactly on each visual flick.
    `--ink-head-fade` flips from 1 (dispersing) to 0 (clean) at the recharge
    start so the head matches the app's `isExtendingForward` mask switch. */
 @keyframes ink-level-cycle {
-  0%   { --ink-charge: 0.55; --ink-head-fade: 1; } /* initial pause */
-  4%   { --ink-charge: 0.55; --ink-head-fade: 1; }
+  /* Starts at full, where the previous cycle ended: a 0.55 start here made
+     the loop cut from full straight to 55%. The pause at full is 82–100%. */
+  0%   { --ink-charge: 1.00; --ink-head-fade: 1; }
   11%  { --ink-charge: 0.32; --ink-head-fade: 1; } /* settle on Info flick */
   18%  { --ink-charge: 0.32; --ink-head-fade: 1; }
   28%  { --ink-charge: 0.16; --ink-head-fade: 1; } /* settle on Warning flick */
