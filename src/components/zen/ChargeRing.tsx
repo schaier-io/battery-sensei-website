@@ -120,6 +120,12 @@ export function ChargeRing({
   )
 }
 
+const BRUSH_GOLD_CSS = `
+.charge-ring-gold{--brush-gold:#FACC2E}
+@media (prefers-color-scheme:dark){:root:not(.light) .charge-ring-gold{--brush-gold:#EBB833}}
+:root.dark .charge-ring-gold{--brush-gold:#EBB833}
+`
+
 /**
  * Solid kin under-stroke for the gold body. Provides one continuous arc
  * so the BrushRing layered on top — which is naturally a *band* of
@@ -160,15 +166,15 @@ function GoldUnderstroke({
       const half = visibleDeg / 2
       return [
         `transparent 0deg`,
-        `var(--kin) ${half.toFixed(2)}deg`,
+        `var(--brush-gold) ${half.toFixed(2)}deg`,
         `transparent ${visibleDeg.toFixed(2)}deg`,
         `transparent 360deg`,
       ].join(', ')
     }
     return [
       `transparent 0deg`,
-      `var(--kin) ${fadeIn}deg`,
-      `var(--kin) ${(visibleDeg - fadeOut).toFixed(2)}deg`,
+      `var(--brush-gold) ${fadeIn}deg`,
+      `var(--brush-gold) ${(visibleDeg - fadeOut).toFixed(2)}deg`,
       `transparent ${visibleDeg.toFixed(2)}deg`,
       `transparent 360deg`,
     ].join(', ')
@@ -180,10 +186,12 @@ function GoldUnderstroke({
 
   return (
     <div
-      className="absolute inset-0"
+      className="charge-ring-gold absolute inset-0"
       style={{ filter: 'url(#gold-ink-filter)', opacity: 0.85 }}
       aria-hidden
     >
+      {/* App ZenTheme.brushGold: #FACC2E light, #EBB833 dark. */}
+      <style>{BRUSH_GOLD_CSS}</style>
       <div
         className="absolute inset-0 rounded-full"
         style={{

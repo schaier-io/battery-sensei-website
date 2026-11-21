@@ -1,4 +1,5 @@
 import { useId, useMemo } from 'react'
+import { useMounted } from '#/lib/use-mounted'
 
 // Deterministic PRNG — pairs with the app's InkPRNG output style.
 function rng(seed: number) {
@@ -85,6 +86,11 @@ export function InkLevelBar({
   const wetPasses = useMemo(() => buildBrushPasses({ seed: seed + 32, w: W, y: Y, thickness: THICKNESS, wet: true }), [seed, W])
   const dryEndCaps = useMemo(() => buildSpeckles({ seed: seed + 91, w: W, y: Y, thickness: THICKNESS, wet: false }), [seed, W])
   const wetEndCaps = useMemo(() => buildSpeckles({ seed: seed + 123, w: W, y: Y, thickness: THICKNESS, wet: true }), [seed, W])
+
+  // ~6 KB gzip of procedural brush paths: keep them out of the prerendered
+  // HTML (first-paint path) and draw after hydration in the same box.
+  const mounted = useMounted()
+  if (!mounted) return <div aria-hidden className={className} style={{ height: H }} />
 
   return (
     <svg
@@ -321,6 +327,26 @@ function BrushGroup({
   )
 }
 
+// The cycle is a stepwise descent through the thresholds: the wet brush
+// pauses at each fraction (where a checkpoint pulse fires) before dropping to
+// the next. Times match the 10 s @keyframes ink-level-cycle in styles.css,
+// whose settling points are 0.32 / 0.16 / 0.07 (displayFraction in
+// Features.tsx). The pulse fires as the brush head lands on each flick
+// (about 11 %, 28 % and 45 % of the cycle).
+const CHECKPOINT_TIMES: Record<string, number> = {
+  '0.15': 1.1, // Info: head arrives at flick position 0.32
+  '0.05': 2.8, // Warn: head arrives at flick position 0.16
+  '0.02': 4.5, // Alert: head arrives at flick position 0.07
+  '0.35': 1.1, // Legacy value from the previous threshold scheme.
+}
+
+/** Seconds into the 10 s cycle when the brush head reaches this threshold.
+ *  Anything animated in sync with a flick (the rule badges in Features.tsx)
+ *  uses this as its `animation-delay`. */
+export function inkCheckpointDelay(fraction: number): number {
+  return CHECKPOINT_TIMES[fraction.toFixed(2)] ?? (1 - fraction) * 5
+}
+
 function Flick({
   x,
   y,
@@ -366,24 +392,7 @@ function Flick({
     return out
   }, [seed])
 
-  // The cycle is a stepwise descent through the thresholds — the wet brush
-  // pauses at each fraction (where a checkpoint pulse should fire) before
-  // dropping to the next. Times below match the @keyframes in styles.css.
-  // Cycle is 10 s; the visual settling points are 0.32 / 0.16 / 0.07 (set in
-  // Features.tsx via displayFraction). The pulse fires just as the brush
-  // head lands on each flick (≈11 %, ≈28 %, ≈45 % of the cycle).
-  const CHECKPOINT_TIMES: Record<string, number> = {
-    // Semantic battery percent → seconds into the 10 s cycle when the wet
-    // brush head settles on this threshold's flick (visual settling points
-    // are 0.32 / 0.16 / 0.07 — see styles.css ink-level-cycle).
-    '0.15': 1.1, // Info  — head arrives at flick position 0.32
-    '0.05': 2.8, // Warn  — head arrives at flick position 0.16
-    '0.02': 4.5, // Alert — head arrives at flick position 0.07
-    // Legacy values from the previous threshold scheme.
-    '0.35': 1.1,
-  }
-  const key = fraction.toFixed(2)
-  const delaySec = CHECKPOINT_TIMES[key] ?? (1 - fraction) * 5
+  const delaySec = inkCheckpointDelay(fraction)
 
   // Position the flick via an outer <g transform=…>. The inner group carries
   // the CSS-driven pulse animation; keeping the two responsibilities separate

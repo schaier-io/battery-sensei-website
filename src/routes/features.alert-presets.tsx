@@ -39,7 +39,7 @@ export const Route = createFileRoute('/features/alert-presets')({
       mockup={
         <ScreenshotMockup
           name="alert-presets"
-          alt='The Warnings card showing the Zen, Regular, and Teach Me Senpai presets.'
+          alt='The Alerts tab showing the Zen, Regular, and Teach Me Senpai presets.'
         />
       }
       extended={extended}

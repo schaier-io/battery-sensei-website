@@ -39,7 +39,7 @@ export const Route = createFileRoute('/features/low-power-mode')({
       mockup={
         <ScreenshotMockup
           name="low-power-mode"
-          alt="The Low Power Mode card in Battery Sensei, with the automation switch and its trigger settings."
+          alt="The Automatic Low Power Mode card in Battery Sensei, with the automation switch and its trigger settings."
         />
       }
       extended={extended}

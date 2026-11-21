@@ -1,12 +1,16 @@
 import type { JSX } from 'react'
 import {
   Smartphone,
-  Headphones, Eye, Bell, BatteryCharging, Plane, Wifi, Search, Zap, CalendarClock, Lock, ArrowUpRight, PlugZap, Unplug, LoaderCircle } from 'lucide-react'
+  Headphones, Eye, Bell, BatteryCharging, Plane, Wifi, Search, CalendarClock, Lock, ArrowUpRight, PlugZap,
+  AppWindow, BatteryFull, BatteryLow, BatteryMedium, CirclePause, Info, Turtle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Link } from '@tanstack/react-router'
 import { Hanko } from '#/components/zen/Hanko'
 import { Reveal } from '#/components/zen/Reveal'
-import { InkLevelBar } from '#/components/zen/InkLevelBar'
+import { InkLevelBar, inkCheckpointDelay } from '#/components/zen/InkLevelBar'
+import { ChargeInkMeter } from '#/components/zen/ChargeInkMeter'
+import { WashiFibers } from '#/components/zen/WashiFibers'
+import { useMounted } from '#/lib/use-mounted'
 
 const featuredMeta = { seal: '警', icon: Bell }
 
@@ -46,44 +50,64 @@ const supportingMeta: Array<{
 ]
 
 /**
- * Compact macOS dropdown mockup — mirrors how Battery Sensei reads when
- * its menu-bar status item is clicked open. A thin translucent menu bar
- * with the BatterySensei badge highlighted, then a small context-menu
- * card below with the live numbers (port of the menuStatusItem + items
- * built in BatteryStatusItemController.swift).
+ * Compact macOS dropdown mockup — mirrors Battery Sensei's open status-item
+ * menu (BatteryStatusItemController.swift item order + ...ControllerMenu.swift):
+ * the app-name header, a grey status row (11pt medium, `•` separators, a
+ * leading battery glyph on the text baseline, text at x=38), then the action
+ * rows. Toggle rows say what a click does (title + icon swap), no checkmark.
  */
 function MenuBarGlanceMockup() {
   const { t } = useTranslation()
+  const separator = <div className="mx-2.5 my-1 h-px bg-[var(--line)]" />
   return (
+    // Not aria-hidden: the status line and menu items are real text that
+    // screen readers should reach, as they did before the redesign.
     <div className="relative mt-5 mx-auto w-fit max-w-full">
       <div className="flex h-6 items-center justify-end gap-2.5 rounded-t-md bg-[color-mix(in_oklab,var(--sumi)_74%,transparent)] px-2.5 text-white/85">
-        <Wifi className="h-2.5 w-2.5" strokeWidth={1.8} aria-hidden />
-        <Search className="h-2.5 w-2.5" strokeWidth={1.8} aria-hidden />
+        <Wifi className="h-2.5 w-2.5" strokeWidth={1.8} />
+        <Search className="h-2.5 w-2.5" strokeWidth={1.8} />
         <span className="tabular-nums font-medium text-[10px]">13:42</span>
-        <MenuBarBatteryBadge percent={84} />
+        <MenuBarBatteryBadge percent={72} />
       </div>
 
-      <div className="ml-auto mt-1 w-[244px] overflow-hidden rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,var(--paper-lift))] shadow-[0_1px_0_rgba(255,255,255,0.5)_inset,0_14px_30px_-14px_rgba(28,26,23,0.30),0_4px_10px_-6px_rgba(28,26,23,0.18)]">
-        <div className="px-3 py-3">
-          <div className="flex items-end justify-between gap-3">
-            <p className="display-title tabular-nums text-[20px] font-semibold leading-none text-sumi">
-              84%
-            </p>
-            <p className="text-[12px] tabular-nums text-sumi-soft leading-none">
-              {t('features.glance.timeLeft')}
-            </p>
-          </div>
-          <div className="mt-2 flex items-center gap-1.5 text-[10px] text-sumi-soft">
-            <Zap className="h-3 w-3 shrink-0 text-hinomaru-ink/85" strokeWidth={1.8} aria-hidden />
-            <span className="truncate">
-              {t('features.glance.source')}: {t('features.glance.powerAdapter')} · 29.7 W
-            </span>
-          </div>
-          <p className="mt-1 text-[10px] text-sumi">
-            {t('features.glance.chargingTo')} 80%
-          </p>
+      <div className="ml-auto mt-1 w-[256px] max-w-full overflow-hidden rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,var(--paper-lift))] py-1 shadow-[0_1px_0_rgba(255,255,255,0.5)_inset,0_14px_30px_-14px_rgba(28,26,23,0.30),0_4px_10px_-6px_rgba(28,26,23,0.18)]">
+        {/* Header: app icon + name, 13pt semibold, 28pt row. */}
+        <div className="flex h-7 items-center">
+          <span className="grid w-[38px] shrink-0 place-items-center">
+            <img src="/favicon-32.png" alt="" width={16} height={16} loading="lazy" decoding="async" className="h-4 w-4" />
+          </span>
+          <span className="text-[12px] font-semibold text-sumi">Battery Sensei</span>
         </div>
+        {/* Status row: icon omits the % already shown in the menu bar. */}
+        <div className="flex h-6 items-baseline whitespace-nowrap text-[10.5px] font-medium leading-6 text-sumi-soft">
+          <span className="grid w-[38px] shrink-0 place-items-center self-center">
+            <BatteryMedium className="h-3.5 w-3.5 text-nezumi" strokeWidth={2} />
+          </span>
+          <span className="truncate pr-3">
+            {t('features.glance.chargingTo')}
+            <span className="mx-1.5 font-normal text-nezumi/70">•</span>
+            <span className="tabular-nums">29.7 W</span>
+          </span>
+        </div>
+        {separator}
+        <MenuActionRow icon={AppWindow} title={t('features.glance.menuOpen')} />
+        {separator}
+        <MenuActionRow icon={CirclePause} title={t('features.glance.menuPause')} />
+        <MenuActionRow icon={Turtle} title={t('features.glance.menuLowPower')} />
+        <MenuActionRow icon={BatteryCharging} title={t('features.glance.menuTravel')} />
       </div>
+    </div>
+  )
+}
+
+/** Native menu item: 13pt SF Symbol in the image column, title at x=38. */
+function MenuActionRow({ icon: Icon, title }: { icon: typeof Wifi; title: string }) {
+  return (
+    <div className="flex h-[22px] items-center text-[12px] text-sumi">
+      <span className="grid w-[38px] shrink-0 place-items-center">
+        <Icon className="h-3.5 w-3.5" strokeWidth={2} />
+      </span>
+      <span className="truncate pr-3">{title}</span>
     </div>
   )
 }
@@ -217,10 +241,16 @@ function MeetingGuardMockup() {
   )
 }
 
+/** iOS-style Low Power Mode yellow (MenuBarBatteryRendering.lowPowerModeFillColor). */
+const LOW_POWER_FILL = 'rgb(255, 204, 0)'
+
 function MenuBarBatteryBadge({
   percent,
+  lowPower = false,
 }: {
   percent: number
+  /** Low Power Mode paints the fill yellow at every level, as iOS does. */
+  lowPower?: boolean
 }) {
   return (
     <span
@@ -245,7 +275,7 @@ function MenuBarBatteryBadge({
           width={Math.max(1, (percent / 100) * 17)}
           height="7"
           rx="1"
-          fill="var(--hinomaru)"
+          fill={lowPower ? LOW_POWER_FILL : 'var(--hinomaru)'}
         />
       </svg>
       <span className="tabular-nums text-[9px] font-semibold text-white">{percent}%</span>
@@ -272,6 +302,9 @@ function RuleRow({
   /** Milliseconds to delay this row's entry — staggers a group of rows. */
   delay?: number
 }) {
+  // InkLevelBar renders after mount, so its brush cycle starts then. Start
+  // the flash in the same commit, or the two drift by the hydration delay.
+  const mounted = useMounted()
   return (
     <li
       className="ink-rule-row flex items-center gap-3 rounded-xl border px-3 py-2 transition-transform duration-200 hover:-translate-y-px"
@@ -281,12 +314,15 @@ function RuleRow({
         ['--rule-delay' as string]: `${delay}ms`,
       }}
     >
+      {/* Flashes when the InkLevelBar brush head reaches this rule's flick:
+          same 10 s CSS cycle, same checkpoint delay. */}
       <span
-        className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-semibold tabular-nums"
+        className={`${mounted ? 'ink-rule-badge ' : ''}inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-semibold tabular-nums`}
         style={{
           color,
           backgroundColor: `color-mix(in oklab, ${color} 14%, transparent)`,
           borderColor: `color-mix(in oklab, ${color} 30%, transparent)`,
+          animationDelay: `${inkCheckpointDelay(percent / 100).toFixed(2)}s`,
         }}
       >
         <BatteryGlyph fraction={percent / 100} />
@@ -326,59 +362,64 @@ function BatteryGlyph({ fraction }: { fraction: number }) {
   )
 }
 
+/** At or below this level on battery, the popup warns (UnplugInfoAlertContent.lowLevelPercentage). */
+const HANDOFF_LOW_LEVEL = 15
+/** ZenAlertNotice.amber: rgb(0.66, 0.48, 0.13) light, rgb(0.88, 0.74, 0.42) dark. */
+const HANDOFF_AMBER_CLASS = 'text-[#A87A21] dark:text-[#E0BD6B]'
+
+/**
+ * Power handoff popup — port of the app's UnplugInfoAlertView.swift: a
+ * 352×148pt washi card with a header row (symbol, title, ⓘ, percentage),
+ * the time estimate at 34pt display, a caption, and the ChargeInkMeter.
+ */
 function HandoffNotice({
   kind,
+  percent = kind === 'unplug' ? 46 : 62,
+  limit = 85,
 }: {
   kind: 'unplug' | 'plug'
+  percent?: number
+  /** Charge limit while plugged in (the meter's reserve starts here). */
+  limit?: number
 }) {
   const { t } = useTranslation()
   const unplugged = kind === 'unplug'
+  const low = unplugged && percent <= HANDOFF_LOW_LEVEL
+  const headerTint = low ? 'text-hinomaru-ink' : HANDOFF_AMBER_CLASS
+  const HeaderIcon = !unplugged ? BatteryCharging : percent < 38 ? BatteryLow : percent < 63 ? BatteryMedium : BatteryFull
 
   return (
-    <div className="relative overflow-hidden rounded-xl border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,var(--paper-lift))] p-4 shadow-[0_1px_0_rgba(255,255,255,0.55)_inset,0_18px_35px_-24px_rgba(28,26,23,0.42)]">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.16] [background-image:radial-gradient(circle_at_18%_24%,var(--sumi)_0_0.45px,transparent_0.65px),radial-gradient(circle_at_76%_64%,var(--hinomaru)_0_0.4px,transparent_0.6px)] [background-size:17px_19px,23px_29px]"
-      />
-      <div className="relative flex items-center gap-4">
-        <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full border border-hinomaru/20 bg-hinomaru/[0.07] text-hinomaru-ink">
-          {unplugged ? (
-            <Unplug className="h-5 w-5 -rotate-12" strokeWidth={1.8} aria-hidden />
-          ) : (
-            <PlugZap className="h-5 w-5 rotate-12" strokeWidth={1.8} aria-hidden />
-          )}
+    <div className="relative flex min-h-[148px] w-full max-w-[352px] flex-col overflow-hidden rounded-2xl border-[0.8px] border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_94%,var(--paper-lift))] px-5 py-4 shadow-[0_1px_0_rgba(255,255,255,0.55)_inset,0_18px_35px_-24px_rgba(28,26,23,0.42)]">
+      <WashiFibers seed={0xa17e} width={352} height={148} />
+
+      <div className={`relative mb-1.5 flex h-4 items-center gap-2 ${headerTint}`}>
+        <span className="grid w-[22px] shrink-0 place-items-center" aria-hidden>
+          <HeaderIcon className="h-3.5 w-3.5" strokeWidth={2} />
         </span>
+        <p className="truncate text-[12px] font-medium leading-4">
+          {t(`features.handoffs.${unplugged ? 'unplugTitle' : 'plugTitle'}`)}
+        </p>
+        <Info className="h-3 w-3 shrink-0 opacity-80" strokeWidth={2} aria-hidden />
+        <span className="ml-auto shrink-0 pl-2 text-[12px] font-medium tabular-nums leading-4 text-sumi-soft">
+          {percent}%
+        </span>
+      </div>
 
-        <div className="min-w-0 flex-1">
-          <div className="flex items-baseline justify-between gap-3">
-            <p className="display-title text-[14px] font-semibold text-sumi">
-              {t(`features.handoffs.${unplugged ? 'unplugTitle' : 'plugTitle'}`)}
-            </p>
-            <span className="shrink-0 rounded-full bg-hinomaru/[0.07] px-2 py-0.5 text-[10px] font-semibold tabular-nums text-hinomaru-ink">
-              46%
-            </span>
-          </div>
+      <p className="display-title relative h-[42px] truncate text-[34px] font-semibold leading-[42px] tracking-[-0.55px] tabular-nums text-sumi">
+        {t(`features.handoffs.${unplugged ? 'unplugTime' : 'plugTime'}`)}
+      </p>
+      <p className="relative mt-0.5 h-3.5 truncate text-[11.5px] leading-3.5 text-sumi-soft">
+        {t(`features.handoffs.${unplugged ? 'refining' : 'untilTarget'}`)}
+      </p>
 
-          <div className="mt-1.5 flex items-center gap-2">
-            {unplugged && (
-              <LoaderCircle
-                className="h-3.5 w-3.5 shrink-0 animate-spin text-hinomaru-ink motion-reduce:animate-none"
-                strokeWidth={2}
-                aria-hidden
-              />
-            )}
-            <span className="display-title text-[20px] font-semibold tabular-nums leading-none text-sumi">
-              {t(`features.handoffs.${unplugged ? 'unplugTime' : 'plugTime'}`)}
-            </span>
-          </div>
-
-          <div className="mt-1.5 flex items-center justify-between gap-3 text-[10px] text-sumi-soft">
-            <span>{t(`features.handoffs.${unplugged ? 'refining' : 'untilTarget'}`)}</span>
-            <kbd className="rounded border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,var(--paper-lift))] px-1.5 py-0.5 font-sans text-[9px] font-semibold text-nezumi shadow-[0_1px_0_rgba(255,255,255,0.55)_inset]">
-              esc
-            </kbd>
-          </div>
-        </div>
+      <div className="relative mt-3">
+        <ChargeInkMeter
+          level={percent / 100}
+          target={unplugged ? 1 : limit / 100}
+          levelLabel={`${percent}%`}
+          targetLabel={unplugged ? undefined : `${limit}%`}
+          tintClass={low ? 'text-hinomaru-ink' : undefined}
+        />
       </div>
     </div>
   )
