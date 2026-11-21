@@ -13,7 +13,7 @@ import {
   Mail,
 } from 'lucide-react'
 import { Trans, useTranslation } from 'react-i18next'
-import { z } from 'zod'
+import { z } from 'zod/mini'
 import { Hanko } from '#/components/zen/Hanko'
 import { PolarInlineCheckout } from '#/components/PolarInlineCheckout'
 import { NotOnMacBanner } from '#/components/NotOnMacBanner'
@@ -34,7 +34,7 @@ const PAGE_TITLE = 'Checkout — Battery Sensei Pro'
 const PAGE_DESC =
   'Secure purchase of Battery Sensei Pro through Polar. Lifetime or Yearly Patron. Promo codes accepted. 14-day refund guarantee.'
 
-const tierSchema = z.enum(['lifetime', 'support']).catch('lifetime')
+const tierSchema = z.catch(z.enum(['lifetime', 'support']), 'lifetime')
 type Tier = z.infer<typeof tierSchema>
 
 // Currency switcher state lives in the URL (`?cur=usd|eur`) so it
@@ -42,7 +42,7 @@ type Tier = z.infer<typeof tierSchema>
 // through to `undefined`, which is the cue for the price hooks to
 // auto-detect the visitor's currency (USD outside the euro zone, EUR
 // inside) instead of forcing one.
-const currencySchema = z.enum(['USD', 'EUR', 'CZK']).optional().catch(undefined)
+const currencySchema = z.catch(z.optional(z.enum(['USD', 'EUR', 'CZK'])), undefined)
 type Currency = z.infer<typeof currencySchema>
 
 export const Route = createFileRoute('/checkout')({

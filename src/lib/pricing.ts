@@ -36,10 +36,11 @@ export type PriceEntry = {
 // connections quotes the wrong figure.
 //
 // Source of truth (Polar dashboard, support subscription product):
-//   USD 2.99 · EUR 2.95 · CZK 55
-const US: PriceEntry = { amount: 2.99, currency: 'USD', locale: 'en-US' }
-const EU: PriceEntry = { amount: 2.95, currency: 'EUR', locale: 'de-DE' }
-const CZ: PriceEntry = { amount: 55, currency: 'CZK', locale: 'cs-CZ' }
+//   USD 4.99 · EUR 3.95 · CZK 99 (EUR/CZK VAT incl., DE/CZ preview)
+// Last checked against live /api/price on 2026-11-21.
+const US: PriceEntry = { amount: 4.99, currency: 'USD', locale: 'en-US' }
+const EU: PriceEntry = { amount: 3.95, currency: 'EUR', locale: 'de-DE' }
+const CZ: PriceEntry = { amount: 99, currency: 'CZK', locale: 'cs-CZ' }
 
 /**
  * Countries that use the euro as their everyday currency.

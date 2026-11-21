@@ -9,11 +9,12 @@
 
 ## Sensei Pro
 
-- Price: $4.49 USD one-time (local currency at checkout via Polar)
+- Price: $9.99 USD one-time (launch price, regular $12.99) (local currency at checkout via Polar)
 - Refund: 14-day, no questions
 - License: lifetime; every future Pro feature included
 - Devices: up to 3 Macs per license
 - Payment: processed by Polar (merchant of record)
+- Optional Yearly Patron: $4.99 USD per year, same Pro features, cancel anytime
 - Distribution: notarized .pkg installer from https://www.battery-sensei.app/download/latest
 - Auto-updates: Sparkle, EdDSA-signed
 - Public release artifacts: https://github.com/schaier-io/battery-sensei-releases (source repo is private)
@@ -40,7 +41,7 @@
 ## Comparison
 
 - AlDente Pro: annual subscription, charges every year
-- Battery Sensei Pro: $4.49 once, lifetime license, 3 Macs
+- Battery Sensei Pro: $9.99 once, lifetime license, 3 Macs
 
 ## Requirements
 

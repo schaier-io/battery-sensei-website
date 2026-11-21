@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/mini'
 
 /**
  * Referral-landing helpers for `/from/$id` — the page behind the QR code the
@@ -41,11 +41,13 @@ export function sanitizeSenseiId(raw: string | null | undefined): string | null 
  * to a quoted string) would make the router 307-rewrite every canonical
  * card URL to a normalized form. `downloadHref` stringifies on the way out.
  */
+// zod v4 numbers already reject Infinity/NaN, matching the old `.finite()`.
 const shortToken = z.union([
-  z.string().min(1).max(80),
-  z.number().finite(),
+  z.string().check(z.minLength(1), z.maxLength(80)),
+  z.number(),
   z.boolean(),
 ])
+const optionalToken = z.catch(z.optional(shortToken), undefined)
 
 /**
  * Search-param schema for `/from/$id`. Each field catches to `undefined`
@@ -53,13 +55,13 @@ const shortToken = z.union([
  * throw away the rest of the attribution set.
  */
 export const referralSearchSchema = z.object({
-  card: z.enum(CARD_TYPES).optional().catch(undefined),
-  ref: shortToken.optional().catch(undefined),
-  utm_source: shortToken.optional().catch(undefined),
-  utm_medium: shortToken.optional().catch(undefined),
-  utm_campaign: shortToken.optional().catch(undefined),
-  utm_term: shortToken.optional().catch(undefined),
-  utm_content: shortToken.optional().catch(undefined),
+  card: z.catch(z.optional(z.enum(CARD_TYPES)), undefined),
+  ref: optionalToken,
+  utm_source: optionalToken,
+  utm_medium: optionalToken,
+  utm_campaign: optionalToken,
+  utm_term: optionalToken,
+  utm_content: optionalToken,
 })
 
 export type ReferralSearch = z.infer<typeof referralSearchSchema>

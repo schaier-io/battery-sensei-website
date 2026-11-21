@@ -1,13 +1,16 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { z } from 'zod'
+import { z } from 'zod/mini'
 import { ThanksPage } from '#/components/ThanksPage'
 
 // Same shape as `/thanks/lifetime`: Polar drops a UUID-ish checkout id
 // into the success URL. Anything weird collapses to undefined so the
 // kicker line never displays an array literal or `[object Object]`.
-const thanksSearchSchema = z.object({
-  checkout_id: z.string().min(1).max(80).optional(),
-}).catch({})
+const thanksSearchSchema = z.catch(
+  z.object({
+    checkout_id: z.optional(z.string().check(z.minLength(1), z.maxLength(80))),
+  }),
+  {},
+)
 
 const SITE_URL = 'https://www.battery-sensei.app'
 const PATH = '/thanks/support'
