@@ -10,6 +10,10 @@ type RevealProps = {
   once?: boolean
   style?: CSSProperties
   id?: string
+  /** Play the entrance as a CSS animation from first paint, with no JS. Use
+   *  for above-the-fold content: the IntersectionObserver path keeps it at
+   *  opacity 0 until the app hydrates, which hides the hero on slow phones. */
+  immediate?: boolean
 }
 
 export function Reveal({
@@ -22,6 +26,7 @@ export function Reveal({
   once = true,
   style,
   id,
+  immediate = false,
 }: RevealProps) {
   // React 19 + TS 6 collapse polymorphic ElementType props to `never` at
   // the call site. The plain `any` cast is the standard escape hatch.
@@ -31,7 +36,7 @@ export function Reveal({
 
   useEffect(() => {
     const el = ref.current
-    if (!el) return
+    if (!el || immediate) return
 
     if (typeof IntersectionObserver === 'undefined') {
       el.setAttribute('data-revealed', 'true')
@@ -58,13 +63,17 @@ export function Reveal({
     )
     io.observe(el)
     return () => io.disconnect()
-  }, [threshold, once])
+  }, [threshold, once, immediate])
 
   return (
     <Tag
       ref={ref as never}
       id={id}
-      data-reveal=""
+      {...(immediate
+        ? // `data-revealed` is set up front so descendant styles keyed on it
+          // (mockup readouts, ink rows) show without waiting for JS.
+          { 'data-reveal-now': '', 'data-revealed': 'true' }
+        : { 'data-reveal': '' })}
       {...(stamp ? { 'data-stamp': '' } : {})}
       className={className}
       style={{ ...style, ['--reveal-delay' as never]: `${delay}ms` }}

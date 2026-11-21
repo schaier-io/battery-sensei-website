@@ -6,8 +6,8 @@
     "#/*": "./src/*"
   },
   "scripts": {
-    "dev": "vite dev --port 5174",
-    "build": "prisma generate && vite build && node scripts/postbuild-404.mjs",
+    "dev": "node scripts/build-fonts.mjs && node scripts/build-images.mjs && vite dev --port 5174",
+    "build": "prisma generate && node scripts/build-fonts.mjs && node scripts/build-images.mjs && vite build && node scripts/postbuild-defer-hydration.mjs && node scripts/postbuild-inline-css.mjs && node scripts/postbuild-404.mjs",
     "preview": "vite preview",
     "test": "vitest run",
     "postinstall": "prisma generate",
