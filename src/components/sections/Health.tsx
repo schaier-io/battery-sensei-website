@@ -561,7 +561,7 @@ function WattsMockup({ className = '' }: { className?: string }) {
           </div>
           {/* Net + charging status. */}
           <div className="mt-2.5 flex items-center justify-between border-t border-[var(--line)] pt-2 text-[10px]">
-            <span className="uppercase tracking-[0.14em] text-nezumi">Charging to 80%</span>
+            <span className="uppercase tracking-[0.14em] text-nezumi">Charging to 85%</span>
             <span className="tabular-nums font-semibold text-sumi">
               Net +{net.toFixed(1)} W
             </span>

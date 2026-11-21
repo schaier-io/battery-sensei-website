@@ -134,7 +134,7 @@
     "items": {
       "alerts": "Alertes intelligentes de batterie faible",
       "handoffs": "Infos au branchement et débranchement",
-      "chargeLimit": "Limite de charge 80 %",
+      "chargeLimit": "Limite de charge 85 %",
       "travelMode": "Mode voyage",
       "cycle": "Cycles et capacité",
       "watts": "Watts de charge en direct",
@@ -179,8 +179,9 @@
     "chargeLimit": {
       "title": "Limite de charge",
       "titleSub": "avec le Mode voyage",
-      "body": "Les batteries lithium-ion vieillissent plus vite quand elles restent à 100 %. Choisissez une limite (80 % est le réglage doux par défaut) ; Sensei la maintient en arrière-plan. Vous prenez l'avion demain ? Un clic lance la charge à 100 %, puis votre limite revient après le voyage.",
+      "body": "Les batteries lithium-ion vieillissent plus vite quand elles restent à 100 %. Choisissez une limite (85 % est le réglage doux par défaut) ; Sensei la maintient en arrière-plan. Vous prenez l'avion demain ? Un clic lance la charge à 100 %, puis votre limite revient après le voyage.",
       "scaleLabel": "Limite de charge",
+      "recommended": "Recommandé",
       "travelLabel": "Mode voyage",
       "travelHint": "monte à 100 % juste pour le voyage"
     },
@@ -188,11 +189,11 @@
       "title": "Un coup d'œil, tout ce qui compte",
       "body": "Charge, source, watts entrants ou sortants, temps restant. Tout est là, d'un seul regard. Pas d'icône dans le Dock. Pas de bruit de notification. Rien à cliquer si vous n'en avez pas envie. Vous savez où vous en êtes sans vérifier deux fois.",
       "timeLeft": "1 h 52 restantes",
-      "chargingTo": "Charge jusqu'à 80 %",
+      "chargingTo": "Charge jusqu'à 85 %",
       "source": "Source",
       "powerAdapter": "Adaptateur secteur",
       "cycles": "Cycles",
-      "chargeLimitOn": "Limite de charge · 80 %",
+      "chargeLimitOn": "Limite de charge · 85 %",
       "on": "ON",
       "menuOpen": "Ouvrir Battery Sensei",
       "menuPause": "Mettre les alertes en pause",
@@ -585,7 +586,7 @@
       "kicker": "Fonctionnalité · 旅",
       "heading": "Mode voyage.",
       "headingItalic": "Charge complète pour partir. Retour à votre limite ensuite.",
-      "body": "Normalement, Sensei maintient la charge à la limite que vous choisissez (80 % recommandé) pour que la batterie vieillisse plus lentement. La veille d'un vol, activez Mode voyage : Sensei suspend la limite, charge à 100 %, passe à des alertes de batterie faible plus strictes (30 % / 15 % / 5 %) et met en pause la Recharge optimisée de la batterie d'Apple. Le lendemain matin à 9 h, votre limite habituelle revient toute seule. Aucun rappel à programmer, aucune batterie bloquée à 100 % pendant des semaines.",
+      "body": "Normalement, Sensei maintient la charge à la limite que vous choisissez (85 % recommandé) pour que la batterie vieillisse plus lentement. La veille d'un vol, activez Mode voyage : Sensei suspend la limite, charge à 100 %, passe à des alertes de batterie faible plus strictes (30 % / 15 % / 5 %) et met en pause la Recharge optimisée de la batterie d'Apple. Le lendemain matin à 9 h, votre limite habituelle revient toute seule. Aucun rappel à programmer, aucune batterie bloquée à 100 % pendant des semaines.",
       "mockupCaption": "Limite suspendue à 100 %. Réinitialisation demain à 9 h.",
       "why": "Les batteries lithium-ion vieillissent plus vite quand on les laisse à 100 %. Le classique « je charge avant de partir et j'oublie » laisse le MacBook à pleine charge pendant des semaines, ce qui accélère l'usure des cellules. La réinitialisation à 9 h, c'est le filet de sécurité : même si vous oubliez, la limite revient."
     },
@@ -856,7 +857,7 @@
       {
         "q": "Comment marche la limite de charge ?",
         "a": [
-          "Sensei arrête la charge au niveau que vous choisissez. Par défaut **80 %** : batterie plus froide, durée de vie plus longue.",
+          "Sensei arrête la charge au niveau que vous choisissez. Par défaut **85 %** : batterie plus froide, durée de vie plus longue.",
           "Le Mode voyage se lance en un clic. Sensei monte à 100 % **à pleine vitesse**, sans ralentissement macOS sur les 20 derniers pour cent.",
           "Votre limite normale revient le lendemain matin à 9 h."
         ]

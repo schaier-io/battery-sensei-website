@@ -134,7 +134,7 @@
     "items": {
       "alerts": "Smart low-battery alerts",
       "handoffs": "Plug & unplug updates",
-      "chargeLimit": "80% charge limit",
+      "chargeLimit": "85% charge limit",
       "travelMode": "Travel Mode",
       "cycle": "Cycle count & capacity",
       "watts": "Live charging watts",
@@ -179,8 +179,9 @@
     "chargeLimit": {
       "title": "Charge limit",
       "titleSub": "with Travel Mode",
-      "body": "Lithium-ion batteries age faster when they sit at 100%. Pick a cap (80% is the gentle default); Sensei holds it in the background. Flying tomorrow? One tap tops up to 100%, then your cap returns after the trip.",
+      "body": "Lithium-ion batteries age faster when they sit at 100%. Pick a cap (85% is the gentle default); Sensei holds it in the background. Flying tomorrow? One tap tops up to 100%, then your cap returns after the trip.",
       "scaleLabel": "Charge limit",
+      "recommended": "Recommended",
       "travelLabel": "Travel Mode",
       "travelHint": "tops up to 100% just for the trip"
     },
@@ -188,11 +189,11 @@
       "title": "One glance, the whole story",
       "body": "Charge, source, watts in or out, time left. The whole picture at a glance. No dock icon. No notification noise. Nothing to click unless you want to. Stay current without checking twice.",
       "timeLeft": "1h 52m left",
-      "chargingTo": "Charging to 80%",
+      "chargingTo": "Charging to 85%",
       "source": "Source",
       "powerAdapter": "Power adapter",
       "cycles": "Cycles",
-      "chargeLimitOn": "Charge limit · 80%",
+      "chargeLimitOn": "Charge limit · 85%",
       "on": "ON",
       "menuOpen": "Open Battery Sensei",
       "menuPause": "Pause warnings",
@@ -585,7 +586,7 @@
       "kicker": "Feature · 旅",
       "heading": "Travel Mode.",
       "headingItalic": "Full charge for the trip. Back to your cap after.",
-      "body": "Sensei normally holds your charge at the cap you set (80% suggested) so the battery ages slower. The night before a flight, tap Travel Mode. Sensei lifts the cap, charges to 100%, switches to stricter low-battery warnings (30% / 15% / 5%), and pauses Apple's Optimized Battery Charging. The next morning at 9 AM your normal limit comes back automatically. No reminder to undo it. No battery sitting at 100% for weeks.",
+      "body": "Sensei normally holds your charge at the cap you set (85% suggested) so the battery ages slower. The night before a flight, tap Travel Mode. Sensei lifts the cap, charges to 100%, switches to stricter low-battery warnings (30% / 15% / 5%), and pauses Apple's Optimized Battery Charging. The next morning at 9 AM your normal limit comes back automatically. No reminder to undo it. No battery sitting at 100% for weeks.",
       "mockupCaption": "Limit lifted to 100%. Auto-resets tomorrow at 9 AM.",
       "why": "Lithium-ion batteries age faster when held at 100%. A typical \"top up before a trip and forget\" leaves a MacBook at full charge for weeks, measurably aging the cells. The 9 AM auto-reset is the safety net: even if you forget, the cap returns."
     },
@@ -856,7 +857,7 @@
       {
         "q": "How does the charge limit work?",
         "a": [
-          "Sensei stops the charge at the level you pick. Default is **80%**: cooler battery, longer life.",
+          "Sensei stops the charge at the level you pick. Default is **85%**: cooler battery, longer life.",
           "Travel Mode is one click. Sensei tops up to 100% **at full speed**, with no macOS slowdown on the last 20%.",
           "Your normal limit returns the next morning at 9 AM."
         ]

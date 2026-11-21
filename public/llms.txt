@@ -34,7 +34,7 @@ actions, and sharing you choose use the services named in the privacy notice.
 
 - Three-level low-battery alerts (Zen / Regular / Senpai presets, or custom)
 - Optional plug and unplug updates with live battery-runtime and time-to-limit estimates
-- Charge limit (cap at any percent, default 80%) with one-click Travel Mode
+- Charge limit (cap at any percent, default 85%) with one-click Travel Mode
 - Live charge, source, watts in/out, and time-left readout in the menu bar
 - Cycle count and capacity tracking with plain-English context
 - Heat-throttling awareness with explanation of macOS pause behaviour

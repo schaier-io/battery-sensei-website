@@ -90,7 +90,7 @@ export const FAQ_ITEMS: ReadonlyArray<FaqItem> = [
   {
     q: 'How does the charge limit work?',
     a: [
-      'Sensei stops the charge at the level you pick. Default is **80%**: cooler battery, longer life.',
+      'Sensei stops the charge at the level you pick. Default is **85%**: cooler battery, longer life.',
       'Travel Mode is one click. Sensei tops up to 100% **at full speed**, with no macOS slowdown on the last 20%.',
       'Your normal limit returns the next morning at 9 AM.',
     ],

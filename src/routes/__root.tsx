@@ -191,7 +191,7 @@ const howToLd = {
       '@type': 'HowToStep',
       position: 2,
       name: 'Set a charge limit',
-      text: 'Open Battery Sensei from the menu bar and pick a cap (the default 80% slows chemical aging per Apple guidance). Sensei holds the limit in the background.',
+      text: 'Open Battery Sensei from the menu bar and pick a cap (the default 85% slows chemical aging per Apple guidance). Sensei holds the limit in the background.',
     },
     {
       '@type': 'HowToStep',

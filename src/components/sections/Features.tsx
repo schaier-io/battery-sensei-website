@@ -1,7 +1,7 @@
 import type { JSX } from 'react'
 import {
   Smartphone,
-  Headphones, Eye, Bell, BatteryCharging, Plane, Wifi, Search, CalendarClock, Lock, ArrowUpRight, PlugZap,
+  Headphones, Eye, Bell, BatteryCharging, Wifi, Search, CalendarClock, Lock, ArrowUpRight, PlugZap,
   AppWindow, BatteryFull, BatteryLow, BatteryMedium, CirclePause, Info, Turtle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Link } from '@tanstack/react-router'
@@ -10,6 +10,7 @@ import { Reveal } from '#/components/zen/Reveal'
 import { InkLevelBar, inkCheckpointDelay } from '#/components/zen/InkLevelBar'
 import { ChargeInkMeter } from '#/components/zen/ChargeInkMeter'
 import { WashiFibers } from '#/components/zen/WashiFibers'
+import { ChargeLimitMockup } from '#/components/zen/ChargeLimitMockup'
 import { useMounted } from '#/lib/use-mounted'
 
 const featuredMeta = { seal: '警', icon: Bell }
@@ -32,11 +33,7 @@ const supportingMeta: Array<{
     key: 'chargeLimit',
     seal: '保',
     icon: BatteryCharging,
-    // Was `mockup: null` — the card stood awkwardly empty next to its
-    // siblings. The new ChargeLimitMockup is a compact horizontal
-    // scale showing the 80% cap with the 80→100 region drawn as
-    // dashed "Travel Mode" overlay. Same height envelope as the
-    // other two mockups so the row aligns at the baseline.
+    // The app's cap presets (85% recommended) and its Travel Mode button.
     mockup: ChargeLimitMockup,
     href: '/features/travel-mode',
   },
@@ -108,78 +105,6 @@ function MenuActionRow({ icon: Icon, title }: { icon: typeof Wifi; title: string
         <Icon className="h-3.5 w-3.5" strokeWidth={2} />
       </span>
       <span className="truncate pr-3">{title}</span>
-    </div>
-  )
-}
-
-/**
- * Charge Limit + Travel Mode mockup. A compact horizontal capacity
- * scale: the 0–80% range is filled solid ink (the cap Sensei holds
- * in the background), the 80–100% range is drawn as a dashed "Travel
- * Mode" overlay (the one-tap full charge for flights). A pill below
- * names the action. Same vertical envelope as the other two
- * supporting mockups so the row of three cards aligns at the
- * baseline rather than two having visuals and one being empty.
- */
-function ChargeLimitMockup() {
-  const { t } = useTranslation()
-  return (
-    <div className="mt-5 w-full">
-      <div className="mb-2 flex items-baseline justify-between text-[10px] uppercase tracking-[0.18em] text-sumi-soft">
-        <span>{t('features.chargeLimit.scaleLabel')}</span>
-        <span className="tabular-nums font-semibold text-sumi">80%</span>
-      </div>
-      {/* Cap bar — solid ink 0→80, dashed pattern 80→100. The vertical
-          tick at the cap line draws the eye to where Sensei actually
-          stops the charge. h-2.5 keeps it visually quiet beside the
-          other mockups which already carry text content. */}
-      <div
-        className="relative h-2.5 w-full overflow-hidden rounded-full border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_45%,var(--paper-lift))]"
-        role="presentation"
-        aria-hidden
-      >
-        {/* Travel-mode stripe texture sits fully in the background.
-            The solid fill overlays it up to 80%, so the stripe region
-            appears only in the tail without a hard left marker line. */}
-        <div
-          className="absolute inset-0 z-0"
-          style={{
-            background:
-              'repeating-linear-gradient(135deg, color-mix(in oklab, var(--hinomaru) 72%, var(--washi)) 0 2px, color-mix(in oklab, var(--hinomaru) 10%, transparent) 2px 5px)',
-          }}
-        />
-        {/* Solid fill to the cap. */}
-        <div
-          className="absolute inset-y-0 left-0 z-10 rounded-l-full bg-gradient-to-r from-sumi to-[color-mix(in_oklab,var(--sumi)_72%,transparent)]"
-          style={{ width: '80%' }}
-        />
-      </div>
-      {/* 0 / 80 / 100 ticks. Each label is absolutely positioned so
-          the "80" sits exactly under the cap marker above (left:80%
-          + translateX(-50%) centers the digits on the tick line)
-          regardless of card width. The previous flex+margin-auto
-          hack collapsed at narrow widths and let "80" drift off
-          the cap line. */}
-      <div className="relative mt-1.5 h-3 text-[9px] tabular-nums uppercase tracking-[0.18em] text-nezumi">
-        <span className="absolute left-0">0</span>
-        <span
-          className="absolute -translate-x-1/2 font-semibold text-sumi-soft"
-          style={{ left: '80%' }}
-        >
-          80
-        </span>
-        <span className="absolute right-0">100</span>
-      </div>
-      {/* Travel Mode action row — one line, plane glyph, the verb. */}
-      <div className="mt-3 inline-flex items-center gap-2 rounded-md border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_70%,var(--paper-lift))] px-2.5 py-1.5 text-[11px] text-sumi-soft">
-        <Plane className="h-3 w-3 text-hinomaru-ink" strokeWidth={1.8} aria-hidden />
-        <span>
-          <span className="font-medium text-sumi">
-            {t('features.chargeLimit.travelLabel')}
-          </span>{' '}
-          {t('features.chargeLimit.travelHint')}
-        </span>
-      </div>
     </div>
   )
 }
