@@ -54,7 +54,7 @@ export function Footer() {
               aria-label={t('footer.ariaPrefs')}
               className="flex flex-wrap items-center justify-center gap-2 sm:gap-3"
             >
-              <LanguageSwitcher />
+              <LanguageSwitcher variant="links" />
               <CurrencySwitcher />
               <a
                 href="https://www.producthunt.com/products/battery-sensei?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-battery-sensei"
@@ -149,6 +149,10 @@ export function Footer() {
           <FooterDot />
           <Link to="/legal" className="zen-link-lift">
             {t('legal.footerLink')}
+          </Link>
+          <FooterDot />
+          <Link to="/legal" hash="withdrawal" className="zen-link-lift">
+            {t('footer.refunds')}
           </Link>
         </nav>
 

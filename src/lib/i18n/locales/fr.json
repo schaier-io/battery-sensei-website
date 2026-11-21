@@ -193,7 +193,11 @@
       "powerAdapter": "Adaptateur secteur",
       "cycles": "Cycles",
       "chargeLimitOn": "Limite de charge · 80 %",
-      "on": "ON"
+      "on": "ON",
+      "menuOpen": "Ouvrir Battery Sensei",
+      "menuPause": "Mettre les alertes en pause",
+      "menuLowPower": "Activer le Low Power Mode",
+      "menuTravel": "Mode voyage"
     },
     "meetings": {
       "title": "Réunions sans coupure.",
@@ -243,7 +247,7 @@
       },
       "privacy": {
         "title": "Vos données vous appartiennent",
-      "body": "Pas de compte cloud ni de télémétrie intégrée. Les données sensibles de batterie, de calendrier et de consommation énergétique par app restent sur votre Mac ; les mises à jour, les licences et les actions que vous déclenchez utilisent les services nommés dans l'avis de confidentialité."
+        "body": "Pas de compte cloud ni de télémétrie intégrée. Les données sensibles de batterie, de calendrier et de consommation énergétique par app restent sur votre Mac ; les mises à jour, les licences et les actions que vous déclenchez utilisent les services nommés dans l'avis de confidentialité."
       },
       "languages": {
         "title": "Les apps qui vident vos heures de batterie",
@@ -810,7 +814,8 @@
         }
       ]
     },
-    "alreadyBought": "Déjà acheté ? Ouvrez Sensei → Réglages → Pro, puis collez votre clé."
+    "alreadyBought": "Déjà acheté ? Ouvrez Sensei → Réglages → Pro, puis collez votre clé.",
+    "terms": "<0>Paiement sécurisé avec Polar</0> · <1>Satisfait ou remboursé pendant 14 jours</1>, sans justification."
   },
   "faq": {
     "kicker": "Questions · 問答",
@@ -1132,7 +1137,8 @@
     "managePurchase": "Gérer l'achat",
     "copyright": "© {{year}} Sandro Thabiso Schaier · Battery Sensei",
     "lastUpdated": "Site mis à jour le {{date}}",
-    "roadmap": "Feuille de route"
+    "roadmap": "Feuille de route",
+    "refunds": "Remboursements"
   },
   "checkout": {
     "kicker": "Paiement · 会計",

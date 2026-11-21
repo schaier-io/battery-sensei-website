@@ -193,7 +193,11 @@
       "powerAdapter": "電源アダプタ",
       "cycles": "サイクル数",
       "chargeLimitOn": "充電上限 · 80%",
-      "on": "オン"
+      "on": "オン",
+      "menuOpen": "Battery Senseiを開く",
+      "menuPause": "警告を一時停止",
+      "menuLowPower": "Low Power Modeをオンにする",
+      "menuTravel": "トラベルモード"
     },
     "meetings": {
       "title": "会議に間に合わせる。",
@@ -243,7 +247,7 @@
       },
       "privacy": {
         "title": "あなたのデータは、あなたのもの",
-      "body": "クラウドアカウントもアプリ内テレメトリもありません。バッテリー、カレンダー、アプリ別エネルギー消費の機密データはMac内に留まり、アップデート、ライセンス、利用者が開始する操作にはプライバシー通知に記載したサービスを使います。"
+        "body": "クラウドアカウントもアプリ内テレメトリもありません。バッテリー、カレンダー、アプリ別エネルギー消費の機密データはMac内に留まり、アップデート、ライセンス、利用者が開始する操作にはプライバシー通知に記載したサービスを使います。"
       },
       "languages": {
         "title": "駆動時間を削っているアプリ",
@@ -810,7 +814,8 @@
         }
       ]
     },
-    "alreadyBought": "もう購入済みですか。Sensei → 設定 → Proで、ライセンスキーを貼り付けてください。"
+    "alreadyBought": "もう購入済みですか。Sensei → 設定 → Proで、ライセンスキーを貼り付けてください。",
+    "terms": "<0>Polar で安全にお支払い</0> · <1>14日間の返金保証</1>（理由は問いません）。"
   },
   "faq": {
     "kicker": "Q&A · 問答",
@@ -1132,7 +1137,8 @@
     "managePurchase": "購入の管理",
     "copyright": "© {{year}} Sandro Thabiso Schaier · Battery Sensei",
     "lastUpdated": "サイト更新 {{date}}",
-    "roadmap": "ロードマップ"
+    "roadmap": "ロードマップ",
+    "refunds": "返金"
   },
   "checkout": {
     "kicker": "会計 · お支払い",

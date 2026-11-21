@@ -193,7 +193,11 @@
       "powerAdapter": "Netzteil",
       "cycles": "Zyklen",
       "chargeLimitOn": "Ladelimit · 80 %",
-      "on": "EIN"
+      "on": "EIN",
+      "menuOpen": "Battery Sensei öffnen",
+      "menuPause": "Warnungen pausieren",
+      "menuLowPower": "Low Power Mode einschalten",
+      "menuTravel": "Reisemodus"
     },
     "meetings": {
       "title": "Meetings ohne Akku-Stress.",
@@ -810,7 +814,8 @@
         }
       ]
     },
-    "alreadyBought": "Bereits gekauft? Öffnen Sie Sensei → Einstellungen → Pro und fügen Sie Ihren Schlüssel ein."
+    "alreadyBought": "Bereits gekauft? Öffnen Sie Sensei → Einstellungen → Pro und fügen Sie Ihren Schlüssel ein.",
+    "terms": "<0>Sicher bezahlen mit Polar</0> · <1>14 Tage Geld-zurück-Garantie</1>, ohne Rückfragen."
   },
   "faq": {
     "kicker": "Fragen · 問答",
@@ -1132,7 +1137,8 @@
     "managePurchase": "Kauf verwalten",
     "copyright": "© {{year}} Sandro Thabiso Schaier · Battery Sensei",
     "lastUpdated": "Website aktualisiert am {{date}}",
-    "roadmap": "Roadmap"
+    "roadmap": "Roadmap",
+    "refunds": "Rückerstattung"
   },
   "checkout": {
     "kicker": "Kasse · 会計",

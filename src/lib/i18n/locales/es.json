@@ -193,7 +193,11 @@
       "powerAdapter": "Adaptador de corriente",
       "cycles": "Ciclos",
       "chargeLimitOn": "Límite de carga · 80%",
-      "on": "ACTIVO"
+      "on": "ACTIVO",
+      "menuOpen": "Abrir Battery Sensei",
+      "menuPause": "Pausar alertas",
+      "menuLowPower": "Activar Low Power Mode",
+      "menuTravel": "Modo viaje"
     },
     "meetings": {
       "title": "Reuniones sin sustos.",
@@ -810,7 +814,8 @@
         }
       ]
     },
-    "alreadyBought": "¿Ya lo compraste? Abre Sensei → Ajustes → Pro y pega tu clave."
+    "alreadyBought": "¿Ya lo compraste? Abre Sensei → Ajustes → Pro y pega tu clave.",
+    "terms": "<0>Paga de forma segura con Polar</0> · <1>Garantía de devolución de 14 días</1>, sin preguntas."
   },
   "faq": {
     "kicker": "Preguntas · 問答",
@@ -1132,7 +1137,8 @@
     "managePurchase": "Gestionar la compra",
     "copyright": "© {{year}} Sandro Thabiso Schaier · Battery Sensei",
     "lastUpdated": "Sitio actualizado el {{date}}",
-    "roadmap": "Hoja de ruta"
+    "roadmap": "Hoja de ruta",
+    "refunds": "Reembolsos"
   },
   "checkout": {
     "kicker": "Compra · 会計",

@@ -38,7 +38,10 @@ function LangGlyph({ className = '' }: { className?: string }) {
   )
 }
 
-type Variant = 'chip' | 'inline'
+type Variant = 'chip' | 'inline' | 'links'
+
+// Home URL per locale. English lives at "/", the others at "/<locale>".
+const homePath = (loc: Locale) => (loc === 'en' ? '/' : `/${loc}`)
 
 // Close animation duration matches the `lang-pop-out` keyframe in styles.css.
 // Keep the two in lockstep — if you change one, change the other.
@@ -174,16 +177,24 @@ export function LanguageSwitcher({
       }
       // Warm the chunk first so the transition's frozen frame is short (the
       // `beforeLoad` await resolves from cache), then cross-fade.
-      void loadLocale(loc).then(() => {
-        runViewTransition(run)
-      })
+      void loadLocale(loc).then(
+        () => runViewTransition(run),
+        // Chunk fetch failed (offline, deploy skew): unlock the switcher and
+        // fall back to a full load of the prerendered locale home.
+        () => {
+          setPending(null)
+          window.location.assign(homePath(loc))
+        },
+      )
       return
     }
 
     // Subpages are English-only URLs — there's no localized route to redirect
     // to, so swap client-side (cookie + i18n). No visible pop-in here since the
     // page content isn't translated; only the shared chrome re-renders.
-    void setLocale(loc).finally(() => {
+    // A failed chunk load keeps the current language (setLocale persists
+    // nothing on failure); the catch only stops an unhandled rejection.
+    void setLocale(loc).catch(() => {}).finally(() => {
       setPending(null)
       // Subpage carrying a ?locale (newsletter / thanks flows): keep it in sync
       // so the URL stops contradicting the translated content — no more stale
@@ -203,7 +214,8 @@ export function LanguageSwitcher({
   // first call. `en` is bundled and returns immediately.
   const prefetch = (loc: Locale) => {
     if (loc === current) return
-    void loadLocale(loc)
+    // Warm-up only: a failure is retried by the real click.
+    loadLocale(loc).catch(() => {})
   }
 
   // When the menu opens, kick off all non-active chunks at low priority so
@@ -225,6 +237,46 @@ export function LanguageSwitcher({
     // the menu opens; `prefetch` itself skips the active locale anyway.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open])
+
+  // Links variant (footer): real <a href> per language home, present in the
+  // prerendered HTML so crawlers and no-JS visitors reach /de, /es, /fr, /ja.
+  // With JS, the click runs the same switch as the other variants.
+  if (variant === 'links') {
+    return (
+      <nav aria-label={t('common.language')} className={`flex items-center gap-1 ${className}`}>
+        <LangGlyph className="mr-1 text-[13px]" />
+        {SUPPORTED_LOCALES.map((loc) => {
+          const active = loc === current
+          return (
+            <a
+              key={loc}
+              href={homePath(loc)}
+              hrefLang={loc}
+              lang={loc}
+              // No aria-label: the accessible name must contain the visible
+              // "DE" (WCAG 2.5.3). The title still names the language.
+              title={NATIVE_NAME[loc]}
+              aria-current={active && onHome ? 'page' : undefined}
+              onClick={(e) => {
+                if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return
+                e.preventDefault()
+                handlePick(loc)
+              }}
+              onPointerEnter={() => prefetch(loc)}
+              onFocus={() => prefetch(loc)}
+              className={[
+                'inline-flex h-7 min-w-[2rem] items-center justify-center rounded-md px-1.5 font-jp text-[11px] tracking-[0.12em] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40',
+                active ? 'text-hinomaru-ink' : 'text-sumi-soft hover:text-sumi',
+                pending === loc ? 'opacity-60' : '',
+              ].join(' ')}
+            >
+              {SHORT_LABEL[loc]}
+            </a>
+          )
+        })}
+      </nav>
+    )
+  }
 
   // Inline variant (mobile drawer): a single compact row of locale codes.
   // The full 2×2 grid of native names was eating vertical space and reading

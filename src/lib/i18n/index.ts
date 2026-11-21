@@ -2,10 +2,6 @@ import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 
 import en from './locales/en.json'
-import de from './locales/de.json'
-import es from './locales/es.json'
-import fr from './locales/fr.json'
-import ja from './locales/ja.json'
 
 export const SUPPORTED_LOCALES = ['en', 'de', 'es', 'fr', 'ja'] as const
 export type Locale = (typeof SUPPORTED_LOCALES)[number]
@@ -31,10 +27,11 @@ export const OG_LOCALE: Record<Locale, string> = {
   ja: 'ja_JP',
 }
 
-// Initial language. On the client, read it from the URL path so a prerendered
-// /de page hydrates as German with no mismatch — the locale bundles are all
-// included below, so this lookup is synchronous. On the server it is the
-// default; the root route's beforeLoad sets the language per prerender/request.
+// Initial language. On the client, read it from the URL path. Only English is
+// bundled; the root route's beforeLoad awaits loadLocale() for /de, /es, /fr,
+// /ja before the first render, so a prerendered locale page still hydrates in
+// its own language. On the server it is the default; beforeLoad sets the
+// language per prerender/request.
 function initialLocale(): Locale {
   if (typeof window === 'undefined') return DEFAULT_LOCALE
   const seg = window.location.pathname.split('/').filter(Boolean)[0]?.toLowerCase()
@@ -47,15 +44,11 @@ if (!i18n.isInitialized) {
   i18n
     .use(initReactI18next)
     .init({
-      // All locales are bundled so prerendered localized pages (/de, /es, ...)
-      // hydrate in their language synchronously. loadLocale therefore resolves
-      // immediately; it stays for the language switcher's prefetch API.
+      // Only English ships in the entry chunk. Each other locale is its own
+      // chunk (~100 KB raw JSON each), fetched by loadLocale() on demand, so
+      // English visitors don't download four languages they never render.
       resources: {
         en: { translation: en },
-        de: { translation: de },
-        es: { translation: es },
-        fr: { translation: fr },
-        ja: { translation: ja },
       },
       lng: initialLocale(),
       fallbackLng: DEFAULT_LOCALE,
@@ -82,9 +75,16 @@ export function loadLocale(locale: Locale): Promise<void> {
   if (i18n.hasResourceBundle(locale, 'translation')) return Promise.resolve()
   const existing = loadingLocales.get(locale)
   if (existing) return existing
-  const promise = localeLoaders[locale]().then((mod) => {
-    i18n.addResourceBundle(locale, 'translation', mod.default, true, true)
-  })
+  const promise = localeLoaders[locale]()
+    .then((mod) => {
+      i18n.addResourceBundle(locale, 'translation', mod.default, true, true)
+    })
+    .catch((error: unknown) => {
+      // Forget the failure so a later call (client.tsx retry, the language
+      // switcher) fetches the chunk again.
+      loadingLocales.delete(locale)
+      throw error
+    })
   loadingLocales.set(locale, promise)
   return promise
 }
