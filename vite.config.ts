@@ -126,9 +126,12 @@ const config = defineConfig({
         // actual application routes: `/download/*` is a Vercel redirect to
         // the GitHub Releases zip, and `/pricing.md` is a static file in
         // `public/`. Both 404 at prerender time even though they work in
-        // production.
+        // production. `/roadmap` renders per request (lib/roadmap-page.ts); a
+        // static copy would shadow that function's rewrite on Vercel.
         filter: (page) =>
-          !page.path.startsWith('/download/') && page.path !== '/pricing.md',
+          !page.path.startsWith('/download/') &&
+          page.path !== '/pricing.md' &&
+          page.path !== '/roadmap',
       },
     }),
     viteReact(),

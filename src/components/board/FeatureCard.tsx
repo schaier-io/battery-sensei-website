@@ -13,15 +13,16 @@ export type BoardItem = {
   createdAt: string
 }
 
-const STATUS_CHIP: Record<BoardStatus, string> = {
-  open: 'text-nezumi border-[var(--line)]',
-  planned: 'text-kin border-kin/30 bg-kin/[0.06]',
-  in_progress: 'text-hinomaru-ink border-hinomaru/30 bg-hinomaru/[0.06]',
-  shipped: 'text-matcha border-matcha/30 bg-matcha/[0.06]',
+/** Status color, shown once per section heading (FeatureBoard). */
+export const STATUS_DOT: Record<BoardStatus, string> = {
+  open: 'bg-nezumi',
+  planned: 'bg-kin',
+  in_progress: 'bg-hinomaru',
+  shipped: 'bg-matcha',
 }
 
 /**
- * One request row: title, status chip, expandable body, vote control.
+ * One request row: title, expandable body, vote control.
  * Title/body are user-submitted content — rendered strictly as React
  * text nodes (never HTML) with pre-line whitespace.
  */
@@ -63,16 +64,10 @@ export function FeatureCard({
       </button>
 
       <div className="min-w-0 flex-1">
-        <div className="flex flex-wrap items-center gap-2">
-          <h3 className="display-title text-[1rem] font-medium leading-snug text-sumi">
-            {item.title}
-          </h3>
-          <span
-            className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] ${STATUS_CHIP[item.status]}`}
-          >
-            {t(`board.statuses.${item.status}`)}
-          </span>
-        </div>
+        {/* No status chip: the section heading above already names it. */}
+        <h3 className="display-title text-[1rem] font-medium leading-snug text-sumi">
+          {item.title}
+        </h3>
         <button
           type="button"
           onClick={() => setExpanded((prev) => !prev)}

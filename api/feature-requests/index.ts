@@ -28,7 +28,6 @@ import {
   HAS_TEXT_RE,
   NO_LINE_BREAK_RE,
   NO_LINE_BREAK_MESSAGE,
-  PUBLIC_STATUSES,
   checkOriginAndBody,
   generateTicketId,
   getClientIp,
@@ -39,9 +38,11 @@ import {
   buildFeatureAdminNotifyEmail,
   buildFeatureConfirmationEmail,
 } from '../../lib/emails/feature-board.js'
-
-const LIST_PAGE_SIZE = 20
-const LIST_PAGE_MAX = 50
+import {
+  LIST_PAGE_MAX,
+  LIST_PAGE_SIZE,
+  listPublicFeatureRequests,
+} from '../../lib/feature-board-list.js'
 
 // Same durable windows as the contact form.
 const EMAIL_RATE_WINDOW_MS = 24 * 60 * 60 * 1000
@@ -126,9 +127,14 @@ function buildRequestRecord({
 }
 
 export async function GET(request: Request): Promise<Response> {
-  // Cursor pagination: stable order (votes desc, createdAt desc, id desc as
-  // the unique tiebreaker) so pages never skip or repeat rows between calls.
   const url = new URL(request.url)
+  // /roadmap is rewritten here (vercel.json). Dynamic import: the SSR bundle
+  // loads only for page renders, never for the JSON list.
+  // getAll: a visitor's own ?page= may be merged next to the rewrite's.
+  if (url.searchParams.getAll('page').includes('roadmap')) {
+    const { renderRoadmapPage } = await import('../../lib/roadmap-page.js')
+    return renderRoadmapPage(request)
+  }
   const rawLimit = Number.parseInt(url.searchParams.get('limit') ?? '', 10)
   const limit = Number.isFinite(rawLimit)
     ? Math.min(Math.max(rawLimit, 1), LIST_PAGE_MAX)
@@ -139,47 +145,18 @@ export async function GET(request: Request): Promise<Response> {
       ? rawCursor
       : undefined
 
-  const rows = await prisma.featureRequest.findMany({
-    where: { status: { in: [...PUBLIC_STATUSES] } },
-    orderBy: [{ votesCount: 'desc' }, { createdAt: 'desc' }, { id: 'desc' }],
-    // One extra row detects overflow for the `hasMore` flag.
-    take: limit + 1,
-    ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),
-    select: {
-      id: true,
-      title: true,
-      body: true,
-      publicTitle: true,
-      publicBody: true,
-      status: true,
-      votesCount: true,
-      createdAt: true,
-    },
+  const page = await listPublicFeatureRequests({ limit, cursor })
+  return json({ ok: true, ...page }, 200, {
+    'cache-control': 'public, s-maxage=60, stale-while-revalidate=300',
   })
-
-  const page = rows.slice(0, limit)
-  const hasMore = rows.length > limit
-
-  return json(
-    {
-      ok: true,
-      items: page.map((r) => ({
-        id: r.id,
-        title: r.publicTitle ?? r.title,
-        body: r.publicBody ?? r.body,
-        status: r.status,
-        votes: r.votesCount,
-        createdAt: r.createdAt.toISOString(),
-      })),
-      hasMore,
-      nextCursor: hasMore ? page[page.length - 1]?.id ?? null : null,
-    },
-    200,
-    { 'cache-control': 'public, s-maxage=60, stale-while-revalidate=300' },
-  )
 }
 
 export async function POST(request: Request): Promise<Response> {
+  // /roadmap is rewritten here for GET only. A POST to the page URL must not
+  // reach the submit path.
+  if (new URL(request.url).searchParams.has('page')) {
+    return json({ ok: false, error: 'method_not_allowed' }, 405)
+  }
   const gate = await checkOriginAndBody(request, { allowNoOrigin: true })
   if (!gate.ok) return gate.response
   const { payload: rawPayload, origin } = gate

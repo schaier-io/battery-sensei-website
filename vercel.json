@@ -7,13 +7,27 @@
     }
   ],
   "outputDirectory": "dist/client",
+  "functions": {
+    "api/feature-requests/index.ts": {
+      "includeFiles": "dist/{server/**,client/assets/*.css}"
+    }
+  },
   "rewrites": [
+    {
+      "source": "/roadmap",
+      "destination": "/api/feature-requests?page=roadmap"
+    },
     {
       "source": "/api/cron/retention",
       "destination": "/api/admin/session?job=retention"
     }
   ],
   "redirects": [
+    {
+      "source": "/roadmap/",
+      "destination": "/roadmap",
+      "permanent": true
+    },
     {
       "source": "/vs-aldente",
       "destination": "/#compare",
@@ -30,7 +44,7 @@
       "permanent": true
     },
     {
-      "source": "/:locale(de|es|fr|ja)/:path(.*)",
+      "source": "/:locale(de|es|fr|ja)/:path(.+)",
       "destination": "/:path",
       "permanent": true
     },

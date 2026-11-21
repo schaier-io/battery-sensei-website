@@ -108,6 +108,18 @@ describe('GET /api/feature-requests', () => {
 })
 
 describe('POST /api/feature-requests', () => {
+  it('rejects a POST that arrives through the /roadmap page rewrite', async () => {
+    const valid = submitRequest(VALID_BODY)
+    const viaRewrite = new Request(`${ORIGIN}/api/feature-requests?page=roadmap`, {
+      method: 'POST',
+      headers: valid.headers,
+      body: JSON.stringify(VALID_BODY),
+    })
+    const res = await POST(viaRewrite)
+    expect(res.status).toBe(405)
+    expect(mockPrisma.featureRequest.create).not.toHaveBeenCalled()
+  })
+
   it('rejects foreign origins', async () => {
     const response = await POST(submitRequest(VALID_BODY, { origin: 'https://evil.example' }))
     expect(response.status).toBe(403)
