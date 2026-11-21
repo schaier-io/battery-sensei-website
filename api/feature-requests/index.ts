@@ -151,6 +151,13 @@ export async function GET(request: Request): Promise<Response> {
   })
 }
 
+/** HEAD for the list and the /roadmap page (link checkers, crawlers). */
+export async function HEAD(request: Request): Promise<Response> {
+  const response = await GET(request)
+  void response.body?.cancel()
+  return new Response(null, { status: response.status, headers: response.headers })
+}
+
 export async function POST(request: Request): Promise<Response> {
   // /roadmap is rewritten here for GET only. A POST to the page URL must not
   // reach the submit path.
