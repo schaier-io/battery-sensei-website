@@ -39,7 +39,7 @@ export const Route = createFileRoute('/features/custom-thresholds')({
       mockup={
         <ScreenshotMockup
           name="custom-thresholds"
-          alt='The Warnings card with custom rules expanded, each with its own threshold and style.'
+          alt='The Alerts tab with custom rules expanded, each with its own threshold and style.'
         />
       }
       extended={extended}

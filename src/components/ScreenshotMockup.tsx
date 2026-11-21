@@ -13,6 +13,11 @@
  * Both appearances ship; the browser picks via `prefers-color-scheme`.
  */
 import { SCREENSHOT_DIMENSIONS } from './screenshot-dimensions'
+import { SCREENSHOT_FORMATS, screenshotSrcSet, screenshotVariant } from '#/lib/screenshot-variants'
+
+// Rendered width: FeaturePage's max-w-3xl figure minus its padding is 656 px
+// on desktop; on phones the figure is the viewport minus 88 px of padding.
+const SCREENSHOT_SIZES = '(min-width: 768px) 656px, calc(100vw - 88px)'
 
 type Props = {
   /** Basename under /screenshots, without the -light/-dark suffix. */
@@ -40,12 +45,26 @@ export function ScreenshotMockup({ name, alt }: Props) {
         aria-label={`${alt} (opens the full-size screenshot)`}
       >
         <picture>
-          <source
-            srcSet={`/screenshots/${name}-dark.png`}
-            media="(prefers-color-scheme: dark)"
-          />
+          {/* AVIF first, WebP fallback, each per theme (scripts/build-images.mjs). */}
+          {SCREENSHOT_FORMATS.map((format) => (
+            <source
+              key={`dark-${format}`}
+              type={`image/${format}`}
+              media="(prefers-color-scheme: dark)"
+              srcSet={screenshotSrcSet(`${name}-dark`, format)}
+              sizes={SCREENSHOT_SIZES}
+            />
+          ))}
+          {SCREENSHOT_FORMATS.map((format) => (
+            <source
+              key={`light-${format}`}
+              type={`image/${format}`}
+              srcSet={screenshotSrcSet(`${name}-light`, format)}
+              sizes={SCREENSHOT_SIZES}
+            />
+          ))}
           <img
-            src={`/screenshots/${name}-light.png`}
+            src={screenshotVariant(`${name}-light`, 1080, 'webp')}
             alt={alt}
             width={size?.width}
             height={size?.height}

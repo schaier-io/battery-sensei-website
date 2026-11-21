@@ -22,8 +22,13 @@ const { mockPrisma } = vi.hoisted(() => {
 })
 
 vi.mock('../lib/db.js', () => ({ prisma: mockPrisma, db: mockPrisma }))
+// The real renderer imports the build output (dist/server); stand it in.
+vi.mock('../lib/roadmap-page.js', () => ({
+  renderRoadmapPage: async () =>
+    new Response('<html>roadmap</html>', { status: 200, headers: { 'content-type': 'text/html' } }),
+}))
 
-import { GET, POST } from './feature-requests/index'
+import { GET, HEAD, POST } from './feature-requests/index'
 
 const ORIGIN = 'https://battery-sensei.app'
 
@@ -107,7 +112,36 @@ describe('GET /api/feature-requests', () => {
   })
 })
 
+describe('HEAD /api/feature-requests', () => {
+  it('answers like GET without a body', async () => {
+    mockPrisma.featureRequest.findMany.mockResolvedValueOnce([])
+    const res = await HEAD(new Request(`${ORIGIN}/api/feature-requests`, { method: 'HEAD' }))
+    expect(res.status).toBe(200)
+    expect(res.headers.get('cache-control')).toContain('s-maxage=60')
+    expect(await res.text()).toBe('')
+  })
+
+  it('answers HEAD for the /roadmap page rewrite (a GET-only export returned 405)', async () => {
+    const res = await HEAD(new Request(`${ORIGIN}/api/feature-requests?page=roadmap`, { method: 'HEAD' }))
+    expect(res.status).toBe(200)
+    expect(res.headers.get('content-type')).toBe('text/html')
+    expect(await res.text()).toBe('')
+  })
+})
+
 describe('POST /api/feature-requests', () => {
+  it('rejects a POST that arrives through the /roadmap page rewrite', async () => {
+    const valid = submitRequest(VALID_BODY)
+    const viaRewrite = new Request(`${ORIGIN}/api/feature-requests?page=roadmap`, {
+      method: 'POST',
+      headers: valid.headers,
+      body: JSON.stringify(VALID_BODY),
+    })
+    const res = await POST(viaRewrite)
+    expect(res.status).toBe(405)
+    expect(mockPrisma.featureRequest.create).not.toHaveBeenCalled()
+  })
+
   it('rejects foreign origins', async () => {
     const response = await POST(submitRequest(VALID_BODY, { origin: 'https://evil.example' }))
     expect(response.status).toBe(403)

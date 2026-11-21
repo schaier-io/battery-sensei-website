@@ -340,10 +340,10 @@ export function Contact() {
                 {t('contact.formHelp')}
               </p>
 
-              {/* Status text + submit. Pulled tight against the message
-                  textarea above so the form's gap-5 rhythm doesn't
-                  leave a chasm beneath the message field. */}
-              <div className="-mt-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              {/* Status text + submit. -mt-1 trims the form's gap-5 to
+                  16 px: closer than between fields, but the button
+                  keeps room to breathe under the message box. */}
+              <div className="-mt-1 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <p
                   role="status"
                   aria-live="polite"

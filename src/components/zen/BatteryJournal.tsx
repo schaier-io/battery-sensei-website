@@ -121,7 +121,7 @@ function Stat({
     <div
       ref={ref}
       data-done={done ? 'true' : 'false'}
-      className="stat-tile group relative flex flex-col items-start gap-1.5 overflow-hidden rounded-md bg-[var(--washi-soft)] px-3 py-2.5"
+      className="stat-tile group relative flex items-center gap-2.5 overflow-hidden rounded-md bg-[var(--washi-soft)] px-3 py-3"
       style={{
         boxShadow:
           // InkStroke: offset secondary stroke beneath the primary border.
@@ -136,17 +136,25 @@ function Stat({
             "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'><filter id='c'><feTurbulence type='fractalNoise' baseFrequency='2.4' numOctaves='2' seed='9'/><feColorMatrix values='0 0 0 0 0.42  0 0 0 0 0.36  0 0 0 0 0.28  0 0 0 0.12 0'/></filter><rect width='100%25' height='100%25' filter='url(%23c)'/></svg>\")",
         }}
       />
-      <Icon
-        className="relative h-3 w-3 text-hinomaru-ink/70 transition-colors duration-[260ms] group-data-[done=true]:text-hinomaru-ink"
-        strokeWidth={1.8}
+      {/* Status ring (not a filled disc): read-only tile, no hover state.
+          App: HealthStatTile, ZenIconDisc role .status, 34pt / 14pt glyph. */}
+      <span
         aria-hidden
-      />
-      <span className="display-title relative text-xl font-semibold leading-none text-sumi tabular-nums tracking-tight">
-        {value}
-        {suffix}
+        className="relative flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-full border border-hinomaru-ink/40"
+      >
+        <Icon
+          className="h-[14px] w-[14px] text-hinomaru-ink/70 transition-colors duration-[260ms] group-data-[done=true]:text-hinomaru-ink"
+          strokeWidth={1.8}
+        />
       </span>
-      <span className="relative text-[9px] font-semibold uppercase tracking-[0.18em] text-sumi-soft">
-        {label}
+      <span className="relative flex min-w-0 flex-col gap-[3px]">
+        <span className="display-title text-xl font-semibold leading-none text-sumi tabular-nums tracking-tight">
+          {value}
+          {suffix}
+        </span>
+        <span className="text-[11px] font-medium leading-tight text-sumi-soft">{label}</span>
+        {/* Reserved 3pt rail slot, as in the app, so tiles share one height. */}
+        <span aria-hidden className="mt-[3px] h-[3px]" />
       </span>
       {/* Hairline ink-stroke that draws across the bottom of the tile
           the moment the count-up lands. Quiet "ink set" beat that

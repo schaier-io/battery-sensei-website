@@ -8,7 +8,7 @@ import {
   storeLicenseKey,
 } from '#/lib/board-license'
 import { BoardSubmitForm } from './BoardSubmitForm'
-import { FeatureCard, type BoardItem, type BoardStatus } from './FeatureCard'
+import { FeatureCard, STATUS_DOT, type BoardItem, type BoardStatus } from './FeatureCard'
 import { LicenseKeyDialog } from './LicenseKeyDialog'
 
 /**
@@ -40,9 +40,12 @@ async function postVote(body: Record<string, unknown>): Promise<{ status: number
   return { status: response.status, data }
 }
 
-export function FeatureBoard() {
+/** First page from the server render (null: fetch on mount instead). */
+export type BoardPage = { items: BoardItem[]; hasMore: boolean; nextCursor: string | null }
+
+export function FeatureBoard({ initialPage = null }: { initialPage?: BoardPage | null }) {
   const { t } = useTranslation()
-  const [items, setItems] = useState<BoardItem[] | null>(null)
+  const [items, setItems] = useState<BoardItem[] | null>(initialPage?.items ?? null)
   const [loadError, setLoadError] = useState(false)
   const [votedIds, setVotedIds] = useState<ReadonlySet<string>>(new Set())
   const [hasStoredKey, setHasStoredKey] = useState(false)
@@ -60,7 +63,9 @@ export function FeatureBoard() {
     votedIdsRef.current = votedIds
   }, [votedIds])
 
-  const [nextCursor, setNextCursor] = useState<string | null>(null)
+  const [nextCursor, setNextCursor] = useState<string | null>(
+    initialPage?.hasMore ? initialPage.nextCursor : null,
+  )
   const [isLoadingMore, setIsLoadingMore] = useState(false)
   const loadMoreRef = useRef<HTMLDivElement | null>(null)
 
@@ -111,9 +116,14 @@ export function FeatureBoard() {
     setNextCursor(data.hasMore ? (data.nextCursor ?? null) : null)
   }, [fetchPage, nextCursor, isLoadingMore])
 
+  // A server-rendered first page is already current (CDN: 60 s, plus up to
+  // 300 s stale-while-revalidate).
+  // Read once: a later loader re-run (client branch returns null) must not
+  // flip this and refetch, which would blank the board.
+  const [hasInitialPage] = useState(initialPage !== null)
   useEffect(() => {
-    void loadBoard()
-  }, [loadBoard])
+    if (!hasInitialPage) void loadBoard()
+  }, [loadBoard, hasInitialPage])
 
   // Infinite load: the sentinel at the bottom of the list's own scroll
   // region fetches the next page as it scrolls into view.
@@ -335,10 +345,13 @@ export function FeatureBoard() {
       ) : (
         // The board scrolls inside its own region so a long list never
         // swallows the page — the submit form below stays reachable.
-        <div className="flex max-h-[560px] flex-col gap-10 overflow-y-auto overscroll-contain pr-1.5">
+        // -mr-1.5 / pr-1.5: the scrollbar sits in the gutter, so the card edges
+        // line up with the submit form below.
+        <div className="-mr-1.5 flex max-h-[560px] flex-col gap-10 overflow-y-auto overscroll-contain pr-1.5">
           {sections.map((section) => (
             <section key={section.status} aria-label={t(`board.sections.${section.status}`)}>
-              <h2 className="display-title mb-4 text-[12px] font-semibold uppercase tracking-[0.22em] text-sumi-soft">
+              <h2 className="display-title mb-4 flex items-center gap-2.5 text-[12px] font-semibold uppercase tracking-[0.22em] text-sumi-soft">
+                <span aria-hidden className={`h-1.5 w-1.5 rounded-full ${STATUS_DOT[section.status]}`} />
                 {t(`board.sections.${section.status}`)}
               </h2>
               <div className="flex flex-col gap-3">

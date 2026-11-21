@@ -202,11 +202,12 @@ export function Hero() {
       />
 
       <div className="relative mx-auto max-w-3xl px-5 sm:px-6 text-center">
-        <Reveal as="p" delay={80} className="kicker-row mx-auto justify-center mb-8 text-center">
+        <Reveal immediate as="p" delay={80} className="kicker-row mx-auto justify-center mb-8 text-center">
           <span>{t('hero.kicker', { trial: TRIAL_DAYS, price: price.formatted })}</span>
         </Reveal>
 
         <Reveal
+          immediate
           as="h1"
           delay={160}
           className="hero-display text-sumi"
@@ -218,14 +219,14 @@ export function Hero() {
           <RotatingHeadline />
         </Reveal>
 
-        <Reveal as="p" delay={320} className="mx-auto mt-8 font-jp text-base text-hinomaru-ink/75 md:text-lg tracking-[0.08em]">
+        <Reveal immediate as="p" delay={320} className="mx-auto mt-8 font-jp text-base text-hinomaru-ink/75 md:text-lg tracking-[0.08em]">
           {t('hero.jp')}
         </Reveal>
-        <Reveal as="p" delay={400} className="prose-readable mx-auto mt-5 text-[1.0625rem] text-sumi-soft md:text-[1.125rem]">
+        <Reveal immediate as="p" delay={400} className="prose-readable mx-auto mt-5 text-[1.0625rem] text-sumi-soft md:text-[1.125rem]">
           {t('hero.body')}
         </Reveal>
 
-        <Reveal delay={480} className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+        <Reveal immediate delay={480} className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <a
             href="#free-download-email"
             className="btn-sumi group inline-flex h-11 items-center gap-2.5 rounded-md px-6 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sumi/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--washi)]"
@@ -264,6 +265,7 @@ export function Hero() {
         </Reveal>
 
         <Reveal
+          immediate
           delay={640}
           className="relative mx-auto mt-[69px] w-full max-w-[480px]"
         >

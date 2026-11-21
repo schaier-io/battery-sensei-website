@@ -21,10 +21,10 @@ export const extended = (
     <H2>Picking a number</H2>
     <UL>
       <li>
-        <strong>80%</strong> is the common default: meaningful reduction in
-        high-state-of-charge time, still a full working day for most people.
-        Sensei badges <strong>85%</strong> as its in-app recommendation, half
-        a step up for anyone who wants a little more runtime in reserve.
+        <strong>85%</strong> is Sensei's default and in-app recommendation:
+        meaningful reduction in high-state-of-charge time, still a full
+        working day for most people. <strong>80%</strong> is half a step
+        gentler, for anyone who rarely needs the extra runtime.
       </li>
       <li>
         <strong>90%</strong> suits people who regularly need the runtime and

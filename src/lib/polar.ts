@@ -65,8 +65,11 @@ export const LIFETIME_DISCOUNT_MAX_REDEMPTIONS =
  * Source of truth (Polar Lifetime product + configured discount):
  *   Currency │  Full   │  Discount removes  │  Final
  *   ─────────┼─────────┼────────────────────┼────────
- *   USD      │  $9.99  │  $3.00             │  $6.99
- *   EUR      │  €9.99  │  €3.00             │  €6.99
+ *   USD      │ $12.99  │  $3.00             │  $9.99
+ *   EUR      │ €12.39  │  €3.00             │  €9.39   (DE preview, VAT incl.)
+ *   CZK      │  245 Kč │  50 Kč             │  195 Kč  (CZ preview, VAT incl.)
+ *
+ * Last checked against live /api/price on 2026-11-21.
  *
  * The "discounted" value is what buyers pay during the limited launch
  * window. "full" is the strikethrough anchor (and the headline once
@@ -76,13 +79,13 @@ export const LIFETIME_FALLBACK: Record<
   string,
   { discounted: number; full: number }
 > = {
-  USD: { discounted: 6.99, full: 9.99 },
-  EUR: { discounted: 6.99, full: 9.99 },
+  USD: { discounted: 9.99, full: 12.99 },
+  EUR: { discounted: 9.39, full: 12.39 },
+  CZK: { discounted: 195, full: 245 },
 }
 /** Used when the visitor's currency isn't in LIFETIME_FALLBACK. */
 export const LIFETIME_FALLBACK_DEFAULT = LIFETIME_FALLBACK.USD
 
-export const SUPPORT_PRICE_USD = 2.99
 export const TRIAL_DAYS = 5
 
 export type CheckoutUrlOptions = {

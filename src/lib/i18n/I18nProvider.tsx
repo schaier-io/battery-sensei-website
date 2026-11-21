@@ -39,6 +39,8 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
         if (cancelled) return
         return i18n.changeLanguage(detected)
       })
+      // Chunk failed (offline): stay in the current language.
+      .catch(() => {})
       .finally(() => {
         if (!cancelled) setReady(true)
       })

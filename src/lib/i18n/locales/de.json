@@ -134,7 +134,7 @@
     "items": {
       "alerts": "Intelligente Akkuwarnungen",
       "handoffs": "Hinweise beim Ein- & Ausstecken",
-      "chargeLimit": "80-%-Ladelimit",
+      "chargeLimit": "85-%-Ladelimit",
       "travelMode": "Reisemodus",
       "cycle": "Zyklenzahl & Kapazität",
       "watts": "Ladeleistung live",
@@ -179,8 +179,9 @@
     "chargeLimit": {
       "title": "Ladelimit",
       "titleSub": "mit Reisemodus",
-      "body": "Lithium-Ionen-Akkus altern schneller, wenn sie lange bei 100 % bleiben. Setzen Sie ein Limit (80 % ist die schonende Voreinstellung); Sensei hält es im Hintergrund. Flug morgen? Ein Klick lädt auf 100 %, danach kehrt Ihr Limit nach der Reise zurück.",
+      "body": "Lithium-Ionen-Akkus altern schneller, wenn sie lange bei 100 % bleiben. Setzen Sie ein Limit (85 % ist die schonende Voreinstellung); Sensei hält es im Hintergrund. Flug morgen? Ein Klick lädt auf 100 %, danach kehrt Ihr Limit nach der Reise zurück.",
       "scaleLabel": "Ladelimit",
+      "recommended": "Empfohlen",
       "travelLabel": "Reisemodus",
       "travelHint": "lädt nur für die Reise auf 100 %"
     },
@@ -188,12 +189,16 @@
       "title": "Alles auf einen Blick",
       "body": "Ladestand, Stromquelle, Watt rein oder raus, Restzeit: alles Wichtige auf einen Blick. Kein Dock-Symbol, kein Benachrichtigungslärm, nichts zum Anklicken, außer Sie wollen es. So bleiben Sie informiert, ohne ständig nachzusehen.",
       "timeLeft": "1 Std. 52 Min. übrig",
-      "chargingTo": "Lädt auf 80 %",
+      "chargingTo": "Lädt auf 85 %",
       "source": "Quelle",
       "powerAdapter": "Netzteil",
       "cycles": "Zyklen",
-      "chargeLimitOn": "Ladelimit · 80 %",
-      "on": "EIN"
+      "chargeLimitOn": "Ladelimit · 85 %",
+      "on": "EIN",
+      "menuOpen": "Battery Sensei öffnen",
+      "menuPause": "Warnungen pausieren",
+      "menuLowPower": "Low Power Mode einschalten",
+      "menuTravel": "Reisemodus"
     },
     "meetings": {
       "title": "Meetings ohne Akku-Stress.",
@@ -581,7 +586,7 @@
       "kicker": "Funktion · 旅",
       "heading": "Reisemodus.",
       "headingItalic": "Vor der Reise voll laden. Danach zurück zum Limit.",
-      "body": "Normalerweise hält Sensei den Akku bei Ihrem gewählten Limit (80 % empfohlen), damit er langsamer altert. Am Abend vor dem Flug aktivieren Sie den Reisemodus. Sensei hebt das Limit auf, lädt auf 100 %, schaltet auf strengere Warnungen bei niedrigem Akku (30 % / 15 % / 5 %) und pausiert Apples optimiertes Laden. Am nächsten Morgen um 9 Uhr kommt Ihr normales Limit automatisch zurück. Sie müssen an nichts denken, nichts zurückstellen, und Ihr Akku bleibt nicht wochenlang bei 100 %.",
+      "body": "Normalerweise hält Sensei den Akku bei Ihrem gewählten Limit (85 % empfohlen), damit er langsamer altert. Am Abend vor dem Flug aktivieren Sie den Reisemodus. Sensei hebt das Limit auf, lädt auf 100 %, schaltet auf strengere Warnungen bei niedrigem Akku (30 % / 15 % / 5 %) und pausiert Apples optimiertes Laden. Am nächsten Morgen um 9 Uhr kommt Ihr normales Limit automatisch zurück. Sie müssen an nichts denken, nichts zurückstellen, und Ihr Akku bleibt nicht wochenlang bei 100 %.",
       "mockupCaption": "Limit auf 100 % angehoben. Morgen um 9 Uhr automatisch zurück.",
       "why": "Lithium-Ionen-Akkus altern schneller, wenn sie lange bei 100 % bleiben. Das klassische „vor der Reise voll laden und dann vergessen“ lässt ein MacBook im schlimmsten Fall wochenlang vollgeladen stehen. Der 9-Uhr-Reset ist das Sicherheitsnetz: Selbst wenn Sie nicht daran denken, kehrt das Limit zurück."
     },
@@ -810,7 +815,8 @@
         }
       ]
     },
-    "alreadyBought": "Bereits gekauft? Öffnen Sie Sensei → Einstellungen → Pro und fügen Sie Ihren Schlüssel ein."
+    "alreadyBought": "Bereits gekauft? Öffnen Sie Sensei → Einstellungen → Pro und fügen Sie Ihren Schlüssel ein.",
+    "terms": "<0>Sicher bezahlen mit Polar</0> · <1>14 Tage Geld-zurück-Garantie</1>, ohne Rückfragen."
   },
   "faq": {
     "kicker": "Fragen · 問答",
@@ -851,7 +857,7 @@
       {
         "q": "Wie funktioniert das Ladelimit?",
         "a": [
-          "Sensei stoppt das Laden bei dem Wert, den Sie wählen. Standard ist **80 %**: kühlerer Akku, längere Lebensdauer.",
+          "Sensei stoppt das Laden bei dem Wert, den Sie wählen. Standard ist **85 %**: kühlerer Akku, längere Lebensdauer.",
           "Der Reisemodus ist ein Klick. Sensei lädt mit **voller Geschwindigkeit** auf 100 %, ohne macOS-Verlangsamung auf den letzten 20 %.",
           "Ihr normales Limit kehrt am nächsten Morgen um 9 Uhr zurück."
         ]
@@ -1132,7 +1138,8 @@
     "managePurchase": "Kauf verwalten",
     "copyright": "© {{year}} Sandro Thabiso Schaier · Battery Sensei",
     "lastUpdated": "Website aktualisiert am {{date}}",
-    "roadmap": "Roadmap"
+    "roadmap": "Roadmap",
+    "refunds": "Rückerstattung"
   },
   "checkout": {
     "kicker": "Kasse · 会計",

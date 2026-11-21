@@ -293,7 +293,7 @@ export function useLifetimePrice(currency?: 'USD' | 'EUR' | 'CZK'): LifetimePric
   // replaced the old `yearly + 1` / `yearly × 3` heuristic, which
   // hard-coded a 3× anchor that no longer matches the actual
   // Lifetime price (Lifetime is 4× yearly now, not 3×, and the
-  // discount is a fixed $7.50 / €7.00 / 110 Kč drop rather than a
+  // discount is a fixed $3.00 / €3.00 / 50 Kč drop rather than a
   // simple $1 delta).
   const fallback =
     LIFETIME_FALLBACK[yearly.currency.toUpperCase()] ??

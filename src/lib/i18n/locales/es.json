@@ -134,7 +134,7 @@
     "items": {
       "alerts": "Avisos inteligentes de batería baja",
       "handoffs": "Avisos al conectar y desconectar",
-      "chargeLimit": "Límite de carga al 80%",
+      "chargeLimit": "Límite de carga al 85%",
       "travelMode": "Modo viaje",
       "cycle": "Recuento de ciclos y capacidad",
       "watts": "Vatios de carga en tiempo real",
@@ -179,8 +179,9 @@
     "chargeLimit": {
       "title": "Límite de carga",
       "titleSub": "con Modo viaje",
-      "body": "Las baterías de iones de litio envejecen más rápido cuando pasan tiempo al 100%. Elige un tope (80% es el ajuste suave por defecto) y Sensei lo mantiene en segundo plano. ¿Viajas mañana? Con un toque, carga al 100%; después del viaje, vuelve tu tope.",
+      "body": "Las baterías de iones de litio envejecen más rápido cuando pasan tiempo al 100%. Elige un tope (85% es el ajuste suave por defecto) y Sensei lo mantiene en segundo plano. ¿Viajas mañana? Con un toque, carga al 100%; después del viaje, vuelve tu tope.",
       "scaleLabel": "Límite de carga",
+      "recommended": "Recomendado",
       "travelLabel": "Modo viaje",
       "travelHint": "carga al 100% solo para el viaje"
     },
@@ -188,12 +189,16 @@
       "title": "Todo claro de un vistazo",
       "body": "Carga, fuente, vatios que entran o salen, tiempo restante. Todo en una sola mirada. Sin icono en el Dock, sin ruido de notificaciones y sin tocar nada salvo que quieras.",
       "timeLeft": "Quedan 1h 52m",
-      "chargingTo": "Cargando hasta 80%",
+      "chargingTo": "Cargando hasta 85%",
       "source": "Fuente",
       "powerAdapter": "Adaptador de corriente",
       "cycles": "Ciclos",
-      "chargeLimitOn": "Límite de carga · 80%",
-      "on": "ACTIVO"
+      "chargeLimitOn": "Límite de carga · 85%",
+      "on": "ACTIVO",
+      "menuOpen": "Abrir Battery Sensei",
+      "menuPause": "Pausar alertas",
+      "menuLowPower": "Activar Low Power Mode",
+      "menuTravel": "Modo viaje"
     },
     "meetings": {
       "title": "Reuniones sin sustos.",
@@ -581,7 +586,7 @@
       "kicker": "Función · 旅",
       "heading": "Modo viaje.",
       "headingItalic": "Carga completa para viajar. Tu límite vuelve solo.",
-      "body": "Normalmente Sensei mantiene la carga en el tope que tú elijas (80% recomendado) para que la batería envejezca más despacio. La noche antes de un vuelo, activa el Modo viaje. Sensei sube el límite, carga al 100%, cambia a avisos de batería baja más estrictos (30% / 15% / 5%) y pausa la Carga Optimizada de Apple. A la mañana siguiente, a las 9:00, tu límite habitual vuelve solo. Sin recordatorios para deshacerlo. Sin dejar la batería semanas al 100%.",
+      "body": "Normalmente Sensei mantiene la carga en el tope que tú elijas (85% recomendado) para que la batería envejezca más despacio. La noche antes de un vuelo, activa el Modo viaje. Sensei sube el límite, carga al 100%, cambia a avisos de batería baja más estrictos (30% / 15% / 5%) y pausa la Carga Optimizada de Apple. A la mañana siguiente, a las 9:00, tu límite habitual vuelve solo. Sin recordatorios para deshacerlo. Sin dejar la batería semanas al 100%.",
       "mockupCaption": "Límite al 100%. Se reinicia mañana a las 9:00.",
       "why": "Las baterías de iones de litio envejecen más rápido al 100%. El clásico «carga antes del viaje y olvídate» deja el MacBook semanas a plena carga, y eso desgasta las celdas de forma medible. El reinicio a las 9:00 es la red de seguridad: aunque lo olvides, el tope vuelve."
     },
@@ -810,7 +815,8 @@
         }
       ]
     },
-    "alreadyBought": "¿Ya lo compraste? Abre Sensei → Ajustes → Pro y pega tu clave."
+    "alreadyBought": "¿Ya lo compraste? Abre Sensei → Ajustes → Pro y pega tu clave.",
+    "terms": "<0>Paga de forma segura con Polar</0> · <1>Garantía de devolución de 14 días</1>, sin preguntas."
   },
   "faq": {
     "kicker": "Preguntas · 問答",
@@ -851,7 +857,7 @@
       {
         "q": "¿Cómo funciona el límite de carga?",
         "a": [
-          "Sensei detiene la carga en el nivel que elijas. Por defecto, **80%**: batería más fría, vida más larga.",
+          "Sensei detiene la carga en el nivel que elijas. Por defecto, **85%**: batería más fría, vida más larga.",
           "El Modo viaje es un clic. Sensei sube la carga al 100% **a máxima velocidad**, sin ralentización de macOS en el último 20%.",
           "Tu límite normal vuelve a la mañana siguiente a las 9:00."
         ]
@@ -1132,7 +1138,8 @@
     "managePurchase": "Gestionar la compra",
     "copyright": "© {{year}} Sandro Thabiso Schaier · Battery Sensei",
     "lastUpdated": "Sitio actualizado el {{date}}",
-    "roadmap": "Hoja de ruta"
+    "roadmap": "Hoja de ruta",
+    "refunds": "Reembolsos"
   },
   "checkout": {
     "kicker": "Compra · 会計",

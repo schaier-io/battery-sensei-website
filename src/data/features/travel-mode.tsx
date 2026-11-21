@@ -102,7 +102,7 @@ export const faqs = [
   {
     q: 'What if my flight is later in the day?',
     a:
-      'Travel Mode keeps the cap lifted until 9 AM local time the morning after you enable it. If your flight is at noon, you can re-enable Travel Mode in the morning to keep the cap raised through the trip, or just leave the 80% cap and rely on stricter alerts plus the partial charge.',
+      'Travel Mode keeps the cap lifted until 9 AM local time the morning after you enable it. If your flight is at noon, you can re-enable Travel Mode in the morning to keep the cap raised through the trip, or just leave the 85% cap and rely on stricter alerts plus the partial charge.',
   },
   {
     q: 'Does Travel Mode work without an internet connection?',

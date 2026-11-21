@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
-import { Wifi, Search, MoonStar, Minus, Plus } from 'lucide-react'
+import { Wifi, Search, MoonStar, Minus, Plus, Info, X } from 'lucide-react'
 import { Trans, useTranslation } from 'react-i18next'
 
 // Formats in the site language, not the visitor's browser language. The
@@ -19,8 +19,8 @@ const formatTime = (d: Date, locale: string) =>
 const CHARGE = 0.15
 
 /**
- * Hero mockup: a tiny macOS desktop with the BatterySensei `WarningOverlay`
- * floating on top. Mirrors how the alert actually appears in the wild —
+ * Hero mockup: a tiny macOS desktop with the app's low-battery alert card
+ * (ZenAlertCard) floating on top. Mirrors how the alert actually appears in the wild —
  * translucent menu bar with the app's icon highlighted on the right, washi
  * desktop, then the warning card centered with its own scrim.
  */
@@ -113,9 +113,8 @@ export function MenuBarMockup({ className = '' }: { className?: string }) {
           }}
         />
 
-        {/* The alert overlay — same visual language as
-            components/zen/WarningOverlay.tsx, miniaturized for the desktop
-            stage so the whole scene fits inside the hero card. */}
+        {/* The alert card: the app's ZenAlertCard layout, miniaturized for
+            the desktop stage so the whole scene fits inside the hero card. */}
         <AlertCard percent={percent} revealed={revealed} />
 
         {/* Dock — a hint at the bottom for desktop realism */}
@@ -179,7 +178,7 @@ function AlertCard({ percent, revealed }: { percent: number; revealed: boolean }
   const { t } = useTranslation()
   return (
     <div
-      className="alert-card absolute left-1/2 top-[calc(50%-20px)] z-10 w-[86%] max-w-[360px] sm:w-[80%] rounded-[22px] border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_94%,var(--paper-lift))] px-5 pt-4 pb-4 text-center shadow-[0_1px_0_rgba(255,255,255,0.55)_inset,0_28px_60px_-22px_rgba(28,26,23,0.45),0_8px_22px_-10px_rgba(28,26,23,0.30)]"
+      className="alert-card absolute left-1/2 top-[calc(50%-20px)] z-10 w-[86%] max-w-[360px] sm:w-[80%] rounded-[16px] border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_94%,var(--paper-lift))] p-5 text-left shadow-[0_4px_10px_rgba(28,26,23,0.12)] dark:shadow-[0_4px_10px_rgba(0,0,0,0.42)]"
       data-revealed={revealed ? 'true' : 'false'}
       style={{
         transform: `translate(-50%, calc(-50% + ${revealed ? '0px' : '12px'}))`,
@@ -188,94 +187,116 @@ function AlertCard({ percent, revealed }: { percent: number; revealed: boolean }
           'transform 680ms cubic-bezier(0.2, 0.8, 0.2, 1), opacity 680ms cubic-bezier(0.2, 0.8, 0.2, 1)',
       }}
     >
+      {/* 電 marks power (WarningOverlayBanner.swift:76). Top on the golden
+          cut of the padding, trailing on the content edge, so it ends
+          where Dismiss ends (ZenAlertCard.swift:98-107). */}
       <span
         aria-hidden
-        className="mx-auto mb-3 block h-[3px] w-8 rounded-full bg-[color-mix(in_oklab,var(--sumi)_22%,transparent)]"
-      />
+        className="font-jp pointer-events-none absolute right-5 top-3 text-[22px] leading-none text-sumi opacity-10"
+      >
+        電
+      </span>
 
-      <div className="mb-2 flex justify-center">
-        <div
-          className="relative grid h-[58px] w-[58px] place-items-center rounded-full"
-          style={{
-            background: '#f6d6d6',
-            boxShadow:
-              '0 0 0 1px color-mix(in oklab, var(--hinomaru) 16%, transparent)',
-          }}
-        >
+      {/* Kicker: spaced caps in the alert tint, then the ⓘ. The ⓘ is
+          decorative here: the popover it opens in the app does not exist on
+          the page. */}
+      <AlertRow index={0} revealed={revealed}>
+        <div className="flex items-center gap-1.5">
+          <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-hinomaru-ink">
+            {t('mockups.menuBar.lowBattery')}
+          </span>
+          <Info aria-hidden className="h-[11px] w-[11px] text-sumi-soft opacity-65" strokeWidth={2} />
+        </div>
+      </AlertRow>
+
+      {/* Glyph + reading. The glyph centres on the digits: `leading-none`
+          on the title makes its line box hug the figures. */}
+      <AlertRow index={1} revealed={revealed} className="mt-2">
+        <div className="flex items-center gap-2">
           <SmallBatteryGlyph fraction={percent / 100} />
+          <p className="display-title text-[24px] font-semibold leading-none tabular-nums text-sumi">
+            {percent}%
+          </p>
         </div>
-      </div>
+      </AlertRow>
 
-      <p className="display-title text-[15px] font-semibold leading-tight text-sumi">
-        {t('mockups.menuBar.lowBattery')}
-      </p>
+      {/* Forecast line, NOT a restatement: the runtime, number in bold, as
+          the app's `bannerDetail` renders it (WarningOverlayBanner.swift:149). */}
+      <AlertRow index={2} revealed={revealed} className="mt-[5px]">
+        <p className="text-[12px] leading-[1.45] text-sumi-soft">
+          <Trans
+            i18nKey="mockups.menuBar.timeLeft"
+            values={{ time: '1h 12m' }}
+            components={[<span className="font-semibold text-sumi tabular-nums" />]}
+          />
+        </p>
+      </AlertRow>
 
-      <div className="mx-auto mt-3 h-[5px] w-[140px] overflow-hidden rounded-full bg-[color-mix(in_oklab,var(--sumi)_10%,var(--washi-soft))]">
-        <div
-          className="h-full rounded-full bg-hinomaru transition-[width] duration-[1100ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)]"
-          style={{ width: revealed ? `${percent}%` : '0%' }}
-        />
-      </div>
-
-      <p className="display-title mt-3 text-[2.25rem] font-semibold leading-none tabular-nums tracking-[-0.02em] text-sumi">
-        {percent}%
-      </p>
-
-      {/* Forecast line, NOT a restatement. The earlier copy ("Battery is
-          now at 15%") just repeated the number above. Replaced with a
-          plain-English prediction so the preview demonstrates the
-          app's actual value (predictive insight) instead of a
-          redundant status echo. */}
-      <p className="mx-auto mt-2 text-[11px] font-medium leading-relaxed text-sumi-soft">
-        <Trans
-          i18nKey="mockups.menuBar.timeLeft"
-          values={{ time: '1h 12m' }}
-          components={[<span className="text-sumi tabular-nums" />]}
-        />
-      </p>
-
-      {/* Hover states copy the real `WarningOverlay`: each stepper button
-          lights up on its own, nothing inside the stepper moves. Stacked lifts
-          (group plus pill) pushed the pill past the group's 2px padding. */}
-      <div className="mt-3 flex items-center justify-between gap-2">
-        <div className="group/snooze flex shrink-0 items-center gap-0.5 rounded-lg border border-[var(--line)] bg-[color-mix(in_oklab,var(--washi)_55%,var(--paper-lift))] p-0.5 shadow-[0_1px_0_rgba(255,255,255,0.45)_inset] transition-[border-color,box-shadow] duration-[240ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:border-[var(--line-strong)] hover:shadow-[0_1px_0_rgba(255,255,255,0.58)_inset,0_6px_14px_-10px_rgba(28,26,23,0.45)]">
-          <span
-            className="px-1 text-sumi-soft transition-[rotate,color] duration-[320ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] group-hover/snooze:text-sumi motion-safe:group-hover/snooze:-rotate-12"
-            aria-hidden
-          >
-            <MoonStar className="h-3 w-3" strokeWidth={1.8} />
+      {/* Action row: one snooze field with −/+ inside it, then the red
+          Dismiss. No keycaps (WarningOverlayAlertControls.swift:4-8). The
+          field hangs by its inset so its keys start on the text edge. */}
+      <AlertRow index={3} revealed={revealed} className="mt-[13px]">
+        <div className="-ml-1 flex items-center justify-between gap-2">
+          <div className="flex h-[30px] shrink-0 items-center gap-1 rounded-lg border border-[var(--line-strong)] bg-[color-mix(in_oklab,var(--washi)_30%,var(--paper-lift))] px-1 transition-[border-color] duration-[240ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:border-[color-mix(in_oklab,var(--sumi)_30%,transparent)]">
+            <StepGlyph>
+              <Minus className="h-3 w-3" strokeWidth={2.4} />
+            </StepGlyph>
+            {/* `nowrap` holds the label on one line; the word "Snooze" drops
+                below `sm` (the moon says it) so de fits a 375px phone. */}
+            <span className="flex items-center gap-1.5 whitespace-nowrap px-0.5 text-[11px] font-medium text-sumi">
+              <MoonStar aria-hidden className="h-3 w-3" fill="currentColor" strokeWidth={1.6} />
+              <span className="hidden sm:inline">{t('mockups.menuBar.snooze')} </span>
+              <span className="tabular-nums">{t('mockups.menuBar.snoozeStep')}</span>
+            </span>
+            <StepGlyph>
+              <Plus className="h-3 w-3" strokeWidth={2.4} />
+            </StepGlyph>
+          </div>
+          <span className="inline-flex h-[30px] shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg bg-hinomaru/95 px-3 text-[11px] font-semibold text-white transition-colors duration-[200ms] hover:bg-hinomaru">
+            <X aria-hidden className="h-2.5 w-2.5" strokeWidth={3} />
+            {t('mockups.menuBar.dismiss')}
           </span>
-          <StepGlyph>
-            <Minus className="h-3 w-3" strokeWidth={2} />
-          </StepGlyph>
-          {/* `nowrap` holds the pill on one line; the word "Snooze" drops
-              below `sm` (the moon says it) so de fits a 375px phone. */}
-          <span className="whitespace-nowrap rounded-md bg-[color-mix(in_oklab,var(--washi)_35%,var(--paper-lift))] px-2 py-0.5 text-[10px] font-semibold text-sumi shadow-[0_1px_0_rgba(255,255,255,0.6)_inset] transition-colors duration-[220ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:bg-[color-mix(in_oklab,var(--paper-lift)_90%,var(--washi-soft))]">
-            <span className="hidden text-sumi-soft sm:inline">{t('mockups.menuBar.snooze')} </span>
-            <span className="tabular-nums">{t('mockups.menuBar.snoozeStep')}</span>
-          </span>
-          <StepGlyph>
-            <Plus className="h-3 w-3" strokeWidth={2} />
-          </StepGlyph>
         </div>
-        <span
-          className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg bg-hinomaru px-2.5 py-1.5 text-[11px] font-semibold text-[#fff8eb] shadow-[0_1px_0_rgba(255,255,255,0.18)_inset,0_2px_4px_rgba(188,0,45,0.22)] transition-[translate,box-shadow] duration-[240ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:shadow-[0_1px_0_rgba(255,255,255,0.2)_inset,0_8px_18px_-10px_rgba(188,0,45,0.65)] motion-safe:hover:-translate-y-px"
-        >
-          {t('mockups.menuBar.dismiss')}
-          <kbd className="hidden rounded bg-[color-mix(in_oklab,#fff8eb_24%,transparent)] px-1 py-0.5 text-[9px] font-medium tracking-wider text-[#fff8eb] ring-1 ring-inset ring-[#fff8eb]/30 sm:inline-block">
-            Esc
-          </kbd>
-        </span>
-      </div>
+      </AlertRow>
     </div>
   )
 }
+
+/**
+ * Row entrance from `ZenAlertRowEntrance` (ZenAlertCard.swift:315-331):
+ * each row fades and drops 6px, 60 ms after the one above, once the card
+ * has started to land.
+ */
+function AlertRow({
+  index,
+  revealed,
+  className = '',
+  children,
+}: {
+  index: number
+  revealed: boolean
+  className?: string
+  children: ReactNode
+}) {
+  return (
+    <div
+      className={`transition-[opacity,translate] duration-[320ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] motion-reduce:transition-none ${revealed ? 'translate-y-0 opacity-100' : '-translate-y-1.5 opacity-0'} ${className}`}
+      style={{ transitionDelay: `${ROW_ENTRANCE_START_MS + index * ROW_ENTRANCE_STEP_MS}ms` }}
+    >
+      {children}
+    </div>
+  )
+}
+
+/** The card lands in 680 ms; rows start partway in, then step 60 ms apart. */
+const ROW_ENTRANCE_START_MS = 240
+const ROW_ENTRANCE_STEP_MS = 60
 
 function StepGlyph({ children }: { children: ReactNode }) {
   return (
     <span
       aria-hidden
-      className="grid h-5 w-5 place-items-center rounded-md text-sumi-soft transition-colors duration-[200ms] [transition-timing-function:cubic-bezier(0.2,0.8,0.2,1)] hover:bg-[color-mix(in_oklab,var(--sumi)_10%,transparent)] hover:text-sumi"
+      className="grid h-5 w-5 place-items-center rounded-[4px] text-sumi transition-colors duration-[140ms] ease-out hover:bg-[color-mix(in_oklab,var(--sumi)_8%,transparent)]"
     >
       {children}
     </span>
@@ -307,33 +328,59 @@ function Dock() {
   )
 }
 
+/** Title size the glyph scales against (`batteryToTitle`, ZenAlertCard.swift:197). */
+const GLYPH_SIZE = 24 * 0.95
+
+/**
+ * `BatteryFillGlyph` (ZenComponents.swift:20-60): outline, inner fill that
+ * tracks the charge (never thinner than a rounded square), and a nub.
+ */
 function SmallBatteryGlyph({ fraction }: { fraction: number }) {
-  const inner = Math.max(2, fraction * 22)
+  const f = Math.max(0, Math.min(1, fraction))
+  const bodyW = GLYPH_SIZE
+  const bodyH = Math.max(10, GLYPH_SIZE * 0.46)
+  const stroke = Math.max(1.2, bodyH * 0.1)
+  const cornerR = bodyH * 0.32
+  const pad = stroke + Math.max(1.5, bodyH * 0.08)
+  const innerH = bodyH - pad * 2
+  const innerMaxW = bodyW - pad * 2
+  const fillW = f > 0 ? Math.min(innerMaxW, Math.max(innerMaxW * f, innerH)) : 0
+  const nubH = bodyH * 0.46
+  const nubW = Math.max(1.5, bodyH * 0.16)
+  const nubGap = Math.max(1, nubW * 0.4)
+  const width = bodyW + nubGap + nubW
   return (
     <svg
-      viewBox="0 0 36 20"
-      width="32"
-      height="18"
+      viewBox={`0 0 ${width} ${bodyH}`}
+      width={width}
+      height={bodyH}
       aria-hidden
-      className="text-hinomaru-ink"
+      className="shrink-0 text-hinomaru-ink"
     >
       <rect
-        x="1"
-        y="2"
-        width="28"
-        height="16"
-        rx="3.6"
+        x={stroke / 2}
+        y={stroke / 2}
+        width={bodyW - stroke}
+        height={bodyH - stroke}
+        rx={cornerR}
         fill="none"
         stroke="currentColor"
-        strokeWidth="1.6"
+        strokeWidth={stroke}
       />
-      <rect x="30" y="7" width="3" height="6" rx="1" fill="currentColor" />
       <rect
-        x="3"
-        y="4"
-        width={inner}
-        height="12"
-        rx="2.2"
+        x={pad}
+        y={pad}
+        width={fillW}
+        height={innerH}
+        rx={Math.max(1, cornerR - pad * 0.6)}
+        fill="currentColor"
+      />
+      <rect
+        x={bodyW + nubGap}
+        y={(bodyH - nubH) / 2}
+        width={nubW}
+        height={nubH}
+        rx={nubW * 0.4}
         fill="currentColor"
       />
     </svg>

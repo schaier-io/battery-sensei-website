@@ -5,7 +5,7 @@
 > tracking, and a plain-English battery history. Sensitive monitoring data
 > stays on your Mac; limited update, licensing, and user-triggered actions use
 > the network.
-> 5-day free trial, no card. $4.49 once, lifetime license.
+> 5-day free trial, no card. $9.99 once, lifetime license.
 
 Battery Sensei (電池先生) is a single-purpose macOS utility for MacBook owners
 who want to slow battery wear, avoid surprise shutdowns, and understand how
@@ -18,7 +18,7 @@ actions, and sharing you choose use the services named in the privacy notice.
 
 ## Quick facts
 
-- Price: $4.49 USD one-time, lifetime license (local currency at checkout via Polar)
+- Price: $9.99 USD one-time (launch price, regular $12.99), lifetime license (local currency at checkout via Polar)
 - Free trial: 5 days, no card required; at trial end Sensei asks once at launch
 - Refund: 14-day, no questions
 - Devices: up to 3 Macs per license
@@ -34,7 +34,7 @@ actions, and sharing you choose use the services named in the privacy notice.
 
 - Three-level low-battery alerts (Zen / Regular / Senpai presets, or custom)
 - Optional plug and unplug updates with live battery-runtime and time-to-limit estimates
-- Charge limit (cap at any percent, default 80%) with one-click Travel Mode
+- Charge limit (cap at any percent, default 85%) with one-click Travel Mode
 - Live charge, source, watts in/out, and time-left readout in the menu bar
 - Cycle count and capacity tracking with plain-English context
 - Heat-throttling awareness with explanation of macOS pause behaviour

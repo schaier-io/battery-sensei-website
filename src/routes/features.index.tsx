@@ -5,6 +5,7 @@ import { Footer } from '#/components/sections/Footer'
 import { Reveal } from '#/components/zen/Reveal'
 import { Hanko } from '#/components/zen/Hanko'
 import { ScreenshotMockup } from '#/components/ScreenshotMockup'
+import { SCREENSHOT_FORMATS, screenshotSrcSet, screenshotVariant } from '#/lib/screenshot-variants'
 import { BrushDivider } from '#/components/zen/BrushDivider'
 
 const SITE_URL = 'https://www.battery-sensei.app'
@@ -209,14 +210,24 @@ function FeaturesIndex() {
                 the visitor that this page does not respond. Add the disc back
                 in the same slot when the <video> lands. */}
             <figure className="group relative aspect-video w-full overflow-hidden rounded-xl bg-sumi shadow-[0_12px_40px_-12px_rgba(28,26,23,0.45)]">
-              <img
-                src="/screenshots/general-dark.png"
-                alt=""
-                aria-hidden
-                className="absolute inset-0 h-full w-full object-cover object-top opacity-45"
-                loading="lazy"
-                decoding="async"
-              />
+              <picture>
+                {SCREENSHOT_FORMATS.map((format) => (
+                  <source
+                    key={format}
+                    type={`image/${format}`}
+                    srcSet={screenshotSrcSet('general-dark', format)}
+                    sizes="(min-width: 768px) 720px, calc(100vw - 40px)"
+                  />
+                ))}
+                <img
+                  src={screenshotVariant('general-dark', 1080, 'webp')}
+                  alt=""
+                  aria-hidden
+                  className="absolute inset-0 h-full w-full object-cover object-top opacity-45"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
               <span
                 aria-hidden
                 className="absolute inset-0 bg-gradient-to-t from-sumi/90 via-sumi/30 to-sumi/50"
