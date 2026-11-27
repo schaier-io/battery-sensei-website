@@ -7,8 +7,9 @@
  * server falls back to the launch code, so a missing dashboard entry
  * never removes the launch price.
  *
- * Lives in the root `lib/` because both `api/*` (Vercel functions) and
- * `src/*` (the site) read it; `api/*` cannot import from `src/*`.
+ * Server only. Only `api/*` may import this file. Never import it from
+ * `src/*`: that would put the end date into the client bundle. The
+ * site learns about the sale from `/api/price` (`lifetime.campaign`).
  */
 export const BLACK_FRIDAY_CODE = 'BLACKFRIDAY'
 export const BLACK_FRIDAY_PERCENT = 50
