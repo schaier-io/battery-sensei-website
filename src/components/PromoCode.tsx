@@ -21,8 +21,8 @@ const TONE: Record<NonNullable<PromoCodeProps['tone']>, string> = {
 
 /**
  * A coupon-style chip: dashed border, monospace code, one click copies
- * it. The icon swaps to a check for a moment and the polite live region
- * announces it. The live region sits next to the button, not inside it:
+ * it. The code text and the icon swap to "Copied" and a check for a
+ * moment, and the polite live region announces it. The live region sits next to the button, not inside it:
  * screen readers treat button children as presentational.
  */
 export function PromoCode({ code, tone = 'onPaper', className = '' }: PromoCodeProps) {
@@ -58,8 +58,18 @@ export function PromoCode({ code, tone = 'onPaper', className = '' }: PromoCodeP
         aria-label={t('blackFriday.copyLabel', { code })}
         className={`group inline-flex h-8 shrink-0 items-center gap-2 rounded-md border border-dashed px-2.5 font-mono text-[0.8125rem] font-medium tracking-[0.08em] transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 ${TONE[tone]} ${className}`}
       >
-        <span ref={codeRef} className="select-all">
-          {code}
+        {/* Both labels share one grid cell, so the chip keeps its width
+            when the visible "Copied" swaps in. */}
+        <span className="grid">
+          <span ref={codeRef} className={`select-all [grid-area:1/1] ${copied ? 'invisible' : ''}`}>
+            {code}
+          </span>
+          <span
+            aria-hidden
+            className={`[grid-area:1/1] text-center font-sans tracking-normal ${copied ? '' : 'invisible'}`}
+          >
+            {t('blackFriday.copiedShort')}
+          </span>
         </span>
         <span aria-hidden className="h-3.5 w-px bg-current opacity-30" />
         <Icon className="h-3.5 w-3.5" strokeWidth={2} aria-hidden />

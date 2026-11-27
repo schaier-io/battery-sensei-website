@@ -1,20 +1,10 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef } from 'react'
 import { Link } from '@tanstack/react-router'
 import { ArrowRight, X } from 'lucide-react'
 import { Trans, useTranslation } from 'react-i18next'
 import { PromoCode } from '#/components/PromoCode'
+import { dismissBlackFriday, useBlackFridayDismissed } from '#/lib/black-friday-dismissal'
 import { useLifetimePrice } from '#/lib/use-price'
-
-/** Per-viewer dismissal. Scoped to this campaign so a later sale shows. */
-const DISMISS_KEY = 'bs:black-friday-2026:dismissed'
-
-function readDismissed(): boolean {
-  try {
-    return window.localStorage.getItem(DISMISS_KEY) === '1'
-  } catch {
-    return false
-  }
-}
 
 /**
  * Site-wide Black Friday strip above the header. Renders nothing until
@@ -26,9 +16,8 @@ export function BlackFridayBanner() {
   const { t } = useTranslation()
   const lifetime = useLifetimePrice()
   const code = lifetime.blackFridayCode
-  const [dismissed, setDismissed] = useState(true)
+  const dismissed = useBlackFridayDismissed()
   const asideRef = useRef<HTMLElement>(null)
-  useEffect(() => setDismissed(readDismissed()), [])
 
   if (!code || dismissed) return null
 
@@ -39,12 +28,7 @@ export function BlackFridayBanner() {
       'a[href], button:not([disabled])',
     )
     next?.focus()
-    setDismissed(true)
-    try {
-      window.localStorage.setItem(DISMISS_KEY, '1')
-    } catch {
-      // Storage blocked: the strip still hides for this page view.
-    }
+    dismissBlackFriday()
   }
 
   return (
@@ -59,7 +43,7 @@ export function BlackFridayBanner() {
             {t('blackFriday.label')}
           </span>
           <span className="font-medium">{t('blackFriday.headline')}</span>
-          <span className="hidden tabular-nums sm:inline">
+          <span className="tabular-nums">
             <Trans
               i18nKey="blackFriday.priceLine"
               values={{

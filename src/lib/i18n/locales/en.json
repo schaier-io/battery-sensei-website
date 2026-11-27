@@ -1500,8 +1500,10 @@
     "cta": "Get Lifetime",
     "copyLabel": "Copy code {{code}}",
     "copied": "Code copied",
+    "copiedShort": "Copied",
     "dismiss": "Hide the Black Friday offer",
     "pill": "Black Friday −50%",
+    "navBadge": "−50%",
     "appliedShort": "Applied at checkout. The code is a backup.",
     "applied": "Black Friday price applied automatically. Use the code if Polar asks for one."
   }

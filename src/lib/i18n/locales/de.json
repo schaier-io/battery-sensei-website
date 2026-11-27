@@ -1500,8 +1500,10 @@
     "cta": "Lifetime holen",
     "copyLabel": "Code {{code}} kopieren",
     "copied": "Code kopiert",
+    "copiedShort": "Kopiert",
     "dismiss": "Black-Friday-Angebot ausblenden",
     "pill": "Black Friday −50 %",
+    "navBadge": "−50 %",
     "appliedShort": "Wird beim Kauf automatisch abgezogen. Der Code ist nur Reserve.",
     "applied": "Black-Friday-Preis automatisch angewendet. Nutzen Sie den Code, falls Polar danach fragt."
   }
