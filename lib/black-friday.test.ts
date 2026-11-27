@@ -25,10 +25,24 @@ describe('Black Friday window', () => {
 // The sale end date lives in this file. Any import from src/ would put
 // it into the client bundle.
 describe('client bundle', () => {
+  // Any extension (.js, .ts) and any quote, including a template literal.
+  const importsBlackFriday = /lib\/black-friday(\.\w+)?['"`]/
+
+  it('recognises every import form', () => {
+    for (const line of [
+      "import { X } from '../../lib/black-friday.js'",
+      'import { X } from "#/../lib/black-friday.ts"',
+      "const m = await import('@/../lib/black-friday')",
+      'const m = await import(`../lib/black-friday`)',
+    ]) {
+      expect(importsBlackFriday.test(line), line).toBe(true)
+    }
+  })
+
   it('never imports lib/black-friday', () => {
     const offenders = readdirSync('src', { recursive: true, encoding: 'utf8' })
       .filter((file) => /\.(ts|tsx)$/.test(file))
-      .filter((file) => /lib\/black-friday(\.js)?['"]/.test(readFileSync(join('src', file), 'utf8')))
+      .filter((file) => importsBlackFriday.test(readFileSync(join('src', file), 'utf8')))
     expect(offenders).toEqual([])
   })
 })

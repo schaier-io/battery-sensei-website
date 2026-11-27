@@ -151,7 +151,7 @@ describe('GET /api/price Black Friday campaign', () => {
 
     expect(fetchMock.mock.calls.length).toBeGreaterThan(callsAfterFirst)
   })
-  it('caches a settled launch quote for longer than an hour outside the sale', async () => {
+  it('caches a settled launch quote for a day outside the sale', async () => {
     configure('S')
     vi.setSystemTime(new Date('2026-12-05T12:00:00Z'))
     stubPolar((q) => new Response(JSON.stringify({ items: q === 'LAUNCHS' ? [{ id: 'launch-id', code: 'LAUNCHS' }] : [] }), { status: 200 }))
@@ -159,12 +159,16 @@ describe('GET /api/price Black Friday campaign', () => {
 
     await GET(new Request('https://battery-sensei.app/api/price?country=EC'))
     const callsAfterFirst = fetchMock.mock.calls.length
-    vi.setSystemTime(new Date('2026-12-05T13:00:00Z'))
+    vi.setSystemTime(new Date('2026-12-06T11:00:00Z'))
+    await GET(new Request('https://battery-sensei.app/api/price?country=EC'))
+    const callsAfter23h = fetchMock.mock.calls.length
+    vi.setSystemTime(new Date('2026-12-06T13:00:00Z'))
     await GET(new Request('https://battery-sensei.app/api/price?country=EC'))
     vi.useRealTimers()
 
     expect(callsAfterFirst).toBeGreaterThan(0)
-    expect(fetchMock.mock.calls.length).toBe(callsAfterFirst)
+    expect(callsAfter23h).toBe(callsAfterFirst)
+    expect(fetchMock.mock.calls.length).toBeGreaterThan(callsAfter23h)
   })
 
   it('does not call a 49% discount half price', async () => {
