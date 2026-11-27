@@ -408,25 +408,31 @@ export async function POST(request: Request): Promise<Response> {
   // Only a confirmed `missing` falls through to the next code. A failed
   // Black Friday lookup stops here: falling back would quietly charge a
   // Black Friday buyer the launch price.
-  let autoDiscountCode: string | undefined
-  let discountId: string | null = null
-  for (const code of candidateCodes) {
-    autoDiscountCode = code
-    const lookup = await resolveDiscountId(code, token)
-    if (lookup.status === 'found') {
-      discountId = lookup.id
-      break
-    }
-    if (lookup.status === 'error') {
-      if (code.toUpperCase() === bfCode) {
-        console.warn('[checkout-session] black friday lookup failed', { tier })
-        return json({ ok: false, reason: 'discount-unavailable' }, 503)
+  const polarToken = token
+  let nextCode = 0
+  // Next code that resolves. null means a Black Friday lookup failed:
+  // the caller sends 503 instead of a quiet fallback.
+  async function pickNextCode(): Promise<{ code?: string; id: string | null } | null> {
+    let code: string | undefined
+    while (nextCode < candidateCodes.length) {
+      code = candidateCodes[nextCode++]
+      const lookup = await resolveDiscountId(code, polarToken)
+      if (lookup.status === 'found') return { code, id: lookup.id }
+      if (lookup.status === 'error') {
+        nextCode = candidateCodes.length
+        if (code.toUpperCase() === bfCode) {
+          console.warn('[checkout-session] black friday lookup failed', { tier })
+          return null
+        }
+        break
       }
-      break
     }
+    return { code, id: null }
   }
-  // Typed or automatic, a Black Friday code gets the same rules.
-  const isBlackFridayCode = autoDiscountCode?.toUpperCase() === bfCode && Boolean(discountId)
+  const firstPick = await pickNextCode()
+  if (!firstPick) return json({ ok: false, reason: 'discount-unavailable' }, 503)
+  let autoDiscountCode = firstPick.code
+  let discountId = firstPick.id
 
   if (autoDiscountCode && !discountId) {
     console.warn('[checkout-session] discount code did not resolve to UUID', {
@@ -474,14 +480,20 @@ export async function POST(request: Request): Promise<Response> {
     // visitor still gets a session at the regular price — the UI on
     // /checkout will already be showing the full price by then since
     // the discount-availability hook reports `remaining === 0`.
-    // Black Friday is the exception: a rejected Black Friday code must
-    // not turn into a full-price session the buyer did not expect.
-    if (!res.ok && res.status === 422 && isBlackFridayCode) {
+    // Black Friday first moves on to the next code (the launch code), so
+    // a code Polar rejects (cap reached, outside its own dates, wrong
+    // product) never blocks Lifetime sales. Polar's form shows the real
+    // total before the buyer pays.
+    while (!res.ok && res.status === 422 && autoDiscountCode?.toUpperCase() === bfCode && discountId) {
       console.warn('[checkout-session] black friday discount rejected', {
         tier,
         discountId,
       })
-      return json({ ok: false, reason: 'discount-unavailable' }, 503)
+      const pick = await pickNextCode()
+      if (!pick) return json({ ok: false, reason: 'discount-unavailable' }, 503)
+      autoDiscountCode = pick.code
+      discountId = pick.id
+      res = await createSession(discountId ? { discount_id: discountId } : {})
     }
     if (!res.ok && res.status === 422 && discountId) {
       console.warn('[checkout-session] discount rejected — retrying without', {

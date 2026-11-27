@@ -255,32 +255,27 @@ describe('checkout session currency', () => {
     expect(discountId).toBe('launch-id')
   })
 
-  it('does not retry at full price when Polar rejects the Black Friday code', async () => {
-    vi.useFakeTimers({ toFake: ['Date'] })
-    vi.setSystemTime(new Date('2026-11-28T12:00:00Z'))
-    vi.stubEnv('POLAR_ACCESS_TOKEN_NEW', 'new-token')
-    vi.stubEnv('POLAR_PRODUCT_ID_LIFETIME_NEW', 'new-lifetime-product')
-    vi.stubEnv('POLAR_DISCOUNT_CODE_NEW', 'LAUNCH422')
-    vi.stubEnv('POLAR_DISCOUNT_CODE_BLACKFRIDAY_NEW', 'BF422')
+  it('moves on to the launch code when Polar rejects the Black Friday code', async () => {
+    stubLifetime('422', '2026-11-28T12:00:00Z')
     const checkoutCalls: Array<Record<string, unknown>> = []
     vi.stubGlobal('fetch', vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
       const url = new URL(String(input))
       if (url.pathname.endsWith('/discounts')) {
-        return new Response(JSON.stringify({ items: [{ id: 'bf-422-id', code: 'BF422' }] }), { status: 200 })
+        const q = url.searchParams.get('query') ?? ''
+        return new Response(JSON.stringify({ items: [{ id: `${q}-id`, code: q }] }), { status: 200 })
       }
-      checkoutCalls.push(JSON.parse(String(init?.body)) as Record<string, unknown>)
-      return new Response('{}', { status: 422 })
+      const body = JSON.parse(String(init?.body)) as Record<string, unknown>
+      checkoutCalls.push(body)
+      return body.discount_id === 'BF422-id'
+        ? new Response('{}', { status: 422 })
+        : new Response(JSON.stringify({ url: 'https://buy.polar.sh/s' }), { status: 201 })
     }))
 
-    const response = await POST(new Request('https://battery-sensei.app/api/checkout-session', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ tier: 'lifetime' }),
-    }))
+    const response = await postLifetime()
     vi.useRealTimers()
 
-    expect(response.status).toBe(503)
-    expect(checkoutCalls.map((c) => c.discount_id)).toEqual(['bf-422-id'])
+    expect(response.ok).toBe(true)
+    expect(checkoutCalls.map((c) => c.discount_id)).toEqual(['BF422-id', 'LAUNCH422-id'])
   })
   function stubLifetime(suffix: string, now: string) {
     vi.useFakeTimers({ toFake: ['Date'] })
@@ -319,23 +314,27 @@ describe('checkout session currency', () => {
     expect(checkoutCalls.map((c) => c.discount_id)).toEqual(['LAUNCHLATE-id'])
   })
 
-  it('does not retry at full price when a typed Black Friday code is rejected', async () => {
+  it('still sells Lifetime when Polar rejects both the typed Black Friday and the launch code', async () => {
     stubLifetime('TYPED', '2026-11-28T12:00:00Z')
     const checkoutCalls: Array<Record<string, unknown>> = []
     vi.stubGlobal('fetch', vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
       const url = new URL(String(input))
       if (url.pathname.endsWith('/discounts')) {
-        return new Response(JSON.stringify({ items: [{ id: 'bf-typed-id', code: 'BFTYPED' }] }), { status: 200 })
+        const q = url.searchParams.get('query') ?? ''
+        return new Response(JSON.stringify({ items: [{ id: `${q}-id`, code: q }] }), { status: 200 })
       }
-      checkoutCalls.push(JSON.parse(String(init?.body)) as Record<string, unknown>)
-      return new Response('{}', { status: 422 })
+      const body = JSON.parse(String(init?.body)) as Record<string, unknown>
+      checkoutCalls.push(body)
+      return body.discount_id
+        ? new Response('{}', { status: 422 })
+        : new Response(JSON.stringify({ url: 'https://buy.polar.sh/s' }), { status: 201 })
     }))
 
     const response = await postLifetime({ discountCode: 'BFTYPED' })
     vi.useRealTimers()
 
-    expect(response.status).toBe(503)
-    expect(checkoutCalls.map((c) => c.discount_id)).toEqual(['bf-typed-id'])
+    expect(response.ok).toBe(true)
+    expect(checkoutCalls.map((c) => c.discount_id)).toEqual(['BFTYPED-id', 'LAUNCHTYPED-id', undefined])
   })
 
   it('treats a Black Friday match without an id as a failed lookup', async () => {
