@@ -1,3 +1,5 @@
+import { BLACK_FRIDAY_CODE, lifetimeDiscountCodes } from '../lib/black-friday.js'
+
 /**
  * GET /api/discount-availability — returns how many configured discount
  * redemptions remain on the Lifetime product, used by the homepage's
@@ -38,14 +40,18 @@ function envValue(name: string): string | undefined {
 
 type DiscountConfig = {
   token: string | undefined
-  code: string
+  /** Codes to look up in order; the first one Polar knows wins. */
+  codes: string[]
   fallbackMaximum: number
 }
 
 /** Keep token, code, and fallback cap in one Polar organization. */
 function resolveDiscountConfig(): DiscountConfig {
   const token = envValue('POLAR_ACCESS_TOKEN_NEW')
-  const code = envValue('POLAR_DISCOUNT_CODE_NEW') ?? 'ZENMODE'
+  const codes = lifetimeDiscountCodes(
+    envValue('POLAR_DISCOUNT_CODE_NEW') ?? 'ZENMODE',
+    envValue('POLAR_DISCOUNT_CODE_BLACKFRIDAY_NEW') ?? BLACK_FRIDAY_CODE,
+  )
   const configuredMaximum = Number(
     envValue('POLAR_DISCOUNT_MAX_REDEMPTIONS_NEW') ?? '500',
   )
@@ -54,7 +60,7 @@ function resolveDiscountConfig(): DiscountConfig {
       ? configuredMaximum
       : 500
 
-  return { token, code, fallbackMaximum }
+  return { token, codes, fallbackMaximum }
 }
 
 const CACHE_TTL_MS = 5 * 60 * 1000
@@ -100,7 +106,7 @@ type AvailabilityFallback = {
 
 type Availability = AvailabilityOk | AvailabilityFallback
 
-let cache: { at: number; payload: Availability } | null = null
+let cache: { at: number; code: string; payload: Availability } | null = null
 
 function json(payload: Availability, status = 200, headers: Record<string, string> = {}) {
   return new Response(JSON.stringify(payload), {
@@ -114,11 +120,29 @@ function json(payload: Availability, status = 200, headers: Record<string, strin
   })
 }
 
+/**
+ * Look up each configured code in order. A code Polar does not know
+ * (`not-found`) falls through to the next one, so a Black Friday code
+ * missing from the dashboard still reports the launch code's count.
+ */
 async function fetchAvailability(): Promise<Availability> {
-  const { token, code, fallbackMaximum } = resolveDiscountConfig()
+  const { token, codes, fallbackMaximum } = resolveDiscountConfig()
   if (!token) {
     return { ok: false, max: fallbackMaximum, reason: 'no-token' }
   }
+  let result: Availability = { ok: false, max: fallbackMaximum, reason: 'not-found' }
+  for (const code of codes) {
+    result = await fetchCodeAvailability(code, token, fallbackMaximum)
+    if (result.ok || result.reason !== 'not-found') return result
+  }
+  return result
+}
+
+async function fetchCodeAvailability(
+  code: string,
+  token: string,
+  fallbackMaximum: number,
+): Promise<Availability> {
 
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), POLAR_TIMEOUT_MS)
@@ -187,14 +211,17 @@ async function fetchAvailability(): Promise<Availability> {
  */
 export async function GET(_request: Request): Promise<Response> {
   const now = Date.now()
-  if (cache && now - cache.at < CACHE_TTL_MS) {
+  // The active code joins the cache check so the Black Friday window
+  // opening or closing never serves the other code's count.
+  const activeCode = resolveDiscountConfig().codes[0]
+  if (cache && cache.code === activeCode && now - cache.at < CACHE_TTL_MS) {
     return json(cache.payload, 200, { 'x-discount-cache': 'hit' })
   }
 
   const payload = await fetchAvailability()
 
   if (payload.ok) {
-    cache = { at: now, payload }
+    cache = { at: now, code: activeCode, payload }
     return json(payload, 200, { 'x-discount-cache': 'miss' })
   }
 

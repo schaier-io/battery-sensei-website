@@ -78,6 +78,9 @@ describe('checkout session currency', () => {
   })
 
   it('resolves a new-organization discount without comparing it to the cache key', async () => {
+    // Outside the Black Friday window, so only the launch code is looked up.
+    vi.useFakeTimers({ toFake: ['Date'] })
+    vi.setSystemTime(new Date('2026-12-15T12:00:00Z'))
     vi.stubEnv('POLAR_ACCESS_TOKEN_NEW', 'new-token')
     vi.stubEnv('POLAR_PRODUCT_ID_LIFETIME_NEW', 'new-lifetime-product')
     vi.stubEnv('POLAR_DISCOUNT_CODE_NEW', 'NEWCODE')
@@ -103,6 +106,7 @@ describe('checkout session currency', () => {
       body: JSON.stringify({ tier: 'lifetime' }),
     }))
 
+    vi.useRealTimers()
     expect(response.ok).toBe(true)
     expect(fetchMock).toHaveBeenCalledTimes(2)
     // Both Polar calls carry the pinned API version. Asserted on the
@@ -162,5 +166,35 @@ describe('checkout session currency', () => {
 
     expect(response.status).toBe(503)
     expect(fetchMock).not.toHaveBeenCalled()
+  })
+
+  it('auto-applies the Black Friday code to Lifetime inside the window', async () => {
+    vi.useFakeTimers({ toFake: ['Date'] })
+    vi.setSystemTime(new Date('2026-11-28T12:00:00Z'))
+    vi.stubEnv('POLAR_ACCESS_TOKEN_NEW', 'new-token')
+    vi.stubEnv('POLAR_PRODUCT_ID_LIFETIME_NEW', 'new-lifetime-product')
+    vi.stubEnv('POLAR_DISCOUNT_CODE_NEW', 'LAUNCHCODE')
+    vi.stubEnv('POLAR_DISCOUNT_CODE_BLACKFRIDAY_NEW', 'BFCODE')
+    let discountId: unknown
+    vi.stubGlobal('fetch', vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
+      const url = new URL(String(input))
+      if (url.pathname.endsWith('/discounts')) {
+        const query = url.searchParams.get('query')
+        const items = query === 'BFCODE' ? [{ id: 'bf-id', code: 'BFCODE' }] : [{ id: 'launch-id', code: 'LAUNCHCODE' }]
+        return new Response(JSON.stringify({ items }), { status: 200 })
+      }
+      discountId = (JSON.parse(String(init?.body)) as Record<string, unknown>).discount_id
+      return new Response(JSON.stringify({ url: 'https://buy.polar.sh/s' }), { status: 201 })
+    }))
+
+    const response = await POST(new Request('https://battery-sensei.app/api/checkout-session', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ tier: 'lifetime' }),
+    }))
+    vi.useRealTimers()
+
+    expect(response.ok).toBe(true)
+    expect(discountId).toBe('bf-id')
   })
 })

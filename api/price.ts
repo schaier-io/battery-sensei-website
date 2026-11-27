@@ -32,6 +32,8 @@
  * VITE_POLAR_CHECKOUT_URL; the API token + product id are server-only.
  */
 
+import { BLACK_FRIDAY_CODE, lifetimeDiscountCodes } from '../lib/black-friday.js'
+
 // ────────────────────────────────────────────────────────────────────
 //  Inlined Polar helpers — duplicated, NOT imported
 // ────────────────────────────────────────────────────────────────────
@@ -75,9 +77,15 @@ function envValue(name: string): string | undefined {
   return value || undefined
 }
 
-/** The new-organization launch discount. */
-function lifetimeDiscountCode(): string {
-  return envValue('POLAR_DISCOUNT_CODE_NEW') ?? 'ZENMODE'
+/**
+ * Lifetime codes to try, in order: the Black Friday code while its
+ * window is open, then the new-organization launch discount.
+ */
+function lifetimeDiscountCodeList(): string[] {
+  return lifetimeDiscountCodes(
+    envValue('POLAR_DISCOUNT_CODE_NEW') ?? 'ZENMODE',
+    envValue('POLAR_DISCOUNT_CODE_BLACKFRIDAY_NEW') ?? BLACK_FRIDAY_CODE,
+  )
 }
 
 // ────────────────────────────────────────────────────────────────────
@@ -386,12 +394,15 @@ async function fetchPolarPreview(
   // Resolve the configured code → UUID once so the lifetime preview can
   // attach `discount_id` (the only field Polar honours; see lib/polar-server.ts).
   // Cached module-scope so repeat country lookups skip this round-trip.
-  const discountId = lifetimeProductId
-      ? await resolveDiscountId(
-        lifetimeDiscountCode(),
-        token,
-      )
-    : null
+  // First code that resolves wins, so a Black Friday code missing from
+  // Polar falls back to the launch code instead of no discount.
+  let discountId: string | null = null
+  if (lifetimeProductId) {
+    for (const code of lifetimeDiscountCodeList()) {
+      discountId = await resolveDiscountId(code, token)
+      if (discountId) break
+    }
+  }
 
   // Use a currency-matched country for the preview call so Polar's
   // quoted total is unambiguously in the requested currency (see
@@ -514,7 +525,9 @@ export async function GET(request: Request): Promise<Response> {
   // Cache by (country, currency) — same country in EUR vs USD are two
   // independent previews. Polar quotes them at different totals after
   // FX, so they must not share a cache slot.
-  const cacheKey = `${country}:${currency}`
+  // The active discount code joins the key so the Black Friday window
+  // opening or closing never serves a preview quoted under the other code.
+  const cacheKey = `${country}:${currency}:${lifetimeDiscountCodeList()[0]}`
 
   const now = Date.now()
   const cached = cache.get(cacheKey)

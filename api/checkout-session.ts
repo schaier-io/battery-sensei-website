@@ -45,6 +45,7 @@
  */
 
 import { z } from 'zod'
+import { BLACK_FRIDAY_CODE, lifetimeDiscountCodes } from '../lib/black-friday.js'
 
 type Tier = 'lifetime' | 'support'
 
@@ -112,9 +113,15 @@ const POLAR_API_VERSION = '2026-04'
 const POLAR_API_BASE = 'https://api.polar.sh/v1'
 const POLAR_TIMEOUT_MS = 4_000
 
-/** Keep the automatic discount in the same organization as the checkout. */
-function lifetimeDiscountCode(): string {
-  return envValue('POLAR_DISCOUNT_CODE_NEW') ?? 'ZENMODE'
+/**
+ * Lifetime codes to try, in order: the Black Friday code while its
+ * window is open, then the new-organization launch discount.
+ */
+function lifetimeDiscountCodeList(): string[] {
+  return lifetimeDiscountCodes(
+    envValue('POLAR_DISCOUNT_CODE_NEW') ?? 'ZENMODE',
+    envValue('POLAR_DISCOUNT_CODE_BLACKFRIDAY_NEW') ?? BLACK_FRIDAY_CODE,
+  )
 }
 
 type DiscountIdEntry = { id: string | null; expiresAt: number }
@@ -350,11 +357,11 @@ export async function POST(request: Request): Promise<Response> {
   //     /checkout UI hides every "launch discount" surface once the
   //     cap is reached, so the visitor sees the plain full price.
   //   - Support tier never gets an auto-apply.
-  const autoDiscountCode =
-    body.discountCode
-    ?? (tier === 'lifetime'
-      ? lifetimeDiscountCode()
-      : undefined)
+  const candidateCodes = body.discountCode
+    ? [body.discountCode]
+    : tier === 'lifetime'
+      ? lifetimeDiscountCodeList()
+      : []
 
   // CRITICAL: Polar's `POST /v1/checkouts/` schema accepts `discount_id`
   // (UUID) and silently ignores `discount_code` (string). We resolve the
@@ -362,9 +369,14 @@ export async function POST(request: Request): Promise<Response> {
   // as `discount_id`. Live testing confirmed sending `discount_code` in
   // the body OR appending `?discount_code=` to the returned URL both
   // result in `discount: null` server-side.
-  const discountId = autoDiscountCode
-    ? await resolveDiscountId(autoDiscountCode, token)
-    : null
+  // First code that resolves wins (Black Friday, then the launch code).
+  let autoDiscountCode: string | undefined
+  let discountId: string | null = null
+  for (const code of candidateCodes) {
+    autoDiscountCode = code
+    discountId = await resolveDiscountId(code, token)
+    if (discountId) break
+  }
 
   if (autoDiscountCode && !discountId) {
     console.warn('[checkout-session] discount code did not resolve to UUID', {
