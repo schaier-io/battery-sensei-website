@@ -183,10 +183,10 @@ async function resolveDiscountId(
   // discounts); those rows never match. A malformed page, a failed
   // request, or a result longer than the page cap leaves `error`.
   let lookup: DiscountLookup = { status: 'error' }
-  // One deadline for all pages, so a slow Polar fails within the
-  // function's time budget instead of stacking a timeout per page.
-  const signal = AbortSignal.timeout(POLAR_TIMEOUT_MS)
   try {
+    // One deadline for all pages, so a slow Polar fails within the
+    // function's time budget instead of stacking a timeout per page.
+    const signal = AbortSignal.timeout(POLAR_TIMEOUT_MS)
     for (let page = 1; page <= DISCOUNT_MAX_PAGES; page++) {
       url.searchParams.set('page', String(page))
       const r = await fetch(url, {

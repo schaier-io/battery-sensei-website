@@ -87,7 +87,12 @@ describe('GET /api/price Black Friday campaign', () => {
 
   it('reports the Black Friday campaign and code when Polar applies it', async () => {
     configure('A')
-    stubPolar((q) => new Response(JSON.stringify({ items: q === 'BFA' ? [{ id: 'bf-id', code: 'BFA' }] : [] }), { status: 200 }))
+    stubPolar((q) =>
+      q === 'BFA'
+        ? new Response(JSON.stringify({ items: [{ id: 'bf-id', code: 'BFA' }] }), { status: 200 })
+        : // Polar's real shape for a code with no rows.
+          new Response(JSON.stringify({ items: [], pagination: { total_count: 0, max_page: 0 } }), { status: 200 }),
+    )
 
     const lifetime = await lifetimeFor('US')
 
