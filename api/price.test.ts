@@ -181,4 +181,24 @@ describe('GET /api/price Black Friday campaign', () => {
     expect(lifetime?.code).toBeNull()
     expect(lifetime?.has_discount).toBe(false)
   })
+  it('quotes the launch code when Polar rejects the Black Friday code', async () => {
+    configure('H')
+    vi.stubGlobal('fetch', vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
+      const url = new URL(String(input))
+      if (url.pathname.endsWith('/discounts')) {
+        const q = url.searchParams.get('query') ?? ''
+        return new Response(JSON.stringify({ items: [{ id: `${q}-id`, code: q }] }), { status: 200 })
+      }
+      const body = JSON.parse(String(init?.body)) as { discount_id?: string }
+      if (body.discount_id === 'BFH-id') return new Response('{}', { status: 422 })
+      const total = body.discount_id === 'LAUNCHH-id' ? 1700 : 2000
+      return new Response(JSON.stringify({ total_amount: total, subtotal_amount: total, tax_amount: 0, currency: 'usd' }), { status: 201 })
+    }))
+
+    const lifetime = await lifetimeFor('UY')
+
+    expect(lifetime?.code).toBe('LAUNCHH')
+    expect(lifetime?.campaign).toBe('launch')
+    expect(lifetime?.discounted_amount).toBe(1700)
+  })
 })

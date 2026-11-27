@@ -354,7 +354,7 @@ async function fetchCheckoutPreview(
   token: string,
   discountId?: string | null,
   currency?: 'usd' | 'eur' | 'czk' | null,
-): Promise<PolarCheckout | null> {
+): Promise<PolarCheckout | 'rejected' | null> {
   const body: Record<string, unknown> = {
     product_id: productId,
     customer_billing_address: { country },
@@ -391,7 +391,7 @@ async function fetchCheckoutPreview(
         productId,
         hasDiscount: Boolean(discountId),
       })
-      return null
+      return response.status === 422 && discountId ? 'rejected' : null
     }
 
     return (await response.json()) as PolarCheckout
@@ -406,13 +406,14 @@ async function fetchCheckoutPreview(
   }
 }
 
-function isValidCheckout(c: PolarCheckout | null): c is PolarCheckout & {
+function isValidCheckout(c: PolarCheckout | 'rejected' | null): c is PolarCheckout & {
   total_amount: number
   subtotal_amount: number
   currency: string
 } {
   return (
     !!c &&
+    typeof c === 'object' &&
     typeof c.total_amount === 'number' &&
     typeof c.subtotal_amount === 'number' &&
     typeof c.currency === 'string'
@@ -439,21 +440,24 @@ async function fetchPolarPreview(
   // Cached module-scope so repeat country lookups skip this round-trip.
   // First code that resolves wins, so a Black Friday code missing from
   // Polar falls back to the launch code instead of no discount.
-  let discountId: string | null = null
-  let discountCode: string | null = null
-  if (lifetimeProductId) {
-    for (const code of lifetimeDiscountCodeList()) {
-      const lookup = await resolveDiscountId(code, token)
-      if (lookup.status === 'found') {
-        discountId = lookup.id
-        discountCode = code
-        break
-      }
+  const polarToken = token
+  const codes = lifetimeProductId ? lifetimeDiscountCodeList() : []
+  let nextCode = 0
+  async function pickNextCode(): Promise<{ id: string | null; code: string | null }> {
+    while (nextCode < codes.length) {
+      const code = codes[nextCode++]
+      const lookup = await resolveDiscountId(code, polarToken)
+      if (lookup.status === 'found') return { id: lookup.id, code }
       // A failed lookup says nothing about the code: do not quote the
       // next code in its place.
-      if (lookup.status === 'error') break
+      if (lookup.status === 'error') {
+        nextCode = codes.length
+        break
+      }
     }
+    return { id: null, code: null }
   }
+  let { id: discountId, code: discountCode } = await pickNextCode()
 
   // Use a currency-matched country for the preview call so Polar's
   // quoted total is unambiguously in the requested currency (see
@@ -476,7 +480,7 @@ async function fetchPolarPreview(
   // Lifetime is optional — if its env var isn't set, both lifetime
   // promises resolve to null and the payload simply lacks a `lifetime`
   // block (client falls back to LIFETIME_FALLBACK table).
-  const [yearlyCheckout, lifetimeFullCheckout, lifetimeDiscountedCheckout] =
+  const [yearlyCheckout, lifetimeFullCheckout, firstDiscountedCheckout] =
     await Promise.all([
       fetchCheckoutPreview(yearlyProductId, previewCountry, token, null, currency),
       lifetimeProductId
@@ -486,6 +490,17 @@ async function fetchPolarPreview(
         ? fetchCheckoutPreview(lifetimeProductId, previewCountry, token, discountId, currency)
         : Promise.resolve(null),
     ])
+
+  // Polar rejected the code (cap reached, outside its own dates, wrong
+  // product): quote the next code, so a rejected Black Friday code
+  // shows the launch price instead of no Lifetime price at all.
+  let lifetimeDiscountedCheckout = firstDiscountedCheckout
+  while (lifetimeDiscountedCheckout === 'rejected' && lifetimeProductId) {
+    ;({ id: discountId, code: discountCode } = await pickNextCode())
+    lifetimeDiscountedCheckout = await fetchCheckoutPreview(
+      lifetimeProductId, previewCountry, token, discountId, currency,
+    )
+  }
 
   if (!isValidCheckout(yearlyCheckout)) {
     return { ok: false, country, reason: 'no_totals', source: 'fallback' }
