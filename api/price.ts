@@ -188,18 +188,22 @@ async function resolveDiscountId(
     })
     if (r.ok) {
       const body = (await r.json()) as { items?: Array<{ id?: string; code?: string }> }
-      // `missing` needs a well-formed list with no exact match. A
-      // malformed body, or a match without an id, tells us nothing.
-      // Every row must carry a string code, or the list proves nothing.
+      // `missing` needs a well-formed list with no exact match. Every
+      // row must carry a string code and a non-empty string id, or the
+      // list proves nothing and the lookup stays `error`.
       if (
         Array.isArray(body.items) &&
-        body.items.every((d) => d !== null && typeof d === 'object' && typeof d.code === 'string')
-      ) {
-        const match = body.items.find(
-          (d) => typeof d.code === 'string' && d.code.toUpperCase() === normalizedCode,
+        body.items.every(
+          (d) =>
+            d !== null &&
+            typeof d === 'object' &&
+            typeof d.code === 'string' &&
+            typeof d.id === 'string' &&
+            d.id !== '',
         )
-        if (!match) lookup = { status: 'missing' }
-        else if (typeof match.id === 'string' && match.id) lookup = { status: 'found', id: match.id }
+      ) {
+        const match = body.items.find((d) => d.code!.toUpperCase() === normalizedCode)
+        lookup = match ? { status: 'found', id: match.id! } : { status: 'missing' }
       }
     } else {
       console.warn('[price] discount list non-2xx', { status: r.status })
@@ -394,7 +398,10 @@ async function fetchCheckoutPreview(
       return response.status === 422 && discountId ? 'rejected' : null
     }
 
-    return (await response.json()) as PolarCheckout
+    const checkout = (await response.json()) as unknown
+    // Only an object is a checkout. Anything else (even the string
+    // "rejected") would confuse the caller's retry loop.
+    return checkout !== null && typeof checkout === 'object' ? (checkout as PolarCheckout) : null
   } catch (err) {
     console.warn('[price] polar fetch threw', {
       err: err instanceof Error ? err.message : String(err),
@@ -497,9 +504,10 @@ async function fetchPolarPreview(
   let lifetimeDiscountedCheckout = firstDiscountedCheckout
   while (lifetimeDiscountedCheckout === 'rejected' && lifetimeProductId) {
     ;({ id: discountId, code: discountCode } = await pickNextCode())
-    lifetimeDiscountedCheckout = await fetchCheckoutPreview(
-      lifetimeProductId, previewCountry, token, discountId, currency,
-    )
+    // No code left: the full-price quote above already is the answer.
+    lifetimeDiscountedCheckout = discountId
+      ? await fetchCheckoutPreview(lifetimeProductId, previewCountry, token, discountId, currency)
+      : lifetimeFullCheckout
   }
 
   if (!isValidCheckout(yearlyCheckout)) {

@@ -201,4 +201,46 @@ describe('GET /api/price Black Friday campaign', () => {
     expect(lifetime?.campaign).toBe('launch')
     expect(lifetime?.discounted_amount).toBe(1700)
   })
+  it('asks Polar for the full price once when every code is rejected', async () => {
+    configure('J')
+    const lifetimeCalls: Array<string | undefined> = []
+    vi.stubGlobal('fetch', vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
+      const url = new URL(String(input))
+      if (url.pathname.endsWith('/discounts')) {
+        const q = url.searchParams.get('query') ?? ''
+        return new Response(JSON.stringify({ items: [{ id: `${q}-id`, code: q }] }), { status: 200 })
+      }
+      const body = JSON.parse(String(init?.body)) as { product_id: string; discount_id?: string }
+      if (body.product_id === 'lifetime') lifetimeCalls.push(body.discount_id)
+      if (body.discount_id) return new Response('{}', { status: 422 })
+      return new Response(JSON.stringify({ total_amount: 2000, subtotal_amount: 2000, tax_amount: 0, currency: 'usd' }), { status: 201 })
+    }))
+
+    const lifetime = await lifetimeFor('PY')
+
+    expect(lifetime?.has_discount).toBe(false)
+    expect(lifetime?.campaign).toBeNull()
+    expect(lifetimeCalls.filter((id) => id === undefined)).toHaveLength(1)
+    expect(lifetimeCalls.filter(Boolean)).toEqual(['BFJ-id', 'LAUNCHJ-id'])
+  })
+
+  it('does not loop when Polar answers a preview with a non-object body', async () => {
+    configure('K')
+    let checkoutPosts = 0
+    vi.stubGlobal('fetch', vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
+      const url = new URL(String(input))
+      if (url.pathname.endsWith('/discounts')) {
+        const q = url.searchParams.get('query') ?? ''
+        return new Response(JSON.stringify({ items: [{ id: `${q}-id`, code: q }] }), { status: 200 })
+      }
+      checkoutPosts++
+      const body = JSON.parse(String(init?.body)) as { discount_id?: string }
+      if (body.discount_id) return new Response(JSON.stringify('rejected'), { status: 200 })
+      return new Response(JSON.stringify({ total_amount: 2000, subtotal_amount: 2000, tax_amount: 0, currency: 'usd' }), { status: 201 })
+    }))
+
+    await lifetimeFor('BO')
+
+    expect(checkoutPosts).toBe(3)
+  })
 })
