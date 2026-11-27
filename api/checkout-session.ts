@@ -180,18 +180,22 @@ async function resolveDiscountId(
     })
     if (r.ok) {
       const body = (await r.json()) as { items?: Array<{ id?: string; code?: string }> }
-      // `missing` needs a well-formed list with no exact match. A
-      // malformed body, or a match without an id, tells us nothing.
-      // Every row must carry a string code, or the list proves nothing.
+      // `missing` needs a well-formed list with no exact match. Every
+      // row must carry a string code and a non-empty string id, or the
+      // list proves nothing and the lookup stays `error`.
       if (
         Array.isArray(body.items) &&
-        body.items.every((d) => d !== null && typeof d === 'object' && typeof d.code === 'string')
-      ) {
-        const match = body.items.find(
-          (d) => typeof d.code === 'string' && d.code.toUpperCase() === normalizedCode,
+        body.items.every(
+          (d) =>
+            d !== null &&
+            typeof d === 'object' &&
+            typeof d.code === 'string' &&
+            typeof d.id === 'string' &&
+            d.id !== '',
         )
-        if (!match) lookup = { status: 'missing' }
-        else if (typeof match.id === 'string' && match.id) lookup = { status: 'found', id: match.id }
+      ) {
+        const match = body.items.find((d) => d.code!.toUpperCase() === normalizedCode)
+        lookup = match ? { status: 'found', id: match.id! } : { status: 'missing' }
       }
     } else {
       console.warn('[checkout-session] discount list non-2xx', { status: r.status })

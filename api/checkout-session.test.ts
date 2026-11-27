@@ -396,4 +396,24 @@ describe('checkout session currency', () => {
     expect(response.status).toBe(503)
     expect(checkoutCalls).toEqual([])
   })
+  it('treats a non-matching row without an id as a failed Black Friday lookup', async () => {
+    stubLifetime('NOROWID', '2026-11-28T12:00:00Z')
+    const checkoutCalls: unknown[] = []
+    vi.stubGlobal('fetch', vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
+      const url = new URL(String(input))
+      if (url.pathname.endsWith('/discounts')) {
+        const q = url.searchParams.get('query') ?? ''
+        const items = q === 'BFNOROWID' ? [{ code: 'OTHER' }] : [{ id: `${q}-id`, code: q }]
+        return new Response(JSON.stringify({ items }), { status: 200 })
+      }
+      checkoutCalls.push(JSON.parse(String(init?.body)))
+      return new Response(JSON.stringify({ url: 'https://buy.polar.sh/s' }), { status: 201 })
+    }))
+
+    const response = await postLifetime()
+    vi.useRealTimers()
+
+    expect(response.status).toBe(503)
+    expect(checkoutCalls).toEqual([])
+  })
 })
