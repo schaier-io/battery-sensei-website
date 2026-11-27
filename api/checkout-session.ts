@@ -45,7 +45,7 @@
  */
 
 import { z } from 'zod'
-import { BLACK_FRIDAY_CODE, isBlackFridayActive, lifetimeDiscountCodes } from '../lib/black-friday.js'
+import { BLACK_FRIDAY_CODE, lifetimeDiscountCodes } from '../lib/black-friday.js'
 
 type Tier = 'lifetime' | 'support'
 
@@ -182,7 +182,11 @@ async function resolveDiscountId(
       const body = (await r.json()) as { items?: Array<{ id?: string; code?: string }> }
       // `missing` needs a well-formed list with no exact match. A
       // malformed body, or a match without an id, tells us nothing.
-      if (Array.isArray(body.items)) {
+      // Every row must carry a string code, or the list proves nothing.
+      if (
+        Array.isArray(body.items) &&
+        body.items.every((d) => d !== null && typeof d === 'object' && typeof d.code === 'string')
+      ) {
         const match = body.items.find(
           (d) => typeof d.code === 'string' && d.code.toUpperCase() === normalizedCode,
         )
@@ -379,12 +383,13 @@ export async function POST(request: Request): Promise<Response> {
   //     /checkout UI hides every "launch discount" surface once the
   //     cap is reached, so the visitor sees the plain full price.
   //   - Support tier never gets an auto-apply.
-  // A typed Black Friday code after the sale is ignored, so it cannot
-  // outlive the window if the Polar code has no expiry of its own.
+  // A typed Black Friday code takes the automatic path: inside the
+  // window that tries Black Friday then the launch code, after it the
+  // launch code only. So a typed code cannot outlive the sale, and a
+  // missing one still falls back like the automatic one.
   const bfCode = blackFridayCode().toUpperCase()
   const typedCode =
-    body.discountCode &&
-    !(body.discountCode.toUpperCase() === bfCode && !isBlackFridayActive())
+    body.discountCode && body.discountCode.toUpperCase() !== bfCode
       ? body.discountCode
       : undefined
   const candidateCodes = typedCode
