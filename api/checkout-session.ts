@@ -45,7 +45,7 @@
  */
 
 import { z } from 'zod'
-import { BLACK_FRIDAY_CODE, lifetimeDiscountCodes } from '../lib/black-friday.js'
+import { BLACK_FRIDAY_CODE, isBlackFridayActive, lifetimeDiscountCodes } from '../lib/black-friday.js'
 
 type Tier = 'lifetime' | 'support'
 
@@ -180,14 +180,15 @@ async function resolveDiscountId(
     })
     if (r.ok) {
       const body = (await r.json()) as { items?: Array<{ id?: string; code?: string }> }
-      const items = Array.isArray(body.items) ? body.items : []
-      const match = items.find(
-        (d) => typeof d.code === 'string' && d.code.toUpperCase() === normalizedCode,
-      )
-      lookup =
-        typeof match?.id === 'string'
-          ? { status: 'found', id: match.id }
-          : { status: 'missing' }
+      // `missing` needs a well-formed list with no exact match. A
+      // malformed body, or a match without an id, tells us nothing.
+      if (Array.isArray(body.items)) {
+        const match = body.items.find(
+          (d) => typeof d.code === 'string' && d.code.toUpperCase() === normalizedCode,
+        )
+        if (!match) lookup = { status: 'missing' }
+        else if (typeof match.id === 'string' && match.id) lookup = { status: 'found', id: match.id }
+      }
     } else {
       console.warn('[checkout-session] discount list non-2xx', { status: r.status })
     }
@@ -378,8 +379,16 @@ export async function POST(request: Request): Promise<Response> {
   //     /checkout UI hides every "launch discount" surface once the
   //     cap is reached, so the visitor sees the plain full price.
   //   - Support tier never gets an auto-apply.
-  const candidateCodes = body.discountCode
-    ? [body.discountCode]
+  // A typed Black Friday code after the sale is ignored, so it cannot
+  // outlive the window if the Polar code has no expiry of its own.
+  const bfCode = blackFridayCode().toUpperCase()
+  const typedCode =
+    body.discountCode &&
+    !(body.discountCode.toUpperCase() === bfCode && !isBlackFridayActive())
+      ? body.discountCode
+      : undefined
+  const candidateCodes = typedCode
+    ? [typedCode]
     : tier === 'lifetime'
       ? lifetimeDiscountCodeList()
       : []
@@ -394,7 +403,6 @@ export async function POST(request: Request): Promise<Response> {
   // Only a confirmed `missing` falls through to the next code. A failed
   // Black Friday lookup stops here: falling back would quietly charge a
   // Black Friday buyer the launch price.
-  const bfCode = blackFridayCode().toUpperCase()
   let autoDiscountCode: string | undefined
   let discountId: string | null = null
   for (const code of candidateCodes) {
@@ -405,15 +413,15 @@ export async function POST(request: Request): Promise<Response> {
       break
     }
     if (lookup.status === 'error') {
-      if (!body.discountCode && code.toUpperCase() === bfCode) {
+      if (code.toUpperCase() === bfCode) {
         console.warn('[checkout-session] black friday lookup failed', { tier })
         return json({ ok: false, reason: 'discount-unavailable' }, 503)
       }
       break
     }
   }
-  const isAutoBlackFriday =
-    !body.discountCode && autoDiscountCode?.toUpperCase() === bfCode && Boolean(discountId)
+  // Typed or automatic, a Black Friday code gets the same rules.
+  const isBlackFridayCode = autoDiscountCode?.toUpperCase() === bfCode && Boolean(discountId)
 
   if (autoDiscountCode && !discountId) {
     console.warn('[checkout-session] discount code did not resolve to UUID', {
@@ -463,7 +471,7 @@ export async function POST(request: Request): Promise<Response> {
     // the discount-availability hook reports `remaining === 0`.
     // Black Friday is the exception: a rejected Black Friday code must
     // not turn into a full-price session the buyer did not expect.
-    if (!res.ok && res.status === 422 && isAutoBlackFriday) {
+    if (!res.ok && res.status === 422 && isBlackFridayCode) {
       console.warn('[checkout-session] black friday discount rejected', {
         tier,
         discountId,
