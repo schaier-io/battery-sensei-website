@@ -120,4 +120,35 @@ describe('GET /api/price Black Friday campaign', () => {
     expect(lifetime?.code).toBeNull()
     expect(lifetime?.has_discount).toBe(false)
   })
+  it('does not call a discount under half price Black Friday', async () => {
+    configure('D')
+    vi.stubGlobal('fetch', vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
+      const url = new URL(String(input))
+      if (url.pathname.endsWith('/discounts')) {
+        return new Response(JSON.stringify({ items: [{ id: 'bf-d-id', code: 'BFD' }] }), { status: 200 })
+      }
+      const body = JSON.parse(String(init?.body)) as { discount_id?: string }
+      const total = body.discount_id ? 1500 : 2000
+      return new Response(JSON.stringify({ total_amount: total, subtotal_amount: total, tax_amount: 0, currency: 'usd' }), { status: 201 })
+    }))
+
+    const lifetime = await lifetimeFor('BR')
+
+    expect(lifetime?.has_discount).toBe(true)
+    expect(lifetime?.campaign).toBeNull()
+  })
+
+  it('asks Polar again within minutes for a Black Friday quote', async () => {
+    configure('E')
+    stubPolar((q) => new Response(JSON.stringify({ items: q === 'BFE' ? [{ id: 'bf-id', code: 'BFE' }] : [] }), { status: 200 }))
+    const fetchMock = vi.mocked(fetch)
+
+    await GET(new Request('https://battery-sensei.app/api/price?country=AR'))
+    const callsAfterFirst = fetchMock.mock.calls.length
+    vi.setSystemTime(new Date('2026-11-28T12:06:00Z'))
+    await GET(new Request('https://battery-sensei.app/api/price?country=AR'))
+    vi.useRealTimers()
+
+    expect(fetchMock.mock.calls.length).toBeGreaterThan(callsAfterFirst)
+  })
 })

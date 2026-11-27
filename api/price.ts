@@ -187,14 +187,15 @@ async function resolveDiscountId(
     })
     if (r.ok) {
       const body = (await r.json()) as { items?: Array<{ id?: string; code?: string }> }
-      const items = Array.isArray(body.items) ? body.items : []
-      const match = items.find(
-        (d) => typeof d.code === 'string' && d.code.toUpperCase() === normalizedCode,
-      )
-      lookup =
-        typeof match?.id === 'string'
-          ? { status: 'found', id: match.id }
-          : { status: 'missing' }
+      // `missing` needs a well-formed list with no exact match. A
+      // malformed body, or a match without an id, tells us nothing.
+      if (Array.isArray(body.items)) {
+        const match = body.items.find(
+          (d) => typeof d.code === 'string' && d.code.toUpperCase() === normalizedCode,
+        )
+        if (!match) lookup = { status: 'missing' }
+        else if (typeof match.id === 'string' && match.id) lookup = { status: 'found', id: match.id }
+      }
     } else {
       console.warn('[price] discount list non-2xx', { status: r.status })
     }
@@ -217,6 +218,8 @@ const CACHE_TTL_MS = 24 * 60 * 60 * 1000
  * dashboard or a recovered Polar shows up within minutes, not a day.
  */
 const FALLBACK_CACHE_TTL_MS = 5 * 60 * 1000
+/** Highest discounted/original percentage that still counts as half price. */
+const HALF_PRICE_MAX_PERCENT = 51
 
 type LifetimeBlock = {
   /** Post-discount total in minor units (e.g. 5600 = 56.00 CZK). */
@@ -278,9 +281,10 @@ function json(body: unknown, status = 200, headers: Record<string, string> = {})
       // Browser-only cache. Different users in different countries should get
       // their own fresh fetches; no shared CDN cache to leak one visitor's
       // country to the next.
-      // Short, so the Black Friday window opening or closing reaches
-      // returning visitors within minutes.
-      'cache-control': 'private, max-age=300',
+      // Revalidate on every load, so the Black Friday window opening or
+      // closing is never hidden by the browser cache. The module cache
+      // below still spares Polar the repeat calls.
+      'cache-control': 'private, no-cache',
       ...headers,
     },
   })
@@ -518,8 +522,13 @@ async function fetchPolarPreview(
         : 0
     const hasDiscount = discTotal < fullTotal
 
+    // Only advertise "50% off" when Polar's quote really is half price.
+    // Polar rounds to the cent, so 50% of 12.99 quotes as 6.50.
+    const isHalfPrice = discTotal * 100 <= fullTotal * HALF_PRICE_MAX_PERCENT
     const isBlackFriday =
-      hasDiscount && discountCode?.toUpperCase() === blackFridayCode().toUpperCase()
+      hasDiscount &&
+      isHalfPrice &&
+      discountCode?.toUpperCase() === blackFridayCode().toUpperCase()
 
     payload.lifetime = {
       code: discountCode,
@@ -583,10 +592,18 @@ export async function GET(request: Request): Promise<Response> {
   const result = await fetchPolarPreview(country, currency)
 
   if (result.ok) {
-    const usedFirstChoice =
-      !envValue('POLAR_PRODUCT_ID_LIFETIME_NEW') || result.lifetime?.code === firstChoiceCode
+    // Cache for a day only a settled launch quote: the first-choice code
+    // applied with a real discount, outside the sale. Anything else (a
+    // fallback, a Polar hiccup, any Black Friday quote) may change within
+    // minutes, so it gets the short TTL.
+    const settled =
+      !envValue('POLAR_PRODUCT_ID_LIFETIME_NEW') ||
+      (result.lifetime?.code === firstChoiceCode &&
+        result.lifetime.has_discount &&
+        result.lifetime.campaign === null &&
+        firstChoiceCode.toUpperCase() !== blackFridayCode().toUpperCase())
     cache.set(cacheKey, {
-      expiresAt: now + (usedFirstChoice ? CACHE_TTL_MS : FALLBACK_CACHE_TTL_MS),
+      expiresAt: now + (settled ? CACHE_TTL_MS : FALLBACK_CACHE_TTL_MS),
       payload: result,
     })
     // `x-price-lifetime` makes it possible to verify from the browser
