@@ -117,14 +117,28 @@ const POLAR_TIMEOUT_MS = 4_000
  * Lifetime codes to try, in order: the Black Friday code while its
  * window is open, then the new-organization launch discount.
  */
+function blackFridayCode(): string {
+  return envValue('POLAR_DISCOUNT_CODE_BLACKFRIDAY_NEW') ?? BLACK_FRIDAY_CODE
+}
+
 function lifetimeDiscountCodeList(): string[] {
   return lifetimeDiscountCodes(
     envValue('POLAR_DISCOUNT_CODE_NEW') ?? 'ZENMODE',
-    envValue('POLAR_DISCOUNT_CODE_BLACKFRIDAY_NEW') ?? BLACK_FRIDAY_CODE,
+    blackFridayCode(),
   )
 }
 
-type DiscountIdEntry = { id: string | null; expiresAt: number }
+/**
+ * `missing` = Polar answered and has no such code. `error` = the lookup
+ * itself failed, so we know nothing about the code. Only `missing` may
+ * fall through to the next candidate code.
+ */
+type DiscountLookup =
+  | { status: 'found'; id: string }
+  | { status: 'missing' }
+  | { status: 'error' }
+
+type DiscountIdEntry = { lookup: DiscountLookup; expiresAt: number }
 const DISCOUNT_ID_TTL_MS = 10 * 60 * 1000
 const globalForDiscountCache = globalThis as unknown as {
   __polarDiscountIdCache?: Map<string, DiscountIdEntry>
@@ -137,23 +151,24 @@ const discountIdCache: Map<string, DiscountIdEntry> =
  * Resolve a Polar discount code to its UUID.
  * Polar's `POST /v1/checkouts/` schema only accepts the UUID via
  * `discount_id`; the string `discount_code` field is silently dropped.
- * Returns `null` (cached) on no-token / Polar error / no match.
+ * Found and missing results are cached; errors are not, so the next
+ * request asks Polar again.
  */
 async function resolveDiscountId(
   code: string,
   token: string,
-): Promise<string | null> {
+): Promise<DiscountLookup> {
   const normalizedCode = code.toUpperCase()
   const key = `new:${normalizedCode}`
   const now = Date.now()
   const cached = discountIdCache.get(key)
-  if (cached && cached.expiresAt > now) return cached.id
+  if (cached && cached.expiresAt > now) return cached.lookup
 
   const url = new URL(`${POLAR_API_BASE}/discounts`)
   url.searchParams.set('query', code)
   url.searchParams.set('limit', '20')
 
-  let id: string | null = null
+  let lookup: DiscountLookup = { status: 'error' }
   try {
     const r = await fetch(url, {
       headers: {
@@ -169,7 +184,10 @@ async function resolveDiscountId(
       const match = items.find(
         (d) => typeof d.code === 'string' && d.code.toUpperCase() === normalizedCode,
       )
-      id = typeof match?.id === 'string' ? match.id : null
+      lookup =
+        typeof match?.id === 'string'
+          ? { status: 'found', id: match.id }
+          : { status: 'missing' }
     } else {
       console.warn('[checkout-session] discount list non-2xx', { status: r.status })
     }
@@ -179,8 +197,10 @@ async function resolveDiscountId(
     })
   }
 
-  discountIdCache.set(key, { id, expiresAt: now + DISCOUNT_ID_TTL_MS })
-  return id
+  if (lookup.status !== 'error') {
+    discountIdCache.set(key, { lookup, expiresAt: now + DISCOUNT_ID_TTL_MS })
+  }
+  return lookup
 }
 
 /**
@@ -223,6 +243,7 @@ type ErrResponse = {
     | 'missing-config'
     | 'polar-error'
     | 'forbidden'
+    | 'discount-unavailable'
 }
 
 function json(payload: OkResponse | ErrResponse, status = 200): Response {
@@ -370,13 +391,29 @@ export async function POST(request: Request): Promise<Response> {
   // the body OR appending `?discount_code=` to the returned URL both
   // result in `discount: null` server-side.
   // First code that resolves wins (Black Friday, then the launch code).
+  // Only a confirmed `missing` falls through to the next code. A failed
+  // Black Friday lookup stops here: falling back would quietly charge a
+  // Black Friday buyer the launch price.
+  const bfCode = blackFridayCode().toUpperCase()
   let autoDiscountCode: string | undefined
   let discountId: string | null = null
   for (const code of candidateCodes) {
     autoDiscountCode = code
-    discountId = await resolveDiscountId(code, token)
-    if (discountId) break
+    const lookup = await resolveDiscountId(code, token)
+    if (lookup.status === 'found') {
+      discountId = lookup.id
+      break
+    }
+    if (lookup.status === 'error') {
+      if (!body.discountCode && code.toUpperCase() === bfCode) {
+        console.warn('[checkout-session] black friday lookup failed', { tier })
+        return json({ ok: false, reason: 'discount-unavailable' }, 503)
+      }
+      break
+    }
   }
+  const isAutoBlackFriday =
+    !body.discountCode && autoDiscountCode?.toUpperCase() === bfCode && Boolean(discountId)
 
   if (autoDiscountCode && !discountId) {
     console.warn('[checkout-session] discount code did not resolve to UUID', {
@@ -424,6 +461,15 @@ export async function POST(request: Request): Promise<Response> {
     // visitor still gets a session at the regular price — the UI on
     // /checkout will already be showing the full price by then since
     // the discount-availability hook reports `remaining === 0`.
+    // Black Friday is the exception: a rejected Black Friday code must
+    // not turn into a full-price session the buyer did not expect.
+    if (!res.ok && res.status === 422 && isAutoBlackFriday) {
+      console.warn('[checkout-session] black friday discount rejected', {
+        tier,
+        discountId,
+      })
+      return json({ ok: false, reason: 'discount-unavailable' }, 503)
+    }
     if (!res.ok && res.status === 422 && discountId) {
       console.warn('[checkout-session] discount rejected — retrying without', {
         tier,

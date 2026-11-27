@@ -197,4 +197,89 @@ describe('checkout session currency', () => {
     expect(response.ok).toBe(true)
     expect(discountId).toBe('bf-id')
   })
+  it('refuses checkout instead of falling back when the Black Friday lookup fails', async () => {
+    vi.useFakeTimers({ toFake: ['Date'] })
+    vi.setSystemTime(new Date('2026-11-28T12:00:00Z'))
+    vi.stubEnv('POLAR_ACCESS_TOKEN_NEW', 'new-token')
+    vi.stubEnv('POLAR_PRODUCT_ID_LIFETIME_NEW', 'new-lifetime-product')
+    vi.stubEnv('POLAR_DISCOUNT_CODE_NEW', 'LAUNCHERR')
+    vi.stubEnv('POLAR_DISCOUNT_CODE_BLACKFRIDAY_NEW', 'BFERR')
+    const checkoutCalls: unknown[] = []
+    vi.stubGlobal('fetch', vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
+      const url = new URL(String(input))
+      if (url.pathname.endsWith('/discounts')) {
+        if (url.searchParams.get('query') === 'BFERR') return new Response('', { status: 429 })
+        return new Response(JSON.stringify({ items: [{ id: 'launch-id', code: 'LAUNCHERR' }] }), { status: 200 })
+      }
+      checkoutCalls.push(JSON.parse(String(init?.body)))
+      return new Response(JSON.stringify({ url: 'https://buy.polar.sh/s' }), { status: 201 })
+    }))
+
+    const response = await POST(new Request('https://battery-sensei.app/api/checkout-session', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ tier: 'lifetime' }),
+    }))
+    vi.useRealTimers()
+
+    expect(response.status).toBe(503)
+    expect(checkoutCalls).toEqual([])
+  })
+
+  it('falls back to the launch code when Polar has no Black Friday code', async () => {
+    vi.useFakeTimers({ toFake: ['Date'] })
+    vi.setSystemTime(new Date('2026-11-28T12:00:00Z'))
+    vi.stubEnv('POLAR_ACCESS_TOKEN_NEW', 'new-token')
+    vi.stubEnv('POLAR_PRODUCT_ID_LIFETIME_NEW', 'new-lifetime-product')
+    vi.stubEnv('POLAR_DISCOUNT_CODE_NEW', 'LAUNCHMISS')
+    vi.stubEnv('POLAR_DISCOUNT_CODE_BLACKFRIDAY_NEW', 'BFMISS')
+    let discountId: unknown
+    vi.stubGlobal('fetch', vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
+      const url = new URL(String(input))
+      if (url.pathname.endsWith('/discounts')) {
+        const items = url.searchParams.get('query') === 'LAUNCHMISS' ? [{ id: 'launch-id', code: 'LAUNCHMISS' }] : []
+        return new Response(JSON.stringify({ items }), { status: 200 })
+      }
+      discountId = (JSON.parse(String(init?.body)) as Record<string, unknown>).discount_id
+      return new Response(JSON.stringify({ url: 'https://buy.polar.sh/s' }), { status: 201 })
+    }))
+
+    const response = await POST(new Request('https://battery-sensei.app/api/checkout-session', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ tier: 'lifetime' }),
+    }))
+    vi.useRealTimers()
+
+    expect(response.ok).toBe(true)
+    expect(discountId).toBe('launch-id')
+  })
+
+  it('does not retry at full price when Polar rejects the Black Friday code', async () => {
+    vi.useFakeTimers({ toFake: ['Date'] })
+    vi.setSystemTime(new Date('2026-11-28T12:00:00Z'))
+    vi.stubEnv('POLAR_ACCESS_TOKEN_NEW', 'new-token')
+    vi.stubEnv('POLAR_PRODUCT_ID_LIFETIME_NEW', 'new-lifetime-product')
+    vi.stubEnv('POLAR_DISCOUNT_CODE_NEW', 'LAUNCH422')
+    vi.stubEnv('POLAR_DISCOUNT_CODE_BLACKFRIDAY_NEW', 'BF422')
+    const checkoutCalls: Array<Record<string, unknown>> = []
+    vi.stubGlobal('fetch', vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
+      const url = new URL(String(input))
+      if (url.pathname.endsWith('/discounts')) {
+        return new Response(JSON.stringify({ items: [{ id: 'bf-422-id', code: 'BF422' }] }), { status: 200 })
+      }
+      checkoutCalls.push(JSON.parse(String(init?.body)) as Record<string, unknown>)
+      return new Response('{}', { status: 422 })
+    }))
+
+    const response = await POST(new Request('https://battery-sensei.app/api/checkout-session', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ tier: 'lifetime' }),
+    }))
+    vi.useRealTimers()
+
+    expect(response.status).toBe(503)
+    expect(checkoutCalls.map((c) => c.discount_id)).toEqual(['bf-422-id'])
+  })
 })
