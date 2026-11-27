@@ -102,7 +102,7 @@ describe('GET /api/price Black Friday campaign', () => {
 
     const lifetime = await lifetimeFor('CA')
 
-    expect(lifetime?.campaign).toBeNull()
+    expect(lifetime?.campaign).toBe('launch')
     expect(lifetime?.code).toBe('LAUNCHB')
   })
 
@@ -150,5 +150,35 @@ describe('GET /api/price Black Friday campaign', () => {
     vi.useRealTimers()
 
     expect(fetchMock.mock.calls.length).toBeGreaterThan(callsAfterFirst)
+  })
+  it('does not call a 49% discount half price', async () => {
+    configure('F')
+    vi.stubGlobal('fetch', vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
+      const url = new URL(String(input))
+      if (url.pathname.endsWith('/discounts')) {
+        return new Response(JSON.stringify({ items: [{ id: 'bf-f-id', code: 'BFF' }] }), { status: 200 })
+      }
+      const body = JSON.parse(String(init?.body)) as { discount_id?: string }
+      const total = body.discount_id ? 1020 : 2000
+      return new Response(JSON.stringify({ total_amount: total, subtotal_amount: total, tax_amount: 0, currency: 'usd' }), { status: 201 })
+    }))
+
+    const lifetime = await lifetimeFor('CL')
+
+    expect(lifetime?.campaign).toBeNull()
+  })
+
+  it('does not treat malformed discount rows as a missing Black Friday code', async () => {
+    configure('G')
+    stubPolar((q) =>
+      q === 'BFG'
+        ? new Response(JSON.stringify({ items: [{}] }), { status: 200 })
+        : new Response(JSON.stringify({ items: [{ id: 'launch-id', code: 'LAUNCHG' }] }), { status: 200 }),
+    )
+
+    const lifetime = await lifetimeFor('PE')
+
+    expect(lifetime?.code).toBeNull()
+    expect(lifetime?.has_discount).toBe(false)
   })
 })

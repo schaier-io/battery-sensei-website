@@ -85,11 +85,12 @@ function blackFridayCode(): string {
   return envValue('POLAR_DISCOUNT_CODE_BLACKFRIDAY_NEW') ?? BLACK_FRIDAY_CODE
 }
 
+function launchCode(): string {
+  return envValue('POLAR_DISCOUNT_CODE_NEW') ?? 'ZENMODE'
+}
+
 function lifetimeDiscountCodeList(): string[] {
-  return lifetimeDiscountCodes(
-    envValue('POLAR_DISCOUNT_CODE_NEW') ?? 'ZENMODE',
-    blackFridayCode(),
-  )
+  return lifetimeDiscountCodes(launchCode(), blackFridayCode())
 }
 
 // ────────────────────────────────────────────────────────────────────
@@ -189,7 +190,11 @@ async function resolveDiscountId(
       const body = (await r.json()) as { items?: Array<{ id?: string; code?: string }> }
       // `missing` needs a well-formed list with no exact match. A
       // malformed body, or a match without an id, tells us nothing.
-      if (Array.isArray(body.items)) {
+      // Every row must carry a string code, or the list proves nothing.
+      if (
+        Array.isArray(body.items) &&
+        body.items.every((d) => d !== null && typeof d === 'object' && typeof d.code === 'string')
+      ) {
         const match = body.items.find(
           (d) => typeof d.code === 'string' && d.code.toUpperCase() === normalizedCode,
         )
@@ -218,8 +223,6 @@ const CACHE_TTL_MS = 24 * 60 * 60 * 1000
  * dashboard or a recovered Polar shows up within minutes, not a day.
  */
 const FALLBACK_CACHE_TTL_MS = 5 * 60 * 1000
-/** Highest discounted/original percentage that still counts as half price. */
-const HALF_PRICE_MAX_PERCENT = 51
 
 type LifetimeBlock = {
   /** Post-discount total in minor units (e.g. 5600 = 56.00 CZK). */
@@ -234,8 +237,13 @@ type LifetimeBlock = {
   tax_formatted: string
   /** The code whose discount this preview used, or null when none resolved. */
   code: string | null
-  /** 'black-friday' when Polar honours the Black Friday code on this quote. */
-  campaign: 'black-friday' | null
+  /**
+   * Which offer this quote shows: 'black-friday' (Black Friday code at
+   * half price), 'launch' (the launch code), or null (no discount, or a
+   * code that is neither, such as a Black Friday code set to the wrong
+   * percentage in Polar).
+   */
+  campaign: 'black-friday' | 'launch' | null
 }
 
 type PricePayload = {
@@ -523,16 +531,19 @@ async function fetchPolarPreview(
     const hasDiscount = discTotal < fullTotal
 
     // Only advertise "50% off" when Polar's quote really is half price.
-    // Polar rounds to the cent, so 50% of 12.99 quotes as 6.50.
-    const isHalfPrice = discTotal * 100 <= fullTotal * HALF_PRICE_MAX_PERCENT
-    const isBlackFriday =
-      hasDiscount &&
-      isHalfPrice &&
-      discountCode?.toUpperCase() === blackFridayCode().toUpperCase()
+    // Polar rounds to the minor unit, so 50% of 12.99 quotes as 6.50.
+    const isHalfPrice = discTotal <= Math.ceil(fullTotal / 2)
+    const applied = hasDiscount ? discountCode?.toUpperCase() : undefined
+    const campaign: LifetimeBlock['campaign'] =
+      applied === blackFridayCode().toUpperCase()
+        ? isHalfPrice ? 'black-friday' : null
+        : applied === launchCode().toUpperCase()
+          ? 'launch'
+          : null
 
     payload.lifetime = {
       code: discountCode,
-      campaign: isBlackFriday ? 'black-friday' : null,
+      campaign,
       discounted_amount: discTotal,
       discounted_formatted: formatAmount(discTotal, quotedCurrency),
       original_amount: fullTotal,
@@ -600,7 +611,7 @@ export async function GET(request: Request): Promise<Response> {
       !envValue('POLAR_PRODUCT_ID_LIFETIME_NEW') ||
       (result.lifetime?.code === firstChoiceCode &&
         result.lifetime.has_discount &&
-        result.lifetime.campaign === null &&
+        result.lifetime.campaign === 'launch' &&
         firstChoiceCode.toUpperCase() !== blackFridayCode().toUpperCase())
     cache.set(cacheKey, {
       expiresAt: now + (settled ? CACHE_TTL_MS : FALLBACK_CACHE_TTL_MS),
