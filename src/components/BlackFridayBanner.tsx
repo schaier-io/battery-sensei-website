@@ -1,0 +1,86 @@
+import { useRef } from 'react'
+import { Link } from '@tanstack/react-router'
+import { ArrowRight, X } from 'lucide-react'
+import { Trans, useTranslation } from 'react-i18next'
+import { PromoCode } from '#/components/PromoCode'
+import { dismissBlackFriday, useBlackFridayDismissed } from '#/lib/black-friday-dismissal'
+import { useLifetimePrice } from '#/lib/use-price'
+
+/**
+ * Site-wide Black Friday strip above the header. Renders nothing until
+ * /api/price confirms Polar applied the Black Friday code, so
+ * prerendered HTML and the post-sale site never carry it. The server
+ * owns the sale window; no end date reaches the page on purpose.
+ */
+export function BlackFridayBanner() {
+  const { t } = useTranslation()
+  const lifetime = useLifetimePrice()
+  const code = lifetime.blackFridayCode
+  const dismissed = useBlackFridayDismissed()
+  const asideRef = useRef<HTMLElement>(null)
+
+  if (!code || dismissed) return null
+
+  function dismiss() {
+    // The button is about to unmount. Hand focus to the next control
+    // (the header's first link) so keyboard users keep their place.
+    const next = asideRef.current?.nextElementSibling?.querySelector<HTMLElement>(
+      'a[href], button:not([disabled])',
+    )
+    next?.focus()
+    dismissBlackFriday()
+  }
+
+  return (
+    <aside
+      ref={asideRef}
+      aria-label={t('blackFriday.label')}
+      className="relative z-50 bg-hinomaru text-[#fdf8ee]"
+    >
+      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-5 gap-y-2 px-12 py-2.5 text-[0.875rem] sm:py-2">
+        <p className="m-0 flex flex-wrap items-baseline justify-center gap-x-2.5 gap-y-0.5 text-center">
+          <span className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.22em] text-[#fdf8ee]">
+            {t('blackFriday.label')}
+          </span>
+          <span className="font-medium">{t('blackFriday.headline')}</span>
+          <span className="tabular-nums">
+            <Trans
+              i18nKey="blackFriday.priceLine"
+              values={{
+                discounted: lifetime.discounted.formatted,
+                original: lifetime.original.formatted,
+              }}
+              components={[
+                <span className="font-semibold" />,
+                <s className="decoration-[#fdf8ee]/70" />,
+              ]}
+            />
+          </span>
+        </p>
+        <div className="flex items-center gap-3">
+          <PromoCode code={code} tone="onInk" />
+          <Link
+            to="/checkout"
+            search={{ tier: 'lifetime', cur: undefined }}
+            className="group inline-flex h-8 items-center gap-1.5 rounded-md bg-[#fdf8ee] px-3 text-[0.8125rem] font-medium text-[#8f0022] transition-colors duration-150 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#fdf8ee]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-hinomaru"
+          >
+            {t('blackFriday.cta')}
+            <ArrowRight
+              className="h-3.5 w-3.5 transition-transform duration-150 motion-safe:group-hover:translate-x-0.5"
+              strokeWidth={2}
+              aria-hidden
+            />
+          </Link>
+        </div>
+      </div>
+      <button
+        type="button"
+        onClick={dismiss}
+        aria-label={t('blackFriday.dismiss')}
+        className="absolute right-2 top-2 inline-flex h-8 w-8 items-center justify-center rounded-md text-[#fdf8ee]/75 transition-colors hover:bg-[#fdf8ee]/10 hover:text-[#fdf8ee] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#fdf8ee]/60 sm:top-1/2 sm:-translate-y-1/2"
+      >
+        <X className="h-4 w-4" strokeWidth={2} aria-hidden />
+      </button>
+    </aside>
+  )
+}

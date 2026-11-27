@@ -28,6 +28,7 @@ import { FreeDownloadForm } from '#/components/sections/PricingFreeDownload'
 import { TRIAL_DAYS } from '#/lib/polar'
 import { usePremiumPrice, useLifetimePrice } from '#/lib/use-price'
 import { useDiscountAvailability } from '#/lib/use-discount-availability'
+import { PromoCode } from '#/components/PromoCode'
 
 // Order mirrors `pricing.lifetime.items` in en.json:
 // 1. lifetime updates (∞), 2. all features, 3. Meeting Guard,
@@ -78,11 +79,18 @@ export function Pricing() {
   // still positive on our side.
   const hasRealDiscount =
     lifetime.hasDiscount && lifetime.original.amount > lifetime.discounted.amount
-  const launchOpen = hasLiveZenmodeCount && zenmodeRemaining > 0 && hasRealDiscount
+  // A confirmed Black Friday quote is a live discount on its own: it
+  // does not depend on the launch code's redemption count.
+  const blackFridayCode = lifetime.blackFridayCode
+  // Launch copy needs the launch code AND redemptions left. Any other
+  // real discount (Black Friday) shows its price without launch copy.
+  const launchOpen =
+    lifetime.isLaunchOffer && hasLiveZenmodeCount && zenmodeRemaining > 0 && hasRealDiscount
+  const showDiscount = hasRealDiscount && (!lifetime.isLaunchOffer || launchOpen)
   // While the launch discount is active we show the discounted price as
   // the headline; once exhausted, the original full price becomes the
   // headline and the strikethrough is gone too.
-  const lifetimePrice = launchOpen ? lifetime.discounted : lifetime.original
+  const lifetimePrice = showDiscount ? lifetime.discounted : lifetime.original
   const freeFeatures = t('pricing.free.items', {
     returnObjects: true,
   }) as Array<{ title: string; body: string }>
@@ -237,15 +245,21 @@ export function Pricing() {
               >
                 {t('pricing.lifetime.tier')}
               </h3>
-              <span className="meta-label inline-flex items-center gap-1 rounded-full bg-hinomaru/10 px-2 py-0.5 text-hinomaru-ink">
-                {t('common.recommended')}
-              </span>
+              {blackFridayCode ? (
+                <span className="meta-label inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full bg-hinomaru px-2 py-0.5 text-[#fdf8ee]">
+                  {t('blackFriday.pill')}
+                </span>
+              ) : (
+                <span className="meta-label inline-flex items-center gap-1 rounded-full bg-hinomaru/10 px-2 py-0.5 text-hinomaru-ink">
+                  {t('common.recommended')}
+                </span>
+              )}
             </div>
             {/* Strikethrough only renders while ZENMODE has redemptions
                 left. Once exhausted, the original price IS the headline
                 price below — keeping a struck-through "was" line on
                 top of that would be a lie. */}
-            {launchOpen && (
+            {showDiscount && (
               <div className="mt-2.5 inline-flex items-baseline gap-2 text-sumi-soft">
                 <span className="meta-label text-nezumi">
                   {t('pricing.lifetime.originalLabel')}
@@ -286,6 +300,14 @@ export function Pricing() {
               </span>
             </div>
             <MacScopeBadge label={t('pricing.lifetime.macsBadge')} accent />
+            {blackFridayCode && (
+              <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2">
+                <PromoCode code={blackFridayCode} />
+                <span className="text-[0.8125rem] leading-snug text-sumi-soft">
+                  {t('blackFriday.appliedShort')}
+                </span>
+              </div>
+            )}
             {/* Launch-discount marketing chrome (note + scarcity bar)
                 appears ONLY while ZENMODE still has redemptions. Past
                 that, the card reads as a plain lifetime product at

@@ -1492,5 +1492,19 @@
     "light": "ライト",
     "system": "システムに合わせる",
     "dark": "ダーク"
+  },
+  "blackFriday": {
+    "label": "ブラックフライデー",
+    "headline": "Lifetime が 50% オフ",
+    "priceLine": "<0>{{discounted}}</0>（通常 <1>{{original}}</1>）",
+    "cta": "Lifetime を購入",
+    "copyLabel": "コード {{code}} をコピー",
+    "copied": "コードをコピーしました",
+    "copiedShort": "コピー済み",
+    "dismiss": "ブラックフライデーのお知らせを閉じる",
+    "pill": "ブラックフライデー −50%",
+    "navBadge": "−50%",
+    "appliedShort": "購入時に自動で適用されます。コードは予備です。",
+    "applied": "ブラックフライデー価格が自動で適用されています。Polar で求められたらコードを入力してください。"
   }
 }

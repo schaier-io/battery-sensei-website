@@ -78,6 +78,9 @@ describe('checkout session currency', () => {
   })
 
   it('resolves a new-organization discount without comparing it to the cache key', async () => {
+    // Outside the Black Friday window, so only the launch code is looked up.
+    vi.useFakeTimers({ toFake: ['Date'] })
+    vi.setSystemTime(new Date('2026-12-15T12:00:00Z'))
     vi.stubEnv('POLAR_ACCESS_TOKEN_NEW', 'new-token')
     vi.stubEnv('POLAR_PRODUCT_ID_LIFETIME_NEW', 'new-lifetime-product')
     vi.stubEnv('POLAR_DISCOUNT_CODE_NEW', 'NEWCODE')
@@ -103,6 +106,7 @@ describe('checkout session currency', () => {
       body: JSON.stringify({ tier: 'lifetime' }),
     }))
 
+    vi.useRealTimers()
     expect(response.ok).toBe(true)
     expect(fetchMock).toHaveBeenCalledTimes(2)
     // Both Polar calls carry the pinned API version. Asserted on the
@@ -162,5 +166,299 @@ describe('checkout session currency', () => {
 
     expect(response.status).toBe(503)
     expect(fetchMock).not.toHaveBeenCalled()
+  })
+
+  it('auto-applies the Black Friday code to Lifetime inside the window', async () => {
+    vi.useFakeTimers({ toFake: ['Date'] })
+    vi.setSystemTime(new Date('2026-11-28T12:00:00Z'))
+    vi.stubEnv('POLAR_ACCESS_TOKEN_NEW', 'new-token')
+    vi.stubEnv('POLAR_PRODUCT_ID_LIFETIME_NEW', 'new-lifetime-product')
+    vi.stubEnv('POLAR_DISCOUNT_CODE_NEW', 'LAUNCHCODE')
+    vi.stubEnv('POLAR_DISCOUNT_CODE_BLACKFRIDAY_NEW', 'BFCODE')
+    let discountId: unknown
+    vi.stubGlobal('fetch', vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
+      const url = new URL(String(input))
+      if (url.pathname.endsWith('/discounts')) {
+        const query = url.searchParams.get('query')
+        const items = query === 'BFCODE' ? [{ id: 'bf-id', code: 'BFCODE' }] : [{ id: 'launch-id', code: 'LAUNCHCODE' }]
+        return new Response(JSON.stringify({ items }), { status: 200 })
+      }
+      discountId = (JSON.parse(String(init?.body)) as Record<string, unknown>).discount_id
+      return new Response(JSON.stringify({ url: 'https://buy.polar.sh/s' }), { status: 201 })
+    }))
+
+    const response = await POST(new Request('https://battery-sensei.app/api/checkout-session', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ tier: 'lifetime' }),
+    }))
+    vi.useRealTimers()
+
+    expect(response.ok).toBe(true)
+    expect(discountId).toBe('bf-id')
+  })
+  it('refuses checkout instead of falling back when the Black Friday lookup fails', async () => {
+    vi.useFakeTimers({ toFake: ['Date'] })
+    vi.setSystemTime(new Date('2026-11-28T12:00:00Z'))
+    vi.stubEnv('POLAR_ACCESS_TOKEN_NEW', 'new-token')
+    vi.stubEnv('POLAR_PRODUCT_ID_LIFETIME_NEW', 'new-lifetime-product')
+    vi.stubEnv('POLAR_DISCOUNT_CODE_NEW', 'LAUNCHERR')
+    vi.stubEnv('POLAR_DISCOUNT_CODE_BLACKFRIDAY_NEW', 'BFERR')
+    const checkoutCalls: unknown[] = []
+    vi.stubGlobal('fetch', vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
+      const url = new URL(String(input))
+      if (url.pathname.endsWith('/discounts')) {
+        if (url.searchParams.get('query') === 'BFERR') return new Response('', { status: 429 })
+        return new Response(JSON.stringify({ items: [{ id: 'launch-id', code: 'LAUNCHERR' }] }), { status: 200 })
+      }
+      checkoutCalls.push(JSON.parse(String(init?.body)))
+      return new Response(JSON.stringify({ url: 'https://buy.polar.sh/s' }), { status: 201 })
+    }))
+
+    const response = await POST(new Request('https://battery-sensei.app/api/checkout-session', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ tier: 'lifetime' }),
+    }))
+    vi.useRealTimers()
+
+    expect(response.status).toBe(503)
+    expect(checkoutCalls).toEqual([])
+  })
+
+  it('falls back to the launch code when Polar has no Black Friday code', async () => {
+    vi.useFakeTimers({ toFake: ['Date'] })
+    vi.setSystemTime(new Date('2026-11-28T12:00:00Z'))
+    vi.stubEnv('POLAR_ACCESS_TOKEN_NEW', 'new-token')
+    vi.stubEnv('POLAR_PRODUCT_ID_LIFETIME_NEW', 'new-lifetime-product')
+    vi.stubEnv('POLAR_DISCOUNT_CODE_NEW', 'LAUNCHMISS')
+    vi.stubEnv('POLAR_DISCOUNT_CODE_BLACKFRIDAY_NEW', 'BFMISS')
+    let discountId: unknown
+    vi.stubGlobal('fetch', vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
+      const url = new URL(String(input))
+      if (url.pathname.endsWith('/discounts')) {
+        const items = url.searchParams.get('query') === 'LAUNCHMISS' ? [{ id: 'launch-id', code: 'LAUNCHMISS' }] : []
+        return new Response(JSON.stringify({ items }), { status: 200 })
+      }
+      discountId = (JSON.parse(String(init?.body)) as Record<string, unknown>).discount_id
+      return new Response(JSON.stringify({ url: 'https://buy.polar.sh/s' }), { status: 201 })
+    }))
+
+    const response = await POST(new Request('https://battery-sensei.app/api/checkout-session', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ tier: 'lifetime' }),
+    }))
+    vi.useRealTimers()
+
+    expect(response.ok).toBe(true)
+    expect(discountId).toBe('launch-id')
+  })
+
+  it('moves on to the launch code when Polar rejects the Black Friday code', async () => {
+    stubLifetime('422', '2026-11-28T12:00:00Z')
+    const checkoutCalls: Array<Record<string, unknown>> = []
+    vi.stubGlobal('fetch', vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
+      const url = new URL(String(input))
+      if (url.pathname.endsWith('/discounts')) {
+        const q = url.searchParams.get('query') ?? ''
+        return new Response(JSON.stringify({ items: [{ id: `${q}-id`, code: q }] }), { status: 200 })
+      }
+      const body = JSON.parse(String(init?.body)) as Record<string, unknown>
+      checkoutCalls.push(body)
+      return body.discount_id === 'BF422-id'
+        ? new Response('{}', { status: 422 })
+        : new Response(JSON.stringify({ url: 'https://buy.polar.sh/s' }), { status: 201 })
+    }))
+
+    const response = await postLifetime()
+    vi.useRealTimers()
+
+    expect(response.ok).toBe(true)
+    expect(checkoutCalls.map((c) => c.discount_id)).toEqual(['BF422-id', 'LAUNCH422-id'])
+  })
+  function stubLifetime(suffix: string, now: string) {
+    vi.useFakeTimers({ toFake: ['Date'] })
+    vi.setSystemTime(new Date(now))
+    vi.stubEnv('POLAR_ACCESS_TOKEN_NEW', 'new-token')
+    vi.stubEnv('POLAR_PRODUCT_ID_LIFETIME_NEW', 'new-lifetime-product')
+    vi.stubEnv('POLAR_DISCOUNT_CODE_NEW', `LAUNCH${suffix}`)
+    vi.stubEnv('POLAR_DISCOUNT_CODE_BLACKFRIDAY_NEW', `BF${suffix}`)
+  }
+
+  function postLifetime(extra: Record<string, unknown> = {}) {
+    return POST(new Request('https://battery-sensei.app/api/checkout-session', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ tier: 'lifetime', ...extra }),
+    }))
+  }
+
+  it('ignores a typed Black Friday code after the sale', async () => {
+    stubLifetime('LATE', '2026-12-03T12:00:00Z')
+    const checkoutCalls: Array<Record<string, unknown>> = []
+    vi.stubGlobal('fetch', vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
+      const url = new URL(String(input))
+      if (url.pathname.endsWith('/discounts')) {
+        const q = url.searchParams.get('query') ?? ''
+        return new Response(JSON.stringify({ items: [{ id: `${q}-id`, code: q }] }), { status: 200 })
+      }
+      checkoutCalls.push(JSON.parse(String(init?.body)) as Record<string, unknown>)
+      return new Response(JSON.stringify({ url: 'https://buy.polar.sh/s' }), { status: 201 })
+    }))
+
+    const response = await postLifetime({ discountCode: 'bflate' })
+    vi.useRealTimers()
+
+    expect(response.ok).toBe(true)
+    expect(checkoutCalls.map((c) => c.discount_id)).toEqual(['LAUNCHLATE-id'])
+  })
+
+  it('still sells Lifetime when Polar rejects both the typed Black Friday and the launch code', async () => {
+    stubLifetime('TYPED', '2026-11-28T12:00:00Z')
+    const checkoutCalls: Array<Record<string, unknown>> = []
+    vi.stubGlobal('fetch', vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
+      const url = new URL(String(input))
+      if (url.pathname.endsWith('/discounts')) {
+        const q = url.searchParams.get('query') ?? ''
+        return new Response(JSON.stringify({ items: [{ id: `${q}-id`, code: q }] }), { status: 200 })
+      }
+      const body = JSON.parse(String(init?.body)) as Record<string, unknown>
+      checkoutCalls.push(body)
+      return body.discount_id
+        ? new Response('{}', { status: 422 })
+        : new Response(JSON.stringify({ url: 'https://buy.polar.sh/s' }), { status: 201 })
+    }))
+
+    const response = await postLifetime({ discountCode: 'BFTYPED' })
+    vi.useRealTimers()
+
+    expect(response.ok).toBe(true)
+    expect(checkoutCalls.map((c) => c.discount_id)).toEqual(['BFTYPED-id', 'LAUNCHTYPED-id', undefined])
+  })
+
+  it('treats a Black Friday match without an id as a failed lookup', async () => {
+    stubLifetime('NOID', '2026-11-28T12:00:00Z')
+    const checkoutCalls: unknown[] = []
+    vi.stubGlobal('fetch', vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
+      const url = new URL(String(input))
+      if (url.pathname.endsWith('/discounts')) {
+        const q = url.searchParams.get('query')
+        const items = q === 'BFNOID' ? [{ code: 'BFNOID' }] : [{ id: 'launch-id', code: 'LAUNCHNOID' }]
+        return new Response(JSON.stringify({ items }), { status: 200 })
+      }
+      checkoutCalls.push(JSON.parse(String(init?.body)))
+      return new Response(JSON.stringify({ url: 'https://buy.polar.sh/s' }), { status: 201 })
+    }))
+
+    const response = await postLifetime()
+    vi.useRealTimers()
+
+    expect(response.status).toBe(503)
+    expect(checkoutCalls).toEqual([])
+  })
+  it('falls back to the launch code when a typed Black Friday code is missing in Polar', async () => {
+    stubLifetime('TMISS', '2026-11-28T12:00:00Z')
+    let discountId: unknown
+    vi.stubGlobal('fetch', vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
+      const url = new URL(String(input))
+      if (url.pathname.endsWith('/discounts')) {
+        const items = url.searchParams.get('query') === 'LAUNCHTMISS' ? [{ id: 'launch-id', code: 'LAUNCHTMISS' }] : []
+        return new Response(JSON.stringify({ items }), { status: 200 })
+      }
+      discountId = (JSON.parse(String(init?.body)) as Record<string, unknown>).discount_id
+      return new Response(JSON.stringify({ url: 'https://buy.polar.sh/s' }), { status: 201 })
+    }))
+
+    const response = await postLifetime({ discountCode: 'BFTMISS' })
+    vi.useRealTimers()
+
+    expect(response.ok).toBe(true)
+    expect(discountId).toBe('launch-id')
+  })
+
+  it('treats malformed discount rows as a failed Black Friday lookup', async () => {
+    stubLifetime('ROWS', '2026-11-28T12:00:00Z')
+    const checkoutCalls: unknown[] = []
+    vi.stubGlobal('fetch', vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
+      const url = new URL(String(input))
+      if (url.pathname.endsWith('/discounts')) {
+        const items = url.searchParams.get('query') === 'BFROWS' ? [{}] : [{ id: 'launch-id', code: 'LAUNCHROWS' }]
+        return new Response(JSON.stringify({ items }), { status: 200 })
+      }
+      checkoutCalls.push(JSON.parse(String(init?.body)))
+      return new Response(JSON.stringify({ url: 'https://buy.polar.sh/s' }), { status: 201 })
+    }))
+
+    const response = await postLifetime()
+    vi.useRealTimers()
+
+    expect(response.status).toBe(503)
+    expect(checkoutCalls).toEqual([])
+  })
+  it('treats a non-matching row without an id as a failed Black Friday lookup', async () => {
+    stubLifetime('NOROWID', '2026-11-28T12:00:00Z')
+    const checkoutCalls: unknown[] = []
+    vi.stubGlobal('fetch', vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
+      const url = new URL(String(input))
+      if (url.pathname.endsWith('/discounts')) {
+        const q = url.searchParams.get('query') ?? ''
+        const items = q === 'BFNOROWID' ? [{ code: 'OTHER' }] : [{ id: `${q}-id`, code: q }]
+        return new Response(JSON.stringify({ items }), { status: 200 })
+      }
+      checkoutCalls.push(JSON.parse(String(init?.body)))
+      return new Response(JSON.stringify({ url: 'https://buy.polar.sh/s' }), { status: 201 })
+    }))
+
+    const response = await postLifetime()
+    vi.useRealTimers()
+
+    expect(response.status).toBe(503)
+    expect(checkoutCalls).toEqual([])
+  })
+  it('applies the Black Friday code next to a codeless discount row', async () => {
+    stubLifetime('NULLCODE', '2026-11-28T12:00:00Z')
+    const checkoutCalls: Array<Record<string, unknown>> = []
+    vi.stubGlobal('fetch', vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
+      const url = new URL(String(input))
+      if (url.pathname.endsWith('/discounts')) {
+        const q = url.searchParams.get('query') ?? ''
+        const items = [{ id: 'codeless-id', code: null }, { id: `${q}-id`, code: q }]
+        return new Response(JSON.stringify({ items }), { status: 200 })
+      }
+      checkoutCalls.push(JSON.parse(String(init?.body)) as Record<string, unknown>)
+      return new Response(JSON.stringify({ url: 'https://buy.polar.sh/s' }), { status: 201 })
+    }))
+
+    const response = await postLifetime()
+    vi.useRealTimers()
+
+    expect(response.ok).toBe(true)
+    expect(checkoutCalls.map((c) => c.discount_id)).toEqual(['BFNULLCODE-id'])
+  })
+
+  it('refuses checkout when the Black Friday code is past the page cap', async () => {
+    stubLifetime('PAGECAP', '2026-11-28T12:00:00Z')
+    const checkoutCalls: unknown[] = []
+    const pagesRead: string[] = []
+    vi.stubGlobal('fetch', vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
+      const url = new URL(String(input))
+      if (url.pathname.endsWith('/discounts')) {
+        const q = url.searchParams.get('query') ?? ''
+        if (q !== 'BFPAGECAP') return new Response(JSON.stringify({ items: [{ id: `${q}-id`, code: q }] }), { status: 200 })
+        pagesRead.push(url.searchParams.get('page') ?? '')
+        const items = Array.from({ length: 100 }, (_, i) => ({ id: `o-${i}`, code: `BFPAGECAP${i}` }))
+        return new Response(JSON.stringify({ items, pagination: { max_page: 7 } }), { status: 200 })
+      }
+      checkoutCalls.push(JSON.parse(String(init?.body)))
+      return new Response(JSON.stringify({ url: 'https://buy.polar.sh/s' }), { status: 201 })
+    }))
+
+    const response = await postLifetime()
+    vi.useRealTimers()
+
+    expect(pagesRead).toEqual(['1', '2', '3', '4', '5'])
+    expect(response.status).toBe(503)
+    expect(checkoutCalls).toEqual([])
   })
 })

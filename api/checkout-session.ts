@@ -45,6 +45,7 @@
  */
 
 import { z } from 'zod'
+import { BLACK_FRIDAY_CODE, lifetimeDiscountCodes } from '../lib/black-friday.js'
 
 type Tier = 'lifetime' | 'support'
 
@@ -112,13 +113,35 @@ const POLAR_API_VERSION = '2026-04'
 const POLAR_API_BASE = 'https://api.polar.sh/v1'
 const POLAR_TIMEOUT_MS = 4_000
 
-/** Keep the automatic discount in the same organization as the checkout. */
-function lifetimeDiscountCode(): string {
-  return envValue('POLAR_DISCOUNT_CODE_NEW') ?? 'ZENMODE'
+/**
+ * Lifetime codes to try, in order: the Black Friday code while its
+ * window is open, then the new-organization launch discount.
+ */
+function blackFridayCode(): string {
+  return envValue('POLAR_DISCOUNT_CODE_BLACKFRIDAY_NEW') ?? BLACK_FRIDAY_CODE
 }
 
-type DiscountIdEntry = { id: string | null; expiresAt: number }
+function lifetimeDiscountCodeList(): string[] {
+  return lifetimeDiscountCodes(
+    envValue('POLAR_DISCOUNT_CODE_NEW') ?? 'ZENMODE',
+    blackFridayCode(),
+  )
+}
+
+/**
+ * `missing` = Polar answered and has no such code. `error` = the lookup
+ * itself failed, so we know nothing about the code. Only `missing` may
+ * fall through to the next candidate code.
+ */
+type DiscountLookup =
+  | { status: 'found'; id: string }
+  | { status: 'missing' }
+  | { status: 'error' }
+
+type DiscountIdEntry = { lookup: DiscountLookup; expiresAt: number }
 const DISCOUNT_ID_TTL_MS = 10 * 60 * 1000
+const DISCOUNT_PAGE_LIMIT = 100
+const DISCOUNT_MAX_PAGES = 5
 const globalForDiscountCache = globalThis as unknown as {
   __polarDiscountIdCache?: Map<string, DiscountIdEntry>
 }
@@ -130,41 +153,75 @@ const discountIdCache: Map<string, DiscountIdEntry> =
  * Resolve a Polar discount code to its UUID.
  * Polar's `POST /v1/checkouts/` schema only accepts the UUID via
  * `discount_id`; the string `discount_code` field is silently dropped.
- * Returns `null` (cached) on no-token / Polar error / no match.
+ * Found and missing results are cached; errors are not, so the next
+ * request asks Polar again.
  */
 async function resolveDiscountId(
   code: string,
   token: string,
-): Promise<string | null> {
+): Promise<DiscountLookup> {
   const normalizedCode = code.toUpperCase()
   const key = `new:${normalizedCode}`
   const now = Date.now()
   const cached = discountIdCache.get(key)
-  if (cached && cached.expiresAt > now) return cached.id
+  if (cached && cached.expiresAt > now) return cached.lookup
 
   const url = new URL(`${POLAR_API_BASE}/discounts`)
   url.searchParams.set('query', code)
-  url.searchParams.set('limit', '20')
+  url.searchParams.set('limit', String(DISCOUNT_PAGE_LIMIT))
 
-  let id: string | null = null
+  // `missing` needs every page read with no exact match. A row needs a
+  // non-empty string id. Its code may be null (Polar allows codeless
+  // discounts); those rows never match. A malformed page, a failed
+  // request, or a result longer than the page cap leaves `error`.
+  let lookup: DiscountLookup = { status: 'error' }
   try {
-    const r = await fetch(url, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        accept: 'application/json',
-        'Polar-Version': POLAR_API_VERSION,
-      },
-      signal: AbortSignal.timeout(POLAR_TIMEOUT_MS),
-    })
-    if (r.ok) {
-      const body = (await r.json()) as { items?: Array<{ id?: string; code?: string }> }
-      const items = Array.isArray(body.items) ? body.items : []
-      const match = items.find(
+    // One deadline for all pages, so a slow Polar fails within the
+    // function's time budget instead of stacking a timeout per page.
+    const signal = AbortSignal.timeout(POLAR_TIMEOUT_MS)
+    for (let page = 1; page <= DISCOUNT_MAX_PAGES; page++) {
+      url.searchParams.set('page', String(page))
+      const r = await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          accept: 'application/json',
+          'Polar-Version': POLAR_API_VERSION,
+        },
+        signal,
+      })
+      if (!r.ok) {
+        console.warn('[checkout-session] discount list non-2xx', { status: r.status, page })
+        break
+      }
+      const body = (await r.json()) as {
+        items?: Array<{ id?: unknown; code?: unknown } | null>
+        pagination?: { max_page?: unknown }
+      }
+      if (
+        !Array.isArray(body.items) ||
+        !body.items.every(
+          (d): d is { id: string; code?: unknown } =>
+            d !== null && typeof d === 'object' && typeof d.id === 'string' && d.id !== '',
+        )
+      ) {
+        break
+      }
+      const match = body.items.find(
         (d) => typeof d.code === 'string' && d.code.toUpperCase() === normalizedCode,
       )
-      id = typeof match?.id === 'string' ? match.id : null
-    } else {
-      console.warn('[checkout-session] discount list non-2xx', { status: r.status })
+      if (match) {
+        lookup = { status: 'found', id: match.id }
+        break
+      }
+      // Trust `max_page` when Polar sends it: a clamped page size makes
+      // a short page that is not the last one.
+      const maxPage = body.pagination?.max_page
+      const isLastPage =
+        typeof maxPage === 'number' ? page >= maxPage : body.items.length < DISCOUNT_PAGE_LIMIT
+      if (isLastPage) {
+        lookup = { status: 'missing' }
+        break
+      }
     }
   } catch (err) {
     console.warn('[checkout-session] discount list threw', {
@@ -172,8 +229,10 @@ async function resolveDiscountId(
     })
   }
 
-  discountIdCache.set(key, { id, expiresAt: now + DISCOUNT_ID_TTL_MS })
-  return id
+  if (lookup.status !== 'error') {
+    discountIdCache.set(key, { lookup, expiresAt: now + DISCOUNT_ID_TTL_MS })
+  }
+  return lookup
 }
 
 /**
@@ -216,6 +275,7 @@ type ErrResponse = {
     | 'missing-config'
     | 'polar-error'
     | 'forbidden'
+    | 'discount-unavailable'
 }
 
 function json(payload: OkResponse | ErrResponse, status = 200): Response {
@@ -350,11 +410,20 @@ export async function POST(request: Request): Promise<Response> {
   //     /checkout UI hides every "launch discount" surface once the
   //     cap is reached, so the visitor sees the plain full price.
   //   - Support tier never gets an auto-apply.
-  const autoDiscountCode =
-    body.discountCode
-    ?? (tier === 'lifetime'
-      ? lifetimeDiscountCode()
-      : undefined)
+  // A typed Black Friday code takes the automatic path: inside the
+  // window that tries Black Friday then the launch code, after it the
+  // launch code only. So a typed code cannot outlive the sale, and a
+  // missing one still falls back like the automatic one.
+  const bfCode = blackFridayCode().toUpperCase()
+  const typedCode =
+    body.discountCode && body.discountCode.toUpperCase() !== bfCode
+      ? body.discountCode
+      : undefined
+  const candidateCodes = typedCode
+    ? [typedCode]
+    : tier === 'lifetime'
+      ? lifetimeDiscountCodeList()
+      : []
 
   // CRITICAL: Polar's `POST /v1/checkouts/` schema accepts `discount_id`
   // (UUID) and silently ignores `discount_code` (string). We resolve the
@@ -362,9 +431,38 @@ export async function POST(request: Request): Promise<Response> {
   // as `discount_id`. Live testing confirmed sending `discount_code` in
   // the body OR appending `?discount_code=` to the returned URL both
   // result in `discount: null` server-side.
-  const discountId = autoDiscountCode
-    ? await resolveDiscountId(autoDiscountCode, token)
-    : null
+  // First code that resolves wins (Black Friday, then the launch code).
+  // Only a confirmed `missing` falls through to the next code. A failed
+  // Black Friday lookup stops here: falling back would quietly charge a
+  // Black Friday buyer the launch price.
+  const polarToken = token
+  let nextCode = 0
+  // Next code that resolves. null means a Black Friday lookup failed:
+  // the caller sends 503 instead of a quiet fallback.
+  async function pickNextCode(): Promise<{ code?: string; id: string | null } | null> {
+    let code: string | undefined
+    while (nextCode < candidateCodes.length) {
+      code = candidateCodes[nextCode++]
+      const lookup = await resolveDiscountId(code, polarToken)
+      if (lookup.status === 'found') return { code, id: lookup.id }
+      if (lookup.status === 'error') {
+        nextCode = candidateCodes.length
+        if (code.toUpperCase() === bfCode) {
+          console.warn('[checkout-session] black friday lookup failed', { tier })
+          return null
+        }
+        // A failed launch lookup (also after Polar rejected Black Friday)
+        // goes on at full price. /api/price quotes the same full price in
+        // that case, so the page and Polar's form agree.
+        break
+      }
+    }
+    return { code, id: null }
+  }
+  const firstPick = await pickNextCode()
+  if (!firstPick) return json({ ok: false, reason: 'discount-unavailable' }, 503)
+  let autoDiscountCode = firstPick.code
+  let discountId = firstPick.id
 
   if (autoDiscountCode && !discountId) {
     console.warn('[checkout-session] discount code did not resolve to UUID', {
@@ -412,6 +510,21 @@ export async function POST(request: Request): Promise<Response> {
     // visitor still gets a session at the regular price — the UI on
     // /checkout will already be showing the full price by then since
     // the discount-availability hook reports `remaining === 0`.
+    // Black Friday first moves on to the next code (the launch code), so
+    // a code Polar rejects (cap reached, outside its own dates, wrong
+    // product) never blocks Lifetime sales. Polar's form shows the real
+    // total before the buyer pays.
+    while (!res.ok && res.status === 422 && autoDiscountCode?.toUpperCase() === bfCode && discountId) {
+      console.warn('[checkout-session] black friday discount rejected', {
+        tier,
+        discountId,
+      })
+      const pick = await pickNextCode()
+      if (!pick) return json({ ok: false, reason: 'discount-unavailable' }, 503)
+      autoDiscountCode = pick.code
+      discountId = pick.id
+      res = await createSession(discountId ? { discount_id: discountId } : {})
+    }
     if (!res.ok && res.status === 422 && discountId) {
       console.warn('[checkout-session] discount rejected — retrying without', {
         tier,

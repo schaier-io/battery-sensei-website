@@ -63,6 +63,25 @@ type LifetimeBlock = {
   original_formatted: string
   has_discount: boolean
   tax_formatted: string
+  /** Code whose discount the preview used. Older servers omit it. */
+  code?: string | null
+  /** Which offer the quote shows. See api/price.ts. */
+  campaign?: 'black-friday' | 'launch' | null
+}
+
+/**
+ * Which offer the page may advertise. Trusts only the server's campaign:
+ * null (for example a smaller Black Friday discount) advertises neither.
+ */
+export function campaignFlags(
+  hasDiscount: boolean,
+  live: Pick<LifetimeBlock, 'code' | 'campaign'>,
+): { blackFridayCode: string | null; isLaunchOffer: boolean } {
+  return {
+    blackFridayCode:
+      hasDiscount && live.campaign === 'black-friday' && live.code ? live.code : null,
+    isLaunchOffer: hasDiscount && live.campaign === 'launch',
+  }
 }
 
 type ApiResponse =
@@ -206,6 +225,18 @@ export type LifetimePrice = {
   original: DisplayPrice
   /** True when the discount is currently live (Polar still honours ZENMODE). */
   hasDiscount: boolean
+  /**
+   * The Black Friday code when the server confirms Polar applied it to
+   * this quote, else null. The server owns the sale window, so the
+   * client never needs its dates.
+   */
+  blackFridayCode: string | null
+  /**
+   * True when the quote uses the launch code. Launch copy and the
+   * launch redemption count apply only then. Any other real discount
+   * still shows as a strikethrough price, so the page matches checkout.
+   */
+  isLaunchOffer: boolean
 }
 
 /**
@@ -284,6 +315,7 @@ export function useLifetimePrice(currency?: 'USD' | 'EUR' | 'CZK'): LifetimePric
         formatted: live.original_formatted,
       },
       hasDiscount,
+      ...campaignFlags(hasDiscount, live),
     }
   }
 
@@ -313,5 +345,7 @@ export function useLifetimePrice(currency?: 'USD' | 'EUR' | 'CZK'): LifetimePric
     // A fallback price is useful for layout, but cannot prove that Polar
     // accepted the discount. Keep launch claims hidden until the live preview.
     hasDiscount: false,
+    blackFridayCode: null,
+    isLaunchOffer: false,
   }
 }

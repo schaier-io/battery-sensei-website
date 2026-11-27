@@ -2,8 +2,11 @@ import { useEffect, useRef, useState } from 'react'
 import { Download, MessageCircle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useRouterState } from '@tanstack/react-router'
+import { BlackFridayBanner } from '#/components/BlackFridayBanner'
 import { LanguageSwitcher } from '#/components/LanguageSwitcher'
 import { ThemeSwitcher } from '#/components/ThemeSwitcher'
+import { useBlackFridayDismissed } from '#/lib/black-friday-dismissal'
+import { useLifetimePrice } from '#/lib/use-price'
 import { SUPPORTED_LOCALES, localeHomePath } from '#/lib/i18n'
 
 /**
@@ -67,6 +70,10 @@ export function Nav() {
   // tracks; on subpages we rewrite to `/#id` so the link actually
   // navigates home instead of becoming a no-op.
   const pathname = useRouterState({ select: (s) => s.location.pathname })
+  // Once the viewer hides the Black Friday strip, a small badge on the
+  // Pricing link keeps the sale findable.
+  const bannerDismissed = useBlackFridayDismissed()
+  const showSaleBadge = !!useLifetimePrice().blackFridayCode && bannerDismissed
   const [scrolled, setScrolled] = useState(false)
   const [active, setActive] = useState<SectionId | null>(null)
   const [progress, setProgress] = useState(0)
@@ -177,6 +184,8 @@ export function Nav() {
 
   return (
     <>
+    {/* Checkout shows its own Black Friday note beside the price. */}
+    {!pathname.endsWith('/checkout') && <BlackFridayBanner />}
     <header
       data-scrolled={scrolled ? 'true' : 'false'}
       // Mobile gets a near-opaque washi fill so headings + section text
@@ -238,6 +247,7 @@ export function Nav() {
               className="nav-link"
             >
               {t(`nav.sections.${id}`)}
+              {id === 'pricing' && showSaleBadge && <SaleBadge />}
             </a>
           ))}
         </nav>
@@ -297,6 +307,7 @@ export function Nav() {
       closing={closing}
       active={active}
       pathname={pathname}
+      showSaleBadge={showSaleBadge}
       onClose={requestCloseMenu}
     />
     <FloatingSupport
@@ -396,11 +407,29 @@ function BrushClose() {
   )
 }
 
+/** Small "−50%" tag after the Pricing label. Screen readers hear the
+ *  full "Black Friday −50%" instead of a bare number. */
+function SaleBadge() {
+  const { t } = useTranslation()
+  return (
+    <>
+      <span
+        aria-hidden
+        className="ml-1.5 inline-flex translate-y-[-1px] items-center rounded-[4px] bg-hinomaru px-1.5 py-px align-middle font-mono text-[0.625rem] font-semibold leading-[1.4] tracking-[0.04em] text-[#fdf8ee]"
+      >
+        {t('blackFriday.navBadge')}
+      </span>
+      <span className="sr-only">, {t('blackFriday.pill')}</span>
+    </>
+  )
+}
+
 function MobileDrawer({
   open,
   closing,
   active,
   pathname,
+  showSaleBadge,
   onClose,
 }: {
   open: boolean
@@ -412,6 +441,7 @@ function MobileDrawer({
    *  `/#id` when the user is on a subpage (e.g. `/checkout`). Same
    *  fix as the desktop nav — see `sectionHref` rationale. */
   pathname: string
+  showSaleBadge: boolean
   onClose: () => void
 }) {
   const { t, i18n } = useTranslation()
@@ -524,6 +554,7 @@ function MobileDrawer({
                       </span>
                       <span className="display-title text-[1.25rem] font-medium text-sumi transition-colors duration-[220ms] group-hover:text-hinomaru-ink group-data-[active=true]:text-hinomaru-ink">
                         {t(`nav.sections.${id}`)}
+                        {id === 'pricing' && showSaleBadge && <SaleBadge />}
                       </span>
                     </span>
                     <span

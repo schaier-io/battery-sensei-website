@@ -22,6 +22,7 @@ import { Reveal } from '#/components/zen/Reveal'
 import { Nav } from '#/components/sections/Nav'
 import { Footer } from '#/components/sections/Footer'
 import { useDiscountAvailability } from '#/lib/use-discount-availability'
+import { PromoCode } from '#/components/PromoCode'
 import { usePremiumPrice, useLifetimePrice } from '#/lib/use-price'
 import { setCurrencyPreference } from '#/lib/currency-preference'
 import {
@@ -103,7 +104,14 @@ function CheckoutPage() {
   // honouring ZENMODE — same bug as Pricing.tsx.
   const hasRealDiscount =
     lifetime.hasDiscount && lifetime.original.amount > lifetime.discounted.amount
-  const launchOpen = hasLiveZenmodeCount && zenmodeRemaining > 0 && hasRealDiscount
+  // A confirmed Black Friday quote is a live discount on its own: it
+  // does not depend on the launch code's redemption count.
+  const blackFridayCode = lifetime.blackFridayCode
+  // Launch copy needs the launch code AND redemptions left. Any other
+  // real discount (Black Friday) shows its price without launch copy.
+  const launchOpen =
+    lifetime.isLaunchOffer && hasLiveZenmodeCount && zenmodeRemaining > 0 && hasRealDiscount
+  const showDiscount = hasRealDiscount && (!lifetime.isLaunchOffer || launchOpen)
 
   const isLifetime = tier === 'lifetime'
 
@@ -111,7 +119,7 @@ function CheckoutPage() {
   // launch is open; falls back to the original full price once the cap
   // is reached. Support tier is the plain yearly recurring price.
   const price = isLifetime
-    ? launchOpen
+    ? showDiscount
       ? lifetime.discounted
       : lifetime.original
     : yearly
@@ -265,7 +273,7 @@ function CheckoutPage() {
                     Once ZENMODE is exhausted the headline IS the
                     original price; a "was X" line over the same number
                     would be a lie. */}
-                {isLifetime && launchOpen ? (
+                {isLifetime && showDiscount ? (
                   <span className="mt-1 block text-[0.6875rem] text-nezumi">
                     {t('checkout.originalLabel')}{' '}
                     <span className="line-through decoration-hinomaru/50">
@@ -290,7 +298,19 @@ function CheckoutPage() {
                 but now visible above the fold and self-updating from
                 /api/discount-availability. Hidden once the cap is hit
                 so we don't dangle "0 codes left" stale copy. */}
-            {isLifetime && launchOpen ? (
+            {isLifetime && blackFridayCode ? (
+              <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2 rounded-lg border border-hinomaru/25 bg-hinomaru/[0.06] px-3.5 py-2.5">
+                <span className="meta-label inline-flex shrink-0 items-center rounded-full bg-hinomaru px-2 py-0.5 text-[#fdf8ee]">
+                  {t('blackFriday.pill')}
+                </span>
+                {/* The 14rem basis wraps the text to its own full line on
+                    narrow screens, so it never squeezes between pill and chip. */}
+                <span className="min-w-0 flex-[1_1_14rem] text-[0.8125rem] leading-snug text-sumi">
+                  {t('blackFriday.applied')}
+                </span>
+                <PromoCode code={blackFridayCode} />
+              </div>
+            ) : isLifetime && launchOpen ? (
               <p className="mt-4 inline-flex max-w-full items-start gap-2 rounded-2xl bg-hinomaru/10 px-3 py-1.5 text-[0.75rem] font-medium text-hinomaru-ink tabular-nums">
                 <Sparkles className="mt-[2px] h-3 w-3 shrink-0" strokeWidth={2} aria-hidden />
                 <span>
