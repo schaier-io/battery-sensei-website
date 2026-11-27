@@ -53,3 +53,71 @@ describe('GET /api/price organization migration', () => {
     expect(fetchMock).not.toHaveBeenCalled()
   })
 })
+
+describe('GET /api/price Black Friday campaign', () => {
+  function stubPolar(lookup: (query: string) => Response) {
+    vi.stubGlobal('fetch', vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
+      const url = new URL(String(input))
+      if (url.pathname.endsWith('/discounts')) return lookup(url.searchParams.get('query') ?? '')
+      const body = JSON.parse(String(init?.body)) as { discount_id?: string }
+      const total = body.discount_id === 'bf-id' ? 1000 : body.discount_id === 'launch-id' ? 1700 : 2000
+      return new Response(
+        JSON.stringify({ total_amount: total, subtotal_amount: total, tax_amount: 0, currency: 'usd' }),
+        { status: 201 },
+      )
+    }))
+  }
+
+  function configure(suffix: string) {
+    vi.useFakeTimers({ toFake: ['Date'] })
+    vi.setSystemTime(new Date('2026-11-28T12:00:00Z'))
+    vi.stubEnv('POLAR_ACCESS_TOKEN_NEW', 'new-token')
+    vi.stubEnv('POLAR_PRODUCT_ID_SUPPORT_NEW', 'support')
+    vi.stubEnv('POLAR_PRODUCT_ID_LIFETIME_NEW', 'lifetime')
+    vi.stubEnv('POLAR_DISCOUNT_CODE_NEW', `LAUNCH${suffix}`)
+    vi.stubEnv('POLAR_DISCOUNT_CODE_BLACKFRIDAY_NEW', `BF${suffix}`)
+  }
+
+  async function lifetimeFor(country: string) {
+    const response = await GET(new Request(`https://battery-sensei.app/api/price?country=${country}`))
+    vi.useRealTimers()
+    const body = (await response.json()) as { lifetime?: Record<string, unknown> }
+    return body.lifetime
+  }
+
+  it('reports the Black Friday campaign and code when Polar applies it', async () => {
+    configure('A')
+    stubPolar((q) => new Response(JSON.stringify({ items: q === 'BFA' ? [{ id: 'bf-id', code: 'BFA' }] : [] }), { status: 200 }))
+
+    const lifetime = await lifetimeFor('US')
+
+    expect(lifetime?.campaign).toBe('black-friday')
+    expect(lifetime?.code).toBe('BFA')
+    expect(lifetime?.discounted_amount).toBe(1000)
+  })
+
+  it('quotes the launch code without a campaign when Black Friday is missing in Polar', async () => {
+    configure('B')
+    stubPolar((q) => new Response(JSON.stringify({ items: q === 'LAUNCHB' ? [{ id: 'launch-id', code: 'LAUNCHB' }] : [] }), { status: 200 }))
+
+    const lifetime = await lifetimeFor('CA')
+
+    expect(lifetime?.campaign).toBeNull()
+    expect(lifetime?.code).toBe('LAUNCHB')
+  })
+
+  it('does not quote the launch code when the Black Friday lookup fails', async () => {
+    configure('C')
+    stubPolar((q) =>
+      q === 'BFC'
+        ? new Response('', { status: 429 })
+        : new Response(JSON.stringify({ items: [{ id: 'launch-id', code: 'LAUNCHC' }] }), { status: 200 }),
+    )
+
+    const lifetime = await lifetimeFor('MX')
+
+    expect(lifetime?.campaign).toBeNull()
+    expect(lifetime?.code).toBeNull()
+    expect(lifetime?.has_discount).toBe(false)
+  })
+})

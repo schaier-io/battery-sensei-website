@@ -81,10 +81,14 @@ function envValue(name: string): string | undefined {
  * Lifetime codes to try, in order: the Black Friday code while its
  * window is open, then the new-organization launch discount.
  */
+function blackFridayCode(): string {
+  return envValue('POLAR_DISCOUNT_CODE_BLACKFRIDAY_NEW') ?? BLACK_FRIDAY_CODE
+}
+
 function lifetimeDiscountCodeList(): string[] {
   return lifetimeDiscountCodes(
     envValue('POLAR_DISCOUNT_CODE_NEW') ?? 'ZENMODE',
-    envValue('POLAR_DISCOUNT_CODE_BLACKFRIDAY_NEW') ?? BLACK_FRIDAY_CODE,
+    blackFridayCode(),
   )
 }
 
@@ -138,7 +142,17 @@ function previewCountryFor(currency: 'usd' | 'eur' | 'czk'): string {
   return 'US'
 }
 
-type DiscountIdEntry = { id: string | null; expiresAt: number }
+/**
+ * `missing` = Polar answered and has no such code. `error` = the lookup
+ * failed, so we know nothing. Only `missing` falls through to the next
+ * candidate code. Mirrors api/checkout-session.ts.
+ */
+type DiscountLookup =
+  | { status: 'found'; id: string }
+  | { status: 'missing' }
+  | { status: 'error' }
+
+type DiscountIdEntry = { lookup: DiscountLookup; expiresAt: number }
 const DISCOUNT_ID_TTL_MS = 10 * 60 * 1000
 const globalForDiscountCache = globalThis as unknown as {
   __polarDiscountIdCache?: Map<string, DiscountIdEntry>
@@ -150,18 +164,18 @@ const discountIdCache: Map<string, DiscountIdEntry> =
 async function resolveDiscountId(
   code: string,
   token: string,
-): Promise<string | null> {
+): Promise<DiscountLookup> {
   const normalizedCode = code.toUpperCase()
   const key = `new:${normalizedCode}`
   const now = Date.now()
   const cached = discountIdCache.get(key)
-  if (cached && cached.expiresAt > now) return cached.id
+  if (cached && cached.expiresAt > now) return cached.lookup
 
   const url = new URL(`${POLAR_API_BASE}/discounts`)
   url.searchParams.set('query', code)
   url.searchParams.set('limit', '20')
 
-  let id: string | null = null
+  let lookup: DiscountLookup = { status: 'error' }
   try {
     const r = await fetch(url, {
       headers: {
@@ -177,7 +191,10 @@ async function resolveDiscountId(
       const match = items.find(
         (d) => typeof d.code === 'string' && d.code.toUpperCase() === normalizedCode,
       )
-      id = typeof match?.id === 'string' ? match.id : null
+      lookup =
+        typeof match?.id === 'string'
+          ? { status: 'found', id: match.id }
+          : { status: 'missing' }
     } else {
       console.warn('[price] discount list non-2xx', { status: r.status })
     }
@@ -187,11 +204,19 @@ async function resolveDiscountId(
     })
   }
 
-  discountIdCache.set(key, { id, expiresAt: now + DISCOUNT_ID_TTL_MS })
-  return id
+  if (lookup.status !== 'error') {
+    discountIdCache.set(key, { lookup, expiresAt: now + DISCOUNT_ID_TTL_MS })
+  }
+  return lookup
 }
 
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000
+/**
+ * TTL for a quote that did not use the first-choice code (lookup error,
+ * or the Black Friday code is missing in Polar). Short, so a fixed
+ * dashboard or a recovered Polar shows up within minutes, not a day.
+ */
+const FALLBACK_CACHE_TTL_MS = 5 * 60 * 1000
 
 type LifetimeBlock = {
   /** Post-discount total in minor units (e.g. 5600 = 56.00 CZK). */
@@ -204,6 +229,10 @@ type LifetimeBlock = {
   has_discount: boolean
   /** VAT portion of the discounted total, formatted. Empty when zero. */
   tax_formatted: string
+  /** The code whose discount this preview used, or null when none resolved. */
+  code: string | null
+  /** 'black-friday' when Polar honours the Black Friday code on this quote. */
+  campaign: 'black-friday' | null
 }
 
 type PricePayload = {
@@ -249,7 +278,9 @@ function json(body: unknown, status = 200, headers: Record<string, string> = {})
       // Browser-only cache. Different users in different countries should get
       // their own fresh fetches; no shared CDN cache to leak one visitor's
       // country to the next.
-      'cache-control': 'private, max-age=3600',
+      // Short, so the Black Friday window opening or closing reaches
+      // returning visitors within minutes.
+      'cache-control': 'private, max-age=300',
       ...headers,
     },
   })
@@ -397,10 +428,18 @@ async function fetchPolarPreview(
   // First code that resolves wins, so a Black Friday code missing from
   // Polar falls back to the launch code instead of no discount.
   let discountId: string | null = null
+  let discountCode: string | null = null
   if (lifetimeProductId) {
     for (const code of lifetimeDiscountCodeList()) {
-      discountId = await resolveDiscountId(code, token)
-      if (discountId) break
+      const lookup = await resolveDiscountId(code, token)
+      if (lookup.status === 'found') {
+        discountId = lookup.id
+        discountCode = code
+        break
+      }
+      // A failed lookup says nothing about the code: do not quote the
+      // next code in its place.
+      if (lookup.status === 'error') break
     }
   }
 
@@ -479,7 +518,12 @@ async function fetchPolarPreview(
         : 0
     const hasDiscount = discTotal < fullTotal
 
+    const isBlackFriday =
+      hasDiscount && discountCode?.toUpperCase() === blackFridayCode().toUpperCase()
+
     payload.lifetime = {
+      code: discountCode,
+      campaign: isBlackFriday ? 'black-friday' : null,
       discounted_amount: discTotal,
       discounted_formatted: formatAmount(discTotal, quotedCurrency),
       original_amount: fullTotal,
@@ -527,7 +571,8 @@ export async function GET(request: Request): Promise<Response> {
   // FX, so they must not share a cache slot.
   // The active discount code joins the key so the Black Friday window
   // opening or closing never serves a preview quoted under the other code.
-  const cacheKey = `${country}:${currency}:${lifetimeDiscountCodeList()[0]}`
+  const firstChoiceCode = lifetimeDiscountCodeList()[0]
+  const cacheKey = `${country}:${currency}:${firstChoiceCode}`
 
   const now = Date.now()
   const cached = cache.get(cacheKey)
@@ -538,7 +583,12 @@ export async function GET(request: Request): Promise<Response> {
   const result = await fetchPolarPreview(country, currency)
 
   if (result.ok) {
-    cache.set(cacheKey, { expiresAt: now + CACHE_TTL_MS, payload: result })
+    const usedFirstChoice =
+      !envValue('POLAR_PRODUCT_ID_LIFETIME_NEW') || result.lifetime?.code === firstChoiceCode
+    cache.set(cacheKey, {
+      expiresAt: now + (usedFirstChoice ? CACHE_TTL_MS : FALLBACK_CACHE_TTL_MS),
+      payload: result,
+    })
     // `x-price-lifetime` makes it possible to verify from the browser
     // network panel whether the live Polar lifetime block was wired
     // up. `present` means the homepage card will show Polar's exact
