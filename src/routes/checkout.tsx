@@ -22,6 +22,9 @@ import { Reveal } from '#/components/zen/Reveal'
 import { Nav } from '#/components/sections/Nav'
 import { Footer } from '#/components/sections/Footer'
 import { useDiscountAvailability } from '#/lib/use-discount-availability'
+import { useBlackFriday } from '#/lib/use-black-friday'
+import { PromoCode } from '#/components/PromoCode'
+import { BLACK_FRIDAY_CODE } from '../../lib/black-friday'
 import { usePremiumPrice, useLifetimePrice } from '#/lib/use-price'
 import { setCurrencyPreference } from '#/lib/currency-preference'
 import {
@@ -104,6 +107,7 @@ function CheckoutPage() {
   const hasRealDiscount =
     lifetime.hasDiscount && lifetime.original.amount > lifetime.discounted.amount
   const launchOpen = hasLiveZenmodeCount && zenmodeRemaining > 0 && hasRealDiscount
+  const blackFriday = useBlackFriday(lifetime)
 
   const isLifetime = tier === 'lifetime'
 
@@ -290,7 +294,17 @@ function CheckoutPage() {
                 but now visible above the fold and self-updating from
                 /api/discount-availability. Hidden once the cap is hit
                 so we don't dangle "0 codes left" stale copy. */}
-            {isLifetime && launchOpen ? (
+            {isLifetime && blackFriday ? (
+              <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2 rounded-lg border border-hinomaru/25 bg-hinomaru/[0.06] px-3.5 py-2.5">
+                <span className="meta-label inline-flex items-center rounded-full bg-hinomaru px-2 py-0.5 text-[#fdf8ee]">
+                  {t('blackFriday.pill')}
+                </span>
+                <span className="min-w-0 flex-1 text-[0.8125rem] leading-snug text-sumi">
+                  {t('blackFriday.applied')}
+                </span>
+                <PromoCode code={BLACK_FRIDAY_CODE} />
+              </div>
+            ) : isLifetime && launchOpen ? (
               <p className="mt-4 inline-flex max-w-full items-start gap-2 rounded-2xl bg-hinomaru/10 px-3 py-1.5 text-[0.75rem] font-medium text-hinomaru-ink tabular-nums">
                 <Sparkles className="mt-[2px] h-3 w-3 shrink-0" strokeWidth={2} aria-hidden />
                 <span>

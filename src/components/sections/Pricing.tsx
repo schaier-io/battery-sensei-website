@@ -28,6 +28,9 @@ import { FreeDownloadForm } from '#/components/sections/PricingFreeDownload'
 import { TRIAL_DAYS } from '#/lib/polar'
 import { usePremiumPrice, useLifetimePrice } from '#/lib/use-price'
 import { useDiscountAvailability } from '#/lib/use-discount-availability'
+import { useBlackFriday } from '#/lib/use-black-friday'
+import { PromoCode } from '#/components/PromoCode'
+import { BLACK_FRIDAY_CODE } from '../../../lib/black-friday'
 
 // Order mirrors `pricing.lifetime.items` in en.json:
 // 1. lifetime updates (∞), 2. all features, 3. Meeting Guard,
@@ -83,6 +86,7 @@ export function Pricing() {
   // the headline; once exhausted, the original full price becomes the
   // headline and the strikethrough is gone too.
   const lifetimePrice = launchOpen ? lifetime.discounted : lifetime.original
+  const blackFriday = useBlackFriday(lifetime)
   const freeFeatures = t('pricing.free.items', {
     returnObjects: true,
   }) as Array<{ title: string; body: string }>
@@ -237,9 +241,15 @@ export function Pricing() {
               >
                 {t('pricing.lifetime.tier')}
               </h3>
-              <span className="meta-label inline-flex items-center gap-1 rounded-full bg-hinomaru/10 px-2 py-0.5 text-hinomaru-ink">
-                {t('common.recommended')}
-              </span>
+              {blackFriday ? (
+                <span className="meta-label inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full bg-hinomaru px-2 py-0.5 text-[#fdf8ee]">
+                  {t('blackFriday.pill')}
+                </span>
+              ) : (
+                <span className="meta-label inline-flex items-center gap-1 rounded-full bg-hinomaru/10 px-2 py-0.5 text-hinomaru-ink">
+                  {t('common.recommended')}
+                </span>
+              )}
             </div>
             {/* Strikethrough only renders while ZENMODE has redemptions
                 left. Once exhausted, the original price IS the headline
@@ -286,6 +296,14 @@ export function Pricing() {
               </span>
             </div>
             <MacScopeBadge label={t('pricing.lifetime.macsBadge')} accent />
+            {blackFriday && (
+              <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2">
+                <PromoCode code={BLACK_FRIDAY_CODE} />
+                <span className="text-[0.8125rem] leading-snug text-sumi-soft">
+                  {t('blackFriday.appliedShort')}
+                </span>
+              </div>
+            )}
             {/* Launch-discount marketing chrome (note + scarcity bar)
                 appears ONLY while ZENMODE still has redemptions. Past
                 that, the card reads as a plain lifetime product at
