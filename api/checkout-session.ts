@@ -428,6 +428,9 @@ export async function POST(request: Request): Promise<Response> {
           console.warn('[checkout-session] black friday lookup failed', { tier })
           return null
         }
+        // A failed launch lookup (also after Polar rejected Black Friday)
+        // goes on at full price. /api/price quotes the same full price in
+        // that case, so the page and Polar's form agree.
         break
       }
     }
