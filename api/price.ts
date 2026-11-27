@@ -155,6 +155,8 @@ type DiscountLookup =
 
 type DiscountIdEntry = { lookup: DiscountLookup; expiresAt: number }
 const DISCOUNT_ID_TTL_MS = 10 * 60 * 1000
+const DISCOUNT_PAGE_LIMIT = 100
+const DISCOUNT_MAX_PAGES = 5
 const globalForDiscountCache = globalThis as unknown as {
   __polarDiscountIdCache?: Map<string, DiscountIdEntry>
 }
@@ -174,39 +176,53 @@ async function resolveDiscountId(
 
   const url = new URL(`${POLAR_API_BASE}/discounts`)
   url.searchParams.set('query', code)
-  url.searchParams.set('limit', '20')
+  url.searchParams.set('limit', String(DISCOUNT_PAGE_LIMIT))
 
+  // `missing` needs every page read with no exact match. A row needs a
+  // non-empty string id. Its code may be null (Polar allows codeless
+  // discounts); those rows never match. A malformed page, a failed
+  // request, or a result longer than the page cap leaves `error`.
   let lookup: DiscountLookup = { status: 'error' }
   try {
-    const r = await fetch(url, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        accept: 'application/json',
-        'Polar-Version': POLAR_API_VERSION,
-      },
-      signal: AbortSignal.timeout(POLAR_TIMEOUT_MS),
-    })
-    if (r.ok) {
-      const body = (await r.json()) as { items?: Array<{ id?: string; code?: string }> }
-      // `missing` needs a well-formed list with no exact match. Every
-      // row must carry a string code and a non-empty string id, or the
-      // list proves nothing and the lookup stays `error`.
+    for (let page = 1; page <= DISCOUNT_MAX_PAGES; page++) {
+      url.searchParams.set('page', String(page))
+      const r = await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          accept: 'application/json',
+          'Polar-Version': POLAR_API_VERSION,
+        },
+        signal: AbortSignal.timeout(POLAR_TIMEOUT_MS),
+      })
+      if (!r.ok) {
+        console.warn('[price] discount list non-2xx', { status: r.status, page })
+        break
+      }
+      const body = (await r.json()) as {
+        items?: Array<{ id?: unknown; code?: unknown } | null>
+        pagination?: { max_page?: unknown }
+      }
       if (
-        Array.isArray(body.items) &&
-        body.items.every(
-          (d): d is { id: string; code: string } =>
-            d !== null &&
-            typeof d === 'object' &&
-            typeof d.code === 'string' &&
-            typeof d.id === 'string' &&
-            d.id !== '',
+        !Array.isArray(body.items) ||
+        !body.items.every(
+          (d): d is { id: string; code?: unknown } =>
+            d !== null && typeof d === 'object' && typeof d.id === 'string' && d.id !== '',
         )
       ) {
-        const match = body.items.find((d) => d.code.toUpperCase() === normalizedCode)
-        lookup = match ? { status: 'found', id: match.id } : { status: 'missing' }
+        break
       }
-    } else {
-      console.warn('[price] discount list non-2xx', { status: r.status })
+      const match = body.items.find(
+        (d) => typeof d.code === 'string' && d.code.toUpperCase() === normalizedCode,
+      )
+      if (match) {
+        lookup = { status: 'found', id: match.id }
+        break
+      }
+      const maxPage = body.pagination?.max_page
+      if (body.items.length < DISCOUNT_PAGE_LIMIT || (typeof maxPage === 'number' && page >= maxPage)) {
+        lookup = { status: 'missing' }
+        break
+      }
     }
   } catch (err) {
     console.warn('[price] discount list threw', {

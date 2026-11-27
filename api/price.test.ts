@@ -55,10 +55,10 @@ describe('GET /api/price organization migration', () => {
 })
 
 describe('GET /api/price Black Friday campaign', () => {
-  function stubPolar(lookup: (query: string) => Response) {
+  function stubPolar(lookup: (query: string, url: URL) => Response) {
     vi.stubGlobal('fetch', vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
       const url = new URL(String(input))
-      if (url.pathname.endsWith('/discounts')) return lookup(url.searchParams.get('query') ?? '')
+      if (url.pathname.endsWith('/discounts')) return lookup(url.searchParams.get('query') ?? '', url)
       const body = JSON.parse(String(init?.body)) as { discount_id?: string }
       const total = body.discount_id === 'bf-id' ? 1000 : body.discount_id === 'launch-id' ? 1700 : 2000
       return new Response(
@@ -262,5 +262,40 @@ describe('GET /api/price Black Friday campaign', () => {
     await lifetimeFor('BO')
 
     expect(checkoutPosts).toBe(3)
+  })
+
+  it('finds the Black Friday code next to a codeless discount row', async () => {
+    configure('N')
+    stubPolar((q) =>
+      new Response(
+        JSON.stringify({
+          items: q === 'BFN' ? [{ id: 'codeless-id', code: null }, { id: 'bf-id', code: 'BFN' }] : [],
+        }),
+        { status: 200 },
+      ),
+    )
+
+    const lifetime = await lifetimeFor('UY')
+
+    expect(lifetime?.campaign).toBe('black-friday')
+    expect(lifetime?.discounted_amount).toBe(1000)
+  })
+
+  it('finds the Black Friday code on the second page of discounts', async () => {
+    configure('P')
+    stubPolar((q, url) => {
+      if (q !== 'BFP') return new Response(JSON.stringify({ items: [] }), { status: 200 })
+      const page = url.searchParams.get('page')
+      const items =
+        page === '2'
+          ? [{ id: 'bf-id', code: 'BFP' }]
+          : Array.from({ length: 100 }, (_, i) => ({ id: `other-${i}`, code: `BFP${i}` }))
+      return new Response(JSON.stringify({ items, pagination: { max_page: 2 } }), { status: 200 })
+    })
+
+    const lifetime = await lifetimeFor('PY')
+
+    expect(lifetime?.campaign).toBe('black-friday')
+    expect(lifetime?.discounted_amount).toBe(1000)
   })
 })

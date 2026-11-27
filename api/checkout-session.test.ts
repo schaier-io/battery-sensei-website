@@ -416,4 +416,24 @@ describe('checkout session currency', () => {
     expect(response.status).toBe(503)
     expect(checkoutCalls).toEqual([])
   })
+  it('applies the Black Friday code next to a codeless discount row', async () => {
+    stubLifetime('NULLCODE', '2026-11-28T12:00:00Z')
+    const checkoutCalls: Array<Record<string, unknown>> = []
+    vi.stubGlobal('fetch', vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
+      const url = new URL(String(input))
+      if (url.pathname.endsWith('/discounts')) {
+        const q = url.searchParams.get('query') ?? ''
+        const items = [{ id: 'codeless-id', code: null }, { id: `${q}-id`, code: q }]
+        return new Response(JSON.stringify({ items }), { status: 200 })
+      }
+      checkoutCalls.push(JSON.parse(String(init?.body)) as Record<string, unknown>)
+      return new Response(JSON.stringify({ url: 'https://buy.polar.sh/s' }), { status: 201 })
+    }))
+
+    const response = await postLifetime()
+    vi.useRealTimers()
+
+    expect(response.ok).toBe(true)
+    expect(checkoutCalls.map((c) => c.discount_id)).toEqual(['BFNULLCODE-id'])
+  })
 })
