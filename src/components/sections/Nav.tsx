@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Download, MessageCircle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useRouterState } from '@tanstack/react-router'
+import { BlackFridayBanner } from '#/components/BlackFridayBanner'
 import { LanguageSwitcher } from '#/components/LanguageSwitcher'
 import { ThemeSwitcher } from '#/components/ThemeSwitcher'
 import { SUPPORTED_LOCALES, localeHomePath } from '#/lib/i18n'
@@ -177,6 +178,8 @@ export function Nav() {
 
   return (
     <>
+    {/* Checkout shows its own Black Friday note beside the price. */}
+    {!pathname.endsWith('/checkout') && <BlackFridayBanner />}
     <header
       data-scrolled={scrolled ? 'true' : 'false'}
       // Mobile gets a near-opaque washi fill so headings + section text

@@ -1492,5 +1492,17 @@
     "light": "Clair",
     "system": "Suivre le système",
     "dark": "Sombre"
+  },
+  "blackFriday": {
+    "label": "Black Friday",
+    "headline": "Lifetime à moitié prix",
+    "priceLine": "<0>{{discounted}}</0> au lieu de <1>{{original}}</1>",
+    "cta": "Obtenir Lifetime",
+    "copyLabel": "Copier le code {{code}}",
+    "copied": "Code copié",
+    "dismiss": "Masquer l’offre Black Friday",
+    "pill": "Black Friday −50 %",
+    "appliedShort": "Appliqué au paiement. Le code sert de secours.",
+    "applied": "Prix Black Friday appliqué automatiquement. Utilisez le code si Polar le demande."
   }
 }
