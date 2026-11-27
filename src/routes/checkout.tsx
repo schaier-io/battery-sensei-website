@@ -300,10 +300,12 @@ function CheckoutPage() {
                 so we don't dangle "0 codes left" stale copy. */}
             {isLifetime && blackFridayCode ? (
               <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2 rounded-lg border border-hinomaru/25 bg-hinomaru/[0.06] px-3.5 py-2.5">
-                <span className="meta-label inline-flex items-center rounded-full bg-hinomaru px-2 py-0.5 text-[#fdf8ee]">
+                <span className="meta-label inline-flex shrink-0 items-center rounded-full bg-hinomaru px-2 py-0.5 text-[#fdf8ee]">
                   {t('blackFriday.pill')}
                 </span>
-                <span className="min-w-0 flex-1 text-[0.8125rem] leading-snug text-sumi">
+                {/* The 14rem basis wraps the text to its own full line on
+                    narrow screens, so it never squeezes between pill and chip. */}
+                <span className="min-w-0 flex-[1_1_14rem] text-[0.8125rem] leading-snug text-sumi">
                   {t('blackFriday.applied')}
                 </span>
                 <PromoCode code={blackFridayCode} />
