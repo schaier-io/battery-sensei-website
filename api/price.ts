@@ -194,7 +194,7 @@ async function resolveDiscountId(
       if (
         Array.isArray(body.items) &&
         body.items.every(
-          (d) =>
+          (d): d is { id: string; code: string } =>
             d !== null &&
             typeof d === 'object' &&
             typeof d.code === 'string' &&
@@ -202,8 +202,8 @@ async function resolveDiscountId(
             d.id !== '',
         )
       ) {
-        const match = body.items.find((d) => d.code!.toUpperCase() === normalizedCode)
-        lookup = match ? { status: 'found', id: match.id! } : { status: 'missing' }
+        const match = body.items.find((d) => d.code.toUpperCase() === normalizedCode)
+        lookup = match ? { status: 'found', id: match.id } : { status: 'missing' }
       }
     } else {
       console.warn('[price] discount list non-2xx', { status: r.status })
@@ -401,7 +401,9 @@ async function fetchCheckoutPreview(
     const checkout = (await response.json()) as unknown
     // Only an object is a checkout. Anything else (even the string
     // "rejected") would confuse the caller's retry loop.
-    return checkout !== null && typeof checkout === 'object' ? (checkout as PolarCheckout) : null
+    return checkout !== null && typeof checkout === 'object' && !Array.isArray(checkout)
+      ? (checkout as PolarCheckout)
+      : null
   } catch (err) {
     console.warn('[price] polar fetch threw', {
       err: err instanceof Error ? err.message : String(err),

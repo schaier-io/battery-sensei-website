@@ -186,7 +186,7 @@ async function resolveDiscountId(
       if (
         Array.isArray(body.items) &&
         body.items.every(
-          (d) =>
+          (d): d is { id: string; code: string } =>
             d !== null &&
             typeof d === 'object' &&
             typeof d.code === 'string' &&
@@ -194,8 +194,8 @@ async function resolveDiscountId(
             d.id !== '',
         )
       ) {
-        const match = body.items.find((d) => d.code!.toUpperCase() === normalizedCode)
-        lookup = match ? { status: 'found', id: match.id! } : { status: 'missing' }
+        const match = body.items.find((d) => d.code.toUpperCase() === normalizedCode)
+        lookup = match ? { status: 'found', id: match.id } : { status: 'missing' }
       }
     } else {
       console.warn('[checkout-session] discount list non-2xx', { status: r.status })
