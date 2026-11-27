@@ -21,8 +21,9 @@ const TONE: Record<NonNullable<PromoCodeProps['tone']>, string> = {
 
 /**
  * A coupon-style chip: dashed border, monospace code, one click copies
- * it. The label swaps to "Copied" for a moment and is announced to
- * screen readers through the polite live region.
+ * it. The icon swaps to a check for a moment and the polite live region
+ * announces it. The live region sits next to the button, not inside it:
+ * screen readers treat button children as presentational.
  */
 export function PromoCode({ code, tone = 'onPaper', className = '' }: PromoCodeProps) {
   const { t } = useTranslation()
@@ -50,20 +51,22 @@ export function PromoCode({ code, tone = 'onPaper', className = '' }: PromoCodeP
 
   const Icon = copied ? Check : Copy
   return (
-    <button
-      type="button"
-      onClick={copy}
-      aria-label={t('blackFriday.copyLabel', { code })}
-      className={`group inline-flex h-8 shrink-0 items-center gap-2 rounded-md border border-dashed px-2.5 font-mono text-[0.8125rem] font-medium tracking-[0.08em] transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 ${TONE[tone]} ${className}`}
-    >
-      <span ref={codeRef} className="select-all">
-        {code}
-      </span>
-      <span aria-hidden className="h-3.5 w-px bg-current opacity-30" />
-      <Icon className="h-3.5 w-3.5" strokeWidth={2} aria-hidden />
+    <>
+      <button
+        type="button"
+        onClick={copy}
+        aria-label={t('blackFriday.copyLabel', { code })}
+        className={`group inline-flex h-8 shrink-0 items-center gap-2 rounded-md border border-dashed px-2.5 font-mono text-[0.8125rem] font-medium tracking-[0.08em] transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 ${TONE[tone]} ${className}`}
+      >
+        <span ref={codeRef} className="select-all">
+          {code}
+        </span>
+        <span aria-hidden className="h-3.5 w-px bg-current opacity-30" />
+        <Icon className="h-3.5 w-3.5" strokeWidth={2} aria-hidden />
+      </button>
       <span className="sr-only" aria-live="polite">
         {copied ? t('blackFriday.copied') : ''}
       </span>
-    </button>
+    </>
   )
 }

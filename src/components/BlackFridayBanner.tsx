@@ -55,11 +55,11 @@ export function BlackFridayBanner() {
     >
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-5 gap-y-2 px-12 py-2.5 text-[0.875rem] sm:py-2">
         <p className="m-0 flex flex-wrap items-baseline justify-center gap-x-2.5 gap-y-0.5 text-center">
-          <span className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.22em] text-[#fdf8ee]/80">
+          <span className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.22em] text-[#fdf8ee]">
             {t('blackFriday.label')}
           </span>
           <span className="font-medium">{t('blackFriday.headline')}</span>
-          <span className="hidden tabular-nums text-[#fdf8ee]/85 sm:inline">
+          <span className="hidden tabular-nums sm:inline">
             <Trans
               i18nKey="blackFriday.priceLine"
               values={{
@@ -67,7 +67,7 @@ export function BlackFridayBanner() {
                 original: lifetime.original.formatted,
               }}
               components={[
-                <span className="font-semibold text-[#fdf8ee]" />,
+                <span className="font-semibold" />,
                 <s className="decoration-[#fdf8ee]/70" />,
               ]}
             />
