@@ -10,6 +10,9 @@ import {
 
 describe('Black Friday window', () => {
   it('opens at the start instant and closes at the end instant', () => {
+    // Pinned instants: the app ships the same window (BlackFridayOfferModel).
+    expect(new Date(BLACK_FRIDAY_STARTS_AT).toISOString()).toBe('2026-11-27T00:00:00.000Z')
+    expect(new Date(BLACK_FRIDAY_ENDS_AT).toISOString()).toBe('2026-12-02T08:00:00.000Z')
     expect(isBlackFridayActive(BLACK_FRIDAY_STARTS_AT - 1)).toBe(false)
     expect(isBlackFridayActive(BLACK_FRIDAY_STARTS_AT)).toBe(true)
     expect(isBlackFridayActive(BLACK_FRIDAY_ENDS_AT - 1)).toBe(true)
