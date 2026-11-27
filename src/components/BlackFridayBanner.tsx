@@ -1,10 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from '@tanstack/react-router'
 import { ArrowRight, X } from 'lucide-react'
 import { Trans, useTranslation } from 'react-i18next'
-import { BLACK_FRIDAY_CODE } from '../../lib/black-friday'
 import { PromoCode } from '#/components/PromoCode'
-import { useBlackFriday } from '#/lib/use-black-friday'
 import { useLifetimePrice } from '#/lib/use-price'
 
 /** Per-viewer dismissal. Scoped to this campaign so a later sale shows. */
@@ -20,20 +18,27 @@ function readDismissed(): boolean {
 
 /**
  * Site-wide Black Friday strip above the header. Renders nothing until
- * the client confirms the offer is live (window open AND Polar quotes
- * the half price), so prerendered HTML and the post-sale site never
- * carry it. No end date on purpose.
+ * /api/price confirms Polar applied the Black Friday code, so
+ * prerendered HTML and the post-sale site never carry it. The server
+ * owns the sale window; no end date reaches the page on purpose.
  */
 export function BlackFridayBanner() {
   const { t } = useTranslation()
   const lifetime = useLifetimePrice()
-  const active = useBlackFriday(lifetime)
+  const code = lifetime.blackFridayCode
   const [dismissed, setDismissed] = useState(true)
+  const asideRef = useRef<HTMLElement>(null)
   useEffect(() => setDismissed(readDismissed()), [])
 
-  if (!active || dismissed) return null
+  if (!code || dismissed) return null
 
   function dismiss() {
+    // The button is about to unmount. Hand focus to the next control
+    // (the header's first link) so keyboard users keep their place.
+    const next = asideRef.current?.nextElementSibling?.querySelector<HTMLElement>(
+      'a[href], button:not([disabled])',
+    )
+    next?.focus()
     setDismissed(true)
     try {
       window.localStorage.setItem(DISMISS_KEY, '1')
@@ -44,6 +49,7 @@ export function BlackFridayBanner() {
 
   return (
     <aside
+      ref={asideRef}
       aria-label={t('blackFriday.label')}
       className="relative z-50 bg-hinomaru text-[#fdf8ee]"
     >
@@ -68,7 +74,7 @@ export function BlackFridayBanner() {
           </span>
         </p>
         <div className="flex items-center gap-3">
-          <PromoCode code={BLACK_FRIDAY_CODE} tone="onInk" />
+          <PromoCode code={code} tone="onInk" />
           <Link
             to="/checkout"
             search={{ tier: 'lifetime', cur: undefined }}

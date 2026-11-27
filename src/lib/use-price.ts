@@ -63,6 +63,10 @@ type LifetimeBlock = {
   original_formatted: string
   has_discount: boolean
   tax_formatted: string
+  /** Code whose discount the preview used. Older servers omit it. */
+  code?: string | null
+  /** 'black-friday' while Polar honours the Black Friday code. */
+  campaign?: 'black-friday' | null
 }
 
 type ApiResponse =
@@ -206,6 +210,12 @@ export type LifetimePrice = {
   original: DisplayPrice
   /** True when the discount is currently live (Polar still honours ZENMODE). */
   hasDiscount: boolean
+  /**
+   * The Black Friday code when the server confirms Polar applied it to
+   * this quote, else null. The server owns the sale window, so the
+   * client never needs its dates.
+   */
+  blackFridayCode: string | null
 }
 
 /**
@@ -284,6 +294,8 @@ export function useLifetimePrice(currency?: 'USD' | 'EUR' | 'CZK'): LifetimePric
         formatted: live.original_formatted,
       },
       hasDiscount,
+      blackFridayCode:
+        hasDiscount && live.campaign === 'black-friday' && live.code ? live.code : null,
     }
   }
 
@@ -313,5 +325,6 @@ export function useLifetimePrice(currency?: 'USD' | 'EUR' | 'CZK'): LifetimePric
     // A fallback price is useful for layout, but cannot prove that Polar
     // accepted the discount. Keep launch claims hidden until the live preview.
     hasDiscount: false,
+    blackFridayCode: null,
   }
 }

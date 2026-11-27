@@ -28,9 +28,7 @@ import { FreeDownloadForm } from '#/components/sections/PricingFreeDownload'
 import { TRIAL_DAYS } from '#/lib/polar'
 import { usePremiumPrice, useLifetimePrice } from '#/lib/use-price'
 import { useDiscountAvailability } from '#/lib/use-discount-availability'
-import { useBlackFriday } from '#/lib/use-black-friday'
 import { PromoCode } from '#/components/PromoCode'
-import { BLACK_FRIDAY_CODE } from '../../../lib/black-friday'
 
 // Order mirrors `pricing.lifetime.items` in en.json:
 // 1. lifetime updates (∞), 2. all features, 3. Meeting Guard,
@@ -81,12 +79,16 @@ export function Pricing() {
   // still positive on our side.
   const hasRealDiscount =
     lifetime.hasDiscount && lifetime.original.amount > lifetime.discounted.amount
-  const launchOpen = hasLiveZenmodeCount && zenmodeRemaining > 0 && hasRealDiscount
+  // A confirmed Black Friday quote is a live discount on its own: it
+  // does not depend on the launch code's redemption count.
+  const blackFridayCode = lifetime.blackFridayCode
+  const launchOpen =
+    (blackFridayCode !== null && hasRealDiscount) ||
+    (hasLiveZenmodeCount && zenmodeRemaining > 0 && hasRealDiscount)
   // While the launch discount is active we show the discounted price as
   // the headline; once exhausted, the original full price becomes the
   // headline and the strikethrough is gone too.
   const lifetimePrice = launchOpen ? lifetime.discounted : lifetime.original
-  const blackFriday = useBlackFriday(lifetime)
   const freeFeatures = t('pricing.free.items', {
     returnObjects: true,
   }) as Array<{ title: string; body: string }>
@@ -241,7 +243,7 @@ export function Pricing() {
               >
                 {t('pricing.lifetime.tier')}
               </h3>
-              {blackFriday ? (
+              {blackFridayCode ? (
                 <span className="meta-label inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full bg-hinomaru px-2 py-0.5 text-[#fdf8ee]">
                   {t('blackFriday.pill')}
                 </span>
@@ -296,9 +298,9 @@ export function Pricing() {
               </span>
             </div>
             <MacScopeBadge label={t('pricing.lifetime.macsBadge')} accent />
-            {blackFriday && (
+            {blackFridayCode && (
               <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2">
-                <PromoCode code={BLACK_FRIDAY_CODE} />
+                <PromoCode code={blackFridayCode} />
                 <span className="text-[0.8125rem] leading-snug text-sumi-soft">
                   {t('blackFriday.appliedShort')}
                 </span>
