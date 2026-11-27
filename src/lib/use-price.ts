@@ -69,6 +69,21 @@ type LifetimeBlock = {
   campaign?: 'black-friday' | 'launch' | null
 }
 
+/**
+ * Which offer the page may advertise. Trusts only the server's campaign:
+ * null (for example a smaller Black Friday discount) advertises neither.
+ */
+export function campaignFlags(
+  hasDiscount: boolean,
+  live: Pick<LifetimeBlock, 'code' | 'campaign'>,
+): { blackFridayCode: string | null; isLaunchOffer: boolean } {
+  return {
+    blackFridayCode:
+      hasDiscount && live.campaign === 'black-friday' && live.code ? live.code : null,
+    isLaunchOffer: hasDiscount && live.campaign === 'launch',
+  }
+}
+
 type ApiResponse =
   | {
       ok: true
@@ -300,11 +315,7 @@ export function useLifetimePrice(currency?: 'USD' | 'EUR' | 'CZK'): LifetimePric
         formatted: live.original_formatted,
       },
       hasDiscount,
-      blackFridayCode:
-        hasDiscount && live.campaign === 'black-friday' && live.code ? live.code : null,
-      // A server without the field predates campaigns: every discount
-      // it quoted was the launch code.
-      isLaunchOffer: hasDiscount && (live.campaign ?? 'launch') === 'launch',
+      ...campaignFlags(hasDiscount, live),
     }
   }
 
