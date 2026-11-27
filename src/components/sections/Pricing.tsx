@@ -82,13 +82,15 @@ export function Pricing() {
   // A confirmed Black Friday quote is a live discount on its own: it
   // does not depend on the launch code's redemption count.
   const blackFridayCode = lifetime.blackFridayCode
+  // Launch copy needs the launch code AND redemptions left. Any other
+  // real discount (Black Friday) shows its price without launch copy.
   const launchOpen =
-    (blackFridayCode !== null && hasRealDiscount) ||
-    (hasLiveZenmodeCount && zenmodeRemaining > 0 && hasRealDiscount)
+    lifetime.isLaunchOffer && hasLiveZenmodeCount && zenmodeRemaining > 0 && hasRealDiscount
+  const showDiscount = hasRealDiscount && (!lifetime.isLaunchOffer || launchOpen)
   // While the launch discount is active we show the discounted price as
   // the headline; once exhausted, the original full price becomes the
   // headline and the strikethrough is gone too.
-  const lifetimePrice = launchOpen ? lifetime.discounted : lifetime.original
+  const lifetimePrice = showDiscount ? lifetime.discounted : lifetime.original
   const freeFeatures = t('pricing.free.items', {
     returnObjects: true,
   }) as Array<{ title: string; body: string }>
@@ -257,7 +259,7 @@ export function Pricing() {
                 left. Once exhausted, the original price IS the headline
                 price below — keeping a struck-through "was" line on
                 top of that would be a lie. */}
-            {launchOpen && (
+            {showDiscount && (
               <div className="mt-2.5 inline-flex items-baseline gap-2 text-sumi-soft">
                 <span className="meta-label text-nezumi">
                   {t('pricing.lifetime.originalLabel')}

@@ -107,9 +107,11 @@ function CheckoutPage() {
   // A confirmed Black Friday quote is a live discount on its own: it
   // does not depend on the launch code's redemption count.
   const blackFridayCode = lifetime.blackFridayCode
+  // Launch copy needs the launch code AND redemptions left. Any other
+  // real discount (Black Friday) shows its price without launch copy.
   const launchOpen =
-    (blackFridayCode !== null && hasRealDiscount) ||
-    (hasLiveZenmodeCount && zenmodeRemaining > 0 && hasRealDiscount)
+    lifetime.isLaunchOffer && hasLiveZenmodeCount && zenmodeRemaining > 0 && hasRealDiscount
+  const showDiscount = hasRealDiscount && (!lifetime.isLaunchOffer || launchOpen)
 
   const isLifetime = tier === 'lifetime'
 
@@ -117,7 +119,7 @@ function CheckoutPage() {
   // launch is open; falls back to the original full price once the cap
   // is reached. Support tier is the plain yearly recurring price.
   const price = isLifetime
-    ? launchOpen
+    ? showDiscount
       ? lifetime.discounted
       : lifetime.original
     : yearly
@@ -271,7 +273,7 @@ function CheckoutPage() {
                     Once ZENMODE is exhausted the headline IS the
                     original price; a "was X" line over the same number
                     would be a lie. */}
-                {isLifetime && launchOpen ? (
+                {isLifetime && showDiscount ? (
                   <span className="mt-1 block text-[0.6875rem] text-nezumi">
                     {t('checkout.originalLabel')}{' '}
                     <span className="line-through decoration-hinomaru/50">
