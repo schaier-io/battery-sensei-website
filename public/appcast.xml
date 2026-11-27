@@ -2225,6 +2225,33 @@
         length="27397653"
         type="application/octet-stream" />
     </item>
+    <item>
+      <title>Version 1.24.0</title>
+      <pubDate>Fri, 27 Nov 2026 18:04:28 +0000</pubDate>
+      <sparkle:version>119</sparkle:version>
+      <sparkle:shortVersionString>1.24.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:installationType>package</sparkle:installationType>
+      <description><![CDATA[
+<h1>1.24.0</h1>
+<h2>Black Friday offer</h2>
+<ul>
+<li>Lifetime is 50% off for Black Friday. After this update, Battery Sensei shows the offer once, in a full window. You can close it with Esc or &quot;Not now&quot;.</li>
+<li>During the sale, a short line above Activate Pro and Buy on Today opens the offer again.</li>
+<li>The discount is applied at checkout on battery-sensei.app. The code BLACKFRIDAY is a backup, in case checkout asks for one.</li>
+<li>Pro users do not see the offer.</li>
+<li>Look for a small ink seal on Today.</li>
+</ul>
+<p>VERIFIED in <code>BlackFridayOfferModelTests</code>.</p>
+<p>Marketing 1.23.1 → 1.24.0, build 118 → 119.</p>
+]]></description>
+      <enclosure
+        url="https://github.com/schaier-io/battery-sensei-releases/releases/download/v1.24.0/Battery-Sensei.pkg"
+        sparkle:edSignature="3R2KxnjBm9UBU6mPQ8sE2glM3lX6fxsSQWQLE2sQIFI4xv5/6vQEiXgOBaa06Zid1U/KQSG7Z0xAnQ51ImPCBA=="
+        length="27496126"
+        type="application/octet-stream" />
+    </item>
+
 
 
 
