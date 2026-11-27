@@ -436,4 +436,29 @@ describe('checkout session currency', () => {
     expect(response.ok).toBe(true)
     expect(checkoutCalls.map((c) => c.discount_id)).toEqual(['BFNULLCODE-id'])
   })
+
+  it('refuses checkout when the Black Friday code is past the page cap', async () => {
+    stubLifetime('PAGECAP', '2026-11-28T12:00:00Z')
+    const checkoutCalls: unknown[] = []
+    const pagesRead: string[] = []
+    vi.stubGlobal('fetch', vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
+      const url = new URL(String(input))
+      if (url.pathname.endsWith('/discounts')) {
+        const q = url.searchParams.get('query') ?? ''
+        if (q !== 'BFPAGECAP') return new Response(JSON.stringify({ items: [{ id: `${q}-id`, code: q }] }), { status: 200 })
+        pagesRead.push(url.searchParams.get('page') ?? '')
+        const items = Array.from({ length: 100 }, (_, i) => ({ id: `o-${i}`, code: `BFPAGECAP${i}` }))
+        return new Response(JSON.stringify({ items, pagination: { max_page: 7 } }), { status: 200 })
+      }
+      checkoutCalls.push(JSON.parse(String(init?.body)))
+      return new Response(JSON.stringify({ url: 'https://buy.polar.sh/s' }), { status: 201 })
+    }))
+
+    const response = await postLifetime()
+    vi.useRealTimers()
+
+    expect(pagesRead).toEqual(['1', '2', '3', '4', '5'])
+    expect(response.status).toBe(503)
+    expect(checkoutCalls).toEqual([])
+  })
 })

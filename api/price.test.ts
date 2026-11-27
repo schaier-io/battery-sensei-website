@@ -298,4 +298,52 @@ describe('GET /api/price Black Friday campaign', () => {
     expect(lifetime?.campaign).toBe('black-friday')
     expect(lifetime?.discounted_amount).toBe(1000)
   })
+
+  function pagedLookup(code: string, pages: (page: number) => { items: unknown[]; max_page: number }) {
+    const pagesRead: number[] = []
+    stubPolar((q, url) => {
+      if (q !== code) return new Response(JSON.stringify({ items: [{ id: 'launch-id', code: q }] }), { status: 200 })
+      const page = Number(url.searchParams.get('page'))
+      pagesRead.push(page)
+      const { items, max_page } = pages(page)
+      return new Response(JSON.stringify({ items, pagination: { max_page } }), { status: 200 })
+    })
+    return pagesRead
+  }
+
+  const otherRows = (n: number, prefix: string) =>
+    Array.from({ length: n }, (_, i) => ({ id: `${prefix}-${i}`, code: `${prefix}${i}` }))
+
+  it('treats a result longer than the page cap as a failed lookup', async () => {
+    configure('Q')
+    const pagesRead = pagedLookup('BFQ', () => ({ items: otherRows(100, 'BFQ'), max_page: 7 }))
+
+    const lifetime = await lifetimeFor('EC')
+
+    expect(pagesRead).toEqual([1, 2, 3, 4, 5])
+    expect(lifetime?.code).toBeNull()
+    expect(lifetime?.has_discount).toBe(false)
+  })
+
+  it('follows max_page when Polar returns fewer rows than the page limit', async () => {
+    configure('R')
+    const pagesRead = pagedLookup('BFR', (page) =>
+      page === 1 ? { items: otherRows(50, 'BFR'), max_page: 2 } : { items: [{ id: 'bf-id', code: 'BFR' }], max_page: 2 },
+    )
+
+    const lifetime = await lifetimeFor('VE')
+
+    expect(pagesRead).toEqual([1, 2])
+    expect(lifetime?.campaign).toBe('black-friday')
+  })
+
+  it('reports missing after a full last page without a match', async () => {
+    configure('S')
+    const pagesRead = pagedLookup('BFS', () => ({ items: otherRows(100, 'BFS'), max_page: 2 }))
+
+    const lifetime = await lifetimeFor('GY')
+
+    expect(pagesRead).toEqual([1, 2])
+    expect(lifetime?.code).toBe('LAUNCHS')
+  })
 })

@@ -183,6 +183,9 @@ async function resolveDiscountId(
   // discounts); those rows never match. A malformed page, a failed
   // request, or a result longer than the page cap leaves `error`.
   let lookup: DiscountLookup = { status: 'error' }
+  // One deadline for all pages, so a slow Polar fails within the
+  // function's time budget instead of stacking a timeout per page.
+  const signal = AbortSignal.timeout(POLAR_TIMEOUT_MS)
   try {
     for (let page = 1; page <= DISCOUNT_MAX_PAGES; page++) {
       url.searchParams.set('page', String(page))
@@ -192,7 +195,7 @@ async function resolveDiscountId(
           accept: 'application/json',
           'Polar-Version': POLAR_API_VERSION,
         },
-        signal: AbortSignal.timeout(POLAR_TIMEOUT_MS),
+        signal,
       })
       if (!r.ok) {
         console.warn('[price] discount list non-2xx', { status: r.status, page })
@@ -218,8 +221,12 @@ async function resolveDiscountId(
         lookup = { status: 'found', id: match.id }
         break
       }
+      // Trust `max_page` when Polar sends it: a clamped page size makes
+      // a short page that is not the last one.
       const maxPage = body.pagination?.max_page
-      if (body.items.length < DISCOUNT_PAGE_LIMIT || (typeof maxPage === 'number' && page >= maxPage)) {
+      const isLastPage =
+        typeof maxPage === 'number' ? page >= maxPage : body.items.length < DISCOUNT_PAGE_LIMIT
+      if (isLastPage) {
         lookup = { status: 'missing' }
         break
       }
